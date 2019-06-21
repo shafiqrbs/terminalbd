@@ -205,18 +205,27 @@
                 <div class="col-md-12 col-lg-12">
                     {{ form_start(form) }}
                     {{ form_row(form._token) }}
-                    <div class='input-group search-box' >
-                        <div class='input-group-field ' style="width: 30%;">
+                    <div class='input-group search-box' style="width: 100%" >
+                        <div class='input-group-field ' style="width: 25%;">
                             {{ form_widget(form.category) }}
                         </div>
-                        <div class='input-group-field' style="width:30%">
+                        <div class='input-group-field' style="width:25%">
                             {{ form_widget(form.brand) }}
                         </div>
+                        <div class="input-group" style="width: 100%">
                         {{ form_widget(form.webName) }}
                         <span class="input-group-btn">
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                               <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
-                                            </span>
+                            {% if app.user %}
+                                <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
+                                <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+                        {% else %}
+                                <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+                            {% endif %}
+                         </span>
+
+                        </div>
                     </div>
                     {{ form_end(form) }}
                 </div>
@@ -231,114 +240,90 @@
     </section>
     <div class="clearfix"></div>
     <div class="clearfix"></div>
+    <style>
+        #searchResult {
+            list-style: none;
+            padding: 0;
+            width: 88%;
+            position: absolute;
+            margin: 0;
+            top: 35px;
+            left: 55px;
+            max-height:220px;
+            overflow-y: scroll;
+            z-index: 999;
+        }
+
+        #searchResult li{
+            background: lavender;
+            padding: 4px;
+            margin-bottom: 1px;
+        }
+
+        #searchResult li:nth-child(even){
+            background: #a6a6a6;
+            color: white;
+        }
+
+        #searchResult li:hover{
+            cursor: pointer;
+            background-color: #187bb2;
+        }
+
+    </style>
     <div class="container" >
         <div class="row-fluid">
             <div class="col-xs-12 col-md-12 bhoechie-tab-container" id="prescription-content">
 
-                <div class="col-xs-8 col-md-8" style="margin-bottom: 45px;">
+                <div class="col-xs-12 col-md-12" style="margin-bottom: 45px;">
                     <div class="modal-content  col-xs-12 col-md-12">
                         <div class="modal-header">
                             <h4 class="modal-title">Prescription</h4>
                         </div>
-                        <form name="prescription" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_prescription_upload') }}" id="prescription" class="register" novalidate="novalidate">
+                        <form name="stockItemForm" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_stock_item_create') }}" id="stockItemForm" class="register" novalidate="novalidate">
                             <div class="modal-body">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <form name="salesTemporaryItem" method="post" action="/medicine/sales-temporary/medicine-add" class="form-horizontal" id="salesTemporaryItemForm" novalidate="novalidate">
-                                            <input type="hidden" id="salesTemporaryItem__token" name="salesTemporaryItem[_token]" value="h9mazXzjzCbtys7PFPixChgKezyflZ1E6-PXlH6p_RM">
-                                            <div class="row-fluid particular-info" style="padding-left:15px!important">
-                                                <div class="span6">
-                                                    <div class="select2-container m-wrap span12 select2StockMedicine input" id="s2id_salesTemporaryItem_stockName"><a href="javascript:void(0)" onclick="return false;" class="select2-choice select2-default" tabindex="-1">   <span class="select2-chosen">Enter stock medicine name</span><abbr class="select2-search-choice-close"></abbr>   <span class="select2-arrow"><b></b></span></a><input class="select2-focusser select2-offscreen" type="text" id="s2id_autogen5"></div><input type="text" id="salesTemporaryItem_stockName" name="salesTemporaryItem[stockName]" required="required" class="m-wrap span12 select2StockMedicine input select2-offscreen" placeholder="Enter stock medicine name" aria-required="true" tabindex="-1">
-
-                                                </div>
-                                                <div class="span3">
-                                                    <select id="salesTemporaryItem_barcode" name="salesTemporaryItem[barcode]" required="required" class="m-wrap span12 input" aria-required="true"><option value="" selected="selected">---Choose barcode---</option></select>
-
-                                                </div>
-                                                <div class="span3">
-                                                    <div class="input-append">
-                                                        <div class="input-group">
-                                                            <input type="text" id="salesTemporaryItem_salesPrice" name="salesTemporaryItem[salesPrice]" required="required" class="m-wrap span4 input" placeholder="MRP" aria-required="true">
-
-                                                            <input type="text" id="salesTemporaryItem_quantity" name="salesTemporaryItem[quantity]" required="required" class="m-wrap span5 form-control input-number input" placeholder="quantity" aria-required="true">
-
-                                                            <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
-                                                        </div>
+                                           <div class="col-xs-7 col-md-7">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-medkit"></span></span><input class="select2StockMedicine form-control" autocomplete="off" name="itemName" id="itemName">
+                                                        <input type="hidden" name="stockId" id="stockId">
                                                     </div>
                                                 </div>
+                                                <ul id="searchResult"></ul>
                                             </div>
-                                        </form>
+
+                                            <div class="col-xs-5 col-md-5">
+                                                <div class="input-group">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-success" aria-label="Bold">৳ </button>                                         </div>
+                                                    <input type="text"  name="salesPrice" id="salesPrice" disabled="disabled" style="width: 80px" class="form-control text-center" >
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn gray-dark-bg danger-font btn-number-stock text-center" data-type="minus" data-field="itemQuantity">
+                                                            <span class="glyphicon glyphicon-minus"></span>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" class="form-control text-center" value="1" min="1" max="1000"  id="itemQuantity" name="itemQuantity">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn gray-dark-bg danger-font btn-number-stock" data-type="plus" data-field="itemQuantity">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                        <button type="button" id="unit" class="btn btn-success">Unit</button> <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span> Add</button>
+                                                    </div>
+                                                </div><!-- /.input-group -->
+                                            </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="modal-footer">
-                    <span style="text-align: left; display:block; float: left">Click here for
-                    <a href="javascript:" class="login-preview" id="register-btn1">Login</a></span>
-                                <button type="submit" class="btn btn-sm btn-warning pull-right" role="button"> <i class="fa fa-save" ></i> Upload Prescription</button>
                             </div>
                         </form>
+                        <div class="clearfix"></div>
+                        <div id="stockCart"></div>
+                        <div class="clearfix"></div>
+
                     </div>
                     <div class="clearfix"></div>
                 </div>
-               <div class="col-xs-4 col-md-4" style="margin-bottom: 45px;">
-                    <div class="modal-content  col-xs-12 col-md-12">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Prescription</h4>
-                        </div>
-                        <form name="prescription" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_prescription_upload') }}" id="prescription" class="register" novalidate="novalidate">
-                            <div class="modal-body">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                       <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
-                                                <input type="text" id="mobile" name="mobile" required="required" class="mobile form-control" placeholder="Enter your mobile no" aria-required="true">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-upload"></span></span>
-                                                <input type="file" id="prescriptionFile" name="prescriptionFile" class="m-wrap span12 form-control" placeholder="">
-                                            </div>
-                                        </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" id="termsConditionAccept" name="termsConditionAccept" required="required" class="" value="1" aria-required="true">
-                                                I agree to Terms & Condotion
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                    <span style="text-align: left; display:block; float: left">Click here for
-                    <a href="javascript:" class="login-preview" id="register-btn1">Login</a></span>
-                                <button type="submit" class="btn btn-sm btn-warning pull-right" role="button"> <i class="fa fa-save" ></i> Upload Prescription</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-               {# <div class="col-xs-6 col-md-6">
-                    <h3>Prescription Upload Process Instructions</h3>
-                    <ol>
-                        <li>আমাদের মাধ্যমে ঢাকা শহরের যেকোনো প্রান্ত থেকে ঘরে বা অফিসে বসে ঔষধের হোম ডেলিভারি পেতে পারেন। অর্ডার দেয়ার ২৪ ঘণ্টার মধ্যে আমরা আপনার বাসা অথবা অফিসে গিয়ে আপনার চাহিদা মত ঔষধ সরবরাহ করি। আমাদের চেষ্টা থাকবে যত দ্রুত সম্ভব ডেলিভারি দেয়া। তাই আমরাই সবচেয়ে সুলভে ভালো ওষুধ সরবরাহ করি।
-
-                            অনলাই‌নে ঔষধ কিন‌তে প্রেস‌ক্রিপশন এর ছ‌বি তু‌লে অথবা স্কান ক‌রে আমা‌দের ওয়েবসাইট অথবা ফেসবুক পেই‌জের পাঠি‌য়ে দিন। আমা‌দের অ‌ভিজ্ঞ ফার্মা‌সিস্ট প্রেস‌ক্রিপশন দে‌খে ঔষধ রে‌ডি ক‌রে দি‌বেন।</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-                        <li>Prescription Upload Process Instructions</li>
-
-                    </ol>
-                </div>#}
             </div>
             <div class="clearfix"></div>
         </div>
@@ -377,13 +362,6 @@
         background-color: #F9FAFA;
         border-radius:0!important;
         border-right:1px solid #d0dde4!important;
-    }
-    .totalItem {
-        position: absolute;
-        top: -9px;
-        left: 64px;
-        background-color: #ff4052;
-        z-index: 9;
     }
 
 </style>

@@ -24,8 +24,11 @@ $(document).ready(function(){
             selector: "[data-toggle=tooltip]",
             container: "body"
         });
-        
-        $('.select-category').select2({
+
+
+
+
+    $('.select-category').select2({
             placeholder: "Filter by category",
             allowClear: true,
             color: "black"
@@ -118,8 +121,7 @@ $(document).ready(function(){
         $( "#viewed" ).click(function() {
             $( "#viewed-item" ).slideToggle( "slow" );
         });
-
-        $('.login-preview').click(function () {
+        $(document).on("click", ".login-preview", function() {
             $('#registerModal').modal('hide');
             $('#forgetModal').modal('hide');
             $('#loginModal').modal('toggle');

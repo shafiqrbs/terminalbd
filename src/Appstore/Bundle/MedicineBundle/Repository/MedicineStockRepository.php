@@ -370,7 +370,7 @@ class MedicineStockRepository extends EntityRepository
 
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineConfig', 'ic');
-        $query->select('e.name as id');
+        $query->select('e.id as id');
         $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");

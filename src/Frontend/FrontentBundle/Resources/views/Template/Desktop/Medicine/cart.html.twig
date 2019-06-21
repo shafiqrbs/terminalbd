@@ -106,7 +106,7 @@
                                             <span class="input-group-btn">
                                                <button type="button" class="btn gray-dark-bg btn-number-cart"
                                                        data-type="minus" data-field="quantity" data-id="{{ product.rowid }}"
-                                                       data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
+                                                       data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"
                                                        data-text="{{ product.id }}" data-title="{{ product.price }}">
                                                         <span class="glyphicon glyphicon-minus"></span>
                                                </button>
@@ -118,7 +118,7 @@
                                               <button type="button" class="btn gray-dark-bg btn-number-cart"
                                                       data-type="plus" data-field="quantity"
                                                       data-id="{{ product.rowid }}"
-                                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
+                                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"
                                                       data-text="{{ product.id }}" data-title="{{ product.price }}">
                                                       <span class="glyphicon glyphicon-plus"></span>
                                               </button>
@@ -148,7 +148,7 @@
                             {% endfor %}
                             <tr>
                                 <td colspan="3" class="text-right"><strong>Subtotal</strong></td>
-                                <td class="text-left col-sm-1 col-md-1"><strong>{{ globalOption.ecommerceConfig.currency }} {{ cart.total }}</strong></td>
+                                <td class="text-left col-sm-1 col-md-1"><strong>{{ globalOption.ecommerceConfig.currency }} <span class="cartTotal">{{ cart.total }}</span></strong></td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="text-right"><h5><strong>Coupon Code</strong></h5></td>
@@ -161,7 +161,7 @@
                             <tr>
                                 <td colspan="3" class="text-right"><strong>Grand Total</strong></td>
                                 <td class="col-sm-1 col-md-1 text-left">
-                                    <strong>{{ globalOption.ecommerceConfig.currency }} {{ cart.total }}</strong>
+                                    <strong>{{ globalOption.ecommerceConfig.currency }} <span class="cartTotal">{{ cart.total }}</span></strong>
                                 </td>
                             </tr>
                             <tr>

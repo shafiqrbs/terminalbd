@@ -130,9 +130,147 @@ $(document).on( "click", ".productToCart", function(e){
 });
 
 
+    $(document).on( "click", ".btn-number-stock", function(e){
 
-$('#cartItem').mouseover(function(){
-    $('#cartItem').popModal({
+        e.preventDefault();
+
+        fieldName = $(this).attr('data-field');
+        type      = $(this).attr('data-type');
+        var input = $("input[name='"+fieldName+"']");
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if(type == 'minus') {
+
+                if(currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
+                }
+                if(parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+            } else if(type == 'plus') {
+
+                if(currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if(parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+            }
+        } else {
+            input.val(0);
+        }
+    });
+
+    $( "#prescriptionUpload" ).click(function() {
+        $('.loader-curtain').fadeIn(5000).addClass('is-active');
+        $.ajax({
+            url: "/product-stock-item-create" ,
+            type: 'POST',
+            data:'',
+            success: function(response) {
+                $('form#stockItemForm')[0].reset();
+                $("#stockCart").html(response);
+                $( "#prescription-content" ).slideToggle();
+                $('.loader-curtain').fadeOut(1000);
+            },
+
+        });
+
+
+    });
+
+    $('#itemName').click(function() {
+        $(this).attr('value', '');
+    });
+
+    var searchRequest = null;
+
+    var minlength = 1;
+
+    $(".select2StockMedicine").keyup(function () {
+
+            var that = this,
+            value = $(this).val();
+            if (value.length >= minlength ) {
+            if (searchRequest != null)
+                searchRequest.abort();
+            searchRequest = $.ajax({
+                type: "GET",
+                url: "/product-stock",
+                data: {
+                    'q' : value
+                },
+                dataType: 'json',
+                success: function(response){
+                    var len = response.length;
+                    $("#searchResult").empty();
+                    for( var i = 0; i<len; i++){
+                        var id = response[i]['id'];
+                        var fname = response[i]['name'];
+                        $("#searchResult").append("<li value='"+id+"'>"+fname+"</li>");
+                    }
+                    // binding click event to li
+                    $("#searchResult li").bind("click",function(){
+                        setText(this);
+                    });
+
+                }
+            });
+        }
+    });
+
+    function setText(element){
+
+        var value = $(element).text();
+        var stockId = $(element).val();
+        $('#stockId').val(stockId);
+        $("#itemName").val(value);
+        $("#searchResult").empty();
+        $.get( "/product-stock-details", { stockId:stockId } )
+            .done(function( response ) {
+                obj = JSON.parse(response);
+                $('#salesPrice').val(obj['price']);
+                $('#unit').html(obj['unit']);
+                $('#quantity').focus();
+            });
+    }
+
+    var form = $("#stockItemForm").validate({
+        rules: {
+            "itemName": {required: true},
+            "itemQuantity": {required: true},
+            "salesPrice": {required: false},
+           },
+
+        messages: {
+            "itemName":"Search a item name",
+            "itemQuantity":"Enter item quantity",
+        },
+        tooltip_options: {
+            "itemName": {placement:'top',html:true},
+            "itemQuantity": {placement:'top',html:true},
+        },
+
+        submitHandler: function(form) {
+
+        $.ajax({
+            url         : $('form#stockItemForm').attr( 'action' ),
+            type        : $('form#stockItemForm').attr( 'method' ),
+            data        : new FormData($('form#stockItemForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                $('form#stockItemForm').reset();
+               $("#stockCart").html(response);
+            }
+        });
+    }
+});
+
+
+
+$('.cartItem').click(function(){
+    $('.cartItem').popModal({
         html : function(callback) {
             $.ajax({url:'/cart/product-details'}).done(function(content){
                 callback(content);
@@ -277,6 +415,8 @@ $('.input-number').focusin(function(){
 });
 
 
+
+
 $(document).on( "click", ".btn-number", function(e){
 
     e.preventDefault();
@@ -310,11 +450,6 @@ $(document).on( "click", ".btn-number", function(e){
 
 
 
-$( "#prescriptionUpload" ).click(function() {
-    $( "#prescription-content" ).slideToggle('5000');
-});
-
-
 $(document).on( "change", ".userMobile", function( e ) {
 
     var mobile = $(this).val();
@@ -334,7 +469,7 @@ $(document).on( "change", ".userMobile", function( e ) {
 
 });
 
-validator =  $("#prescription").validate({
+/*validator =  $("#prescriptionx").validate({
 
     rules: {
 
@@ -374,7 +509,7 @@ validator =  $("#prescription").validate({
         });
     }
 
-});
+});*/
 
 
 $(document).on( "click", ".btn-number-cart", function(e){

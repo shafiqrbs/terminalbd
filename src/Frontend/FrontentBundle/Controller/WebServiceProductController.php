@@ -13,6 +13,7 @@ use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -152,6 +153,33 @@ class WebServiceProductController extends Controller
         }else{
             return $this->redirect($this->generateUrl('homepage'));
         }
+    }
+
+    public function stockSearchAction($subdomain)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $item = trim($_REQUEST['q']);
+        $search_arr = array();
+        if ($item) {
+            $config = $globalOption->getMedicineConfig();
+            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchNameAutoComplete($item,$config);
+            foreach ($items as $item):
+                $id = $item['id'];
+                $name = $item['text'];
+                $search_arr[] = array("id" => $id, "name" => $name);
+            endforeach;
+        }
+        echo json_encode($search_arr);
+        exit;
+    }
+
+    public function stockItemDetailsAction($subdomain)
+    {
+        $id = $_REQUEST['stockId'];
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($id);
+        return new Response(json_encode(array('price' => $entity->getSalesPrice() , 'unit' => $entity->getUnit()->getName())));
+
     }
 
     public function medicineProductSearch($request , $subdomain)
@@ -457,7 +485,6 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
 
                 array(
-
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'product'           => $entity,
@@ -763,6 +790,52 @@ class WebServiceProductController extends Controller
 
     }
 
+    public function stockProductToCartAction(Request $request , $subdomain)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        $data = $request->request->all();
+        if(!empty($data)) {
+
+            $product = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['stockId']);
+            $quantity = isset($data['itemQuantity']) ? $data['itemQuantity'] : '';
+            $productUnit = (!empty($product->getUnit())) ? $product->getUnit()->getName() : '';
+
+            /** @var GlobalOption $globalOption */
+
+            $data = array(
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'brand' => $product->getBrandName(),
+                'category' => '',
+                'price' => $product->getSalesPrice(),
+                'quantity' => $quantity,
+                'productUnit' => $productUnit,
+                'productImg' => ''
+            );
+            $cart->insert($data);
+        }
+
+        $detect = new MobileDetect();
+        if($detect->isMobile() || $detect->isTablet() ) {
+            $theme = 'Template/Mobile/Medicine/';
+        }else{
+            $theme = 'Template/Desktop/Medicine/';
+        }
+        $html = $this->renderView(
+            'FrontendBundle:'.$theme.':stockCart.html.twig', array(
+                'cart' => $cart,
+                'globalOption' => $globalOption
+            )
+        );
+        return new Response($html);
+
+    }
+
+
 
     public function productCartDetailsAction(Request $request, $subdomain){
 
@@ -812,6 +885,27 @@ class WebServiceProductController extends Controller
         }else{
             $array =(json_encode(array('process'=>'invalid')));
         }
+        echo $array;
+        exit;
+    }
+
+    public function productMedicineUpdateCartAction(Request $request , $cartid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cart = new Cart($request->getSession());
+        $quantity = (int)$_REQUEST['quantity'];
+        $productId = (int)$_REQUEST['productId'];
+        $price = (float)$_REQUEST['price'];
+        $data = array(
+            'rowid' => $cartid,
+            'price' => $price,
+            'quantity' => $quantity,
+        );
+        $cart->update($data);
+        $cartTotal = (string)round($cart->total());
+        $totalItems = (string)$cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
         echo $array;
         exit;
     }

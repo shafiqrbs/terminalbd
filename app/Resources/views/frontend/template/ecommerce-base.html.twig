@@ -26,6 +26,7 @@
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
     <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
     <!--[if lt IE 9]>
@@ -117,12 +118,13 @@
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
 {% endif %}
-
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
 <!-- jQuery -->
 <!--Jquery Smooth Scrolling-->
 {% javascripts
-
-'assets/template/desktop/js/jquery.js'
 'assets/template/desktop/js/bootstrap.min.js'
 'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
 'assets/template/plugin/numeric/jquery.numeric.js'
@@ -130,7 +132,6 @@
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/mobile/js/jquery.mmenu.min.all.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
-'assets/template/plugin/select2/select2.js'
 'assets/template/plugin/wow/js/wow.min.js'
 'assets/template/plugin/treeview/treeview.js'
 'assets/template/plugin/matchHeight/height-match.js'
@@ -148,6 +149,7 @@
 
 {% endjavascripts %}
 <script>  subdomain = "{{ globalOption.subDomain }}"; </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 {% block javascriptBlock %}{% endblock %}
 <script>
     $(document).ready(function(){

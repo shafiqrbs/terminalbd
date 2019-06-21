@@ -94,8 +94,8 @@ webservice_product_cart_update:
 
 
 webservice_product_medicine_cart_update:
-    path:     /cart/product-update/{cartid}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
+    path:     /cart/product-medicine-update/{cartid}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productMedicineUpdateCart }
     methods:  GET
     options:
             expose: true
@@ -211,6 +211,18 @@ webservice_customer_mobile_validation:
     options:
             expose: true
 
+webservice_medicine_stock_search:
+    path:     /product-stock
+    defaults: { _controller: "FrontendBundle:WebServiceProduct:stockSearch" }
+    options:
+            expose: true
+
+webservice_medicine_stock_details:
+    path:     /product-stock-details
+    defaults: { _controller: "FrontendBundle:WebServiceProduct:stockItemDetails" }
+    options:
+            expose: true
+
 webservice_search:
     path:     /search
     defaults: { _controller: FrontendBundle:WebServiceModule:search }
@@ -218,6 +230,20 @@ webservice_search:
 webservice_product_search:
     path:     /product-search
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSearch }
+
+webservice_stock_item_create:
+    path:     /product-stock-item-create
+    defaults: { _controller: FrontendBundle:WebServiceProduct:stockProductToCart }
+    methods:  POST
+    options:
+            expose: true
+
+webservice_prescription_upload:
+    path:     /prescription-upload
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }
+    methods:  POST
+    options:
+            expose: true
 
 webservice_module_page:
     path:     /{module}/{slug}
@@ -235,12 +261,8 @@ frontend_brand:
     path:     /brand/{slug}
     defaults: { _controller: FrontendBundle:Default:brand }
 
-webservice_prescription_upload:
-    path:     /prescription-upload
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:insert }
-    methods:  POST
-    options:
-            expose: true
+
+
 
 
 

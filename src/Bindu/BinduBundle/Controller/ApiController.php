@@ -410,13 +410,16 @@ class ApiController extends Controller
 
             /* @var $template TemplateCustomize */
 
+            $baseurl = "";
             $template = $entity->getTemplateCustomize();
-            $dir = $template->getUploadDir();
-            $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+            if($template->getAndroidLogo()){
+                $dir = $template->getUploadDir();
+                $baseurl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath().'/'.$dir.'/'.$template->getAndroidLogo();
+            }
 
             $data = array(
                 'globalOption'                      => $entity->getId(),
-                'androidLogo'                       => $baseurl.'/'.$dir.'/'.$template->getAndroidLogo() ,
+                'androidLogo'                       => $baseurl,
                 'androidHeaderBg'                   => $template->getAndroidHeaderBg() ,
                 'androidMenuBg'                     => $template->getAndroidMenuBg() ,
                 'androidMenuBgHover'                => $template->getAndroidMenuBgHover() ,
