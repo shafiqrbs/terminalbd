@@ -154,7 +154,7 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form col-md-9 text-right">
+                <div class="bs-example-form col-md-9 text-right" style="padding-right: 0!important;">
                     <div class="box">
                         {% if globalOption.templateCustomize.topTextPosition == "menu-right" and globalOption.templateCustomize.topBarContent is not empty %}
                             {{  globalOption.templateCustomize.topBarContent|raw }}
