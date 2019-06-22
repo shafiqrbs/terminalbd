@@ -370,6 +370,23 @@ class MedicineStockRepository extends EntityRepository
 
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineConfig', 'ic');
+        $query->select('e.name as id');
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchWebStock($q, MedicineConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
         $query->select('e.id as id');
         $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
@@ -381,6 +398,7 @@ class MedicineStockRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
 
 
     public function searchAutoCompleteBrandName($q, MedicineConfig $config)

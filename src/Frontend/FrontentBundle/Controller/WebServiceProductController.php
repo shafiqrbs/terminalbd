@@ -163,7 +163,7 @@ class WebServiceProductController extends Controller
         $search_arr = array();
         if ($item) {
             $config = $globalOption->getMedicineConfig();
-            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchNameAutoComplete($item,$config);
+            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchWebStock($item,$config);
             foreach ($items as $item):
                 $id = $item['id'];
                 $name = $item['text'];

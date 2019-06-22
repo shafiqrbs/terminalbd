@@ -72,9 +72,7 @@
                                         <td class="numeric" >
                                             <div class="actions">
                                                 <div class="btn-group">
-                                            <a href="{{ path('payroll_sheet',{'id':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Sheet</a>
-                                                    <a href="{{ path('payroll_sheet',{'id':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Sheet</a>
-                                                <a href="{{ path('payroll_delete',{'id':entity.id}) }}" class="btn red mini" ><i class="fa fa-trash"></i></a></div></div>
+                                            <a href="{{ path('payroll_sheet',{'id':entity.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Sheet</a><a href="{{ path('payroll_delete',{'id':entity.id}) }}" class="btn red mini" ><i class="fa fa-trash"></i></a></div></div>
                                         </td>
                                     </tr>
                                 {% endfor %}
