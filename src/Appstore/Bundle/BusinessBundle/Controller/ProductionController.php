@@ -191,13 +191,14 @@ class ProductionController extends Controller
         $editForm = $this->createPreProductionForm($entity,$item);
         $editForm->handleRequest($request);
         $data = $request->request->all();
+        $productionElementPrice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->getProductPurchaseSalesPrice($item);
         if ($editForm->isValid()) {
 	        $entity->setBusinessParticular($item);
-	        $entity->setPurchasePrice($data['purchasePrice']);
-	        $entity->setSalesPrice($data['salesPrice']);
+	        $entity->setPurchasePrice($productionElementPrice['purchasePrice']);
+	        $entity->setSalesPrice($productionElementPrice['salesPrice']);
 	        $entity->setQuantity($data['productionQuantity']);
-	        $entity->setPurchaseSubTotal($data['purchasePrice'] * $data['productionQuantity']);
-	        $entity->setSalesSubTotal($data['salesPrice'] * $data['productionQuantity']);
+	        $entity->setPurchaseSubTotal($productionElementPrice['purchasePrice'] * $data['productionQuantity']);
+	        $entity->setSalesSubTotal($productionElementPrice['salesPrice'] * $data['productionQuantity']);
 	        $em->persist($entity);
 	        $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -224,13 +225,14 @@ class ProductionController extends Controller
 		$data = $request->request->all();
 		if ($editForm->isValid()) {
 			$particular = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
-			$entity->setBusinessParticular($particular);
+            $productionElementPrice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->getProductPurchaseSalesPrice($particular);
 			$entity->setBusinessParticular($particular);
 			$entity->setPurchasePrice($data['purchasePrice']);
-			$entity->setSalesPrice($data['salesPrice']);
-			$entity->setQuantity($data['quantity']);
-			$entity->setPurchaseSubTotal($data['purchasePrice'] * $data['quantity']);
-			$entity->setSalesSubTotal($data['salesPrice'] * $data['quantity']);
+            $entity->setPurchasePrice($productionElementPrice['purchasePrice']);
+            $entity->setSalesPrice($productionElementPrice['salesPrice']);
+            $entity->setQuantity($data['quantity']);
+            $entity->setPurchaseSubTotal($productionElementPrice['purchasePrice'] * $data['quantity']);
+            $entity->setSalesSubTotal($productionElementPrice['salesPrice'] * $data['quantity']);
 			$em->persist($entity);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(

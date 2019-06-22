@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessProduction;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
@@ -329,7 +330,7 @@ class BusinessParticularRepository extends EntityRepository
        }
     }
 
-	public function salesProductionQnt(BusinessProductionElement  $element){
+	public function salesProductionQnt( BusinessProductionElement  $element){
 
         $em = $this->_em;
         $particular = $element->getParticular();

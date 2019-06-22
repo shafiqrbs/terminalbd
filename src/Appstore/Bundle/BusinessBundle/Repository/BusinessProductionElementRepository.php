@@ -37,7 +37,7 @@ class BusinessProductionElementRepository extends EntityRepository
     {
 
 	    $qb = $this->createQueryBuilder('e');
-	    $qb->select('sum(e.purchasePrice) as purchasePrice,sum(e.salesPrice) as salesPrice');
+	    $qb->select('sum(e.purchasePrice * e.quantity) as purchasePrice, sum(e.salesPrice* e.quantity) as salesPrice');
 	    $qb->where('e.businessParticular = :particular');
 	    $qb->setParameter('particular', $particular);
 	    return $qb->getQuery()->getOneOrNullResult();
@@ -54,16 +54,17 @@ class BusinessProductionElementRepository extends EntityRepository
         foreach ($entities as $entity) {
 
             $subTotal = $entity->getSalesPrice() * $entity->getQuantity() ;
+            $subPurchase = $entity->getPurchasePrice() * $entity->getQuantity();
 	        $unit = !empty($entity->getParticular()->getUnit() && !empty($entity->getParticular()->getUnit()->getName())) ? $entity->getParticular()->getUnit()->getName():'Unit';
-
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td class='span1' >{$i}</td>";
             $data .= "<td class='span1' >{$entity->getParticular()->getParticularCode()}</td>";
             $data .= "<td class='span3' >{$entity->getParticular()->getName()}</td>";
-            $data .= "<td class='span1' >{$entity->getPurchasePrice()}</td>";
-            $data .= "<td class='span1' >{$entity->getSalesPrice()}</td>";
             $data .= "<td class='span1' >{$entity->getQuantity()}</td>";
             $data .= "<td class='span1' >{$unit}</td>";
+            $data .= "<td class='span1' >{$entity->getPurchasePrice()}</td>";
+            $data .= "<td class='span1' >{$subPurchase}</td>";
+            $data .= "<td class='span1' >{$entity->getSalesPrice()}</td>";
             $data .= "<td class='span1' >{$subTotal}</td>";
             $data .= "<td class='span1' ><a id='{$entity->getId()}' data-url='/business/product-production/{$particular->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';

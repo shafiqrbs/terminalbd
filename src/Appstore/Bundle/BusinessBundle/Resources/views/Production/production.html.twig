@@ -85,25 +85,31 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
                             <th class="span4">Name</th>
-                            <th class="span1">Purchase</th>
-                            <th class="span1">Sales</th>
                             <th class="span1">Qnt</th>
                             <th class="span1">Unit</th>
-                            <th class="span1">Sub Total</th>
+                            <th class="span1">Purchase</th>
+                            <th class="span1">PP SubTotal</th>
+                            <th class="span1">Sales</th>
+                            <th class="span1">Sales SubTotal</th>
                             <th class="span1"></th>
                         </tr>
                         </thead>
                         <tbody id="invoiceParticulars">
+                        {% set productionPurchaseCost = 0 %}
+                        {% set productionSalesCost = 0 %}
                         {% if entity.productionElements is not empty %}
                             {% for item in entity.productionElements %}
+                                {% set productionPurchaseCost = productionPurchaseCost + (item.purchasePrice * item.quantity) %}
+                                {% set productionSalesCost = productionSalesCost + (item.salesPrice * item.quantity) %}
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.particular.particularCode }}</td>
                                     <td class="span4">{{ item.particular.name }}</td>
-                                    <td class="span1">{{ item.purchasePrice }}</td>
-                                    <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{% if item.particular.unit is not empty %}{{ item.particular.unit.name }}{% endif %}</td>
+                                    <td class="span1">{{ item.purchasePrice }}</td>
+                                    <td class="span1">{{ (item.purchasePrice * item.quantity)|number_format }}</td>
+                                    <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ (item.salesPrice * item.quantity)|number_format }}</td>
                                     <td class="span1"><a id="{{ item.id }}" data-url="{{ path('business_pre_production_delete',{'particular': entity.id,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
@@ -112,11 +118,12 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="10" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
                             <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                            <td class="span1"><strong id="subTotal">{{ entity.productionSalesPrice|number_format }}</strong></td>
+                            <td class="span1"><strong id="subTotal">{{ productionPurchaseCost|number_format }}</strong></td>
+                            <td class="span1"><strong id="subTotal">{{ productionSalesCost|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         </tfoot>
