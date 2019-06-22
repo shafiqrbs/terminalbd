@@ -435,6 +435,13 @@ class MedicineStockRepository extends EntityRepository
 
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row->getId();
+
+            if($row->getMedicineBrand()){
+                $printName = $row->getMedicineBrand()->getName();
+            }else{
+                $printName = $row->getName();
+            }
+
             if ($row->getMode() != ""){
                 $category = $this->_em->getRepository('MedicineBundle:MedicineParticularType')->findOneBy(array('slug' => $row->getMode()));
                 $data[$key]['category_id']      = $category->getId();
@@ -451,7 +458,9 @@ class MedicineStockRepository extends EntityRepository
                 $data[$key]['unit_id']          = 0;
                 $data[$key]['unit']             = '';
             }
+
             $data[$key]['name']                 = $row->getName();
+            $data[$key]['printName']            = $printName;
             $data[$key]['quantity']             = $row->getRemainingQuantity();
             $data[$key]['salesPrice']           = $row->getSalesPrice();
             $data[$key]['purchasePrice']        = $row->getPurchasePrice();

@@ -501,6 +501,7 @@ class ApiController extends Controller
             return new Response('Unauthorized access.', 401);
 
         }else{
+
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             if($entity->getMainApp()->getSlug() == 'miss'){
