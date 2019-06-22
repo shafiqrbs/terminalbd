@@ -437,7 +437,7 @@ class MedicineStockRepository extends EntityRepository
             $data[$key]['item_id']              = (int) $row->getId();
 
             if($row->getMedicineBrand()){
-                $printName = $row->getMedicineBrand()->getName();
+                $printName = $row->getMedicineBrand()->getName() .'-'.$row->getMedicineBrand()->getStrength();
             }else{
                 $printName = $row->getName();
             }
