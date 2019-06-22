@@ -26,6 +26,7 @@ use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
@@ -1413,7 +1414,7 @@ class GlobalOption
     }
 
     /**
-     * @return InventorConfig
+     * @return InventoryConfig
      */
     public function getInventoryConfig()
     {

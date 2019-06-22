@@ -455,6 +455,7 @@ class MedicineStockRepository extends EntityRepository
             $data[$key]['quantity']             = $row->getRemainingQuantity();
             $data[$key]['salesPrice']           = $row->getSalesPrice();
             $data[$key]['purchasePrice']        = $row->getPurchasePrice();
+            $data[$key]['printHidden']          = $row->isPrintHide();
 
         }
 

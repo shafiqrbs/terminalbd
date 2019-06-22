@@ -99,6 +99,13 @@ class AppModule
 	/**
      * @var string
      *
+     * @ORM\Column(name="applicationManual", type="text" , nullable = true)
+     */
+    private $applicationManual;
+
+	/**
+     * @var string
+     *
      * @ORM\Column(name="shortContent", type="text" , nullable = true)
      */
     private $shortContent;
@@ -432,6 +439,22 @@ class AppModule
     public function getAppDomains()
     {
         return $this->appDomains;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationManual()
+    {
+        return $this->applicationManual;
+    }
+
+    /**
+     * @param string $applicationManual
+     */
+    public function setApplicationManual($applicationManual)
+    {
+        $this->applicationManual = $applicationManual;
     }
 }
 

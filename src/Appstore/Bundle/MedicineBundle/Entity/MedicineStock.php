@@ -241,6 +241,13 @@ class MedicineStock
     /**
      * @var boolean
      *
+     * @ORM\Column(name="printHide", type="boolean",  nullable=true)
+     */
+    private $printHide = true;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isWeb", type="boolean",  nullable=true)
      */
     private $isWeb = false;
@@ -781,6 +788,22 @@ class MedicineStock
     public function setIsAndroid($isAndroid)
     {
         $this->isAndroid = $isAndroid;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintHide()
+    {
+        return $this->printHide;
+    }
+
+    /**
+     * @param bool $printHide
+     */
+    public function setPrintHide($printHide)
+    {
+        $this->printHide = $printHide;
     }
 
 

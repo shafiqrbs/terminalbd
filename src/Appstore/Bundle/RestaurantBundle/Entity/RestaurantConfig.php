@@ -320,6 +320,13 @@ class RestaurantConfig
     private $barcodeScale = 1;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text", nullable = true)
+     */
+    private $address;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
@@ -1022,6 +1029,22 @@ class RestaurantConfig
     public function setPayFor(string $payFor)
     {
         $this->payFor = $payFor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 
 

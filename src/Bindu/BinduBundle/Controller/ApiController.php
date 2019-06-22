@@ -48,6 +48,18 @@ class ApiController extends Controller
         }else{
             /* @var $entity GlobalOption */
             $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
+
+            $address = '';
+            if( $entity->getMainApp()->getSlug() == "miss"){
+                $address  = $entity->getMedicineConfig()->getAddress();
+            }elseif( $entity->getMainApp()->getSlug() == "business"){
+                $address  = $entity->getBusinessConfig()->getAddress();
+            }elseif( $entity->getMainApp()->getSlug() == "restaurant"){
+                $address  = $entity->getRestaurantConfig()->getAddress();
+            }elseif( $entity->getMainApp()->getSlug() == "inventory"){
+                $address  = $entity->getInventoryConfig()->getAddress();
+            }
+
             $data = array(
                 'setupId' => $entity->getId(),
                 'deviceId' => $device,
@@ -56,9 +68,12 @@ class ApiController extends Controller
                 'mobile' => $entity->getMobile(),
                 'email' => $entity->getEmail(),
                 'locationId' => $entity->getLocation()->getId(),
+                'address' => $address,
                 'locationName' => $entity->getLocation()->getName(),
                 'main_app' => $entity->getMainApp()->getId(),
                 'main_app_name' => $entity->getMainApp()->getSlug(),
+                'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                'website' => $entity->getDomain(),
             );
         }
 

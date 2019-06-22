@@ -174,6 +174,14 @@ class InventoryConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="address", type="text", nullable = true)
+     */
+    private $address;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="printer", type="string", length=50,nullable = true)
      */
     private $printer;
@@ -1348,6 +1356,22 @@ class InventoryConfig
 	public function setUsingSalesPrice($usingSalesPrice ) {
 		$this->usingSalesPrice = $usingSalesPrice;
 	}
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
 
 
 }
