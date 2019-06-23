@@ -496,6 +496,7 @@ class ApiController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
+
         if( $this->checkApiValidation($request) == 'invalid') {
 
             return new Response('Unauthorized access.', 401);
@@ -504,8 +505,42 @@ class ApiController extends Controller
 
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
+            $deviceId = $request->headers->get('X-DEVICE-ID');
+            $data = $request->request->all();
             if($entity->getMainApp()->getSlug() == 'miss'){
-                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$request);
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$deviceId,$data);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function apiSalesItemAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $data = $request->request->all();
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesItem($entity,$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
                 $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
             }elseif($entity->getMainApp()->getSlug() == 'inventory'){

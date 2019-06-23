@@ -73,7 +73,7 @@ class CustomerRepository extends EntityRepository
     {
         $em = $this->_em;
         $name = $data['customerName'];
-        $address = $data['customerAddress'];
+        $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
         if($entity){
             $entity->setAddress($address);

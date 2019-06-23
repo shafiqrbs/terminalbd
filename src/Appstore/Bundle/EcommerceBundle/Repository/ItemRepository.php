@@ -30,9 +30,9 @@ class ItemRepository extends EntityRepository
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
-
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.brand','brand');
+        $qb->leftJoin('product.category','category');
         $qb->where("product.status = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
@@ -58,15 +58,18 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('discount', $data['discount']);
         }
 
+        if (!empty($data['categoryId'])) {
+            $qb->andWhere("category.id >= :catId");
+            $qb->setParameter('catId', $data['categoryId']);
+        }
+
         if (!empty($data['category'])) {
-            $qb
-                ->leftJoin('product.category', 'category')
-                ->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
-                        $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
-                    )
-                );
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
+                    $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
+                )
+            );
         }
         if (!empty($data['product'])) {
              $search = strtolower($data['product']);

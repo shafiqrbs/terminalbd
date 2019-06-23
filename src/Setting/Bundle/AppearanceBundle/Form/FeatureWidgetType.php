@@ -101,6 +101,7 @@ class FeatureWidgetType extends AbstractType
 
             ->add('promotion', 'entity', array(
                 'required'    => false,
+                'multiple'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
                 'empty_value' => '---Select Promotion---',
                 'property' => 'name',
@@ -117,6 +118,7 @@ class FeatureWidgetType extends AbstractType
 
             ->add('tag', 'entity', array(
                 'required'    => false,
+                'multiple'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
                 'empty_value' => '---Select Tag---',
                 'property' => 'name',
@@ -415,7 +417,7 @@ class FeatureWidgetType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_appearancebundle_featurewidget';
+        return 'featurewidget';
     }
 
     /**
@@ -424,7 +426,7 @@ class FeatureWidgetType extends AbstractType
     protected function categoryChoiceList()
     {
 
-        return $categoryTree = $this->category->getUseInventoryItemCategory($this->globalOption->getInventoryConfig());
+        return $categoryTree = $this->category->getUseEcommerceItemCategory($this->globalOption->getEcommerceConfig());
 
     }
 

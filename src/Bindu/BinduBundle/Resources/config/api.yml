@@ -67,4 +67,16 @@ api_system_template_customization:
     path:     /template-customization
     defaults: { _controller: BinduBundle:Api:templateCustomization }
 
+api_system_sales:
+    path:     /sales
+    defaults: { _controller: BinduBundle:Api:apiSales }
+    methods:  POST
+    options:
+            expose: true
 
+api_system_sales_item:
+    path:     /sales-item
+    defaults: { _controller: BinduBundle:Api:apiSalesItem }
+    methods:  POST
+    options:
+            expose: true

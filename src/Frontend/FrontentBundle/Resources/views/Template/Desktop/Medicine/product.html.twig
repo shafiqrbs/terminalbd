@@ -171,7 +171,7 @@
                             <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
                                 <form id="add_buy_cart-{{ product.id }}" class="addCart">
                                     <div class="product-canvas">
-                                {#        <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span> Preview</a>#}
+                                        <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-warning product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span> Preview</a>
 
                                         {% if product.discount is not empty  %}<a class="btn gray-dark-bg danger-font product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                         <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
@@ -300,9 +300,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
     '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
     '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js'
     '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

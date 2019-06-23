@@ -57,12 +57,12 @@ class Promotion
     private  $templateTag;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="promotion" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="promotion" , cascade={"remove"})
      **/
     private  $featureWidgetPromotions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="tag" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="tag" , cascade={"remove"})
      **/
     private  $featureWidgetTags;
 

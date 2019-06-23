@@ -394,21 +394,6 @@ class MedicineSales
         $this->vat = $vat;
     }
 
-    /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param float $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
 
     /**
      * @return \DateTime

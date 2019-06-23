@@ -71,11 +71,9 @@ class WebServiceProductController extends Controller
             $data['brand']= isset($post['brand']) ? $post['brand']:'';
             $data['name']= isset($post['webName']) ? $post['webName']:'';
 
-            $ecommerce = $globalOption->getEcommerceConfig();
-
-            $limit = !empty($data['limit'])  ? $data['limit'] : 20;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -112,10 +110,9 @@ class WebServiceProductController extends Controller
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
             $data = $_REQUEST;
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config,$data);
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -195,11 +192,9 @@ class WebServiceProductController extends Controller
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
             $data = $_REQUEST;
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $config = $globalOption->getEcommerceConfig();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $medicineConfig = $globalOption->getMedicineConfig()->getId();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
             $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
            $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
 
@@ -244,10 +239,9 @@ class WebServiceProductController extends Controller
             if(empty($data)){
                 $data = array('brand' => $brand );
             }
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -288,12 +282,12 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             if(empty($data)){
-                $data = array('category' => $category->getId());
+                $data = array('categoryId' => $category->getId());
             }
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -333,9 +327,8 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -373,9 +366,8 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -412,9 +404,8 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
-            $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
@@ -455,7 +446,7 @@ class WebServiceProductController extends Controller
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product-details'));
 
-            $config = $globalOption->getEcommerceConfig();
+
 
             /*==========Related Product===============================*/
 
@@ -463,6 +454,7 @@ class WebServiceProductController extends Controller
 
                 $cat = $entity->getCategory()->getId();
                 $data = array('category' => $cat);
+                $config = $globalOption->getEcommerceConfig()->getId();
                 $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
                 $products = $this->paginate($entities, $limit = 12 , $globalOption->getTemplateCustomize()->getPagination());
             }

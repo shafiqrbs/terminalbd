@@ -69,14 +69,23 @@ class FeatureWidget
     private  $moduleCategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotions" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotions")
+     *  * @ORM\JoinTable(name="feature_widget_promotion",
+     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
      **/
     private  $promotion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetTags" )
-     **/
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetTags")
+     * @ORM\JoinTable(name="feature_widget_tag",
+     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
+     */
     private  $tag;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="featureWidgets" )
