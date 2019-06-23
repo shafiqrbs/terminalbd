@@ -406,6 +406,7 @@ class UserRepository extends EntityRepository
             $data[$key]['user_id'] = (int) $row->getId();
             $data[$key]['username'] = $row->getUsername();
             $data[$key]['email'] = $row->getEmail();
+            $data[$key]['password'] = $row->getAppPassword();
             $data[$key]['roles'] = unserialize(serialize($row->getAppRoles()));
 
         }

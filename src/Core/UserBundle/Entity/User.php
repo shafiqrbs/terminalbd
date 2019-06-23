@@ -90,6 +90,13 @@ class User extends BaseUser
 	private $userGroup;
 
 	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="appPassword", type="string", length = 30, nullable=true)
+	 */
+	private $appPassword = "android";
+
+	/**
 	 * @var array
 	 *
 	 * @ORM\Column(name="appRoles", type="array", nullable=true)
@@ -1877,6 +1884,22 @@ class User extends BaseUser
     public function setAppRoles($appRoles)
     {
         $this->appRoles = $appRoles;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppPassword()
+    {
+        return $this->appPassword;
+    }
+
+    /**
+     * @param string $appPassword
+     */
+    public function setAppPassword($appPassword)
+    {
+        $this->appPassword = $appPassword;
     }
 
 
