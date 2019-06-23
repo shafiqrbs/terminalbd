@@ -90,6 +90,13 @@ class User extends BaseUser
 	private $userGroup;
 
 	/**
+	 * @var array
+	 *
+	 * @ORM\Column(name="appRoles", type="array", nullable=true)
+	 */
+	private $appRoles;
+
+	/**
 	 * @var boolean
 	 *
 	 * @ORM\Column(name="agent", type="boolean", nullable=true)
@@ -1854,6 +1861,22 @@ class User extends BaseUser
     public function getEmployeePayroll()
     {
         return $this->employeePayroll;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAppRoles()
+    {
+        return $this->appRoles;
+    }
+
+    /**
+     * @param array $appRoles
+     */
+    public function setAppRoles($appRoles)
+    {
+        $this->appRoles = $appRoles;
     }
 
 

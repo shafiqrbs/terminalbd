@@ -62,6 +62,13 @@ class DomainEditUserType extends AbstractType
                     'empty_data'  => null,
                     'choices'   => $this->getAccessRoleGroup())
             )
+            ->add('appRoles', 'choice', array(
+                    'attr'=>array('class'=>'category form-control'),
+                    'required'=>false,
+                    'multiple'    => true,
+                    'empty_data'  => null,
+                    'choices'   => $this->getAppRoleGroup())
+            )
             ->add('enabled');
             $builder->add('profile', new DomainUserProfileType($this->globalOption, $this->location, $this->designation));
 
@@ -88,5 +95,8 @@ class DomainEditUserType extends AbstractType
     public function getAccessRoleGroup(){
 
         return $userGroups =$this->user->getAccessRoleGroup($this->globalOption);
+    }
+    public function getAppRoleGroup(){
+        return $userGroups = $this->user->getAndroidRoleGroup();
     }
 }
