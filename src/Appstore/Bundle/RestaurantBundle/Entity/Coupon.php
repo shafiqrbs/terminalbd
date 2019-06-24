@@ -1,6 +1,7 @@
 <?php
 
-namespace Appstore\Bundle\EcommerceBundle\Entity;
+namespace Appstore\Bundle\RestaurantBundle\Entity;
+
 
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Coupon
  *
- * @ORM\Table("ems_coupon")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\CouponRepository")
+ * @ORM\Table("restaurant_coupon")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\CouponRepository")
  * @UniqueEntity(fields="couponCode",message="This coupon code already existing,Please try again.")
  */
 
@@ -31,14 +32,9 @@ class Coupon
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="coupons")
-     */
-    protected $ecommerceConfig;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="coupon")
-     */
-    protected $orders;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="coupons")
+     **/
+    private $restaurantConfig;
 
 
     /**
@@ -252,21 +248,6 @@ class Coupon
         $this->endDate = $endDate;
     }
 
-    /**
-     * @return EcommerceConfig
-     */
-    public function getEcommerceConfig()
-    {
-        return $this->ecommerceConfig;
-    }
-
-    /**
-     * @param EcommerceConfig $ecommerceConfig
-     */
-    public function setEcommerceConfig($ecommerceConfig)
-    {
-        $this->ecommerceConfig = $ecommerceConfig;
-    }
 
     /**
      * @return float
@@ -348,13 +329,7 @@ class Coupon
         $this->couponCode = $couponCode;
     }
 
-    /**
-     * @return Order
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
+
 
     /**
      * @return int
@@ -386,6 +361,22 @@ class Coupon
     public function setRemainingQuantity($remainingQuantity)
     {
         $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRestaurantConfig()
+    {
+        return $this->restaurantConfig;
+    }
+
+    /**
+     * @param mixed $restaurantConfig
+     */
+    public function setRestaurantConfig($restaurantConfig)
+    {
+        $this->restaurantConfig = $restaurantConfig;
     }
 
 

@@ -29,6 +29,10 @@ api_system_tarnsaction_method:
     path:     /tarnsaction-method
     defaults: { _controller: BinduBundle:Api:transactionMethod }
 
+api_system_payment_card:
+    path:     /payment-card
+    defaults: { _controller: BinduBundle:Api:paymentCard }
+
 
 api_system_bank:
     path:     /online-bank-acccount
@@ -58,7 +62,6 @@ api_system_dims:
     path:     /medicine-dims
     defaults: { _controller: BinduBundle:Api:medicineDims }
 
-
 api_system_expense_category:
     path:     /expense-category
     defaults: { _controller: BinduBundle:Api:expenditureCategory }
@@ -66,6 +69,14 @@ api_system_expense_category:
 api_system_template_customization:
     path:     /template-customization
     defaults: { _controller: BinduBundle:Api:templateCustomization }
+
+api_system_token_no:
+    path:     /token-no
+    defaults: { _controller: BinduBundle:Api:tokenNo }
+
+api_system_discount_coupon:
+    path:     /discount-coupon
+    defaults: { _controller: BinduBundle:Api:discountCoupon }
 
 api_system_sales:
     path:     /sales
