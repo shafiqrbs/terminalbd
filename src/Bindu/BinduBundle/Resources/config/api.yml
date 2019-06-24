@@ -80,3 +80,27 @@ api_system_sales_item:
     methods:  POST
     options:
             expose: true
+
+api_system_purchase:
+    path:     /purchase
+    defaults: { _controller: BinduBundle:Api:apiPurchase }
+    methods:  POST
+    options:
+            expose: true
+
+api_system_purchase_item:
+    path:     /purchase-item
+    defaults: { _controller: BinduBundle:Api:apiPurchaseItem }
+    methods:  POST
+    options:
+            expose: true
+
+api_system_expense:
+    path:     /expense
+    defaults: { _controller: BinduBundle:Api:apiExpense }
+    methods:  POST
+    options:
+            expose: true
+
+
+

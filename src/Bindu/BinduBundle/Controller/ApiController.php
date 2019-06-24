@@ -548,7 +548,94 @@ class ApiController extends Controller
             }elseif($entity->getMainApp()->getSlug() == 'business'){
                 $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
             }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
 
+    }
+
+    public function apiPurchaseAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $deviceId = $request->headers->get('X-DEVICE-ID');
+            $data = $request->request->all();
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->insertApiPurchase($entity,$deviceId,$data);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function apiPurchaseItemAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $data = $request->request->all();
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->insertApiPurchaseItem($entity,$data);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->getApiVendor($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function apiExpenseAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $data = $request->request->all();
+            $data = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertApiExpenditure($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

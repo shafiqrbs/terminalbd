@@ -271,5 +271,42 @@ class ExpenditureRepository extends EntityRepository
         $accountCash->execute();
     }
 
+    public function insertApiExpenditure(GlobalOption $option , $data){
+
+        $em = $this->_em;
+        $expense = new Expenditure();
+        $expense->setGlobalOption($option);
+        $expense->setAmount($data['amount']);
+        $expense->setBalance($data['amount']);
+        if($data['transactionMethod']){
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
+            $expense->setTransactionMethod($method);
+        }
+        if($data['bankAccount']){
+            $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
+            $expense->setAccountBank($bank);
+        }
+        if($data['mobileBankAccount']){
+            $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
+            $expense->setAccountMobileBank($mobile);
+        }
+        if($data['createdBy']){
+            $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+            $expense->setCreatedBy($createdBy);
+        }
+        if($data['toUser']){
+            $toUser = $em->getRepository('UserBundle:User')->find($data['toUser']);
+            $expense->setToUser($toUser);
+        }
+        $created = new \DateTime($data['created']);
+        $expense->setCreated($created);
+        $expense->setUpdated($created);
+        $em->persist($expense);
+        $em->flush();
+        return $expense->getId();
+
+    }
+
+
 
 }
