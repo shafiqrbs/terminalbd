@@ -45,7 +45,7 @@ class ItemBrand  implements CodeAwareEntity
     protected $ecommerceMenu;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="brand")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="brand")
      **/
     private $featureWidgets;
 

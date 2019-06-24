@@ -264,16 +264,18 @@
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.category is defined and widget.category is not empty %}
-            <div class="wow fadeInDown feature-carousel" >
-                <div class="page-title-bar">
-                    <div class="col-md-12" >
-                        <div class="page-title">{{ widget.category.name }}</div>
+            {% for category in widget.category %}
+                <div class="wow fadeInDown feature-carousel" >
+                    <div class="page-title-bar">
+                        <div class="col-md-12" >
+                            <div class="page-title">{{ category.name }}</div>
+                        </div>
+                    </div>
+                    <div>
+                        {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id, 'category':category.id}) %}
                     </div>
                 </div>
-                <div>
-                    {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id, 'category':widget.category.id}) %}
-                </div>
-            </div>
+            {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
@@ -303,42 +305,48 @@
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.brand is defined and widget.brand is not empty %}
+        {% for brand in widget.brand %}
             <div class="wow fadeInDown feature-carousel"  >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
-                        <div class="page-title">{{ widget.brand.name }}</div>
+                        <div class="page-title">{{ brand.name }}</div>
                     </div>
                 </div>
                 <div>
-                    {% render controller("FrontendBundle:EcommerceWidget:brandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id ,'brand':widget.brand.id}) %}
+                    {% render controller("FrontendBundle:EcommerceWidget:brandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id ,'brand':brand.id}) %}
                 </div>
             </div>
+        {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
        {% if widget.promotion is defined and widget.promotion is not empty %}
+           {% for promotion in widget.promotion %}
                 <div class="wow fadeInDown feature-carousel"  style="">
                     <div class="page-title-bar">
                         <div class="col-md-12" >
-                            <div class="page-title">{{ widget.promotion.name }}</div>
+                            <div class="page-title">{{ promotion.name }}</div>
                         </div>
                     </div>
                     <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:promotionTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':widget.promotion.id}) %}
+                        {% render controller("FrontendBundle:EcommerceWidget:promotionTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':promotion.id}) %}
                     </div>
                 </div>
+           {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.tag is defined and widget.tag is not empty %}
-                <div class="wow fadeInDown feature-carousel"  style="">
-                    <div class="page-title-bar">
-                        <div class="col-md-12" >
-                            <div class="page-title">{{ widget.tag.name }}</div>
+            {% for tag in widget.tag %}
+                    <div class="wow fadeInDown feature-carousel"  style="">
+                        <div class="page-title-bar">
+                            <div class="col-md-12" >
+                                <div class="page-title">{{ tag.name }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':tag.id}) %}
                         </div>
                     </div>
-                    <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':widget.tag.id}) %}
-                    </div>
-                </div>
+            {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.discount is defined and widget.discount is not empty %}

@@ -109,7 +109,7 @@ class Category
     protected $ecommerceMenus;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="category" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="category" )
      **/
     protected $featureWidgets;
 

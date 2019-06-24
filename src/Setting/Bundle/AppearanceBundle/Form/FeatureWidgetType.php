@@ -64,6 +64,7 @@ class FeatureWidgetType extends AbstractType
             ))
             ->add('category', 'entity', array(
                 'required'    => true,
+                'multiple'    => true,
                 'empty_value' => '---Select parent category---',
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
                 'class' => 'ProductProductBundle:Category',
@@ -73,10 +74,11 @@ class FeatureWidgetType extends AbstractType
 
 	        ->add('brand', 'entity', array(
 		        'required'    => false,
+                'multiple'    => true,
 		        'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
 		        'empty_value' => '---Select Brand---',
 		        'property' => 'name',
-		        'attr'=>array('class'=>'m-wrap span12 '),
+		        'attr'=>array('class'=>'m-wrap span12 select2'),
 		        'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
 			        return $er->createQueryBuilder('e')
 			                  ->where("e.status = 1")
@@ -87,6 +89,7 @@ class FeatureWidgetType extends AbstractType
 
 	        ->add('discount', 'entity', array(
                 'required'    => false,
+                'multiple'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
                 'empty_value' => '---Select Discount---',
                 'property' => 'name',
@@ -334,69 +337,6 @@ class FeatureWidgetType extends AbstractType
                     'grid'                => 'Product grid',
                 ),
             ))
-
-           /* ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
-            ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
-            ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
-
-
-            ->add('moduleShowType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'list'                => 'List',
-                    'grid'                => 'Grid',
-                    'slider'              => 'Slider',
-                ),
-            ))
-
-            ->add('pageShowType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'list'                => 'List',
-                    'grid'                => 'Grid',
-                    'slider'              => 'Slider',
-                ),
-            ))
-
-
-            ->add('page', 'entity', array(
-                'required'    => false,
-                'multiple'    => true,
-                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
-                'empty_value' => '---Select Page---',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.module = 12")
-                        ->andWhere("e.globalOption = $this->globalId")
-                        ->orderBy('e.name','ASC');
-                },
-            ))
-
-            ->add('module', 'entity', array(
-                'required'    => false,
-                'multiple'    => false,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
-                'empty_value' => '---Select page module---',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join('e.nav' ,'n')
-                        ->where("e.status = 1")
-                        ->andWhere("e.isSingle != 1")
-                        ->andWhere("n.module != 12")
-                        ->andWhere("n.module is not NULL")
-                        ->andWhere("n.globalOption = $this->globalId")
-                        ->orderBy('e.name','ASC');
-                },
-            ))*/
             ->add('featureBrand')
             ->add('featureCategory')
         ;
