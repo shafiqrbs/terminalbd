@@ -689,7 +689,6 @@ class MedicineSalesRepository extends EntityRepository
         $salesItem->setSubTotal($data['subTotal']);
         $em->persist($salesItem);
         $em->flush();
-        return $salesItem->getId();
 
     }
 
