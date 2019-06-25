@@ -30,8 +30,6 @@ class ApiController extends Controller
         return "invalid";
     }
 
-
-
     public function setupAction(Request $request)
     {
 
@@ -607,7 +605,6 @@ class ApiController extends Controller
 
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

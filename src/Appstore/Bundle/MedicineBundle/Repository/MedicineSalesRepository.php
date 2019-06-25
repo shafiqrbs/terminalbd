@@ -670,9 +670,6 @@ class MedicineSalesRepository extends EntityRepository
             $sales->setPaymentStatus("Paid");
             $em->persist($sales);
             $em->flush();
-            return $sales->getId();
-           // $this->insertApiSalesItem($sales,$data);
-
 
     }
 
