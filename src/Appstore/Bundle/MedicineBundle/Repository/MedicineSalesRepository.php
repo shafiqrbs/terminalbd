@@ -651,6 +651,10 @@ class MedicineSalesRepository extends EntityRepository
                 $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
                 $sales->setCustomer($customer);
             }
+            if(empty($data['customerId']) and empty($data['customerName']) ){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'name'=>'Default'));
+                $sales->setCustomer($customer);
+            }
             if($data['customerName'] and $data['customerMobile']){
                 $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
                 $sales->setCustomer($customer);
