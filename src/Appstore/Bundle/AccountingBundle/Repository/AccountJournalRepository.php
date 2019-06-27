@@ -35,7 +35,7 @@ class AccountJournalRepository extends EntityRepository
         $qb->leftJoin('e.transactionMethod','t');
         $qb->leftJoin('e.accountMobileBank','amb');
         $qb->leftJoin('e.accountBank','ab');
-        $qb->select('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.transactionType as transactionType','e.amount as amount','e.remark as remark','e.process as process','e.journalSource as process');
+        $qb->select('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.transactionType as transactionType','e.amount as amount','e.remark as remark','e.process as process','e.journalSource as source');
         $qb->addSelect('profile.name as userName');
         $qb->addSelect('accountHeadDebit.name as accountHeadDebitName');
         $qb->addSelect('accountHeadCredit.name as accountHeadCreditName');
