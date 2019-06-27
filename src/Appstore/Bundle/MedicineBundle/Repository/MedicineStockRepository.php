@@ -287,6 +287,7 @@ class MedicineStockRepository extends EntityRepository
         $em = $this->_em;
         $avg = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseSalesAvg($stock);
 	    $stock->setPurchasePrice($item->getPurchasePrice());
+	    $stock->setSalesPrice($item->getSalesPrice());
         $stock->setAveragePurchasePrice($avg['purchase']);
         $stock->setAverageSalesPrice($avg['sales']);
         $em->persist($stock);
@@ -418,59 +419,50 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+
     public function getApiStock(GlobalOption $option)
     {
         $config = $option->getMedicineConfig();
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.medicineBrand','brand');
+        $qb->leftJoin('e.unit','u');
+        $qb->select('e.id as stockId','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden');
+        $qb->addSelect('brand.name as brandName','brand.strength as strength');
+        $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         $qb->orderBy('e.sku','ASC');
-        $result = $qb->getQuery()->getResult();
-
+        $result = $qb->getQuery()->getArrayResult();
         $data = array();
-
-        /* @var $row MedicineStock */
-
         foreach($result as $key => $row) {
 
-
             $data[$key]['global_id']            = (int) $option->getId();
-            $data[$key]['item_id']              = (int) $row->getId();
+            $data[$key]['item_id']              = (int) $row['stockId'];
 
-            if($row->getMedicineBrand()){
-                $printName = $row->getMedicineBrand()->getName().' '.$row->getMedicineBrand()->getStrength();
+            if($row['brandName']){
+                $printName = $row['brandName'].' '.$row['strength'];
             }else{
-                $printName = $row->getName();
+                $printName = $row['name'];
             }
 
-            if ($row->getMode() != ""){
-                $category = $this->_em->getRepository('MedicineBundle:MedicineParticularType')->findOneBy(array('slug' => $row->getMode()));
-                $data[$key]['category_id']      = $category->getId();
-                $data[$key]['categoryName']     = $category->getName();
-            }else{
-                $data[$key]['category_id']      = 0;
-                $data[$key]['categoryName']     = '';
-            }
-            if ($row->getUnit()){
-                $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($row->getUnit());
-                $data[$key]['unit_id']          = $unit->getId();
-                $data[$key]['unit']             = $unit->getName();
+            $data[$key]['category_id']      = 0;
+            $data[$key]['categoryName']     = '';
+            if ($row['unitId']){
+                $data[$key]['unit_id']          = $row['unitId'];
+                $data[$key]['unit']             = $row['unitName'];
             }else{
                 $data[$key]['unit_id']          = 0;
                 $data[$key]['unit']             = '';
             }
-
-            $data[$key]['name']                 = $row->getName();
+            $data[$key]['name']                 = $row['name'];
             $data[$key]['printName']            = $printName;
-            $data[$key]['quantity']             = $row->getRemainingQuantity();
-            $data[$key]['salesPrice']           = $row->getSalesPrice();
-            $data[$key]['purchasePrice']        = $row->getPurchasePrice();
-            $data[$key]['printHidden']          = $row->isPrintHide();
+            $data[$key]['quantity']             = $row['remainingQuantity'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
+            $data[$key]['purchasePrice']        = $row['purchasePrice'];
+            $data[$key]['printHidden']          = $row['printHidden'];
 
         }
-
         return $data;
     }
-
 
     public function brandStock(User $user,$data)
     {

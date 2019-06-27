@@ -511,6 +511,45 @@ class PurchaseController extends Controller
         exit;
     }
 
+    public function reverseAction(MedicinePurchase $purchase)
+    {
+
+        /*
+         * Item Remove Total quantity
+         * Stock Details
+         * Purchase Item
+         * Purchase Vendor Item
+         * Purchase
+         * Account Purchase
+         * Account Journal
+         * Transaction
+         * Delete Journal & Account Purchase
+         */
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        $em = $this->getDoctrine()->getManager();
+        if($purchase->getAsInvestment() == 1 ) {
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
+        }
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
+        $purchase->setRevised(true);
+        $purchase->setPayment(0);
+        $purchase->setProcess('Created');
+        $em->flush();
+        if(!empty($purchase->getMedicinePurchaseReturn())){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
+        }
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+        $template = $this->get('twig')->render('MedicineBundle:Purchase:purchaseReverse.html.twig', array(
+            'entity' => $purchase,
+            'config' => $purchase->getMedicineConfig(),
+        ));
+        $em->getRepository('MedicineBundle:MedicineReverse')->purchase($purchase, $template);
+        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
+    }
+
     /**
      * Deletes a Vendor entity.
      *
@@ -615,43 +654,7 @@ class PurchaseController extends Controller
         ));
     }
 
-    public function reverseAction(MedicinePurchase $purchase)
-    {
 
-        /*
-         * Item Remove Total quantity
-         * Stock Details
-         * Purchase Item
-         * Purchase Vendor Item
-         * Purchase
-         * Account Purchase
-         * Account Journal
-         * Transaction
-         * Delete Journal & Account Purchase
-         */
-
-        set_time_limit(0);
-        ignore_user_abort(true);
-
-        $em = $this->getDoctrine()->getManager();
-        if($purchase->getAsInvestment() == 1 ) {
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
-        }
-        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
-        $purchase->setRevised(true);
-        $purchase->setProcess('Created');
-        $em->flush();
-	    if(!empty($purchase->getMedicinePurchaseReturn())){
-		    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
-	    }
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
-        $template = $this->get('twig')->render('MedicineBundle:Purchase:purchaseReverse.html.twig', array(
-            'entity' => $purchase,
-            'config' => $purchase->getMedicineConfig(),
-        ));
-        $em->getRepository('MedicineBundle:MedicineReverse')->purchase($purchase, $template);
-        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
-    }
 
     public function reverseShowAction($id)
     {
@@ -673,6 +676,7 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity->setMedicineConfig($config);
         $entity->setMedicineVendor($vendor);
+        $entity->setPayment($vendor);
         $entity->setCreatedBy($this->getUser());
         $receiveDate = new \DateTime('now');
         $entity->setReceiveDate($receiveDate);

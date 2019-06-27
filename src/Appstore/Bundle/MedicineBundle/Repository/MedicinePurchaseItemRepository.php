@@ -498,7 +498,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
             $data .= "<td class='span1' >{$entity->getSalesQuantity()}</td>";
             $data .= '<td class="span1" >
-                     <a id="'.$entity->getId(). '" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     <a id="'.$entity->getId(). '" data-url="/medicine/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>
                      </td>';
             $data .= '</tr>';
             $i++;

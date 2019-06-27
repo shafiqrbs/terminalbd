@@ -309,7 +309,6 @@ class MedicinePurchaseRepository extends EntityRepository
 
     public function purchaseVendorReport(User $user , $data = array())
     {
-
         $global =  $user->getGlobalOption()->getId();
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:AccountPurchase','e');

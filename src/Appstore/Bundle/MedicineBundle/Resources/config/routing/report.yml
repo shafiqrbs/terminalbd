@@ -42,7 +42,7 @@ medicine_report_purchase_details:
     defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
 
 medicine_report_purchase_stock:
-    path:     /purchase-vendor-
+    path:     /purchase-vendor
     defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
 
 medicine_system_overview:

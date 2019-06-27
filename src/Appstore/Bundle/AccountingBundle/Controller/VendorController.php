@@ -247,7 +247,7 @@ class VendorController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $global = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->searchAutoComplete($item,$global);
+            $item = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->searchAutoComplete($item,$global);
         }
         return new JsonResponse($item);
     }

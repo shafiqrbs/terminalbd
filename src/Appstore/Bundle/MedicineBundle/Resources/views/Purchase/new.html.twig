@@ -202,7 +202,7 @@
                                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
                                                         <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >
                                                         {{ item.salesQuantity }}</td>
-                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>{% endif %}</td>
+                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
                                                 </tr>
                                             {% endfor %}
                                         {% endif %}
@@ -230,7 +230,7 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box purple">
-                                <div class="pull-right span3">
+                                <div class="pull-right span2">
                                     <button type="button" class="btn green span12 grandTotal" style="text-align: left">{{ entity.netTotal }}</button>
                                 </div>
                                 <div class="pull-right span2">
@@ -374,7 +374,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right"><button class="btn red mini" id="discountPercentage">%</button>{{ form_widget(form.payment) }}</span>
+                                                <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right"><button class="btn red mini" id="discountPercentage">{% if entity.discountType == 'flat' %}{{  entity.discountCalculation }}{% else %}{{  entity.discountCalculation }}{% endif %}%</button>{{ form_widget(form.payment) }}</span>
                                                 </label>
                                                 <div class="controls">
                                                     {{ form_errors(form.payment) }}
@@ -388,7 +388,7 @@
                                         <div class="span12">
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName"><span class="label">Due Payable TK.</span>
-                                                    <span class="pull-right sales-right"><input type="text" id="invoiceDue" name="invoiceDue" class="numeric span8 inputs m-wrap remove-value" placeholder="Due payable amount" value="{{ entity.due }}"></span>
+                                                    <span class="pull-right sales-right"><input type="text" id="invoiceDue" name="invoiceDue" class="numeric span8 inputs m-wrap remove-value" placeholder="Due payable amount" value=""></span>
                                                 </label>
                                             </div>
                                         </div>
@@ -417,7 +417,7 @@
                             <div class="form-actions portlet box grey">
                                 <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
                                 <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
-                                <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
+                                <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.subTotal }}">
                                 <div class="pull-right">
                                     <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Save</button>
                                 </div>

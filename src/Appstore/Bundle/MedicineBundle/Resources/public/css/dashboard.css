@@ -292,9 +292,9 @@ Green Sharp
      height: 50px!important;
  }
 .icon-btn div{
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
-    color: #26a69a;
+    color:#217ebd !important;
 }
 .dashboard-stat .visual{
     width: auto;

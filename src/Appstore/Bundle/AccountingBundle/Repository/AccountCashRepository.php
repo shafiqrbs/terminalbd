@@ -380,34 +380,34 @@ class AccountCashRepository extends EntityRepository
 
         $balance = $this->lastInsertCash($entity,$processHead);
         $em = $this->_em;
-        $cash = new AccountCash();
-
-        $cash->setAccountBank($entity->getAccountBank());
-        $cash->setAccountMobileBank($entity->getAccountMobileBank());
-        $cash->setGlobalOption($entity->getGlobalOption());
-        $cash->setAccountJournal($entity);
-        $cash->setToUser($entity->getToUser());
-        $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setProcessHead($processHead);
-        $cash->setAccountRefNo($entity->getAccountRefNo());
-        if(!empty($entity->getBranches())){
-            $cash->setBranches($entity->getBranches());
+        if(empty($entity->getAccountCash())){
+            $cash = new AccountCash();
+            $cash->setAccountBank($entity->getAccountBank());
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+            $cash->setGlobalOption($entity->getGlobalOption());
+            $cash->setAccountJournal($entity);
+            $cash->setToUser($entity->getToUser());
+            $cash->setTransactionMethod($entity->getTransactionMethod());
+            $cash->setProcessHead($processHead);
+            $cash->setAccountRefNo($entity->getAccountRefNo());
+            if(!empty($entity->getBranches())){
+                $cash->setBranches($entity->getBranches());
+            }
+            $cash->setUpdated($entity->getUpdated());
+            if($entity->getTransactionType()  == 'Debit' ){
+                $cash->setAccountHead($entity->getAccountHeadDebit());
+                $cash->setDebit($entity->getAmount());
+                $cash->setBalance($balance + $entity->getAmount());
+            }else{
+                $cash->setAccountHead($entity->getAccountHeadCredit());
+                $cash->setBalance($balance - $entity->getAmount() );
+                $cash->setCredit($entity->getAmount());
+            }
+            $cash->setCreated($entity->getCreated());
+            $cash->setUpdated($entity->getUpdated());
+            $em->persist($cash);
+            $em->flush();
         }
-        $cash->setUpdated($entity->getUpdated());
-        if($entity->getTransactionType()  == 'Debit' ){
-            $cash->setAccountHead($entity->getAccountHeadDebit());
-            $cash->setDebit($entity->getAmount());
-            $cash->setBalance($balance + $entity->getAmount());
-        }else{
-            $cash->setAccountHead($entity->getAccountHeadCredit());
-            $cash->setBalance($balance - $entity->getAmount() );
-            $cash->setCredit($entity->getAmount());
-        }
-        $cash->setCreated($entity->getCreated());
-        $cash->setUpdated($entity->getUpdated());
-        $em->persist($cash);
-        $em->flush();
-
     }
 
 	public function balanceTransferAccountCash(AccountBalanceTransfer $entity , $processHead ='BalanceTransfer')

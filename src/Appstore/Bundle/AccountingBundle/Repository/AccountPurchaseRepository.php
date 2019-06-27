@@ -44,7 +44,7 @@ class AccountPurchaseRepository extends EntityRepository
 		$qb->select('e.companyName as id');
 		$qb->addSelect('e.companyName as text');
 		$qb->where("e.globalOption = :global")->setParameter('global', $global->getId());
-		$qb->andWhere($qb->expr()->like("e.companyName", "'$q%'" ));
+		$qb->andWhere($qb->expr()->like("e.companyName", "'%$q%'" ));
 		$qb->groupBy('e.companyName');
 		$qb->orderBy('e.companyName', 'ASC');
 		$qb->setMaxResults( '30' );
@@ -334,7 +334,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
                 $globalOption->getMainApp()->getSlug();
-                if($globalOption->getMainApp()->getSlug() == 'miss'){
+               /* if($globalOption->getMainApp()->getSlug() == 'miss'){
                     $qb->leftJoin('e.medicineVendor','v');
                 }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
                     $qb->leftJoin('e.vendor','v');
@@ -344,7 +344,8 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 if(!empty($vendor)){
                     $qb->andWhere("v.companyName = :vendor");
                     $qb->setParameter('vendor', $vendor);
-                }
+                }*/
+                $qb->andWhere($qb->expr()->like("e.companyName", "'%$vendor%'" ));
                 if (!empty($startDate) and !empty($endDate) ) {
 	                $compareTo = new \DateTime($startDate);
 	                $startDate =  $compareTo->format('Y-m-d 00:00:00');
