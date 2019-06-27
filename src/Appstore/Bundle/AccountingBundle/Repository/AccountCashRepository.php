@@ -548,12 +548,12 @@ class AccountCashRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if($entity->getTransactionMethod()->getId() == 1 ){
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-        }elseif($entity->getTransactionMethod()->getId() == 2 ){
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
-        }if($entity->getTransactionMethod()->getId() == 3 ){
-        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+        if($entity->getTransactionMethod()->getId() == 2){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+        }elseif($entity->getTransactionMethod()->getId() == 3){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+        }else{
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }
         $cash->setBalance($balance - $entity->getPayment() );
         $cash->setCredit($entity->getPayment());
@@ -727,11 +727,11 @@ class AccountCashRepository extends EntityRepository
         $em = $this->_em;
         $cash = new AccountCash();
         if($entity->getTransactionMethod()->getId() == 2){
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
         }elseif($entity->getTransactionMethod()->getId() == 3){
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
         }else{
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }
         $cash->setGlobalOption($entity->getGlobalOption());
         if(!empty($entity->getBranches())){

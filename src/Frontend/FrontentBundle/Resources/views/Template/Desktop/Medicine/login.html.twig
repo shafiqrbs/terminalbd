@@ -93,4 +93,23 @@
     </section>
  </section>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/product.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/medicine.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 

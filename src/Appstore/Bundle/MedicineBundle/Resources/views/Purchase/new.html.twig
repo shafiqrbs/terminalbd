@@ -230,17 +230,11 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box purple">
-                                <div class="pull-left span3">
-                                    <span class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Remark</span>
-                                </div>
-                                <div class="pull-left span4 msg-hidden" style="display: none">
-                                    <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
-                                </div>
                                 <div class="pull-right span3">
                                     <button type="button" class="btn green span12 grandTotal" style="text-align: left">{{ entity.netTotal }}</button>
                                 </div>
                                 <div class="pull-right span2">
-                                    <a class="btn blue span12 pull-right" style="text-align: right" ><i class="icon-money"></i>&nbsp;<strong>Grand Total</strong>&nbsp;=&nbsp;</a>
+                                    <span class="btn blue span12 pull-right" style="text-align: right" ><i class="icon-money"></i>&nbsp;<strong>Grand Total</strong>&nbsp;=&nbsp;</span>
                                 </div>
 
                             </div>
@@ -249,14 +243,7 @@
                             {{ form_row(form._token) }}
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
-                                <div class="span8">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            {{ form_widget(form.remark) }}
-                                            {{ form_errors(form.remark) }}
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="span8"></div>
                                 <div class="span4 payment-info">
 
                                     <div class="row-fluid">
@@ -415,9 +402,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            {{ form_widget(form.remark) }}
+                                            {{ form_errors(form.remark) }}
+                                        </div>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </div>
+
                             </div>
+
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">

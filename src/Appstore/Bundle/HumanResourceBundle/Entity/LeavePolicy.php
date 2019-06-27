@@ -37,6 +37,13 @@ class LeavePolicy
     /**
      * @var boolean
      *
+     * @ORM\Column(name="paymentable", type="boolean", nullable=true)
+     */
+    private $paymentable = true;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="status", type="boolean")
      */
     private $status;
@@ -105,6 +112,38 @@ class LeavePolicy
     public function getLeaveSetup()
     {
         return $this->leaveSetup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLeaveType()
+    {
+        return $this->leaveType;
+    }
+
+    /**
+     * @param string $leaveType
+     */
+    public function setLeaveType($leaveType)
+    {
+        $this->leaveType = $leaveType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentable()
+    {
+        return $this->paymentable;
+    }
+
+    /**
+     * @param bool $paymentable
+     */
+    public function setPaymentable($paymentable)
+    {
+        $this->paymentable = $paymentable;
     }
 }
 

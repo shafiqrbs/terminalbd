@@ -107,12 +107,45 @@ class ExpenditureRepository extends EntityRepository
 
     }
 
+    public function androidDeviceExpenditureOverview(GlobalOption $option, $data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:Expenditure','e');
+        $qb->select('sum(e.amount) as amount');
+        $qb->where('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere('e.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $option->getId());
+        $qb->andWhere('e.androidDevice = :device')->setParameter('device', $data['device']);
+        $this->handleSearchBetween($qb,$data);
+        $amount = $qb->getQuery()->getOneOrNullResult();
+        return  $amount['amount'] ;
+
+    }
+
     public function findWithSearch(User $user , $data)
     {
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.createdBy','cu');
+        $qb->join('e.toUser','tu');
+        $qb->join('tu.profile','profile');
+        $qb->leftJoin('e.expenseCategory','c');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->leftJoin('e.accountMobileBank','amb');
+        $qb->leftJoin('e.accountBank','ab');
+        $qb->select('e.id as id','e.created as created','e.amount as amount','e.accountRefNo as accountRefNo','e.path as path','e.remark as remark','e.process as process');
+        $qb->addSelect('cu.username as createdBy');
+        $qb->addSelect('profile.name as toUser');
+        $qb->addSelect('t.name as methodName');
+        $qb->addSelect('c.name as categoryName');
+        $qb->addSelect('amb.name as mobileBankName');
+        $qb->addSelect('amb.mobile as mobileNo');
+        $qb->addSelect('ab.name as bankName');
+        $qb->addSelect('ab.accountNo as accountNo');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -120,7 +153,7 @@ class ExpenditureRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
 
@@ -237,6 +270,43 @@ class ExpenditureRepository extends EntityRepository
         $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.expenditure =".$entity->getId()." AND e.processHead = 'Expenditure'");
         $accountCash->execute();
     }
+
+    public function insertApiExpenditure(GlobalOption $option , $data){
+
+        $em = $this->_em;
+        $expense = new Expenditure();
+        $expense->setGlobalOption($option);
+        $expense->setAmount($data['amount']);
+        $expense->setBalance($data['amount']);
+        if($data['transactionMethod']){
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
+            $expense->setTransactionMethod($method);
+        }
+        if($data['bankAccount']){
+            $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
+            $expense->setAccountBank($bank);
+        }
+        if($data['mobileBankAccount']){
+            $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
+            $expense->setAccountMobileBank($mobile);
+        }
+        if($data['createdBy']){
+            $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+            $expense->setCreatedBy($createdBy);
+        }
+        if($data['toUser']){
+            $toUser = $em->getRepository('UserBundle:User')->find($data['toUser']);
+            $expense->setToUser($toUser);
+        }
+        $created = new \DateTime($data['created']);
+        $expense->setCreated($created);
+        $expense->setUpdated($created);
+        $em->persist($expense);
+        $em->flush();
+        return $expense->getId();
+
+    }
+
 
 
 }

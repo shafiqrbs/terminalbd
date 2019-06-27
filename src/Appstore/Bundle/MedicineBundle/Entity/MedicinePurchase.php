@@ -10,6 +10,7 @@ use Core\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
@@ -95,6 +96,19 @@ class MedicinePurchase
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="medicinePurchases" )
      **/
     private  $accountMobileBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", inversedBy="medicinePurchases" )
+     **/
+    private  $androidDevice;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="devicePurchaseId", type="integer",nullable=true)
+     */
+    private $devicePurchaseId;
 
 
     /**
@@ -837,6 +851,38 @@ class MedicinePurchase
     public function setInvoiceMode(string $invoiceMode)
     {
         $this->invoiceMode = $invoiceMode;
+    }
+
+    /**
+     * @return AndroidDeviceSetup
+     */
+    public function getAndroidDevice()
+    {
+        return $this->androidDevice;
+    }
+
+    /**
+     * @param AndroidDeviceSetup $androidDevice
+     */
+    public function setAndroidDevice($androidDevice)
+    {
+        $this->androidDevice = $androidDevice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDevicePurchaseId()
+    {
+        return $this->devicePurchaseId;
+    }
+
+    /**
+     * @param int $devicePurchaseId
+     */
+    public function setDevicePurchaseId($devicePurchaseId)
+    {
+        $this->devicePurchaseId = $devicePurchaseId;
     }
 
 

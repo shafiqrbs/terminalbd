@@ -41,14 +41,16 @@
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
                                         <thead class="flip-content ">
                                         <tr class="head-blue">
-                                            <th class="numeric">Name</th>
+                                            <th class="numeric span10">Name</th>
+                                            <th class="numeric">Paymentable</th>
                                             <th class="numeric">No of off Day</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for item in entities %}
                                             <tr>
-                                                <td  class="numeric">{{ loop.index }}. {{ item.name }}</td>
+                                                <td  class="numeric"><strong>{{ loop.index }}</strong>. {{ item.name }}</td>
+                                                <td  class="numeric">{% if item.paymentable == 1 %}<span class="btn mini green">Yes</span> {% else %}<span class="btn mini red ">No</span>{% endif %}</td>
                                                 <td class="numeric">
                                                     <div class="controls">
                                                         <input type="text"  name="offDay[]" class="span3 m-wrap" value="{% if leaveSetup is not empty and leaveSetup[item.id] is defined and leaveSetup[item.id] is not empty %}{{ leaveSetup[item.id].offDay }}{% endif %}" autocomplete="off" placeholder="Enter no off day">

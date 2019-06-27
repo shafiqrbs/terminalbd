@@ -3,6 +3,7 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
@@ -20,6 +21,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -88,6 +90,20 @@ class User extends BaseUser
 	private $userGroup;
 
 	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="appPassword", type="string", length = 30, nullable=true)
+	 */
+	private $appPassword = "android";
+
+	/**
+	 * @var array
+	 *
+	 * @ORM\Column(name="appRoles", type="array", nullable=true)
+	 */
+	private $appRoles;
+
+	/**
 	 * @var boolean
 	 *
 	 * @ORM\Column(name="agent", type="boolean", nullable=true)
@@ -129,6 +145,23 @@ class User extends BaseUser
 	 **/
 	protected $globalOptionAgents;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="employee" )
+     **/
+    private  $accountHead;
+
+
+	/**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="employee" )
+     **/
+    private  $employeePayroll;
+
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="approvedBy" )
+     **/
+    private  $payrollApproved;
+
 
 	/**
 	 * This part for system customer payment
@@ -138,11 +171,6 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="user" , cascade={"persist", "remove"} )
 	 */
 	protected $pages;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Admission", mappedBy="createUser" , cascade={"persist", "remove"})
-	 */
-	protected $admissionPromotions;
 
 
 	/**
@@ -156,26 +184,6 @@ class User extends BaseUser
 	 */
 	protected $products;
 
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Education", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $education;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\StudyAbroad", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $studyAbroad;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Tutor", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $tutor;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Vendor", mappedBy="user" , cascade={"persist", "remove"})
-	 */
-	protected $vendor;
 
 	/**
 	 * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", mappedBy="user" , cascade={"persist", "remove"})
@@ -1835,6 +1843,63 @@ class User extends BaseUser
     public function setUserGroup($userGroup)
     {
         $this->userGroup = $userGroup;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
+    }
+
+
+    /**
+     * @return EmployeePayroll
+     */
+    public function getPayrollApproved()
+    {
+        return $this->payrollApproved;
+    }
+
+    /**
+     * @return EmployeePayroll
+     */
+    public function getEmployeePayroll()
+    {
+        return $this->employeePayroll;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAppRoles()
+    {
+        return $this->appRoles;
+    }
+
+    /**
+     * @param array $appRoles
+     */
+    public function setAppRoles($appRoles)
+    {
+        $this->appRoles = $appRoles;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppPassword()
+    {
+        return $this->appPassword;
+    }
+
+    /**
+     * @param string $appPassword
+     */
+    public function setAppPassword($appPassword)
+    {
+        $this->appPassword = $appPassword;
     }
 
 

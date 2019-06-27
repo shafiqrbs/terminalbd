@@ -123,38 +123,6 @@
                             </table>
                         </div>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box red">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="fa fa-sign-out"></i>Leave Type wise Leave</div>
-                            </div>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
-                        <div class="portlet-body flip-scroll">
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                <thead class="flip-content ">
-                                <tr class="head-green">
-                                    <th class="numeric" >Leave Type</th>
-                                    <th class="numeric" >Leave Year</th>
-                                    <th class="numeric" >No of Leave</th>
-                                    <th class="numeric" >Leave</th>
-                                    <th class="numeric" >Remaining Leave</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for leave in leaveTypeWiseAbsence %}
-                                    <tr>
-                                        <td class="numeric" >{{ leave.leaveTypeName }}</td>
-                                        <td class="numeric" >{{ leave.year }}</td>
-                                        <td class="numeric" >{{ leave.noOfLeave }}</td>
-                                        <td class="numeric" >{{ leave.offDay }}</td>
-                                        <td class="numeric" >{{ leave.noOfLeave -leave.offDay }}</td>
-                                    </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box purple">
                             <div class="portlet-title">
                                 <div class="caption"><i class="fa fa-sign-out"></i>Monthly Attendance</div>

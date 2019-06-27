@@ -49,6 +49,11 @@ class Profile
      **/
     protected $location;
 
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="profile")
+     **/
+    protected $employeePayroll;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation", inversedBy="designationProfiles")
      **/
@@ -66,13 +71,41 @@ class Profile
      */
     private $name;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fatherName", type="string", nullable=true)
+     */
+    private $fatherName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="string", length=15, unique=true )
+     * @ORM\Column(name="motherName", type="string", nullable=true)
+     */
+    private $motherName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userGroup", type="string", length = 30, nullable=true)
+     */
+    private $userGroup;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phoneNo", type="string", length=15, nullable=true)
+     */
+    private $phoneNo;
 
     /**
      * @var string
@@ -142,6 +175,14 @@ class Profile
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", nullable=true)
+     */
+    private $gender;
+
+
+    /**
      * @var datetime
      *
      * @ORM\Column(name="dob", type="datetime", nullable=true)
@@ -154,6 +195,30 @@ class Profile
      * @ORM\Column(name="bloodGroup", type="string", nullable=true)
      */
     private $bloodGroup;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="religionStatus", type="string", nullable=true)
+     */
+    private $religionStatus;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="maritalStatus", type="string", nullable=true)
+     */
+    private $maritalStatus;
+
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="employeeType", type="string", nullable=true)
+     */
+    private $employeeType;
 
 
      /**
@@ -747,8 +812,134 @@ class Profile
         $this->facebookId = $facebookId;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserGroup()
+    {
+        return $this->userGroup;
+    }
+
+    /**
+     * @param string $userGroup
+     */
+    public function setUserGroup($userGroup)
+    {
+        $this->userGroup = $userGroup;
+    }
 
 
+    /**
+     * @return string
+     */
+    public function getFatherName()
+    {
+        return $this->fatherName;
+    }
+
+    /**
+     * @param string $fatherName
+     */
+    public function setFatherName($fatherName)
+    {
+        $this->fatherName = $fatherName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMotherName()
+    {
+        return $this->motherName;
+    }
+
+    /**
+     * @param string $motherName
+     */
+    public function setMotherName($motherName)
+    {
+        $this->motherName = $motherName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReligionStatus()
+    {
+        return $this->religionStatus;
+    }
+
+    /**
+     * @param string $religionStatus
+     */
+    public function setReligionStatus($religionStatus)
+    {
+        $this->religionStatus = $religionStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaritalStatus()
+    {
+        return $this->maritalStatus;
+    }
+
+    /**
+     * @param string $maritalStatus
+     */
+    public function setMaritalStatus($maritalStatus)
+    {
+        $this->maritalStatus = $maritalStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmployeeType()
+    {
+        return $this->employeeType;
+    }
+
+    /**
+     * @param string $employeeType
+     */
+    public function setEmployeeType($employeeType)
+    {
+        $this->employeeType = $employeeType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNo()
+    {
+        return $this->phoneNo;
+    }
+
+    /**
+     * @param string $phoneNo
+     */
+    public function setPhoneNo($phoneNo)
+    {
+        $this->phoneNo = $phoneNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    }
 
 
 }

@@ -151,12 +151,9 @@ class CustomCategoryController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

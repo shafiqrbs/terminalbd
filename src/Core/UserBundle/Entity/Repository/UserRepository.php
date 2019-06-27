@@ -54,6 +54,32 @@ class UserRepository extends EntityRepository
 
     }
 
+    /**
+     * @param array $criteria
+     * @return array
+     */
+    public function getEntityByIdAndStatusCriteria(array $criteria)
+    {
+        if ( $criteria['username']) {
+            return $this->createQueryBuilder('e')
+                ->andWhere('e.username = :username')
+                ->setParameter('username', $criteria['username'])
+                ->getQuery()
+                ->getResult();
+        }
+
+        return [];
+    }
+
+    public function checkExistingUser($mobile)
+    {
+        return (boolean)$this->createQueryBuilder('u')
+            ->andWhere('u.username = :user')
+            ->setParameter('user', $mobile)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getAccessRoleGroup(GlobalOption $globalOption){
 
 
@@ -282,6 +308,29 @@ class UserRepository extends EntityRepository
             'ROLE_SMS_BULK'                                     => 'SMS Bulk',
 
         );
+        $array['Android Apps'] = array(
+            'ROLE_MANAGER'                                   => 'Manager',
+            'ROLE_PURCHASE'                                  => 'Purchase',
+            'ROLE_SALES'                                     => 'Sales',
+            'ROLE_EXPENSE'                                   => 'Expense',
+            'ROLE_STOCK'                                     => 'Stock',
+        );
+
+
+        return $array;
+    }
+
+    public function getAndroidRoleGroup(){
+
+        $array = array();
+        $array['Android Apps'] = array(
+            'ROLE_MANAGER'                                   => 'Manager',
+            'ROLE_PURCHASE'                                  => 'Purchase',
+            'ROLE_SALES'                                     => 'Sales',
+            'ROLE_EXPENSE'                                   => 'Expense',
+            'ROLE_STOCK'                                     => 'Stock',
+        );
+
 
         return $array;
     }
@@ -290,10 +339,29 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
-        $qb->andWhere("e.globalOption =".$option->getId());
+        $qb->leftJoin('p.location','l');
+        $qb->leftJoin('e.employeePayroll','ep');
+        $qb->leftJoin('p.designation','d');
+        $qb->select('e.id as id','e.username as username');
+        $qb->addSelect('d.name as designationName');
+        $qb->addSelect('l.name as locationName');
+        $qb->addSelect('p.name as name','p.mobile as mobile','p.address as address','p.employeeType as employeeType','p.joiningDate as joiningDate','p.userGroup as userGroup');
+        $qb->addSelect('ep.basicAmount as basicAmount','ep.allowanceAmount as allowance','ep.deductionAmount as deduction','ep.loanAmount as loan','ep.advanceAmount as advance','ep.arearAmount as arear','ep.salaryType as salaryType','ep.totalAmount as total','ep.payableAmount as payable');
+        $qb->where("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');
         $qb->orderBy("p.name","ASC");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function getEmployeeEntities(GlobalOption $option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption =".$option->getId());
+        $qb->andWhere('e.domainOwner = 2');
+        $qb->andWhere('e.isDelete != 1');
+        $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
     }
@@ -338,6 +406,8 @@ class UserRepository extends EntityRepository
             $data[$key]['user_id'] = (int) $row->getId();
             $data[$key]['username'] = $row->getUsername();
             $data[$key]['email'] = $row->getEmail();
+            $data[$key]['password'] = $row->getAppPassword();
+            $data[$key]['roles'] = unserialize(serialize($row->getAppRoles()));
 
         }
         return $data;

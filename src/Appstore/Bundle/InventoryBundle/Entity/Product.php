@@ -100,21 +100,6 @@ class Product implements CodeAwareEntity
 	 **/
 	private  $size;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="products" )
-	 **/
-	private  $discount;
-
-	/**
-	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="productTags" )
-	 **/
-	private  $tag;
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="products" )
-	 **/
-	private  $promotion;
-
 
 
 	/**

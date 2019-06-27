@@ -72,7 +72,7 @@
                                                             <select id="particular" name="particular" class="span12 m-wrap select2">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
-                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
+                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
                                                                 {% endfor %}
                                                             </select>
                                                             </div>
@@ -225,7 +225,7 @@
                                 <div class="span4 payment-info">
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{% if entity.customer.name != 'Default' %}{{ entity.customer.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
                                             <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                         </div>
                                     </div>
@@ -389,7 +389,7 @@
                                     <div class="action"> <strong>Invoice For: </strong>
                                         {{ form_widget(form.process) }}
                                         <div class="btn-group">
-                                            <button type="button" class="btn blue" id="receiveBtn" ><i class="icon-print"></i>&nbsp; Save</button>
+                                            <button type="button" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -422,4 +422,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $("#businessInvoice_comment").attr("placeholder", "PC no");
 {% endblock %}

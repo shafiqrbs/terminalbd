@@ -5,6 +5,7 @@ namespace Appstore\Bundle\MedicineBundle\Repository;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * MedicineCompanyRepository
@@ -16,6 +17,63 @@ use Doctrine\ORM\EntityRepository;
 
 class MedicineBrandRepository extends EntityRepository
 {
+
+    public function getMedicineBrandSearch($data)
+    {
+
+        //$name = $data['webName'];
+        $name = $data['item']['webName'];
+        $brand = $data['item']['brand'];
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineGeneric','g');
+        $query->join('e.medicineCompany','c');
+        $query->select('e.*');
+        $query->select('e.id','e.price as salesPrice','e.medicineForm','e.strength', 'e.name as webName','g.name as genericName', 'c.name as brand');
+        $query->where($query->expr()->like("e.name", "'$name%'"  ));
+        $query->orWhere($query->expr()->like("g.name", "'$name%'"  ));
+        if($brand > 0){
+            $query->andWhere("c.id = {$brand}");
+        }
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $result = $query->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function getApiDims(GlobalOption $option,$data)
+    {
+        $offset = (int)$data['offset'];
+        $limit = (int)$data['limit'];
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.medicineCompany','b');
+        $qb->leftJoin('e.medicineGeneric','g');
+        $qb->select('e.id as medicineId','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as medicineName');
+        $qb->addSelect('g.name as genericName');
+        $qb->addSelect( 'b.name as brand');
+        $qb->setFirstResult( $offset );
+        $qb->setMaxResults( $limit );
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+
+        $data = array();
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['medicineId']           = (int) $row['medicineId'];
+            $data[$key]['medicineName']         = $row['medicineName'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
+            $data[$key]['medicineForm']         = $row['medicineForm'];
+            $data[$key]['strength']             = $row['strength'];
+            $data[$key]['genericName']          = $row['genericName'];
+            $data[$key]['brand']                = $row['brand'];
+        }
+
+        return $data;
+
+    }
+
     public function updateMedicine()
     {
         $results = $this->findAll();

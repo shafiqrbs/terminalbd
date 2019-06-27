@@ -12,22 +12,6 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
-$(document).on('change', '.transactionMethod', function() {
-
-    var paymentMethod = $(this).val();
-
-    if( paymentMethod == 2){
-        $('#cartMethod').show();
-        $('#bkashMethod').hide();
-    }else if( paymentMethod == 3){
-        $('#bkashMethod').show();
-        $('#cartMethod').hide();
-    }else{
-        $('#cartMethod').hide();
-        $('#bkashMethod').hide();
-    }
-
-});
 
 $('form#purchaseItem').on('keypress', 'input', function (e) {
 

@@ -2,7 +2,7 @@
 var owlCategory = $(".category-slider");
 owlCategory.owlCarousel({
     items: 4 ,
-    slideSpeed : 5000,
+    slideSpeed : 1000,
     itemsCustom : false,
     itemsDesktop : [1199,4],
     itemsDesktopSmall : [980,3],
@@ -23,7 +23,7 @@ owlCategory.owlCarousel({
 var owlCategory3 = $(".category-slider-3");
 owlCategory3.owlCarousel({
     items: 3 ,
-    slideSpeed : 5000,
+    slideSpeed : 1000,
     itemsCustom : false,
     itemsDesktop : [1199,4],
     itemsDesktopSmall : [980,3],

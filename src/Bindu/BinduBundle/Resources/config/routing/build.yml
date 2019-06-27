@@ -9,6 +9,12 @@ bindu_build_checking_subdomain:
     requirements: { _method: post }
 
 
+bindu_customer_mobile_validation:
+    path:     /build/login-mobile-validation-customer
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:customerLoginMobileValidation }
+    requirements: { _method: post }
+
+
 bindu_build_option:
     path:     /option
     defaults: { _controller: BinduBundle:SettingBuilder:option }

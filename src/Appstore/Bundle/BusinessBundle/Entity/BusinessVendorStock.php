@@ -26,6 +26,7 @@ class BusinessVendorStock
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessVendorStocks" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessConfig;
 
@@ -91,9 +92,6 @@ class BusinessVendorStock
     private $code;
 
 
-
-
-
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -108,8 +106,6 @@ class BusinessVendorStock
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
-
-
 
 
     /**

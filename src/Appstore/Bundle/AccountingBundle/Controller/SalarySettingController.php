@@ -6,7 +6,7 @@ use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Appstore\Bundle\AccountingBundle\Entity\SalarySetting;
+use Appstore\Bundle\AccountingBundle\Entity\Payroll;
 use Appstore\Bundle\AccountingBundle\Form\SalarySettingType;
 
 /**
@@ -53,7 +53,7 @@ class SalarySettingController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new SalarySetting();
+        $entity = new Payroll();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -84,11 +84,11 @@ class SalarySettingController extends Controller
     /**
      * Creates a form to create a SalarySetting entity.
      *
-     * @param SalarySetting $entity The entity
+     * @param Payroll $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(SalarySetting $entity)
+    private function createCreateForm(Payroll $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new SalarySettingType($globalOption), $entity, array(
@@ -108,7 +108,7 @@ class SalarySettingController extends Controller
      */
     public function newAction()
     {
-        $entity = new SalarySetting();
+        $entity = new Payroll();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('AccountingBundle:SalarySetting:new.html.twig', array(
@@ -161,11 +161,11 @@ class SalarySettingController extends Controller
     /**
     * Creates a form to edit a SalarySetting entity.
     *
-    * @param SalarySetting $entity The entity
+    * @param Payroll $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(SalarySetting $entity)
+    private function createEditForm(Payroll $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new SalarySettingType($globalOption), $entity, array(
@@ -218,7 +218,7 @@ class SalarySettingController extends Controller
      * Deletes a SalarySetting entity.
      *
      */
-    public function deleteAction(SalarySetting $entity)
+    public function deleteAction(Payroll $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -247,7 +247,7 @@ class SalarySettingController extends Controller
         exit;
     }
 
-    public function approveAction(SalarySetting $entity)
+    public function approveAction(Payroll $entity)
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
@@ -261,7 +261,7 @@ class SalarySettingController extends Controller
         exit;
     }
 
-    public function statusAction(SalarySetting $entity)
+    public function statusAction(Payroll $entity)
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();

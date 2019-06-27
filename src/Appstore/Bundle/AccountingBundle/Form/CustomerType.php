@@ -51,7 +51,18 @@ class CustomerType extends AbstractType
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
-           ;
+
+            ->add('userGroup', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'expanded'      =>false,
+                'required'    => true,
+                'multiple'      =>false,
+                'choices' => array(
+                    'employee' => 'Employee',
+                    'stock-holder' => 'Stock-Holder',
+                    'other' => 'Other',
+                ),
+            ));
     }
     
     /**

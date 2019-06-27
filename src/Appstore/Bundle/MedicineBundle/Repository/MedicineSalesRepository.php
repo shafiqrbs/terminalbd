@@ -2,11 +2,14 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -271,6 +274,21 @@ class MedicineSalesRepository extends EntityRepository
         }
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function androidDeviceSalesOverview(GlobalOption $option ,$data)
+    {
+
+
+        $config =  $option->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('sum(s.netTotal) as total ,sum(s.received) as salesReceive , count(s.id) as voucher');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('s.process = :process')->setParameter('process', 'Done');
+        $qb->andWhere('s.androidDevice = :device')->setParameter('device', $data['device']);
+        $this->handleSearchBetween($qb,$data);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
 
     public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
 
@@ -590,6 +608,92 @@ class MedicineSalesRepository extends EntityRepository
             $array[$row['salesBy']]= $row['totalPurchaseAmount'];
         }
         return $array;
+    }
+
+    public function insertApiSales(GlobalOption $option,$device, $data)
+    {
+        $em = $this->_em;
+
+            // $androidDevice =
+
+            $sales = new MedicineSales();
+            $sales->setMedicineConfig($option->getMedicineConfig());
+            $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
+            $sales->setAndroidDevice($device);
+            $sales->setDeviceSalesId($data['invoiceId']);
+            $sales->setSubTotal($data['subTotal']);
+            $sales->setDiscount($data['discount']);
+            $sales->setDiscountType($data['discountType']);
+            $sales->setDiscountCalculation($data['discountCalculation']);
+            $sales->setNetTotal($data['total']);
+            $sales->setReceived($data['receive']);
+            $sales->setDue($data['due']);
+            $sales->setVat($data['vat']);
+            if($data['transactionMethod']){
+                $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
+                $sales->setTransactionMethod($method);
+            }
+            if($data['bankAccount']){
+                $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
+                $sales->setAccountBank($bank);
+                $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
+                $sales->setPaymentCard($card);
+                $sales->setCardNo($data['paymentCardNo']);
+                $sales->setTransactionId($data['transactionId']);
+            }
+            if($data['mobileBankAccount']){
+                $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
+                $sales->setAccountMobileBank($mobile);
+                $sales->setPaymentMobile($data['paymentMobile']);
+                $sales->setTransactionId($data['transactionId']);
+            }
+            if($data['customerId']){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
+                $sales->setCustomer($customer);
+            }
+            if(empty($data['customerId']) and empty($data['customerName']) ){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'name'=>'Default'));
+                $sales->setCustomer($customer);
+            }
+            if($data['customerName'] and $data['customerMobile']){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
+                $sales->setCustomer($customer);
+            }
+            if($data['createdBy']){
+                $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+                $sales->setCreatedBy($createdBy);
+            }
+            if($data['salesBy']){
+                 $salesBy = $em->getRepository('UserBundle:User')->find($data['salesBy']);
+                 $sales->setSalesBy($salesBy);
+            }
+            $created = new \DateTime($data['created']);
+            $sales->setCreated($created);
+            $sales->setUpdated($created);
+            $sales->setProcess("Done");
+            $sales->setPaymentStatus("Paid");
+            $em->persist($sales);
+            $em->flush();
+
+    }
+
+    public function insertApiSalesItem(GlobalOption $option , $data){
+
+        $em = $this->_em;
+        $conf = $option->getMedicineConfig();
+        $deviceSalesId = $data['salesId'];
+        $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig'=>$conf,'deviceSalesId'=>$deviceSalesId));
+        $salesItem = new MedicineSalesItem();
+        $salesItem->setMedicineSales($sales);
+        $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($data['stockId']);
+        $salesItem->setMedicineStock($stockId);
+        $salesItem->setQuantity($data['quantity']);
+        $salesItem->setSalesPrice($data['unitPrice']);
+        $salesItem->setPurchasePrice($stockId->getPurchasePrice());
+        $salesItem->setSubTotal($data['subTotal']);
+        $em->persist($salesItem);
+        $em->flush();
+
     }
 
 

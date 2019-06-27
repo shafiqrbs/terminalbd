@@ -43,6 +43,16 @@ class ProductUnit
     protected $goodsItem;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="productUnit")
+     */
+    protected $item;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="productUnit")
+     */
+    protected $itemSub;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="productUnit")
      */
     protected $purchaseVendorItem;

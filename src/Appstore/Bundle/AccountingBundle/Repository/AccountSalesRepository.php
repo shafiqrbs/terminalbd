@@ -81,8 +81,7 @@ class AccountSalesRepository extends EntityRepository
 				$qb->setParameter('name', $customer);
 			}
 			if (!empty($invoice)) {
-				$qb->join('e.sales','s');
-				$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
+				$qb->andWhere($qb->expr()->like("e.sourceInvoice", "'%$invoice%'"  ));
 			}
 			if (!empty($medicineInvoice)) {
 				$qb->join('e.medicineSales','ms');
@@ -111,7 +110,7 @@ class AccountSalesRepository extends EntityRepository
 
 	public function receiveModeOverview(User $user,$data)
 	{
-		$globalOption = $user->getGlobalOption();
+		$globalOption = $user->getGlobalOption()->getId();
 		$branch = $user->getProfile()->getBranches();
 		$qb = $this->createQueryBuilder('e');
 		$qb->leftJoin('e.transactionMethod','t');
@@ -156,13 +155,22 @@ class AccountSalesRepository extends EntityRepository
 
     public function findWithSearch(User $user,$data = '',$process = '')
     {
-        $globalOption = $user->getGlobalOption();
+        $globalOption = $user->getGlobalOption()->getId();
         $branch = $user->getProfile()->getBranches();
 
 	    $sort = isset($data['sort'])? $data['sort'] :'e.id';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','customer');
+        $qb->leftJoin('e.transactionMethod','transactionMethod');
+        $qb->leftJoin('e.accountMobileBank','mobile');
+        $qb->leftJoin('e.accountBank','bank');
+        $qb->select('customer.name as customerName','customer.name as customerMobile');
+        $qb->addSelect('transactionMethod.name as method');
+        $qb->addSelect('mobile.name as mobileName');
+        $qb->addSelect('bank.name as bankName');
+        $qb->addSelect('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.totalAmount as totalAmount','e.amount as amount','e.balance as balance','e.sourceInvoice as sourceInvoice','e.processHead as processHead','e.process as process','e.remark');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){

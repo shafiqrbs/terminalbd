@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessProduction;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
@@ -273,13 +274,14 @@ class BusinessParticularRepository extends EntityRepository
     public function remainingQnt(BusinessParticular $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity()+$stock->getDamageQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity()+ $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();
     }
 
     public function insertInvoiceProductItem(BusinessInvoice $invoice){
+
 	    $em = $this->_em;
         if(!empty($invoice->getBusinessInvoiceParticulars())) {
 
@@ -328,7 +330,7 @@ class BusinessParticularRepository extends EntityRepository
        }
     }
 
-	public function salesProductionQnt(BusinessProductionElement  $element){
+	public function salesProductionQnt( BusinessProductionElement  $element){
 
         $em = $this->_em;
         $particular = $element->getParticular();
@@ -357,14 +359,15 @@ class BusinessParticularRepository extends EntityRepository
 
 		$qb = $this->_em->createQueryBuilder();
 		$qb->from('BusinessBundle:BusinessInvoiceParticular','e');
+        $qb->join('e.businessInvoice','i');
 		$qb->select('SUM(e.totalQuantity) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
 		$invoiceQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
 		return $invoiceQnt;
 
 	}
-
 
 
 	public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){

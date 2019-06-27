@@ -341,6 +341,20 @@ class ReportController extends Controller
         ));
     }
 
+    public function brandStockAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicineStock')->brandStock($user, $data);
+        return $this->render('MedicineBundle:Report:brandStock.html.twig', array(
+            'option' => $user->getGlobalOption(),
+            'entities' => $entities,
+            'searchForm' => $data,
+        ));
+    }
+
 
     public function purchaseBrandAction()
     {

@@ -33,9 +33,13 @@ class MedicineStockRepository extends EntityRepository
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
-
+        $webName = isset($data['item']['webName'])? $data['item']['webName'] :'';
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if (!empty($webName)) {
+            $aKeyword = explode(" ", $webName);
+            $qb->andWhere($qb->expr()->like("e.name", "'%$webName%'"  ));
         }
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
@@ -137,7 +141,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.sku','ASC');
-        $qb->getQuery();
+        $qb->getQuery()->getArrayResult();
         return  $qb;
     }
 
@@ -378,6 +382,24 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function searchWebStock($q, MedicineConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->select('e.id as id');
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+
 
     public function searchAutoCompleteBrandName($q, MedicineConfig $config)
     {
@@ -413,6 +435,13 @@ class MedicineStockRepository extends EntityRepository
 
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row->getId();
+
+            if($row->getMedicineBrand()){
+                $printName = $row->getMedicineBrand()->getName().' '.$row->getMedicineBrand()->getStrength();
+            }else{
+                $printName = $row->getName();
+            }
+
             if ($row->getMode() != ""){
                 $category = $this->_em->getRepository('MedicineBundle:MedicineParticularType')->findOneBy(array('slug' => $row->getMode()));
                 $data[$key]['category_id']      = $category->getId();
@@ -429,14 +458,37 @@ class MedicineStockRepository extends EntityRepository
                 $data[$key]['unit_id']          = 0;
                 $data[$key]['unit']             = '';
             }
+
             $data[$key]['name']                 = $row->getName();
+            $data[$key]['printName']            = $printName;
             $data[$key]['quantity']             = $row->getRemainingQuantity();
             $data[$key]['salesPrice']           = $row->getSalesPrice();
             $data[$key]['purchasePrice']        = $row->getPurchasePrice();
+            $data[$key]['printHidden']          = $row->isPrintHide();
 
         }
 
         return $data;
+    }
+
+
+    public function brandStock(User $user,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.brandName as name' );
+        $qb->addSelect('COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0) as avgPurchase');
+        $qb->addSelect('COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0) as purchase');
+        $qb->addSelect('COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0) as avgSales ' );
+        $qb->addSelect('COALESCE(SUM(e.salesPrice * e.remainingQuantity),0) as sales ' );
+        $qb->addSelect('(COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0)) as avgProfit');
+        $qb->addSelect('(COALESCE(SUM(e.salesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0)) as profit');
+        $qb->where('e.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy("e.brandName");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
     }
 
 }

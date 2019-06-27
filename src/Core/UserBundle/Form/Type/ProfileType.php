@@ -53,7 +53,7 @@ class ProfileType extends AbstractType
                ->add('location', 'entity', array(
                    'required'    => false,
                    'empty_value' => '---Select Location---',
-                   'attr'=>array('class'=>'select2 span12 input-selector item-select'),
+                   'attr'=>array('class'=>'select-location span12 m-wrap form-control'),
                    'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                    'constraints' =>array(
                        new NotBlank(array('message'=>'Select user location'))

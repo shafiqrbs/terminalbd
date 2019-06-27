@@ -15,6 +15,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
@@ -54,7 +55,6 @@ class GlobalOptionRepository extends EntityRepository
     {
 
         if(!empty($data['location'])){
-            $qb->join("e.location","location");
             $qb->andWhere("location.name LIKE :location");
 	        $qb->setParameter('location',  '%'.$data['location'].'%');
         }
@@ -86,9 +86,15 @@ class GlobalOptionRepository extends EntityRepository
         $qb =  $this->createQueryBuilder('e');
         $qb->join('e.siteSetting', 'sitesetting');
         $qb->join('sitesetting.appModules', 'appmodules');
+        $qb->leftJoin('e.templateCustomize', 't');
+        $qb->leftJoin('e.location', 'location');
+        $qb->leftJoin('location.parent', 'p');
+        $qb->leftJoin('e.syndicate', 's');
+        $qb->select('e.name','t.logo','e.id','e.domain','e.mobile','e.email','location.name as locationName','p.name as parentName','s.slug as syndicateSlug','s.slug as syndicateName');
         $qb->orderBy('e.name', 'ASC');
         $qb->where("e.status = 1");
-        $qb->andWhere("e.domain != :domain")->setParameter('domain', 'NULL');
+        $qb->andWhere("e.subDomain != :subDomain")->setParameter('subDomain', 'null');
+        $qb->andWhere("t.logo != :logo")->setParameter('logo', 'null');
         $qb->andWhere("appmodules.slug = :slug")->setParameter('slug', $slug);
         $result = $qb->getQuery();
         return $result;
@@ -112,16 +118,39 @@ class GlobalOptionRepository extends EntityRepository
         $location = isset($data['location']) ? $data['location']:'';
         $name = isset($data['name']) ? $data['name']:'';
         $data = array('location'=> $location ,'syndicate'=> $syndicate,'name' => $name);
+
         $qb =  $this->createQueryBuilder('e');
         $qb->leftJoin('e.templateCustomize', 't');
-        $qb->orderBy('e.name', 'ASC');
         $qb->where("e.status = 1");
-        $qb->andWhere("e.subDomain != :subDomain");
-        $qb->setParameter('subDomain', 'null');
-        $qb->andWhere("t.logo != :logo");
-        $qb->setParameter('logo', 'null');
+        $qb->andWhere("e.subDomain != :subDomain")->setParameter('subDomain', 'null');
+        $qb->andWhere("t.logo != :logo")->setParameter('logo', 'null');
         $this->searchHandle($qb,$data);
+        $qb->orderBy('e.name', 'ASC');
         $result = $qb->getQuery();
+        return $result;
+    }
+
+    function findClientSubdomain($data = array(), $limit = 0) {
+
+        $syndicate = isset($data['syndicate'])  ? $data['syndicate']:'';
+        $location = isset($data['location']) ? $data['location']:'';
+        $name = isset($data['name']) ? $data['name']:'';
+        $data = array('location'=> $location ,'syndicate'=> $syndicate,'name' => $name);
+        $qb =  $this->createQueryBuilder('e');
+        $qb->leftJoin('e.templateCustomize', 't');
+        $qb->leftJoin('e.location', 'location');
+        $qb->leftJoin('location.parent', 'p');
+        $qb->leftJoin('e.syndicate', 's');
+        $qb->select('e.name','t.logo','e.id','e.domain','e.mobile','e.email','location.name as locationName','p.name as parentName','s.slug as syndicateSlug','s.slug as syndicateName');
+        $qb->where("e.status = 1");
+        $qb->andWhere("e.subDomain != :subDomain")->setParameter('subDomain', 'null');
+        $qb->andWhere("t.logo != :logo")->setParameter('logo', 'null');
+        $this->searchHandle($qb,$data);
+        $qb->orderBy('e.name', 'ASC');
+        if($limit > 0){
+            $qb->setMaxResults(12);
+        }
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
@@ -346,7 +375,7 @@ class GlobalOptionRepository extends EntityRepository
     /**
      * @param GlobalOption $entity
      */
-    public function initialSetup($entity)
+    public function initialSetup(User $entity)
     {
         $em = $this->_em;
 
@@ -397,7 +426,7 @@ class GlobalOptionRepository extends EntityRepository
 
         $customer = new Customer();
         $customer->setGlobalOption($globalOption);
-        $customer->setMobile($globalOption->getMobile(0));
+        $customer->setMobile($globalOption->getMobile());
         $customer->setName('Default');
         $em->persist($customer);
 

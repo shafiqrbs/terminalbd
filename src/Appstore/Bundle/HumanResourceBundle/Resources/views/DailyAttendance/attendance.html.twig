@@ -37,10 +37,10 @@
                     <div class="portlet-body">
                         {% include('flash-message.html.twig')  %}
 
-                        <table id="attendance" class="stripe row-border order-column" cellspacing="0" width="100%">
+                        <table id="attendancex" class="stripe row-border order-column" cellspacing="0" width="100%">
                             <thead class="head-blue">
                             <tr>
-                                <th class="numeric" >Name of Employee</th>
+                                <th class="span2" >Name of Employee</th>
                                 {% set max =  "now"|date("t") %}
                                 {% set today =  "now"|date("d") %}
                                 {% set month =  "now"|date("Y/m/") %}
@@ -83,7 +83,7 @@
                             <tbody>
                             {% for entity in currentMonthEmployeeAttendance  %}
                                 <tr>
-                                    <th class=""><span class="">{{ entity.employee.profile.name }}<br/><sub>{{ entity.employee.profile.designation.name }}</sub></span></th>
+                                    <th class=""><span class="">{{ entity.employee.profile.name }}<br/><sub>{% if entity.employee.profile.designation is not empty %}{{ entity.employee.profile.designation.name }}{% endif %}</sub></span></th>
                                     {% for i in 1..max %}
                                         {% set blackO = date(month~i)|date('m/d/Y') %}
                                         {% if blackO  in  blackoutdate %}
@@ -107,6 +107,20 @@
             </div>
         </div>
     </div>
+    <style>
+        td, th {
+            margin: 0;
+            border: 1px solid grey;
+            white-space: nowrap;
+            border-top-width: 0px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        div.checker {
+            margin-right: 0!important;
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

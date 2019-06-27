@@ -78,7 +78,7 @@ class DomainSearchType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_toolbundle_globaloption';
+        return 'search';
     }
 
     /**

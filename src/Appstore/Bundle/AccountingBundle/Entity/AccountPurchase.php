@@ -90,10 +90,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $restaurantPurchase;
 
-        /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", inversedBy="accountPurchase" )
-         **/
-        private  $restaurantVendor;
 
          /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="accountPurchase" )

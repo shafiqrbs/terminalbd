@@ -211,32 +211,7 @@
                                 <tr><td><strong>SKU</strong></td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.sku  }}</strong></td></tr>
                                 {% endif %}
                                 <tr><td><strong>Stock in</strong></td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.masterQuantity  }}</strong>&nbsp;{% if product.productUnit is not empty %}{{ product.productUnit.name }}{% endif %}</td></tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <ul class="mbm_social">
-                                            <li><a class="social-facebook" target="_blank" href="//www.facebook.com/sharer.php?u={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                                    <i class="fa fa-facebook"></i>
-                                                    <div class="tooltip"><span>facebook</span></div>
-                                                </a>
-                                            </li>
-                                            <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                                    <i class="fa fa-google-plus"></i>
-                                                    <div class="tooltip"><span>Google</span></div>
-                                                </a>
-                                            </li>
-                                            <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                                    <i class="fa fa-twitter"></i>
-                                                    <div class="tooltip"><span>Twitter</span></div>
-                                                </a>
-                                            </li>
-                                            <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                                    <i class="fa  fa-instagram"></i>
-                                                    <div class="tooltip"><span>Instagram</span></div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+
                                 <tr><td colspan="2"><hr/></td></tr>
                                 <tr>
                                     <td colspan="2" class="right-text">

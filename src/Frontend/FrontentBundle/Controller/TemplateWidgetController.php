@@ -93,11 +93,21 @@ class TemplateWidgetController extends Controller
         $user = new User();
         $form   = $this->createCreateForm($globalOption->getSubDomain(),$user);
 
+        if($globalOption->getDomainType() == 'ecommerce'){
+
+        }elseif ($globalOption->getDomainType() == 'medicine'){
+
+        }
+
         $detect = new MobileDetect();
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $template = 'Template/Mobile/Widget/';
-        }else{
-            $template = 'Template/Desktop/Widget/';
+        if( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'ecommerce') {
+            $template = 'Template/Mobile/Widget';
+        }elseif( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
+            $template = 'Template/Mobile/Medicine/EcommerceWidget';
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'ecommerce'){
+            $template = 'Template/Desktop/Widget';
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
+            $template = 'Template/Desktop/Medicine/EcommerceWidget';
         }
         return $this->render('@Frontend/'.$template.'/modalLogin.html.twig', array(
             'globalOption'             => $globalOption,

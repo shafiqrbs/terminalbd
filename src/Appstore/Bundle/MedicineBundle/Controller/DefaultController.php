@@ -26,7 +26,9 @@ class DefaultController extends Controller
 	public function indexAction()
     {
 
-    	/* @var GlobalOption $globalOption */
+
+
+        /* @var GlobalOption $globalOption */
 
         $globalOption = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();

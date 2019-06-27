@@ -71,7 +71,7 @@
                                         {% else %}
                                             <td>
                                     <span class="row-fluid pull-center">
-                                    <input type="checkbox" disabled="disabled"  {% if i in user.userAttendanceMonth(year,currentMonth) %} checked="checked" {% endif %} data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('daily_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
+                                    <input type="checkbox" disabled="disabled"  {% if i in user.userAttendanceMonth(year,currentMonth) %} checked="checked" {% endif %} data-id="{{ i }}" id="{{ i }}" class="attendance"  name="present"  value="{{ i }}" >
                                     </span>
                                             </td>
                                         {% endif %}

@@ -65,7 +65,8 @@
     {% endif %}
     <div class="clearfix"></div>
     <section>
-        <div class="container">
+        <div class="clearfix"></div>
+        <div class="container" style="margin-top: 30px">
             <form class="" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post">
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
@@ -73,7 +74,7 @@
                             <thead>
                             <tr style="background-color:#269abc; color:#ffffff">
                                 <th>Product Name</th>
-                                <th class="text-center">Price</th>
+                                <th class="text-center">Price(MRP)</th>
                                 <th>Quantity</th>
                                 <th class="text-left">SubTotal</th>
                             </tr>
@@ -91,10 +92,6 @@
                                             {% endif %}
                                             <div class="media-body">
                                                 <h5 class="media-heading">{{ product.name }}</h5>
-                                                {% if product.size != 0 %}
-                                                <h5 class="media-heading">Size of {{ product.size }}{% if product.sizeUnit is not empty %} {{ product.sizeUnit }}{% endif %}</h5>
-                                                {% endif %}
-                                                {% if product.color is not empty %}<h5 class="media-heading"> Color: {{ product.color }}</h5>{% endif %}
                                                 {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
                                                 <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
                                             </div>
@@ -107,21 +104,21 @@
                                         <form class="addCart">
                                             <div class="input-group">
                                             <span class="input-group-btn">
-                                               <button type="button" class="btn btn-danger btn-number-cart"
+                                               <button type="button" class="btn gray-dark-bg btn-number-cart"
                                                        data-type="minus" data-field="quantity" data-id="{{ product.rowid }}"
-                                                       data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
+                                                       data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"
                                                        data-text="{{ product.id }}" data-title="{{ product.price }}">
                                                         <span class="glyphicon glyphicon-minus"></span>
                                                </button>
                                             </span>
                                             <input type="text" name="quantity" id="quantity-{{ product.rowid }}"
                                                        class="form-control input-number" value="{{ product.quantity }}"
-                                                       min="1" max="{{ product.maxQuantity }}">
+                                                       min="1" max="100" style="width: 75px!important;">
                                                 <span class="input-group-btn">
-                                              <button type="button" class="btn btn-success btn-number-cart"
+                                              <button type="button" class="btn gray-dark-bg btn-number-cart"
                                                       data-type="plus" data-field="quantity"
                                                       data-id="{{ product.rowid }}"
-                                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
+                                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"
                                                       data-text="{{ product.id }}" data-title="{{ product.price }}">
                                                       <span class="glyphicon glyphicon-plus"></span>
                                               </button>
@@ -151,7 +148,7 @@
                             {% endfor %}
                             <tr>
                                 <td colspan="3" class="text-right"><strong>Subtotal</strong></td>
-                                <td class="text-left col-sm-1 col-md-1"><strong>{{ globalOption.ecommerceConfig.currency }} {{ cart.total }}</strong></td>
+                                <td class="text-left col-sm-1 col-md-1"><strong>{{ globalOption.ecommerceConfig.currency }} <span class="cartTotal">{{ cart.total }}</span></strong></td>
                             </tr>
                             <tr>
                                 <td colspan="3" class="text-right"><h5><strong>Coupon Code</strong></h5></td>
@@ -164,7 +161,7 @@
                             <tr>
                                 <td colspan="3" class="text-right"><strong>Grand Total</strong></td>
                                 <td class="col-sm-1 col-md-1 text-left">
-                                    <strong>{{ globalOption.ecommerceConfig.currency }} {{ cart.total }}</strong>
+                                    <strong>{{ globalOption.ecommerceConfig.currency }} <span class="cartTotal">{{ cart.total }}</span></strong>
                                 </td>
                             </tr>
                             <tr>
@@ -206,26 +203,23 @@
         </div>
     {% endif %}
     <div class="clearfix"></div>
-    <style>
-        .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
-            vertical-align: middle;
-        }
-    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/desktop/css/product.css' %}
+    '@FrontendBundle/Resources/public/template/desktop/css/product.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/medicine.css'
+    %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-{% endblock %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/desktop/js/page.js'
     '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
     '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/product.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js' %}
+    '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

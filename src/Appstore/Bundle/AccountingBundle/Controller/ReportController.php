@@ -239,9 +239,11 @@ class ReportController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview( $this->getUser(),$data);
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findByQuery();
         $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $option, 'status'=>1),array('name'=>'asc'));
         $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getExpenseAccountHead();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($option);
+
         if(empty($data['pdf'])) {
 
             return $this->render('AccountingBundle:Report/Expenditure:expenditure.html.twig', array(
@@ -250,6 +252,8 @@ class ReportController extends Controller
             'transactionMethods' => $transactionMethods,
             'heads' => $heads,
             'categories' => $categories,
+            'employees' => $employees,
+            'global' => $option->getId(),
             'searchForm' => $data,
             ));
         }else {
@@ -420,6 +424,7 @@ class ReportController extends Controller
 
             return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
                 'entities' => $entities->getResult(),
+                'globalOption' => $this->getUser()->getGlobalOption(),
                 'overview' => $overview,
                 'customer' => $customer,
                 'searchForm' => $data,
@@ -427,7 +432,7 @@ class ReportController extends Controller
 
         }else{
 
-            $html = $this->renderView(
+          /*  $html = $this->renderView(
                 'AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
                     'globalOption' => $this->getUser()->getGlobalOption(),
                     'entities' => $entities->getResult(),
@@ -435,8 +440,15 @@ class ReportController extends Controller
                     'customer' => $customer,
                     'searchForm' => $data,
                 )
-            );
-            $this->downloadPdf($html,'customerLedgerPdf.pdf');
+            );*/
+            return $this->render('AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
+                'entities' => $entities->getResult(),
+                'globalOption' => $this->getUser()->getGlobalOption(),
+                'overview' => $overview,
+                'customer' => $customer,
+                'searchForm' => $data,
+            ));
+          //  $this->downloadPdf($html,'customerLedgerPdf.pdf');
 
         }
 	}

@@ -248,7 +248,7 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->reset($option);
         }
         if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
-            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->dmsReset($option);
+            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->reset($option);
         }
         $em->remove($option);
         $em->flush();

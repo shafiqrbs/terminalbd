@@ -43,6 +43,11 @@ class Transaction
      private $accountHead;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="subTransactions" )
+     **/
+     private $subAccountHead;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="transactions" )
      **/
     private  $branches;
@@ -403,6 +408,22 @@ class Transaction
     public function setBranches($branches)
     {
         $this->branches = $branches;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getSubAccountHead()
+    {
+        return $this->subAccountHead;
+    }
+
+    /**
+     * @param AccountHead $subAccountHead
+     */
+    public function setSubAccountHead($subAccountHead)
+    {
+        $this->subAccountHead = $subAccountHead;
     }
 
 }

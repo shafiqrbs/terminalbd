@@ -26,6 +26,7 @@ use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
@@ -59,9 +60,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * GlobalOption
- * @UniqueEntity(fields="domain",message="This data is already in use.")
+ * @UniqueEntity(fields="domain",message="This domain is already in use.")
  * @UniqueEntity(fields="mobile",message="This mobile is already in use.")
- * @UniqueEntity(fields="subDomain",message="This data is already in use.")
+ * @UniqueEntity(fields="subDomain",message="This sub-domain is already in use.")
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\GlobalOptionRepository")
  */
@@ -72,6 +73,11 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\User", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $users;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $androids;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="appDomains" , cascade={"persist", "remove"})
@@ -85,9 +91,27 @@ class GlobalOption
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", inversedBy="globalOption" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="globalOption" )
      **/
     protected $customerInbox;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting", mappedBy="globalOption" )
+     **/
+    protected $payrollSetting;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="globalOption" )
+     **/
+    protected $payroll;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="globalOption" )
+     **/
+    protected $employeePayroll;
 
 
     /**
@@ -205,9 +229,10 @@ class GlobalOption
     protected $accountingConfig;
 
    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\LedgerAccount", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
-    protected $ledgerAccounts;
+    protected $accountHeads;
+
 
    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -316,10 +341,7 @@ class GlobalOption
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $invoiceModules;
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" )
-     */
-    protected $instituteLevels;
+
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1392,7 +1414,7 @@ class GlobalOption
     }
 
     /**
-     * @return InventorConfig
+     * @return InventoryConfig
      */
     public function getInventoryConfig()
     {
@@ -2006,6 +2028,14 @@ class GlobalOption
     public function getAccountPurchaseCommission()
     {
         return $this->accountPurchaseCommission;
+    }
+
+    /**
+     * @return AndroidDeviceSetup
+     */
+    public function getAndroids()
+    {
+        return $this->androids;
     }
 
 

@@ -31,6 +31,11 @@ class MedicineVendor
     protected $medicineConfig;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="medicineVendor" )
+     **/
+    private  $accountHead;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="medicineVendor")
      */
     protected $medicinePurchases;

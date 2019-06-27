@@ -39,15 +39,20 @@ class AccountJournalController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent'=>1),array('name'=>'ASC'));
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
+
         $debit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Debit',$data);
         $credit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Credit',$data);
         $overview = array('debit' => $debit,'credit' => $credit);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountJournal:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'overview' => $overview,
             'accountHead' => $accountHead,
+            'heads' => $heads,
+            'transactionMethods' => $transactionMethods,
         ));
     }
 
@@ -60,7 +65,23 @@ class AccountJournalController extends Controller
         $entity = new AccountJournal();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if ($form->isValid() && empty($method)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_journal'));
+        }elseif (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             if(!empty($this->getUser()->getProfile()->getBranches())){
@@ -73,7 +94,9 @@ class AccountJournalController extends Controller
             );
             return $this->redirect($this->generateUrl('account_journal'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountJournal:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -281,8 +304,8 @@ class AccountJournalController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
-            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
-            if($accountConfig == 1){
+            $accountClose = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountClose == 1){
                 $datetime = new \DateTime("yesterday 23:59:59");
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);
@@ -372,18 +395,18 @@ class AccountJournalController extends Controller
 
 		foreach ($entities as $key => $entity){
 
-			$method = !empty($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getName():'';
-			$creditHead = !empty($entity->getAccountHeadCredit()) ? $entity->getAccountHeadCredit()->getName():'';
-			$debitHead = !empty($entity->getAccountHeadDebit()) ? $entity->getAccountHeadDebit()->getName():'';
+			$method = !empty($entity['methodName']) ? $entity['methodName']:'';
+			$creditHead = !empty($entity['accountHeadDebitName']) ? $entity['accountHeadDebitName']:'';
+			$debitHead = !empty($entity['accountHeadCreditName']) ? $entity['accountHeadCreditName']:'';
 
-			$debit = $entity->getTransactionType() == 'Debit' ? $entity->getAmount():'';
-			$credit = $entity->getTransactionType() == 'Credit' ? $entity->getAmount():'';
+			$debit = $entity['transactionType'] == 'Debit' ? $entity['amount']:'';
+			$credit = $entity['transactionType'] == 'Credit' ? $entity['amount']:'';
 			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
 			$rows = array(
-				$entity->getCreated()->format('d-m-Y'),
-				$entity->getToUser(),
+				$entity['updated']->format('d-m-Y'),
+				$entity['userName'],
 				$method,
-				$entity->getAccountRefNo(),
+				$entity['accountRefNo'],
 				$debitHead,
 				$creditHead,
 				$debit,

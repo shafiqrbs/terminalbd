@@ -9,6 +9,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -347,5 +348,32 @@ class ParticularRepository extends EntityRepository
             $i++;
         }
     }
+
+    public function getApiRestaurantToken(GlobalOption $entity)
+    {
+        $config = $entity->getRestaurantConfig()->getId();
+        $result = $this->createQueryBuilder('e')
+            ->join("e.service",'s')
+            ->select('e.id as id','e.name as name')
+            ->where("e.status = 1")
+            ->andWhere('s.slug IN (:slugs)')
+            ->setParameter('slugs',array('token'))
+            ->andWhere("e.restaurantConfig ={$config}")
+            ->orderBy("e.name","ASC")
+            ->getQuery()->getArrayResult();
+
+        /* @var $row Particular */
+
+        $data = array();
+
+        foreach($result as $key => $row){
+
+            $data[$key]['tokenId'] = (int) $row['id'];
+            $data[$key]['tokenName'] = $row['name'];
+        }
+        return $data;
+
+    }
+
 
 }

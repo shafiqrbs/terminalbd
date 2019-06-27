@@ -34,6 +34,11 @@ class RestaurantConfig
      **/
     private $particulars;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Coupon", mappedBy="restaurantConfig")
+     **/
+    private $coupons;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary", mappedBy="restaurantConfig")
      **/
@@ -44,10 +49,6 @@ class RestaurantConfig
      **/
     private $invoices;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Vendor", mappedBy="restaurantConfig")
-     **/
-    private $vendors;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="restaurantConfig")
@@ -322,6 +323,13 @@ class RestaurantConfig
      * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
      */
     private $barcodeScale = 1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="text", nullable = true)
+     */
+    private $address;
 
     /**
      * @var boolean
@@ -1026,6 +1034,22 @@ class RestaurantConfig
     public function setPayFor(string $payFor)
     {
         $this->payFor = $payFor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 
 

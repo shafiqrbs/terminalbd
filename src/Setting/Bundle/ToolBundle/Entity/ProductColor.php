@@ -25,12 +25,17 @@ class ProductColor
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="itemColors")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="itemColors")
      */
     protected $items;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="color")
+     */
+    protected $orderItem;
+
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="colors")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="colors")
      */
     protected $itemSub;
 

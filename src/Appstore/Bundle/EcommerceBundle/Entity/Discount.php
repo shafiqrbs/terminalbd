@@ -35,17 +35,12 @@ class Discount
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="discount" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="discount" )
      */
-    protected $purchaseVendorItems;
+    protected $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="discount" )
-     */
-    protected $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="discount" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="discount" , cascade={"remove"})
      **/
     private  $featureWidgets;
 

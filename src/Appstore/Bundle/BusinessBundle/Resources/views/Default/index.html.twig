@@ -292,7 +292,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    {% if (app.user.granted("ROLE_HOTEL_REPORTS"))  %}
+    {% if (app.user.granted("ROLE_BUSINESS_REPORTS"))  %}
         window.onload = function () {
 
         var optionsYearlyMonthlySales = {
@@ -314,7 +314,7 @@
         dataPoints: [
         {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
         {% for key,month in months %}
-            { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlySales|keys %}{{ monthlySales[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlySales|keys %}{{ monthlySales[key]|number_format }}{% endif %}" },
+            { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in monthlySales|keys %}{{ monthlySales[key]|default(0) }}{% else %}0{% endif %},indexLabel: "BDT {% if key in monthlySales|keys %}{{ monthlySales[key]|number_format }}{% endif %}" },
         {% endfor %}
         ]
         }]

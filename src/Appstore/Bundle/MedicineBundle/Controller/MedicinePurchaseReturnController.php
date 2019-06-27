@@ -311,7 +311,7 @@ class MedicinePurchaseReturnController extends Controller
     public function approveAction(MedicinePurchaseReturn $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!empty($entity)) {
+        if (!empty($entity) and $entity->getProcess() != "approved") {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());

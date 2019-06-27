@@ -35,10 +35,6 @@ class Location
      */
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Education", mappedBy="location")
-     */
-    protected $educations;
 
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="location")
@@ -50,6 +46,12 @@ class Location
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="district")
      */
     protected $election;
+
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="geoLocation")
+     */
+    protected $committees;
 
 
      /**
@@ -91,26 +93,6 @@ class Location
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="district")
      */
     protected $contactPageDistricts;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Scholarship", mappedBy="location")
-     */
-    protected $scholarships;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\StudyAbroad", mappedBy="location")
-     */
-    protected $studyAbroads;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Tutor", mappedBy="location")
-     */
-    protected $tutors;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Vendor", mappedBy="location")
-     */
-    protected $vendors;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="location")

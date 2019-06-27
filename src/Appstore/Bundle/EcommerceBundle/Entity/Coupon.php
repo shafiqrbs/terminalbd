@@ -82,7 +82,7 @@ class Coupon
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="integer", length=5, nullable = true)
+     * @ORM\Column(name="quantity", type="integer", length = 5, nullable = true)
      */
     private $quantity;
 

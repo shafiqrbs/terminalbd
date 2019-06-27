@@ -41,6 +41,11 @@ class Customer
 
     protected $globalOption;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="customer" )
+     **/
+    private  $accountHead;
+
 	/**
 	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", mappedBy="customer")
 	 * @ORM\OrderBy({"companyName" = "ASC"})

@@ -352,18 +352,14 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $expirationEndDate = (new \DateTime($data['expirationEndDate']));
             $entity->setExpirationEndDate($expirationEndDate);
         }
-        $unitPrice = round(($item->getPurchasePrice()/$item->getPurchaseQuantity()),2);
-        $salesPrice = round(($item->getSalesPrice()/$item->getPurchaseQuantity()),2);
-        $entity->setPurchaseSubTotal($item->getPurchasePrice());
-        $entity->setSalesPrice($salesPrice);
-        $entity->setPurchasePrice($unitPrice);
-        $entity->setActualPurchasePrice($unitPrice);
+        $entity->setPurchaseSubTotal($item->getPurchasePrice() * $item->getPurchaseQuantity());
+        $entity->setSalesPrice($item->getSalesPrice());
+        $entity->setPurchasePrice($item->getPurchasePrice());
+        $entity->setActualPurchasePrice($item->getPurchasePrice());
         $entity->setQuantity($item->getPurchaseQuantity());
         $entity->setPack($item->getPack());
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
         $em->persist($entity);
-        $item->setPurchasePrice($unitPrice);
-        $item->setSalesPrice($unitPrice);
         $em->flush();
     }
 

@@ -67,8 +67,7 @@ class AttendanceController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $monthWiseAttendance = $em->getRepository('HumanResourceBundle:Attendance')->findBy(array('employee'=>$user),array('year'=>'DESC','month'=>'ASC'));
         $leaveTypeWiseAbsence = $em->getRepository('HumanResourceBundle:EmployeeLeave')->leaveTypeWiseAbsence($user);
-        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array(),array('updated'=>'DESC'));
-
+        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array('employee'=>$user),array('updated'=>'DESC'));
         return $this->render('HumanResourceBundle:Attendance:employeeDetails.html.twig', array(
             'user'  => $user,
             'entities'  => $entities,
@@ -108,8 +107,8 @@ class AttendanceController extends Controller
         $form->handleRequest($request);
         $startDate = $entity->getStartDate();
         $endDate = $entity->getEndDate();
-        $start = new \DateTime("$startDate");
-        $end = new \DateTime("$endDate");
+        $start = new \DateTime($startDate);
+        $end = new \DateTime($endDate);
         $interval = $start->diff($end);
         $offDay = $interval->format('%a');
         $offDay = (int)$offDay +1;
@@ -120,6 +119,7 @@ class AttendanceController extends Controller
         }else{
             $remaining = $offDay;
         }
+
         $datetime = new \DateTime("now");
         if ($form->isValid() and $entity->getLeaveSetup()->getOffDay() >= $remaining) {
             $em = $this->getDoctrine()->getManager();
@@ -160,12 +160,13 @@ class AttendanceController extends Controller
         $em->flush();
         $blackoutdate ='';
         $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $leave->getGlobalOption()));
-        $blackOutDate =  $calendarBlackout ->getWeekendDate();
-        if($blackOutDate){
-            $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
+        if($calendarBlackout){
+            $blackOutDate =  $calendarBlackout ->getWeekendDate();
+            if($blackOutDate){
+                $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
+            }
         }
         $em->getRepository('HumanResourceBundle:Attendance')->leaveAttendance($leave,$blackoutdate);
-
         exit;
     }
 

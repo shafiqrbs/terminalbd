@@ -23,6 +23,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('mobileShowLogo')
             ->add('mobileHomeShowLogo')
             ->add('topBar')
+            ->add('contactButton')
             ->add('footerBlock')
             ->add('showCalendar')
             ->add('showNewsLetter')
@@ -35,6 +36,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('menuBold')
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('topBarContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'placeholder'=>'Enter top bar text or button')))
+            ->add('siteCssStyle','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 12,'placeholder'=>'Enter customize site css style')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','left' => 'Left',  'right' => 'Right'),
@@ -68,7 +70,7 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('topIconPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Contact Position---','menu-right' => 'Menu-Right','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+                'choices' => array('' => '---Contact Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
             ))
 
             ->add('topTextPosition', 'choice', array(
@@ -419,6 +421,36 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+
+            ->add('androidHeaderBg','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android header bg')
+            ))
+
+            ->add('androidMenuBg','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android menu bg')
+            ))
+
+            ->add('androidMenuBgHover','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android menu bg hover')
+            ))
+
+            ->add('androidIconColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android icon color')
+            ))
+            ->add('androidAnchorColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android anchor color')
+            ))
+            ->add('androidAnchorHoverColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'Android anchor color hover')
+            ))
+
+
         ;
 	    $builder->add('globalOption', new SocialIconType());
 

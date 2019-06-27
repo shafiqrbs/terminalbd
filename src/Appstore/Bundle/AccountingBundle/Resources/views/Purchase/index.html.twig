@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Purchase
+                   Manage Bill Voucher
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_expense_purchase') }}"> Manage Expense Purchase</a>
+                        <a href="{{ path('account_expense_purchase') }}"> Manage Expense Bill Voucher</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,10 +33,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Expense Purchase</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Bill Voucher</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add Expense Purchase</a>
+                                <a class="btn red" href="{{ path('account_expense_purchase_new') }}"><i class="icon-plus-sign"></i> Add Bill Voucher</a>
                              </div>
                         </div>
                     </div>
@@ -86,6 +86,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Vendor Name</th>
+                                    <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -99,6 +100,7 @@
                                     <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.accountRefNo }}</td>
                                     <td class="numeric" >{{ entity.companyName }}</td>
+                                    <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                     <td class="numeric" >{{ entity.payment|number_format }}</td>
                                     <td class="numeric" >{{ (entity.totalAmount-entity.payment)|number_format }}</td>

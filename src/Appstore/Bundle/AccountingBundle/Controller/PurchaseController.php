@@ -61,6 +61,7 @@ class PurchaseController extends Controller
         $entity->setGlobalOption($config);
         $entity->setCreatedBy($this->getUser());
         $entity->setProcessHead('Expense');
+        $entity->setUpdated($entity->getCreated());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
@@ -72,7 +73,7 @@ class PurchaseController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getId();
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -171,22 +172,31 @@ class PurchaseController extends Controller
             throw $this->createNotFoundException('Unable to find AccountVendor entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
+        $form = $this->createEditForm($entity);
+        $form->handleRequest($request);
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+            $entity->setUpdated($entity->getCreated());
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
             return $this->redirect($this->generateUrl('account_expense_purchase_show',['id'=>$entity->getId()]));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         if($entity->getProcess() == 'Approved'){
            $this->approvedAction($entity->getId());
         }
         return $this->render("AccountingBundle:Purchase:new.html.twig",[
             'entity' => $entity,
             'id' => 'purchase',
-            'form' => $editForm->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -290,12 +300,12 @@ class PurchaseController extends Controller
 		$purchase->setProcess('created');
 		$purchase->setApprovedBy(NULL);
 		$em->flush();
-		$this->getDoctrine()->getRepository('AccountingBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
+		//$this->getDoctrine()->getRepository('AccountingBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
 		$template = $this->get('twig')->render('AccountingBundle:Purchase:purchaseReverse.html.twig', array(
 			'entity' => $purchase,
 			'config' => $purchase->getBusinessConfig(),
 		));
-		$this->getDoctrine()->getRepository('AccountingBundle:BusinessReverse')->purchaseReverse($purchase, $template);
+		//$this->getDoctrine()->getRepository('AccountingBundle:BusinessReverse')->purchaseReverse($purchase, $template);
 		return $this->redirect($this->generateUrl('account_expense_purchase_edit',array('id' => $purchase->getId())));
 	}
 

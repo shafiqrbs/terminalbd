@@ -4,6 +4,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Form\ParticularType;
+use Appstore\Bundle\MedicineBundle\Form\PayrollSettingType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

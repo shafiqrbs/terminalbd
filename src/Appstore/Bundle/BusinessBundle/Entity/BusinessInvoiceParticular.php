@@ -49,7 +49,7 @@ class BusinessInvoiceParticular
     private $businessProductionExpense;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", inversedBy="businessInvoiceParticular", cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem", inversedBy="businessInvoiceParticulars", cascade={"persist"} )
      **/
     private $vendorStockItem;
 

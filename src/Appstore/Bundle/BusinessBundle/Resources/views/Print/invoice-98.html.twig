@@ -114,7 +114,9 @@
                                 <td ><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                             </tr>
                         {% endfor %}
-                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 1px solid #000000"><strong>Narration: </strong> : {{ entity.comment|raw }}</td></tr>
+                        {% if entity.comment is not empty %}
+                        <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 1px solid #000000"><strong>PC No. </strong> : {{ entity.comment|raw }}</td></tr>
+                        {% endif %}
                         </tbody>
                         {% if entity.process != 'Quotation' %}
                         <tr>

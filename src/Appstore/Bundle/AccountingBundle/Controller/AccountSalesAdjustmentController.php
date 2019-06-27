@@ -55,7 +55,11 @@ class AccountSalesAdjustmentController extends Controller
         $entity = new AccountSalesAdjustment();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-	    if ($form->isValid()) {
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if(($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             if(!empty($this->getUser()->getProfile()->getBranches())){
@@ -72,7 +76,9 @@ class AccountSalesAdjustmentController extends Controller
             );
             return $this->redirect($this->generateUrl('account_salesadjustment'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountSalesAdjustment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -211,7 +217,8 @@ class AccountSalesAdjustmentController extends Controller
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
 		$entity->setProcess(null);
 		$entity->setApprovedBy(null);
-		$entity->setAmount(0);
+		$entity->setSales(0);
+		$entity->setPurchase(0);
 		$em->flush();
 		return $this->redirect($this->generateUrl('account_salesadjustment'));
 

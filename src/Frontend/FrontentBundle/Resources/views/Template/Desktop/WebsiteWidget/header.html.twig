@@ -90,7 +90,7 @@
                                     <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.youtube is not empty %}
-                                    <li><a class="youtube" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.instagramPageUrl is not empty %}
                                     <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
@@ -137,7 +137,7 @@
                                     <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.youtube is not empty %}
-                                    <li><a class="youtube" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.instagramPageUrl is not empty %}
                                     <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
@@ -182,7 +182,7 @@
                                     <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.youtube is not empty %}
-                                    <li><a class="youtube" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-youtube"></i></a></li>
+                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
                                 {% endif %}
                                 {% if globalOption.instagramPageUrl is not empty %}
                                     <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
@@ -414,8 +414,6 @@
             </div>
         </form>
     </div>
-
-
 </nav>
 <div class="clearfix"></div>
 <div class="pageheader-header dark"></div>
@@ -425,3 +423,15 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header'}) %}
     </section>
 {% endif %}
+<style>
+    {% set menuHeight = height+20 %}
+    .navbar-brand {
+        height: auto;
+    }
+    #navbar-menu, .attr-nav{
+        display: flex!important;
+        align-items: center;
+        height: {{ menuHeight }}px!important;
+    }
+
+</style>

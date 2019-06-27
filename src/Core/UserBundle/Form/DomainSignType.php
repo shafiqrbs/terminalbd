@@ -60,6 +60,14 @@ class DomainSignType extends AbstractType
                     'choices'   => $this->getAccessRoleGroup())
             )
 
+            ->add('appRoles', 'choice', array(
+                    'attr'=>array('class'=>'category form-control'),
+                    'required'=>false,
+                    'multiple'    => true,
+                    'empty_data'  => null,
+                    'choices'   => $this->getAppRoleGroup())
+            )
+
             ->add('username','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off' ,'placeholder'=>'Enter your user name'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter your user name')),
@@ -108,5 +116,9 @@ class DomainSignType extends AbstractType
     public function getAccessRoleGroup(){
 
         return $userGroups = $this->user->getAccessRoleGroup($this->globalOption);
+    }
+    public function getAppRoleGroup(){
+
+        return $userGroups = $this->user->getAndroidRoleGroup();
     }
 }

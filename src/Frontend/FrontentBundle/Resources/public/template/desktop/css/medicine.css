@@ -1,0 +1,106 @@
+/* ================= Header ============*/
+.search-box {
+   border: 0!important;
+}
+.serarch-keyword {
+    border: 1px solid #cccccc!important;
+    border-radius: 0!important;
+}
+
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+    vertical-align: middle;
+}
+.select-location{
+    width: 100%!important;
+}
+.select2-container{
+    width: 100%!important;
+}
+.product-canvas .product-eye {
+    bottom:inherit;
+}
+
+.product-canvas:hover .product-eye {
+    left: 33%!important;
+    top: 25%!important;
+    bottom: inherit;
+    opacity: 1;
+    z-index: 99;
+}
+
+.img-card , .add-card{
+    align-items:center;
+    display: flex;
+}
+
+.product-canvas .card-content{
+    text-align: center!important;
+}
+.product-canvas .product-eye , .product-canvas .product-buy{
+    width: auto;
+}
+.product-canvas .product-buy {
+    position: absolute;
+    /* bottom: 3px; */
+    cursor: pointer;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+    width: auto;
+    opacity: 0;
+    right: 0;
+}
+
+.caption .brand{
+    font-size: 11px;
+}
+
+.input-group .input-number {
+    text-align: center;
+    font-weight: bold;
+    width: 100%!important;
+}
+
+div.bhoechie-tab-container {
+    margin-top: 7px;
+}
+.select2{
+    border: 1px solid #cccccc;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.select2-dropdown{
+    margin-left: -15px!important;
+}
+.btn-warning {
+    color: #fff;
+    background-color: #ff6a00;
+    border-color: #FF6701;
+}
+.btn-warning:hover{
+    color: #fff;
+    background-color: #FF5400;
+}
+
+
+#prescription-content{
+    display: none;
+}
+.bs-example-form{
+    float: right;
+}
+.bs-example-form .box{
+    width: 100%;
+}
+
+.bs-example-form .quote-button-box{
+    float: right;
+}
+
+.bs-example-form .support-box{
+    margin-top: 0;
+    float: right;
+    padding-right: 15px;
+}

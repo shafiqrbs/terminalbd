@@ -40,7 +40,7 @@ class EcommerceProductEditType extends AbstractType
 			->add('category', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Choose a product category---',
-				'attr'=>array('class'=>'col-md-12 col-lg-12 search-select search-field form-control select2'),
+				'attr'=>array('class'=>'col-md-12 col-lg-12 search-select search-field form-control select-category'),
 				'constraints' =>array(
 					new NotBlank(array('message'=>'Please input required'))
 				),
@@ -54,7 +54,7 @@ class EcommerceProductEditType extends AbstractType
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
 				'property' => 'name',
 				'empty_value' => '-Choose a brand-',
-				'attr'=>array('class'=>'col-md-12 col-lg-12 select2'),
+				'attr'=>array('class'=>'col-md-12 col-lg-12 search-select search-field form-control select-brand'),
 				'query_builder' => function(EntityRepository $er){
 					return $er->createQueryBuilder('p')
 					          ->where("p.status = 1")

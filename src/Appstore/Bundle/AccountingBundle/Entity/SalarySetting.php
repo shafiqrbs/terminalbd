@@ -174,7 +174,7 @@ class SalarySetting
      *
      * @param string $name
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setName($name)
     {
@@ -198,7 +198,7 @@ class SalarySetting
      *
      * @param string $bonus
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setBonus($bonus)
     {
@@ -222,7 +222,7 @@ class SalarySetting
      *
      * @param float $bonusAmount
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setBonusAmount($bonusAmount)
     {
@@ -247,7 +247,7 @@ class SalarySetting
      *
      * @param boolean $status
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setStatus($status)
     {
@@ -271,7 +271,7 @@ class SalarySetting
      *
      * @param \DateTime $created
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setCreated($created)
     {
@@ -295,7 +295,7 @@ class SalarySetting
      *
      * @param \DateTime $updated
      *
-     * @return SalarySetting
+     * @return Payroll
      */
     public function setUpdated($updated)
     {

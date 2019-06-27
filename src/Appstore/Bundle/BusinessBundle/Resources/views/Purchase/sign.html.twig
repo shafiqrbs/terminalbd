@@ -83,9 +83,10 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
                             <th class="span3">Name</th>
-                            <th class="span1">Sales</th>
-                            <th class="span1">Receive</th>
+                            <th class="span1">Price</th>
+                            <th class="span1">Size</th>
                             <th class="span1">Qnt</th>
+                            <th class="span1">Total Qnt</th>
                             <th class="span1">Unit</th>
                             <th class="span1">Sub Total</th>
                             <th class="span1"><i class="icon-trash"></i></th>
@@ -98,8 +99,9 @@
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.businessParticular.particularCode }}</td>
                                     <td class="span3">{{ item.businessParticular.name }}</td>
-                                    <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
+                                    <td class="span1">{{ item.height }} x {{ item.width }}</td>
+                                    <td class="span1">{{ item.subQuantity }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
@@ -110,20 +112,20 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="10" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="netTotal">{{ entity.netTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>

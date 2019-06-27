@@ -40,8 +40,8 @@ class AccountJournalType extends AbstractType
                     new NotBlank(array('message'=>'Please choose required'))
                 ),
                 'choices' => array(
-                    'Debit' => 'Debit',
-                    'Credit' => 'Credit',
+                    'Debit' => 'In',
+                    'Credit' => 'Out',
                 ),
             ))
             ->add('transactionMethod', 'entity', array(
@@ -65,12 +65,17 @@ class AccountJournalType extends AbstractType
                 'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'group_by'  => 'parent.name',
                 'property'  => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please choose debit account'))
+                ),
+                'empty_value' => '---Choose a debit account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.parent",'c')
-                        ->where("e.toIncrease = 'Debit'")
+                        ->where("e.status = 1")
+                        ->andWhere("c.isParent =1")
                         ->orderBy("e.name", "ASC");
                 }
             ])
@@ -79,12 +84,17 @@ class AccountJournalType extends AbstractType
                 'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'group_by'  => 'parent.name',
                 'property'  => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please choose credit account'))
+                ),
+                'empty_value' => '---Choose a credit account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.parent",'c')
-                        ->where("e.toIncrease = 'Credit'")
+                        ->where("e.status = 1")
+                        ->andWhere("c.isParent =1")
                         ->orderBy("e.name", "ASC");
                 }
             ])

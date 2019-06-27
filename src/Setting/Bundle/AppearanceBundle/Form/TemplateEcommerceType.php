@@ -22,6 +22,7 @@ class TemplateEcommerceType extends AbstractType
 			->add('mobileShowLogo')
 			->add('mobileHomeShowLogo')
 			->add('topBar')
+			->add('contactButton')
 			->add('footerBlock')
 			->add('showCalendar')
 			->add('showNewsLetter')
@@ -57,8 +58,10 @@ class TemplateEcommerceType extends AbstractType
 
 			->add('topIconPosition', 'choice', array(
 				'attr'=>array('class'=>'span12'),
-				'choices' => array('' => '---Contact Position---','menu-right' => 'Menu-Right','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
+				'choices' => array('' => '---Contact Position---','text-left' => 'Left','text-center' => 'Center','text-right' => 'Right'),
 			))
+
+            ->add('siteCssStyle','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 12,'placeholder'=>'Enter customize site css style')))
 
 			->add('topTextPosition', 'choice', array(
 				'attr'=>array('class'=>'span12'),

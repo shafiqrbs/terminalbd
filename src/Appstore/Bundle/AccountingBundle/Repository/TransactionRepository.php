@@ -248,13 +248,37 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-	    $transaction->setProcessHead('Journal');
+        $transaction->setProcessHead('Journal');
         $transaction->setProcess($entity->getAccountHeadDebit()->getParent()->getName());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setUpdated($entity->getUpdated());
         $transaction->setAccountHead($entity->getAccountHeadDebit());
         $transaction->setAmount($entity->getAmount());
         $transaction->setDebit($entity->getAmount());
+
+        /* Cash - Cash various */
+
+        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Credit'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getProfile());
+            $transaction->setSubAccountHead($subAccount);
+        }
+
+        if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Debit' ){
+
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
+
+        }elseif($entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Debit' ){
+
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
+
+        }
+
         if(!empty($entity->getBranches())){
             $transaction->setBranches($entity->getBranches());
         }
@@ -277,6 +301,31 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountHead($entity->getAccountHeadCredit());
         $transaction->setAmount('-'.$entity->getAmount());
         $transaction->setCredit($entity->getAmount());
+
+        /* Cash - Cash various */
+
+        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Debit'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
+            $transaction->setSubAccountHead($subAccount);
+        }
+
+        if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Credit' ){
+
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
+
+        }elseif($entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Credit' ){
+
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
+
+        }
+
+
         if(!empty($entity->getBranches())){
             $transaction->setBranches($entity->getBranches());
         }
@@ -298,17 +347,28 @@ class TransactionRepository extends EntityRepository
 
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
-		$transaction->setProcessHead('BalanceTransfer');
+		$transaction->setProcessHead('Contra Account');
 		$transaction->setProcess('Current Assets');
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
 		$transaction->setUpdated($entity->getUpdated());
-		if(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 2 ){
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
-		}elseif(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 3 ){
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
-		}else{
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-		}
+        /* Cash - Cash various */
+        if($entity->getToTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getToAccountBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }elseif($entity->getToTransactionMethod()->getId() == 3 ){
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getToAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }elseif($entity->getToTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+            $transaction->setProcess('Cash');
+        }
 		$transaction->setAmount($entity->getAmount());
 		$transaction->setDebit($entity->getAmount());
 		if(!empty($entity->getBranches())){
@@ -326,17 +386,28 @@ class TransactionRepository extends EntityRepository
 
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
-		$transaction->setProcessHead('BalanceTransfer');
+		$transaction->setProcessHead('Contra Account');
 		$transaction->setProcess('Current Assets');
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
 		$transaction->setUpdated($entity->getUpdated());
-		if(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 2 ){
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
-		}elseif(!empty($entity->getFromTransactionMethod()) and $entity->getFromTransactionMethod()->getId() == 3 ){
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
-		}else{
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-		}
+        /* Cash - Cash various */
+        if($entity->getFromTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getFromAccountBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }elseif($entity->getFromTransactionMethod()->getId() == 3 ){
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getFromAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }elseif($entity->getToTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+            $transaction->setProcess('Cash');
+        }
 		$transaction->setAmount('-'.$entity->getAmount());
 		$transaction->setCredit($entity->getAmount());
 		if(!empty($entity->getBranches())){
@@ -391,19 +462,25 @@ class TransactionRepository extends EntityRepository
 
             /* Cash - Cash various */
 
+            /* Cash - Cash various */
             if($purchase->getTransactionMethod()->getId() == 2 ){
-                /* Current Asset Bank Cash Credit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($purchase->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($purchase->getTransactionMethod()->getId() == 3 ){
-                /* Current Asset Mobile Account Credit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($purchase->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
-            }else{
-                /* Cash - Purchase Goods Payment Account */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            }elseif($purchase->getTransactionMethod()->getId() == 1 ){
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
                 $transaction->setProcess('Cash');
             }
+
 
             $transaction->setAmount('-' . $amount);
             $transaction->setCredit($amount);
@@ -444,6 +521,15 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcess('Current Liabilities');
         /* Current Liabilities - Account Payable Payment */
         $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+        /* ==== Sub Account set ====*/
+        if($entity->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($entity->getMedicineVendor());
+        }elseif ($entity->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($entity->getVendor());
+        }else{
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($entity->getAccountVendor());
+        }
+        $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount('-'.$entity->getPurchaseAmount());
         $transaction->setCredit($entity->getPurchaseAmount());
         $this->_em->persist($transaction);
@@ -483,18 +569,23 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
         if($entity->getTransactionMethod()->getId() == 2 ){
-            /* Current Asset Bank Cash Credit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            /* Current Asset Mobile Account Credit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
-        }else{
-            /* Cash - Purchase Goods Payment Account */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }elseif($entity->getTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
         }
+
         $transaction->setAmount('-'.$entity->getPayment());
         $transaction->setCredit($entity->getPayment());
         $this->_em->persist($transaction);
@@ -511,7 +602,16 @@ class TransactionRepository extends EntityRepository
         $transaction->setUpdated($entity->getUpdated());
         $transaction->setProcess('Current Liabilities');
         /* Current Liabilities - Account Payable Payment */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(46));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+        /* ==== Sub Account set ==== */
+        if($entity->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($entity->getMedicineVendor());
+        }elseif ($entity->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($entity->getVendor());
+        }else{
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($entity->getAccountVendor());
+        }
+        $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount($entity->getPayment());
         $transaction->setDebit($entity->getPayment());
         $this->_em->persist($transaction);
@@ -633,16 +733,21 @@ class TransactionRepository extends EntityRepository
             if($accountSales->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
-            }else{
+            }elseif($entity->getTransactionMethod()->getId() == 1 ){
                 /* Cash - Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
                 $transaction->setProcess('Cash');
             }
+
 
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
@@ -770,16 +875,22 @@ class TransactionRepository extends EntityRepository
             if($entity->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($entity->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
-            }else{
+            }elseif($entity->getTransactionMethod()->getId() == 1 ){
                 /* Cash - Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
                 $transaction->setProcess('Cash');
             }
+
+
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $this->_em->persist($transaction);
@@ -797,9 +908,9 @@ class TransactionRepository extends EntityRepository
         }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('SalesAdjustment');
-        $transaction->setProcess('Cash');
+        $transaction->setProcess('Inventory Assets');
         /* Cash - Sales Adjustment Payment Account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(61));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$entity->getSales());
         $transaction->setCredit($entity->getSales());
         $this->_em->persist($transaction);
@@ -818,9 +929,12 @@ class TransactionRepository extends EntityRepository
 		$transaction->setProcess('Current Asset');
 		/* Current Current Asset - Account Receivable */
 		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
-		$transaction->setAmount($entity->getTotalAmount());
+		/* ==== Sub Account set ====*/
+        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
+        $transaction->setSubAccountHead($subAccount);
+        $transaction->setAmount($entity->getTotalAmount());
 		$transaction->setDebit($entity->getTotalAmount());
-		$this->_em->persist($transaction);
+        $this->_em->persist($transaction);
 		$this->_em->flush();
 
 
@@ -861,8 +975,11 @@ class TransactionRepository extends EntityRepository
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Current Asset');
 		/* Current Current Asset - Account Receivable */
-		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(21));
-		$transaction->setAmount('-'.$entity->getAmount());
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+        /* ==== Sub Account set ====*/
+        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
+        $transaction->setSubAccountHead($subAccount);
+        $transaction->setAmount('-'.$entity->getAmount());
 		$transaction->setCredit($entity->getAmount());
 		$this->_em->persist($transaction);
 		$this->_em->flush();
@@ -878,7 +995,16 @@ class TransactionRepository extends EntityRepository
 		$transaction->setUpdated($entity->getUpdated());
 		$transaction->setProcess('Current Liabilities');
 		/* Current Current Asset - Account Receivable */
-		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(58));
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+        /* ==== Sub Account set ====*/
+        if($entity->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($entity->getMedicineVendor());
+        }elseif ($entity->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($entity->getVendor());
+        }else{
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($entity->getAccountVendor());
+        }
+        $transaction->setSubAccountHead($subAccount);
 		$transaction->setAmount($entity->getPayment());
 		$transaction->setDebit($entity->getPayment());
 		$this->_em->persist($transaction);
@@ -949,7 +1075,7 @@ class TransactionRepository extends EntityRepository
                 $transaction->setProcess('Current Assets');
             }if($entity->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
                 $transaction->setProcess('Current Assets');
             }
 
@@ -1045,19 +1171,26 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Sales');
         $transaction->setUpdated($entity->getUpdated());
 
+
+
         /* Cash - Cash various */
-        if($entity->getTransactionMethod()->getId() == 1 ){
-            /* Cash - Cash Debit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
-            $transaction->setProcess('Cash');
-        }elseif($entity->getTransactionMethod()->getId() == 2 ){
+        /* Cash - Cash various */
+        if($entity->getTransactionMethod()->getId() == 2 ){
             /* Current Asset Bank Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
             /* Current Asset Mobile Account Debit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
+        }elseif($entity->getTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+            $transaction->setProcess('Cash');
         }
 
         $transaction->setAmount($entity->getAmount());
@@ -1078,7 +1211,10 @@ class TransactionRepository extends EntityRepository
         $transaction->setUpdated($entity->getUpdated());
         $transaction->setProcessHead('Sales');
         /* Sales Revenue - Sales Due Payment credit */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(21));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+        /* ==== Sub Account set ====*/
+        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
+        $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount('-'.$entity->getAmount());
         $transaction->setCredit($entity->getAmount());
         $this->_em->persist($transaction);
@@ -1115,7 +1251,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Petty Cash');
         $transaction->setProcess('Cash Credit');
         /* Cash - Cash credit */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         $transaction->setAmount('-'.$entity->getAmount());
         $transaction->setCredit($entity->getAmount());
         $this->_em->persist($transaction);
@@ -1198,15 +1334,22 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Expenditure');
 
         /* Cash - Cash various */
-        if($entity->getTransactionMethod()->getId() == 1 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-            $transaction->setProcess('Cash');
-        }elseif($entity->getTransactionMethod()->getId() == 2 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+        if($entity->getTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
+        }elseif($entity->getTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+            $transaction->setProcess('Cash');
         }
 
         $transaction->setAmount('-'.$entity->getAmount());
@@ -1246,15 +1389,22 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('PurchaseExpenditure');
 
         /* Cash - Cash various */
-        if($entity->getTransactionMethod()->getId() == 1 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-            $transaction->setProcess('Cash');
-        }elseif($entity->getTransactionMethod()->getId() == 2 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+        if($entity->getTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
+        }elseif($entity->getTransactionMethod()->getId() == 1 ){
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+            $transaction->setProcess('Cash');
         }
 
         $transaction->setAmount('-'.$entity->getPayment());
@@ -1294,15 +1444,22 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('PaymentSalary');
 
         /* Cash - Cash various */
-        if($paymentSalary->getTransactionMethod() == 1 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        if($paymentSalary->getTransactionMethod()->getId() == 2 ){
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($paymentSalary->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }elseif($paymentSalary->getTransactionMethod()->getId() == 3 ){
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($paymentSalary->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setProcess('Current Assets');
+        }else{
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
-        }elseif($paymentSalary->getTransactionMethod() == 2 ){
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
-            $transaction->setProcess('Bank Cash');
-        }elseif($paymentSalary->getTransactionMethod() == 3 ) {
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
-            $transaction->setProcess('Mobile Cash');
         }
 
         /* Cash - Cash various */
@@ -1399,10 +1556,14 @@ class TransactionRepository extends EntityRepository
             if($accountSales->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }else{
                 /* Cash - Cash Debit */
@@ -1532,13 +1693,18 @@ class TransactionRepository extends EntityRepository
             $transaction->setUpdated($entity->getUpdated());
 
             /* Cash - Cash various */
+            /* Cash - Cash various */
             if($accountSales->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }else{
                 /* Cash - Cash Debit */
@@ -1627,10 +1793,14 @@ class TransactionRepository extends EntityRepository
             if($accountSales->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }else{
                 /* Cash - Cash Debit */
@@ -1658,7 +1828,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Sales');
         $transaction->setProcess('Goods');
         /* Sales Revenue - Sales goods account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$amount);
         $transaction->setCredit($amount);
         $this->_em->persist($transaction);
@@ -1682,6 +1852,8 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcess('AccountReceivable');
             /* Assets Account - Account Receivable */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($accountSales->getCustomer());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $this->_em->persist($transaction);
@@ -1753,7 +1925,7 @@ class TransactionRepository extends EntityRepository
 			$transaction->setProcessHead('SalesReturn');
 			$transaction->setProcess('Cash');
 			/* Cash - Sales Return Payment Account */
-			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+			$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
 			$transaction->setAmount('-'.$amount);
 			$transaction->setCredit($amount);
 			$this->_em->persist($transaction);
@@ -1813,7 +1985,7 @@ class TransactionRepository extends EntityRepository
 	public function purchaseGlobalTransaction(AccountPurchase $accountPurchase,$source='')
     {
         $this->insertGlobalInventoryAsset($accountPurchase);
-	    if(!empty($accountPurchase->getTransactionMethod())){
+	    if(!empty($accountPurchase->getTransactionMethod()) and $accountPurchase->getPayment() > 0){
 	        $this->insertGlobalPurchaseCash($accountPurchase);
         }
         $this->insertGlobalPurchaseAccountPayable($accountPurchase);
@@ -1855,18 +2027,23 @@ class TransactionRepository extends EntityRepository
             /* Cash - Cash various */
 
             if($accountPurchase->getTransactionMethod()->getId() == 2 ){
-                /* Current Asset Bank Cash Credit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountPurchase->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($accountPurchase->getTransactionMethod()->getId() == 3 ){
-                /* Current Asset Mobile Account Credit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountPurchase->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }else{
-                /* Cash - Purchase Goods Payment Account */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
                 $transaction->setProcess('Cash');
             }
+
             $transaction->setAmount('-' . $amount);
             $transaction->setCredit($amount);
             $this->_em->persist($transaction);
@@ -1886,6 +2063,14 @@ class TransactionRepository extends EntityRepository
             $transaction->setUpdated($accountPurchase->getUpdated());
             /* Current Liabilities-Purchase Account payable */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+            if($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($accountPurchase->getMedicineVendor());
+            }elseif ($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($accountPurchase->getVendor());
+            }else{
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($accountPurchase->getAccountVendor());
+            }
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setAmount('-'.$amount);
             $transaction->setCredit($amount);
             $this->_em->persist($transaction);
@@ -1909,7 +2094,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Purchase Return');
         $transaction->setProcess('InventoryAssets');
         /* Sales Revenue - Purchase Return account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$amount);
         $transaction->setCredit($amount);
         $this->_em->persist($transaction);
@@ -1930,7 +2115,16 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcessHead('Purchase Return');
             $transaction->setProcess('AccountReceivable');
             /* Assets Account - Account Receivable */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+
+            if($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($accountPurchase->getMedicineVendor());
+            }elseif ($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($accountPurchase->getVendor());
+            }else{
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($accountPurchase->getAccountVendor());
+            }
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $this->_em->persist($transaction);
@@ -1965,7 +2159,7 @@ class TransactionRepository extends EntityRepository
 	public function insertGlobalDamageCreditTransaction($globalOption,$damage)
 	{
 		$transaction = new Transaction();
-		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(47);
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
 		$transaction->setProcessHead('Damage');
@@ -1991,18 +2185,22 @@ class TransactionRepository extends EntityRepository
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setProcessHead('Purchase Commission');
-		/* Cash - Cash various */
+
         if($commission->getTransactionMethod()->getId() == 2 ){
-            /* Current Asset Bank Cash Credit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+            /* Current Asset Bank Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($commission->getAccountBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }elseif($commission->getTransactionMethod()->getId() == 3 ){
-            /* Current Asset Mobile Account Credit */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+            /* Current Asset Mobile Account Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($commission->getAccountMobileBank());
+            $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
         }else{
-            /* Cash - Purchase Goods Payment Account */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+            /* Cash - Cash Debit */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
         }
 		$transaction->setAmount($commission->getAmount());
@@ -2014,7 +2212,7 @@ class TransactionRepository extends EntityRepository
 	public function purchaseCommissionTransactionCredit($globalOption,AccountPurchaseCommission $commission)
 	{
 		$transaction = new Transaction();
-		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(61);
+		$accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
 		$transaction->setProcessHead('Purchase Commission');
@@ -2067,14 +2265,17 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcessHead('Sales');
             $transaction->setUpdated($entity->getUpdated());
 
-            /* Cash - Cash various */
             if($entity->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }elseif($entity->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
                 $transaction->setProcess('Current Assets');
             }else{
                 /* Cash - Cash Debit */
@@ -2137,19 +2338,23 @@ class TransactionRepository extends EntityRepository
 			$transaction->setUpdated($entity->getUpdated());
 
 			/* Cash - Cash various */
-			if($accountSales->getTransactionMethod()->getId() == 2 ){
-				/* Current Asset Bank Cash Debit */
-				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
-				$transaction->setProcess('Current Assets');
-			}elseif($accountSales->getTransactionMethod()->getId() == 3 ){
-				/* Current Asset Mobile Account Debit */
-				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
-				$transaction->setProcess('Current Assets');
-			}else{
-				/* Current Assets - Cash in Hand Debit */
-				$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
-				$transaction->setProcess('Current Assets');
-			}
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                $transaction->setSubAccountHead($subAccount);
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                $transaction->setSubAccountHead($subAccount);
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
 
 			$transaction->setAmount($amount);
 			$transaction->setDebit($amount);

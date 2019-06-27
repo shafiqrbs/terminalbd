@@ -128,7 +128,7 @@ class BusinessProductionRepository extends EntityRepository
 					$entity->setProductionElement($element->getParticular());
 					$entity->setPurchasePrice($element->getPurchasePrice());
 					$entity->setSalesPrice($element->getSalesPrice());
-					$entity->setQuantity($production->getQuantity());
+					$entity->setQuantity($element->getQuantity() * $production->getQuantity());
 					$this->_em->persist($entity);
 					$this->_em->flush();
 					$this->_em->getRepository('BusinessBundle:BusinessParticular')->salesProductionQnt($element);

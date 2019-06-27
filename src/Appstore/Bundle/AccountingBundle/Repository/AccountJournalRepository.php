@@ -28,6 +28,22 @@ class AccountJournalRepository extends EntityRepository
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.accountHeadDebit','accountHeadDebit');
+        $qb->join('e.accountHeadCredit','accountHeadCredit');
+        $qb->join('e.toUser','toUser');
+        $qb->join('toUser.profile','profile');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->leftJoin('e.accountMobileBank','amb');
+        $qb->leftJoin('e.accountBank','ab');
+        $qb->select('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.transactionType as transactionType','e.amount as amount','e.remark as remark','e.process as process');
+        $qb->addSelect('profile.name as userName');
+        $qb->addSelect('accountHeadDebit.name as accountHeadDebitName');
+        $qb->addSelect('accountHeadCredit.name as accountHeadCreditName');
+        $qb->addSelect('t.name as methodName');
+        $qb->addSelect('amb.name as mobileBankName');
+        $qb->addSelect('amb.mobile as mobileNo');
+        $qb->addSelect('ab.name as bankName');
+        $qb->addSelect('ab.accountNo as accountNo');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
@@ -94,8 +110,7 @@ class AccountJournalRepository extends EntityRepository
 
         	$accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
             $toUser = isset($data['toUser']) ? $data['toUser'] :'';
-            $accountHeadDebit = isset($data['accountHeadDebit']) ? $data['accountHeadDebit'] :'';
-            $accountHeadCredit = isset($data['accountHeadCredit']) ? $data['accountHeadCredit'] :'';
+            $accountHead = isset($data['accountHead']) ? $data['accountHead'] :'';
             $startDate = isset($data['startDate']) ? $data['startDate'] : '';
             $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
 
@@ -110,15 +125,10 @@ class AccountJournalRepository extends EntityRepository
 	            $qb->setParameter('toUser', $toUser);
             }
 
-            if (!empty($accountHeadCredit)) {
-                $qb->andWhere("e.accountHeadCredit = :accountHeadCredit");
-                $qb->setParameter('accountHeadCredit', $accountHeadCredit);
-            }
-
-            if (!empty($accountHeadDebit)) {
+            if (!empty($accountHead)) {
                 $qb->andWhere("e.accountHeadDebit = :accountHeadDebit");
-                $qb->setParameter('accountHeadDebit', $accountHeadDebit);
-            }
+                $qb->setParameter('accountHeadDebit', $accountHead);
+             }
 
 			if (!empty($startDate) ) {
 				$datetime = new \DateTime($data['startDate']);
@@ -127,7 +137,7 @@ class AccountJournalRepository extends EntityRepository
                 $qb->setParameter('startDate', $startDate);
             }
 
-            if (!empty($data['endDate'])) {
+            if (!empty($endDate)) {
 	            $datetime = new \DateTime($data['endDate']);
 	            $date = $datetime->format('Y-m-d 23:59:59');
 	            $qb->andWhere("e.created <= :endDate");
@@ -330,7 +340,7 @@ class AccountJournalRepository extends EntityRepository
 		$journalSource = "Sales-Return-{$salesReturn->getSales()->getInvoice()}";
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 
 		$entity->setTransactionType('Credit');
@@ -362,10 +372,9 @@ class AccountJournalRepository extends EntityRepository
 
 		$journalSource = "Sales-Return-{$sales->getId()}";
 		$entity = new AccountJournal();
-		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-
      	$entity->setTransactionType('Credit');
 		$entity->setAmount($salesReturn->getSubTotal());
 		$entity->setTransactionMethod($transaction);
@@ -374,7 +383,6 @@ class AccountJournalRepository extends EntityRepository
 		$entity->setGlobalOption($salesReturn->getCreatedBy()->getGlobalOption());
 		$entity->setAccountHeadCredit($accountHeadCredit);
 		$entity->setAccountHeadDebit($accountCashHead);
-		$entity->setToUser($salesReturn->getCreatedBy());
 		$entity->setJournalSource($journalSource);
 		$entity->setProcess('approved');
 		$this->_em->persist($entity);
@@ -398,7 +406,7 @@ class AccountJournalRepository extends EntityRepository
 
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
-		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(31);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 
      	$entity->setTransactionType('Credit');

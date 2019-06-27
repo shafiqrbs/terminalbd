@@ -5,6 +5,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -26,6 +27,27 @@ class MedicineVendorRepository extends EntityRepository
         $qb->orderBy('s.companyName','ASC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function getApiVendor(GlobalOption $entity)
+    {
+
+        $config = $entity->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->orderBy('s.companyName','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+        /* @var $row MedicineVendor */
+
+        foreach($result as $key => $row) {
+            $data[$key]['vendor_id']    = (int) $row->getId();
+            $data[$key]['name']           = $row->getCompanyName();
+        }
+
+        return $data;
     }
 
 

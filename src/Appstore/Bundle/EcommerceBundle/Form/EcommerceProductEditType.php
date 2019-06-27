@@ -93,7 +93,7 @@ class EcommerceProductEditType extends AbstractType
 				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
 				'empty_value' => '-Choose a unit-',
 				'property' => 'name',
-				'attr'=>array('class'=>'span12'),
+				'attr'=>array('class'=>'span12 m-wrap select2'),
 				'query_builder' => function(EntityRepository $er){
 					return $er->createQueryBuilder('p')
 					          ->where("p.status = 1")

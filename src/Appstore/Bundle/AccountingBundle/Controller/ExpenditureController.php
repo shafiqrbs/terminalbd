@@ -39,25 +39,24 @@ class ExpenditureController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entity = new Expenditure();
-        $form = $this->createCreateForm($entity);
-        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
      //   $flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions( $user->getGlobalOption());
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
 	    $categories = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=> $user->getGlobalOption(), 'status'=>1),array('name'=>'asc'));
 	    $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getExpenseAccountHead();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($user->getGlobalOption());
         return $this->render('AccountingBundle:Expenditure:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'flatExpenseCategoryTree' => '',
             'transactionMethods' => $transactionMethods,
             'overview' => $overview,
-            'entity' => $entity,
             'heads' => $heads,
+            'global' => $user->getGlobalOption()->getId(),
+            'employees'=> $employees,
             'categories' => $categories,
-            'form'   => $form->createView(),
         ));
     }
     /**
@@ -70,19 +69,20 @@ class ExpenditureController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
-        $method = $entity->getTransactionMethod()->getSlug();
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
-            ($form->isValid() && $method == 'bank' && !empty($entity->getAccountBank())) ||
-            ($form->isValid() && $method == 'mobile' && !empty($entity->getAccountMobileBank()))
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
             $lastBalance = $em->getRepository('AccountingBundle:Expenditure')->lastInsertExpenditure($entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
             $entity->setBalance($lastBalance + $entity->getAmount());
             $entity->setAccountHead($entity->getExpenseCategory()->getAccountHead());
-            if(!empty($this->getUser()->getProfile()->getBranches())){
+            if($this->getUser()->getProfile()->getBranches()){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+            $entity->setUpdated($entity->getCreated());
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -91,7 +91,9 @@ class ExpenditureController extends Controller
             );
             return $this->redirect($this->generateUrl('account_expenditure'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:Expenditure:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -137,123 +139,6 @@ class ExpenditureController extends Controller
         ));
     }
 
-    /**
-     * Finds and displays a Expenditure entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:Expenditure')->find($id);
-         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Expenditure entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('AccountingBundle:Expenditure:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing Expenditure entity.
-     *
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:Expenditure')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Expenditure entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('AccountingBundle:Expenditure:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-    * Creates a form to edit a Expenditure entity.
-    *
-    * @param Expenditure $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(Expenditure $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $expenseCategory = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
-        $form = $this->createForm(new ExpenditureType($globalOption,$expenseCategory), $entity, array(
-            'action' => $this->generateUrl('account_expenditure_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'horizontal-form purchase',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
-    /**
-     * Edits an existing Expenditure entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:Expenditure')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Expenditure entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            if($entity->upload() && !empty($entity->getFile())){
-                $entity->removeUpload();
-            }
-            $entity->upload();
-            $em->flush();
-            return $this->redirect($this->generateUrl('account_expenditure_edit', array('id' => $id)));
-        }
-
-        return $this->render('AccountingBundle:Expenditure:new.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-
-    /**
-     * Creates a form to delete a Expenditure entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('account_expenditure_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
 
     /**
      * Displays a form to edit an existing Expenditure entity.
@@ -292,7 +177,6 @@ class ExpenditureController extends Controller
             return new Response('failed');
         }
 
-        exit;
     }
 
     /**
@@ -311,7 +195,7 @@ class ExpenditureController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
+
     }
 
     /**

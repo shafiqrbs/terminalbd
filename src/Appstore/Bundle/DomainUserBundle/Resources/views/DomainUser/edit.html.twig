@@ -108,13 +108,10 @@
                                 <!--/span-->
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label">Joining date</label>
+                                        <label class="control-label">Joining Date</label>
                                         <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-calendar"></i>
-                                                {{ form_widget(form.profile.joiningDate) }}
-                                                {{ form_errors(form.profile.joiningDate) }}
-                                            </div>
+                                            {{ form_widget(form.profile.joiningDate) }}
+                                            {{ form_errors(form.profile.joiningDate) }}
                                         </div>
                                     </div>
                                 </div>
@@ -182,6 +179,26 @@
                             </div>
                             <!--/row-->
                             <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="form-group">
+                                        <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
+                                            Android Control Roles:
+                                        </label>
+                                        <div class="col-md-9">
+                                            <div class="input-icon right">
+                                                <div class="controls">
+                                                    {{ form_errors(form.appRoles) }}
+                                                    {{ form_widget(form.appRoles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">

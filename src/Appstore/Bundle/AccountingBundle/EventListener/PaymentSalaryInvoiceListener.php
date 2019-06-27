@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\EventListener;
 
-use Appstore\Bundle\AccountingBundle\Entity\SalarySetting;
+use Appstore\Bundle\AccountingBundle\Entity\Payroll;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class PaymentSalaryInvoiceListener
@@ -17,7 +17,7 @@ class PaymentSalaryInvoiceListener
         $entity = $args->getEntity();
 
         // perhaps you only want to act on some "Sales" entity
-        if ($entity instanceof SalarySetting) {
+        if ($entity instanceof Payroll) {
 
             $datetime = new \DateTime("now");
 

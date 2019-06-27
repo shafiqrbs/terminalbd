@@ -89,7 +89,7 @@ class EcommerceWidgetController extends Controller
         $config = $global->getEcommerceConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $form = $this->createForm(new EcommerceProductEditType($em,$config), $entity, array(
-            'action' => $this->generateUrl("{$global->getSubDomain()}_webservice_product"),
+            'action' => $this->generateUrl("{$global->getSubDomain()}_webservice_product_search"),
             'method' => 'GET',
             'attr' => array(
                 'class' => 'action bs-example',
@@ -529,8 +529,8 @@ class EcommerceWidgetController extends Controller
         $data = array('category' => $category->getId());
         $datalimit = $widget->getCategoryLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $inventory = $globalOption->getInventoryConfig()->getId();
-        $categoryProducts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -541,7 +541,7 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/CategoryWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'          => $categoryProducts->getResult(),
+            'products'          => $products->getResult(),
             'globalOption'              => $globalOption,
             'widget'                    => $widget,
             'category'                  => $category,
@@ -579,8 +579,8 @@ class EcommerceWidgetController extends Controller
         $data = array('promotion' => $promotion);
         $datalimit = $widget->getPromotionLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -604,8 +604,8 @@ class EcommerceWidgetController extends Controller
         $data = array('tag' => $promotion);
         $datalimit = $widget->getTagLimit();
         $limit = $datalimit > 0 ? $datalimit :12;
-        $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -628,8 +628,8 @@ class EcommerceWidgetController extends Controller
         $data = array('discount' => $discount);
         $datalimit = $widget->getTagLimit();
         $limit = $datalimit > 0 ? $datalimit :12;
-        $inventory = $globalOption->getInventoryConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */

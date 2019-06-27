@@ -36,6 +36,12 @@ class EducationStock
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationFeesItem", mappedBy="stock" )
+     **/
+    private  $feesItems;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="productType", type="string", length=20, nullable=true)

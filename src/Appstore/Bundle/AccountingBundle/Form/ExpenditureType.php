@@ -88,7 +88,7 @@ class ExpenditureType extends AbstractType
             ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
-                'empty_value' => '---Choose a bkash---',
+                'empty_value' => '---Choose a mobile account---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){

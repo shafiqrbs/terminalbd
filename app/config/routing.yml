@@ -89,9 +89,6 @@ product_product:
     resource: "@ProductProductBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-syndicate_component:
-    resource: "@SyndicateComponentBundle/Resources/config/routing.yml"
-    prefix:   /admin
 
 setting_tool:
     resource: "@SettingToolBundle/Resources/config/routing.yml"

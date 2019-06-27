@@ -71,7 +71,12 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin" value="{% if searchForm.toUser is defined and searchForm.toUser is not empty %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                        <select class="search-input span12 m-wrap" id="toUser" name="toUser">
+                                            <option value="">--Select Employee--</option>
+                                            {% for employee in employees %}
+                                                <option {% if searchForm.toUser is defined and searchForm.toUser == employee.username %} selected="selected" {% endif %} value="{{ employee.username }}">{{ employee.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  date-picker" value="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
@@ -108,7 +113,7 @@
                                     <th class="numeric" >To user</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Ref No.</th>
-                                    <th class="numeric" >Trans. Method</th>
+                                    <th class="numeric" >Method</th>
                                     <th class="numeric" >Amount</th>
                                     <th class="numeric" >Attach</th>
                                     <th class="numeric" >Action</th>
@@ -118,12 +123,13 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser.profile.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.expenseCategory is not empty %}{{ entity.expenseCategory.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.categoryName is not empty %}{{ entity.categoryName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.methodName is not empty %}{{ entity.methodName }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'approved'  %}
                                                 {{ entity.amount|number_format }}
@@ -131,7 +137,9 @@
                                                 <a class="editable" data-name="amount" href="#"  data-url="{{ path('account_expenditure_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric" >{% if entity.webPath is not empty %}<a href="/{{ entity.webPath }}" target="_blank">Download</a>{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~global~'/expenditure/'~entity.path) }}" target="_blank">Download</a>{% endif %}
+                                        </td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved'  %}
                                                 <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_expenditure_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
@@ -145,12 +153,12 @@
                                         <td colspan="10">
                                             <table class="table">
                                                 <tr><td>Remark</td><td>{{ entity.remark }}</td></tr>
-                                                {% if entity.accountBank is not empty %}
-                                                    <tr><td>Bank name</td><td>{{ entity.accountBank.bank.name }}</td></tr>
-                                                    <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
+                                                {% if entity.bankName is not empty %}
+                                                    <tr><td>Bank name</td><td>{{ entity.bankName }}</td></tr>
+                                                    <tr><td>Account no.</td><td>{{ entity.accountNo }}</td></tr>
                                                 {% endif %}
-                                                {% if entity.accountMobileBank is not empty %}
-                                                    <tr><td>Mobile Account</td><td>{{ entity.accountMobileBank.name }}</td></tr>
+                                                {% if entity.mobileBankName is not empty %}
+                                                    <tr><td>Mobile Account</td><td>{{ entity.mobileBankName }}</td></tr>
                                                 {% endif %}
                                             </table>
                                         </td>

@@ -107,7 +107,7 @@
                                         <td class="numeric" >{{ entity.salesSubTotal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' %}
-                                            <a href="javascript:" data-url="{{ path('business_pre_production_delete', { 'id': entity.id }) }}" class="btn red mini confirm" ><i class="icon-trash"></i></a>
+                                            <a href="javascript:" data-url="{{ path('business_pre_production_delete', { 'particular':entity.businessParticular.id,'id': entity.id }) }}" class="btn red mini confirm" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.process == 'created' and entity.quantity > 0 %}
                                                 <a href="javascript:" data-url="{{ path('business_production_approve', { 'id': entity.id }) }}" class="btn yellow mini confirm" ><i class="icon-ok"></i> Approve</a>

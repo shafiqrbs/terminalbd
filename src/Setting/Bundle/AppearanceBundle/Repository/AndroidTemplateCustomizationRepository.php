@@ -11,8 +11,27 @@ namespace Setting\Bundle\AppearanceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 class AndroidTemplateCustomizationRepository extends EntityRepository {
+
+
+    public function getApiTemplateCustomization(GlobalOption $option)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option->getId());
+        $row = $qb->getQuery()->getOneOrNullResult();
+
+        $data = array();
+            $data['global_id']            = (int) $option->getId();
+            $data['category_id']          = (int) $row->getId();
+            $data['name']                 = $row->getName();
+            $data['slug']                 = $row->getSlug();
+        return $data;
+
+    }
 
 
     public function updateTemplateCustomize(TemplateCustomize $entity , $data , $file){

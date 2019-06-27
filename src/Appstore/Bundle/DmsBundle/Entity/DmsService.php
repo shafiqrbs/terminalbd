@@ -24,6 +24,7 @@ class DmsService
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsServices")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dmsConfig;
 
@@ -38,7 +39,7 @@ class DmsService
     private $invoiceParticular;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="service")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="service", cascade={"detach","merge"})
      **/
     private $dmsParticulars;
 

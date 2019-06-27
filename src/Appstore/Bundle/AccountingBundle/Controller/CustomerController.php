@@ -98,6 +98,9 @@ class CustomerController extends Controller
 	        $entity->setUser($user);
             $em->persist($entity);
             $em->flush();
+            if($entity->getUserGroup() != 'other'){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity);
+            }
             return $this->redirect($this->generateUrl('account_customer'));
         }
 

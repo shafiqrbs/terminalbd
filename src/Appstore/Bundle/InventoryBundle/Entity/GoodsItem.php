@@ -30,10 +30,6 @@ class GoodsItem
      **/
     private  $purchaseVendorItem;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="goodsItem" )
-     **/
-    private  $orderItems;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="goodsItems")

@@ -91,9 +91,12 @@
                                             <td class="span1">&nbsp;&nbsp;<i class="icon-list"></i></td>
                                             <th class="span1">Code</th>
                                             <th class="span4">Particular</th>
+                                            {% if entity.businessConfig.businessModel == 'sign' %}
+                                            <th class="span1">Size</th>
                                             <th class="span1">Qnt</th>
-                                            <th class="span2">Sales Price</th>
-                                            <th class="span2">Purchase Price</th>
+                                            {% endif %}
+                                            <th class="span1">Total Qnt</th>
+                                            <th class="span2">Price</th>
                                             <th class="span1">Sub-Total</th>
                                         </tr>
                                         </thead>
@@ -103,8 +106,11 @@
                                                 <td  class="span1">{{ loop.index }}</td>
                                                 <td  class="span1">{{ item.businessParticular.particularCode }}</td>
                                                 <td class="span4">{{ item.businessParticular.name }}</td>
+                                                {% if entity.businessConfig.businessModel == 'sign' %}
+                                                <td>{{ item.height }} x {{ item.width }}</td>
+                                                <td>{{ item.subQuantity }}</td>
+                                                {% endif %}
                                                 <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span2">{{ item.salesPrice }}</td>
                                                 <td class="span2">{{ item.purchasePrice }}</td>
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>

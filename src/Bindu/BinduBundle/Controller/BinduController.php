@@ -23,8 +23,7 @@ class BinduController extends Controller
 		$apps =$this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1));
 		$testimonials =$this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findBy(array('status'=>1));
 		$data = array();
-		$result =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data)->setMaxResults(10);
-		$clients = $this->paginate($result);
+        $clients =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findClientSubdomain($data,$limit = 12);
 		$entity = new User();
 		$form   = $this->createCreateForm($entity);
 		$detect = new MobileDetect();
@@ -315,7 +314,7 @@ class BinduController extends Controller
 	public function findAction()
 	{
 		$data = array();
-		$entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
+		$entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findClientSubdomain($data);
 		if(!empty($entities)){
 			$pagination = $this->paginate($entities);
 		}
@@ -336,7 +335,7 @@ class BinduController extends Controller
 	public function searchingAction(Request $request)
 	{
 		$data = $request->request->all();
-		$entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data['setting_bundle_toolbundle_globaloption']);
+		$entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findClientSubdomain($data['search']);
 		if(!empty($entities)){
 			$pagination = $this->paginate($entities);
 		}else{

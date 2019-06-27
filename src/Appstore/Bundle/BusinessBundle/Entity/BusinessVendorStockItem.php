@@ -35,6 +35,11 @@ class BusinessVendorStockItem
      **/
     private $particular;
 
+     /**
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="vendorStockItem", cascade={"persist"} )
+         **/
+    private $businessInvoiceParticulars;
+
 
 
     /**

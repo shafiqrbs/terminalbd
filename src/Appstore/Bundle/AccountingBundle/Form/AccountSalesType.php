@@ -46,17 +46,10 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
-                'empty_value' => '---Choose a customer---',
-                'property' => 'nameMobile',
-                'attr'=>array('class'=>'span12 select2 customer-ledger'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId());
-                },
-            ))
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span12 select2Customer leftMargin','placeholder'=>'Select customer name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add payment amount'))
+            )))
             ->add('accountBank', 'entity', array(
                'required'    => true,
                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',

@@ -52,8 +52,13 @@ class AccountPurchaseCommissionController extends Controller
     {
         $entity = new AccountPurchaseCommission();
         $form = $this->createCreateForm($entity);
+        $global = $this->getUser()->getGlobalOption();
         $form->handleRequest($request);
-	    if ($form->isValid()) {
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $global = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($global);
@@ -77,9 +82,12 @@ class AccountPurchaseCommissionController extends Controller
             );
             return $this->redirect($this->generateUrl('account_purchasecommission'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
         return $this->render('AccountingBundle:AccountPurchaseCommission:new.html.twig', array(
             'entity' => $entity,
+            'option' => $global,
             'form'   => $form->createView(),
         ));
     }
@@ -114,8 +122,10 @@ class AccountPurchaseCommissionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountPurchaseCommission();
         $form   = $this->createCreateForm($entity);
+        $global = $this->getUser()->getGlobalOption();
         return $this->render('AccountingBundle:AccountPurchaseCommission:new.html.twig', array(
             'entity' => $entity,
+            'option' => $global,
             'form'   => $form->createView(),
         ));
     }

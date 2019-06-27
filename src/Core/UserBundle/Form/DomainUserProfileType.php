@@ -55,11 +55,8 @@ class DomainUserProfileType extends AbstractType
                 )
             ))
             ->add('joiningDate', 'date', array(
-                'widget' => 'single_text',
-                'placeholder' => array('mm' => 'mm', 'dd' => 'dd','YY' => 'YY'),
-                'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span12 datePicker'),
-                'view_timezone' => 'Asia/Dhaka'
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y')-50),
             ))
 
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))

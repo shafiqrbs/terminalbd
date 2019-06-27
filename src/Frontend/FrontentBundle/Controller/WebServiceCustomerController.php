@@ -10,6 +10,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 
 class WebServiceCustomerController extends Controller
@@ -148,7 +149,43 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $form = $this->createCreateForm($subdomain,$entity);
         $form->handleRequest($request);
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $intlMobile = $entity->getProfile()->getMobile();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity->getProfile()->setMobile($mobile);
+        $a = mt_rand(1000,9999);
+        if ($form->isValid()) {
+            $entity->setPlainPassword($a);
+            $entity->setEnabled(true);
+            $entity->setUsername($mobile);
+            if(empty($entity->getEmail())){
+                $entity->setEmail($mobile.'@gmail.com');
+            }
+            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $em->persist($entity);
+            $em->flush();
+            $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main',serialize($token));
+
+           // $dispatcher = $this->container->get('event_dispatcher');
+           // $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
+
+            return new Response(json_encode(array('success'=>"valid",'mobile' => $mobile,'otp'=>$a)));
+        }else{
+            return new Response(json_encode(array('success'=>"invalid",'mobile' => $mobile,'exist' => "registered",'otp'=>$a)));
+        }
+        exit;
+    }
+
+    public function prescriptionAction($subdomain, Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new User();
+        $form = $this->createCreateForm($subdomain,$entity);
+        $form->handleRequest($request);
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity->getProfile()->setMobile($mobile);
@@ -253,6 +290,30 @@ class WebServiceCustomerController extends Controller
                 'globalOption'  => $globalOption,
             )
         );
+    }
+
+
+    public function customerLoginMobileValidationAction(Request $request)
+    {
+        $intlMobile = $request->query->get('mobile',NULL,true);
+        $em = $this->getDoctrine()->getManager();
+        echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
+        /* @var $user User */
+        if(empty($user)){
+            $valid = 'false';
+        }else{
+
+            $a = mt_rand(1000,9999);
+            $user->setPlainPassword($a);
+            $this->get('fos_user.user_manager')->updateUser($user);
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+            $valid =  'Collect OTP form your login mobile no and input OTP field'.$a;
+        }
+        echo $valid;
+        exit;
+
     }
 
     public function customerForgetPasswordAction()

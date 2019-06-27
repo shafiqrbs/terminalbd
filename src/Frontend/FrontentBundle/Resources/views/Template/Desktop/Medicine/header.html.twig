@@ -1,41 +1,150 @@
 <nav class="navbar navbar-inverse ">
-    <section id="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-left">
-                    <div class="box">
-                        <ul class="info-links">
-                            {% if globalOption.templateCustomize.showCalendar == 1 %}
-                                <li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
-                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
-                                <li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
-                            {% if globalOption.templateCustomize.showMobile == 1 %}
-                                <li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
-                        </ul>
+    {% if globalOption.templateCustomize.topBar is not empty %}
+        <section id="top-bar" class="header-position">
+            <div class="container" >
+                <div class="row">
+                    <div class="col-md-4 text-left">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-left" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
+                            {% endif %}
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-left" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.topIconPosition == "text-left" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
                     </div>
-                </div>
-                <div class=" col-md-6 text-right">
-                    <div class="box">
-                        <ul class="social-links">
-                            {% if globalOption.facebookPageUrl == 1 %}
-                                <li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a>
-                                </li>{% endif %}
-                            {% if globalOption.templateCustomize.showSearch == 1 %}
-                                <li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a>
-                                </li>{% endif %}
-                            <li><a href="javascript:" class="register-btn"><i class="fa fa-user"></i></a></li>
-                            {% if  app.user %}
-                                <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" class="logout"> <i class="fa fa-sign-in"></i></a></li>
+                    <div class="col-md-4 text-center">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-center" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
                             {% endif %}
-                            {% if globalOption.ecommerceConfig.cart == 1 %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-center" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
                             {% endif %}
-                        </ul>
+                            {% if globalOption.templateCustomize.topIconPosition == "text-center" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class=" col-md-4 text-right">
+                        <div class="box">
+                            {% if globalOption.templateCustomize.topTextPosition == "text-right" and globalOption.templateCustomize.topBarContent is not empty %}
+                                {{  globalOption.templateCustomize.topBarContent|raw }}
+                            {% endif %}
+                            {% if globalOption.templateCustomize.socialIconPosition == "top-right" %}
+                                <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                    {% if globalOption.facebookPageUrl is not empty %}
+                                        <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.twitterUrl is not empty %}
+                                        <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.youtube is not empty %}
+                                        <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.instagramPageUrl is not empty %}
+                                        <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.linkedin is not empty %}
+                                        <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.googlePlus is not empty %}
+                                        <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                    {% endif %}
+                                    {% if globalOption.skype is not empty %}
+                                        <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                            {% if globalOption.templateCustomize.topIconPosition == "text-right" %}
+                                <ul class="info-links">
+                                    {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                        <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                        <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                                    {% endif %}
+                                    {% if globalOption.templateCustomize.showMobile == 1 %}
+                                        <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
     <section id="header">
         <div class="container">
             <div class="navbar-header">
@@ -45,38 +154,180 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="col-md-9" >
-                    {% if globalOption.templateCustomize.showSearch == 1 %}
+                <div class="bs-example-form col-md-9 text-right" style="padding-right: 0!important;">
+                    <div class="box">
+                        {% if globalOption.templateCustomize.topTextPosition == "menu-right" and globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
+                        {% if globalOption.templateCustomize.socialIconPosition == "menu-right" %}
+                            <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
+                                {% if globalOption.facebookPageUrl is not empty %}
+                                    <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.twitterUrl is not empty %}
+                                    <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.youtube is not empty %}
+                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.instagramPageUrl is not empty %}
+                                    <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.linkedin is not empty %}
+                                    <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.googlePlus is not empty %}
+                                    <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                                {% endif %}
+                                {% if globalOption.skype is not empty %}
+                                    <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
 
-                            <div class="row bs-example-form">
-                                <div class="col-md-12 col-lg-12" id="header-form">
-                                    {{ form_start(form) }}
-                                    {{ form_row(form._token) }}
-                                    <div class='input-group search-box' >
-                                        <div class='input-group-field' style="width: 39.7%;">
-                                            {{ form_widget(form.category) }}
-                                        </div>
-                                        <div class='input-group-field' style="width: 22%">
-                                            {{ form_widget(form.brand) }}
-                                        </div>
-                                        {{ form_widget(form.webName) }}
-                                        <span class="input-group-btn">
-                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                            </span>
-                                    </div>
-                                    {{ form_end(form) }}
-                                </div>
+                        {% if globalOption.templateCustomize.showMobile == 1 and globalOption.templateCustomize.contactButton == 1 %}
+                            <div class="support-box">
+                                <div class="support">For Support Call <span class="icon fa fa-headphones"></span></div>
+                                <div class="support-number">{{ globalOption.mobile }}</div>
                             </div>
+                        {% endif %}
 
-                    {% endif %}
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
     <div class="clearfix"></div>
+    <div class="container">
+        {% if globalOption.templateCustomize.showSearch == 1 %}
+            <div class="row" style="margin-bottom: 15px; margin-top: 15px">
+                <div class="col-md-12 col-lg-12">
+                    {{ form_start(form) }}
+                    {{ form_row(form._token) }}
+                    <div class='input-group search-box' style="width: 100%" >
+                        <div class='input-group-field ' style="width: 25%;">
+                            {{ form_widget(form.category) }}
+                        </div>
+                        <div class='input-group-field' style="width:25%">
+                            {{ form_widget(form.brand) }}
+                        </div>
+                        <div class="input-group" style="width: 100%">
+                        {{ form_widget(form.webName) }}
+                        <span class="input-group-btn">
+                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
+                            {% if app.user %}
+                                <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
+                                <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+                        {% else %}
+                                <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+                            {% endif %}
+                         </span>
+
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+    <div class="clearfix"></div>
     <section id="menu-bar" class="sticky">
-        <div class="container">{{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
+        <div class="container">
+            {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
     </section>
+    <div class="clearfix"></div>
+    <div class="clearfix"></div>
+    <style>
+        #searchResult {
+            list-style: none;
+            padding: 0;
+            width: 88%;
+            position: absolute;
+            margin: 0;
+            top: 35px;
+            left: 55px;
+            max-height:220px;
+            overflow-y: scroll;
+            z-index: 999;
+        }
+
+        #searchResult li{
+            background: lavender;
+            padding: 4px;
+            margin-bottom: 1px;
+        }
+
+        #searchResult li:nth-child(even){
+            background: #a6a6a6;
+            color: white;
+        }
+
+        #searchResult li:hover{
+            cursor: pointer;
+            background-color: #187bb2;
+        }
+
+    </style>
+    <div class="container" >
+        <div class="row-fluid">
+            <div class="col-xs-12 col-md-12 bhoechie-tab-container" id="prescription-content">
+
+                <div class="col-xs-12 col-md-12" style="margin-bottom: 45px;">
+                    <div class="modal-content  col-xs-12 col-md-12">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Prescription</h4>
+                        </div>
+                        <form name="stockItemForm" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_stock_item_create') }}" id="stockItemForm" class="register" novalidate="novalidate">
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                           <div class="col-xs-7 col-md-7">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-medkit"></span></span><input class="select2StockMedicine form-control" autocomplete="off" name="itemName" id="itemName">
+                                                        <input type="hidden" name="stockId" id="stockId">
+                                                    </div>
+                                                </div>
+                                                <ul id="searchResult"></ul>
+                                            </div>
+
+                                            <div class="col-xs-5 col-md-5">
+                                                <div class="input-group">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-success" aria-label="Bold">৳ </button>                                         </div>
+                                                    <input type="text"  name="salesPrice" id="salesPrice" disabled="disabled" style="width: 80px" class="form-control text-center" >
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn gray-dark-bg danger-font btn-number-stock text-center" data-type="minus" data-field="itemQuantity">
+                                                            <span class="glyphicon glyphicon-minus"></span>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" class="form-control text-center" value="1" min="1" max="1000"  id="itemQuantity" name="itemQuantity">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn gray-dark-bg danger-font btn-number-stock" data-type="plus" data-field="itemQuantity">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                        <button type="button" id="unit" class="btn btn-success">Unit</button> <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span> Add</button>
+                                                    </div>
+                                                </div><!-- /.input-group -->
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="clearfix"></div>
+                        <div id="stockCart"></div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header'}) %}
@@ -111,13 +362,6 @@
         background-color: #F9FAFA;
         border-radius:0!important;
         border-right:1px solid #d0dde4!important;
-    }
-    .totalItem {
-        position: absolute;
-        top: -9px;
-        left: 64px;
-        background-color: #ff4052;
-        z-index: 9;
     }
 
 </style>

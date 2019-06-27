@@ -226,6 +226,11 @@
             border-top: solid {{ globalOption.templateCustomize.headerBorderHeight }}  {{ globalOption.templateCustomize.borderColor }} !important;
         {% endif %}
     }
+    {% if globalOption.templateCustomize.borderColor is not empty %}
+        nav.navbar.bootsnav li.dropdown ul.dropdown-menu {
+            border-color:{{ globalOption.templateCustomize.borderColor }} !important;
+        }
+    {% endif %}
 
 
     #header-menu ul a{
@@ -1002,8 +1007,8 @@
         background-color: {{ globalOption.templateCustomize.subMenuBgColorHover }} !important;
     }
     {% endif %}
-
-
-
+    {% if globalOption.templateCustomize.siteCssStyle is not empty %}
+        {{ globalOption.templateCustomize.siteCssStyle|raw }}
+    {% endif %}
 
 </style>

@@ -78,6 +78,8 @@
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Vendor Name</th>
                                     <th class="numeric" >Total</th>
+                                    <th class="numeric" >Discount</th>
+                                    <th class="numeric" >Dis. Type</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Mode</th>
@@ -95,6 +97,7 @@
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.medicineVendor is defined and entity.medicineVendor is not empty %}{{ entity.medicineVendor.companyName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
+                                        <td class="numeric" >{{ entity.discount|number_format }}</td> <td class="numeric" ><span class="btn red mini">{{ entity.discountCalculation|number_format(2, '.', ',') }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.mode|capitalize }}</td>

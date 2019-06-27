@@ -40,7 +40,7 @@
     </div>
     <div class="container" id="footer-menu" >
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <div class="bs-callout" >
                     <h4>About</h4>
                     <p>
@@ -48,13 +48,13 @@
                     </p>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <h4>{{ globalOption.name }}</h4>
                 {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
             </div>
-            <div class="col-sm-3">
-                <h4>SHOP/OFFICE ADDRESS</h4>
-                <address>
+            <div class="col-sm-3 text-center">
+                <h4>CONTACT US</h4>
+                <address class="text-center">
                     {% if globalOption.contactPage.address1 is not empty %}
 
                         <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>

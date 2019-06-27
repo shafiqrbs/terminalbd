@@ -34,17 +34,6 @@ class Promotion
     protected $ecommerceConfig;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="promotion")
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $purchaseVendorItems;
-
-   /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="promotion")
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $products;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="tag")
@@ -56,10 +45,6 @@ class Promotion
      */
     protected $itemPromotions;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="tag")
-     */
-    protected $productTags;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="promotion"  , cascade={"persist", "remove"} )
@@ -72,12 +57,12 @@ class Promotion
     private  $templateTag;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="promotion" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="promotion" , cascade={"remove"})
      **/
     private  $featureWidgetPromotions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="tag" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="tag" , cascade={"remove"})
      **/
     private  $featureWidgetTags;
 
