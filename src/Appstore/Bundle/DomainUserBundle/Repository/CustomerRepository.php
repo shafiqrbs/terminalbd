@@ -615,18 +615,16 @@ class CustomerRepository extends EntityRepository
         $qb = $this->createQueryBuilder('customer');
         $qb->select('customer.id as customerId','customer.name as name','customer.name as mobile');
         $qb->where("customer.globalOption = :globalOption");
+        $qb->andWhere("customer.mobile IS NOT NULL");
         $qb->setParameter('globalOption', $option->getId());
         $qb->orderBy('customer.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
-
         $data = array();
-
         foreach($result as $key => $row) {
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['customer_id']          = (int) $row['customerId'];
             $data[$key]['name']                 = $row['name'];
             $data[$key]['mobile']               = $row['mobile'];
-
         }
 
         return $data;
