@@ -34,6 +34,7 @@ class MedicineVendorRepository extends EntityRepository
 
         $config = $entity->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
+        $qb->select('e.id as id , e.companyName as name');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->orderBy('s.companyName','ASC');
         $result = $qb->getQuery()->getResult();
@@ -43,8 +44,8 @@ class MedicineVendorRepository extends EntityRepository
         /* @var $row MedicineVendor */
 
         foreach($result as $key => $row) {
-            $data[$key]['vendor_id']    = (int) $row->getId();
-            $data[$key]['name']           = $row->getCompanyName();
+            $data[$key]['vendor_id']    = (int) $row['id'];
+            $data[$key]['name']           = $row['name'];
         }
 
         return $data;
