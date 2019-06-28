@@ -556,7 +556,6 @@ class PurchaseController extends Controller
      */
     public function deleteAction(MedicinePurchase $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
