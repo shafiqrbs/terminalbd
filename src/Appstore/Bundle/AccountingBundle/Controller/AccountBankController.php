@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Request;
@@ -208,14 +209,25 @@ class AccountBankController extends Controller
 
     public function deleteAction(AccountBank $entity)
     {
+
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        $em->remove($entity);
-        $em->flush();
-        return new Response('success');
-        exit;
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
+        return $this->redirect($this->generateUrl('accountbank'));
     }
 
 }

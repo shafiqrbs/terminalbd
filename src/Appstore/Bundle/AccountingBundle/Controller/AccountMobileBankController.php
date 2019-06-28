@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +58,7 @@ class AccountMobileBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity);
             return $this->redirect($this->generateUrl('accountmobilebank'));
         }
 
@@ -206,10 +207,20 @@ class AccountMobileBankController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        $em->remove($entity);
-        $em->flush();
-        return new Response('success');
-        exit;
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
+        return $this->redirect($this->generateUrl('accountmobilebank'));
     }
 
 }

@@ -383,9 +383,10 @@ class ApiController extends Controller
 
             if($result){
                 foreach($result as $key => $row) {
-                    $data[$key]['global_id']              = (int) $entity->getId();
+                    $data[$key]['global_id']            = (int) $entity->getId();
                     $data[$key]['item_id']              = (int) $row->getId();
                     $data[$key]['name']                 = $row->getName();
+                    $data[$key]['service_charge']       = $row->getServiceCharge();
                 }
             }
             $response = new Response();
@@ -420,6 +421,7 @@ class ApiController extends Controller
                     $data[$key]['global_id'] = (int)$entity->getId();
                     $data[$key]['item_id'] = (int)$row->getId();
                     $data[$key]['name'] = $row->getName();
+                    $data[$key]['service_charge'] = $row->getServiceCharge();
                 }
             }
             $response = new Response();

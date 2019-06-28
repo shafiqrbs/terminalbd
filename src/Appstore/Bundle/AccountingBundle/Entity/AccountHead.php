@@ -53,11 +53,13 @@ class AccountHead
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountHead" )
+     * @ORM\JoinColumn(name="bank_account_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $accountBank;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountHead" )
+     * @ORM\JoinColumn(name="mobile_account_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $accountMobileBank;
 

@@ -69,7 +69,7 @@
                                         <td class="numeric" >{{ entity.serviceCharge }}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('accountmobilebank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
-                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('accountmobilebank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            <a href="{{ path('accountmobilebank_delete',{'id':entity.id}) }}" id="" data-id="{{ entity.id }}" class="btn red mini"  data-url=""><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -91,7 +91,13 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 
 
 

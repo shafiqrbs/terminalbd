@@ -392,22 +392,23 @@ class UserRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
+        $qb->select('e.username as username','e.email as email', 'e.id as id', 'e.appPassword as appPassword', 'e.appRoles as appRoles');
+        $qb->addSelect('p.name as fullName');
         $qb->andWhere("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.enabled = 1');
         $qb->andWhere('e.isDelete != 1');
         $qb->orderBy("p.name","ASC");
-        $result = $qb->getQuery()->getResult();
-
-        /* @var $row User */
+        $result = $qb->getQuery()->getArrayResult();
 
         foreach($result as $key => $row){
 
-            $data[$key]['user_id'] = (int) $row->getId();
-            $data[$key]['username'] = $row->getUsername();
-            $data[$key]['email'] = $row->getEmail();
-            $data[$key]['password'] = $row->getAppPassword();
-            $data[$key]['roles'] = unserialize(serialize($row->getAppRoles()));
+            $data[$key]['user_id'] = (int) $row['id'];
+            $data[$key]['username'] = $row['username'];
+            $data[$key]['fullName'] = $row['fullName'];
+            $data[$key]['email'] = $row['email'];
+            $data[$key]['password'] = $row['appPassword'];
+            $data[$key]['roles'] = unserialize(serialize($row['appRoles']));
 
         }
         return $data;

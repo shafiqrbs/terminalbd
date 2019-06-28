@@ -69,7 +69,7 @@
                                         <td class="numeric" >{{ entity.serviceCharge }}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('accountbank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
-                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('accountbank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            <a href="{{ path('accountbank_delete',{'id':entity.id}) }}" id="" data-id="{{ entity.id }}" class="btn red mini"  data-url=""><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

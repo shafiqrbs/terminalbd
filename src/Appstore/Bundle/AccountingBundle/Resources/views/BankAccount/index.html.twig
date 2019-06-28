@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_bank') }}">Account of Bank</a>
+                        <a href="{{ path('accountbank') }}">Account of Bank</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="javascript:">Account of Bank</a></li>
@@ -69,8 +69,8 @@
                                         <td class="numeric" >{{ entity.accountNo }}</td>
                                         <td class="numeric" >{{ entity.accountType }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('appsetting_bank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
-                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('appsetting_bank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            <a href="{{ path('accountbank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
+                                            <a href="{{ path('accountbank_delete',{'id':entity.id}) }}" id="" data-id="{{ entity.id }}" class="btn red mini"  data-url=""><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
