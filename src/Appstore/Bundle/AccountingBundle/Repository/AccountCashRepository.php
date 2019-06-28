@@ -358,21 +358,20 @@ class AccountCashRepository extends EntityRepository
     public function lastInsertCash($entity,$processHead)
     {
         $em = $this->_em;
-
-        if($entity->getTransactionMethod()->getId() == 2){
-            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBank' => $entity->getAccountBank(), 'processHead' => $processHead );
-        }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountMobileBank' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
-        }else{
-            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(), 'processHead' => $processHead );
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
+        $qb->where("e.globalOption = :globalOption")->setParameter('e.globalOption', $entity->getGlobalOption()->getId());
+        if($entity->getTransactionMethod()->getId() == 2) {
+            $qb->andWhere("e.method = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
+            $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
+        }elseif($entity->getTransactionMethod()->getId() == 3) {
+            $qb->andWhere("e.method = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
+            $qb->andWhere("e.accountMobileBank = :mobile")->setParameter('mobile', $entity->getAccountMobileBank()->getId());
         }
-
-        $entity = $em->getRepository('AccountingBundle:AccountCash')->findOneBy($array,array('id' => 'DESC'));
-
-        if (empty($entity)) {
-            return 0;
-        }
-        return $entity->getBalance();
+        $qb->andWhere("e.processHead = :head")->setParameter('head', $processHead);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $balance = ($result['debit'] - $result['credit']);
+        return abs($balance);
     }
 
     public function insertAccountCash(AccountJournal $entity , $processHead ='Journal')
