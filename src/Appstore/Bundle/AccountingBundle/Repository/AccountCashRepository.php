@@ -360,7 +360,7 @@ class AccountCashRepository extends EntityRepository
         $em = $this->_em;
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
-        $qb->where("e.globalOption = :globalOption")->setParameter('e.globalOption', $entity->getGlobalOption()->getId());
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $entity->getGlobalOption()->getId());
         if($entity->getTransactionMethod()->getId() == 2) {
             $qb->andWhere("e.method = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
             $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
