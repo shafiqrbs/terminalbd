@@ -613,7 +613,7 @@ class CustomerRepository extends EntityRepository
     public function getApiCustomer(GlobalOption $option)
     {
         $qb = $this->createQueryBuilder('customer');
-        $qb->select('customer.id as customerId','customer.name as name','customer.name as mobile');
+        $qb->select('customer.id as customerId','customer.name as name','customer.mobile as mobile');
         $qb->where("customer.globalOption = :globalOption");
         $qb->andWhere("customer.mobile IS NOT NULL");
         $qb->setParameter('globalOption', $option->getId());
