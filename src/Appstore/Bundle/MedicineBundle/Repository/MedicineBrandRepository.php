@@ -48,7 +48,7 @@ class MedicineBrandRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.medicineCompany','b');
         $qb->leftJoin('e.medicineGeneric','g');
-        $qb->select('e.id as medicineId','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as medicineName');
+        $qb->select('e.id as medicineId','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as medicineName', 'e.useFor as useFor');
         $qb->addSelect('g.name as genericName');
         $qb->addSelect( 'b.name as brand');
         $qb->setFirstResult( $offset );
@@ -68,6 +68,7 @@ class MedicineBrandRepository extends EntityRepository
             $data[$key]['strength']             = $row['strength'];
             $data[$key]['genericName']          = $row['genericName'];
             $data[$key]['brand']                = $row['brand'];
+            $data[$key]['useFor']               = $row['useFor'];
         }
 
         return $data;
