@@ -361,11 +361,11 @@ class AccountCashRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $entity->getGlobalOption()->getId());
-        if($entity->getTransactionMethod()->getId() == 2) {
-            $qb->andWhere("e.method = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
+        if($entity->getTransactionMethod()->getSlug() == "bank") {
+            $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
             $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
-        }elseif($entity->getTransactionMethod()->getId() == 3) {
-            $qb->andWhere("e.method = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
+        }elseif($entity->getTransactionMethod()->getId() == 'mobile') {
+            $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
             $qb->andWhere("e.accountMobileBank = :mobile")->setParameter('mobile', $entity->getAccountMobileBank()->getId());
         }
         $qb->andWhere("e.processHead = :head")->setParameter('head', $processHead);
