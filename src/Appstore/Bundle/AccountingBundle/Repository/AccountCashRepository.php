@@ -364,7 +364,7 @@ class AccountCashRepository extends EntityRepository
         if($entity->getTransactionMethod()->getSlug() == "bank") {
             $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
             $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
-        }elseif($entity->getTransactionMethod()->getId() == 'mobile') {
+        }elseif($entity->getTransactionMethod()->getSlug() == 'mobile') {
             $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
             $qb->andWhere("e.accountMobileBank = :mobile")->setParameter('mobile', $entity->getAccountMobileBank()->getId());
         }
