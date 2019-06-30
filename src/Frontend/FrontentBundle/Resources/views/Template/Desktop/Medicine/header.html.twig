@@ -148,91 +148,47 @@
     <section id="header">
         <div class="container">
             <div class="navbar-header">
-                <div class="col-md-3" id="logo-area">
+                <div class="col-md-2" id="logo-area">
                     <a class="img-logo"
                        href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form col-md-9 text-right" style="padding-right: 0!important;">
-                    <div class="box">
-                        {% if globalOption.templateCustomize.topTextPosition == "menu-right" and globalOption.templateCustomize.topBarContent is not empty %}
-                            {{  globalOption.templateCustomize.topBarContent|raw }}
-                        {% endif %}
-                        {% if globalOption.templateCustomize.socialIconPosition == "menu-right" %}
-                            <ul class="{% if globalOption.templateCustomize.socialIconType == 'icon-square' %}square-social-links{% else %}circle-social-links{% endif %}">
-                                {% if globalOption.facebookPageUrl is not empty %}
-                                    <li><a class="facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.twitterUrl is not empty %}
-                                    <li><a class="twitter" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.youtube is not empty %}
-                                    <li><a class="youtube" target="_blank" href="{{ globalOption.youtube }}"><i class="fa fa-youtube"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.instagramPageUrl is not empty %}
-                                    <li><a class="instagram" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.linkedin is not empty %}
-                                    <li><a class="linkedin" target="_blank" href="{{ globalOption.linkedin }}"><i class="fa fa-linkedin"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.googlePlus is not empty %}
-                                    <li><a class="google-plus" target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.skype is not empty %}
-                                    <li><a class="skype" target="_blank" href="{{ globalOption.skype }}"><i class="fa fa-skype"></i></a></li>
-                                {% endif %}
-                            </ul>
-                        {% endif %}
-
-                        {% if globalOption.templateCustomize.showMobile == 1 and globalOption.templateCustomize.contactButton == 1 %}
-                            <div class="support-box">
-                                <div class="support">For Support Call <span class="icon fa fa-headphones"></span></div>
-                                <div class="support-number">{{ globalOption.mobile }}</div>
+                <div class="bs-example-form col-md-10 text-left" style="padding-right: 0!important;">
+                    {% if globalOption.templateCustomize.showSearch == 1 %}
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class='input-group search-box' style="width: 100%" >
+                            <div class='input-group-field ' style="width: 25%;">
+                                {{ form_widget(form.category) }}
                             </div>
-                        {% endif %}
+                            <div class='input-group-field' style="width:25%">
+                                {{ form_widget(form.brand) }}
+                            </div>
+                            <div class="input-group" style="width: 100%">
+                                {{ form_widget(form.webName) }}
+                                <span class="input-group-btn">
+                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
+                                    {% if app.user %}
+                                        <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
+                                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+                        {% else %}
+                                        <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+                                    {% endif %}
+                         </span>
 
-                    </div>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    {% endif %}
                 </div>
 
             </div>
         </div>
     </section>
     <div class="clearfix"></div>
-    <div class="container">
-        {% if globalOption.templateCustomize.showSearch == 1 %}
-            <div class="row" style="margin-bottom: 15px; margin-top: 15px">
-                <div class="col-md-12 col-lg-12">
-                    {{ form_start(form) }}
-                    {{ form_row(form._token) }}
-                    <div class='input-group search-box' style="width: 100%" >
-                        <div class='input-group-field ' style="width: 25%;">
-                            {{ form_widget(form.category) }}
-                        </div>
-                        <div class='input-group-field' style="width:25%">
-                            {{ form_widget(form.brand) }}
-                        </div>
-                        <div class="input-group" style="width: 100%">
-                        {{ form_widget(form.webName) }}
-                        <span class="input-group-btn">
-                                               <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
-                            {% if app.user %}
-                                <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
-                                <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
-                        {% else %}
-                                <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
-                            {% endif %}
-                         </span>
 
-                        </div>
-                    </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
-
-        {% endif %}
-    </div>
     <div class="clearfix"></div>
     <section id="menu-bar" class="sticky">
         <div class="container">
@@ -241,6 +197,9 @@
     <div class="clearfix"></div>
     <div class="clearfix"></div>
     <style>
+        .action{
+            width: 100%!important;
+        }
         #searchResult {
             list-style: none;
             padding: 0;
