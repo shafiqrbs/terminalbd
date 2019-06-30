@@ -308,15 +308,6 @@ class UserRepository extends EntityRepository
             'ROLE_SMS_BULK'                                     => 'SMS Bulk',
 
         );
-        $array['Android Apps'] = array(
-            'ROLE_MANAGER'                                   => 'Manager',
-            'ROLE_PURCHASE'                                  => 'Purchase',
-            'ROLE_SALES'                                     => 'Sales',
-            'ROLE_EXPENSE'                                   => 'Expense',
-            'ROLE_STOCK'                                     => 'Stock',
-        );
-
-
         return $array;
     }
 
