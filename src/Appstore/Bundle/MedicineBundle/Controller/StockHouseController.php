@@ -162,9 +162,9 @@ class StockHouseController extends Controller
             $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=>$entity->getStockName()));
             $remainingQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStockHouse')->getStockRemainingQnt($stock,$entity->getWearHouse());
             if($remainingQnt >= $entity->getStockOut()){
+
                 $em = $this->getDoctrine()->getManager();
                 $entity->setMedicineConfig($config);
-                $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($entity->getStockName());
                 $entity->setMedicineStock($stock);
                 $entity->setStockName($stock->getName());
                 $em->persist($entity);
