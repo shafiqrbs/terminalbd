@@ -243,7 +243,7 @@ class MedicineStock
      *
      * @ORM\Column(name="printHide", type="boolean",  nullable=true)
      */
-    private $printHide = true;
+    private $printHide = false;
 
     /**
      * @var boolean

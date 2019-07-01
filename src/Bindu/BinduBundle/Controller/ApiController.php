@@ -47,54 +47,54 @@ class ApiController extends Controller
 
             /* @var $entity GlobalOption */
             $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
-
-            $address = '';
-            $vatRegNo = '';
-            $vatPercentage = '';
-            $vatEnable = '';
-
-            if( $entity->getMainApp()->getSlug() == "miss"){
-                $address  = $entity->getMedicineConfig()->getAddress();
-                $vatPercentage  = $entity->getMedicineConfig()->getVatPercentage();
-                $vatRegNo  = $entity->getMedicineConfig()->getVatRegNo();
-                $vatEnable  = $entity->getMedicineConfig()->isVatEnable();
-            }elseif( $entity->getMainApp()->getSlug() == "business"){
-                $address  = $entity->getBusinessConfig()->getAddress();
-                $vatPercentage  = $entity->getBusinessConfig()->getVatPercentage();
-                $vatRegNo  = $entity->getBusinessConfig()->getVatRegNo();
-                $vatEnable  = $entity->getBusinessConfig()->getVatEnable();
-            }elseif( $entity->getMainApp()->getSlug() == "restaurant"){
-                $address  = $entity->getRestaurantConfig()->getAddress();
-                $vatPercentage  = $entity->getRestaurantConfig()->getVatPercentage();
-                $vatRegNo  = $entity->getRestaurantConfig()->getVatRegNo();
-                $vatEnable  = $entity->getRestaurantConfig()->getVatEnable();
-            }elseif( $entity->getMainApp()->getSlug() == "inventory"){
-                $address  = $entity->getInventoryConfig()->getAddress();
-                $vatPercentage  = $entity->getInventoryConfig()->getVatPercentage();
-                $vatRegNo  = $entity->getInventoryConfig()->getVatRegNo();
-                $vatEnable  = $entity->getInventoryConfig()->getVatEnable();
+            if($device) {
+                $address = '';
+                $vatRegNo = '';
+                $vatPercentage = '';
+                $vatEnable = '';
+                if ($entity->getMainApp()->getSlug() == "miss") {
+                    $address = $entity->getMedicineConfig()->getAddress();
+                    $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getMedicineConfig()->getVatRegNo();
+                    $vatEnable = $entity->getMedicineConfig()->isVatEnable();
+                } elseif ($entity->getMainApp()->getSlug() == "business") {
+                    $address = $entity->getBusinessConfig()->getAddress();
+                    $vatPercentage = $entity->getBusinessConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getBusinessConfig()->getVatRegNo();
+                    $vatEnable = $entity->getBusinessConfig()->getVatEnable();
+                } elseif ($entity->getMainApp()->getSlug() == "restaurant") {
+                    $address = $entity->getRestaurantConfig()->getAddress();
+                    $vatPercentage = $entity->getRestaurantConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getRestaurantConfig()->getVatRegNo();
+                    $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+                } elseif ($entity->getMainApp()->getSlug() == "inventory") {
+                    $address = $entity->getInventoryConfig()->getAddress();
+                    $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
+                    $vatEnable = $entity->getInventoryConfig()->getVatEnable();
+                }
+                $data = array(
+                    'setupId' => $entity->getId(),
+                    'deviceId' => $device,
+                    'uniqueCode' => $entity->getUniqueCode(),
+                    'name' => $entity->getName(),
+                    'mobile' => $entity->getMobile(),
+                    'email' => $entity->getEmail(),
+                    'locationId' => $entity->getLocation()->getId(),
+                    'address' => $address,
+                    'locationName' => $entity->getLocation()->getName(),
+                    'main_app' => $entity->getMainApp()->getId(),
+                    'main_app_name' => $entity->getMainApp()->getSlug(),
+                    'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                    'website' => $entity->getDomain(),
+                    'vatRegNo' => $vatRegNo,
+                    'vatPercentage' => $vatPercentage,
+                    'vatEnable' => $vatEnable,
+                );
+            }else{
+                return new Response('403 Forbidden.', 403);
             }
-
-            $data = array(
-                'setupId' => $entity->getId(),
-                'deviceId' => $device,
-                'uniqueCode' => $entity->getUniqueCode(),
-                'name' => $entity->getName(),
-                'mobile' => $entity->getMobile(),
-                'email' => $entity->getEmail(),
-                'locationId' => $entity->getLocation()->getId(),
-                'address' => $address,
-                'locationName' => $entity->getLocation()->getName(),
-                'main_app' => $entity->getMainApp()->getId(),
-                'main_app_name' => $entity->getMainApp()->getSlug(),
-                'appsManual' => $entity->getMainApp()->getApplicationManual(),
-                'website' => $entity->getDomain(),
-                'vatRegNo' => $vatRegNo,
-                'vatPercentage' => $vatPercentage,
-                'vatEnable' => $vatEnable,
-            );
         }
-
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($data));
