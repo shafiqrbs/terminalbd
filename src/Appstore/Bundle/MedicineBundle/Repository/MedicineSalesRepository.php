@@ -667,9 +667,6 @@ class MedicineSalesRepository extends EntityRepository
                  $salesBy = $em->getRepository('UserBundle:User')->find($data['salesBy']);
                  $sales->setSalesBy($salesBy);
             }
-            $created = new \DateTime($data['created']);
-            $sales->setCreated($created);
-            $sales->setUpdated($created);
             $sales->setProcess("Done");
             $sales->setPaymentStatus("Paid");
             $em->persist($sales);
