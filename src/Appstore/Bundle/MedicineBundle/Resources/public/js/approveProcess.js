@@ -48,6 +48,27 @@ $(document).on("click", ".confirm", function() {
     });
 });
 
+$(document).on( "click", ".androidProcess", function( e ) {
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.ajax({
+                url : url,
+                beforeSend: function(){
+                    $('.loader-double').fadeIn(1000).addClass('is-active');
+                },
+                success:  function (data) {
+                    location.reload();
+                }
+            });
+
+        }
+    });
+
+});
+
 $(document).on("click", "#vendorPaymentBtn", function() {
     var id      = $(this).attr("data-id");
     var url     = $(this).attr("data-url");

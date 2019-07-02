@@ -604,7 +604,6 @@ class ApiController extends Controller
             }elseif($entity->getMainApp()->getSlug() == 'business'){
                 $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
             }
-
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setStatusCode(Response::HTTP_OK);
@@ -723,6 +722,31 @@ class ApiController extends Controller
             $entity = $this->checkApiValidation($request);
             $data = $request->request->all();
             $data = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertApiExpenditure($entity,$data);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+
+    public function apiInvoiceTokenAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $data = $request->request->all();
+            $data = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->insertApiInvoiceToken($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

@@ -449,7 +449,7 @@ class SalesController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
@@ -500,6 +500,23 @@ class SalesController extends Controller
             'entity' => $entity,
         ));
 
+    }
+
+
+    public function androidSalesAction()
+    {
+        $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSales($conf);
+        return $this->render('MedicineBundle:Sales:salesAndroid.html.twig', array(
+            'entities' => $entity,
+        ));
+    }
+    public function androidSalesProcessAction($device)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
+        exit;
     }
 
 }

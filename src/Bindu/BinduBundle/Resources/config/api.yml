@@ -10,7 +10,6 @@ api_template_customization:
     path:     /template-customization
     defaults: { _controller: BinduBundle:Api:templateCustomization }
 
-
 api_system_user:
     path:     /system-user
     defaults: { _controller: BinduBundle:Api:systemUsers }
@@ -113,5 +112,9 @@ api_system_expense:
     options:
             expose: true
 
-
-
+api_business_invoice_token:
+    path:     /invoice-token-print
+    defaults: { _controller: BinduBundle:Api:apiInvoiceToken }
+    methods:  POST
+    options:
+            expose: true

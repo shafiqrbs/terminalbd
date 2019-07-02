@@ -298,13 +298,13 @@ class ExpenditureRepository extends EntityRepository
             $toUser = $em->getRepository('UserBundle:User')->find($data['toUser']);
             $expense->setToUser($toUser);
         }
-        $created = new \DateTime($data['created']);
-        $expense->setCreated($created);
-        $expense->setUpdated($created);
+        if($data['expenseCategory']){
+            $category = $em->getRepository('AccountingBundle:ExpenseCategory')->find($data['expenseCategory']);
+            $expense->setExpenseCategory($category);
+        }
+        $expense->setUpdated($expense->getCreated());
         $em->persist($expense);
         $em->flush();
-        return $expense->getId();
-
     }
 
 

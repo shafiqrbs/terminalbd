@@ -1,0 +1,92 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN purchase_order HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="purchase_order-title">
+                    Sales Android
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Sales Android</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END purchase_order HEADER-->
+        <!-- BEGIN purchase_order CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Sales Android</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="loader loader-double" ></div>
+                    <div class="clearfix">&nbsp;</div>
+                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <thead class="flip-content ">
+                        <tr class="head-green">
+                            <th>S/N</th>
+                            <th>Username</th>
+                            <th>Device ID</th>
+                            <th>Total Invoice</th>
+                            <th>Sub-Total</th>
+                            <th>Discount</th>
+                            <th>Total</th>
+                            <th>Received</th>
+                            <th>Due</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        {% for entity in entities %}
+                            <tr>
+                                <th class="numeric" >{{ loop.index }}.</th>
+                                <td class="numeric" >{{ entity.salesBy }}</td>
+                                <td class="numeric" >{{ entity.device }}</td>
+                                <td class="numeric" >{{ entity.totalInvoice|number_format }}</td>
+                                <td class="numeric" >{{ entity.subTotal|number_format }}</td>
+                                <td class="numeric" >{{ entity.discount|number_format }}</td>
+                                <td class="numeric" >{{ entity.total|number_format }}</td>
+                                <td class="numeric" >{{ entity.received|number_format }}</td>
+                                <td class="numeric" >{{ entity.due|number_format }}</td>
+                                <td class="numeric" >
+                                    <a  id="{{ entity.deviceId }}" data-id="{{ entity.deviceId }}" data-url="{{ path('medicine_sales_android_process',{'device':entity.deviceId}) }}" href="javascript:" class="btn red mini androidProcess" ><i class="icon-retweet"></i> Process</a></td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                    <div class="clearfix">&nbsp;</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MedicineBundle/Resources/public/js/approveProcess.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+{% endblock %}
+
+
+
+
+

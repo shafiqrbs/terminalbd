@@ -268,12 +268,20 @@ class MedicineSales
      */
     private $due;
 
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="revised", type="boolean" )
      */
     private $revised = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deviceApproved", type="boolean" )
+     */
+    private $deviceApproved = false;
 
     /**
      * @var string
@@ -308,43 +316,6 @@ class MedicineSales
     }
 
 
-    /**
-     * @return InvoiceItem
-     */
-    public function getInvoiceItems()
-    {
-        return $this->invoiceItems;
-    }
-
-    /**
-     * @param InvoiceItem $invoiceItems
-     */
-    public function setInvoiceItems($invoiceItems)
-    {
-        $this->invoiceItems = $invoiceItems;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * Giftcard
-     * Bkash
-     * Payment Card
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     /**
      * @return float
@@ -998,6 +969,22 @@ class MedicineSales
     public function setDeviceSalesId($deviceSalesId)
     {
         $this->deviceSalesId = $deviceSalesId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeviceApproved()
+    {
+        return $this->deviceApproved;
+    }
+
+    /**
+     * @param bool $deviceApproved
+     */
+    public function setDeviceApproved($deviceApproved)
+    {
+        $this->deviceApproved = $deviceApproved;
     }
 
 

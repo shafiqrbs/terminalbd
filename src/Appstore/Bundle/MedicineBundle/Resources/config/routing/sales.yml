@@ -2,6 +2,16 @@ medicine_sales:
     path:     /
     defaults: { _controller: "MedicineBundle:Sales:index" }
 
+medicine_sales_android:
+    path:     /android
+    defaults: { _controller: "MedicineBundle:Sales:androidSales" }
+
+medicine_sales_android_process:
+    path:     /{device}/android-process
+    defaults: { _controller: "MedicineBundle:Sales:androidSalesProcess" }
+    options:
+            expose: true
+
 medicine_sales_item:
     path:     /sales-item
     defaults: { _controller: "MedicineBundle:Sales:salesItem" }

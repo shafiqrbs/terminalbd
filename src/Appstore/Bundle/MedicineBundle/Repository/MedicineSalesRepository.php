@@ -626,7 +626,11 @@ class MedicineSalesRepository extends EntityRepository
             $sales->setDiscountType($data['discountType']);
             $sales->setDiscountCalculation($data['discountCalculation']);
             $sales->setNetTotal($data['total']);
-            $sales->setReceived($data['receive']);
+            if($data['total'] < $data['receive']){
+                $sales->setReceived($data['total']);
+            }else{
+                $sales->setReceived($data['receive']);
+            }
             $sales->setDue($data['due']);
             $sales->setVat($data['vat']);
             if($data['transactionMethod']){
@@ -647,16 +651,14 @@ class MedicineSalesRepository extends EntityRepository
                 $sales->setPaymentMobile($data['paymentMobile']);
                 $sales->setTransactionId($data['transactionId']);
             }
-            if($data['customerId']){
-                $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
-                $sales->setCustomer($customer);
-            }
-            if(empty($data['customerId']) and empty($data['customerName']) ){
-                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'name'=>'Default'));
-                $sales->setCustomer($customer);
-            }
             if($data['customerName'] and $data['customerMobile']){
                 $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
+                $sales->setCustomer($customer);
+            }elseif($data['customerId']){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
+                $sales->setCustomer($customer);
+            }elseif(empty($data['customerId']) and empty($data['customerName']) ) {
+                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
                 $sales->setCustomer($customer);
             }
             if($data['createdBy']){
@@ -691,6 +693,49 @@ class MedicineSalesRepository extends EntityRepository
         $em->persist($salesItem);
         $em->flush();
 
+    }
+
+    public function androidDeviceSales($config)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.createdBy', 'u');
+        $qb->join('e.androidDevice','a');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('a.id as deviceId','a.device as device');
+        $qb->addSelect('COUNT(e.id) as totalInvoice','SUM(e.subTotal) as subTotal','SUM(e.discount) as discount','SUM(e.netTotal) as total','SUM(e.received) as received','SUM(e.due) as due');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.deviceApproved = :deviceApproved')->setParameter('deviceApproved', 0);
+        $compareTo = new \DateTime("now");
+        $created =  $compareTo->format('Y-m-d 00:00:00');
+        $qb->andWhere("e.created >= :createdStart")->setParameter('createdStart', $created);
+        $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+        $qb->andWhere("e.created <= :createdEnd")->setParameter('createdEnd', $createdEnd);
+        $qb->groupBy('e.androidDevice');
+        $qb->groupBy('e.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function androidDeviceSalesProcess($device)
+    {
+        $em = $this->_em;
+        $entities = $this->findBy(array('androidDevice' => $device,'deviceApproved' => 0));
+
+        /* @var $entity MedicineSales */
+
+        foreach ($entities as $entity){
+
+            $entity->setProcess('Approved');
+            $entity->setApprovedBy($entity->getCreatedBy());
+            $entity->setUpdated($entity->getCreated());
+            $entity->setDeviceApproved(true);
+            $em->flush();
+            $em->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($entity);
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        }
     }
 
 

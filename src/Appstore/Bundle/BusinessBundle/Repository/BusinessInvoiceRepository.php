@@ -8,6 +8,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -557,6 +558,58 @@ class BusinessInvoiceRepository extends EntityRepository
         }
         return $array;
     }
+
+    public function getCountDailyInvoice($config){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id) as totalInvoice');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
+        $compareTo = new \DateTime("now");
+        $created =  $compareTo->format('Y-m-d 00:00:00');
+        $qb->andWhere("e.created >= :createdStart")->setParameter('createdStart', $created);
+        $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+        $qb->andWhere("e.created <= :createdEnd")->setParameter('createdEnd', $createdEnd);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return ($result['totalInvoice'])?$result['totalInvoice']:1;
+    }
+
+    public function insertApiInvoiceToken(GlobalOption $option , $data){
+
+        $em = $this->_em;
+        $conf = $option->getBusinessConfig();
+        $sales = new BusinessInvoice();
+        $sales->setBusinessConfig($option->getBusinessConfig());
+        if($data['customerName'] and $data['customerMobile']){
+            $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
+            $sales->setCustomer($customer);
+        }elseif($data['customerId']){
+            $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
+            $sales->setCustomer($customer);
+        }elseif(empty($data['customerId']) and empty($data['customerName']) ) {
+            $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
+            $sales->setCustomer($customer);
+        }
+        if($data['createdBy']){
+            $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+            $sales->setCreatedBy($createdBy);
+        }
+        $sales->setComment($data['counterNo']);
+        $tokenNo = $this->getCountDailyInvoice($conf->getId())+1;
+        $em->persist($sales);
+        $em->flush();
+        $data = array(
+            'invoice' => $sales->getInvoice(),
+            'customerId' => $sales->getCustomer()->getId(),
+            'customerName' => $sales->getCustomer()->getName(),
+            'customerMobile' => $sales->getCustomer()->getMobile(),
+            'counterNo' => $sales->getComment(),
+            'tokenNo' => $tokenNo,
+            'created' => $sales->getCreated()->format('d-m-Y')
+        );
+        return $data;
+
+    }
+
 
 
 }
