@@ -584,16 +584,32 @@ class ApiController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
 
+
         if( $this->checkApiValidation($request) == 'invalid') {
 
             return new Response('Unauthorized access.', 401);
 
         }else{
 
+
+  /*          $jsonInput = '[
+            {
+            "invoiceId":"051900111","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","customerId":"223","customerName":"Jacky","customerMobile":"01828148148","addresss":"Dhaka","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","salesBy":"","created":"","createdBy":"","slipNo":"","tokenNo":"","discountCoupon":"","remark":""
+            },{
+            "invoiceId":"0519000332","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","customerId":"223","customerName":"Jacky","customerMobile":"01828148148","addresss":"Dhaka","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","salesBy":"","created":"","createdBy":"","slipNo":"","tokenNo":"","discountCoupon":"","remark":""
+            },{
+            "invoiceId":"05190000223","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","customerId":"223","customerName":"Jacky","customerMobile":"01828148148","addresss":"Dhaka","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","salesBy":"","created":"","createdBy":"","slipNo":"","tokenNo":"","discountCoupon":"","remark":""
+            }
+        ]';*/
+
+
+            $json = $_REQUEST['salesJson'];
+            $data = json_decode($json,true);
+
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             $deviceId = $request->headers->get('X-DEVICE-ID');
-            $data = $request->request->all();
+          //  $data = $request->request->all();
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$deviceId,$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){

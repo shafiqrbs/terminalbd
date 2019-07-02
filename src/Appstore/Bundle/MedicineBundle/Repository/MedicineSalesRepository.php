@@ -610,69 +610,71 @@ class MedicineSalesRepository extends EntityRepository
         return $array;
     }
 
-    public function insertApiSales(GlobalOption $option,$device, $data)
+    public function insertApiSales(GlobalOption $option,$device, $datas)
     {
         $em = $this->_em;
 
-            // $androidDevice =
+           foreach ($datas as $data):
 
-            $sales = new MedicineSales();
-            $sales->setMedicineConfig($option->getMedicineConfig());
-            $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
-            $sales->setAndroidDevice($device);
-            $sales->setDeviceSalesId($data['invoiceId']);
-            $sales->setSubTotal($data['subTotal']);
-            $sales->setDiscount($data['discount']);
-            $sales->setDiscountType($data['discountType']);
-            $sales->setDiscountCalculation($data['discountCalculation']);
-            $sales->setNetTotal($data['total']);
-            if($data['total'] < $data['receive']){
-                $sales->setReceived($data['total']);
-            }else{
-                $sales->setReceived($data['receive']);
-            }
-            $sales->setDue($data['due']);
-            $sales->setVat($data['vat']);
-            if($data['transactionMethod']){
-                $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
-                $sales->setTransactionMethod($method);
-            }
-            if($data['bankAccount']){
-                $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
-                $sales->setAccountBank($bank);
-                $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
-                $sales->setPaymentCard($card);
-                $sales->setCardNo($data['paymentCardNo']);
-                $sales->setTransactionId($data['transactionId']);
-            }
-            if($data['mobileBankAccount']){
-                $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
-                $sales->setAccountMobileBank($mobile);
-                $sales->setPaymentMobile($data['paymentMobile']);
-                $sales->setTransactionId($data['transactionId']);
-            }
-            if($data['customerName'] and $data['customerMobile']){
-                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
-                $sales->setCustomer($customer);
-            }elseif($data['customerId']){
-                $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
-                $sales->setCustomer($customer);
-            }elseif(empty($data['customerId']) and empty($data['customerName']) ) {
-                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
-                $sales->setCustomer($customer);
-            }
-            if($data['createdBy']){
-                $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
-                $sales->setCreatedBy($createdBy);
-            }
-            if($data['salesBy']){
-                 $salesBy = $em->getRepository('UserBundle:User')->find($data['salesBy']);
-                 $sales->setSalesBy($salesBy);
-            }
-            $sales->setProcess("Done");
-            $sales->setPaymentStatus("Paid");
-            $em->persist($sales);
-            $em->flush();
+                $sales = new MedicineSales();
+                $sales->setMedicineConfig($option->getMedicineConfig());
+                $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
+                $sales->setAndroidDevice($device);
+                $sales->setDeviceSalesId($data['invoiceId']);
+                $sales->setSubTotal($data['subTotal']);
+                $sales->setDiscount($data['discount']);
+                $sales->setDiscountType($data['discountType']);
+                $sales->setDiscountCalculation($data['discountCalculation']);
+                $sales->setNetTotal($data['total']);
+                if($data['total'] < $data['receive']){
+                    $sales->setReceived($data['total']);
+                }else{
+                    $sales->setReceived($data['receive']);
+                }
+                $sales->setDue($data['due']);
+                $sales->setVat($data['vat']);
+                if($data['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
+                    $sales->setTransactionMethod($method);
+                }
+                if($data['bankAccount']){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
+                    $sales->setAccountBank($bank);
+                    $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
+                    $sales->setPaymentCard($card);
+                    $sales->setCardNo($data['paymentCardNo']);
+                    $sales->setTransactionId($data['transactionId']);
+                }
+                if($data['mobileBankAccount']){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
+                    $sales->setAccountMobileBank($mobile);
+                    $sales->setPaymentMobile($data['paymentMobile']);
+                    $sales->setTransactionId($data['transactionId']);
+                }
+                if($data['customerName'] and $data['customerMobile']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
+                    $sales->setCustomer($customer);
+                }elseif($data['customerId']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
+                    $sales->setCustomer($customer);
+                }elseif(empty($data['customerId']) and empty($data['customerName']) ) {
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
+                    $sales->setCustomer($customer);
+                }
+                if($data['createdBy']){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+                    $sales->setCreatedBy($createdBy);
+                }
+                if($data['salesBy']){
+                     $salesBy = $em->getRepository('UserBundle:User')->find($data['salesBy']);
+                     $sales->setSalesBy($salesBy);
+                }
+                $sales->setProcess("Done");
+                $sales->setPaymentStatus("Paid");
+                $em->persist($sales);
+                $em->flush();
+
+           endforeach;
 
     }
 
