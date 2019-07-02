@@ -46,6 +46,7 @@ class ApiController extends Controller
         }else{
 
             /* @var $entity GlobalOption */
+
             $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
             if($device) {
                 $address = '';
@@ -91,8 +92,6 @@ class ApiController extends Controller
                     'vatPercentage' => $vatPercentage,
                     'vatEnable' => $vatEnable,
                 );
-            }else{
-                return new Response('403 Forbidden.', 403);
             }
         }
         $response = new Response();

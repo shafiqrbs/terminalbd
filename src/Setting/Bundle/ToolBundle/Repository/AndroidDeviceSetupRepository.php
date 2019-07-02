@@ -19,7 +19,7 @@ class AndroidDeviceSetupRepository extends EntityRepository
         /* @var $exist AndroidDeviceSetup */
         $exist = $this->findOneBy(array('globalOption' => $option , 'device' => $device));
         if ($exist) {
-            return false;
+            return $exist->getId();
         }else{
             $head = new AndroidDeviceSetup();
             $head->setGlobalOption($option);
