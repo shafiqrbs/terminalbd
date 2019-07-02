@@ -305,6 +305,7 @@ class ExpenditureRepository extends EntityRepository
         $expense->setUpdated($expense->getCreated());
         $em->persist($expense);
         $em->flush();
+
     }
 
 

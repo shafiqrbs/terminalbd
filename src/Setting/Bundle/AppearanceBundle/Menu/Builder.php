@@ -1211,7 +1211,9 @@ class Builder extends ContainerAware
 	        $menu['Medicine']->addChild('Manage Sales')
 	                         ->setAttribute('icon', 'icon-shopping-cart')
 	                         ->setAttribute('dropdown', true);
-        	    $menu['Medicine']['Manage Sales']->addChild('Manage Sales', array('route' => 'medicine_sales'))
+        	    $menu['Medicine']['Manage Sales']->addChild('Sales', array('route' => 'medicine_sales'))
+                    ->setAttribute('dropdown', true);
+        	    $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
                     ->setAttribute('icon', 'icon-list');
                 $menu['Medicine']['Manage Sales']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
                     ->setAttribute('icon', 'icon-list');
