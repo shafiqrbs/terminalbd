@@ -102,6 +102,11 @@ class MedicinePurchase
      **/
     private  $androidDevice;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", inversedBy="medicinePurchase" )
+     **/
+    private  $androidProcess;
+
 
     /**
      * @var integer
@@ -883,6 +888,22 @@ class MedicinePurchase
     public function setDevicePurchaseId($devicePurchaseId)
     {
         $this->devicePurchaseId = $devicePurchaseId;
+    }
+
+    /**
+     * @return MedicineAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param MedicineAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 

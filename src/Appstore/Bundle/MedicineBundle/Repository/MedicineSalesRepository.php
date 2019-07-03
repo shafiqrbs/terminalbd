@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -610,63 +611,65 @@ class MedicineSalesRepository extends EntityRepository
         return $array;
     }
 
-    public function insertApiSales(GlobalOption $option,$device, $datas)
+    public function insertApiSales(GlobalOption $option,MedicineAndroidProcess $process)
     {
         $em = $this->_em;
 
-           foreach ($datas as $data):
+            $items = json_decode($process->getJsonItem(),true);
+
+            foreach ($items as $item):
 
                 $sales = new MedicineSales();
                 $sales->setMedicineConfig($option->getMedicineConfig());
-                $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
-                $sales->setAndroidDevice($device);
-                $sales->setDeviceSalesId($data['invoiceId']);
-                $sales->setSubTotal($data['subTotal']);
-                $sales->setDiscount($data['discount']);
-                $sales->setDiscountType($data['discountType']);
-                $sales->setDiscountCalculation($data['discountCalculation']);
-                $sales->setNetTotal($data['total']);
-                if($data['total'] < $data['receive']){
-                    $sales->setReceived($data['total']);
+                $sales->setAndroidDevice($process->getAndroidDevice());
+                $sales->setAndroidProcess($process);
+                $sales->setInvoice($item['invoiceId']);
+                $sales->setSubTotal($item['subTotal']);
+                $sales->setDiscount($item['discount']);
+                $sales->setDiscountType($item['discountType']);
+                $sales->setDiscountCalculation($item['discountCalculation']);
+                $sales->setNetTotal($item['total']);
+                if($item['total'] < $item['receive']){
+                    $sales->setReceived($item['total']);
                 }else{
-                    $sales->setReceived($data['receive']);
+                    $sales->setReceived($item['receive']);
                 }
-                $sales->setDue($data['due']);
-                $sales->setVat($data['vat']);
-                if($data['transactionMethod']){
-                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
+                $sales->setDue($item['due']);
+                $sales->setVat($item['vat']);
+                if($item['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
                     $sales->setTransactionMethod($method);
                 }
-                if($data['bankAccount']){
-                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
+                if($item['bankAccount']){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
                     $sales->setAccountBank($bank);
-                    $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
+                    $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
                     $sales->setPaymentCard($card);
-                    $sales->setCardNo($data['paymentCardNo']);
-                    $sales->setTransactionId($data['transactionId']);
+                    $sales->setCardNo($item['paymentCardNo']);
+                    $sales->setTransactionId($item['transactionId']);
                 }
-                if($data['mobileBankAccount']){
-                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
+                if($item['mobileBankAccount']){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
                     $sales->setAccountMobileBank($mobile);
-                    $sales->setPaymentMobile($data['paymentMobile']);
-                    $sales->setTransactionId($data['transactionId']);
+                    $sales->setPaymentMobile($item['paymentMobile']);
+                    $sales->setTransactionId($item['transactionId']);
                 }
-                if($data['customerName'] and $data['customerMobile']){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$data['customerMobile'],$data);
+                if($item['customerName'] and $item['customerMobile']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
                     $sales->setCustomer($customer);
-                }elseif($data['customerId']){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->find($data['customerId']);
+                }elseif($item['customerId']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->find($item['customerId']);
                     $sales->setCustomer($customer);
-                }elseif(empty($data['customerId']) and empty($data['customerName']) ) {
+                }elseif(empty($item['customerId']) and empty($item['customerName']) ) {
                     $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
                     $sales->setCustomer($customer);
                 }
-                if($data['createdBy']){
-                    $createdBy = $em->getRepository('UserBundle:User')->find($data['createdBy']);
+                if($item['createdBy']){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
                     $sales->setCreatedBy($createdBy);
                 }
-                if($data['salesBy']){
-                     $salesBy = $em->getRepository('UserBundle:User')->find($data['salesBy']);
+                if($item['salesBy']){
+                     $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
                      $sales->setSalesBy($salesBy);
                 }
                 $sales->setProcess("Done");
@@ -675,26 +678,81 @@ class MedicineSalesRepository extends EntityRepository
                 $em->flush();
 
            endforeach;
+           $countRecords = $this->countNumberSalesItem($process->getId());
+           if($process->getItemCount() == $countRecords){
+               $this->insertApiSalesItem( $option, $process);
+           }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
+               $batch = $process->getId();
+               $remove = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess = {$batch}");
+               $remove->execute();
+           }else{
+               return "Failed";
+           }
 
     }
 
-    public function insertApiSalesItem(GlobalOption $option , $data){
+    public function countNumberSalesItem($batch)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.androidProcess = :batch')
+            ->setParameter('batch', $batch)
+            ->select('COUNT(e.id) as count')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function insertApiSalesItem(GlobalOption $option,MedicineAndroidProcess $process){
 
         $em = $this->_em;
         $conf = $option->getMedicineConfig();
-        $deviceSalesId = $data['salesId'];
-        $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig'=>$conf,'deviceSalesId'=>$deviceSalesId));
-        $salesItem = new MedicineSalesItem();
-        $salesItem->setMedicineSales($sales);
-        $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($data['stockId']);
-        $salesItem->setMedicineStock($stockId);
-        $salesItem->setQuantity($data['quantity']);
-        $salesItem->setSalesPrice($data['unitPrice']);
-        $salesItem->setPurchasePrice($stockId->getPurchasePrice());
-        $salesItem->setSubTotal($data['subTotal']);
-        $em->persist($salesItem);
-        $em->flush();
 
+        $items = json_decode($process->getJsonSubItem(),true);
+
+        foreach ($items as $item):
+
+            $deviceSalesId = $item['salesId'];
+            $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $conf,'deviceSalesId' => $deviceSalesId));
+            if($sales){
+
+                $salesItem = new MedicineSalesItem();
+                $salesItem->setAndroidProcess($process);
+                $salesItem->setMedicineSales($sales);
+                $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
+                if($stockId){
+                    $salesItem->setMedicineStock($stockId);
+                }
+                $salesItem->setQuantity($item['quantity']);
+                $salesItem->setSalesPrice($item['unitPrice']);
+                $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                $salesItem->setSubTotal($item['subTotal']);
+                $em->persist($salesItem);
+                $em->flush();
+            }
+
+        endforeach;
+
+        $countRecords = $this->countNumberSalesSubItem($process->getId());
+        if($process->getItemCount() == $countRecords){
+            $this->insertApiSalesItem( $option, $process);
+        }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
+            $batch = $process->getId();
+            $remove = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess = {$batch}");
+            $remove->execute();
+        }else{
+            return "Failed";
+        }
+
+    }
+
+    public function countNumberSalesSubItem($batch)
+    {
+        return $this->_em->createQueryBuilder()
+            ->from('MedicineBundle:MedicineSalesItem','e')
+            ->where('e.androidProcess = :batch')
+            ->setParameter('batch', $batch)
+            ->select('COUNT(e.id) as count')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function androidDeviceSales($config)

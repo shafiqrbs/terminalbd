@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -52,6 +53,13 @@ class AndroidDeviceSetup
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="androidDevice" )
      **/
     private  $expenditure;
+
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", mappedBy="androidDevice" )
+     **/
+    private  $medicineAndroidProcess;
 
 
     /**
@@ -150,6 +158,14 @@ class AndroidDeviceSetup
     public function getExpenditure()
     {
         return $this->expenditure;
+    }
+
+    /**
+     * @return MedicineAndroidProcess
+     */
+    public function getMedicineAndroidProcess()
+    {
+        return $this->medicineAndroidProcess;
     }
 
 

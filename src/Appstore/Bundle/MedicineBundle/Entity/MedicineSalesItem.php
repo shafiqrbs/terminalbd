@@ -50,6 +50,11 @@ class MedicineSalesItem
     private $medicineSalesReturns;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", inversedBy="medicineSalesItem" )
+     **/
+    private  $androidProcess;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="stockName", type="string", nullable=true)
@@ -350,6 +355,22 @@ class MedicineSalesItem
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return MedicineAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param MedicineAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 

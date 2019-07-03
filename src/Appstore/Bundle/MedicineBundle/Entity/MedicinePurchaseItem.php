@@ -69,6 +69,11 @@ class MedicinePurchaseItem
     private  $medicineSalesTemporary;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", inversedBy="medicinePurchaseItem" )
+     **/
+    private  $androidProcess;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="stockName", type="string", nullable=true)
@@ -599,6 +604,22 @@ class MedicinePurchaseItem
     public function setPack($pack)
     {
         $this->pack = $pack;
+    }
+
+    /**
+     * @return MedicineAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param MedicineAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 }
