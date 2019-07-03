@@ -619,8 +619,8 @@ class MedicineSalesRepository extends EntityRepository
             foreach ($items as $item):
                 $config = $this->_em->getRepository('MedicineBundle:MedicineConfig')->find(10);
                 $sales = new MedicineSales();
-                $sales->setMedicineConfig($config);
-               // $sales->setMedicineConfig($option->getMedicineConfig());
+                //$sales->setMedicineConfig($config);
+                $sales->setMedicineConfig($option->getMedicineConfig());
                 $sales->setAndroidDevice($process->getAndroidDevice());
                 $sales->setAndroidProcess($process);
                 $sales->setInvoice($item['invoiceId']);
@@ -675,17 +675,21 @@ class MedicineSalesRepository extends EntityRepository
                      $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
                      $sales->setSalesBy($salesBy);
                 }
+
+                $created = new \DateTime($item['created']);
+                $sales->setCreated($created);
+                $sales->setUpdated($created);
                 $sales->setProcess("Done");
                 $sales->setPaymentStatus("Paid");
                 $em->persist($sales);
                 $em->flush();
 
            endforeach;
-         //  $countRecords = $this->countNumberSalesItem($process->getId());
            $this->insertApiSalesItem( $option, $process);
-        //   $countRecords = $this->countNumberSalesSubItem($process->getId());
-
-         /*  if($process->getItemCount() == $countRecords){
+         /*
+          $countRecords = $this->countNumberSalesSubItem($process->getId());
+          $countRecords = $this->countNumberSalesItem($process->getId());
+          if($process->getItemCount() == $countRecords){
                 $this->insertApiSalesItem( $option, $process);
            }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
                $batch = $process->getId();
