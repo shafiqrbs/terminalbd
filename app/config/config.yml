@@ -3,18 +3,6 @@ imports:
     - { resource: security.yml }
     - { resource: bundles.yml }
 
-doctrine:
-    dbal:
-        default_connection: default
-        connections:
-            default:
-                driver:   %database_driver%
-                dbname:   %database_name%
-                user:     %database_user%
-                host:     %database_host%
-                password: %database_password%
-                unix_socket: /tmp/mysql.sock
-
 framework:
     #esi:             ~
     translator: { fallback: %locale% }

@@ -594,15 +594,15 @@ class ApiController extends Controller
 
             $jsonInput = '[
             {
-            "invoiceId":"051900111","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","customerId":"223","customerName":"Jacky","customerMobile":"01828148148","addresss":"Dhaka","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","salesBy":"","created":"","createdBy":"","slipNo":"","tokenNo":"","discountCoupon":"","remark":""
+            "invoiceId":"051900113","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","customerId":"223","customerName":"Jacky","customerMobile":"01828148148","addresss":"Dhaka","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","salesBy":"","created":"","createdBy":"","slipNo":"","tokenNo":"","discountCoupon":"","remark":""
             }
         ]';
 
         $jsonInputItem = '[
-            {"salesId":"051900111","stockId":"7087","unitPrice":"120","quantity":"2","subTotal":"240"},
-            {"salesId":"051900111","stockId":"1295","unitPrice":"120","quantity":"2","subTotal":"240"},
-            {"salesId":"051900111","stockId":"7088","unitPrice":"120","quantity":"2","subTotal":"240"},
-            {"salesId":"051900111","stockId":"7420","unitPrice":"120","quantity":"2","subTotal":"240"}
+            {"salesId":"051900113","stockId":"7087","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"salesId":"051900113","stockId":"1295","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"salesId":"051900113","stockId":"7088","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"salesId":"051900113","stockId":"7420","unitPrice":"120","quantity":"2","subTotal":"240"}
         ]';
 
 
@@ -614,9 +614,11 @@ class ApiController extends Controller
             $entity = $this->checkApiValidation($request);
             $deviceId = $request->headers->get('X-DEVICE-ID');
 
-            $data = array('deviceId' => 1,'item' => "jsonItem",'itemCount'=> 10,'subItem'=>"jsonSubItem",'subItemCount'=> 50);
+           // $data = array('item' => $jsonInput,'itemCount'=> 1,'subItem'=> $jsonInputItem,'subItemCount'=> 4);
 
-            $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,$data);
+            $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
+
+
 
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);

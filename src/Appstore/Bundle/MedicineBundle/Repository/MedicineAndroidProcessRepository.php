@@ -20,7 +20,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class MedicineAndroidProcessRepository extends EntityRepository
 {
 
-    public function insertAndroidProcess(GlobalOption $option,$device,$data)
+    public function insertAndroidProcess(GlobalOption $option,$device,$process,$data)
     {
         $em =  $this->_em;
 
@@ -29,13 +29,14 @@ class MedicineAndroidProcessRepository extends EntityRepository
         $entity = new MedicineAndroidProcess();
         $entity->setMedicineConfig($option->getMedicineConfig());
         $entity->setAndroidDevice($device);
-        $entity->setProcess($data['process']);
+        $entity->setProcess($process);
         $entity->setJsonItem($data['item']);
+        $entity->setItemCount($data['itemCount']);
         $entity->setJsonSubItem($data['subItem']);
+        $entity->setSubItemCount($data['subItemCount']);
         $entity->setStatus(false);
         $em->persist($entity);
         $em->flush();
-
         return $entity;
 
     }
