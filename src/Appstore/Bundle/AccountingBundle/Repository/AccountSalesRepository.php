@@ -664,9 +664,13 @@ class AccountSalesRepository extends EntityRepository
 				$globalOption = $sales->getGlobalOption()->getId();
 				$accountRefNo = $sales->getAccountRefNo();
 				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$transaction->execute();
-				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$accountCash->execute();
+				if($transaction){
+                    $transaction->execute();
+                }
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
+                if($accountCash){
+                    $accountCash->execute();
+                }
 			}
 		}
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.sales = '.$entity->getId());
@@ -881,8 +885,10 @@ class AccountSalesRepository extends EntityRepository
 				$accountRefNo = $sales->getAccountRefNo();
 				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
 				$transaction->execute();
-				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$accountCash->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
+                if($accountCash){
+                    $accountCash->execute();
+                }
 			}
 		}
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.medicineSales = '.$entity->getId());
@@ -961,9 +967,13 @@ class AccountSalesRepository extends EntityRepository
 				$globalOption = $sales->getGlobalOption()->getId();
 				$accountRefNo = $sales->getAccountRefNo();
 				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$transaction->execute();
-				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$accountCash->execute();
+				if($transaction){
+                    $transaction->execute();
+                }
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
+                if($accountCash){
+                    $accountCash->execute();
+                }
 
 			}
 		}

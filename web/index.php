@@ -11,7 +11,7 @@ EzMaintenance\Worker::watch('file', array(
     'msg' => 'Site is currently undergoing maintenance!'
 ));
 
-defined('APPLICATION_ENV')
+/*defined('APPLICATION_ENV')
 || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'prod'));
 
 define('WEB_PATH', __DIR__);
@@ -22,4 +22,4 @@ if (APPLICATION_ENV == 'dev') {
     require 'app_dev.php';
 } else {
     require 'app.php';
-}
+}*/
