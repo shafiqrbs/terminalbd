@@ -14,7 +14,7 @@
                         <div class="col" style="float: left">
                             <span>
                               {% if config.webPath is not empty %}
-                                  <img  src="{{ image(config.webPath).resize(340,102, 'white') }}">
+                                  <img style="max-height:120px!important; width: auto"  src="{{ image(config.webPath).resize(340,102, 'white') }}">
                               {% endif %}
                             </span>
                         </div>
@@ -23,6 +23,7 @@
                         </div>
                     </div>
                 </header>
+                <div class="clearfix"></div>
                 <main>
                     <div class="row contacts">
                         <div class="col invoice-to" style="float: left">
@@ -110,5 +111,11 @@
             <div></div>
         </div>
     </div>
+<style>
+    .clearfix{
+       clear: both;
+        display: inline-block;
+    }
+</style>
 {% endblock %}
 
