@@ -559,13 +559,12 @@ class MedicineSalesRepository extends EntityRepository
 	public function currentMonthSales(User $user , $data =array())
 	{
 
-		$userBranch = $user->getProfile()->getBranches();
-		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
 
-		$compare = new \DateTime();
-		$year =  $compare->format('Y');
-		$month =  $compare->format('m');
-		$year = isset($data['year'])? $data['year'] :$year;
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$compare    = new \DateTime();
+		$year       = $compare->format('Y');
+		$month      = $compare->format('m');
+		$year       = isset($data['year'])? $data['year'] :$year;
 
 		$sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month, SUM(sales.netTotal) AS total
                 FROM medicine_sales as sales
@@ -772,6 +771,27 @@ class MedicineSalesRepository extends EntityRepository
     public function androidDeviceSales($config)
     {
 
+       /* $compare    = new \DateTime();
+        $year       = $compare->format('Y');
+        $month      = $compare->format('m');
+
+        $sql = "SELECT DATE (sales.created) as date,SUM(sales.netTotal) AS total
+                FROM medicine_sales as sales
+                 JOIN Customer as customer ON sales.customer_id = customer.id
+                WHERE sales.medicineConfig_id = :config AND sales.process = :process  AND MONTH (sales.created) =:month AND YEAR(sales.created) =:year
+                GROUP BY date,e.androidDevice ORDER BY date ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        var_dump($result);
+        exit;*/
+
+
+
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.createdBy', 'u');
         $qb->join('e.androidDevice','a');
@@ -801,7 +821,7 @@ class MedicineSalesRepository extends EntityRepository
 
         foreach ($entities as $entity){
 
-            $entity->setProcess('Approved');
+            $entity->setProcess('Done');
             $entity->setApprovedBy($entity->getCreatedBy());
             $entity->setUpdated($entity->getCreated());
             $entity->setDeviceApproved(true);
