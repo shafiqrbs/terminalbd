@@ -617,9 +617,7 @@ class MedicineSalesRepository extends EntityRepository
 
             $items = json_decode($process->getJsonItem(),true);
             foreach ($items as $item):
-                $config = $this->_em->getRepository('MedicineBundle:MedicineConfig')->find(10);
                 $sales = new MedicineSales();
-                //$sales->setMedicineConfig($config);
                 $sales->setMedicineConfig($option->getMedicineConfig());
                 $sales->setAndroidDevice($process->getAndroidDevice());
                 $sales->setAndroidProcess($process);
@@ -641,6 +639,9 @@ class MedicineSalesRepository extends EntityRepository
                 $sales->setVat($item['vat']);
                 if($item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                    $sales->setTransactionMethod($method);
+                }elseif (empty($item['transactionMethod']) and $sales->getReceived() > 0){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
                     $sales->setTransactionMethod($method);
                 }
                 if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
@@ -679,7 +680,7 @@ class MedicineSalesRepository extends EntityRepository
                 $created = new \DateTime($item['created']);
                 $sales->setCreated($created);
                 $sales->setUpdated($created);
-                $sales->setProcess("Done");
+                $sales->setProcess("Device");
                 $sales->setPaymentStatus("Paid");
                 $em->persist($sales);
                 $em->flush();
