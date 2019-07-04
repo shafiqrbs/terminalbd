@@ -7,8 +7,9 @@
             </div>
             <hr>
         </div>
-        <div class="invoice overflow-auto">
+    <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
             <div style="min-width: 600px">
+                {% if config.isPrintHeader == 1 %}
                 <header>
                     <div class="row">
                         <div class="col" style="float: left">
@@ -23,6 +24,7 @@
                         </div>
                     </div>
                 </header>
+                {% endif %}
                 <div class="clearfix"></div>
                 <main>
                     <div class="row contacts">
