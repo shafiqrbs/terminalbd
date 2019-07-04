@@ -166,7 +166,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->leftJoin('e.transactionMethod','transactionMethod');
         $qb->leftJoin('e.accountMobileBank','mobile');
         $qb->leftJoin('e.accountBank','bank');
-        $qb->select('customer.name as customerName','customer.name as customerMobile');
+        $qb->select('customer.name as customerName','customer.mobile as customerMobile');
         $qb->addSelect('transactionMethod.name as method');
         $qb->addSelect('mobile.name as mobileName');
         $qb->addSelect('bank.name as bankName');

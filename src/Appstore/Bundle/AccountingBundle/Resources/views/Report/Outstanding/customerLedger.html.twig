@@ -34,7 +34,7 @@
                                 {% set mobile = searchForm.mobile is defined ? searchForm.mobile :'' %}
                                 {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
                                 {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
-                                <a target="_blank" href="{{ path('report_customer_ledger',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'mobile':mobile}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+                                <a target="_blank" href="{{ path('report_customer_ledger',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'mobile':mobile}) }}" class="btn purple"><i class="icon icon-download"></i> Download</a>
                             </div>
                         </div>
                     </div>
