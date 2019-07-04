@@ -103,7 +103,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Android Device</th>
+                                    <th class="numeric" >Device Sales</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -120,7 +120,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.androidDevice is defined and entity.androidDevice is not null %}{{ entity.androidDevice.device }}/{{ entity.deviceSalesId }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.deviceSalesId }}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ entity.received|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
