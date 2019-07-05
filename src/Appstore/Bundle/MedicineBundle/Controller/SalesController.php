@@ -518,5 +518,41 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
         exit;
     }
+    public function groupReverseAction(MedicineConfig $config)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($config,$data);
+        $entities = $entities->getQuery()->getResult();
+        foreach ( $entities as $sales):
+            $em = $this->getDoctrine()->getManager();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
+            $sales->setRevised(true);
+            $sales->setProcess('Created');
+        endforeach;
+        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
+    }
+    public function groupApprovedAction(MedicineConfig $config)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($config,$data);
+        $entities = $entities->getQuery()->getResult();
+        foreach ( $entities as $sales):
+            if (!empty($sales) and $sales->getProcess() == "Complete" ) {
+                $sales->setProcess('Approved');
+                $sales->setUpdated($sales->getCreated());
+                $sales->setApprovedBy($this->getUser());
+                $em->flush();
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
+                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            }
+        endforeach;
+        return $this->redirect($this->generateUrl('medicine_sales'));
+    }
 
 }

@@ -519,7 +519,6 @@ class AccountCashRepository extends EntityRepository
         }if($entity->getTransactionMethod()->getId() == 3 ){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
         }
-
         $cash->setBalance($balance - $entity->getPayment() );
         $cash->setCredit($entity->getPayment());
         $cash->setCreated($entity->getCreated());

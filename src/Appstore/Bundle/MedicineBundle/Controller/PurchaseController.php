@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
@@ -685,6 +686,73 @@ class PurchaseController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->mergePurchaseItem($entity,$vendor);
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
-
     }
+
+    public function groupReverseAction(MedicineConfig $config)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
+        $entities = $entities->getQuery()->getResult();
+        foreach ( $entities as $purchase):
+                echo $purchase->getId();
+                /*if($purchase->getProcees != "Created"){
+                    if($purchase->getAsInvestment() == 1 ) {
+                        $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
+                    }
+                    $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
+                    $purchase->setRevised(true);
+                    $purchase->setPayment(0);
+                    $purchase->setProcess('Complete');
+                    $em->flush();
+                    if(!empty($purchase->getMedicinePurchaseReturn())){
+                        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
+                    }
+                    $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+                }*/
+        endforeach;
+        exit;
+        return $this->redirect($this->generateUrl('medicine_purchase'));
+    }
+    public function groupApprovedAction(MedicineConfig $config)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+
+        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
+        $entities = $entities->getQuery()->getResult();
+        foreach ( $entities as $purchase):
+            echo $purchase->getId();
+            /*if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
+                $em = $this->getDoctrine()->getManager();
+                $purchase->setProcess('Approved');
+                $purchase->setUpdated($purchase->getCreated());
+                $purchase->setApprovedBy($this->getUser());
+                if($purchase->getPayment() == 0){
+                    $purchase->setAsInvestment(false);
+                    $purchase->setTransactionMethod(NULL);
+                }
+                $em->flush();
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
+                if(!empty($purchase->getMedicinePurchaseReturn())){
+                    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
+                }
+                if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
+                    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
+                    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
+                    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
+                }
+                $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
+                $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            }*/
+        endforeach;
+        exit;
+        return $this->redirect($this->generateUrl('medicine_purchase'));
+    }
+
 }

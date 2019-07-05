@@ -114,3 +114,23 @@ medicine_report_vendor_payment_receive:
     path:     /{vendor}/vendor-payment-receive
     defaults: { _controller: "MedicineBundle:Default:vendorPaymentReceive" }
 
+medicine_group_device_sales:
+    path:     /group/device/sales/{id}
+    defaults: { _controller: "MedicineBundle:Purchase:groupReverse" }
+
+medicine_group_purchase_reverse:
+    path:     /group/purchase/reverse/{id}
+    defaults: { _controller: "MedicineBundle:Purchase:groupReverse" }
+
+medicine_group_purchase_approved:
+    path:      /group/purchase/approved/{id}
+    defaults: { _controller: "MedicineBundle:Purchase:groupApproved" }
+
+medicine_group_sales_reverse:
+    path:     /group/sales/reverse/{id}
+    defaults: { _controller: "MedicineBundle:Sales:groupReverse" }
+
+medicine_group_sales_approved:
+    path:      /group/sales/approved/{id}
+    defaults: { _controller: "MedicineBundle:Sales:groupApproved" }
+

@@ -737,17 +737,17 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
             foreach ($entity->getAccountPurchases() as $purchase ){
                 $globalOption = $purchase->getGlobalOption()->getId();
                 $accountRefNo = $purchase->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo ={$accountRefNo} AND e.processHead = 'Purchase'");
                 $transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountPurchase ={$purchase->getId()} AND e.processHead = 'Purchase'");
                 if($accountCash){
                     $accountCash->execute();
                 }
             }
         }
-        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.medicinePurchase = '.$entity->getId());
-        if(!empty($accountCash)){
-            $accountCash->execute();
+        $removeAccountPurchase = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.medicinePurchase = '.$entity->getId());
+        if(!empty($removeAccountPurchase)){
+            $removeAccountPurchase->execute();
         }
     }
 

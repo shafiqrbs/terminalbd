@@ -71,6 +71,7 @@
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
                                     <th class="numeric">Location</th>
+                                    <th class="numeric">Email</th>
                                     <th class="numeric">Address</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -82,6 +83,7 @@
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
+                                        <td>{{ entity.email }}</td>
                                         <td>{{ entity.address|raw }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
