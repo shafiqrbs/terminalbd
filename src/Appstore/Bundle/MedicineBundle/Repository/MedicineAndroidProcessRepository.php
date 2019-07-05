@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -20,6 +21,17 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class MedicineAndroidProcessRepository extends EntityRepository
 {
 
+    public function getAndroidSalesList( $config){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.androidDevice','a');
+        $qb->select('e.id as id','e.created as created','e.itemCount as itemCount','e.status as status');
+        $qb->addSelect('a.device as device');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        $qb->orderBy('e.created',"DESC");
+        $result = $qb->getQuery();
+        return $result;
+    }
     public function insertAndroidProcess(GlobalOption $option,$device,$process,$data)
     {
         $em =  $this->_em;

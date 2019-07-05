@@ -39,6 +39,11 @@ class MedicineConfig
      **/
     private $stockHouses;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", mappedBy="medicineConfig")
+     **/
+    private $androidProcesses;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineMinimumStock", mappedBy="medicineConfig")
      **/
@@ -622,6 +627,14 @@ class MedicineConfig
     public function setExpiryDate(int $expiryDate)
     {
         $this->expiryDate = $expiryDate;
+    }
+
+    /**
+     * @return MedicineAndroidProcess
+     */
+    public function getAndroidProcesses()
+    {
+        return $this->androidProcesses;
     }
 
 }

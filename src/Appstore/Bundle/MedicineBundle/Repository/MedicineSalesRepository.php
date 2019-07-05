@@ -636,26 +636,33 @@ class MedicineSalesRepository extends EntityRepository
                 }
                 $sales->setDue($item['due']);
                 $sales->setVat($item['vat']);
-                if($item['transactionMethod']){
+                if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
                     $sales->setTransactionMethod($method);
-                }elseif (empty($item['transactionMethod']) and $sales->getReceived() > 0){
+                }elseif (isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
                     $sales->setTransactionMethod($method);
                 }
                 if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
                     $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
                     $sales->setAccountBank($bank);
-                    $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
-                    $sales->setPaymentCard($card);
+                    if(isset($item['paymentCard']) and $item['paymentCard']){
+                        $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
+                        $sales->setPaymentCard($card);
+                    }
+                }
+                if(isset($item['paymentCardNo']) and $item['paymentCardNo']) {
                     $sales->setCardNo($item['paymentCardNo']);
-                    $sales->setTransactionId($item['transactionId']);
+                }
+                if(isset($item['transactionId']) and $item['transactionId']) {
+                    $sales->setCardNo($item['transactionId']);
                 }
                 if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
                     $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
                     $sales->setAccountMobileBank($mobile);
+                }
+                if(isset($item['paymentMobile']) and $item['paymentMobile']) {
                     $sales->setPaymentMobile($item['paymentMobile']);
-                    $sales->setTransactionId($item['transactionId']);
                 }
                 if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
                     $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
@@ -771,27 +778,6 @@ class MedicineSalesRepository extends EntityRepository
     public function androidDeviceSales($config)
     {
 
-       /* $compare    = new \DateTime();
-        $year       = $compare->format('Y');
-        $month      = $compare->format('m');
-
-        $sql = "SELECT DATE (sales.created) as date,SUM(sales.netTotal) AS total
-                FROM medicine_sales as sales
-                 JOIN Customer as customer ON sales.customer_id = customer.id
-                WHERE sales.medicineConfig_id = :config AND sales.process = :process  AND MONTH (sales.created) =:month AND YEAR(sales.created) =:year
-                GROUP BY date,e.androidDevice ORDER BY date ASC";
-        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
-        $stmt->bindValue('month', $month);
-        $stmt->bindValue('year', $year);
-        $stmt->execute();
-        $result =  $stmt->fetchAll();
-        var_dump($result);
-        exit;*/
-
-
-
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.createdBy', 'u');
         $qb->join('e.androidDevice','a');
@@ -830,6 +816,10 @@ class MedicineSalesRepository extends EntityRepository
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         }
+    }
+
+    public function deleteSalesRecords(MedicineConfig $config){
+        $this->_em->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
     }
 
 

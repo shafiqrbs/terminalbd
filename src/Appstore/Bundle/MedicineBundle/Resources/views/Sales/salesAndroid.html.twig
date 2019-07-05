@@ -36,35 +36,36 @@
                     <table class="table table-bordered table-striped table-condensed flip-content ">
                         <thead class="flip-content ">
                         <tr class="head-green">
-                            <th>S/N</th>
-                            <th>Username</th>
-                            <th>Device ID</th>
+                            <th>Created</th>
+                            <th>Time</th>
                             <th>Total Invoice</th>
-                            <th>Sub-Total</th>
-                            <th>Discount</th>
-                            <th>Total</th>
-                            <th>Received</th>
-                            <th>Due</th>
+                            <th>Device</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         {% for entity in entities %}
                             <tr>
-                                <th class="numeric" >{{ loop.index }}.</th>
-                                <td class="numeric" >{{ entity.salesBy }}</td>
+                                <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                <td class="numeric" >{{ entity.created|date('h:i A') }}</td>
+                                <td class="numeric" >{{ entity.itemCount|number_format }}</td>
                                 <td class="numeric" >{{ entity.device }}</td>
-                                <td class="numeric" >{{ entity.totalInvoice|number_format }}</td>
-                                <td class="numeric" >{{ entity.subTotal|number_format }}</td>
-                                <td class="numeric" >{{ entity.discount|number_format }}</td>
-                                <td class="numeric" >{{ entity.total|number_format }}</td>
-                                <td class="numeric" >{{ entity.received|number_format }}</td>
-                                <td class="numeric" >{{ entity.due|number_format }}</td>
-                                <td class="numeric" >
-                                    <a  id="{{ entity.deviceId }}" data-id="{{ entity.deviceId }}" data-url="{{ path('medicine_sales_android_process',{'device':entity.deviceId}) }}" href="javascript:" class="btn red mini androidProcess" ><i class="icon-retweet"></i> Process</a></td>
+                                <td class="numeric" >{% if entity.status == 1 %}<span class="btn mini blue">Success</span>{% else %}<span class="btn mini red">Waiting</span>{% endif %}</td>
+                                 <td class="numeric" >
+                                     {% if entity.status == 1 %}
+                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('medicine_sales_android_view',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>
+                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_android_reprocess',{'device':entity.id}) }}"  class="btn yellow mini" ><i class="icon-retweet"></i> Re-process</a>
+                                    {% else %}
+                                        <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_sales_android_process',{'device':entity.id}) }}" href="javascript:" class="btn green mini androidProcess" ><i class="icon-retweet"></i> Process</a>
+                                     {% endif %}
+                                 </td>
                             </tr>
                         {% endfor %}
 
                     </table>
+                        <div class="pagination pull-center" >
+                            {{ knp_pagination_render(entities) }}
+                        </div>
                     <div class="clearfix">&nbsp;</div>
                     </div>
                 </div>

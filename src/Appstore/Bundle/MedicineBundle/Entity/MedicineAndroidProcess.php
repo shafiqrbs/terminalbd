@@ -25,7 +25,7 @@ class MedicineAndroidProcess
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicineReverses")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="androidProcesses")
      */
     protected $medicineConfig;
 

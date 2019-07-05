@@ -134,3 +134,8 @@ medicine_group_sales_approved:
     path:      /group/sales/approved/{id}
     defaults: { _controller: "MedicineBundle:Sales:groupApproved" }
 
+medicine_device_sales_import:
+    path:      /device-sales-delete-import/{id}/{android}
+    defaults: { _controller: "MedicineBundle:Sales:insertGroupApiSalesImport" }
+
+

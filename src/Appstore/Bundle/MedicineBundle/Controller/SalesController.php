@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -506,9 +508,10 @@ class SalesController extends Controller
     public function androidSalesAction()
     {
         $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
-        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSales($conf);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf);
+        $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:Sales:salesAndroid.html.twig', array(
-            'entities' => $entity,
+            'entities' => $pagination,
         ));
     }
     public function androidSalesProcessAction($device)
@@ -522,16 +525,17 @@ class SalesController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($config,$data);
         $entities = $entities->getQuery()->getResult();
         foreach ( $entities as $sales):
-            $em = $this->getDoctrine()->getManager();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
             $sales->setRevised(true);
             $sales->setProcess('Created');
+            $em->flush();
         endforeach;
-        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
+        return $this->redirect($this->generateUrl('medicine_sales',array('id' => $sales->getId())));
     }
     public function groupApprovedAction(MedicineConfig $config)
     {
@@ -553,6 +557,27 @@ class SalesController extends Controller
             }
         endforeach;
         return $this->redirect($this->generateUrl('medicine_sales'));
+    }
+
+    public function insertGroupApiSalesImportAction(MedicineConfig $config,MedicineAndroidProcess $android)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findBy(['medicineConfig' => $config ,'androidDevice' => $android]);
+        foreach ($entities as $entity){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($entity);
+            $this->allSalesItemDelete($entity);
+            $em->remove($entity);
+            $em->flush();
+        }
+        foreach ($config->getAndroidProcesses() as $entity):
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$entity);
+        endforeach;
+        $android->setStatus(true);
+        $em->persist($android);
+        $em->flush();
+        exit;
     }
 
 }

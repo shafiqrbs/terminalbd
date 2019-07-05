@@ -6,6 +6,16 @@ medicine_sales_android:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }
 
+medicine_sales_android_view:
+    path:     /android
+    defaults: { _controller: "MedicineBundle:Sales:androidSales" }
+
+medicine_sales_android_reprocess:
+    path:     /{device}/android-process
+    defaults: { _controller: "MedicineBundle:Sales:androidSalesProcess" }
+    options:
+            expose: true
+
 medicine_sales_android_process:
     path:     /{device}/android-process
     defaults: { _controller: "MedicineBundle:Sales:androidSalesProcess" }
