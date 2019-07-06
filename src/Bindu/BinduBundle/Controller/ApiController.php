@@ -609,6 +609,9 @@ class ApiController extends Controller
 
             $data = $request->request->all();
 
+            var_dump($data);
+            exit;
+
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
