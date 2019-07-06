@@ -178,7 +178,6 @@ class MedicineSalesRepository extends EntityRepository
     public function invoiceLists(User $user, $data)
     {
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
-
         $qb = $this->createQueryBuilder('s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);

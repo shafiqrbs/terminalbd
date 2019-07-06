@@ -581,7 +581,6 @@ class MedicineStockController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 		$items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
-
 		/* @var MedicineStock $item */
 
 		foreach ($items as $item){

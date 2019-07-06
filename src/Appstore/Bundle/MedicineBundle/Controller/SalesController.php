@@ -558,7 +558,6 @@ class SalesController extends Controller
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
-                //$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
@@ -586,7 +585,6 @@ class SalesController extends Controller
             $sales->setUpdated($sales->getCreated());
             $sales->setApprovedBy($this->getUser());
             $em->flush();
-           // $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         }
