@@ -59,8 +59,13 @@ $(document).on( "click", ".androidProcess", function( e ) {
                 beforeSend: function(){
                     $('.loader-double').fadeIn(1000).addClass('is-active');
                 },
-                success:  function (data) {
-                    location.reload();
+                success:  function (response) {
+                  if(response == "success"){
+                      location.reload();
+                  }else{
+                      alert('Data does not import successfully, Please try now');
+                      location.reload();
+                  }
                 }
             });
 

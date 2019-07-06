@@ -570,6 +570,7 @@ class SalesController extends Controller
 
     public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
     {
+        $msg = "invalid";
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
@@ -590,11 +591,20 @@ class SalesController extends Controller
             $em->flush();
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $msg = "valid";
         }
-        $android->setStatus(true);
-        $em->persist($android);
-        $em->flush();
-        exit;
+        if($msg == "valid"){
+            $android->setStatus(true);
+            $android->setJsonItem(NULL);
+            $android->setJsonSubItem(NULL);
+            $em->persist($android);
+            $em->flush();
+        }
+        if($msg == "valid"){
+            return new Response('success');
+        }else{
+            return new Response('failed');
+	    }
     }
 
 }
