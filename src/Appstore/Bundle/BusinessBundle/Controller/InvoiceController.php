@@ -680,6 +680,9 @@ class InvoiceController extends Controller
 
     public function invoiceGroupReverseAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $em = $this->getDoctrine()->getManager();
         $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Done"];
         $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $data);
@@ -700,13 +703,14 @@ class InvoiceController extends Controller
 
     public function invoiceGroupApprovedAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $em = $this->getDoctrine()->getManager();
         $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
         $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $mode='general-sales', $data);
         $pagination = $entities->getQuery()->getResult();
-
         /* @var $entity BusinessInvoice */
-
         foreach ($pagination as $entity):
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);

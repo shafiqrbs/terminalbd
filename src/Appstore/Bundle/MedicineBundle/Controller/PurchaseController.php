@@ -688,11 +688,12 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
     }
 
-    public function groupReverseAction(MedicineConfig $config)
+    public function groupReverseAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
         $entities = $entities->getQuery()->getResult();
@@ -716,12 +717,12 @@ class PurchaseController extends Controller
         exit;
         return $this->redirect($this->generateUrl('medicine_purchase'));
     }
-    public function groupApprovedAction(MedicineConfig $config)
+    public function groupApprovedAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
         $entities = $entities->getQuery()->getResult();
@@ -754,7 +755,6 @@ class PurchaseController extends Controller
             }
         endforeach;
         exit;
-        return $this->redirect($this->generateUrl('medicine_purchase'));
     }
 
 }

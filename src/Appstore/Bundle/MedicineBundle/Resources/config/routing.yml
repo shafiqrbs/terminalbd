@@ -114,28 +114,24 @@ medicine_report_vendor_payment_receive:
     path:     /{vendor}/vendor-payment-receive
     defaults: { _controller: "MedicineBundle:Default:vendorPaymentReceive" }
 
-medicine_group_device_sales:
-    path:     /group/device/sales/{id}
-    defaults: { _controller: "MedicineBundle:Purchase:groupReverse" }
-
 medicine_group_purchase_reverse:
-    path:     /group/purchase/reverse/{id}
+    path:     /group/purchase/reverse
     defaults: { _controller: "MedicineBundle:Purchase:groupReverse" }
 
 medicine_group_purchase_approved:
-    path:      /group/purchase/approved/{id}
+    path:      /group/purchase/approved
     defaults: { _controller: "MedicineBundle:Purchase:groupApproved" }
 
 medicine_group_sales_reverse:
-    path:     /group/sales/reverse/{id}
+    path:     /group/sales/reverse
     defaults: { _controller: "MedicineBundle:Sales:groupReverse" }
 
 medicine_group_sales_approved:
-    path:      /group/sales/approved/{id}
+    path:      /group/sales/approved
     defaults: { _controller: "MedicineBundle:Sales:groupApproved" }
 
 medicine_device_sales_import:
-    path:      /device-sales-delete-import/{id}/{android}
+    path:      /device-sales-delete-import/{android}
     defaults: { _controller: "MedicineBundle:Sales:insertGroupApiSalesImport" }
 
 

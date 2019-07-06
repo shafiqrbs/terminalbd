@@ -527,11 +527,12 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
         exit;
     }
-    public function groupReverseAction(MedicineConfig $config)
+    public function groupReverseAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesReverseMigration($config->getId(),$data);
         /* @var $sales MedicineSales */
@@ -544,11 +545,12 @@ class SalesController extends Controller
         exit;
         return $this->redirect($this->generateUrl('medicine_sales'));
     }
-    public function groupApprovedAction(MedicineConfig $config)
+    public function groupApprovedAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesReverseMigration($config,$data);
         /* @var $sales MedicineSales */
@@ -566,11 +568,12 @@ class SalesController extends Controller
 
     }
 
-    public function insertGroupApiSalesImportAction(MedicineConfig $config,MedicineAndroidProcess $android)
+    public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findBy(['medicineConfig' => $config ,'androidProcess' => $android]);
         foreach ($entities as $entity){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($entity);
