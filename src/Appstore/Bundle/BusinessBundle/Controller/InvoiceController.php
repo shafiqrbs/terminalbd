@@ -688,7 +688,7 @@ class InvoiceController extends Controller
         $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $data);
         $pagination = $entities->getQuery()->getResult();
 
-        /* @var $entity BusinessInvoice */
+        /* @var $sales BusinessInvoice */
 
         foreach ($pagination as $sales):
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
@@ -708,11 +708,10 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
-        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $mode='general-sales', $data);
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $data);
         $pagination = $entities->getQuery()->getResult();
         /* @var $entity BusinessInvoice */
         foreach ($pagination as $entity):
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         endforeach;
