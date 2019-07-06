@@ -677,5 +677,43 @@ class InvoiceController extends Controller
         return $this->redirect($this->generateUrl('business_invoice'));
     }
 
+
+    public function invoiceGroupReverseAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Done"];
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $data);
+        $pagination = $entities->getQuery()->getResult();
+
+        /* @var $entity BusinessInvoice */
+
+        foreach ($pagination as $sales):
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
+            $sales->setIsReversed(true);
+            $sales->setProcess('Revised');
+            $em->flush();
+          endforeach;
+        exit;
+
+    }
+
+    public function invoiceGroupApprovedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $mode='general-sales', $data);
+        $pagination = $entities->getQuery()->getResult();
+
+        /* @var $entity BusinessInvoice */
+
+        foreach ($pagination as $entity):
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        endforeach;
+        exit;
+    }
+
 }
 

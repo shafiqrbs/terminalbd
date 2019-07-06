@@ -119,7 +119,7 @@
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             {% if entity.isReversed == 1 %}
-                                                <a href="{{ path('business_reverse_show', { 'id': entity.businessReverse.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                <a href="{{ path('business_reverse_show', { 'id': entity.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >

@@ -75,7 +75,6 @@ class BusinessInvoiceRepository extends EntityRepository
             $qb->setParameter('process', $process);
         }
 
-
     }
 
     public function handleDateRangeFind($qb,$data)
@@ -402,6 +401,7 @@ class BusinessInvoiceRepository extends EntityRepository
 
     public function invoiceLists(User $user, $data)
     {
+
         $config = $user->getGlobalOption()->getBusinessConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;

@@ -26,7 +26,9 @@ class BusinessProductionExpenseRepository extends EntityRepository
 
 		    foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 			    $transaction = $em->createQuery( "DELETE BusinessBundle:BusinessProductionExpense e WHERE e.businessInvoiceParticular ={$item->getId()}");
-			    $transaction->execute();
+			    if($transaction){
+                    $transaction->execute();
+                }
 		    }
 
 	    }

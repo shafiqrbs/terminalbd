@@ -61,3 +61,11 @@ business_config:
 business_homepage:
     path:     /dashboard
     defaults: { _controller: BusinessBundle:Default:index }
+
+business_group_approved:
+    path:      /group/invoice/approved
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceGroupApproved" }
+
+business_group_revised:
+    path:     /group/invoice/revised
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceGroupReverse" }
