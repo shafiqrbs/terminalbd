@@ -57,7 +57,7 @@ class AccountSales
     private  $accountBank;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountSales" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountSales", cascade={"remove"})
      **/
     private  $accountCash;
 

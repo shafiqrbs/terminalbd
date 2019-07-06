@@ -50,13 +50,13 @@ class MedicineSales
     private  $medicineSalesItems;
 
       /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="medicineSales" , cascade={"remove"} )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineReverse", mappedBy="medicineSales" , cascade={"persist"} )
      **/
     private  $medicineReverse;
 
 
    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="medicineSales" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="medicineSales", cascade={"remove"} )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;

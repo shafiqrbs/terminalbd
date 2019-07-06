@@ -299,17 +299,16 @@ class MedicineStockRepository extends EntityRepository
         $em = $this->_em;
 
         /** @var $item MedicineSalesItem */
-
-        foreach($invoice->getMedicineSalesItems() as $item ){
-
-            /** @var  $stock MedicineStock */
-
-            $stock = $item->getMedicineStock();
-            $qnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
-            $stock->setSalesQuantity($qnt);
-            $em->persist($stock);
-            $em->flush();
-            $this->remainingQnt($stock);
+        if($invoice->getMedicineSalesItems()){
+            foreach($invoice->getMedicineSalesItems() as $item ){
+                /** @var  $stock MedicineStock */
+                $stock = $item->getMedicineStock();
+                $qnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
+                $stock->setSalesQuantity($qnt);
+                $em->persist($stock);
+                $em->flush();
+                $this->remainingQnt($stock);
+            }
         }
     }
 

@@ -93,7 +93,7 @@ class AccountCash
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", inversedBy="accountCash")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(name="accountSales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      */
     protected $accountSales;
 

@@ -361,12 +361,16 @@ class AccountCashRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $entity->getGlobalOption()->getId());
-        if($entity->getTransactionMethod()->getSlug() == "bank") {
+        if(($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getSlug() == "bank") {
             $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
-            $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
-        }elseif($entity->getTransactionMethod()->getSlug() == 'mobile') {
+            if($entity->getAccountBank()) {
+                $qb->andWhere("e.accountBank = :bank")->setParameter('bank', $entity->getAccountBank()->getId());
+            }
+        }elseif(($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getSlug() == 'mobile') {
             $qb->andWhere("e.transactionMethod = :method")->setParameter('method', $entity->getTransactionMethod()->getId());
-            $qb->andWhere("e.accountMobileBank = :mobile")->setParameter('mobile', $entity->getAccountMobileBank()->getId());
+            if($entity->getAccountMobileBank()){
+                $qb->andWhere("e.accountMobileBank = :mobile")->setParameter('mobile', $entity->getAccountMobileBank()->getId());
+            }
         }
         $qb->andWhere("e.processHead = :head")->setParameter('head', $processHead);
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -570,11 +574,10 @@ class AccountCashRepository extends EntityRepository
         $cash = new AccountCash();
 
         /* Cash - Cash various */
-        if($entity->getTransactionMethod()->getId() == 2 ){
+        if($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "bank" and $entity->getAccountBank() ){
             /* Current Asset Bank Cash Debit */
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $cash->setAccountBank($entity->getAccountBank());
-        }elseif($entity->getTransactionMethod()->getId() == 3 ){
+        }elseif($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "mobile" and $entity->getAccountMobileBank() ){
             /* Current Asset Mobile Account Debit */
             $cash->setAccountMobileBank($entity->getAccountMobileBank());
             $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);

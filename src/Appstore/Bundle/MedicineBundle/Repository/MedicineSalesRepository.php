@@ -638,14 +638,18 @@ class MedicineSalesRepository extends EntityRepository
                 $sales->setVat($item['vat']);
                 if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
-                    $sales->setTransactionMethod($method);
-                }elseif (isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
+                    if($method){
+                        $sales->setTransactionMethod($method);
+                    }
+                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
                     $sales->setTransactionMethod($method);
                 }
                 if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
                     $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
-                    $sales->setAccountBank($bank);
+                    if($bank){
+                        $sales->setAccountBank($bank);
+                    }
                     if(isset($item['paymentCard']) and $item['paymentCard']){
                         $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
                         $sales->setPaymentCard($card);
@@ -659,7 +663,9 @@ class MedicineSalesRepository extends EntityRepository
                 }
                 if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
                     $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
-                    $sales->setAccountMobileBank($mobile);
+                    if($mobile){
+                        $sales->setAccountMobileBank($mobile);
+                    }
                 }
                 if(isset($item['paymentMobile']) and $item['paymentMobile']) {
                     $sales->setPaymentMobile($item['paymentMobile']);

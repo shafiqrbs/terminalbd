@@ -430,21 +430,27 @@ class SalesController extends Controller
 		$em = $this->getDoctrine()->getManager();
 
 		/* @var $particular MedicineSalesItem */
+        if($invoice->getMedicineSalesItems()){
+            foreach ($invoice->getMedicineSalesItems() as $particular){
 
-		foreach ($invoice->getMedicineSalesItems() as $particular){
+                $item = $particular->getMedicinePurchaseItem();
+                $stock = $particular->getMedicineStock();
+                $this->get('session')->set('item', $item);
+                $this->get('session')->set('stock', $stock);
+                $em->remove($particular);
+                $em->flush();
+                $item = $this->get('session')->get('item');
+                $stock = $this->get('session')->get('stock');
+                if($item){
+                    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+                }
+                if($stock){
+                    $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+                }
 
-			$item = $particular->getMedicinePurchaseItem();
-			$stock = $particular->getMedicineStock();
-			$this->get('session')->set('item', $item);
-			$this->get('session')->set('stock', $stock);
-			$em->remove($particular);
-			$em->flush();
-			$item = $this->get('session')->get('item');
-			$stock = $this->get('session')->get('stock');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+            }
+        }
 
-		}
 	}
 
     public function autoSearchAction(Request $request)
@@ -532,7 +538,7 @@ class SalesController extends Controller
         foreach ( $entities as $sales):
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
             $sales->setRevised(true);
-            $sales->setProcess('Created');
+            $sales->setProcess('Complete');
             $em->flush();
         endforeach;
         return $this->redirect($this->generateUrl('medicine_sales',array('id' => $sales->getId())));
@@ -547,7 +553,7 @@ class SalesController extends Controller
         $entities = $entities->getQuery()->getResult();
         foreach ( $entities as $sales):
             if (!empty($sales) and $sales->getProcess() == "Complete" ) {
-                $sales->setProcess('Approved');
+                $sales->setProcess('Done');
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
@@ -564,16 +570,24 @@ class SalesController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findBy(['medicineConfig' => $config ,'androidDevice' => $android]);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findBy(['medicineConfig' => $config ,'androidProcess' => $android]);
         foreach ($entities as $entity){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($entity);
             $this->allSalesItemDelete($entity);
             $em->remove($entity);
             $em->flush();
         }
-        foreach ($config->getAndroidProcesses() as $entity):
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$entity);
-        endforeach;
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
+        /* @var $sales MedicineSales */
+        foreach ($android->getMedicineSales() as $sales){
+            $sales->setProcess('Done');
+            $sales->setUpdated($sales->getCreated());
+            $sales->setApprovedBy($this->getUser());
+            $em->flush();
+           // $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        }
         $android->setStatus(true);
         $em->persist($android);
         $em->flush();
