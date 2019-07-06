@@ -187,6 +187,17 @@ class MedicineSalesRepository extends EntityRepository
         return  $qb;
     }
 
+    public function salesReverseMigration($config, $data)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('s.androidProcess IS NULL');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
     public function updateMedicineSalesTotalPrice(MedicineSales $invoice)
     {
         $em = $this->_em;

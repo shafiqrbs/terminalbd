@@ -533,15 +533,16 @@ class SalesController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($config,$data);
-        $entities = $entities->getQuery()->getResult();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesReverseMigration($config->getId(),$data);
+        /* @var $sales MedicineSales */
         foreach ( $entities as $sales):
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
             $sales->setRevised(true);
             $sales->setProcess('Complete');
             $em->flush();
         endforeach;
-        return $this->redirect($this->generateUrl('medicine_sales',array('id' => $sales->getId())));
+        exit;
+        return $this->redirect($this->generateUrl('medicine_sales'));
     }
     public function groupApprovedAction(MedicineConfig $config)
     {
@@ -549,19 +550,20 @@ class SalesController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($config,$data);
-        $entities = $entities->getQuery()->getResult();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesReverseMigration($config,$data);
+        /* @var $sales MedicineSales */
         foreach ( $entities as $sales):
             if (!empty($sales) and $sales->getProcess() == "Complete" ) {
                 $sales->setProcess('Done');
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
+                //$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
         endforeach;
+        exit;
         return $this->redirect($this->generateUrl('medicine_sales'));
     }
 
