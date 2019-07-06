@@ -678,8 +678,10 @@ class InvoiceController extends Controller
         $pagination = $entities->getQuery()->getResult();
         /* @var $entity DoctorInvoice */
         foreach ($pagination as $entity):
-            $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->accountReverse($entity->getExpenditure());
-            $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->removeDoctorExpenditure($entity);
+            if($entity->getExpenditure()){
+                $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->accountReverse($entity->getExpenditure());
+                $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->removeDoctorExpenditure($entity);
+            }
             $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertCommissionPayment($entity);
         endforeach;
         exit;
