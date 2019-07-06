@@ -238,7 +238,6 @@ class DoctorInvoiceController extends Controller
     {
 
         if (!empty($entity)) {
-
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('Paid');
             $entity->setApprovedBy($this->getUser());

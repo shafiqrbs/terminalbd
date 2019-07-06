@@ -153,11 +153,8 @@ class SalesRepository extends EntityRepository
         $qb->andWhere("s.salesMode = :mode");
         $qb->setParameter('mode', $mode);
         if ($branch and $mode == 'online'){
-
             $qb->andWhere("s.branches is NULL OR s.branches =".$branch->getId());
-
         }elseif($config->getIsBranch() == 1 and empty($branch) and $user->getCheckRoleGlobal(array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) and ! $user->getCheckRoleGlobal($existArray) ){
-
             $qb->andWhere("s.createdBy =".$user->getId());
         }
         $this->handleSearchBetween($qb,$data);

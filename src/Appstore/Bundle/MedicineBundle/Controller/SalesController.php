@@ -563,7 +563,7 @@ class SalesController extends Controller
             }
         endforeach;
         exit;
-        return $this->redirect($this->generateUrl('medicine_sales'));
+
     }
 
     public function insertGroupApiSalesImportAction(MedicineConfig $config,MedicineAndroidProcess $android)

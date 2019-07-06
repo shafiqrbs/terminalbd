@@ -131,7 +131,7 @@ class ExpenditureRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.createdBy','cu');
-        $qb->join('e.toUser','tu');
+        $qb->leftJoin('e.toUser','tu');
         $qb->join('tu.profile','profile');
         $qb->leftJoin('e.expenseCategory','c');
         $qb->leftJoin('e.transactionMethod','t');
@@ -187,6 +187,8 @@ class ExpenditureRepository extends EntityRepository
         $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
         $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
         $entity->setAccountBank($doctorInvoice->getAccountBank());
+        $entity->setCreated($doctorInvoice->getCreated());
+        $entity->setUpdated($doctorInvoice->getCreated());
         $commission = "From Commission. Invoice No.-{$doctorInvoice->getHmsDoctorInvoice()} Name: {$doctorInvoice->getAssignDoctor()->getName()} and  type of commission: {$doctorInvoice->getHmsCommission()->getName()}";
         $entity->setRemark($commission);
         $entity->setProcess('approved');
@@ -266,9 +268,13 @@ class ExpenditureRepository extends EntityRepository
     {
         $em = $this->_em;
         $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.accountRefNo =".$entity->getAccountRefNo()." AND e.processHead = 'Expenditure'");
-        $transaction->execute();
-        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$entity->getGlobalOption()->getId() ." AND e.expenditure =".$entity->getId()." AND e.processHead = 'Expenditure'");
-        $accountCash->execute();
+        if($transaction){
+            $transaction->execute();
+        }
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId() } AND e.expenditure ={$entity->getId()} AND e.processHead = 'Expenditure'");
+        if($accountCash){
+            $accountCash->execute();
+        }
     }
 
     public function insertApiExpenditure(GlobalOption $option , $data){
@@ -306,6 +312,15 @@ class ExpenditureRepository extends EntityRepository
         $em->persist($expense);
         $em->flush();
 
+    }
+
+    public function removeDoctorExpenditure(DoctorInvoice $entity)
+    {
+        $em = $this->_em;
+        $transaction = $em->createQuery("DELETE AccountingBundle:Expenditure e WHERE  e.doctorInvoice ={$entity->getId()}");
+        if($transaction){
+            $transaction->execute();
+        }
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
@@ -613,6 +614,74 @@ class InvoiceController extends Controller
             $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
         }
+        exit;
+    }
+
+    public function invoiceGroupReverseAction(){
+
+        /*
+         * Stock Details
+         * Invoice  Transaction Update
+         * Medicine Invoice
+         * Account Sales
+         * Transaction
+         * Delete Journal & Account Purchase
+         */
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = ['created'=>'2019-07-04'];
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
+        $pagination = $entities->getQuery()->getResult();
+            /* @var $entity Invoice */
+            foreach ($pagination as $entity):
+                $entity->setRevised(true);
+                $entity->setProcess('Revised');
+                $entity->setRevised(true);
+                $em->flush();
+                $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
+            endforeach;
+        exit;
+    }
+
+    public function invoiceGroupApprovedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = ['startDate'=>'2019-07-04','endDate'=>'2019-07-04'];
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists($user, $mode = 'diagnostic', $data);
+        $pagination = $entities->getQuery()->getResult();
+        /* @var $entity Invoice  */
+        foreach ($pagination as $invoice):
+            if ($invoice->getProcess() == "Revised") {
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($invoice);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($invoice);
+                $invoice->setApprovedBy($this->getUser());
+                $invoice->setProcess('Done');
+                $invoice->setCommissionApproved(true);
+                $em->persist($invoice);
+                $em->flush();
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateCommissionPayment($invoice);
+                $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hmsSalesFinal($invoice, $accountInvoice);
+            }
+        endforeach;
+        exit;
+    }
+    public function doctorInvoiceGroupApprovedAction()
+    {
+        $user = $this->getUser();
+        $data = ['startDate'=>'2019-07-04','endDate'=>'2019-07-04'];
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->findWithList($user,$data);
+        $pagination = $entities->getQuery()->getResult();
+        /* @var $entity DoctorInvoice */
+        foreach ($pagination as $entity):
+            $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->accountReverse($entity->getExpenditure());
+            $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->removeDoctorExpenditure($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertCommissionPayment($entity);
+        endforeach;
         exit;
     }
 

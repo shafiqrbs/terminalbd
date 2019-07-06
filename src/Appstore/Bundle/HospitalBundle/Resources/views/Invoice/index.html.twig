@@ -195,6 +195,8 @@
                                                 {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') != "now"|date('d-m-Y')) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
                                                     <a href="{{ path('hms_invoicereturn_create', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
                                                 {% endif %}
+                                                <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
+
                                             </div>
                                         </td>
                                     </tr>

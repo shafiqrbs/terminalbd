@@ -609,9 +609,6 @@ class ApiController extends Controller
 
             $data = $request->request->all();
 
-            var_dump($data);
-            exit;
-
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
@@ -620,8 +617,6 @@ class ApiController extends Controller
            // $data = array('item' => $jsonInput,'itemCount'=> 1,'subItem'=> $jsonInputItem,'subItemCount'=> 4);
 
             $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-
-
 
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);

@@ -718,7 +718,6 @@ class AccountSalesRepository extends EntityRepository
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         }
         return $accountSales;
-
     }
 
     public function insertHospitalFinalAccountInvoice(\Appstore\Bundle\HospitalBundle\Entity\Invoice $entity)

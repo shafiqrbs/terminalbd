@@ -213,6 +213,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setPaymentMobile($invoice->getPaymentMobile());
             $entity->setTransactionId($invoice->getTransactionId());
             $entity->setComment($invoice->getComment());
+            $entity->setCreated($invoice->getCreated());
             $entity->setIsMaster(true);
             if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
                 $vat = $this->getCulculationVat($invoice, $entity->getPayment());
@@ -323,7 +324,7 @@ class InvoiceTransactionRepository extends EntityRepository
         }
         $docter = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hmsInvoice = '.$entity->getId());
         if(!empty( $docter)){
-            $docter->execute();
+         //   $docter->execute();
         }
     }
 

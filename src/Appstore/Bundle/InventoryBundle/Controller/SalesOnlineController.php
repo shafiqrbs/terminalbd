@@ -1229,4 +1229,46 @@ class SalesOnlineController extends Controller
         return $this->redirect($this->generateUrl('inventory_salesonline_edit', array('code' => $entity->getInvoice())));
     }
 
+    public function invoiceGroupReverseAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Done"];
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='general-sales', $data);
+        $pagination = $entities->getResult();
+
+        /* @var $entity Sales */
+
+        foreach ($pagination as $entity):
+           $em->getRepository('InventoryBundle:StockItem')->saleaItemStockReverse($entity);
+            $em->getRepository('InventoryBundle:Item')->getSalesItemReverse($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
+            $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
+            $em = $this->getDoctrine()->getManager();
+            $entity->setRevised(true);
+            $entity->setProcess("Revised");
+            $em->flush();
+        endforeach;
+        exit;
+
+      }
+
+    public function invoiceGroupApprovedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='general-sales', $data);
+        $pagination = $entities->getResult();
+
+        /* @var $entity Sales */
+
+        foreach ($pagination as $entity):
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+        endforeach;
+        exit;
+    }
+
 }

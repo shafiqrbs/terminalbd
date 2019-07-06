@@ -97,3 +97,15 @@ hospital_config:
 hospital_homepage:
     path:     /
     defaults: { _controller: HospitalBundle:Default:index }
+
+hospital_group_approved:
+    path:      /group/invoice/approved
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceGroupApproved" }
+
+hospital_group_revised:
+    path:     /group/invoice/revised
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceGroupReverse" }
+
+hospital_group_commission_approved:
+    path:     /group/doctor/commission
+    defaults: { _controller: "HospitalBundle:Invoice:doctorInvoiceGroupApproved" }

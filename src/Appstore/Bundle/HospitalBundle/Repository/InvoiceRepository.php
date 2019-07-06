@@ -277,6 +277,7 @@ class InvoiceRepository extends EntityRepository
 
     public function invoiceLists(User $user , $mode , $data)
     {
+
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;

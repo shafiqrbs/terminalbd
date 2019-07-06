@@ -195,4 +195,10 @@ inventory_sales_reset:
     path:     /sales-reset
     defaults: { _controller: InventoryBundle:Default:salesReset }
 
+inventory_group_approved:
+    path:      /group/invoice/approved
+    defaults: { _controller: "InventoryBundle:SalesOnline:invoiceGroupApproved" }
 
+inventory_group_revised:
+    path:     /group/invoice/revised
+    defaults: { _controller: "InventoryBundle:SalesOnline:invoiceGroupReverse" }
