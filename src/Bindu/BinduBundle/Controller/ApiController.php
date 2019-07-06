@@ -617,15 +617,14 @@ class ApiController extends Controller
            // $data = array('item' => $jsonInput,'itemCount'=> 1,'subItem'=> $jsonInputItem,'subItemCount'=> 4);
 
             $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-
             if($entity->getMainApp()->getSlug() == 'miss'){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+             //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+              //  $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
             }elseif($entity->getMainApp()->getSlug() == 'inventory'){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+               // $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
             }elseif($entity->getMainApp()->getSlug() == 'business'){
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+               // $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
             }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

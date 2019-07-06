@@ -709,6 +709,7 @@ class MedicineSalesRepository extends EntityRepository
 
            endforeach;
            $this->insertApiSalesItem( $option, $process);
+
          /*
           $countRecords = $this->countNumberSalesSubItem($process->getId());
           $countRecords = $this->countNumberSalesItem($process->getId());
