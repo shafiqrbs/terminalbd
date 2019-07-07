@@ -373,10 +373,7 @@ class Purchase
 
     /**
      * Set receiveDate
-     *
-     * @param string $receiveDate
-     *
-     * @return Purchase
+     * @param \DateTime $receiveDate
      */
     public function setReceiveDate($receiveDate)
     {
@@ -388,7 +385,9 @@ class Purchase
     /**
      * Get receiveDate
      *
-     * @return string
+     * @param \DateTime
+     *
+     * @return Purchase
      */
     public function getReceiveDate()
     {
@@ -397,10 +396,7 @@ class Purchase
 
     /**
      * Set created
-     *
      * @param \DateTime $created
-     *
-     * @return Purchase
      */
     public function setCreated($created)
     {

@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * PurchaseOrder controller.
@@ -69,6 +70,8 @@ class PurchaseSimpleController extends Controller
         $entity = new Purchase();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity->setInventoryConfig($inventory);
+        $date = new \DateTime("now");
+        $entity->setReceiveDate($date);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $entity->getId())));
