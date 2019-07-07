@@ -700,7 +700,6 @@ class MedicineSalesRepository extends EntityRepository
                      $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
                      $sales->setSalesBy($salesBy);
                 }
-
                 $created = new \DateTime($item['created']);
                 $sales->setCreated($created);
                 $sales->setUpdated($created);
