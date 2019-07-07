@@ -595,8 +595,6 @@ class SalesController extends Controller
         }
         if($msg == "valid"){
             $android->setStatus(true);
-            $android->setJsonItem(NULL);
-            $android->setJsonSubItem(NULL);
             $em->persist($android);
             $em->flush();
         }
