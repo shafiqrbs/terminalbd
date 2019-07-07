@@ -266,7 +266,7 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="string",  unique="true" length=50, nullable =true)
+     * @ORM\Column(name="mobile", type="string", length=50, nullable =true)
      */
     private $mobile;
 
