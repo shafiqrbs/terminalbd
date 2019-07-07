@@ -24,4 +24,4 @@ if (APPLICATION_ENV == 'dev') {
     require 'app.php';
 }
 
-?>
+

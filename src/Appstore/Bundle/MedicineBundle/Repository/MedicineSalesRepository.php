@@ -680,16 +680,18 @@ class MedicineSalesRepository extends EntityRepository
                 if(isset($item['paymentMobile']) and $item['paymentMobile']) {
                     $sales->setPaymentMobile($item['paymentMobile']);
                 }
-                if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
+                $sales->setCustomer($customer);
+               /* if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
                     $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
                     $sales->setCustomer($customer);
                 }elseif(($item['customerId']) and $item['customerId'] > 0 ){
                     $customer = $em->getRepository('DomainUserBundle:Customer')->find($item['customerId']);
                     $sales->setCustomer($customer);
                 }elseif(empty($item['customerId']) and empty($item['customerName']) ) {
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'name' => 'Default'));
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
                     $sales->setCustomer($customer);
-                }
+                }*/
                 if(($item['createdBy']) and $item['createdBy'] > 0){
                     $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
                     $sales->setCreatedBy($createdBy);
@@ -698,7 +700,6 @@ class MedicineSalesRepository extends EntityRepository
                      $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
                      $sales->setSalesBy($salesBy);
                 }
-
                 $created = new \DateTime($item['created']);
                 $sales->setCreated($created);
                 $sales->setUpdated($created);

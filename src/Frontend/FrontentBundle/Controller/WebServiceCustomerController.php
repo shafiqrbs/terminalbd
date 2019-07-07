@@ -303,7 +303,6 @@ class WebServiceCustomerController extends Controller
         if(empty($user)){
             $valid = 'false';
         }else{
-
             $a = mt_rand(1000,9999);
             $user->setPlainPassword($a);
             $this->get('fos_user.user_manager')->updateUser($user);
