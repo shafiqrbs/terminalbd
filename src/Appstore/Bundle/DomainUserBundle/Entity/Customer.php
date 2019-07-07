@@ -16,12 +16,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Customer
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\CustomerRepository")
+ * @UniqueEntity(fields="mobile",message="Mobile no already existing,Please try again.")
  */
 class Customer
 {
@@ -265,7 +266,7 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="string", length=255, nullable =true)
+     * @ORM\Column(name="mobile", type="string",  unique="true" length=50, nullable =true)
      */
     private $mobile;
 
