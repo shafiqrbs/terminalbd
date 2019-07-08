@@ -316,8 +316,8 @@ class CustomerRepository extends EntityRepository
         $qb = $this->createQueryBuilder('customer');
         $qb->where("customer.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        /*        $qb->andWhere("customer.name != :name");
-                $qb->setParameter('name', 'Default');*/
+        $qb->andWhere("customer.name != :name");
+        $qb->setParameter('name', 'Default');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('customer.created','DESC');
         $qb->getQuery();

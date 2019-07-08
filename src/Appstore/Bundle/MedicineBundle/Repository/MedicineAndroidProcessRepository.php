@@ -24,9 +24,9 @@ class MedicineAndroidProcessRepository extends EntityRepository
     public function getAndroidSalesList( $config){
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.androidDevice','a');
+        $qb->leftJoin('e.androidDevice','a');
         $qb->select('e.id as id','e.created as created','e.itemCount as itemCount','e.status as status');
-        $qb->addSelect('a.device as device');
+         $qb->addSelect('a.device as device');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
         $qb->orderBy('e.created',"DESC");
         $result = $qb->getQuery();

@@ -752,7 +752,6 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $em->persist($cash);
         $em->flush();
-
     }
 
     public function insertPettyCash(PettyCash $entity)

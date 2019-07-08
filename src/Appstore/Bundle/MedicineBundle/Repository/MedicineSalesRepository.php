@@ -227,6 +227,27 @@ class MedicineSalesRepository extends EntityRepository
 
     }
 
+    public function findAndroidDeviceSales($x)
+    {
+        $ids = [];
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.androidProcess','a');
+        $qb->select('a.id as androidId');
+        $qb->addSelect('sum(s.subTotal) as subTotal ,sum(s.netTotal) as total ,sum(s.received) as salesReceive ,sum(s.due) as due ,sum(s.discount) as discount , count(s.id) as voucher');
+        $qb->where("s.androidProcess IN (:salesId)")->setParameter('salesId', $ids);
+        $qb->groupBy('androidId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= [];
+        foreach ($result as $row ){
+            $array[$row['androidId']]= $row;
+        }
+        return $array;
+    }
+
     public function getUpdateDiscount(MedicineSales $invoice,$subTotal)
     {
         if($invoice->getDiscountType() == 'flat'){
@@ -288,8 +309,6 @@ class MedicineSalesRepository extends EntityRepository
 
     public function androidDeviceSalesOverview(GlobalOption $option ,$data)
     {
-
-
         $config =  $option->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->select('sum(s.netTotal) as total ,sum(s.received) as salesReceive , count(s.id) as voucher');
@@ -489,6 +508,8 @@ class MedicineSalesRepository extends EntityRepository
         return $array;
     }
 
+
+
 	public  function reportSalesItem(User $user, $data=''){
 
 		$userBranch = $user->getProfile()->getBranches();
@@ -643,8 +664,8 @@ class MedicineSalesRepository extends EntityRepository
                     $sales->setReceived($item['total']);
                 }else{
                     $sales->setReceived($item['receive']);
+                    $sales->setDue($item['total'] - $item['receive']);
                 }
-                $sales->setDue($item['due']);
                 $sales->setVat($item['vat']);
                 if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
@@ -680,18 +701,16 @@ class MedicineSalesRepository extends EntityRepository
                 if(isset($item['paymentMobile']) and $item['paymentMobile']) {
                     $sales->setPaymentMobile($item['paymentMobile']);
                 }
-                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
-                $sales->setCustomer($customer);
-               /* if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
                     $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
                     $sales->setCustomer($customer);
                 }elseif(($item['customerId']) and $item['customerId'] > 0 ){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->find($item['customerId']);
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'id'=>$item['customerId']));
                     $sales->setCustomer($customer);
-                }elseif(empty($item['customerId']) and empty($item['customerName']) ) {
+                }else{
                     $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
                     $sales->setCustomer($customer);
-                }*/
+                }
                 if(($item['createdBy']) and $item['createdBy'] > 0){
                     $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
                     $sales->setCreatedBy($createdBy);

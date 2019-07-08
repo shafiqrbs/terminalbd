@@ -39,6 +39,11 @@
                             <th>Created</th>
                             <th>Time</th>
                             <th>Total Invoice</th>
+                            <th>Sub-Total</th>
+                            <th>Discount</th>
+                            <th>Total</th>
+                            <th>Receive</th>
+                            <th>Due</th>
                             <th>Device</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -49,8 +54,13 @@
                                 <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                 <td class="numeric" >{{ entity.created|date('h:i A') }}</td>
                                 <td class="numeric" >{{ entity.itemCount|number_format }}</td>
+                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].subTotal|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].discount|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].total|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].salesReceive|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ (sales[entity.id].total-sales[entity.id].salesReceive)|number_format }}{% endif %}</td>
                                 <td class="numeric" >{{ entity.device }}</td>
-                                <td class="numeric" >{% if entity.status == 1 %}<span class="btn mini blue">Success</span>{% else %}<span class="btn mini red">Waiting</span>{% endif %}</td>
+                                <td class="numeric" >{% if entity.status == 1 %}<span class="btn mini purple">Success</span>{% else %}<span class="btn mini red">Waiting</span>{% endif %}</td>
                                  <td class="numeric" >
                                      {% if entity.status == 1 %}
                                          <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('medicine_sales_android_view',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>

@@ -438,7 +438,6 @@ class PurchaseController extends Controller
                 $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
                 $entity->setTransactionMethod($transactionMethod);
             }
-
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
@@ -452,7 +451,6 @@ class PurchaseController extends Controller
             'form' => $editForm->createView(),
         ));
     }
-
 
     /**
      * Finds and displays a Vendor entity.
@@ -477,7 +475,6 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 	    $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-
 	    if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
@@ -561,12 +558,11 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        $em->createQuery('DELETE MedicineBundle:MedicinePurchaseItem e WHERE e.medicinePurchase = '.$entity->getId());
+        $em->createQuery("DELETE MedicineBundle:MedicinePurchaseItem e WHERE e.medicinePurchase ={$entity->getId()}");
         $em->remove($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('medicine_purchase'));
     }
-
 
     /**
      * Status a Page entity.
@@ -653,8 +649,6 @@ class PurchaseController extends Controller
             'text'=>$vendor
         ));
     }
-
-
 
     public function reverseShowAction($id)
     {

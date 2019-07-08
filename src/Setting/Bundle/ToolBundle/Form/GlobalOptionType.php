@@ -55,7 +55,7 @@ class GlobalOptionType extends AbstractType
                     'choices_as_values' => true,
                     'choice_label' => 'nestedLabel',
                 ))
-                ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Please enter public relational mobile no' , 'data-original-title' =>'Please enter public relational mobile no' , 'data-trigger' => 'hover'),
+                ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','readonly'=> 'readonly','placeholder'=>'Please enter public relational mobile no' , 'data-original-title' =>'Please enter public relational mobile no' , 'data-trigger' => 'hover'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please input required')),
                         new Length(array('max'=>200))
