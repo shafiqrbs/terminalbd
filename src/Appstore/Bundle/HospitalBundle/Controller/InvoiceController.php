@@ -61,6 +61,29 @@ class InvoiceController extends Controller
 
     }
 
+     /**
+     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
+     */
+
+    public function appointmentInvoiceAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
+        $pagination = $this->paginate($entities);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
+
+        return $this->render('HospitalBundle:Invoice:appointmentIndex.html.twig', array(
+            'entities'                          => $pagination,
+            'assignDoctors'                     => $assignDoctors,
+            'searchForm'                        => $data,
+        ));
+
+    }
+
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -584,6 +607,35 @@ class InvoiceController extends Controller
         ));
     }
 
+    public function appointmentPrintAction(Invoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+
+        if($entity->getHospitalConfig()->getId() != $hospital->getId()){
+            return $this->redirect($this->generateUrl('hms_invoice'));
+        }
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+
+        if($hospital->isCustomPrint() == 1){
+            $template = "Print/{$hospital->getGlobalOption()->getId()}:{$entity->getPrintFor()}";
+        }else{
+            $template = "Print:{$entity->getPrintFor()}";
+        }
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
+            'entity'                => $entity,
+            'config'                => $entity->getHospitalConfig(),
+            'global'                => $entity->getHospitalConfig()->getGlobalOption(),
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+
+        ));
+    }
+
     public function invoiceTransactionApproveAction(InvoiceTransaction $transaction)
     {
         $em = $this->getDoctrine()->getManager();
@@ -600,6 +652,15 @@ class InvoiceController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
+        exit;
+    }
+
+    public function invoiceAppointmentApproveAction(Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity->setProcess('Done');
+        $em->persist($entity);
+        $em->flush();
         exit;
     }
 

@@ -2,6 +2,10 @@ hms_invoice:
     path:     /
     defaults: { _controller: "HospitalBundle:Invoice:index" }
 
+hms_invoice_appointment:
+    path:     /appointment
+    defaults: { _controller: "HospitalBundle:Invoice:appointmentInvoice" }
+
 hms_invoice_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:Invoice:show" }
@@ -86,6 +90,10 @@ hms_invoice_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "HospitalBundle:Invoice:invoicePrint" }
 
+hms_invoice_appointment_print:
+    path:     /{id}/appointment-print
+    defaults: { _controller: "HospitalBundle:Invoice:appointmentPrint" }
+
 hms_invoice_process_update:
     path:     /hms-invoice/upadte-process
     defaults: { _controller: "HospitalBundle:Invoice:invoiceProcessUpdate" }
@@ -120,6 +128,12 @@ hms_invoice_add_patient:
 hms_invoice_item_approve:
     path:      /{id}/invoice-payment-approve
     defaults: { _controller: "HospitalBundle:Invoice:invoiceTransactionApprove" }
+    options:
+            expose: true
+
+hms_invoice_appointment_approve:
+    path:      /{id}/invoice-appointment-close
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceAppointmentApprove" }
     options:
             expose: true
 

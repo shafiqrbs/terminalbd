@@ -14,23 +14,27 @@
                 <div class="span5">
                     <div class="btn-group" style="width: 100%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in  option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                        <a class="btn red big addPatient" style="width: 28%" href="javascript:"> <i class="fa fa-ambulance"></i> Add Diagnostic  </a>
+                        <a class="btn red big addPatient" style="width:26%" href="javascript:"> <i class="fa fa-ambulance"></i> Add Diagnostic  </a>
                         {% endif %}
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('hms_invoice') }}" style="width:30%" class="btn green big"><i class="fa fa-money"></i> Diagnostic</a>
+                            <a href="{{ path('hms_invoice') }}" style="width:27%" class="btn green big"><i class="fa fa-money"></i> Diagnostic</a>
                         {% endif %}
                         {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
-                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 28%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
+                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 27%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
                         {% endif %}
                     </div>
                 </div>
-                <div class="span4">
-                    <div class="btn-group" style="width: 83%!important;">
-                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('hms_invoice_admission_new') }}" style="width: 50%" class="btn red big"><i class="fa fa-ambulance"></i> Add Admission</a>
+                <div class="span2">
+                    <div class="btn-group" style="width:100%!important;">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'visit' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a  href="javascript:" style="width: 88%" class="btn yellow big addAppointment"><i class="fa fa-ambulance"></i> Visit</a>
                         {% endif %}
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="btn-group" style="width: 100%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('hms_invoice_admission') }}" style="width: 50%" class="btn green big"><i class="fa fa-money"></i> Admission</a>
+                            <a  href="javascript:" style="width: 88%" class="btn red big addAppointment"><i class="fa fa-ambulance"></i> Admission</a>
                         {% endif %}
                     </div>
                 </div>
@@ -289,6 +293,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/diagnostic.js'
+    '@HospitalBundle/Resources/public/js/appointment.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

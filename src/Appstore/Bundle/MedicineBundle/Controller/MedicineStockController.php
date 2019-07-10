@@ -574,22 +574,39 @@ class MedicineStockController extends Controller
 	    return $this->redirect($this->generateUrl('medicine_stock'));
     }
 
-	public function stockQuantityUpdateAction()
+    public function stockUpdatepaginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            500  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
+
+    public function stockQuantityUpdateAction()
 	{
 		set_time_limit(0);
 		ignore_user_abort(true);
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-		$items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
+        $data = [];
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
 		/* @var MedicineStock $item */
 
-		foreach ($items as $item){
+		foreach ($pagination as $item){
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales-return');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'purchase-return');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'damage');
 		}
+		exit;
 		return $this->redirect($this->generateUrl('medicine_stock'));
 	}
 

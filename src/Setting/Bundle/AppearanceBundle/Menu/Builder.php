@@ -948,6 +948,9 @@ class Builder extends ContainerAware
             if (!empty($config) and in_array('admission', $config)) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
             }
+            if (!empty($config) and in_array('visit', $config)) {
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Appointment', array('route' => 'hms_invoice_appointment'));
+            }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
             if (!empty($config) and in_array('commission', $config)) {

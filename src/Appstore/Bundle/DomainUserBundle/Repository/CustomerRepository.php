@@ -249,7 +249,10 @@ class CustomerRepository extends EntityRepository
         $ageGroup = isset($customer['ageGroup']) ? $customer['ageGroup']:'';
         $age = $customer['age'];
         $ageType = $customer['ageType'];
-        $address = $customer['address'];
+        $address = isset($customer['address']) ? $customer['address']:'';
+        $height = isset($customer['height']) ? $customer['height']:'';
+        $width = isset($customer['width']) ? $customer['width']:'';
+        $bloodPressure = isset($customer['bloodPressure']) ? $customer['bloodPressure']:'';
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
             return $entity;
@@ -261,7 +264,19 @@ class CustomerRepository extends EntityRepository
             $entity->setAge($age);
             $entity->setAgeGroup($ageGroup);
             $entity->setAgeType($ageType);
-            $entity->setAddress($address);
+            if($address){
+                $entity->setAddress($address);
+            }
+            if($height){
+                $entity->setHeight($height);
+            }
+            if($width){
+                $entity->setWeight($width);
+            }
+            if($bloodPressure){
+                $entity->setBloodPressure($bloodPressure);
+            }
+
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush($entity);

@@ -31,6 +31,7 @@ class ConfigType extends AbstractType
                     'choices' => array(
                         'diagnostic'    => 'Diagnostic',
                         'admission'   => 'Admission',
+                        'visit'  => 'Visit',
                         'commission'  => 'Commission ',
                     ),
                     'required'    => true,

@@ -1,12 +1,29 @@
 hms_invoice_temporary_new:
-    path:     /new
+    path:     /diagonestic-new
     defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:new" }
     options:
             expose: true
 
 hms_invoice_temporary_create:
-    path:     /create
+    path:     /diagonestic-create
     defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:create" }
+    methods:  POST
+
+hms_doctor_visit_new:
+    path:     /appointment-new
+    defaults: { _controller: "HospitalBundle:DoctorAppointment:new" }
+    options:
+            expose: true
+
+hms_doctor_visit_amount:
+    path:     /{id}/appointment-doctor-visit
+    defaults: { _controller: "HospitalBundle:DoctorAppointment:doctorVisitAmount" }
+    options:
+            expose: true
+
+hms_doctor_visit_create:
+    path:     /appointment-create
+    defaults: { _controller: "HospitalBundle:DoctorAppointment:create" }
     methods:  POST
 
 
