@@ -165,7 +165,7 @@ class ExpenditureController extends Controller
             $expenditure->setApprovedBy($this->getUser());
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday 23:59:59");
+                $datetime = new \DateTime("yesterday 23:30:30");
                 $expenditure->setCreated($datetime);
                 $expenditure->setUpdated($datetime);
             }

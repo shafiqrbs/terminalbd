@@ -115,6 +115,12 @@ class PurchaseController extends Controller
         $entity->setMedicineConfig($config);
         $entity->setCreatedBy($this->getUser());
         $receiveDate = new \DateTime('now');
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:30:30");
+            $entity->setCreated($datetime);
+            $entity->setUpdated($datetime);
+        }
         $entity->setReceiveDate($receiveDate);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
@@ -485,7 +491,7 @@ class PurchaseController extends Controller
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday");
+                $datetime = new \DateTime("yesterday 23:30:30");
                 $purchase->setCreated($datetime);
                 $purchase->setUpdated($datetime);
             }

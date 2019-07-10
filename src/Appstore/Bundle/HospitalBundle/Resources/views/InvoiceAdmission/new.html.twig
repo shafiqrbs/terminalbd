@@ -110,11 +110,14 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
+                        <label class="control-label red" for="firstName"><span>Search Patient</span></label>
                         <div class="controls">
-                            <div class="input-icon left">
-                                <i class="icon-search"></i>
+                            <div class="input-append span12">
                                 {{ form_widget(form.customer.customerId) }}
                                 {{ form_errors(form.customer.customerId) }}
+                                <div class="btn-group">
+                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -775,7 +778,7 @@
 {% endblock %}
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/invoice.css'
+    '@HospitalBundle/Resources/public/css/admission.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

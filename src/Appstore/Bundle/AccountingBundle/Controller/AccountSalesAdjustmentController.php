@@ -158,7 +158,7 @@ class AccountSalesAdjustmentController extends Controller
             $entity->setApprovedBy($this->getUser());
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday 23:59:59");
+                $datetime = new \DateTime("yesterday 23:30:30");
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);
             }

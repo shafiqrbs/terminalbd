@@ -140,7 +140,7 @@ class InvoiceAdmissionController extends Controller
             'action' => $this->generateUrl('hms_invoice_admission_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'id' => 'invoiceForm',
                 'novalidate' => 'novalidate',
             )

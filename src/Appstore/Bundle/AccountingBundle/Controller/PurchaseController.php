@@ -236,7 +236,7 @@ class PurchaseController extends Controller
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday 23:59:59");
+                $datetime = new \DateTime("yesterday 30:30:30");
                 $purchase->setCreated($datetime);
                 $purchase->setUpdated($datetime);
             }

@@ -205,7 +205,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $accountConfig = $entity->getGlobalOption()->getAccountingConfig()->isAccountClose();
         if($accountConfig == 1){
-            $datetime = new \DateTime("yesterday 23:59:59");
+            $datetime = new \DateTime("yesterday 23:30:30");
             $accountSales->setCreated($datetime);
             $accountSales->setUpdated($datetime);
         }

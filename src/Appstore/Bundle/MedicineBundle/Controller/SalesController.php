@@ -348,7 +348,7 @@ class SalesController extends Controller
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday");
+                $datetime = new \DateTime("yesterday 23:30:30");
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);
             }
