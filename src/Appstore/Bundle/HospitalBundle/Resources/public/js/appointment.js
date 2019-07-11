@@ -1,14 +1,3 @@
-$( ".date-picker" ).datepicker({
-    dateFormat: "dd-mm-yy"
-});
-
-$( ".dateCalendar" ).datepicker({
-    dateFormat: "dd-mm-yy",
-    changeMonth: true,
-    changeYear: true,
-    yearRange: "-100:+0",
-});
-
 $(document).on('click', '.addAppointment', function() {
 
     $('.dialogModal_header').html('Patient Information');
@@ -24,7 +13,7 @@ $(document).on('click', '.addAppointment', function() {
                 async: true,
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
-                    formSubmit();
+                    appointmentFormSubmit();
                     $('.select2').select2();
                 }
             });
@@ -35,22 +24,6 @@ $(document).on('click', '.addAppointment', function() {
 
 });
 
-$(document).on("click", ".saveButton", function() {
-
-    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
-    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data:formData,
-        success: function(response){
-
-        }
-    });
-});
-
 $(document).on('change', '#appointment_invoice_assignDoctor', function() {
     var id = $(this).val();
     $.get(Routing.generate('hms_doctor_visit_amount',{id:id}), function( data ){
@@ -59,12 +32,13 @@ $(document).on('change', '#appointment_invoice_assignDoctor', function() {
 });
 
 
-function formSubmit() {
+function appointmentFormSubmit() {
 
     $('#appointment_invoice_customer_name').focus().keypress(function () {
         $('#appointment_invoice_customer_name').css('textTransform', 'capitalize');
     });
-    $('form#invoicePatientForm').on('keypress', 'input,select,textarea', function (e) {
+
+    $('form#appointmentPatientForm').on('keypress', 'input,select,textarea', function (e) {
 
         if (e.which == 13) {
 
@@ -107,23 +81,8 @@ function formSubmit() {
         }
     });
 
-    $(document).on('keyup', '.payment', function() {
 
-        var payment  = parseInt($('#appointment_invoice_payment').val()  != '' ? $('#appointment_invoice_payment').val() : 0 );
-        var due  = parseInt($('#initialDue').val()  != '' ? $('#initialDue').val() : 0 );
-        var dueAmount = (due - payment);
-        if(dueAmount > 0){
-            $('#balance').html('Due Tk.');
-            $('#dueable').html(dueAmount);
-        }else{
-            var balance =  payment - due ;
-            $('#balance').html('Return Tk.');
-            $('#dueable').html(balance);
-        }
-
-    });
-
-    var form = $("#invoicePatientForm").validate({
+    var form = $("#appointmentPatientForm").validate({
 
         rules: {
 
@@ -151,16 +110,16 @@ function formSubmit() {
         },
         submitHandler: function (form) {
             $.ajax({
-                url         : $('form#invoicePatientForm').attr( 'action' ),
-                type        : $('form#invoicePatientForm').attr( 'method' ),
-                data        : new FormData($('form#invoicePatientForm')[0]),
+                url         : $('form#appointmentPatientForm').attr( 'action' ),
+                type        : $('form#appointmentPatientForm').attr( 'method' ),
+                data        : new FormData($('form#appointmentPatientForm')[0]),
                 processData : false,
                 contentType : false,
                 beforeSend: function() {
                     $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
                 },
                 success: function(response){
-                    $('form#invoicePatientForm')[0].reset();
+                    $('form#appointmentPatientForm')[0].reset();
                     $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr("disabled", false);
                     $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                     $('#appointment_invoice_discount').val(0);

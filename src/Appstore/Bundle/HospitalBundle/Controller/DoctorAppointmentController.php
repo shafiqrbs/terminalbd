@@ -50,7 +50,7 @@ class DoctorAppointmentController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal',
-                'id' => 'invoicePatientForm',
+                'id' => 'appointmentPatientForm',
                 'novalidate' => 'novalidate',
             )
         ));
