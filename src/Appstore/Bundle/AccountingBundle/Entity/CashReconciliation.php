@@ -216,19 +216,27 @@ class CashReconciliation
     }
 
     /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return CashReconciliation
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
      * @return \DateTime
      */
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
-     */
-    public function setCreated(\DateTime $created)
-    {
-        $this->created = $created;
     }
 
     /**

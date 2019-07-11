@@ -118,11 +118,20 @@ class CashReconciliationController extends Controller
         $exist = $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->checkExist($global);
         if(!$exist){
             $entity->setGlobalOption($global);
-            $entity->setCreated($date);
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:30:30");
+                $entity->setCreated($datetime);
+                $date = $datetime->format("Y-m-d");
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setCreated($datetime);
+            }
             $em->persist($entity);
             $em->flush();
-            $bankCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
-            $mobileCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+            $data = ['startDate' => $date,'endDate'=>$date];
+            $bankCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+            $mobileCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$entity);
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->notesReconciliationInsert($entity,$bankCash,$mobileCash);
             return $this->redirect($this->generateUrl('account_cashreconciliation_edit',array('id' => $entity->getId())));
@@ -140,9 +149,19 @@ class CashReconciliationController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
-        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
-        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:30:30");
+            $date = $datetime->format("Y-m-d");
+        }else{
+            $datetime = new \DateTime("now");
+            $date = $datetime->format("Y-m-d");
+        }
+        $data = ['startDate' => $date,'endDate'=>$date];
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->systemCashUpdate($this->getUser(),$entity);
+        $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$entity);
         return $this->render('AccountingBundle:CashReconciliation:new.html.twig', [
             'entity' => $entity,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,

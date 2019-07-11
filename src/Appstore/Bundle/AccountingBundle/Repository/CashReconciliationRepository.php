@@ -123,20 +123,24 @@ class CashReconciliationRepository extends EntityRepository
             $entity->setCashReconciliation($reconciliation);
             $entity->setTransactionMethod('Bank');
             $entity->setMetaKey($bank['bankName']);
-            $entity->setAmount($closing);
+            if($closing > 0){
+                $entity->setAmount($closing);
+            }
             $this->_em->persist($entity);
             $this->_em->flush();
         }
 
-        foreach ($mobileCash['result'] as $mobile ){
+        foreach ($mobileCash['result'] as $mobile ) {
 
             $bankId = $mobile['accountId'];
-            $closing = ($mobileCash['openingBalance'][$bankId] + $mobileCash['transactionMobileCash'][$bankId]['debit'] - $mobileCash['transactionMobileCash'][$bankId]['credit'] );
+            $closing = ($mobileCash['openingBalance'][$bankId] + $mobileCash['transactionMobileCash'][$bankId]['debit'] - $mobileCash['transactionMobileCash'][$bankId]['credit']);
             $entity = new CashReconciliationMeta();
             $entity->setCashReconciliation($reconciliation);
             $entity->setTransactionMethod('Mobile');
             $entity->setMetaKey($mobile['mobileBankName']);
-            $entity->setAmount($closing);
+            if ($closing > 0){
+                $entity->setAmount($closing);
+            }
             $this->_em->persist($entity);
             $this->_em->flush();
         }

@@ -121,7 +121,7 @@
                                         <th class="numeric">{{ transactionBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
                                         <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].debit|number_format }}</td>
                                         <td class="numeric" >{{ transactionBankCashOverviews.transactionBankCash[row.accountId].credit|number_format }}</td>
-                                        <th class="numeric" >{{ closing|number_format }}</th>
+                                        <th class="numeric" >{% if closing > 0 %}{{ closing|number_format }}{% endif %}</th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -152,7 +152,7 @@
                                         <th class="numeric">{{ transactionMobileBankCashOverviews.openingBalance[row.accountId]|default|number_format }}</th>
                                         <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].debit|number_format }}</td>
                                         <td class="numeric" >{{ transactionMobileBankCashOverviews.transactionMobileCash[row.accountId].credit|number_format }}</td>
-                                        <th class="numeric" >{{ closing|number_format }}</th>
+                                        <th class="numeric" >{% if closing > 0 %}{{ closing|number_format }}{% endif %}</th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
