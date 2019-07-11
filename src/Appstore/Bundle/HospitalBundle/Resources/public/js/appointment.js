@@ -27,7 +27,7 @@ $(document).on('click', '.addAppointment', function() {
 $(document).on('change', '#appointment_invoice_assignDoctor', function() {
     var id = $(this).val();
     $.get(Routing.generate('hms_doctor_visit_amount',{id:id}), function( data ){
-        $('#appointment_invoice_assignDoctor').val(data);
+        $('#appointment_invoice_payment').val(data);
     });
 });
 
@@ -70,7 +70,7 @@ function appointmentFormSubmit() {
                     break;
 
                 case 'appointment_invoice_assignDoctor':
-                    $('#appointment_invoice_customer_payment').focus();
+                    $('#appointment_invoice_payment').focus();
                     break;
 
 
@@ -106,7 +106,7 @@ function appointmentFormSubmit() {
             "appointment_invoice[customer][name]": {placement: 'top', html: true},
             "appointment_invoice[customer][mobile]": {placement: 'top', html: true},
             "appointment_invoice[customer][age]": {placement: 'top', html: true},
-            "appointment_invoice[payment]": {placement: 'top', html: true},
+           "appointment_invoice[payment]": {placement: 'top', html: true},
         },
         submitHandler: function (form) {
             $.ajax({
@@ -126,7 +126,7 @@ function appointmentFormSubmit() {
                     $('#invoiceParticulars').hide();
                     $("#appointment_invoice_assignDoctor").select2().select2("val","");
                     $("#referredId").select2().select2("val","");
-                    window.open('/hms/invoice/'+response+'/appointment-print', '_blank');
+                   window.open('/hms/invoice/'+response+'/appointment-print', '_blank');
                 }
             });
 

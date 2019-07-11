@@ -49,7 +49,7 @@ class DoctorAppointmentType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
                 'empty_value' => '---Select Assign Doctor---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
