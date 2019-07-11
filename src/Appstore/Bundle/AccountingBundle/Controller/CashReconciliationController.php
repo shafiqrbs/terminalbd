@@ -126,6 +126,7 @@ class CashReconciliationController extends Controller
             }else{
                 $datetime = new \DateTime("now");
                 $entity->setCreated($datetime);
+                $date = $datetime->format("Y-m-d");
             }
             $em->persist($entity);
             $em->flush();

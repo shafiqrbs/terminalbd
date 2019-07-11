@@ -59,6 +59,7 @@
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Total System</th>
                                     <th class="numeric" >Total</th>
+                                    <th class="numeric" >Less/More</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -74,6 +75,7 @@
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{{ (entity.systemCash + entity.systemBank + entity.systemMobile)|number_format }}</td>
                                         <td class="numeric" >{{ (entity.cash + entity.bank + entity.mobile)|number_format }}</td>
+                                        <td class="numeric" >{{ ((entity.systemCash + entity.systemBank + entity.systemMobile)-(entity.cash + entity.bank + entity.mobile))|number_format }}</td>
                                         <td class="" >
                                             <div class="actions">
                                                 <div class="btn-group">
