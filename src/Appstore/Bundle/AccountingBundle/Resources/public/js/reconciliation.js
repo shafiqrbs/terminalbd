@@ -69,6 +69,7 @@ $(document).on("change", ".updateAmount", function() {
     var metaKey = $('#metaKey-'+id).val();
     var url = $(this).attr("data-url");
     $.get(url,{amount:amount,note:0,metaKey:metaKey}).done(function( data ) {
+        setTimeout(pageReload, 1000);
         location.reload();
     });
 });
