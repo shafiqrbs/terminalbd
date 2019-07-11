@@ -156,7 +156,8 @@ class CashReconciliationRepository extends EntityRepository
         $qb->setParameter('reconciliation', $cash->getId());
         $qb->andWhere("e.transactionMethod = :method");
         $qb->setParameter('method', $method);
-        $result = $qb->getQuery()->getOneOrNullResult()['amount'];
+        echo $result = $qb->getQuery()->getOneOrNullResult()['amount'];
+        echo $method;
         if($method == 'Cash'){
             $cash->setCash($result);
         }elseif($method == 'Bank'){
@@ -164,7 +165,9 @@ class CashReconciliationRepository extends EntityRepository
         }elseif($method == 'Mobile'){
             $cash->setMobile($result);
         }
+        $this->_em->persist($cash);
         $this->_em->flush($cash);
+
     }
 
 }

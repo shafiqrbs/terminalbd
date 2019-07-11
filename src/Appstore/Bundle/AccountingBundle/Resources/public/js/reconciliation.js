@@ -30,7 +30,7 @@ $(document).on("click", "#cash-reconciliation", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url,{particular:particular,amount:amount,method:method}).done(function( data ) {
-                location.reload();
+               /* location.reload();*/
             });
         }
     });
