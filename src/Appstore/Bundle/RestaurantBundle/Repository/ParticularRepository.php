@@ -74,6 +74,45 @@ class ParticularRepository extends EntityRepository
 
     }
 
+    public function getApiStock(GlobalOption $option)
+    {
+        $config = $option->getRestaurantConfig();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.category','c');
+        $qb->leftJoin('e.unit','u');
+        $qb->select('e.id as stockId','e.name as name','e.quantity as quantity','e.price as salesPrice','e.purchasePrice as purchasePrice');
+        $qb->addSelect('u.id as unitId','u.name as unitName');
+        $qb->addSelect('c.id as categoryId','c.name as categoryName');
+        $qb->where('e.restaurantConfig = :config');
+        $qb->setParameter('config',$config);
+        $qb->orderBy('c.name , e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['item_id']              = (int) $row['stockId'];
+
+            $data[$key]['category_id']          = $row['categoryId'];
+            $data[$key]['categoryName']         = $row['categoryName'];
+            if ($row['unitId']){
+                $data[$key]['unit_id']          = $row['unitId'];
+                $data[$key]['unit']             = $row['unitName'];
+            }else{
+                $data[$key]['unit_id']          = 0;
+                $data[$key]['unit']             = '';
+            }
+            $data[$key]['name']                 = $row['name'];
+            $data[$key]['printName']            = $row['name'];
+            $data[$key]['quantity']             = $row['quantity'];
+            $data[$key]['price']                = $row['salesPrice'];
+            $data[$key]['purchasePrice']        = $row['purchasePrice'];
+            $data[$key]['printHidden']          = 0;
+
+        }
+        return $data;
+    }
+
     public function findWithSearch($config,$service, $data = array()){
 
         $name = isset($data['name'])? $data['name'] :'';

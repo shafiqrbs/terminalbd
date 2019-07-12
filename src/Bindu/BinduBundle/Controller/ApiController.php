@@ -258,7 +258,7 @@ class ApiController extends Controller
             }elseif($entity->getMainApp()->getSlug() == 'inventory'){
                 $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getApiCategory($entity);
             }elseif($entity->getMainApp()->getSlug() == 'business'){
-                $data = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getApiCategory($entity);
+                $data = $this->getDoctrine()->getRepository('BusinessBundle:Category')->getApiCategory($entity);
             }
 
             $response = new Response();

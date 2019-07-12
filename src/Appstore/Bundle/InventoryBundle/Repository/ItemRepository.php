@@ -14,6 +14,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
 
 use Doctrine\ORM\EntityRepository;
@@ -99,6 +100,75 @@ class ItemRepository extends EntityRepository
         $result = $count['totalNumber'];
         return $result;
 
+    }
+
+    public function getApiStock(GlobalOption $option)
+    {
+        $config = $option->getInventoryConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.masterItem','m');
+        $qb->join('m.category','c');
+        $qb->leftJoin('m.productUnit','u');
+        $qb->select('e.id as stockId','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice');
+        $qb->addSelect('u.id as unitId','u.name as unitName');
+        $qb->addSelect('c.id as categoryId','c.name as categoryName');
+        $qb->where('e.inventoryConfig = :config');
+        $qb->setParameter('config',$config);
+        $qb->orderBy('c.name , e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['item_id']              = (int) $row['stockId'];
+
+            $data[$key]['category_id']          = $row['categoryId'];
+            $data[$key]['categoryName']         = $row['categoryName'];
+            if ($row['unitId']){
+                $data[$key]['unit_id']          = $row['unitId'];
+                $data[$key]['unit']             = $row['unitName'];
+            }else{
+                $data[$key]['unit_id']          = 0;
+                $data[$key]['unit']             = '';
+            }
+            $data[$key]['name']                 = $row['name'];
+            $data[$key]['printName']            = $row['name'];
+            $data[$key]['quantity']             = $row['quantity'];
+            $data[$key]['price']                = $row['salesPrice'];
+            $data[$key]['purchasePrice']        = $row['purchasePrice'];
+            $data[$key]['printHidden']          = 0;
+
+        }
+        return $data;
+    }
+
+    public function getApiCategory(GlobalOption $option)
+    {
+
+        $config = $option->getRestaurantConfig()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Product','e');
+        $qb->join('e.category','c');
+        $qb->select('c.id as categoryId','c.name as name','c.slug as slug');
+        $qb->where('e.inventoryConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.status = :status')->setParameter('status',1) ;
+        $qb->groupBy('c.id');
+        $qb->orderBy('c.name','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        $data = array();
+
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']        = (int) $option->getId();
+            $data[$key]['category_id']      = (int) $row['categoryId'];
+            $data[$key]['name']             = $row['name'];
+            $data[$key]['slug']             = $row['slug'];
+
+        }
+
+        return $data;
     }
 
     public function checkInstantDuplicateSKU(InventoryConfig $inventory,$data)

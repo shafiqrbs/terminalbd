@@ -391,17 +391,20 @@ class UserRepository extends EntityRepository
         $qb->andWhere('e.isDelete != 1');
         $qb->orderBy("p.name","ASC");
         $result = $qb->getQuery()->getArrayResult();
+        $data =array();
+        if($result){
+            foreach($result as $key => $row){
 
-        foreach($result as $key => $row){
+                $data[$key]['user_id'] = (int) $row['id'];
+                $data[$key]['username'] = $row['username'];
+                $data[$key]['fullName'] = $row['fullName'];
+                $data[$key]['email'] = $row['email'];
+                $data[$key]['password'] = $row['appPassword'];
+                $data[$key]['roles'] = unserialize(serialize($row['appRoles']));
 
-            $data[$key]['user_id'] = (int) $row['id'];
-            $data[$key]['username'] = $row['username'];
-            $data[$key]['fullName'] = $row['fullName'];
-            $data[$key]['email'] = $row['email'];
-            $data[$key]['password'] = $row['appPassword'];
-            $data[$key]['roles'] = unserialize(serialize($row['appRoles']));
-
+            }
         }
+
         return $data;
 
     }

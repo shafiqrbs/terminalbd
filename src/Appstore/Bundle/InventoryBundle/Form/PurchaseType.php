@@ -86,10 +86,9 @@ class PurchaseType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))
             )))
-            /*->add('chalan','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
 
             ->add('receiveDate', 'date', array(
-                'attr' => array('class'=>'m-wrap span12 datePicker purchaseInput'),
+                'attr' => array('class'=>'m-wrap span12 purchaseInput'),
                 'view_timezone' => 'Asia/Dhaka'))
 
             ->add('totalAmount','text', array('attr'=>array('class'=>' m-wrap span12 numeric','placeholder'=>'Net total amount BDT'),

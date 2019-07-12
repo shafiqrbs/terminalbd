@@ -1,13 +1,21 @@
 {% extends '::print.html.twig' %}
 {% block body %}
     <style>
+
         #print-container{
             width: 100%;
             margin: 0 auto;
             display: block;
-            font-size: 14px;
+            font-size: 12px;
             color: #0A0302;
         }
+        .print-header .title-center{
+            line-height: 35px;
+        }
+        .print-header{
+            height: 35px!important;
+        }
+
         .print-patient .barcode-left{
             float: left;
             margin-top: 5px;
@@ -20,7 +28,7 @@
         }
 
     </style>
-    <div id="print-container">
+    <div id="print-container" style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
         {% if config.isPrintHeader == 1 %}
             <table class="table" >
                 <tr>
@@ -46,7 +54,7 @@
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">
-                    <span class="title-center text-center">Payment Received</span>
+                    <span class="title-center text-center" sty>Payment Received</span>
                 </th>
             </tr>
             <tr class="print-header">
@@ -65,15 +73,12 @@
             </tr>
             <tr class="print-patient">
                 <td>
-                    <span class="barcode-left"><strong>Mobile: </strong>: {{ entity.customer.mobile }}</span>
+                    <span class="barcode-left"><strong class="strong3">Mobile</strong>: {{ entity.customer.mobile }}</span>
                 </td>
                 <td>
-                     <span class="barcode-right">Height/Weight: {{ entity.customer.height }}/ {{ entity.customer.weight }}</span>
-                     <span class="barcode-right">B/P: {{ entity.customer.bloodPressure }}</span>
+                     <span class="barcode-right">H/W: <span style="width:60px; display: inline-block">{{ entity.customer.height }}  {{ entity.customer.weight }}</span></span>
+                     <span class="barcode-right"><span class="strong3">B/P: {{ entity.customer.bloodPressure }}</span></span>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="bottom-border">&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
@@ -84,25 +89,20 @@
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.comment }}</td>
             </tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
             <tr>
-                <td class="span6">
-                    <ul class="unstyled">
+                <td class="span6" style="margin-top: 10px">
+                    <ul class="unstyled" style="margin-top: 15px!important;">
                         <li>Amount Tk. <label class="label-box">{{ entity.payment|number_format }}</label></li>
                     </ul>
                 </td>
-
-                <td class="span3 pull-right">
+                <td class="span3 pull-right" style="margin-top: 30px">
                     <ul class="unstyled">
-                        <li style="border-top:2px solid #000; text-align: center">Signature</li>
+                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">Signature</li>
                     </ul>
                 </td>
             </tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
         </table>
-        <div style="height: 100px"></div>
+        <div style="height:50px"></div>
         {% if config.isPrintHeader == 1 %}
             <table class="table" >
                 <tr>
@@ -128,7 +128,7 @@
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">
-                    <span class="title-center text-center">Payment Received</span>
+                    <span class="title-center text-center" sty>Payment Received</span>
                 </th>
             </tr>
             <tr class="print-header">
@@ -147,15 +147,12 @@
             </tr>
             <tr class="print-patient">
                 <td>
-                    <span class="barcode-left"><strong>Mobile: </strong>: {{ entity.customer.mobile }}</span>
+                    <span class="barcode-left"><strong class="strong3">Mobile</strong>: {{ entity.customer.mobile }}</span>
                 </td>
                 <td>
-                    <span class="barcode-right">Height/Weight: {{ entity.customer.height }}/ {{ entity.customer.weight }}</span>
-                    <span class="barcode-right">B/P: {{ entity.customer.bloodPressure }}</span>
+                    <span class="barcode-right">H/W: <span style="width:60px; display: inline-block">{{ entity.customer.height }}  {{ entity.customer.weight }}</span></span>
+                    <span class="barcode-right"><span class="strong3">B/P: {{ entity.customer.bloodPressure }}</span></span>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="bottom-border">&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
@@ -166,23 +163,18 @@
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.comment }}</td>
             </tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
             <tr>
-                <td class="span6">
-                    <ul class="unstyled">
+                <td class="span6" style="margin-top: 10px">
+                    <ul class="unstyled" style="margin-top: 15px!important;">
                         <li>Amount Tk. <label class="label-box">{{ entity.payment|number_format }}</label></li>
                     </ul>
                 </td>
-
-                <td class="span3 pull-right">
+                <td class="span3 pull-right" style="margin-top: 30px">
                     <ul class="unstyled">
-                        <li style="border-top:2px solid #000; text-align: center">Signature</li>
+                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">Signature</li>
                     </ul>
                 </td>
             </tr>
-            <tr><td colspan="2">&nbsp;</td></tr>
         </table>
     </div>
     <style>
@@ -216,13 +208,13 @@
         }
 
     </style>
-    <script>
+{#    <script>
         window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
         }, 2000);
-    </script>
+    </script>#}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
