@@ -208,13 +208,13 @@
         }
 
     </style>
-{#    <script>
+    <script>
         window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
         }, 2000);
-    </script>#}
+    </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
