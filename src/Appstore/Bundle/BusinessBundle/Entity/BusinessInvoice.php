@@ -39,6 +39,12 @@ class BusinessInvoice
     private $businessConfig;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", inversedBy="sales")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $androidProcess;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", mappedBy="businessInvoice")
      **/
     private $businessReverse;
@@ -910,6 +916,22 @@ class BusinessInvoice
     public function setEndDate(string $endDate)
     {
         $this->endDate = $endDate;
+    }
+
+    /**
+     * @return BusinessAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param BusinessAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 }

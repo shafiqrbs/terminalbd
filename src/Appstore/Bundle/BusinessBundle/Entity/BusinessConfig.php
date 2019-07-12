@@ -35,6 +35,11 @@ class BusinessConfig
      **/
     private $businessInvoices;
 
+	 /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", mappedBy="businessConfig")
+     **/
+    private $androidProcess;
+
 	/**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessReverse", mappedBy="businessConfig")
      **/
@@ -1292,6 +1297,14 @@ class BusinessConfig
     public function setBorderColor($borderColor)
     {
         $this->borderColor = $borderColor;
+    }
+
+    /**
+     * @return BusinessAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
     }
 
 

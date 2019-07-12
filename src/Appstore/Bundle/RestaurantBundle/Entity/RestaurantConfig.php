@@ -34,6 +34,12 @@ class RestaurantConfig
      **/
     private $particulars;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", mappedBy="restaurantConfig")
+     **/
+    private $androidProcesses;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Coupon", mappedBy="restaurantConfig")
      **/
@@ -1050,6 +1056,14 @@ class RestaurantConfig
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return RestaurantAndroidProcess
+     */
+    public function getAndroidProcesses()
+    {
+        return $this->androidProcesses;
     }
 
 

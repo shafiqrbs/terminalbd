@@ -3,14 +3,14 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Icon
@@ -60,6 +60,24 @@ class AndroidDeviceSetup
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", mappedBy="androidDevice" )
      **/
     private  $medicineAndroidProcess;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", mappedBy="androidDevice" )
+     **/
+    private  $inventoryAndroidProcess;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", mappedBy="androidDevice" )
+     **/
+    private  $businessAndroidProcess;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", mappedBy="androidDevice" )
+     **/
+    private  $restaurantAndroidProcess;
 
 
     /**
@@ -166,6 +184,30 @@ class AndroidDeviceSetup
     public function getMedicineAndroidProcess()
     {
         return $this->medicineAndroidProcess;
+    }
+
+    /**
+     * @return BusinessAndroidProcess
+     */
+    public function getBusinessAndroidProcess()
+    {
+        return $this->businessAndroidProcess;
+    }
+
+    /**
+     * @return InventoryAndroidProcess
+     */
+    public function getInventoryAndroidProcess()
+    {
+        return $this->inventoryAndroidProcess;
+    }
+
+    /**
+     * @return RestaurantAndroidProcess
+     */
+    public function getRestaurantAndroidProcess()
+    {
+        return $this->restaurantAndroidProcess;
     }
 
 

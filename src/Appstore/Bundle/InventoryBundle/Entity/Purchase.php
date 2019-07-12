@@ -34,6 +34,11 @@ class Purchase
      **/
     private  $inventoryConfig;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", inversedBy="purchase" , cascade={"detach","merge"} )
+     **/
+    private  $androidProcess;
+
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="purchase" )
      **/
@@ -1001,6 +1006,22 @@ class Purchase
     public function getReverse()
     {
         return $this->reverse;
+    }
+
+    /**
+     * @return InventoryAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param InventoryAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 }

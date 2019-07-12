@@ -39,6 +39,12 @@ class BusinessPurchase
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", inversedBy="purchase" , cascade={"detach","merge"} )
+     **/
+    private  $androidProcess;
+
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="businessPurchase" , cascade={"remove"})
      **/
     private  $accountPurchase;
@@ -779,6 +785,22 @@ class BusinessPurchase
     public function setCommissionInvoice($commissionInvoice)
     {
         $this->commissionInvoice = $commissionInvoice;
+    }
+
+    /**
+     * @return BusinessAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param BusinessAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 

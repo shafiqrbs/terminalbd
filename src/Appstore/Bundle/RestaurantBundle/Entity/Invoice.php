@@ -44,6 +44,12 @@ class Invoice
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", inversedBy="sales")
+     **/
+    private $androidProcess;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", mappedBy="invoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -978,6 +984,22 @@ class Invoice
     public function setDiscountCoupon(string $discountCoupon)
     {
         $this->discountCoupon = $discountCoupon;
+    }
+
+    /**
+     * @return RestaurantAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param RestaurantAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 

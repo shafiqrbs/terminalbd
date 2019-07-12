@@ -5,6 +5,7 @@ namespace Core\UserBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
@@ -276,6 +277,11 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", mappedBy="createdBy" , cascade={"persist", "remove"})
 	 */
 	protected $excelImporters;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $inventoryAndroidProcess;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="createdBy" , cascade={"persist", "remove"})
@@ -793,6 +799,11 @@ class User extends BaseUser
 	protected $restaurantTemps;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $restaurantAndroidProcess;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
 	 */
 	protected $invoiceCreatedBy;
@@ -905,6 +916,11 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
 	 */
 	protected $businessInvoiceCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $businessAndroidProcess;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
@@ -1900,6 +1916,14 @@ class User extends BaseUser
     public function setAppPassword($appPassword)
     {
         $this->appPassword = $appPassword;
+    }
+
+    /**
+     * @return BusinessAndroidProcess
+     */
+    public function getBusinessAndroidProcess()
+    {
+        return $this->businessAndroidProcess;
     }
 
 

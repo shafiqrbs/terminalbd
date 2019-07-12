@@ -31,6 +31,11 @@ class Sales
      **/
     private $inventoryConfig;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", inversedBy="sales" )
+     **/
+    private $androidProcess;
+
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="sales" )
      **/
@@ -1032,6 +1037,22 @@ class Sales
 	public function setProfit( float $profit ) {
 		$this->profit = $profit;
 	}
+
+    /**
+     * @return InventoryAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param InventoryAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
+    }
 
 }
 

@@ -37,6 +37,11 @@ class Purchase
      **/
     private  $restaurantConfig;
 
+ /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", inversedBy="purchase" , cascade={"detach","merge"} )
+     **/
+    private  $androidProcess;
+
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="restaurantPurchase" , cascade={"remove"})
@@ -666,6 +671,22 @@ class Purchase
     public function setRestaurantConfig($restaurantConfig)
     {
         $this->restaurantConfig = $restaurantConfig;
+    }
+
+    /**
+     * @return RestaurantAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param RestaurantAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 
 
