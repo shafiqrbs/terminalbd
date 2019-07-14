@@ -42,6 +42,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
             obj = JSON.parse(response);
             $('#purchaseItem_quantity').focus();
             $('#pack').val(obj['pack']);
+            $('#minQuantity').val(obj['minQuantity']);
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);

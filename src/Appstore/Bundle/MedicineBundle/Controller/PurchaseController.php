@@ -215,7 +215,7 @@ class PurchaseController extends Controller
     {
         $unit = !empty($particular->getUnit()) ? $particular->getUnit()->getName():'Unit';
         $pack = $particular->getPack() > 0  ?  $particular->getPack() : 1;
-        return new Response(json_encode(array('purchasePrice'=> '', 'pack'=> $pack, 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
+        return new Response(json_encode(array('purchasePrice'=> '', 'pack'=> $pack,'minQuantity'=> $particular->getMinQuantity(), 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
     }
 
     public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)
@@ -259,6 +259,8 @@ class PurchaseController extends Controller
                 $entity->setUnit($unit);
             }
             $pack = !empty($data['medicineStock']['pack']) ? $data['medicineStock']['pack'] : 1;
+            $minQuantity = !empty($data['medicineStock']['minQuantity']) ? $data['medicineStock']['minQuantity'] : 0;
+            $entity->setMinQuantity($minQuantity);
             $quantity = ($pack * $entity->getPurchaseQuantity());
             $entity->setPack($pack);
             $entity->getPurchasePrice();
@@ -329,6 +331,7 @@ class PurchaseController extends Controller
         $stockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stockMedicine);
         $pack = !empty($data['pack']) ? $data['pack'] :1;
+        $minStock = !empty($data['minQuantity']) ? $data['minQuantity'] :1;
         $quantity = ($pack * $entity->getQuantity());
         $entity->setQuantity($quantity);
         if(!empty($stockMedicine) and empty($entity->getPurchasePrice())){
@@ -353,7 +356,7 @@ class PurchaseController extends Controller
         $entity->setPack($pack);
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack,$minStock);
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);

@@ -85,9 +85,15 @@
                                         <div class="span4" >
                                             <div class="row-fluid">
                                                 <div class="span12" >
+                                                    <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span12 m-wrap select2Customer eventProcess inputs" value="{% if entity.customer.name != 'Default' %}{{ entity.customer.mobile }}{% endif %}"  autocomplete="off" placeholder="Search existing customer name/mobile">
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <div class="row-fluid">
+                                                <div class="span12" >
                                                     <div class="input-icon left">
                                                         <i class="icon-user"></i>
-                                                        <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input eventProcess" autocomplete="off" placeholder="Customer name/company" value="{{ entity.customer.name }}">
+                                                        <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input eventProcess" autocomplete="off" placeholder="Customer name/company" value="{% if entity.customer.name != "Default" %}{{ entity.customer.name }} {% endif %}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -95,10 +101,13 @@
                                                 <div class="span12" >
                                                     <div class="input-icon left">
                                                         <i class="icon-phone"></i>
-                                                        <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 customer-input eventProcess" autocomplete="off" placeholder="Customer mobile no" value="{{ entity.customer.mobile }}">
+                                                        <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 customer-input eventProcess" autocomplete="off" placeholder="Customer mobile no" value="{% if entity.customer.name != "Default" %}{{ entity.customer.mobile }}{% endif %}">
                                                     </div>
                                                 </div>
                                             </div>
+
+                                        </div>
+                                        <div class="span4">
                                             <div class="row-fluid">
                                                 <div class="span12" >
                                                     <div class="input-icon left">
@@ -107,11 +116,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="span4">
                                             <div class="row-fluid">
                                                 <div class="span12" >
-                                                    <textarea class="m-wrap span12 eventProcess" rows="5" name="customerAddress" id="customerAddress" placeholder="Enter address">{{ entity.customer.address|raw }}</textarea>
+                                                    <textarea class="m-wrap span12 eventProcess" rows="4" name="customerAddress" id="customerAddress" placeholder="Enter address">{{ entity.customer.address|raw }}</textarea>
                                                 </div>
                                             </div>
 

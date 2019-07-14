@@ -284,7 +284,6 @@ class InvoiceController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
     }
 
     public function particularSearchAction(BusinessParticular $particular)
@@ -334,6 +333,10 @@ class InvoiceController extends Controller
         if(!empty($data['customerName']) and !empty($data['customerMobile'])){
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
+            $invoice->setCustomer($customer);
+        }elseif (!empty($data['mobile'])){
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
             $invoice->setCustomer($customer);
         }
         $em->flush();

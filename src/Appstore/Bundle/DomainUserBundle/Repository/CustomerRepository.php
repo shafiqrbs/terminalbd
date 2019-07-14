@@ -74,12 +74,11 @@ class CustomerRepository extends EntityRepository
         $em = $this->_em;
         $name = $data['customerName'];
         $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
+        $email = isset($data['customerEmail']) ? $data['customerEmail']:'';
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
         if($entity){
             $entity->setAddress($address);
-            if(isset($data['customerEmail']) and !empty($data['customerEmail'])){
-                $entity->setEmail($data['customerEmail']);
-            }
+            if($email){ $entity->setEmail($email); }
             if(!empty($data['location'])){
                 $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
                 $entity->setLocation($location);
@@ -91,9 +90,7 @@ class CustomerRepository extends EntityRepository
             $entity->setMobile($mobile);
             $entity->setName($name);
             $entity->setAddress($address);
-            if(isset($data['customerEmail']) and !empty($data['customerEmail'])){
-                $entity->setEmail($data['customerEmail']);
-            }
+            if($email){$entity->setEmail($email); }
             $entity->setGlobalOption($globalOption);
             if(!empty($data['location'])){
                 $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
@@ -333,6 +330,7 @@ class CustomerRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("customer.name != :name");
         $qb->setParameter('name', 'Default');
+        $qb->andWhere("customer.mobile IS NOT NULL");
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('customer.created','DESC');
         $qb->getQuery();
@@ -352,8 +350,8 @@ class CustomerRepository extends EntityRepository
             $customerType =    isset($data['type'])? $data['type'] :'';
 
             if (!empty($mobile)) {
-                $qb->andWhere("customer.mobile = :mobile");
-                $qb->setParameter('mobile', $mobile);
+                $qb->andWhere("customer.mobile LIKE :mobile");
+                $qb->setParameter('mobile','%'. $mobile.'%');
             }
             if (!empty($location)) {
                 $qb->leftJoin('customer.location','l');

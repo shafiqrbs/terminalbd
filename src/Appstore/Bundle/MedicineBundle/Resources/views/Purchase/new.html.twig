@@ -137,19 +137,22 @@
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
                             <div class="row-fluid particular-info" >
-                                <div class="span5" style="padding-left:15px">
+                                <div class="span4" style="padding-left:15px">
                                     {{ form_widget(purchaseItem.stockName) }}
                                     {{ form_errors(purchaseItem.stockName) }}
                                 </div>
-                                <div class="span7">
+                                <div class="span8">
                                     <div class="input-append">
                                         <div class="input-group">
+                                            <button class="btn blue">Min Qnt.</button>
+                                            <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input" placeholder="Mini qnt" autocomplete="off" value="" aria-required="true" aria-invalid="false">
+                                            <button class="btn blue">Pack</button>
                                             <input type="text" id="pack" name="pack" class="m-wrap purchase-input" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
                                             <button class="btn yellow">X</button>
                                             {{ form_widget(purchaseItem.quantity) }}
                                             <button class="btn red">=</button>
                                             <button class="btn green" id="totalQnt">Total</button>
-                                            <button class="btn red" id="unit">Unit</button>
+                                            <button class="btn blue" id="unit">Unit</button>
                                             {{ form_widget(purchaseItem.purchasePrice) }}
                                             {{ form_widget(purchaseItem.salesPrice) }}
                                             {{ form_widget(purchaseItem.expirationEndDate) }}
@@ -432,7 +435,7 @@
     </div>
     <style>
         .purchase-input{
-            width: 9%;
+            width:6%;
             background: #FFFFff!important;
         }
         input#medicinepurchase_memo {
@@ -454,7 +457,7 @@
         .numeric input {
             margin-bottom: 0;
             min-height: 15px!important;
-            width: 70px;
+            width: 50px;
             height: 15px!important;
             border: 1px solid #999;
             font-size: 13px!important;
