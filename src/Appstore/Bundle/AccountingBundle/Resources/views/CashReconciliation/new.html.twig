@@ -88,25 +88,25 @@
                                     <td>Bank</td>
                                     <td>{{ entity.systemBank|number_format }}</td>
                                     <td>{{ entity.bank|number_format }}</td>
-                                    <td>{{ (entity.systemBank - entity.bank)|number_format }}</td>
+                                    <td>{{ (entity.bank-entity.systemBank)|number_format }}</td>
                                 </tr>
                                 <tr>
                                     <td>Mobile</td>
                                     <td>{{ entity.systemMobile|number_format }}</td>
                                     <td>{{ entity.mobile|number_format }}</td>
-                                    <td>{{ (entity.systemMobile - entity.mobile)|number_format }}</td>
+                                    <td>{{ (entity.mobile-entity.systemMobile)|number_format }}</td>
                                 </tr>
                                 <tr>
                                     <td>Cash</td>
                                     <td>{{ entity.systemCash|number_format }}</td>
                                     <td>{{ entity.cash|number_format }}</td>
-                                    <td>{{ (entity.systemCash - entity.cash)|number_format }}</td>
+                                    <td>{{ (entity.cash-entity.systemCash)|number_format }}</td>
                                 </tr>
                                 <tr>
                                     <td>Grand Total</td>
                                     <td>{{ (entity.systemBank + entity.systemMobile + entity.systemCash)|number_format }}</td>
                                     <td>{{ (entity.bank + entity.mobile + entity.cash)|number_format }}</td>
-                                    <td>{{ ((entity.systemBank + entity.systemMobile + entity.systemCash) - (entity.bank + entity.mobile + entity.cash))|number_format }}</td>
+                                    <td>{{ ( (entity.bank + entity.mobile + entity.cash)-(entity.systemBank + entity.systemMobile + entity.systemCash))|number_format }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -136,11 +136,8 @@
                                 {% for note in entity.cashReconciliationMetas %}
                                 {% if note.TransactionMethod == 'Bank' %}
                                 <tr>
-                                    {% if note.isCustom == 1 %}
                                         <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
-                                    {% else %}
-                                        <th>{{ note.metaKey }}</th>
-                                    {% endif %}
+
                                     <th class="numeric" >
                                         <div class="span12">
                                             <div class="actions">
@@ -189,17 +186,13 @@
                                 {% for note in entity.cashReconciliationMetas %}
                                     {% if note.TransactionMethod == 'Mobile' %}
                                         <tr>
-                                            {% if note.isCustom == 1 %}
-                                                <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
-                                            {% else %}
-                                                <th>{{ note.metaKey }}</th>
-                                            {% endif %}
+                                            <th> <input type="text" name="metaKey" id="metaKey-{{ note.id }}" data-id="{{ note.id }}"  class="m-wrap span12" value="{{ note.metaKey }}"></th>
                                             <th class="numeric" >
                                                 <div class="span12">
                                                     <div class="actions">
                                                         <div class="btn-group">
                                                             <input type="hidden" id="metaId" name="metaId[]" class="" value="{{ note.id }}">
-                                                            <input type="number" class="m-wrap span10 custom-field mobileAmount updateAmount" data-id="{{ note.id }}" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" value="{{ note.amount }}">
+                                                            <input  type="number" class="m-wrap span10 custom-field mobileAmount updateAmount" data-id="{{ note.id }}" data-url="{{ path('account_cashreconciliation_meta_update',{'id':note.id}) }}" value="{{ note.amount }}">
                                                             {% if note.isCustom ==  1 %}
                                                                 <a class="btn red delete mini" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
                                                             {% endif %}
@@ -261,7 +254,8 @@
                                                     <div class="span12">
                                                         <div class="actions">
                                                             <div class="btn-group">
-                                                                <input type="number" class="m-wrap span10 custom-field amount" data-id="{{ note.id }}" id="update-amount-{{ note.id }}"  value="{{ note.amount }}">
+                                                                <input disabled="disabled" type="text" class="m-wrap span10 custom-field"  id="update-show-amount-{{ note.id }}"  value="{{ note.amount }}">
+                                                                <input readonly="readonly" type="hidden" class="m-wrap span10 custom-field amount" data-id="{{ note.id }}" id="update-amount-{{ note.id }}"  value="{{ note.amount }}">
                                                                 {% if note.isCustom ==  1 %}
                                                                     <a class="btn red delete mini" href="javascript:"  data-url="{{ path('account_cashreconciliation_meta_delete',{'id':note.id}) }}"><i class="icon-trash"></i></a>
                                                                 {% endif %}

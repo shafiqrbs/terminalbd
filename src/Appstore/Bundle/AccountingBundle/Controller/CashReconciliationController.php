@@ -46,64 +46,7 @@ class CashReconciliationController extends Controller
         ));
     }
     /**
-     * Creates a new CashReconciliation entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new CashReconciliation();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-	    if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $global = $this->getUser()->getGlobalOption();
-            $entity->setGlobalOption($global);
-            if(!empty($this->getUser()->getProfile()->getBranches())){
-                $entity->setBranches($this->getUser()->getProfile()->getBranches());
-            }
-            if($global->getMainApp()->getSlug() == 'miss'){
-                $entity->setCompanyName($entity->getMedicineVendor()->getCompanyName());
-                $entity->setMedicineVendor($entity->getMedicineVendor());
-            }elseif($global->getMainApp()->getSlug() == 'inventory'){
-                $entity->setCompanyName($entity->getVendor()->getCompanyName());
-                $entity->setVendor($entity->getVendor());
-            }else{
-                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
-                $entity->setAccountVendor($entity->getAccountVendor());
-            }
-            $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            return $this->redirect($this->generateUrl('account_cashreconciliation'));
-        }
-        return $this->render('AccountingBundle:CashReconciliation:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
 
-    /**
-     * Creates a form to create a CashReconciliation entity.
-     *
-     * @param CashReconciliation $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(CashReconciliation $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new CashReconciliationType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_cashreconciliation_create'),
-            'method' => 'POST',
-            'attr' => array(
-                'class' => 'horizontal-form purchase',
-                'novalidate' => 'novalidate',
-            )
-        ));
-      return $form;
-    }
 
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
@@ -130,7 +73,7 @@ class CashReconciliationController extends Controller
             }
             $em->persist($entity);
             $em->flush();
-            $data = ['startDate' => $date,'endDate'=>$date];
+            $data = array('startDate' => $date,'endDate'=>$date);
             $bankCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
             $mobileCash = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
             $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->initialUpdate($this->getUser(),$entity);
@@ -146,7 +89,7 @@ class CashReconciliationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(['globalOption' => $option,'id' => $id]);
+        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(array('globalOption' => $option,'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
@@ -158,34 +101,34 @@ class CashReconciliationController extends Controller
             $datetime = new \DateTime("now");
             $date = $datetime->format("Y-m-d");
         }
-        $data = ['startDate' => $date,'endDate'=>$date];
+        $data = array('startDate' => $date,'endDate'=>$date);
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->systemCashUpdate($this->getUser(),$entity);
-        return $this->render('AccountingBundle:CashReconciliation:new.html.twig', [
+        return $this->render('AccountingBundle:CashReconciliation:new.html.twig', array(
             'entity' => $entity,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
             'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
 
-        ]);
+        ));
     }
 
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(['globalOption' => $option,'id' => $id]);
+        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(array('globalOption' => $option,'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
         }
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
-        return $this->render('AccountingBundle:CashReconciliation:show.html.twig', [
+        return $this->render('AccountingBundle:CashReconciliation:show.html.twig', array(
             'entity' => $entity,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
             'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
 
-        ]);
+        ));
     }
 
     /**

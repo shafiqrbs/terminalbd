@@ -142,7 +142,7 @@ class MedicineStock
      *
      * @ORM\Column(name="minQuantity", type="integer", nullable=true)
      */
-    private $minQuantity;
+    private $minQuantity = 0;
 
     /**
      * @var integer

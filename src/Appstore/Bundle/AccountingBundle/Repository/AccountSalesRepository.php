@@ -488,7 +488,7 @@ class AccountSalesRepository extends EntityRepository
 		}
 		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
         $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
 		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
 		return $data;

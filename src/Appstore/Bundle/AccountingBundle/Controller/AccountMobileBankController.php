@@ -159,7 +159,7 @@ class AccountMobileBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountMobileBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('accountmobilebank'),
+            'action' => $this->generateUrl('accountmobilebank_update',array('id'=>$entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -187,12 +187,15 @@ class AccountMobileBankController extends Controller
             $name = $entity->getMobile().','.$entity->getServiceName();
             $entity->setName($name);
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
             return $this->redirect($this->generateUrl('accountmobilebank_edit', array('id' => $id)));
         }
 
         return $this->render('AccountingBundle:MobileBankAccount:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 

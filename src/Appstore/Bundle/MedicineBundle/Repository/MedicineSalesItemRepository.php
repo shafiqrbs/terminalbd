@@ -21,6 +21,32 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class MedicineSalesItemRepository extends EntityRepository
 {
 
+
+    public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.medicineSales','s');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('COUNT(si.id) AS totalItem');
+        $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS totalPurchase');
+        $qb->addSelect('SUM(si.quantity * si.salesPrice) AS totalSales');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        if ($userBranch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $userBranch);
+        }
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
+
     public function salesStockItemUpdate(MedicineStock $stockItem)
     {
         $qb = $this->createQueryBuilder('e');

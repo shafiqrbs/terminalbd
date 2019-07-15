@@ -65,7 +65,7 @@
         <td class="pull-center" colspan="9"><h2>{{ globalOption.name }}</h2></td>
     </tr>
     <tr>
-        <th class="pull-center" colspan="9"><h3><strong>MONTH CASH STATEMENT SHEET: {{ month|capitalize }} , {{ year }}</strong></h3></th>
+        <th class="pull-center" colspan="9"><h3><strong>DAY CASH STATEMENT SHEET: {{ month|capitalize }} , {{ year }}</strong></h3></th>
     </tr>
     <tr class="head-green">
         <th>Date</th>
@@ -91,6 +91,14 @@
     {% set opening = app.session.get('opening') %}
     {% set balance = 0 %}
     {% set closing = 0 %}
+
+    {% set totalSales = 0 %}
+    {% set totalPurchase = 0 %}
+    {% set totalPurchaseCommission = 0 %}
+    {% set totalExpenditure = 0 %}
+    {% set totalJournalDebit = 0 %}
+    {% set totalJournalCredit = 0 %}
+
     {% for i in 1..max %}
         {% set blackO               = date(month~i)|date('d-m-Y') %}
         {% set openingBalance       = openingBalanceTrans[blackO] is defined and openingBalanceTrans[blackO] is not empty ? openingBalanceTrans[blackO] : 0  %}
@@ -101,6 +109,15 @@
         {% set journalDebit         = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].debit : 0  %}
         {% set journalCredit        = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].credit : 0  %}
         {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure  + journalCredit))|default(0)|number_format  %}
+
+        {% set totalSales = totalSales + sales %}
+        {% set totalPurchase = totalPurchase + purchase %}
+        {% set totalExpenditure = totalExpenditure + expenditure %}
+        {% set totalPurchaseCommission = totalPurchaseCommission + commission %}
+        {% set totalJournalDebit = totalJournalDebit + journalDebit %}
+        {% set totalJournalCredit = totalJournalCredit + journalCredit %}
+
+
         <tr>
             <td>{{ blackO }}</td>
             <td>{{ openingBalance }}</td>
@@ -114,4 +131,15 @@
         </tr>
     {% endfor %}
     </tbody>
+    <tfoot>
+    <tr><th colspan="2">Summary</th>
+        <th>{{ totalSales|number_format }}</th>
+        <th>{{ totalPurchase|number_format }}</th>
+        <th>{{ totalPurchaseCommission|number_format }}</th>
+        <th>{{ totalExpenditure|number_format }}</th>
+        <th>{{ totalJournalDebit|number_format }}</th>
+        <th>{{ totalJournalCredit|number_format }}</th>
+        <th></th>
+    </tr>
+    </tfoot>
 </table>
