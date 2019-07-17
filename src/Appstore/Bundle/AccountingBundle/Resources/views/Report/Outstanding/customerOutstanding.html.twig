@@ -88,7 +88,7 @@
                                         <td class="numeric" >{{ entity.customerMobile }}</td>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
                                         <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
-                                            <a class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
+                                            <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
                                         </th>
                                     </tr>
                                 {% endfor %}
