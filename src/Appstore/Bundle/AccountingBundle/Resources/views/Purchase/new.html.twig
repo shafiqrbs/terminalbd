@@ -197,8 +197,21 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                {{ form_widget(form.remark) }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="clearfix"></div>
+
             </div>
+            <div class="clearfix">&nbsp;</div>
+
+
+            <div class="clearfix"></div>
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box grey">
                 <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">

@@ -30,8 +30,8 @@ class AccountJournalRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHeadDebit','accountHeadDebit');
         $qb->join('e.accountHeadCredit','accountHeadCredit');
-        $qb->join('e.toUser','toUser');
-        $qb->join('toUser.profile','profile');
+        $qb->leftJoin('e.toUser','toUser');
+        $qb->leftJoin('toUser.profile','profile');
         $qb->leftJoin('e.transactionMethod','t');
         $qb->leftJoin('e.accountMobileBank','amb');
         $qb->leftJoin('e.accountBank','ab');
@@ -111,12 +111,18 @@ class AccountJournalRepository extends EntityRepository
         	$accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
             $toUser = isset($data['toUser']) ? $data['toUser'] :'';
             $accountHead = isset($data['accountHead']) ? $data['accountHead'] :'';
+            $transactionMethod = isset($data['transactionMethod']) ? $data['transactionMethod'] :'';
             $startDate = isset($data['startDate']) ? $data['startDate'] : '';
             $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
 
             if (!empty($accountRefNo)) {
                 $qb->andWhere("e.accountRefNo = :accountRefNo");
                 $qb->setParameter('accountRefNo', $accountRefNo);
+            }
+
+            if (!empty($transactionMethod)) {
+                $qb->andWhere("e.transactionMethod = :transactionMethod");
+                $qb->setParameter('transactionMethod', $transactionMethod);
             }
 
             if (!empty($toUser)) {

@@ -450,6 +450,43 @@ class ReportController extends Controller
 	 * Lists all AccountSales entities.
 	 *
 	 */
+
+
+	public function customerOutstandingPrintAction()
+	{
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        $em = $this->getDoctrine()->getManager();
+		$data = $_REQUEST;
+		$user = $this->getUser();
+		$customer ='';
+		$overview = '';
+		if(isset($data['mobile']) and !empty($data['mobile'])){
+			$customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
+			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+		}
+
+		$amount = ($overview['totalAmount'] - $overview['receiveAmount']);
+        $amountInWord = $this->get('settong.toolManageRepo')->intToWords($amount);
+
+        return $this->render('AccountingBundle:Report/Outstanding:customerOutstandingPrint.html.twig', array(
+            'globalOption' => $this->getUser()->getGlobalOption(),
+            'config' => $this->getUser()->getGlobalOption()->getAccountingConfig(),
+            'overview' => $overview,
+            'entity' => $customer,
+            'amountInWord' => $amountInWord,
+            'searchForm' => $data,
+        ));
+
+
+	}
+	/**
+	 * Lists all AccountSales entities.
+	 *
+	 */
+
+
 	public function vendorOutstandingAction()
     {
         set_time_limit(0);

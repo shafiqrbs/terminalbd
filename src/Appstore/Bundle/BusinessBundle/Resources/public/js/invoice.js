@@ -39,7 +39,7 @@ $('#startDate, #endDate').datepicker({
 function customRange(input) {
     if (input.id == 'endDate') {
         var minDate = new Date($('#startDate').val());
-        minDate.setDate(minDate.getDate() + 1)
+        minDate.setDate(minDate.getDate())
         return {
             minDate: minDate
         };

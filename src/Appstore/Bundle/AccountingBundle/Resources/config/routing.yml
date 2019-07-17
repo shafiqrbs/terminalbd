@@ -158,5 +158,9 @@ report_customer_ledger:
     path:     /customer/ledger
     defaults: { _controller: "AccountingBundle:Report:customerLedger" }
 
+report_customer_ledger_print:
+    path:     /customer/oustanding-print
+    defaults: { _controller: "AccountingBundle:Report:customerOutstandingPrint" }
+
 
 

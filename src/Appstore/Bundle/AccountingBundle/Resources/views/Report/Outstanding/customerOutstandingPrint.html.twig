@@ -55,24 +55,18 @@
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">
-                    <span class="title-center text-center">Payment Received</span>
-                </th>
-            </tr>
-            <tr class="print-header">
-                <th colspan="2">
-                    <span class="barcode-left">Invoice no. {{ entity.accountRefNo }}</span>
-                    <span class="barcode-right">Date {{ entity.updated|date('d-m-Y') }}</span>
+                    <span class="title-center text-center">Customer Outstanding</span>
                 </th>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border"><strong class="strong3">Customer</strong>: {{ entity.customer.name }}</td>
-                <td class="bottom-border"><strong>Mobile</strong>: {{ entity.customer.mobile }}</td>
+                <td class="bottom-border"><strong class="strong3">Customer</strong>: {{ entity.name }}</td>
+                <td class="bottom-border"><strong>Mobile</strong>: {{ entity.mobile }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.customer.address|raw }}</td>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.address|raw }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ amountInWord }}</td>
+                <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ amountInWord }}.</td>
             </tr>
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.remark }}</td>
@@ -83,11 +77,11 @@
             <tr>
                 <td class="span6">
                     <ul class="unstyled">
-                        <li>Amount Tk. <label class="label-box">{{ entity.amount|number_format }}.</label></li>
+                        <li>Outstanding Tk. <label class="label-box">{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</label></li>
                     </ul>
                 </td>
 
-                <td class="span4 pull-right">
+                <td class="span3 pull-right">
                     <ul class="unstyled">
                         <li style="border-top:2px solid #000; text-align: center">Signature</li>
                     </ul>

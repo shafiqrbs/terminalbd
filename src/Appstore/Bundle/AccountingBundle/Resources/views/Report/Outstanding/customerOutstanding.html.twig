@@ -77,6 +77,7 @@
                                     <th class="numeric" >Customer Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Outstanding</th>
+                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -86,6 +87,9 @@
                                         <td class="numeric" >{{ entity.customerName|capitalize }}</td>
                                         <td class="numeric" >{{ entity.customerMobile }}</td>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
+                                        <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
+                                            <a class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
+                                        </th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

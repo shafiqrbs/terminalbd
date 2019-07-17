@@ -43,9 +43,9 @@ class ExpenditureRepository extends EntityRepository
         }
 
         if (!empty($toUser)) {
+
             $qb->join("e.toUser",'u');
-	        $qb->andWhere("u.username = :username");
-	        $qb->setParameter('username', $toUser);
+            $qb->andWhere($qb->expr()->like("u.username", "'%$toUser%'" ));
         }
 
         if (!empty($accountHead)) {
@@ -132,7 +132,7 @@ class ExpenditureRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.createdBy','cu');
         $qb->leftJoin('e.toUser','tu');
-        $qb->join('tu.profile','profile');
+        $qb->leftJoin('tu.profile','profile');
         $qb->leftJoin('e.expenseCategory','c');
         $qb->leftJoin('e.transactionMethod','t');
         $qb->leftJoin('e.accountMobileBank','amb');

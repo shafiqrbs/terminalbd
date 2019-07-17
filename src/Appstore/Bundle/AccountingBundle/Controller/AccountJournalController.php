@@ -46,11 +46,14 @@ class AccountJournalController extends Controller
         $credit = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountCashOverview($this->getUser(),'Credit',$data);
         $overview = array('debit' => $debit,'credit' => $credit);
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($this->getUser()->getGlobalOption());
+
         return $this->render('AccountingBundle:AccountJournal:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'overview' => $overview,
             'accountHead' => $accountHead,
+            'employees' => $employees,
             'heads' => $heads,
             'transactionMethods' => $transactionMethods,
         ));

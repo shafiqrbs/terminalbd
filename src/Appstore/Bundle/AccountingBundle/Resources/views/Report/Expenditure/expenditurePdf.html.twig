@@ -93,7 +93,7 @@
     {% for entity in entities %}
         {% set total = total+entity.amount %}
         <tr>
-            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+            <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
             <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
             <td class="numeric" >{% if entity.categoryName is not empty %}{{ entity.categoryName }}{% endif %}</td>
             <td class="numeric" >{{ entity.accountRefNo }}</td>
