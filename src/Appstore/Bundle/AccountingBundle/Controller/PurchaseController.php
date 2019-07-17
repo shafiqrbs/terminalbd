@@ -241,6 +241,7 @@ class PurchaseController extends Controller
                 $purchase->setUpdated($datetime);
             }
 		    $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
             return new Response('success');
