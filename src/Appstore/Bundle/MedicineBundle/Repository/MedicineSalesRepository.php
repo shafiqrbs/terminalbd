@@ -671,7 +671,17 @@ class MedicineSalesRepository extends EntityRepository
                     $sales->setReceived($item['receive']);
                     $sales->setDue($item['total'] - $item['receive']);
                 }
-
+                if($sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge()){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setNetTotal($serviceCharge['total']);
+                    $sales->setReceived($serviceCharge['total']);
+                }elseif($sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge()){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setNetTotal($serviceCharge['total']);
+                    $sales->setReceived($serviceCharge['total']);
+                }
                 $sales->setVat($item['vat']);
                 if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
