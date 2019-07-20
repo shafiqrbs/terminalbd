@@ -496,9 +496,10 @@ class ReportController extends Controller
         /* @var $globalOption GlobalOption */
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption);
+        $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
             'option' => $globalOption,
-            'entities' => $entities,
+            'entities' => $pagination,
 			'searchForm' => $data,
 		));
 	}

@@ -682,7 +682,6 @@ class AccountCashRepository extends EntityRepository
         }else{
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
         }
-
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountOnlineOrder($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
