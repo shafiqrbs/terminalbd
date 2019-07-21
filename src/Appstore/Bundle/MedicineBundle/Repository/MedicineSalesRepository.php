@@ -671,17 +671,6 @@ class MedicineSalesRepository extends EntityRepository
                     $sales->setReceived($item['receive']);
                     $sales->setDue($item['total'] - $item['receive']);
                 }
-                if($sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge()){
-                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
-                    $sales->setDiscount($serviceCharge['discount']);
-                    $sales->setNetTotal($serviceCharge['total']);
-                    $sales->setReceived($serviceCharge['total']);
-                }elseif($sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge()){
-                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
-                    $sales->setDiscount($serviceCharge['discount']);
-                    $sales->setNetTotal($serviceCharge['total']);
-                    $sales->setReceived($serviceCharge['total']);
-                }
                 $sales->setVat($item['vat']);
                 if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
@@ -734,6 +723,17 @@ class MedicineSalesRepository extends EntityRepository
                 if(($item['salesBy']) and $item['salesBy'] > 0){
                      $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
                      $sales->setSalesBy($salesBy);
+                }
+                if($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setNetTotal($serviceCharge['total']);
+                    $sales->setReceived($serviceCharge['total']);
+                }elseif($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setNetTotal($serviceCharge['total']);
+                    $sales->setReceived($serviceCharge['total']);
                 }
                 $created = new \DateTime($item['created']);
                 $sales->setCreated($created);
@@ -800,6 +800,7 @@ class MedicineSalesRepository extends EntityRepository
                 $salesItem->setSubTotal($item['subTotal']);
                 $em->persist($salesItem);
                 $em->flush();
+                $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $salesItem->getMedicineStock(), 'sales' );
             }
         endforeach;
 
@@ -880,13 +881,13 @@ class MedicineSalesRepository extends EntityRepository
         if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
             $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
             $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
-            $discount = ($entity -> getDiscount() + $totalServiceCharge);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
             $total = ( $entity->getSubTotal()- $discount);
             return $data = ['total'=>$total,'discount'=>$discount];
         }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
             $serviceCharge = $entity->getAccountBank()->getServiceCharge();
             $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
-            $discount = ($entity -> getDiscount() + $totalServiceCharge);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
             $total = ( $entity->getSubTotal()- $discount);
             return $data = ['total' => $total,'discount' => $discount];
         }
