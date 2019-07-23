@@ -9,6 +9,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
+use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
@@ -74,22 +75,64 @@ class ParticularRepository extends EntityRepository
 
     }
 
+    public function resize($newWidth, $targetFile, $originalFile) {
+
+        $info = getimagesize($originalFile);
+        $mime = $info['mime'];
+
+        switch ($mime) {
+            case 'image/jpeg':
+                $image_create_func = 'imagecreatefromjpeg';
+                $image_save_func = 'imagejpeg';
+                $new_image_ext = 'jpg';
+                break;
+
+            case 'image/png':
+                $image_create_func = 'imagecreatefrompng';
+                $image_save_func = 'imagepng';
+                $new_image_ext = 'png';
+                break;
+
+            case 'image/gif':
+                $image_create_func = 'imagecreatefromgif';
+                $image_save_func = 'imagegif';
+                $new_image_ext = 'gif';
+                break;
+
+            default:
+                throw new Exception('Unknown image type.');
+        }
+
+        $img = $image_create_func($originalFile);
+        list($width, $height) = getimagesize($originalFile);
+
+        $newHeight = ($height / $width) * $newWidth;
+        $tmp = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        if (file_exists($targetFile)) {
+            unlink($targetFile);
+        }
+        $image_save_func($tmp, "$targetFile.$new_image_ext");
+    }
+
+
     public function getApiStock(GlobalOption $option)
     {
         $config = $option->getRestaurantConfig();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','c');
         $qb->leftJoin('e.unit','u');
-        $qb->select('e.id as stockId','e.name as name','e.quantity as quantity','e.price as salesPrice','e.purchasePrice as purchasePrice');
+        $qb->select('e.id as stockId','e.name as name','e.quantity as quantity','e.price as salesPrice','e.purchasePrice as purchasePrice','e.path as path');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.restaurantConfig = :config');
         $qb->setParameter('config',$config);
-        $qb->orderBy('c.name , e.name','ASC');
+        $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
-        foreach($result as $key => $row) {
 
+        foreach($result as $key => $row) {
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row['stockId'];
 
@@ -108,9 +151,20 @@ class ParticularRepository extends EntityRepository
             $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = 0;
-
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/product/{$row['path']}");
+            $data[$key]['imagePath']            =  $path;
+            }else{
+            $data[$key]['imagePath']            = "";
+            }
         }
         return $data;
+    }
+
+    public function resizeFilter($pathToImage, $width = 100, $height = 100)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->zoomCrop($width, $height, 'transparent', 'top', 'left')->guess();
+        return $path;
     }
 
     public function findWithSearch($config,$service, $data = array()){

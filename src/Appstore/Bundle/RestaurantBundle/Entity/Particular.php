@@ -633,7 +633,7 @@ class Particular
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getRestaurantConfig()->getGlobalOption()->getId().'/hms/';
+        return 'uploads/domain/'.$this->getRestaurantConfig()->getGlobalOption()->getId().'/product/';
     }
 
     public function upload()
