@@ -381,11 +381,14 @@ class UserRepository extends EntityRepository
 
     public function getCustomers(GlobalOption $option){
 
+
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
+        $qb->join('e.globalOption','g');
         $qb->select('e.username as username','e.email as email', 'e.id as id', 'e.appPassword as appPassword', 'e.appRoles as appRoles');
         $qb->addSelect('p.name as fullName');
-        $qb->andWhere("e.globalOption =".$option->getId());
+        $qb->where("e.globalOption =".$option->getId());
+        $qb->andWhere("g.status =1");
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.enabled = 1');
         $qb->andWhere('e.isDelete != 1');

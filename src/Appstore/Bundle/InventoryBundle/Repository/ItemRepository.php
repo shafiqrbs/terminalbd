@@ -114,7 +114,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.inventoryConfig = :config');
         $qb->setParameter('config',$config);
-        $qb->orderBy('c.name , e.name','ASC');
+        $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
         foreach($result as $key => $row) {
@@ -134,7 +134,7 @@ class ItemRepository extends EntityRepository
             $data[$key]['name']                 = $row['name'];
             $data[$key]['printName']            = $row['name'];
             $data[$key]['quantity']             = $row['quantity'];
-            $data[$key]['price']                = $row['salesPrice'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = 0;
 

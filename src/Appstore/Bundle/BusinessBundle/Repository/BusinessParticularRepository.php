@@ -118,7 +118,7 @@ class BusinessParticularRepository extends EntityRepository
             $data[$key]['name']                 = $row['name'];
             $data[$key]['printName']            = $row['name'];
             $data[$key]['quantity']             = $row['quantity'];
-            $data[$key]['price']                = $row['salesPrice'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = 0;
 

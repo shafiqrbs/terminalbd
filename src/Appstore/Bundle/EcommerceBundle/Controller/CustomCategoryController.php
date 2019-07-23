@@ -67,7 +67,10 @@ class CustomCategoryController extends Controller
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('ecommerce_category', array('id' => $entity->getId())));
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been created successfully"
+            );
+            return $this->redirect($this->generateUrl('ecommerce_category_new'));
         }
 
         return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
