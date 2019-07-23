@@ -938,7 +938,6 @@ class TransactionRepository extends EntityRepository
         $this->_em->persist($transaction);
 		$this->_em->flush();
 
-
 		$transaction = new Transaction();
 		$transaction->setGlobalOption($entity->getGlobalOption());
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
