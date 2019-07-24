@@ -538,7 +538,7 @@ class BusinessParticular
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getBusinessConfig()->getGlobalOption()->getId().'/business/';
+        return 'uploads/domain/'.$this->getBusinessConfig()->getGlobalOption()->getId().'/product/';
     }
 
     public function upload()
