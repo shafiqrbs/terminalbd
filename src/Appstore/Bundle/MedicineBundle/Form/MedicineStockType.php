@@ -90,6 +90,7 @@ class MedicineStockType extends AbstractType
                 },
             ])
             ->add('noDiscount')
+            ->add('file')
         ;
     }
 

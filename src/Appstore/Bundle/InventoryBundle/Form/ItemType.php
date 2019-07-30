@@ -55,7 +55,8 @@ class ItemType extends AbstractType
                         ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
                 },
-            ));
+            ))
+            ->add('file');
 
             if($this->inventoryConfig->getIsVendor() == 1 ){
 
@@ -139,6 +140,7 @@ class ItemType extends AbstractType
 
             }
 
+
     }
     
     /**
@@ -156,7 +158,7 @@ class ItemType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_item';
+        return 'item';
     }
 
     /**

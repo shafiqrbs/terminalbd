@@ -185,6 +185,7 @@ class MedicineStockController extends Controller
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -215,6 +216,7 @@ class MedicineStockController extends Controller
             $brand = $entity->getAccessoriesBrand();
             $entity->setBrandName($brand->getName());
             $entity->setMode($brand->getParticularType()->getSlug());
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -363,6 +365,10 @@ class MedicineStockController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

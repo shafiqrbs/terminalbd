@@ -179,6 +179,7 @@ class ProductController extends Controller
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

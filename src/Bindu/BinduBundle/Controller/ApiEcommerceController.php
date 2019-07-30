@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class ApiController extends Controller
+class ApiEcommerceController extends Controller
 {
 
     public function checkApiValidation($request)
@@ -121,7 +121,6 @@ class ApiController extends Controller
         }
     }
 
-
     public function dashboardAction(Request $request)
     {
 
@@ -157,7 +156,6 @@ class ApiController extends Controller
         }
 
     }
-
 
     public function StockItemAction(Request $request)
     {

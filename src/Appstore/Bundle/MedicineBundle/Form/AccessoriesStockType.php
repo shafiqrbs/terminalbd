@@ -90,6 +90,7 @@ class AccessoriesStockType extends AbstractType
                 },
             ])
             ->add('noDiscount')
+            ->add('file')
         ;
     }
 

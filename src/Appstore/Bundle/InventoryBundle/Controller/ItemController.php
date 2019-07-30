@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Item controller.
@@ -93,6 +94,7 @@ class ItemController extends Controller
 
                 $entity->setInventoryConfig($inventory);
                 $entity->setName($entity->getMasterItem()->getName());
+                $entity->upload();
                 $em->persist($entity);
                 $em->flush();
                 $this->get('session')->getFlashBag()->add(
@@ -280,11 +282,16 @@ class ItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
-
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+        $erors = $editForm->getErrors();
         if ($editForm->isValid()) {
 
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
@@ -295,6 +302,7 @@ class ItemController extends Controller
 
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity'      => $entity,
+            'inventory'     => $inventory,
             'form'   => $editForm->createView(),
         ));
     }

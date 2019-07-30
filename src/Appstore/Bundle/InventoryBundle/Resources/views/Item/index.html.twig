@@ -126,8 +126,9 @@
                                         <td class="" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product sales price">{{ entity.salesPrice }}</a></td>
                                         <td class="" >
                                             <div class="btn-group" >
-                                            {% if entity.purchaseItems is empty %}
+
                                                 <a href="{{ path('item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                {% if entity.purchaseItems is empty %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif  %}
                                             <a href="{{ path('item_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i></a>
