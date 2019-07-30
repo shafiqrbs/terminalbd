@@ -10,7 +10,6 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Symfony\Component\HttpFoundation\Response;

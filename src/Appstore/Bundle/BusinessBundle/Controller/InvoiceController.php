@@ -330,6 +330,7 @@ class InvoiceController extends Controller
         $invoice->setEventType($data['eventType']);
         $invoice->setStartDate($data['startDate']);
         $invoice->setEndDate($data['endDate']);
+        $invoice->setVenue($data['venue']);
         if(!empty($data['customerName']) and !empty($data['customerMobile'])){
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);

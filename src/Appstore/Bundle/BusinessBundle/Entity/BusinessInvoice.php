@@ -113,6 +113,13 @@ class BusinessInvoice
      */
     private $cardNo;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="venue", type="string", length=256, nullable=true)
+     */
+    private $venue;
+
     /**
      * @var string
      *
@@ -932,6 +939,23 @@ class BusinessInvoice
     public function setAndroidProcess($androidProcess)
     {
         $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVenue()
+    {
+        return $this->venue;
+    }
+
+    /**
+     * @param string $venue
+     */
+
+    public function setVenue($venue)
+    {
+        $this->venue = $venue;
     }
 
 }
