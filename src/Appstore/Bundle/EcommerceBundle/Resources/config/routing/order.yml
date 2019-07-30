@@ -73,4 +73,8 @@ customer_order_ajax_payment:
     methods:  [POST]
 
 
-
+order_medicine_stock_search:
+    path:     /order-medicine-search
+    defaults: { _controller: "CustomerBundle:Order:autoSearch" }
+    options:
+            expose: true

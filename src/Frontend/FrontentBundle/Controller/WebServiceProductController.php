@@ -782,6 +782,28 @@ class WebServiceProductController extends Controller
 
     }
 
+    public function prescriptionPreviewAction(Request $request , $subdomain)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $detect = new MobileDetect();
+        if($detect->isMobile() || $detect->isTablet() ) {
+            $theme = 'Template/Mobile/Medicine/';
+        }else{
+            $theme = 'Template/Desktop/Medicine/';
+        }
+        $html = $this->renderView(
+            'FrontendBundle:'.$theme.':prescription.html.twig', array(
+                'cart' => $cart,
+                'globalOption' => $globalOption
+            )
+        );
+        return new Response($html);
+
+    }
+
     public function stockProductToCartAction(Request $request , $subdomain)
     {
 
@@ -790,6 +812,7 @@ class WebServiceProductController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         $data = $request->request->all();
+
         if(!empty($data)) {
 
             $product = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['stockId']);
@@ -826,8 +849,6 @@ class WebServiceProductController extends Controller
         return new Response($html);
 
     }
-
-
 
     public function productCartDetailsAction(Request $request, $subdomain){
 

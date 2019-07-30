@@ -60,3 +60,8 @@ order_payment_delete:
     path:      /{id}/order-payment-delete
     defaults: { _controller: "CustomerBundle:Order:paymentDelete" }
 
+order_medicine_stock_search:
+    path:     /order-medicine-search
+    defaults: { _controller: "CustomerBundle:Order:autoSearch" }
+    options:
+            expose: true

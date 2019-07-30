@@ -7,12 +7,17 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderPaymentType;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderType;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
+use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Date;
@@ -61,7 +66,8 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $user = $this->getUser();
-        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$couponCode);
+        $files = $request->files->all();
+        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$couponCode,$files);
         $cart->destroy();
         return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
 
@@ -137,12 +143,29 @@ class OrderController extends Controller
         }else{
             $theme = 'ecommerce';
         }
+        $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         return $this->render("CustomerBundle:Order/{$theme}:payment.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
             'orderForm'   => $order->createView(),
+            'salesItem'     => $salesItemForm->createView(),
         ));
 
+    }
+
+    private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
+    {
+
+        $form = $this->createForm(new SalesTemporaryItemType(), $salesItem, array(
+            'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'salesTemporaryItemForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     /**
@@ -387,6 +410,16 @@ class OrderController extends Controller
         return new Response('');
 
 
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = trim($_REQUEST['q']);
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
     }
 
 

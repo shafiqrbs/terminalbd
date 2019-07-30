@@ -89,6 +89,7 @@
                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                             <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
+                                            <li><strong>Uploaded Prescription</strong>:&nbsp; {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~entity.globalOption.id~'/order/'~entity.path) }}" target="_blank"> <i class="icon-download"></i> <strong>Download</strong></a>{% endif %}</li>
 
 
                                         </ul>
@@ -111,7 +112,34 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="portlet-body flip-scroll">
+                            <div class="clearfix">&nbsp;</div>
+                            {{ form_start(salesItem) }}
+                            {{ form_row(salesItem._token) }}
+                            <div class="row-fluid particular-info" style="padding-left:15px!important" >
+                                <div class="span6">
+                                    {{ form_widget(salesItem.stockName) }}
+                                    {{ form_errors(salesItem.stockName) }}
+                                </div>
+                                <div class="span3">
+                                    {{ form_widget(salesItem.barcode) }}
+                                    {{ form_errors(salesItem.barcode) }}
+                                </div>
+                                <div class="span3">
+                                    <div class="input-append">
+                                        <div class="input-group">
+                                            {{ form_widget(salesItem.salesPrice) }}
+                                            {{ form_errors(salesItem.salesPrice) }}
+                                            {{ form_widget(salesItem.quantity) }}
+                                            {{ form_errors(salesItem.quantity) }}
+                                            <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(salesItem) }}
+                            <div class="clearfix">&nbsp;</div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
@@ -138,16 +166,16 @@
                                                 <div class="input-append">
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity" data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-text="{{ orderItem.id }}" data-title="{{ orderItem.price }}">
-                                                              <span class="add-on"><i class="icon-minus"></i></span>
+                                                            <i class="icon-minus"></i>
                                                         </button>
 
                                                     <input type="text" readonly="readonly" name="quantity" id="quantity-{{ orderItem.id }}" class="form-control m-wrap  span4 input-number" value="{{ orderItem.quantity }}" min="1" max="100" >
                                                           <button type="button" class="btn blue btn-number" data-type="plus" data-field="quantity" data-id="{{ orderItem.id }}"  data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-text="{{ orderItem.id }}" data-title="{{ orderItem.price }}">
-                                                              <span class="add-on"><i class="icon-plus"></i></span>
+                                                             <i class="icon-plus"></i>
                                                           </button>
                                                     {% if orderItem.UnitName is not empty %}
-                                                              <button type="button" class="btn green">
-                                                                  <span class="add-on">{{ orderItem.UnitName }}</span>
+                                                              <button type="button" class="btn yellow">
+                                                                 {{ orderItem.UnitName }}
                                                               </button>
                                                         </span>
                                                     {% endif %}
@@ -360,6 +388,7 @@
 <style>
     input[class*="span"].m-wrap, .row-fluid select[class*="span"] {
         border: 3px solid #0b84fe!important;
+        height: 34px!important;
     }
 </style>
 {% endblock %}

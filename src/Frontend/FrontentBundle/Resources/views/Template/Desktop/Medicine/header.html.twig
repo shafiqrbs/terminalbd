@@ -230,7 +230,7 @@
         }
 
     </style>
-    <div class="container" >
+{#    <div class="container" >
         <div class="row-fluid">
             <div class="col-xs-12 col-md-12 bhoechie-tab-container" id="prescription-content">
 
@@ -286,7 +286,7 @@
             </div>
             <div class="clearfix"></div>
         </div>
-    </div>
+    </div>#}
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header'}) %}

@@ -62,7 +62,23 @@ class OrderRepository extends EntityRepository
     }*/
 
 
-    public function insertNewCustomerOrder(User $user,$shop, $cart, $couponCode ='')
+
+    public function fileUploader(Order $entity, $file = '')
+    {
+        $em = $this->_em;
+        if(isset($file['prescriptionFile'])){
+            $img = $file['prescriptionFile'];
+            $fileName = $img->getClientOriginalName();
+            $imgName =  uniqid(). '.' .$fileName;
+            $img->move($entity->getUploadDir(), $imgName);
+            $entity->setPath($imgName);
+        }
+        $em->persist($entity);
+        $em->flush();
+    }
+
+
+    public function insertNewCustomerOrder(User $user,$shop, $cart, $couponCode ='',$files = '')
     {
 
         $em = $this->_em;
@@ -101,6 +117,7 @@ class OrderRepository extends EntityRepository
         $em->persist($order);
         $em->flush();
         $this->insertOrderItem($order,$cart);
+        $this->fileUploader($order,$files);
         return $order;
 
     }

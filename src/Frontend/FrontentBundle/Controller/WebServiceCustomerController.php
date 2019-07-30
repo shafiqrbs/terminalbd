@@ -142,6 +142,14 @@ class WebServiceCustomerController extends Controller
 
     }
 
+    private function authenticateUser(User $user)
+    {
+        $providerKey = 'secured_area'; // your firewall name
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+
+        $this->container->get('security.context')->setToken($token);
+    }
+
     public function insertAction($subdomain, Request $request)
     {
 
@@ -162,6 +170,7 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setUserGroup('customer');
             $em->persist($entity);
             $em->flush();
             $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
@@ -170,12 +179,10 @@ class WebServiceCustomerController extends Controller
 
            // $dispatcher = $this->container->get('event_dispatcher');
            // $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
-
-            return new Response(json_encode(array('success'=>"valid",'mobile' => $mobile,'otp'=>$a)));
+            return new Response('success');
         }else{
-            return new Response(json_encode(array('success'=>"invalid",'mobile' => $mobile,'exist' => "registered",'otp'=>$a)));
+            return new Response('invalid');
         }
-        exit;
     }
 
     public function prescriptionAction($subdomain, Request $request)
@@ -197,15 +204,19 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setUserGroup('customer');
             $em->persist($entity);
             $em->flush();
+            $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main',serialize($token));
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
             return new Response('success');
         }else{
             return new Response('invalid');
         }
-        exit;
+
     }
 
     public function confirmAction($subdomain)
@@ -297,8 +308,8 @@ class WebServiceCustomerController extends Controller
     {
         $intlMobile = $request->query->get('mobile',NULL,true);
         $em = $this->getDoctrine()->getManager();
-        echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
         /* @var $user User */
         if(empty($user)){
             $valid = 'false';
@@ -308,7 +319,7 @@ class WebServiceCustomerController extends Controller
             $this->get('fos_user.user_manager')->updateUser($user);
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
-            $valid =  'Collect OTP form your login mobile no and input OTP field'.$a;
+            $valid =  'Collect OTP form your login mobile no and input OTP field '.$a;
         }
         echo $valid;
         exit;

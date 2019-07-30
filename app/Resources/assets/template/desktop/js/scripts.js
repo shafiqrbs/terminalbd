@@ -360,10 +360,9 @@ $(document).ready(function(){
                     contentType : false,
                     success: function(response){},
                     complete: function(response){
-                        obj = JSON.parse(response);
-                        if(obj['success'] === 'valid'){
+                        if(response === 'valid'){
                             location.reload();
-                        }else if(obj['success'] === 'invalid'){
+                        }else if(response === 'invalid'){
                             $('#registerModal').modal('hide');
                             $('#forgetModal').modal('hide');
                             $('#loginModal').modal('toggle');

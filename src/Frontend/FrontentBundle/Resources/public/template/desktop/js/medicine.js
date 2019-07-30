@@ -162,16 +162,15 @@ $(document).on( "click", ".productToCart", function(e){
     });
 
     $( "#prescriptionUpload" ).click(function() {
-        $('.loader-curtain').fadeIn(5000).addClass('is-active');
+
         $.ajax({
-            url: "/product-stock-item-create" ,
+            url: "/prescription-stock-item" ,
             type: 'POST',
             data:'',
             success: function(response) {
-                $('form#stockItemForm')[0].reset();
-                $("#stockCart").html(response);
-                $( "#prescription-content" ).slideToggle();
-                $('.loader-curtain').fadeOut(1000);
+                $('.product-modal-content').html(response);
+                $('#product-modal').modal('toggle');
+                jqueryTemporaryLoad();
             },
 
         });
@@ -179,19 +178,21 @@ $(document).on( "click", ".productToCart", function(e){
 
     });
 
+
+function jqueryTemporaryLoad() {
+
     $('#itemName').click(function() {
-        $(this).attr('value', '');
+        $(this).attr('value', '').focus();
     });
 
     var searchRequest = null;
-
     var minlength = 1;
 
-    $(".select2StockMedicine").keyup(function () {
+    $(document).on( "keyup", ".select2StockMedicine", function(e){
 
-            var that = this,
+        var that = this,
             value = $(this).val();
-            if (value.length >= minlength ) {
+        if (value.length >= minlength ) {
             if (searchRequest != null)
                 searchRequest.abort();
             searchRequest = $.ajax({
@@ -235,38 +236,38 @@ $(document).on( "click", ".productToCart", function(e){
             });
     }
 
-    var form = $("#stockItemForm").validate({
+    $("#stockItemForm").validate({
         rules: {
             "itemName": {required: true},
             "itemQuantity": {required: true},
             "salesPrice": {required: false},
-           },
+        },
 
         messages: {
-            "itemName":"Search a item name",
-            "itemQuantity":"Enter item quantity",
+            "itemName": "Search a item name",
+            "itemQuantity": "Enter item quantity",
         },
         tooltip_options: {
-            "itemName": {placement:'top',html:true},
-            "itemQuantity": {placement:'top',html:true},
+            "itemName": {placement: 'top', html: true},
+            "itemQuantity": {placement: 'top', html: true},
         },
 
-        submitHandler: function(form) {
+        submitHandler: function (form) {
 
-        $.ajax({
-            url         : $('form#stockItemForm').attr( 'action' ),
-            type        : $('form#stockItemForm').attr( 'method' ),
-            data        : new FormData($('form#stockItemForm')[0]),
-            processData : false,
-            contentType : false,
-            success: function(response){
-                $('form#stockItemForm').reset();
-               $("#stockCart").html(response);
-            }
-        });
-    }
-});
-
+            $.ajax({
+                url: $('form#stockItemForm').attr('action'),
+                type: $('form#stockItemForm').attr('method'),
+                data: new FormData($('form#stockItemForm')[0]),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('form#stockItemForm')[0].reset();
+                    $("#stockCart").html(response);
+                }
+            });
+        }
+    });
+}
 
 
 $('.cartItem').click(function(){
@@ -415,8 +416,6 @@ $('.input-number').focusin(function(){
 });
 
 
-
-
 $(document).on( "click", ".btn-number", function(e){
 
     e.preventDefault();
@@ -454,7 +453,6 @@ $(document).on( "change", ".userMobile", function( e ) {
 
     var mobile = $(this).val();
     var url = $(this).attr("data-action");
-    alert(url);
     $.get(url,{ mobile:mobile} ).done(function(response) {
         $("#mobile-validate").html(response);
     }).always(function() {

@@ -238,6 +238,13 @@ webservice_stock_item_create:
     options:
             expose: true
 
+webservice_stock_prescription:
+    path:     /prescription-stock-item
+    defaults: { _controller: FrontendBundle:WebServiceProduct:prescriptionPreview }
+    methods:  POST
+    options:
+            expose: true
+
 webservice_prescription_upload:
     path:     /prescription-upload
     defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }

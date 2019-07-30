@@ -459,6 +459,7 @@ class MedicineStockRepository extends EntityRepository
             $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = $row['printHidden'];
+            $data[$key]['imagePath']            = "";
 
         }
         return $data;
