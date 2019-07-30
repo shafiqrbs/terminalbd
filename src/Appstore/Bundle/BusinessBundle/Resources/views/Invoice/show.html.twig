@@ -88,7 +88,7 @@
                                     <li><strong>Event Type:</strong>&nbsp;{{ entity.eventType }}</li>
                                     <li><strong>Venue:</strong>&nbsp;{{ entity.venue }}</li>
                                     <li><strong>Start Date:</strong>&nbsp;{{ entity.startDate|date('d-m-Y') }}</li>
-                                    <li><strong>End Date:</strong>&nbsp;{{ entity.startDate|date('d-m-Y') }}</li>
+                                    <li><strong>End Date:</strong>&nbsp;{{ entity.endDate|date('d-m-Y') }}</li>
                                 </ul>
                             </div>
                             {% endif %}
@@ -99,7 +99,7 @@
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
-                                    <th class="span1"> Si/No</th>
+                                    <th class="span1"> S/N</th>
                                         <th class="span4">Particular</th>
                                         {% if entity.businessConfig.businessModel == 'sign' %}
                                         <th class="span1">Size</th>
