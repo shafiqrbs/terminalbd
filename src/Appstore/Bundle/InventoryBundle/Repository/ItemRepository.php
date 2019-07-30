@@ -110,7 +110,7 @@ class ItemRepository extends EntityRepository
         $qb->join('e.masterItem','m');
         $qb->join('m.category','c');
         $qb->leftJoin('m.productUnit','u');
-        $qb->select('e.id as stockId','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice');
+        $qb->select('e.id as stockId','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice','e.path as path');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.inventoryConfig = :config');

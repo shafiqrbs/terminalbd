@@ -427,7 +427,7 @@ class MedicineStockRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.medicineBrand','brand');
         $qb->leftJoin('e.unit','u');
-        $qb->select('e.id as stockId','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden');
+        $qb->select('e.id as stockId','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden','e.path as path');
         $qb->addSelect('brand.name as brandName','brand.strength as strength');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
