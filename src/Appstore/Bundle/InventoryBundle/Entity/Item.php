@@ -555,7 +555,7 @@ class Item
     protected function getUploadDir()
     {
         //return 'uploads/files/inventory/purchase/'.$this->getPurchasePrice().'item/';
-        return 'uploads/domain/'.$this->getInventoryConfig()->getGlobalOption()->getId().'/inventory/item/';
+        return 'uploads/domain/'.$this->getInventoryConfig()->getGlobalOption()->getId().'/product/';
     }
 
     public function upload()

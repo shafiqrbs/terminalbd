@@ -14,6 +14,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Doctrine\ORM\EntityRepository;
+use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
@@ -131,7 +132,7 @@ class BusinessParticularRepository extends EntityRepository
         }
         return $data;
     }
-    public function resizeFilter($pathToImage, $width = 100, $height = 100)
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->zoomCrop($width, $height, 'transparent', 'top', 'left')->guess();
         return $_SERVER['HTTP_HOST'].$path;

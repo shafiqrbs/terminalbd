@@ -119,7 +119,7 @@ class ParticularRepository extends EntityRepository
         return $data;
     }
 
-    public function resizeFilter($pathToImage, $width = 100, $height = 100)
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->zoomCrop($width, $height, 'transparent', 'top', 'left')->guess();
         return $_SERVER['HTTP_HOST'].$path;

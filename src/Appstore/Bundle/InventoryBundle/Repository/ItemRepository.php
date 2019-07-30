@@ -14,6 +14,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
+use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -137,9 +138,21 @@ class ItemRepository extends EntityRepository
             $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = 0;
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/product/{$row['path']}");
+                $data[$key]['imagePath']            =  $path;
+            }else{
+                $data[$key]['imagePath']            = "";
+            }
 
         }
         return $data;
+    }
+
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->zoomCrop($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
     }
 
     public function getApiCategory(GlobalOption $option)

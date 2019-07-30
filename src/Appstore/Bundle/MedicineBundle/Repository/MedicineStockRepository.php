@@ -12,6 +12,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
@@ -459,11 +460,23 @@ class MedicineStockRepository extends EntityRepository
             $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
             $data[$key]['printHidden']          = $row['printHidden'];
-            $data[$key]['imagePath']            = "";
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/product/{$row['path']}");
+                $data[$key]['imagePath']            =  $path;
+            }else{
+                $data[$key]['imagePath']            = "";
+            }
 
         }
         return $data;
     }
+
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->zoomCrop($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
+    }
+
 
     public function brandStock(User $user,$data)
     {
