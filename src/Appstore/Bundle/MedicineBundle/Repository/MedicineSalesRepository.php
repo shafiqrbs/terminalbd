@@ -800,7 +800,9 @@ class MedicineSalesRepository extends EntityRepository
                 $salesItem->setSubTotal($item['subTotal']);
                 $em->persist($salesItem);
                 $em->flush();
-                $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $salesItem->getMedicineStock(), 'sales' );
+                if($salesItem->getMedicineStock()){
+                    $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $salesItem->getMedicineStock(), 'sales' );
+                }
             }
         endforeach;
 

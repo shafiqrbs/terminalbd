@@ -587,13 +587,15 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
         /* @var $sales MedicineSales */
         foreach ($android->getMedicineSales() as $sales){
-            $sales->setProcess('Done');
-            $sales->setUpdated($sales->getCreated());
-            $sales->setApprovedBy($this->getUser());
-            $em->flush();
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-            $msg = "valid";
+            if($sales->getProcess() == "Device"){
+                $sales->setProcess('Done');
+                $sales->setUpdated($sales->getCreated());
+                $sales->setApprovedBy($this->getUser());
+                $em->flush();
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
+                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                $msg = "valid";
+            }
         }
         if($msg == "valid"){
             $android->setStatus(true);
