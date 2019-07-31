@@ -20,8 +20,8 @@ api_ecommerce_item_all_brand:
 
 api_ecommerce_item_promotion:
     path:     /promotion
-    defaults: { _controller: BinduBundle:ApiEcommerce:brand }
+    defaults: { _controller: BinduBundle:ApiEcommerce:promotion }
 
 api_ecommerce_item_discount:
     path:     /discount
-    defaults: { _controller: BinduBundle:ApiEcommerce:brand }
+    defaults: { _controller: BinduBundle:ApiEcommerce:discount }
