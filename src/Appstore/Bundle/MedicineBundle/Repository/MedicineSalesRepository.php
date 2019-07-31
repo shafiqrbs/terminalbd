@@ -660,9 +660,9 @@ class MedicineSalesRepository extends EntityRepository
                 $sales->setDeviceSalesId($item['invoiceId']);
                 $sales->setSubTotal($item['subTotal']);
                 if(isset($item['discount']) and $item['discount'] > 0){
-                    $sales->setDiscount($item['discount']);
+                    $sales->setDiscount($item['discountCalculation']);
                     $sales->setDiscountType($item['discountType']);
-                    $sales->setDiscountCalculation($item['discountCalculation']);
+                    $sales->setDiscountCalculation($item['discount']);
                 }
                 $sales->setNetTotal($item['total']);
                 if($item['total'] < $item['receive']){
@@ -885,7 +885,7 @@ class MedicineSalesRepository extends EntityRepository
             $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
             $discount = round($entity -> getDiscount() + $totalServiceCharge);
             $total = ( $entity->getSubTotal()- $discount);
-            return $data = ['total'=>$total,'discount'=>$discount];
+            return $data = ['total'=>$total,'discount' => $discount];
         }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
             $serviceCharge = $entity->getAccountBank()->getServiceCharge();
             $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
