@@ -94,7 +94,7 @@ class BusinessParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','c');
         $qb->leftJoin('e.unit','u');
-        $qb->select('e.id as stockId','e.name as name','e.quantity as quantity','e.price as salesPrice','e.purchasePrice as purchasePrice','e.path as path');
+        $qb->select('e.id as stockId','e.name as name','e.quantity as quantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.path as path');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.businessConfig = :config');

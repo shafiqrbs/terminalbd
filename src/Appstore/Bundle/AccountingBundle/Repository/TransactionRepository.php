@@ -688,7 +688,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Sales');
         $transaction->setProcess('Goods');
         /* Sales Revenue - Sales goods account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$amount);
         $transaction->setCredit($amount);
         $this->_em->persist($transaction);
@@ -943,9 +943,12 @@ class TransactionRepository extends EntityRepository
 		$transaction->setAccountRefNo($entity->getAccountRefNo());
 		$transaction->setProcessHead('Sales');
 		$transaction->setUpdated($entity->getUpdated());
-		$transaction->setProcess('Inventory Assets');
+		$transaction->setProcess('Long Term Liabilities');
 		/* Current Current Asset - Account Receivable */
-		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(49));
+        /* ==== Sub Account set ====*/
+        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
+        $transaction->setSubAccountHead($subAccount);
 		$transaction->setAmount('-'.$entity->getTotalAmount());
 		$transaction->setCredit($entity->getTotalAmount());
 		$this->_em->persist($transaction);
@@ -1046,7 +1049,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Online');
         $transaction->setProcess('Goods');
         /* Sales Revenue - Sales goods account */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
         $transaction->setAmount('-'.$amount);
         $transaction->setCredit($amount);
         $this->_em->persist($transaction);
