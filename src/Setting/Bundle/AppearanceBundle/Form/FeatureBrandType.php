@@ -18,7 +18,7 @@ class FeatureBrandType extends AbstractType
     public function __construct(GlobalOption $globalOption)
     {
         $this->globalOption = $globalOption;
-        $this->inventoryConfig = $globalOption->getInventoryConfig();
+        $this->ecommerceConfig = $globalOption->getEcommerceConfig();
     }
 
     /**
@@ -33,7 +33,7 @@ class FeatureBrandType extends AbstractType
             )))
             ->add('brand', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
                 'empty_value' => '---Select Brand Name---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select Brand Name'))
@@ -43,7 +43,7 @@ class FeatureBrandType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig->getId())
                         ->orderBy('e.name','ASC');
                 },
             ));
@@ -64,7 +64,7 @@ class FeatureBrandType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_appearancebundle_feature_brand';
+        return 'feature_brand';
     }
 
 

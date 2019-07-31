@@ -15,7 +15,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Repository\FeatureCategoryRepository")
- * @UniqueEntity(fields="category",message="Already this category name used .")
  */
 class FeatureCategory
 {
@@ -34,7 +33,7 @@ class FeatureCategory
     private  $globalOption;
 
     /**
-     * @ORM\OneToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureCategory" )
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureCategory" )
      **/
      private  $category;
 

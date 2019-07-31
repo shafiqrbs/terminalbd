@@ -18,7 +18,6 @@ class VendorListener
 
         // perhaps you only want to act on some "Sales" entity
         if ($entity instanceof AccountVendor) {
-
             $lastCode = $this->getLastCode($args, $entity);
             $entity->setCode($lastCode+1);
             $entity->setVendorCode(sprintf("%s", str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));

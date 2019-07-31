@@ -4,6 +4,8 @@ namespace Setting\Bundle\AppearanceBundle\Repository;
 
 
 use Doctrine\ORM\EntityRepository;
+use Gregwar\Image\Image;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -14,6 +16,9 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class FeatureCategoryRepository extends EntityRepository
 {
+
+
+
     public function getSliderFeatureCategory(GlobalOption $globalOption , $limit = 10){
 
         $qb = $this->createQueryBuilder('e');
@@ -26,4 +31,42 @@ class FeatureCategoryRepository extends EntityRepository
         return  $result;
 
     }
+
+    public function getApiFeature(GlobalOption $option, $limit = 10)
+    {
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option");
+        $qb->setParameter('option', $option->getId());
+        $qb->orderBy('e.id','DESC');
+        $qb->setMaxResults($limit);
+        $sql = $qb->getQuery();
+        $result = $sql->getResult();
+
+
+        $data = array();
+
+        /* @var $row FeatureCategory */
+
+        foreach($result as $key => $row) {
+
+            $data[$key]['category_id']    = (int) $row->getId();
+            $data[$key]['name']           = $row->getCategory()->getName();
+            if($row->getWebPath()){
+                $path = $this->resizeFilter($row->getWebPath());
+                $data[$key]['imagePath']            =  $path;
+            }else{
+                $data[$key]['imagePath']            = "";
+            }
+        }
+        return $data;
+    }
+
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
+    }
+
 }

@@ -1,0 +1,27 @@
+api_setup:
+    path:     /setup
+    defaults: { _controller: BinduBundle:ApiEcommerce:setup }
+
+api_ecommerce_item_category:
+    path:     /feature-category
+    defaults: { _controller: BinduBundle:ApiEcommerce:category }
+
+api_ecommerce_item_all_category:
+    path:     /all-category
+    defaults: { _controller: BinduBundle:ApiEcommerce:allCategory }
+
+api_ecommerce_item_brand:
+    path:     /feature-brand
+    defaults: { _controller: BinduBundle:ApiEcommerce:brand }
+
+api_ecommerce_item_all_brand:
+    path:     /all-brand
+    defaults: { _controller: BinduBundle:ApiEcommerce:allBrand }
+
+api_ecommerce_item_promotion:
+    path:     /promotion
+    defaults: { _controller: BinduBundle:ApiEcommerce:brand }
+
+api_ecommerce_item_discount:
+    path:     /discount
+    defaults: { _controller: BinduBundle:ApiEcommerce:brand }

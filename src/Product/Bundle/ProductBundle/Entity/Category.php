@@ -119,7 +119,7 @@ class Category
     protected $features;
 
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
      **/
     protected $featureCategory;
 

@@ -5,6 +5,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ItemBrandRepository
@@ -61,4 +62,6 @@ class ItemBrandRepository extends EntityRepository
         }
         return $entity;
     }
+
+
 }

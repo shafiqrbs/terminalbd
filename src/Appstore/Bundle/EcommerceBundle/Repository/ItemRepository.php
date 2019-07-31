@@ -7,8 +7,11 @@ use Appstore\Bundle\configBundle\Entity\PurchaseItem;
 use Appstore\Bundle\configBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
+use Appstore\Bundle\HotelBundle\Entity\Category;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
+use Gregwar\Image\Image;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * PurchaseVendorItemRepository
@@ -422,11 +425,120 @@ class ItemRepository extends EntityRepository
         }else{
             $discountPrice = ( $purchase->getSalesPrice() - (int)$discount->getDiscountAmount());
         }
-
         return $discountPrice;
+    }
+
+    public function getSliderFeatureCategory(GlobalOption $globalOption , $limit = 10){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option");
+        $qb->setParameter('option', $globalOption->getId());
+        $qb->orderBy('e.id','DESC');
+        $qb->setMaxResults($limit);
+        $sql = $qb->getQuery();
+        $result = $sql->getResult();
+        return  $result;
 
     }
 
+    public function getApiAllCategory(GlobalOption $option)
+    {
 
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.category','category');
+        $qb->select('category.id as id','category.name as name');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->orderBy('category.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['category_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+            }
+        }
+        return $data;
+    }
+
+    public function getApiAllBrand(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.brand','brand');
+        $qb->select('brand.id as id','brand.name as name');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->orderBy('brand.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['brand_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+            }
+        }
+        return $data;
+    }
+
+
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
+    }
+
+
+    public function getApiPromotion(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.promotion','promotion');
+        $qb->select('promotion.id as id','promotion.name as name','e.path as path');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->orderBy('promotion.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['promotion_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
+    public function getApiDiscount(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.discount','discount');
+        $qb->select('discount.id as id','discount.name as name','discount.amount as amount','discount.type as type','e.path as path');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->orderBy('discount.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['discount_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
 
 }

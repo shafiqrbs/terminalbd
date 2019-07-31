@@ -6,6 +6,10 @@ android_api:
     resource: "@BinduBundle/Resources/config/api.yml"
     prefix:   /android-api
 
+android_ecommerce_api:
+    resource: "@BinduBundle/Resources/config/apiEcommerce.yml"
+    prefix:   /android-api-ecommerce
+
 election:
     resource: "@ElectionBundle/Resources/config/routing.yml"
     prefix:   /election

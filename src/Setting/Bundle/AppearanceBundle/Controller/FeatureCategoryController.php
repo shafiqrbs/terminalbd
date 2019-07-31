@@ -36,13 +36,14 @@ class FeatureCategoryController extends Controller
     public function createAction(Request $request)
     {
         $entity = new FeatureCategory();
+        $global = $this->getUser()->getGlobalOption();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        $category = $entity->getCategory();
+        $exist = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->findOneBy(array('globalOption'=>$category,'category'=>$category));
+        if ($form->isValid() and empty($exist) ) {
             $em = $this->getDoctrine()->getManager();
-            $user = $this->getUser();
-            $entity->setGlobalOption($user->getGlobalOption());
+            $entity->setGlobalOption($global);
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -183,7 +184,6 @@ class FeatureCategoryController extends Controller
             if($entity->upload()){
                 $entity->removeUpload();
             }
-
             $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
