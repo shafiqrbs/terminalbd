@@ -75,8 +75,7 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric span4" >Product</th>
-                                    <th class="numeric" >Prch.Qnt</th>
-                                    <th class="numeric" >Reming.Qnt</th>
+                                     <th class="numeric" colspan="2" >Qnt</th>
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
                                     <th class="numeric" >Discount</th>
@@ -90,8 +89,8 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.webName }}</td>
-                                        <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.masterQuantity }}</td>
+                                        <td class="" ><input class="isApplicable" data-url="{{ path('ecommerce_item_quantity_applicable',{'id':entity.id}) }}" data-id="{{ entity.id }}" style="margin-right: 0!important;" type="checkbox" name="quantityApplicable" id="quantityApplicable" value="" {% if entity.quantityApplicable == 1 %} checked="checked" {% endif %} ></td>
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
@@ -108,7 +107,7 @@
                                             {% endif %}
                                             <a href="{{ path('ecommerce_item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;</a>
                                             <a href="{{ path('ecommerce_item_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                            {% if entity.source != 'inventory' %}
+                                            {% if entity.source == 'ecommerce' %}
                                                 <a href="javascript:" data-id="{{ entity.id }}"  data-url="{{ path('ecommerce_item_delete',{'id':entity.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
                                                 <a target="_blank" href="{{ path('ecommerce_item_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
                                             {% endif %}
@@ -132,7 +131,7 @@
     {{ parent() }}
     {% javascripts
     '@EcommerceBundle/Resources/public/js/editable.js'
-    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@EcommerceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

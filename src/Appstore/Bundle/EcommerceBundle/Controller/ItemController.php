@@ -464,6 +464,20 @@ class ItemController extends Controller
 
 	}
 
+	public function quantityApplicableAction(Item $item)
+	{
+        $em = $this->getDoctrine()->getManager();
+	    if($item->isQuantityApplicable() == 1){
+            $item->setQuantityApplicable(0);
+        }else{
+            $item->setQuantityApplicable(1);
+        }
+        $em->persist($item);
+        $em->flush();
+        exit;
+
+	}
+
 	public function tagSelectAction()
 	{
 		$getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();

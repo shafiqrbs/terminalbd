@@ -413,6 +413,28 @@ class UserRepository extends EntityRepository
     }
 
 
+    public function getOTP(GlobalOption $option,$data){
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.profile','p');
+        $qb->join('e.globalOption','g');
+        $qb->select('e.username as username','e.email as email', 'e.id as id', 'e.appRoles as appRoles');
+        $qb->addSelect('p.name as fullName');
+        $qb->where("e.globalOption =".$option->getId());
+        $qb->andWhere("e.username = :username")->setParameter('username',$data['mobile']);
+        $qb->andWhere("g.status =1");
+        $qb->andWhere("e.userGroup = 'customer'");
+        $qb->andWhere('e.enabled = 1');
+        $user = $qb->getQuery()->getOneOrNullResult();
+        $a = mt_rand(1000,9999);
+        $user->setPlainPassword($a);
+        $this->get('fos_user.user_manager')->updateUser($user);
+        $data =array();
+        return $data;
+
+    }
+
 
 
 }

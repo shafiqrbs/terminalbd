@@ -5,6 +5,9 @@ namespace Bindu\BinduBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Core\UserBundle\Entity\Profile;
+use Core\UserBundle\Entity\User;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -97,6 +100,53 @@ class ApiEcommerceController extends Controller
         return $response;
 
     }
+
+    public function productAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $data = $_REQUEST;
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$data);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function productDetailsAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $id = $_REQUEST['id'];
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$id);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
 
     public function categoryAction(Request $request)
     {
@@ -213,6 +263,28 @@ class ApiEcommerceController extends Controller
 
     }
 
+    public function tagAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiTag($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
 
     public function discountAction(Request $request)
     {
@@ -236,5 +308,179 @@ class ApiEcommerceController extends Controller
         }
 
     }
+
+    public function userLoginAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $this->checkApiValidation($request);
+            $intlMobile = $request->query->get('mobile',NULL,true);
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
+            /* @var $user User */
+            if(empty($user)){
+                $data['msg'] = "invalid";
+            }else{
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $this->get('fos_user.user_manager')->updateUser($user);
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+            }
+
+            $data['user_id'] = (int) $user->getId();
+            $data['username'] = $mobile;
+            $data['fullName'] = $user->userFullName();
+            $data['email'] = $user->getEmail();
+            $data['password'] = $a;
+            $data['msg'] = "valid";
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function userRegisterAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            var_dump($data);
+            exit;
+
+            /* @var $entity GlobalOption */
+
+            $this->checkApiValidation($request);
+
+            $name = $data['name'];
+            $mobile = $data['mobile'];
+            $email = $data['email'];
+            $address = $data['address'];
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=> 1));
+
+            /* @var $user User */
+
+            if(empty($user)){
+
+                $user = new User();
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $user->setEnabled(true);
+                $user->setUsername($mobile);
+                if(empty($data['email'])){
+                    $user->setEmail($mobile.'@gmail.com');
+                }else{
+                    $user->setEmail($email);
+                }
+                $user->setRoles(array('ROLE_CUSTOMER'));
+                $user->setUserGroup('customer');
+                $user->setEnabled(1);
+                $em->persist($user);
+                $em->flush();
+
+                $profile = new Profile();
+                $profile->setUser($user);
+                $profile->setName($name);
+                $profile->setMobile($mobile);
+                $profile->setAddress($address);
+                $em->persist($profile);
+                $em->flush();
+
+            }else{
+
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $this->get('fos_user.user_manager')->updateUser($user);
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+            }
+
+            $data['user_id'] = (int) $user->getId();
+            $data['username'] = $mobile;
+            $data['fullName'] = $user->userFullName();
+            $data['email'] = $user->getEmail();
+            $data['password'] = $a;
+            $data['msg'] = "valid";
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function orderAction(Request $request)
+    {
+
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $userId = 1;
+            $attachFile = '';
+            $jsonOrder = '[
+            {
+            "subTotal":"1200","discount":"200","vat":"0","total":"1000","shippingCharge":"100","transactionMethod":"cash","discountCoupon":"123443","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","remark":""
+            }
+        ]';
+
+            $jsonOrderItem = '[
+            {"itemId":"051900113","name":"ItemName","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"itemId":"051900113","name":"ItemName","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"itemId":"051900113","name":"ItemName","unitPrice":"120","quantity":"2","subTotal":"240"},
+            {"itemId":"051900113","name":"ItemName","unitPrice":"120","quantity":"2","subTotal":"240"},
+          
+        ]';
+
+
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $orderData = array('userId'=> $userId,'order'=>  $data['jsonOrder'] ,'orderItem'=> $data['jsonOrderItem'],'attachFile' => $data['attachFile']);
+
+            $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
 
 }

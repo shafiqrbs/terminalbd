@@ -196,7 +196,7 @@ class FeatureCategory
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/ecommerce';
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/feature-category';
     }
 
     public function upload()

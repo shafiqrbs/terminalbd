@@ -269,7 +269,8 @@ class ItemRepository extends EntityRepository
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
         $promotion      = isset($data['promotion'])? $data['promotion'] :'';
-        $discount          = isset($data['discount'])? $data['discount'] :'';
+        $discount       = isset($data['discount'])? $data['discount'] :'';
+        $tag            = isset($data['tag'])? $data['tag'] :'';
 
 
         if (!empty($cat)) {
@@ -428,6 +429,91 @@ class ItemRepository extends EntityRepository
         return $discountPrice;
     }
 
+
+    public function getApiProduct(GlobalOption $option,$data = array())
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.productUnit','productUnit');
+        $qb->leftJoin('item.category','category');
+        $qb->leftJoin('item.brand','brand');
+        $qb->leftJoin('item.discount','discount');
+        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->addSelect('category.name as categoryName');
+        $qb->addSelect('brand.name as brandName');
+        $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('discount.name as discountName');
+        $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('item.webName','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['product_id']               = (int) $row['id'];
+                $data[$key]['name']                     = $row['name'];
+                $data[$key]['quantity']                 = $row['quantity'];
+                $data[$key]['price']                    = $row['price'];
+                $data[$key]['discountPrice']            = $row['discountPrice'];
+                $data[$key]['category']                 = $row['categoryName'];
+                $data[$key]['brand']                    = $row['brandName'];
+                $data[$key]['discountName']             = $row['discountName'];
+                $data[$key]['unitName']                 = $row['unitName'];
+                $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
+    public function getApiProductDetails(GlobalOption $option,$id)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.productUnit','productUnit');
+        $qb->leftJoin('item.category','category');
+        $qb->leftJoin('item.brand','brand');
+        $qb->leftJoin('item.discount','discount');
+        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->addSelect('category.name as categoryName');
+        $qb->addSelect('brand.name as brandName');
+        $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('discount.name as discountName');
+        $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->where("item.id = :pid")->setParameter('pid', $id);
+
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['product_id']               = (int) $row['id'];
+                $data[$key]['name']                     = $row['name'];
+                $data[$key]['quantity']                 = $row['quantity'];
+                $data[$key]['price']                    = $row['price'];
+                $data[$key]['discountPrice']            = $row['discountPrice'];
+                $data[$key]['category']                 = $row['categoryName'];
+                $data[$key]['brand']                    = $row['brandName'];
+                $data[$key]['discountName']             = $row['discountName'];
+                $data[$key]['unitName']                 = $row['unitName'];
+                $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
     public function getSliderFeatureCategory(GlobalOption $globalOption , $limit = 10){
 
         $qb = $this->createQueryBuilder('e');
@@ -449,6 +535,7 @@ class ItemRepository extends EntityRepository
         $qb->join('e.category','category');
         $qb->select('category.id as id','category.name as name');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -469,6 +556,7 @@ class ItemRepository extends EntityRepository
         $qb->join('e.brand','brand');
         $qb->select('brand.id as id','brand.name as name');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->groupBy('brand.id');
         $qb->orderBy('brand.id','DESC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -495,8 +583,10 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.promotion','promotion');
-        $qb->select('promotion.id as id','promotion.name as name','e.path as path');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Promotion"%');
+        $qb->groupBy('promotion.id');
         $qb->orderBy('promotion.id','DESC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -515,15 +605,44 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
+    public function getApiTag(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.tag','promotion');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Tag"%');
+        $qb->groupBy('promotion.id');
+        $qb->orderBy('promotion.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['tag_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
     public function getApiDiscount(GlobalOption $option)
     {
 
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.discount','discount');
-        $qb->select('discount.id as id','discount.name as name','discount.amount as amount','discount.type as type','e.path as path');
+        $qb->select('discount.id as id','discount.name as name','discount.discountAmount as amount','discount.type as type','discount.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->orderBy('discount.id','DESC');
+        $qb->groupBy('discount.id');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
         if($result){

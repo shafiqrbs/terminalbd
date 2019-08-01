@@ -44,6 +44,12 @@ ecommerce_item_inline_discount_search:
     options:
            expose: true
 
+ecommerce_item_quantity_applicable:
+    path:     /{id}/quantity-applicable
+    defaults: { _controller: "EcommerceBundle:Item:quantityApplicable" }
+    options:
+           expose: true
+
 ecommerce_item_inline_tag_search:
     path:     /inline-tag-search
     defaults: { _controller: "EcommerceBundle:Item:tagSelect" }

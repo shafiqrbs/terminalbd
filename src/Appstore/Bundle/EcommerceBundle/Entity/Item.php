@@ -238,6 +238,13 @@ class Item
     /**
      * @var boolean
      *
+     * @ORM\Column(name="quantityApplicable", type="boolean", nullable = true)
+     */
+    private $quantityApplicable = 0;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="preOrder", type="boolean", nullable = true)
      */
     private $preOrder = false;
@@ -284,9 +291,9 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=20 , nullable = true)
+     * @ORM\Column(name="source", type="string", length= 30 , nullable = true)
      */
-    private $source;
+    private $source = "ecommerce";
 
     /**
      * @var text
@@ -1144,6 +1151,22 @@ class Item
     public function setImageDefaultSource($imageDefaultSource)
     {
         $this->imageDefaultSource = $imageDefaultSource;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQuantityApplicable()
+    {
+        return $this->quantityApplicable;
+    }
+
+    /**
+     * @param bool $quantityApplicable
+     */
+    public function setQuantityApplicable($quantityApplicable)
+    {
+        $this->quantityApplicable = $quantityApplicable;
     }
 
 

@@ -35,14 +35,16 @@ class FeatureCategoryRepository extends EntityRepository
     public function getApiFeature(GlobalOption $option, $limit = 10)
     {
 
-
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.category','category');
+        $qb->select('e.path as path');
+        $qb->addSelect('category.id AS category_id','category.name AS name');
         $qb->where("e.globalOption = :option");
         $qb->setParameter('option', $option->getId());
         $qb->orderBy('e.id','DESC');
         $qb->setMaxResults($limit);
         $sql = $qb->getQuery();
-        $result = $sql->getResult();
+        $result = $sql->getArrayResult();
 
 
         $data = array();
@@ -51,10 +53,10 @@ class FeatureCategoryRepository extends EntityRepository
 
         foreach($result as $key => $row) {
 
-            $data[$key]['category_id']    = (int) $row->getId();
-            $data[$key]['name']           = $row->getCategory()->getName();
-            if($row->getWebPath()){
-                $path = $this->resizeFilter($row->getWebPath());
+            $data[$key]['category_id']    = (int) $row['category_id'];
+            $data[$key]['name']           = $row['name'];
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/feature-category/{$row['path']}");
                 $data[$key]['imagePath']            =  $path;
             }else{
                 $data[$key]['imagePath']            = "";

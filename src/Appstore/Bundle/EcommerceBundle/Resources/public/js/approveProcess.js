@@ -39,22 +39,9 @@ function ApproveProcess(){
     });
 
 
-    $(document).on("click", ".item-remove", function() {
+    $(document).on("click", ".isApplicable", function() {
         var url = $(this).attr('data-url');
-        var subDomain = $(this).attr('data-value');
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.get(url, function( data ) {
-                    if(data == 'itemDelete'){
-                        location.reload();
-                    }else{
-                        top.location.href="/customer/"+subDomain+"/order";//redirection
-                    }
-                });
-            }
-        });
+        $.get(url);
     });
 
     $('.btn-number').click(function(e){

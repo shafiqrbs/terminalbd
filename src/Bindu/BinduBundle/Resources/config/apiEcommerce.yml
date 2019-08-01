@@ -2,6 +2,18 @@ api_setup:
     path:     /setup
     defaults: { _controller: BinduBundle:ApiEcommerce:setup }
 
+api_ecommerce_item_details:
+    path:     /product-details
+    defaults: { _controller: BinduBundle:ApiEcommerce:productDetails }
+
+api_ecommerce_item:
+    path:     /product
+    defaults: { _controller: BinduBundle:ApiEcommerce:product }
+
+api_ecommerce_item_search:
+    path:     /product-search
+    defaults: { _controller: BinduBundle:ApiEcommerce:product }
+
 api_ecommerce_item_category:
     path:     /feature-category
     defaults: { _controller: BinduBundle:ApiEcommerce:category }
@@ -22,6 +34,24 @@ api_ecommerce_item_promotion:
     path:     /promotion
     defaults: { _controller: BinduBundle:ApiEcommerce:promotion }
 
+api_ecommerce_item_tag:
+    path:     /tag
+    defaults: { _controller: BinduBundle:ApiEcommerce:tag }
+
 api_ecommerce_item_discount:
     path:     /discount
     defaults: { _controller: BinduBundle:ApiEcommerce:discount }
+
+api_ecommerce_login:
+    path:     /user-login
+    defaults: { _controller: BinduBundle:ApiEcommerce:userLogin }
+    methods:  POST
+    options:
+            expose: true
+
+api_ecommerce_registration:
+    path:     /user-register
+    defaults: { _controller: BinduBundle:ApiEcommerce:userRegister }
+    methods:  POST
+    options:
+            expose: true

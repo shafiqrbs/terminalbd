@@ -281,6 +281,11 @@ class OrderRepository extends EntityRepository
         $em->flush();
     }
 
+    public function insertAndroidOrder(GlobalOption $option,$data= array())
+    {
+
+    }
+
 
 
 }

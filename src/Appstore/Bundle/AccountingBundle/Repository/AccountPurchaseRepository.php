@@ -33,6 +33,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption->getId());
         $this->handleSearchBetween($qb,$globalOption,$data);
         $qb->orderBy('e.created','DESC');
+        $qb->addOrderBy('e.id','DESC');
         $result = $qb->getQuery();
         return $result;
 
@@ -232,7 +233,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 
     }
 
-	public function vendorSingleOutstanding($globalOption,$head = '',$vendor)
+	public function vendorSingleOutstanding(GlobalOption $globalOption,$head = '',$vendor)
 	{
 
 		$qb = $this->createQueryBuilder('e');
@@ -249,7 +250,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
             $qb->join('e.accountVendor','v');
         }
 		$qb->andWhere("v.id = :vendor")->setParameter('vendor', $vendor);
-		$result = $qb->getQuery()->getOneOrNullResult()['balance'];
+        $result = $qb->getQuery()->getOneOrNullResult()['balance'];
 		return $result;
 
 	}
