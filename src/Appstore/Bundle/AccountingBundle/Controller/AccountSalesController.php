@@ -377,7 +377,8 @@ class AccountSalesController extends Controller
 		    }elseif($entity->getProcessHead() == 'Discount'){
 			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
 		    }elseif($entity->getAmount() > 0 ){
-			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
 		    }
 		    return new Response('success');
 

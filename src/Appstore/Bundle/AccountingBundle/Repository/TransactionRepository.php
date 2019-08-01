@@ -543,14 +543,13 @@ class TransactionRepository extends EntityRepository
 	    $transaction->setProcess('Inventory Assets');
 	    /* Current Liabilities - Account Payable Payment */
 	    $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
-	    $transaction->setAmount('-'.$entity->getPurchaseAmount());
-	    $transaction->setCredit($entity->getPurchaseAmount());
+        $transaction->setSubAccountHead($subAccount);
+	    $transaction->setAmount($entity->getPurchaseAmount());
+	    $transaction->setDebit($entity->getPurchaseAmount());
 	    $this->_em->persist($transaction);
 	    $this->_em->flush();
 
     }
-
-
 
     public function insertPurchaseVendorTransaction(AccountPurchase $entity)
     {
@@ -585,7 +584,14 @@ class TransactionRepository extends EntityRepository
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
         }
-
+        if($entity->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($entity->getMedicineVendor());
+        }elseif ($entity->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($entity->getVendor());
+        }else{
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($entity->getAccountVendor());
+        }
+        $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount('-'.$entity->getPayment());
         $transaction->setCredit($entity->getPayment());
         $this->_em->persist($transaction);
@@ -938,20 +944,20 @@ class TransactionRepository extends EntityRepository
         $this->_em->persist($transaction);
 		$this->_em->flush();
 
-		$transaction = new Transaction();
-		$transaction->setGlobalOption($entity->getGlobalOption());
-		$transaction->setAccountRefNo($entity->getAccountRefNo());
-		$transaction->setProcessHead('Sales');
-		$transaction->setUpdated($entity->getUpdated());
-		$transaction->setProcess('Long Term Liabilities');
+		$transactionCredit = new Transaction();
+        $transactionCredit->setGlobalOption($entity->getGlobalOption());
+        $transactionCredit->setAccountRefNo($entity->getAccountRefNo());
+        $transactionCredit->setProcessHead('Sales');
+        $transactionCredit->setUpdated($entity->getUpdated());
+		$transactionCredit->setProcess('Long Term Liabilities');
 		/* Current Current Asset - Account Receivable */
-		$transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(49));
+		$transactionCredit->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(49));
         /* ==== Sub Account set ====*/
         $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
-        $transaction->setSubAccountHead($subAccount);
-		$transaction->setAmount('-'.$entity->getTotalAmount());
-		$transaction->setCredit($entity->getTotalAmount());
-		$this->_em->persist($transaction);
+        $transactionCredit->setSubAccountHead($subAccount);
+		$transactionCredit->setAmount('-'.$entity->getTotalAmount());
+		$transactionCredit->setCredit($entity->getTotalAmount());
+		$this->_em->persist($transactionCredit);
 		$this->_em->flush();
 
 	}
@@ -1159,7 +1165,7 @@ class TransactionRepository extends EntityRepository
 
         $this->insertAccountSalesDebitTransaction($entity);
         $this->insertAccountSalesCreditTransaction($entity);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
+
     }
 
     public function  insertAccountSalesDebitTransaction(AccountSales $entity)
@@ -1191,8 +1197,8 @@ class TransactionRepository extends EntityRepository
             /* Cash - Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
-        }
 
+        }
         $transaction->setAmount($entity->getAmount());
         $transaction->setDebit($entity->getAmount());
         $this->_em->persist($transaction);
