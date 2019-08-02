@@ -5,6 +5,7 @@ namespace Bindu\BinduBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
@@ -135,9 +136,12 @@ class ApiEcommerceController extends Controller
         }else{
 
             /* @var $entity GlobalOption */
-            $id = $_REQUEST['id'];
+
+            $item = $_REQUEST['id'];
+
+
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$id);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$item);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));
@@ -324,7 +328,7 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $this->checkApiValidation($request);
-            $intlMobile = $request->query->get('mobile',NULL,true);
+            $intlMobile =$data['mobile'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
@@ -366,9 +370,6 @@ class ApiEcommerceController extends Controller
         }else{
 
             $data = $request->request->all();
-
-            var_dump($data);
-            exit;
 
             /* @var $entity GlobalOption */
 
@@ -421,7 +422,7 @@ class ApiEcommerceController extends Controller
 
             $data['user_id'] = (int) $user->getId();
             $data['username'] = $mobile;
-            $data['fullName'] = $user->userFullName();
+            $data['fullName'] = $user->getProfile()->getName();
             $data['email'] = $user->getEmail();
             $data['password'] = $a;
             $data['msg'] = "valid";

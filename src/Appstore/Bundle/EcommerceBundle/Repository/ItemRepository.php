@@ -481,35 +481,30 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.category','category');
         $qb->leftJoin('item.brand','brand');
         $qb->leftJoin('item.discount','discount');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
         $qb->addSelect('category.name as categoryName');
         $qb->addSelect('brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
         $qb->addSelect('discount.name as discountName');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
-        $qb->where("item.id = :pid")->setParameter('pid', $id);
-
-        $result = $qb->getQuery()->getArrayResult();
+        $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
+        $row = $qb->getQuery()->getOneOrNullResult();
         $data = array();
-        if($result){
-            foreach($result as $key => $row) {
-                $data[$key]['product_id']               = (int) $row['id'];
-                $data[$key]['name']                     = $row['name'];
-                $data[$key]['quantity']                 = $row['quantity'];
-                $data[$key]['price']                    = $row['price'];
-                $data[$key]['discountPrice']            = $row['discountPrice'];
-                $data[$key]['category']                 = $row['categoryName'];
-                $data[$key]['brand']                    = $row['brandName'];
-                $data[$key]['discountName']             = $row['discountName'];
-                $data[$key]['unitName']                 = $row['unitName'];
-                $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
-                if($row['path']){
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$row['path']}");
-                    $data[$key]['imagePath']            =  $path;
-                }else{
-                    $data[$key]['imagePath']            = "";
-                }
-            }
+        $data['product_id']               = (int) $row['itemId'];
+        $data['name']                     = $row['name'];
+        $data['quantity']                 = $row['quantity'];
+        $data['price']                    = $row['price'];
+        $data['discountPrice']            = $row['discountPrice'];
+        $data['category']                 = $row['categoryName'];
+        $data['brand']                    = $row['brandName'];
+        $data['discountName']             = $row['discountName'];
+        $data['unitName']                 = $row['unitName'];
+        $data['quantityApplicable']       = $row['quantityApplicable'];
+        if($row['path']){
+            $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$row['path']}");
+            $data['imagePath']            =  $path;
+        }else{
+            $data['imagePath']            = "";
         }
         return $data;
     }
