@@ -1,0 +1,46 @@
+assets_particular:
+    resource: "@AssetsBundle/Resources/config/routing/particular.yml"
+    prefix:   /particular
+
+assets_depreciation_model:
+    resource: "@AssetsBundle/Resources/config/routing/model.yml"
+    prefix:   /depreciation-model
+
+assets_disposal:
+    resource: "@AssetsBundle/Resources/config/routing/disposal.yml"
+    prefix:   /disposal
+
+assets_distribution:
+    resource: "@AssetsBundle/Resources/config/routing/distribution.yml"
+    prefix:   /distribution
+
+assets_product:
+    resource: "@AssetsBundle/Resources/config/routing/product.yml"
+    prefix:   /product
+
+assets_ledger:
+    resource: "@AssetsBundle/Resources/config/routing/ledger.yml"
+    prefix:   /ledger
+
+assets_stockitem:
+    resource: "@AssetsBundle/Resources/config/routing/stockitem.yml"
+    prefix:   /stockitem
+
+assets_item:
+    resource: "@AssetsBundle/Resources/config/routing/item.yml"
+    prefix:   /item
+
+assets_depreciation:
+    path:     /depreciation
+    defaults: { _controller: AssetsBundle:Depreciation:edit }
+
+assets_depreciation_update:
+    path:     /depreciation/update
+    defaults: { _controller: AssetsBundle:Depreciation:update }
+    methods:  [POST, PUT]
+
+assets_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: AssetsBundle:Default:index }
+
+

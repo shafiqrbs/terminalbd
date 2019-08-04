@@ -72,7 +72,7 @@
                                         <ul class="unstyled" >
                                             <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
                                             <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
-                                            <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
+                                            <li><strong>Location</strong>:{% if entity.createdBy.profile.location is not empty %}&nbsp;{{ entity.createdBy.profile.location.name }}{% endif %}</li>
                                             <li>{{ entity.address }}</li>
                                         </ul>
                                     </div>
@@ -115,30 +115,7 @@
 
                         <div class="portlet-body flip-scroll">
                             <div class="clearfix">&nbsp;</div>
-                            {{ form_start(salesItem) }}
-                            {{ form_row(salesItem._token) }}
-                            <div class="row-fluid particular-info" style="padding-left:15px!important" >
-                                <div class="span6">
-                                    {{ form_widget(salesItem.stockName) }}
-                                    {{ form_errors(salesItem.stockName) }}
-                                </div>
-                                <div class="span3">
-                                    {{ form_widget(salesItem.barcode) }}
-                                    {{ form_errors(salesItem.barcode) }}
-                                </div>
-                                <div class="span3">
-                                    <div class="input-append">
-                                        <div class="input-group">
-                                            {{ form_widget(salesItem.salesPrice) }}
-                                            {{ form_errors(salesItem.salesPrice) }}
-                                            {{ form_widget(salesItem.quantity) }}
-                                            {{ form_errors(salesItem.quantity) }}
-                                            <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{ form_end(salesItem) }}
+
                             <div class="clearfix">&nbsp;</div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
@@ -193,7 +170,6 @@
                                                 <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
                                             {% endif %}
                                             {% if entity.process == 'created'  %}
-                                                <a title="Are you sure went to add ?"  data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn blue orderItemProcess" ><i class="icon-save"></i></a>
                                                 <a title="Are you sure went to delete ?"  data-id="{{ orderItem.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn red item-remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
@@ -261,8 +237,33 @@
 
                         </div>
                         <div class="clearfix"><br/> </div>
-
-
+                        <div class="clearfix"> </div>
+                        <div class="form-actions portlet box red">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Order Update</div></div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        {{ form_start(salesItem) }}
+                        {{ form_row(salesItem._token) }}
+                        <div class="row-fluid particular-info" style="padding-left:15px!important" >
+                            <div class="span8">
+                                {{ form_widget(salesItem.itemName) }}
+                                {{ form_errors(salesItem.itemName) }}
+                            </div>
+                            <div class="span4">
+                                <div class="input-append">
+                                    <div class="input-group">
+                                        {{ form_widget(salesItem.price) }}
+                                        {{ form_errors(salesItem.price) }}
+                                        {{ form_widget(salesItem.quantity) }}
+                                        {{ form_errors(salesItem.quantity) }}
+                                        <button type="button" class="btn yellow" id="unit">Unit</button>
+                                        <button type="button" class="btn blue" id="addOrderItem"> <span class="fa fa-shopping-cart"></span> Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_end(salesItem) }}
+                        <div class="clearfix"><br/> </div>
                         <div class="clearfix"> </div>
                         <div class="form-actions portlet box green">
                             <div class="portlet-title">
@@ -386,9 +387,16 @@
     </div>
     <div id="payment-confirm" style="display:none; text-align: left!important;">Thank you for your payment. Your payment has been sent successfully to our customer service department.</div>
 <style>
-    input[class*="span"].m-wrap, .row-fluid select[class*="span"] {
+    input[class*="span"].m-wrap,select[class*="span"],select{
         border: 3px solid #0b84fe!important;
         height: 34px!important;
+    }
+    .row-fluid textarea[class*="span"] {
+        border: 3px solid #0b84fe!important;
+    }
+    .select2-container .select2-choice {
+        border: 3px solid #0b84fe!important;
+        height: 27px!important;
     }
 </style>
 {% endblock %}
@@ -402,8 +410,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@EcommerceBundle/Resources/public/js/editable.js'
-    '@EcommerceBundle/Resources/public/js/approveProcess.js'
+    '@CustomerBundle/Resources/public/js/editable.js'
+    '@CustomerBundle/Resources/public/js/medicine.js'
+    '@CustomerBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

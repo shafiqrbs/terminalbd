@@ -35,6 +35,7 @@ $(document).on('change', '.transactionMethod', function() {
 $(document).on('change', '#purchaseItem_stockName', function() {
 
     var medicine = $('#purchaseItem_stockName').val();
+    alert(medicine);
     $.ajax({
         url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
         type: 'GET',

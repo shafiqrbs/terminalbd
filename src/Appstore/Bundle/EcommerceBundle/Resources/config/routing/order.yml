@@ -19,6 +19,8 @@ customer_order_add_item:
     path:     /item-add-inline/{id}
     defaults: { _controller: "EcommerceBundle:Order:inlineItemAdd" }
 
+
+
 customer_order_item_disable:
     path:     /item-disable-inline/{id}
     defaults: { _controller: "EcommerceBundle:Order:inlineDisable" }
@@ -75,6 +77,21 @@ customer_order_ajax_payment:
 
 order_medicine_stock_search:
     path:     /order-medicine-search
-    defaults: { _controller: "CustomerBundle:Order:autoSearch" }
+    defaults: { _controller: "EcommerceBundle:Order:autoSearch" }
     options:
             expose: true
+
+medicine_order_item_stock_details:
+    path:     /{id}/order-medicine-item-details
+    defaults: { _controller: "EcommerceBundle:Order:stockDetails" }
+    options:
+            expose: true
+
+customer_medicine_order_item:
+    path:     /{id}/customer-medicine-order-item
+    defaults: { _controller: "EcommerceBundle:Order:medicineItemAdd" }
+    methods:  POST
+    options:
+            expose: true
+
+

@@ -1,3 +1,7 @@
+assests:
+    resource: "@AssetsBundle/Resources/config/routing.yml"
+    prefix:   /
+
 site_domain_control:
     resource: "dynamic/sites.yml"
     type:     rest

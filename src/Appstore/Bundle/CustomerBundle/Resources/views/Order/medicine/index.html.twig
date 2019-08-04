@@ -43,8 +43,7 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >Created</th>
+                                    <th>&nbsp;&nbsp;<i class="icon-list"></i> Created</th>
                                     <th class="numeric" >Delivery</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Quantity</th>
@@ -59,8 +58,7 @@
 
                                 {% for entity in entities %}
                                     <tr id="remove-tr-{{ entity.id }}">
-                                        <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                       <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.item }}</td>
@@ -82,37 +80,7 @@
 
                                         </td>
                                     </tr>
-                                    <tr id="show-{{ entity.id }}" class="showing-overview" >
-                                        <td colspan="11">
-                                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                                <thead class="flip-content ">
-                                                <tr class="head-blue">
-                                                    <th class="numeric" >Item</th>
-                                                    <th class="numeric" >Size/Weight/Dimension</th>
-                                                    <th class="numeric" >Color</th>
-                                                    <th class="numeric" >Quantity</th>
-                                                    <th class="numeric" >Unit Price</th>
-                                                    <th class="numeric" >Total Price</th>
-                                                    <th class="numeric" >Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for item in entity.orderItems %}
-                                                    <tr id="remove-{{ item.id }}">
-                                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }} {{ item.purchaseVendorItem.webName }}</td>
-                                                        <td class="numeric" >{% if item.goodsItem.size is not empty %}{{ item.goodsItem.size.name }}{% endif %}</td>
-                                                        <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
-                                                        <td class="numeric" >{{ item.quantity }}&nbsp;{% if item.purchaseVendorItem.masterItem.productUnit is defined and item.purchaseVendorItem.masterItem.productUnit is not empty %}{{ item.purchaseVendorItem.masterItem.productUnit.name }}{% endif %}</td>
-                                                        <td class="numeric" >{{ item.price }}</td>
-                                                        <td class="numeric" >{{ item.subTotal }}</td>
-                                                    </tr>
 
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-
-                                        </td>
-                                    </tr>
                                 {% endfor %}
 
                                 </tbody>

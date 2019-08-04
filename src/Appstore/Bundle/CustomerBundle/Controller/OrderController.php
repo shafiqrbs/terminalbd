@@ -6,9 +6,11 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderPaymentType;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderType;
+use Appstore\Bundle\EcommerceBundle\Form\MedicineItemType;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -43,11 +45,10 @@ class OrderController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
         $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
-
+        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user , 'globalOption' => $globalOption), array('updated' => 'desc'));
         $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Order:index.html.twig', array(
+        return $this->render("CustomerBundle:Order:index.html.twig", array(
             'entities' => $pagination,
             'globalOption' => $globalOption,
         ));
@@ -137,13 +138,13 @@ class OrderController extends Controller
         if(in_array($entity->getProcess(),$arrs)){
             return $this->redirect($this->generateUrl('order_show',array('id' => $entity->getId(),'shop' => $entity->getGlobalOption()->getUniqueCode())));
         }
-
+        $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$entity);
         if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
             $theme = 'medicine';
         }else{
             $theme = 'ecommerce';
         }
-        $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
+
         return $this->render("CustomerBundle:Order/{$theme}:payment.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
@@ -153,20 +154,67 @@ class OrderController extends Controller
 
     }
 
-    private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
+    private function createMedicineSalesItemForm(OrderItem $orderItem,Order $order )
     {
 
-        $form = $this->createForm(new SalesTemporaryItemType(), $salesItem, array(
-            'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
+        $form = $this->createForm(new MedicineItemType(), $orderItem, array(
+            'action' => $this->generateUrl('medicine_order_item',array('shop' => $order->getGlobalOption()->getSlug(),'id' => $order->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'salesTemporaryItemForm',
+                'id' => 'orderItem',
                 'novalidate' => 'novalidate',
             )
         ));
         return $form;
     }
+
+    /**
+     * Displays a form to edit an existing OrderItem entity.
+     *
+     */
+    public function medicineItemAddAction(Order $entity , Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $orderItem = new OrderItem();
+        $data = $request->request->all()['orderItem'];
+        $stockId = $data['itemName'];
+        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockId);
+        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() :"";
+        $orderItem->setOrder($entity);
+        $orderItem->setItemName($stock->getName());
+        $orderItem->setBrandName($stock->getBrandName());
+        $orderItem->setUnitName($unit);
+        $orderItem->setQuantity($data['quantity']);
+        $orderItem->setPrice($data['price']);
+        $orderItem->setSubTotal($data['price'] * $data['quantity']);
+        $em->persist($orderItem);
+        $em->flush();
+        $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
+        return new Response('success');
+
+    }
+
+
+    public function stockDetailsAction()
+    {
+        $id = $_REQUEST['id'];
+        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($id);
+        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() : '';
+        return new Response(json_encode(array('unit' => $unit , 'price' => $stock->getSalesPrice())));
+    }
+
+    public function autoSearchAction($shop,Request $request)
+    {
+        $item = trim($_REQUEST['q']);
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        if ($item) {
+            $inventory = $globalOption->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->ecommerceSearchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
 
     /**
      * Creates a form to edit a Order entity.
@@ -410,16 +458,6 @@ class OrderController extends Controller
         return new Response('');
 
 
-    }
-
-    public function autoSearchAction(Request $request)
-    {
-        $item = trim($_REQUEST['q']);
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
     }
 
 

@@ -1,0 +1,16 @@
+services:
+#    appstore_inventory.example:
+#        class: Appstore\Bundle\InventoryBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+
+    appstore.product.asset.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\ProductListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.disposal.asset.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\DisposalListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

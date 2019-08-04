@@ -348,6 +348,28 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function ecommerceSearchAutoComplete($q, MedicineConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->leftJoin('e.rackNo', 'rack');
+        $query->leftJoin('e.unit', 'unit');
+        $query->leftJoin('e.medicineBrand', 'brand');
+        $query->leftJoin('brand.medicineGeneric', 'generic');
+        $query->select('e.id as id');
+        $query->addSelect("e.name as text");
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
     public function searchAutoPurchaseStock($q, MedicineConfig $config)
     {
 
@@ -357,6 +379,7 @@ class MedicineStockRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->andWhere("e.status = 1");
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');
@@ -375,9 +398,9 @@ class MedicineStockRepository extends EntityRepository
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->andWhere("e.status = 1");
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
-        $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
