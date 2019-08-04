@@ -43,7 +43,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [UserBundle,FOSCommentBundle,AssetsBundle,InventoryBundle,HospitalBundle,AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,DmsBundle,MedicineBundle,RestaurantBundle,OfficeBundle,BusinessBundle,EducationBundle,HotelBundle,DoctorPrescriptionBundle,MedicineBundle,ElectionBundle]
+    bundles:        [UserBundle,FOSCommentBundle,InventoryBundle,HospitalBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,DmsBundle,MedicineBundle,RestaurantBundle,OfficeBundle,BusinessBundle,EducationBundle,HotelBundle,DoctorPrescriptionBundle,MedicineBundle,ElectionBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
