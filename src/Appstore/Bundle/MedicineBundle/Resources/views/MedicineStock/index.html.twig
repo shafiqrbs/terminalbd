@@ -83,9 +83,11 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Name</th>
+                                    {%  set sort = app.request.query.get('sort') %}
+                                    {%  set direction = app.request.query.get('direction') %}
+                                    <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     {#<th class="numeric" >DAR</th>#}
-                                    <th class="numeric" >Rack</th>
+                                    <th {% if pagination.isSorted('e.rack') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Rack', 'p.name') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Avg PP</th>
                                     <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >Avg MRP</th>
@@ -93,9 +95,9 @@
                                    {# <th class="numeric" >Opening</th>#}
                                     <th class="numeric" >PP Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
-                                    <th class="numeric" >Stock</th>
+                                    <th {% if pagination.isSorted('e.remainingQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Stock', 'e.remainingQuantity') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Pack</th>
-                                    <th class="numeric" >Min.</th>
+                                    <th {% if pagination.isSorted('e.minQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Mini', 'e.minQuantity') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Unit</th>
                                     <th class="numeric" >Action</th>
                                 </tr>

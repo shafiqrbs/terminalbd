@@ -138,10 +138,13 @@ class MedicineStockRepository extends EntityRepository
 
     public function findWithSearch($config,$data){
 
+        $sort = isset($data['sort'])? $data['sort'] :'e.sku';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.rackNo','p');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.sku','ASC');
+        $qb->orderBy("{$sort}",$direction);
         $qb->getQuery()->getArrayResult();
         return  $qb;
     }
