@@ -125,6 +125,7 @@ class CashReconciliationRepository extends EntityRepository
             $entity->setMetaKey($bank['bankName']);
             if($closing > 0){
                 $entity->setAmount($closing);
+                $entity->setSystemAmount($closing);
             }
             $this->_em->persist($entity);
             $this->_em->flush();
@@ -140,6 +141,7 @@ class CashReconciliationRepository extends EntityRepository
             $entity->setMetaKey($mobile['mobileBankName']);
             if ($closing > 0){
                 $entity->setAmount($closing);
+                $entity->setSystemAmount($closing);
             }
             $this->_em->persist($entity);
             $this->_em->flush();

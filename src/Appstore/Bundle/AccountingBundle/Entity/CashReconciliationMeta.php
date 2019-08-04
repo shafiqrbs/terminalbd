@@ -55,6 +55,13 @@ class CashReconciliationMeta
      */
     private $amount = 0;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="systemAmount", type="float", nullable=true)
+     */
+    private $systemAmount = 0;
+
     /**
      * @var float
      *
@@ -201,6 +208,22 @@ class CashReconciliationMeta
     public function setTransactionMethod(string $transactionMethod)
     {
         $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSystemAmount()
+    {
+        return $this->systemAmount;
+    }
+
+    /**
+     * @param float $systemAmount
+     */
+    public function setSystemAmount($systemAmount)
+    {
+        $this->systemAmount = $systemAmount;
     }
 
 }

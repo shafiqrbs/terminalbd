@@ -25,7 +25,7 @@ class BusinessAndroidProcess
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="androidProcesses")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="androidProcess")
      */
     protected $businessConfig;
 

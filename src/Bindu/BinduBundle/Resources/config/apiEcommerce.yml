@@ -1,4 +1,4 @@
-api_setup:
+api_ecommerce_setup:
     path:     /setup
     defaults: { _controller: BinduBundle:ApiEcommerce:setup }
 

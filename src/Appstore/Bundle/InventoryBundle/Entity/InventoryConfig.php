@@ -39,6 +39,11 @@ class InventoryConfig
      */
     protected $products;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $androidProcesses;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PrePurchaseItem", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */

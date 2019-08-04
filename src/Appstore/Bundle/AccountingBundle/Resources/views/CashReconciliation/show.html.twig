@@ -100,8 +100,9 @@
                         {% if transactionBankCashOverviews.result is not empty %}
                             <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-black">
-                                    <th class="span10">Bank Account Name</th>
+                                <tr class="head-grey">
+                                    <th class="span8">Bank Account Name</th>
+                                    <th class="span2" >System Amount</th>
                                     <th class="span2" >Amount</th>
                                 </tr>
                                 </thead>
@@ -111,6 +112,7 @@
                                     {% if note.TransactionMethod == 'Bank' %}
                                         <tr>
                                             <th >{{ note.metaKey }}</th>
+                                            <th>{{ note.systemAmount }}</th>
                                             <th class="numeric" >
                                                 <div class="span12">
                                                     <div class="actions">{{ note.amount }}</div>
@@ -122,7 +124,8 @@
                                 </tbody>
                                 <tr>
                                     <th class="numeric"><span class="pull-right">Grand Total</span></th>
-                                    <td class="numeric" ><strong id="bankTotal">{{ entity.systemBank|number_format }}</strong></td>
+                                    <td class="numeric" ><strong id="">{{ entity.systemBank|number_format }}</strong></td>
+                                    <td class="numeric" ><strong id="bankTotal">{{ entity.bank|number_format }}</strong></td>
                                 </tr>
                             </table>
                         {% endif %}
@@ -142,7 +145,8 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="span10">Mobile Account</th>
+                                    <th class="span8">Mobile Account</th>
+                                    <th class="span2" >System Amount</th>
                                     <th class="span2" >Amount</th>
                                 </tr>
                                 </thead>
@@ -152,6 +156,7 @@
                                     {% if note.TransactionMethod == 'Mobile' %}
                                         <tr>
                                             <th >{{ note.metaKey }}</th>
+                                            <th>{{ note.systemAmount }}</th>
                                             <th class="numeric" >
                                                 <div class="span12">
                                                     <div class="actions">
@@ -168,6 +173,7 @@
                                 <tr>
                                     <th class="numeric"><span class="pull-right">Grand Total</span></th>
                                     <td class="numeric" ><strong id="mobileTotal">{{ entity.systemMobile|number_format }}</strong></td>
+                                    <td class="numeric" ><strong id="">{{ entity.mobile|number_format }}</strong></td>
                                 </tr>
                             </table>
                         {% endif %}

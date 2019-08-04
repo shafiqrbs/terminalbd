@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\CashReconciliationMeta;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -241,5 +242,37 @@ class CashReconciliationController extends Controller
 		return $this->redirect($this->generateUrl('account_cashreconciliation'));
 
 	}
+
+    /**
+	 * @Secure(roles="ROLE_DOMAIN")
+	 */
+
+	public function reportDownloadAction( $id){
+
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('AccountingBundle:CashReconciliation')->findOneBy(array('globalOption' => $option,'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find CashReconciliation entity.');
+        }
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser());
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser());
+        $html = $this->renderView('AccountingBundle:CashReconciliation:pdf.html.twig', array(
+            'entity' => $entity,
+            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
+            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
+
+        ));
+        $date = date("d-m-y");
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename=reconciliation-{$date}.pdf");
+        echo $pdf;
+
+
+    }
 
 }

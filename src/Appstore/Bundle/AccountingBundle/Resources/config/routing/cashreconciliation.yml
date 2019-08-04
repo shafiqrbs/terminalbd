@@ -37,15 +37,10 @@ account_cashreconciliation_reverse:
     path:     /{id}/reverse
     defaults: { _controller: "AccountingBundle:CashReconciliation:journalReverse" }
 
-account_cashreconciliation_approve:
-    path:     /{id}/payment-approve
-    defaults: { _controller: "AccountingBundle:CashReconciliation:approve" }
-    options:
-           expose: true
 
-account_cashreconciliation_inline:
-    path:     /inline-update
-    defaults: { _controller: "AccountingBundle:CashReconciliation:inlineUpdate" }
+account_cashreconciliation_pdf:
+    path:     /{id}/pdf-download
+    defaults: { _controller: "AccountingBundle:CashReconciliation:reportDownload" }
 
 account_cashreconciliation_delete:
     path:     /{id}/delete
