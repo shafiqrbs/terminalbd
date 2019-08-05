@@ -397,13 +397,14 @@ class UserRepository extends EntityRepository
         $data =array();
         if($result){
             foreach($result as $key => $row){
-
+                $roles = unserialize(serialize($row['appRoles']));
+                $rolesSeparated = implode(",", $roles);
                 $data[$key]['user_id'] = (int) $row['id'];
                 $data[$key]['username'] = $row['username'];
                 $data[$key]['fullName'] = $row['fullName'];
                 $data[$key]['email'] = $row['email'];
                 $data[$key]['password'] = $row['appPassword'];
-                $data[$key]['roles'] = unserialize(serialize($row['appRoles']));
+                $data[$key]['roles'] = $rolesSeparated;
 
             }
         }
