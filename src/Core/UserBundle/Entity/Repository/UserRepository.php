@@ -404,7 +404,7 @@ class UserRepository extends EntityRepository
                 $data[$key]['fullName'] = $row['fullName'];
                 $data[$key]['email'] = $row['email'];
                 $data[$key]['password'] = $row['appPassword'];
-                $data[$key]['roles'] = $roles;
+                $data[$key]['roles'] = $rolesSeparated;
 
             }
         }
