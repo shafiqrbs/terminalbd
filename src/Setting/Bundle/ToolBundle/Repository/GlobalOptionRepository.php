@@ -17,6 +17,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
@@ -99,6 +100,8 @@ class GlobalOptionRepository extends EntityRepository
         $result = $qb->getQuery();
         return $result;
     }
+
+
 
     function findByDomain($data = array()) {
 
@@ -927,5 +930,50 @@ class GlobalOptionRepository extends EntityRepository
     }
 
 
+    function apiDomains() {
+
+        $qb =  $this->createQueryBuilder('e');
+        $qb->join('e.siteSetting', 'sitesetting');
+        $qb->join('sitesetting.appModules', 'appmodules');
+        $qb->leftJoin('e.templateCustomize', 't');
+        $qb->leftJoin('e.location', 'location');
+        $qb->leftJoin('location.parent', 'p');
+        $qb->leftJoin('e.mainApp', 'ma');
+        $qb->select('e.name','e.id','e.domain','e.mobile','e.email','location.name as locationName','p.name as parentName','e.domain as domain','e.uniqueCode as uniqueCode');
+        $qb->addSelect('ma.name as mainApp');
+        $qb->addSelect('t.logo  as logo');
+        $qb->orderBy('e.name', 'ASC');
+        $qb->where("e.status = 1");
+        $qb->andWhere("e.domain IS NOT NULL");
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $id = $row['id'];
+            $data[$key]['global_id']            = (int) $row['id'];
+            $data[$key]['name']                 =  $row['name'];
+            $data[$key]['mobile']               =  $row['mobile'];
+            $data[$key]['email']                =  $row['email'];
+            $data[$key]['locationName']         =  $row['locationName'] .",". $row['parentName'];
+            $data[$key]['domain']               =  $row['domain'];
+            $data[$key]['uniqueCode']           =  $row['uniqueCode'];
+            $data[$key]['category']             =  $row['mainApp'];
+            if($row['logo']){
+                $path = $this->resizeFilter("uploads/domain/{$id}/customizeTemplate/{$row['logo']}");
+                $data[$key]['imagePath']            =  $path;
+            }else{
+                $data[$key]['imagePath']            = "";
+            }
+
+        }
+        return $data;
+
+    }
+
+    public function resizeFilter($pathToImage, $width = 256, $height = 256)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
+    }
 
 }

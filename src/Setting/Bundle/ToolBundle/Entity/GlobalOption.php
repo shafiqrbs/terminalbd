@@ -42,6 +42,7 @@ use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ContentBundle\Entity\Admission;
 use Setting\Bundle\ContentBundle\Entity\ContactPage;
 use Setting\Bundle\ContentBundle\Entity\HomePage;

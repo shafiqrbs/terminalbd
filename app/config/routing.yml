@@ -6,8 +6,12 @@ site_domain_control:
     resource: "dynamic/sites.yml"
     type:     rest
 
-android_api:
-    resource: "@BinduBundle/Resources/config/api.yml"
+android_portal_api:
+    resource: "@BinduBundle/Resources/config/apiPortal.yml"
+    prefix:   /android-api-portal
+
+android_sales_api:
+    resource: "@BinduBundle/Resources/config/apiSales.yml"
     prefix:   /android-api
 
 android_ecommerce_api:
