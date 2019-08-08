@@ -660,9 +660,9 @@ class MedicineSalesRepository extends EntityRepository
                 $sales->setDeviceSalesId($item['invoiceId']);
                 $sales->setSubTotal($item['subTotal']);
                 if(isset($item['discount']) and $item['discount'] > 0){
-                    $sales->setDiscount($item['discountCalculation']);
+                    $sales->setDiscount($item['discount']);
                     $sales->setDiscountType($item['discountType']);
-                    $sales->setDiscountCalculation($item['discount']);
+                    $sales->setDiscountCalculation($item['discountCalculation']);
                 }
                 $sales->setNetTotal($item['total']);
                 if($item['total'] < $item['receive']){
