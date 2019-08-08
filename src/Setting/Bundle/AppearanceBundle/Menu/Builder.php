@@ -152,6 +152,13 @@ class Builder extends ContainerAware
                 }
             }
 
+            $result = array_intersect($menuName, array('Assets'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_ASSETS')){
+                    $menu = $this->AssetsMenu($menu);
+                }
+            }
+
             $result = array_intersect($menuName, array('Payroll'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_HR') || $securityContext->isGranted('ROLE_PAYROLL')){
@@ -565,7 +572,6 @@ class Builder extends ContainerAware
                 $menu['Accounting']->addChild('Payment', array('route' => 'account_purchase_restaurant_new'))->setAttribute('icon', 'icon-th-list');
             }
         }*/
-        $menu['Accounting']->addChild('Account User', array('route' => 'account_customer'))->setAttribute('icon', 'icon-user');
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Balance Transfer', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
@@ -620,12 +626,68 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
+            $menu['Accounting']['Master Data']->addChild('Account User', array('route' => 'account_user'));
             $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'accountbank'));
             $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'accountmobilebank'));
             $menu['Accounting']['Master Data']->addChild('Configuration', array('route' => 'account_config_manage'));
             $menu['Accounting']['Master Data']->addChild('Account Head', array('route' => 'accounthead'));
-
         }
+
+        return $menu;
+
+    }
+
+    public function AssetsMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        $menu
+            ->addChild('Asset')
+            ->setAttribute('icon', 'icon-archive')
+            ->setAttribute('dropdown', true);
+
+        $menu['Asset']->addChild('Manage Asset')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Asset']['Manage Asset']->addChild("All Asset", array('route' => 'assets_product'))->setAttribute('icon', 'icon-th-list');
+        foreach ($user->getGlobalOption()->getInventoryConfig()->getCategories() as $category):
+            if($category->getlevel() == 1 ){
+                $menu['Asset']['Manage Asset']->addChild("{$category->getName()}", array('route' => 'assets_product', 'routeParameters' => array('parent' => $category->getSlug())))->setAttribute('icon', 'icon-th-list');
+            }
+        endforeach;
+        $menu['Asset']->addChild('Asset Distribution')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Asset']['Asset Distribution']->addChild("All Distribution", array('route' => 'assets_distribution'))->setAttribute('icon', 'icon-th-list');
+        foreach ($user->getGlobalOption()->getInventoryConfig()->getCategories() as $category):
+            if($category->getlevel() == 1 ){
+                $menu['Asset']['Asset Distribution']->addChild("{$category->getName()}", array('route' => 'assets_distribution', 'routeParameters' => array('parent' => $category->getSlug())))->setAttribute('icon', 'icon-th-list');
+            }
+        endforeach;
+        $menu['Asset']['Asset Distribution']->addChild("Add Distribution", array('route' => 'assets_distribution'))->setAttribute('icon', 'icon-th-list');
+
+        $menu['Asset']->addChild('Asset Ledger')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Asset']['Asset Ledger']->addChild("All Ledger", array('route' => 'assets_ledger'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']['Asset Ledger']->addChild("Product", array('route' => 'assets_ledger_product'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']['Asset Ledger']->addChild("Item", array('route' => 'assets_ledger_item'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']['Asset Ledger']->addChild("Category", array('route' => 'assets_ledger_category'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']['Asset Ledger']->addChild("Branch", array('route' => 'assets_ledger_branch'))->setAttribute('icon', 'icon-th-list');
+
+        $menu['Asset']->addChild('Asset Maintenance')->setAttribute('icon', 'icon icon-cogs')->setAttribute('dropdown', true);
+        $menu['Asset']['Asset Maintenance']->addChild("Asset Maintenance", array('route' => 'serviceinvoice'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']->addChild('Asset Disposal')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Asset']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'))->setAttribute('icon', 'icon-th-list');
+        $menu['Asset']->addChild('Asset Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Asset']['Asset Stock']->addChild('Stock Item', array('route' => 'assets_item'))
+            ->setAttribute('icon', 'icon-hdd');
+        $menu['Asset']['Asset Stock']->addChild('Barcode wise Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
+        $menu['Asset']['Asset Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'))->setAttribute('icon', 'icon-bar-chart');
+        $menu['Asset']['Asset Stock']->addChild('Stock Item Details', array('route' => 'assets_stockitem'))
+            ->setAttribute('icon', 'icon-hdd');
+
+        $menu['Asset']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')->setAttribute('dropdown', true);
+        $menu['Asset']['Master Data']->addChild('Depreciation Model', array('route' => 'assets_model'))->setAttribute('icon', 'icon-hdd');
+        $menu['Asset']['Master Data']->addChild('Depreciation Setup', array('route' => 'assets_depreciation'))->setAttribute('icon', 'icon-hdd');
+        $menu['Asset']['Master Data']->addChild('Setting Data', array('route' => 'assets_particular'))->setAttribute('icon', 'icon-hdd');
 
         return $menu;
 

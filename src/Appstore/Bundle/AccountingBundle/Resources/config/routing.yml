@@ -18,9 +18,17 @@ accounting_customer:
     resource: "@AccountingBundle/Resources/config/routing/accountcustomer.yml"
     prefix:   /account-customer
 
+accounting_user:
+    resource: "@AccountingBundle/Resources/config/routing/accountuser.yml"
+    prefix:   /account-user
+
 accounting_account_sales_adjustment:
     resource: "@AccountingBundle/Resources/config/routing/accountsalesadjustment.yml"
     prefix:   /sales-adjustment
+
+accounting_account_profit:
+    resource: "@AccountingBundle/Resources/config/routing/profit.yml"
+    prefix:   /profit-loss
 
 accounting_account_purchase_commission:
     resource: "@AccountingBundle/Resources/config/routing/purchasecommission.yml"

@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CustomerType extends AbstractType
+class UserType extends AbstractType
 {
 
     /** @var  LocationRepository */

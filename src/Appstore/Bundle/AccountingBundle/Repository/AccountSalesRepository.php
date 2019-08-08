@@ -451,7 +451,7 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-	public function reportMedicineMonthlyIncome(User $user,$data)
+	public function reportMedicineMonthlyIncome(User $user,$data = array())
 	{
 		$globalOption = $user->getGlobalOption();
 		if(empty($data)){
@@ -475,7 +475,32 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-	public function reportMedicineIncome(User $user,$data)
+    public function reportMonthlyProfitLoss(User $user,$data = array())
+    {
+        $globalOption = $user->getGlobalOption();
+        if(empty($data)){
+
+            $datetime = new \DateTime("2019-07-01");
+            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+        }else{
+            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+        }
+
+        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
+        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
+        $data =  ['sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']];
+        return $data;
+
+    }
+
+
+    public function reportMedicineIncome(User $user,$data)
 	{
 		$globalOption = $user->getGlobalOption()->getId();
 		if(empty($data)){

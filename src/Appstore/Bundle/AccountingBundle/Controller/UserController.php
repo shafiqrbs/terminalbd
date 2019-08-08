@@ -19,7 +19,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
  * Customer controller.
  *
  */
-class CustomerController extends Controller
+class UserController extends Controller
 {
 
 
@@ -48,7 +48,7 @@ class CustomerController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('UserBundle:User')->getEmployees($globalOption,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:Customer:index.html.twig', array(
+        return $this->render('AccountingBundle:User:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
@@ -77,7 +77,7 @@ class CustomerController extends Controller
             }
 
         }
-        return $this->redirect($this->generateUrl('account_customer'));
+        return $this->redirect($this->generateUrl('account_user'));
     }
 
     /**
@@ -102,10 +102,10 @@ class CustomerController extends Controller
             if($entity->getUserGroup() != 'other'){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity);
             }
-            return $this->redirect($this->generateUrl('account_customer'));
+            return $this->redirect($this->generateUrl('account_user'));
         }
 
-        return $this->render('AccountingBundle:Customer:new.html.twig', array(
+        return $this->render('AccountingBundle:User:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -122,7 +122,7 @@ class CustomerController extends Controller
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new UserType($location), $entity, array(
-            'action' => $this->generateUrl('account_customer_create'),
+            'action' => $this->generateUrl('account_user_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -138,7 +138,7 @@ class CustomerController extends Controller
     {
         $entity = new Profile();
         $form   = $this->createCreateForm($entity);
-        return $this->render('AccountingBundle:Customer:new.html.twig', array(
+        return $this->render('AccountingBundle:User:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -150,17 +150,7 @@ class CustomerController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UserBundle:Profile')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
-        }
-
-        return $this->render('AccountingBundle:Customer:show.html.twig', array(
-            'entity'      => $entity,
-        ));
     }
 
     /**
@@ -177,7 +167,7 @@ class CustomerController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('AccountingBundle:Customer:new.html.twig', array(
+        return $this->render('AccountingBundle:User:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -194,7 +184,7 @@ class CustomerController extends Controller
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new UserType($location), $entity, array(
-            'action' => $this->generateUrl('account_customer_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('account_user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -224,10 +214,10 @@ class CustomerController extends Controller
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->flush();
-            return $this->redirect($this->generateUrl('account_customer'));
+            return $this->redirect($this->generateUrl('account_user'));
         }
 
-        return $this->render('AccountingBundle:Customer:new.html.twig', array(
+        return $this->render('AccountingBundle:User:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -257,110 +247,9 @@ class CustomerController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        return $this->redirect($this->generateUrl('account_customer'));
-    }
-
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($go,$item);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchCustomerNameAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
-    }
-
-    public function autoMobileSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $go = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($go,$item);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchCustomerMobileAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
-    }
-
-    public function autoCodeSearchAction(Request $request)
-    {
-
-        $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['customer'],'value' => $entity['text']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
-
-    public function searchCodeAction($customer)
-    {
-        return new JsonResponse(array(
-            'id'=> $customer,
-            'text' => $customer
-        ));
+        return $this->redirect($this->generateUrl('account_user'));
     }
 
 
-    public function autoLocationSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
-        }
-        return new JsonResponse($item);
-
-    }
-
-    public function searchLocationNameAction($location)
-    {
-        return new JsonResponse(array(
-            'id'=> $location,
-            'text' => $location
-        ));
-    }
-
-    public function searchAutoCompleteNameAction()
-    {
-        $q = $_REQUEST['q'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($entities);
-
-    }
-
-    public function searchAutoCompleteMobileAction()
-    {
-        $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['customer'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
 
 }

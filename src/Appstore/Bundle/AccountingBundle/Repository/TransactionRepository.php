@@ -184,6 +184,22 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function reportTransactionIncomeLoss($globalOption,$accountHeads,$data){
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHead','accountHead');
+        $qb->select('SUM(ex.amount) as amount');
+        $qb->where("accountHead.parent IN (:parent)");
+        $qb->setParameter('parent', $accountHeads);
+        $qb->andWhere('ex.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $res =  $qb->getQuery();
+        $result = $res->getOneOrNullResult();
+        return $result;
+
+    }
+
     public function reportTransactionIncome($globalOption,$accountHeads,$data){
 
         $qb = $this->createQueryBuilder('ex');

@@ -618,17 +618,13 @@ class ApiController extends Controller
 
 
             if($entity->getMainApp()->getSlug() == 'miss'){
-                $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-             //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
-                $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-              //  $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+                $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
             }elseif($entity->getMainApp()->getSlug() == 'inventory'){
-                $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-               // $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+                $this->getDoctrine()->getRepository('InventoryBundle:InventoryAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
             }elseif($entity->getMainApp()->getSlug() == 'business'){
-                $androidProcess = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
-               // $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($entity,$androidProcess);
+                $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
             }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
@@ -638,36 +634,6 @@ class ApiController extends Controller
 
     }
 
-    public function apiSalesItemAction(Request $request)
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-        if( $this->checkApiValidation($request) == 'invalid') {
-
-            return new Response('Unauthorized access.', 401);
-
-        }else{
-
-            /* @var $entity GlobalOption */
-            $entity = $this->checkApiValidation($request);
-            $data = $request->request->all();
-            if($entity->getMainApp()->getSlug() == 'miss'){
-                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesItem($entity,$data);
-            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
-                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
-            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
-                $data = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->getApiVendor($entity);
-            }elseif($entity->getMainApp()->getSlug() == 'business'){
-                $data = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->getApiVendor($entity);
-            }
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
-        }
-
-    }
 
     public function apiPurchaseAction(Request $request)
     {
@@ -684,7 +650,21 @@ class ApiController extends Controller
             $entity = $this->checkApiValidation($request);
             $deviceId = $request->headers->get('X-DEVICE-ID');
 
-            $data = array('deviceId' => 1,'item' => "jsonItem",'itemCount'=> 10,'subItem'=>"jsonSubItem",'subItemCount'=> 50);
+            $jsonInput = '[
+            {
+            "invoiceId":"051900113","subTotal":"1200","discount":"200","discountType":"Flat","discountCalculation":"10","vat":"0","total":"1000","receive":"800","due":"200","vendorId":"223","transactionMethod":"cash","bankAccount":"","mobileBankAccount":"","created":"","createdBy":"","invoiceMode":"","remark":""
+            }
+        ]';
+
+            $jsonInputItem = '[
+            {"purchaseId":"051900113","stockId":"10717","purchasePrice":"25","quantity":"2","subTotal":"50"},
+            {"purchaseId":"051900113","stockId":"10713","purchasePrice":"15","quantity":"2","subTotal":"30"},
+            {"purchaseId":"051900113","stockId":"10707","purchasePrice":"120","quantity":"2","subTotal":"240"},
+            {"purchaseId":"051900113","stockId":"10708","purchasePrice":"10","quantity":"2","subTotal":"20"}
+        ]';
+
+
+            $data = array('deviceId' => 1,'item' => $jsonInput ,'itemCount'=> 1,'subItem'=>$jsonInputItem,'subItemCount'=> 4);
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'purchase',$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){

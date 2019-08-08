@@ -230,6 +230,11 @@ class GlobalOption
     protected $accountingConfig;
 
    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountProfit", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountProfit;
+
+   /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $accountHeads;

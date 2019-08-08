@@ -145,6 +145,21 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $assets = array('assets');
+        $result = array_intersect($arrSlugs, $assets);
+        if (!empty($result)) {
+            $array['ASSETS'] = array(
+                'ROLE_ASSETS'                                      => 'Fixed Assets',
+                'ROLE_ASSETS_MANAGE'                               => 'Assets Manage',
+                'ROLE_ASSETS_DISTRIBUTION'                         => 'Assets Distribution',
+                'ROLE_ASSETS_MAINTENANCE'                          => 'Assets Maintenance',
+                'ROLE_ASSETS_DISPOSAL'                             => 'Assets Disposal',
+                'ROLE_ASSETS_STOCK'                                => 'Assets Stock',
+                'ROLE_ASSETS_SETTING'                              => 'Assets Setting',
+
+            );
+        }
+
         $payroll = array('payroll');
         $result = array_intersect($arrSlugs, $payroll);
         if (!empty($result)) {

@@ -1,6 +1,10 @@
 assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /assets
+
+assets_service:
+    resource: "@ServiceBundle/Resources/config/routing.yml"
+    prefix:   /asset-maintenance
 
 site_domain_control:
     resource: "dynamic/sites.yml"

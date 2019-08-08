@@ -1,0 +1,88 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Account of Profit/Loss
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="javascript:">Account of Profit/Loss</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Account Profit/Loss</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('account_profit_new') }}"><i class="icon-plus-sign"></i>&nbsp;Generate</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body">
+                            {% include('flash-message.html.twig') %}
+                        </div>
+                        <div class="portlet-body flip-scroll">
+
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
+                                    <th class="numeric" >Month</th>
+                                    <th class="numeric" >Year</th>
+                                    <th class="numeric" >Sales</th>
+                                    <th class="numeric" >Purchase</th>
+                                    <th class="numeric" >Expenditure</th>
+                                    <th class="numeric" >Revenue</th>
+                                    <th class="numeric" >Profit</th>
+                                    <th class="numeric" >Loss</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.updated|date('F') }}</td>
+                                        <td class="numeric" >{{ entity.updated|date('Y') }}</td>
+                                        <td class="numeric" >{{ entity.sales|number_format }}</td>
+                                        <td class="numeric" >{{ entity.purchase|number_format }}</td>
+                                        <td class="numeric" >{{ entity.expenditure|number_format }}</td>
+                                        <td class="numeric" >{{ entity.revenue|number_format }}</td>
+                                        <th class="numeric" >{{ entity.profit|number_format }}</th>
+                                        <th class="numeric" >{{ entity.loss|number_format }}</th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

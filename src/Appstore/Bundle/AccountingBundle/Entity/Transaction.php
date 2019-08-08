@@ -43,6 +43,11 @@ class Transaction
      private $accountHead;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountProfit", inversedBy="transactions" )
+     **/
+     private $accountProfit;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="subTransactions" )
      **/
      private $subAccountHead;
@@ -424,6 +429,22 @@ class Transaction
     public function setSubAccountHead($subAccountHead)
     {
         $this->subAccountHead = $subAccountHead;
+    }
+
+    /**
+     * @return AccountProfit
+     */
+    public function getAccountProfit()
+    {
+        return $this->accountProfit;
+    }
+
+    /**
+     * @param AccountProfit $accountProfit
+     */
+    public function setAccountProfit($accountProfit)
+    {
+        $this->accountProfit = $accountProfit;
     }
 
 }

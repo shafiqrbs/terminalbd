@@ -1,0 +1,12 @@
+services:
+#    appstore_inventory.example:
+#        class: Appstore\Bundle\InventoryBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+
+    appstore.service.invoice.event.listener:
+        class: Appstore\Bundle\ServiceBundle\EventListener\ServiceInvoiceListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+
