@@ -626,8 +626,10 @@ class ApiController extends Controller
             }elseif($entity->getMainApp()->getSlug() == 'business'){
                 $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantAndroidProcess')->insertAndroidProcess($entity,$deviceId,'sales',$data);
             }
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode(array('message'=>"success", 'ipAddress'=>$ipAddress)));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -639,6 +641,7 @@ class ApiController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
+
 
         if( $this->checkApiValidation($request) == 'invalid') {
 
@@ -677,10 +680,10 @@ class ApiController extends Controller
             }elseif($entity->getMainApp()->getSlug() == 'business'){
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessAndroidProcess')->insertAndroidProcess($entity,$deviceId,'purchase',$data);
             }
-
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode(array('message'=>"success", 'ipAddress'=>$ipAddress)));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -692,7 +695,7 @@ class ApiController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $deviceId = $request->headers->get('X-DEVICE-ID');
-
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
         if( $this->checkApiValidation($request) == 'invalid') {
 
             return new Response('Unauthorized access.', 401);
@@ -702,10 +705,10 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             $data = $request->request->all();
-            $this->getDoctrine()->getRepository('AccountingBundle:ExpenseAndroidProcess')->insertAndroidProcess($entity,$deviceId,'expenditure',$data);
+            $this->getDoctrine()->getRepository('AccountingBundle:ExpenseAndroidProcess')->insertAndroidProcess($entity,$ipAddress,$deviceId,'expenditure',$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode(array('message'=>"success", 'ipAddress'=>$ipAddress)));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -730,7 +733,7 @@ class ApiController extends Controller
             $data = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->insertApiInvoiceToken($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode("success"));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

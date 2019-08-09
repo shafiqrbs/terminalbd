@@ -54,6 +54,12 @@ class BusinessAndroidProcess
      **/
     private  $purchase;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ipAddress", type="string", length = 100, nullable=true)
+     */
+    private $ipAddress;
 
     /**
      * @var float
@@ -435,6 +441,22 @@ class BusinessAndroidProcess
     public function setBusinessConfig($businessConfig)
     {
         $this->businessConfig = $businessConfig;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * @param string $ipAddress
+     */
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
     }
 
 

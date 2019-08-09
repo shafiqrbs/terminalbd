@@ -12,7 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * MedicineAndroidProcess
  *
  * @ORM\Table(name="expense_android_process")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\ExpenseAndroidProcessRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\ExpenseAndroidProcessRepository")
  */
 class ExpenseAndroidProcess
 {
@@ -101,6 +101,14 @@ class ExpenseAndroidProcess
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ipAddress", type="string", length = 100, nullable=true)
+     */
+    private $ipAddress;
+
 
 
     /**
@@ -281,6 +289,22 @@ class ExpenseAndroidProcess
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * @param string $ipAddress
+     */
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
     }
 
 

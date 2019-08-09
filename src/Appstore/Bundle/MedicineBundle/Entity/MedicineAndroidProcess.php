@@ -83,6 +83,13 @@ class MedicineAndroidProcess
     private $process = 'sales';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="ipAddress", type="string", length = 100, nullable=true)
+     */
+    private $ipAddress;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean", nullable=true)
@@ -319,6 +326,22 @@ class MedicineAndroidProcess
     public function setSubItemCount($subItemCount)
     {
         $this->subItemCount = $subItemCount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * @param string $ipAddress
+     */
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
     }
 
 
