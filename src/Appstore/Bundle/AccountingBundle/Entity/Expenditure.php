@@ -47,6 +47,11 @@ class Expenditure
     private  $accountHead;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess", inversedBy="expendituries" )
+     **/
+    private  $androidProcess;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", inversedBy="expendituries" )
      **/
     private  $expenseCategory;
@@ -665,6 +670,22 @@ class Expenditure
     public function setDeviceSalesId($deviceSalesId)
     {
         $this->deviceSalesId = $deviceSalesId;
+    }
+
+    /**
+     * @return ExpenseAndroidProcess
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param ExpenseAndroidProcess $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
     }
 }
 

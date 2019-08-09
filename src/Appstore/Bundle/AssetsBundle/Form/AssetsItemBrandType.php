@@ -1,13 +1,13 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Form;
+namespace Appstore\Bundle\AssetsBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class ItemBrandType extends AbstractType
+class AssetsItemBrandType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -29,7 +29,7 @@ class ItemBrandType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand'
+            'data_class' => 'Appstore\Bundle\AssetsBundle\Entity\AssetsItemBrand'
         ));
     }
 
@@ -38,6 +38,6 @@ class ItemBrandType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_ItemBrand';
+        return 'itemBrand';
     }
 }

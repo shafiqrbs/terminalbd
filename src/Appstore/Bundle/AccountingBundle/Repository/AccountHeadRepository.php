@@ -86,7 +86,7 @@ class AccountHeadRepository extends EntityRepository
     public function getAccountHeadTrees(){
 
         $ret = array();
-        $parent = array(23,37);
+        $parent = array(23,37,9);
         $query = $this->createQueryBuilder('e');
         $query->select('e');
         $query->where("e.parent IN (:parent)");

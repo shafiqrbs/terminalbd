@@ -2,17 +2,17 @@
 
 namespace Appstore\Bundle\AssetsBundle\Controller;
 
-use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
-use Appstore\Bundle\InventoryBundle\Entity\Product;
-use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
-use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
+use Appstore\Bundle\AssetsBundle\Entity\ItemGallery;
+use Appstore\Bundle\AssetsBundle\Entity\Product;
+use Appstore\Bundle\AssetsBundle\Form\ItemSearchType;
+use Appstore\Bundle\AssetsBundle\Form\ItemWebType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Appstore\Bundle\InventoryBundle\Entity\Item;
-use Appstore\Bundle\InventoryBundle\Form\ItemType;
+use Appstore\Bundle\AssetsBundle\Entity\Item;
+use Appstore\Bundle\AssetsBundle\Form\ItemType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -44,10 +44,10 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,'assets',$data);
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AssetsBundle:Product')->findAll();
         $pagination = $this->paginate($entities);
-        return $this->render('InventoryBundle:Item:index.html.twig', array(
+        return $this->render('AssetsBundle:Item:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data
         ));
@@ -60,19 +60,19 @@ class ItemController extends Controller
 
     public function createAction(Request $request)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $config = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $entity = new Item();
+        $entity = new Product();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
 
         if ($form->isValid()) {
-            $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
+            $checkData = $this->getDoctrine()->getRepository('AssetsBundle:Product')->checkDuplicateSKU($config,$data);
             if($checkData == 0 ) {
 
-                $entity->setInventoryConfig($inventory);
-                $entity->setName($entity->getMasterItem()->getName());
+                $entity->setGlobalOption($config);
+                $entity->upload();
                 $em->persist($entity);
                 $em->flush();
                 $this->get('session')->getFlashBag()->add(
@@ -85,19 +85,14 @@ class ItemController extends Controller
                 $this->get('session')->getFlashBag()->add(
                     'notice',"Item already exist, Please change add another item name"
                 );
-                return $this->render('InventoryBundle:Item:new.html.twig', array(
+                return $this->render('AssetsBundle:Item:new.html.twig', array(
                     'entity' => $entity,
-                    'inventory' => $inventory,
                     'form'   => $form->createView(),
                 ));
             }
-
-
         }
-
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('AssetsBundle:Item:new.html.twig', array(
             'entity' => $entity,
-            'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
     }
@@ -110,15 +105,15 @@ class ItemController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Item $entity)
+    private function createCreateForm(Product $entity)
     {
-        $em = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping');
-        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new ItemType($inventoryConfig,$em), $entity, array(
-            'action' => $this->generateUrl('item_create'),
+        $em = $this->getDoctrine()->getRepository('AssetsBundle:AssetsCategory');
+        $config = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ItemType($config,$em), $entity, array(
+            'action' => $this->generateUrl('assetsitem_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -132,13 +127,12 @@ class ItemController extends Controller
      */
     public function newAction()
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $entity = new Item();
+        $entity = new Product();
         $form   = $this->createCreateForm($entity);
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('AssetsBundle:Item:new.html.twig', array(
             'entity' => $entity,
-            'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
     }
@@ -151,13 +145,13 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:Item')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
 
-       return $this->render('InventoryBundle:Item:show.html.twig', array(
+       return $this->render('AssetsBundle:Item:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
@@ -170,12 +164,12 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('AssetsBundle:Item:new.html.twig', array(
 
             'entity'        => $entity,
             'inventory'     => $inventory,
@@ -215,7 +209,7 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
@@ -229,11 +223,11 @@ class ItemController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertProductGallery($entity,$data);
+            $this->getDoctrine()->getRepository('AssetsBundle:ItemGallery')->insertProductGallery($entity,$data);
             return $this->redirect($this->generateUrl('item'));
         }
 
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('AssetsBundle:Item:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -251,7 +245,7 @@ class ItemController extends Controller
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
         $editForm = $this->createWebForm($entity);
-        return $this->render('InventoryBundle:Item:web.html.twig', array(
+        return $this->render('AssetsBundle:Item:web.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
 
@@ -289,7 +283,7 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $entity = $em->getRepository('InventoryBundle:Product')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Product')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
@@ -301,15 +295,15 @@ class ItemController extends Controller
             if(!empty($entity->upload())){ $entity->removeUpload(); }
             $entity->upload();
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:ItemMetaAttribute')->insertProductCategoryMeta($entity,$data);
-            $this->getDoctrine()->getRepository('InventoryBundle:ItemKeyValue')->insertProductKeyValue($entity,$data);
-            $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertMasterProductGallery($entity,$data);
+            $this->getDoctrine()->getRepository('AssetsBundle:ItemMetaAttribute')->insertProductCategoryMeta($entity,$data);
+            $this->getDoctrine()->getRepository('AssetsBundle:ItemKeyValue')->insertProductKeyValue($entity,$data);
+            $this->getDoctrine()->getRepository('AssetsBundle:ItemGallery')->insertMasterProductGallery($entity,$data);
             $this->get('session')->getFlashBag()->add('success',"Data has been changed successfully");
             return $this->redirect($this->generateUrl('item_edit_web', array('id' => $entity->getId())));
 
         }
 
-        return $this->render('InventoryBundle:Item:web.html.twig', array(
+        return $this->render('AssetsBundle:Item:web.html.twig', array(
             'entity'    => $entity,
             'form'      => $editForm->createView(),
         ));
@@ -351,7 +345,7 @@ class ItemController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -374,7 +368,7 @@ class ItemController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($id);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -401,10 +395,10 @@ class ItemController extends Controller
         $em = $this->getDoctrine()->getManager();
         if(!empty($data)) {
             foreach ($data as $row) {
-                $entities[] = $em->getRepository('InventoryBundle:Item')->find($row);
+                $entities[] = $em->getRepository('AssetsBundle:Item')->find($row);
             }
         }
-        return $this->render('InventoryBundle:Item:pre-barcode.html.twig', array(
+        return $this->render('AssetsBundle:Item:pre-barcode.html.twig', array(
             'entities'      => $entities
         ));
 
@@ -424,7 +418,7 @@ class ItemController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('AssetsBundle:Item')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
     }
@@ -434,7 +428,7 @@ class ItemController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoCompleteAllItem($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('AssetsBundle:Item')->searchAutoCompleteAllItem($item,$inventory);
         }
         return new JsonResponse($item);
     }
@@ -442,7 +436,7 @@ class ItemController extends Controller
     public function priceAction(Request $request)
     {
         $item = $request->request->get('item');
-        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($item);
+        $entity = $this->getDoctrine()->getRepository('AssetsBundle:Item')->find($item);
         return new JsonResponse(array('salesPrice' => $entity->getSalesPrice(),'webPrice'=>$entity->getWebPrice()));
     }
 
@@ -450,7 +444,7 @@ class ItemController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($data['pk']);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
@@ -458,7 +452,7 @@ class ItemController extends Controller
         $entity->$process($data['value']);
         $em->flush();
         if($data['name'] =='SalesPrice'){
-            $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->updateSalesPrice($entity);
+            $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->updateSalesPrice($entity);
         }
         exit;
     }
@@ -486,7 +480,7 @@ class ItemController extends Controller
     public function vendorItemAction($vendor)
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(
+        $entities = $this->getDoctrine()->getRepository('AssetsBundle:Item')->findBy(
             array(
                 'inventoryConfig'=>$inventory,
                 'vendor'=>$vendor)
@@ -539,12 +533,12 @@ class ItemController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:Item')->find($data['pk']);
+        $entity = $em->getRepository('AssetsBundle:Item')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         $discount = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
-        $em->getRepository('InventoryBundle:Item')->getCulculationDiscountPrice($entity,$discount);
+        $em->getRepository('AssetsBundle:Item')->getCulculationDiscountPrice($entity,$discount);
         exit;
 
     }
@@ -557,7 +551,7 @@ class ItemController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-		$entities = $em->getRepository('InventoryBundle:Item')->getInventoryExcel($inventory,$data);
+		$entities = $em->getRepository('AssetsBundle:Item')->getInventoryExcel($inventory,$data);
 		$phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
 
 		$phpExcelObject->setActiveSheetIndex(0)

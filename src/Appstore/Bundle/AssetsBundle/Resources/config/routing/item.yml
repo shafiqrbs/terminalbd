@@ -2,103 +2,103 @@ assets_item:
     path:     /
     defaults: { _controller: "AssetsBundle:Item:index" }
 
-item_show:
+assetsitem_show:
     path:     /{id}/show
     defaults: { _controller: "AssetsBundle:Item:show" }
 
-item_new:
+assetsitem_new:
     path:     /new
     defaults: { _controller: "AssetsBundle:Item:new" }
 
-item_create:
+assetsitem_create:
     path:     /create
     defaults: { _controller: "AssetsBundle:Item:create" }
     methods:  POST
 
-item_edit:
+assetsitem_edit:
     path:     /{id}/edit
     defaults: { _controller: "AssetsBundle:Item:edit" }
 
 
-item_edit_web:
+assetsitem_edit_web:
     path:     /{id}/edit-web
     defaults: { _controller: "AssetsBundle:Item:editWeb" }
 
-item_web_status:
+assetsitem_web_status:
     path:     /{id}/item-web-status
     defaults: { _controller: "AssetsBundle:Item:webStatus" }
 
-assets_item_inline_modify:
+assets_assetsitem_inline_modify:
     path:     /item-inline-update
     defaults: { _controller: "AssetsBundle:Item:updateSalesPrice" }
     methods:  POST
     options:
             expose: true
 
-item_gallery:
+assetsitem_gallery:
     path:     /{item}/upload
     defaults: { _controller: "AssetsBundle:Item:uploadItemImage" }
     options:
            expose: true
 
-item_status:
+assetsitem_status:
     path:     /{id}/status
     defaults: { _controller: "AssetsBundle:Item:status" }
 
-item_is_web:
+assetsitem_is_web:
     path:     /{id}/is-web
     defaults: { _controller: "AssetsBundle:Item:isWeb" }
 
-item_update:
+assetsitem_update:
     path:     /{id}/update
     defaults: { _controller: "AssetsBundle:Item:update" }
     methods:  [POST, PUT]
 
-item_web_update:
+assetsitem_web_update:
     path:     /{id}/web-update
     defaults: { _controller: "AssetsBundle:Item:updateWeb" }
     methods:  [POST, PUT]
 
-item_delete:
+assetsitem_delete:
     path:     /{id}/delete
     defaults: { _controller: "AssetsBundle:Item:delete" }
 
-item_search:
+assetsitem_search:
     path:     /search
     defaults: { _controller: "AssetsBundle:Item:autoSearch" }
     options:
            expose: true
 
-item_search_all:
+assetsitem_search_all:
     path:     /all-search
     defaults: { _controller: "AssetsBundle:Item:autoSearchItemAll" }
     options:
            expose: true
 
-assets_item_inline_update:
+assets_assetsitem_inline_update:
     path:     /{vendor}/vendor-item
     defaults: { _controller: "AssetsBundle:Item:vendorItem" }
     options:
            expose: true
 
-item_price:
+assetsitem_price:
     path:      /price
     defaults: { _controller: "AssetsBundle:Item:price" }
     methods:  [POST]
 
-item_inline_discount_search:
+assetsitem_inline_discount_search:
     path:     /inline-discount-search
     defaults: { _controller: "AssetsBundle:Item:discountSelect" }
     options:
            expose: true
 
-item_inline_tag_search:
+assetsitem_inline_tag_search:
     path:     /inline-tag-search
     defaults: { _controller: "AssetsBundle:Item:tagSelect" }
     options:
            expose: true
 
-item_inline_update:
+assetsitem_inline_update:
     path:     /inline-item-update
     defaults: { _controller: "AssetsBundle:Item:inlineItemUpdate" }
     methods:  POST
@@ -106,7 +106,7 @@ item_inline_update:
             expose: true
 
 
-assets_item_gallery:
+assets_assetsitem_gallery:
     path:     /{item}/item-upload
     defaults: { _controller: "AssetsBundle:Item:uploadItemImage" }
     methods:  POST

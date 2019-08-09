@@ -121,7 +121,7 @@ class BusinessParticularRepository extends EntityRepository
             $data[$key]['quantity']             = $row['quantity'];
             $data[$key]['salesPrice']           = $row['salesPrice'];
             $data[$key]['purchasePrice']        = $row['purchasePrice'];
-            $data[$key]['printHidden']          = 0;
+            $data[$key]['printHidden']          = "";
             if($row['path']){
                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/product/{$row['path']}");
                 $data[$key]['imagePath']            =  $path;

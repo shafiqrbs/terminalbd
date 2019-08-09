@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
@@ -38,6 +39,12 @@ class AndroidDeviceSetup
     private $globalOption;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess", mappedBy="androidDevice" )
+     **/
+    private  $expenseAndroidProcess;
+
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="androidDevice" )
      **/
     private  $medicineSales;
@@ -208,6 +215,14 @@ class AndroidDeviceSetup
     public function getRestaurantAndroidProcess()
     {
         return $this->restaurantAndroidProcess;
+    }
+
+    /**
+     * @return ExpenseAndroidProcess
+     */
+    public function getExpenseAndroidProcess()
+    {
+        return $this->expenseAndroidProcess;
     }
 
 

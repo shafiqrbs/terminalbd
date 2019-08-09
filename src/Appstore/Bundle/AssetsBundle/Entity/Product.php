@@ -3,14 +3,15 @@
 namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
@@ -30,6 +31,11 @@ class Product
     private $id;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="products" )
+	 **/
+	private  $globalOption;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", inversedBy="products" )
 	 **/
 	private  $depreciation;
@@ -39,20 +45,12 @@ class Product
 	 **/
 	private  $depreciationStatus;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="products" )
-	 **/
-	private  $item;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="product" )
 	 **/
 	private  $distributions;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="products" )
-	 **/
-	private  $salesItem;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="products" )
@@ -65,27 +63,28 @@ class Product
 	 **/
 	private  $branch;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="products" )
-	 **/
-	private  $vendor;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="assetProducts" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", inversedBy="assetProducts" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="childProducts" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", inversedBy="childProducts" )
 	 **/
 	private  $parentCategory;
 
+
 	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="purchaseRequisition", type="string", length=50, nullable=true)
-	 */
-	private $purchaseRequisition;
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsItemBrand", inversedBy="products" )
+	 **/
+	private  $brand;
+
+    /**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="products" )
+	 **/
+	private  $vendor;
+
 
 	/**
 	 * @var string
@@ -100,13 +99,6 @@ class Product
 	 * @ORM\Column(name="branchSerialNo", type="string", length=100, nullable=true)
 	 */
 	private $branchSerialNo;
-
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="tags", type="string", length=100, nullable=true)
-	 */
-	private $tags;
 
 
 	/**
@@ -130,6 +122,13 @@ class Product
 	 * @ORM\Column(name="quantity", type="integer", nullable=true)
 	 */
 	private $quantity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productType", type="string", length=30, nullable=true)
+     */
+    private $productType;
 
 	/**
 	 * @var string
@@ -244,6 +243,17 @@ class Product
      */
     private $customDepreciation = false;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
+
+
 
     /**
      * Get id
@@ -355,33 +365,7 @@ class Product
 		$this->depreciationStatus = $depreciationStatus;
 	}
 
-	/**
-	 * @return Item
-	 */
-	public function getItem() {
-		return $this->item;
-	}
 
-	/**
-	 * @param Item $item
-	 */
-	public function setItem( $item ) {
-		$this->item = $item;
-	}
-
-	/**
-	 * @return SalesItem
-	 */
-	public function getSalesItem() {
-		return $this->salesItem;
-	}
-
-	/**
-	 * @param SalesItem $salesItem
-	 */
-	public function setSalesItem( $salesItem ) {
-		$this->salesItem = $salesItem;
-	}
 
 	/**
 	 * @return PurchaseItem
@@ -439,19 +423,6 @@ class Product
 		$this->parentCategory = $parentCategory;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getPurchaseRequisition() {
-		return $this->purchaseRequisition;
-	}
-
-	/**
-	 * @param string $purchaseRequisition
-	 */
-	public function setPurchaseRequisition( $purchaseRequisition ) {
-		$this->purchaseRequisition = $purchaseRequisition;
-	}
 
 	/**
 	 * @return string
@@ -749,6 +720,134 @@ class Product
 	public function setDepreciationRate( $depreciationRate ) {
 		$this->depreciationRate = $depreciationRate;
 	}
+
+    /**
+     * @return string
+     */
+    public function getProductType()
+    {
+        return $this->productType;
+    }
+
+    /**
+     * @param string $productType
+     */
+    public function setProductType($productType)
+    {
+        $this->productType = $productType;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return AssetsItemBrand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param AssetsItemBrand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param Item $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return Item
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/assets/product/';
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
 
 
 }

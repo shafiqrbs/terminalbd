@@ -5,6 +5,7 @@ use Appstore\Bundle\AssetsBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Core\UserBundle\Entity\User;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
 
 use Doctrine\ORM\EntityRepository;
@@ -238,42 +239,23 @@ class ProductRepository extends EntityRepository
 
     }
 
-    public function checkDuplicateSKU(InventoryConfig $inventory,$data)
+    public function checkDuplicateSKU(GlobalOption $option,$data)
     {
 
 
-        $masterItem = $data['appstore_bundle_inventorybundle_item']['masterItem'];
-        $vendor = isset($data['appstore_bundle_inventorybundle_item']['vendor']) ? $data['appstore_bundle_inventorybundle_item']['vendor'] :'NULL';
-        $itemColor = isset ($data['appstore_bundle_inventorybundle_item']['color']) ? $data['appstore_bundle_inventorybundle_item']['color']:'NULL';
-        $itemSize = isset($data['appstore_bundle_inventorybundle_item']['size']) ? $data['appstore_bundle_inventorybundle_item']['size'] : 'NULL';
-        $itemBrand = isset($data['appstore_bundle_inventorybundle_item']['brand'])?$data['appstore_bundle_inventorybundle_item']['brand']:'NULL';
+        $masterItem = $data['item']['name'];
+        $vendor     = isset($data['item']['vendor']) ? $data['item']['vendor'] :'NULL';
+        $itemBrand  = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
 
         $qb = $this->createQueryBuilder('item');
-        $qb->join('item.masterItem', 'm');
-        $qb->select('COUNT(item.id) AS totalNumber');
-        $qb->where("item.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-
-        $qb->andWhere('item.masterItem = :masterId');
+        $qb->select('COUNT(item.id) AS count');
+        $qb->where("item.globalOption = :option");
+        $qb->setParameter('option', $option);
+        $qb->andWhere('item.name = :masterId');
         $qb->setParameter('masterId', $masterItem);
-        if($inventory->getIsSize() == 1) {
-            $qb->andWhere('item.size = :itemSize');
-            $qb->setParameter('itemSize', $itemSize);
-        }
-        if($inventory->getIsColor() == 1) {
-            $qb->andWhere('item.color = :itemColor');
-            $qb->setParameter('itemColor', $itemColor);
-        }
-        if($inventory->getIsVendor() == 1) {
-            $qb->andWhere('item.vendor = :vendor');
-            $qb->setParameter('vendor', $vendor);
-        }
-        if($inventory->getIsBrand() == 1) {
-            $qb->andWhere('item.brand = :itemBrand');
-            $qb->setParameter('itemBrand', $itemBrand);
-        }
+
         $count = $qb->getQuery()->getOneOrNullResult();
-        $result = $count['totalNumber'];
+        $result = $count['count'];
         return $result;
 
     }
@@ -336,10 +318,9 @@ class ProductRepository extends EntityRepository
 
 
         $qb = $this->createQueryBuilder('item');
-        $qb->join('item.item', 'm');
         $qb->where("item.status IS NOT NULL");
         if (!empty($item)) {
-            $qb->andWhere("m.name = :name");
+            $qb->andWhere("item.name = :name");
             $qb->setParameter('name', $item);
         }
 

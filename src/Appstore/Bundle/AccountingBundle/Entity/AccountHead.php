@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\AssetsBundle\Entity\AssetsCategory;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
@@ -50,6 +51,12 @@ class AccountHead
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $expendituries;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", mappedBy="accountHead" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $assetsCategories;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountHead" )
@@ -617,6 +624,14 @@ class AccountHead
     public function setInventoryVendor($inventoryVendor)
     {
         $this->inventoryVendor = $inventoryVendor;
+    }
+
+    /**
+     * @return AssetsCategory
+     */
+    public function getAssetsCategories()
+    {
+        return $this->assetsCategories;
     }
 
 }

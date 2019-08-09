@@ -664,7 +664,10 @@ class ApiController extends Controller
         ]';
 
 
-            $data = array('deviceId' => 1,'item' => $jsonInput ,'itemCount'=> 1,'subItem'=>$jsonInputItem,'subItemCount'=> 4);
+           // $data = array('deviceId' => 1,'item' => $jsonInput ,'itemCount'=> 1,'subItem'=>$jsonInputItem,'subItemCount'=> 4);
+
+            $data = $request->request->all();
+
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'purchase',$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
@@ -688,6 +691,8 @@ class ApiController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
+        $deviceId = $request->headers->get('X-DEVICE-ID');
+
         if( $this->checkApiValidation($request) == 'invalid') {
 
             return new Response('Unauthorized access.', 401);
@@ -697,7 +702,7 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             $data = $request->request->all();
-            $data = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertApiExpenditure($entity,$data);
+            $this->getDoctrine()->getRepository('AccountingBundle:ExpenseAndroidProcess')->insertAndroidProcess($entity,$deviceId,'expenditure',$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

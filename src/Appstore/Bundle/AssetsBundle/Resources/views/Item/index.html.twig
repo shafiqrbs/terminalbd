@@ -40,8 +40,8 @@
                                 {% set item = searchForm.item is defined ? searchForm.item :'' %}
                                 {% set category = searchForm.category is defined ? searchForm.category :'' %}
                                 {% set brand = searchForm.brand is defined ? searchForm.brand :'' %}
-                                <a  class="btn yellow" target="_blank" href="{{ path('product_inventory_stock_excel',{'gpSku':gpSku,'item':item,'category':category,'brand':brand}) }}"><i class="fa fa-download"></i>&nbsp;Export Excel</a>
-                                <a class="btn red" href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a  class="btn yellow" target="_blank" href=""><i class="fa fa-download"></i>&nbsp;Export Excel</a>
+                                <a class="btn red" href="{{ path('assetsitem_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
                                 <a href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn"  onclick="return prepareBarCode()" >
                                     Barcode
                                     <i class="icon-barcode"></i>
@@ -56,26 +56,19 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span3">
-                                            <input type="text" id="gpSku" name="gpSku"  class="span12 m-warp" value="{% if searchForm.gpSku is defined %}{{ searchForm.gpSku }}{% endif %}"  autocomplete="off" placeholder="Enter sku">
-                                        </div>
-                                        <div class="span3">
+                                        <div class="span6">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
                                         </div>
-                                        <div class="span3">
-                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row-fluid">
                                         <div class="span6">
                                             <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
                                         </div>
-                                        <div class="span5">
-                                            <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+
+
+                                    </div>
+                                    <br>
+                                    <div class="row-fluid">
+                                        <div class="span11">
+                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
                                         </div>
                                         <div class="span1">
                                             <div class="controls">
@@ -94,17 +87,13 @@
                                 <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >SKU</th>
+                                    <th class="numeric" >Category</th>
                                     <th class="numeric" >Name </th>
-                                   {# <th class="numeric" >Opening Qnt</th>#}
+                                    <th class="numeric" >Opening Qnt</th>
+                                    <th class="numeric" >Unit Price</th>
                                     <th class="numeric" >P.Qnt</th>
                                     <th class="numeric" >Ongoing.Qnt</th>
                                     <th class="numeric" >Rmn.Qnt</th>
-                                    <th class="numeric" >Cart Min Qnt</th>
-                                    <th class="numeric" >DP Price</th>
-                                    <th class="numeric" >MRP</th>
-                                    <th class="numeric" >Discount</th>
-                                    <th class="numeric" >Profit</th>
-                                    <th class="numeric" >Is-Web</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -113,30 +102,19 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                        <td class=""><a class="editable" data-name="GpSku" href="#"  data-url="{{ path('inventory_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter GP sku">{{entity.gpSku}}</a></td>
+                                        <td class=""><a class="editable" data-name="Sku" href="#"  data-url="{{ path('assets_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter sku">{{entity.sku}}</a></td>
+                                        <td class="numeric" >{{ entity.masterItem.category.name }}</td>
                                         <td class="numeric" >{{ entity.masterItem.name }}</td>
-                                       {# <td class="numeric" ><a class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('inventory_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter opening quantity">{{entity.openingQuantity}}</a></td>#}
+                                        <td class="numeric" ><a class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('assets_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter opening quantity">{{entity.openingQuantity}}</a></td>
+                                        <td class="numeric" ><a class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('assets_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter approx. purchase price">{{entity.purchasePrice}}</a></td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.orderCreateItem }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
-                                        <td class="numeric" ><a class="editable" data-name="cartDefaultQuantity" href="#"  data-url="{{ path('inventory_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter sales cart min quantity">{{entity.cartDefaultQuantity}}</a></td>
-                                        <td class="numeric" ><a class="editable" data-name="salesDistributorPrice" href="#"  data-url="{{ path('inventory_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter sales price">{{entity.salesDistributorPrice}}</a>{% if entity.discount is not empty %}<br/>{{entity.getDpDiscountPrice}}{% endif %}</td>
-                                        <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_item_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter sales price">{{entity.salesPrice}}</a>{% if entity.discount is not empty %}<br/>{{entity.getDiscountPrice}}{% endif %}</td>
-                                        <td class="numeric" ><a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('item_inline_discount_search') }}"  data-url="{{ path('item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-({{ entity.discount.discountAmount }}) {% if  entity.discount.type == 'percentage' %}%{% endif %}{% endif %}</a></td>
-                                        <td class="numeric" >{{ entity.salesDiscountPercentage }}</td>
                                         <td class="numeric" >
-                                            {% if( entity.isWeb == 1) %}
-                                                <a href="{{ path('item_is_web', { 'id': entity.id}) }}" class="btn blue mini"><i class="icon-check"></i></a>
-                                            {% else %}
-                                                <a  href="{{ path('item_is_web', { 'id': entity.id}) }}" class="btn red mini" ><i class="icon-check-empty"></i></a>
-                                            {% endif %}
-                                        </td>
-                                        <td class="numeric" >
-                                            {% if entity.purchaseQuantity is not empty %}
+                                            {% if  entity.productType == 'assets' %}
                                                 <a href="{{ path('item_edit_web', { 'id': entity.masterItem.id }) }}" class="btn blue mini" >Manage</a>
                                             {% endif %}
                                             {% if entity.purchaseItems is empty %}
-                                                <a href="{{ path('item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif  %}
                                         </td>
@@ -165,8 +143,8 @@
                                                         <th class="numeric" >GRN</th>
                                                         <th class="numeric" >Qnt</th>
                                                         <th class="numeric" >Reaming Qnt</th>
-                                                        <th class="numeric" >Purchase price</th>
-                                                        <th class="numeric" >Sales price</th>
+                                                        <th class="numeric" >Unit price</th>
+                                                        <th class="numeric" >Sub-Total</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -180,7 +158,7 @@
                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                             <td class="numeric" >{{ purchaseItem.itemStock }}</td>
                                                             <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
-                                                            <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a></td>
+                                                            <td class="numeric" >{{ purchaseItem.purchaseSubTotal }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>

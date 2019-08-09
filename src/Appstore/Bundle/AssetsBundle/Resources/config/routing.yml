@@ -30,6 +30,14 @@ assets_item:
     resource: "@AssetsBundle/Resources/config/routing/item.yml"
     prefix:   /item
 
+assets_item_brand:
+    resource: "@AssetsBundle/Resources/config/routing/itembrand.yml"
+    prefix:   /item-brand
+
+assets_category:
+    prefix:     /category
+    resource: "@AssetsBundle/Resources/config/routing/category.yml"
+
 assets_depreciation:
     path:     /depreciation
     defaults: { _controller: AssetsBundle:Depreciation:edit }
