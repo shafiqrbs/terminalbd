@@ -2,6 +2,10 @@ assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
     prefix:   /assets
 
+tally:
+    resource: "@TallyBundle/Resources/config/routing.yml"
+    prefix:   /tally
+
 assets_service:
     resource: "@ServiceBundle/Resources/config/routing.yml"
     prefix:   /asset-maintenance
@@ -76,10 +80,6 @@ core_user_bundle:
 customer:
     resource: "@CustomerBundle/Resources/config/routing.yml"
     prefix:   /customer
-
-ims:
-    resource: "@ImsBundle/Resources/config/routing.yml"
-    prefix:   /
 
 accounting:
     resource: "@AccountingBundle/Resources/config/routing.yml"

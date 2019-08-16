@@ -1,0 +1,47 @@
+itemissue:
+    path:     /
+    defaults: { _controller: "TallyBundle:SalesOnline:index" }
+
+
+itemissue_show:
+    path:     /{id}/show
+    defaults: { _controller: "TallyBundle:SalesOnline:show" }
+
+itemissue_show_preview:
+    path:     /{id}/show-preview
+    defaults: { _controller: "TallyBundle:SalesOnline:showPreview" }
+    methods:  GET
+    options:
+            expose: true
+
+itemissue_new:
+    path:     /new
+    defaults: { _controller: "TallyBundle:SalesOnline:new" }
+
+itemissue_edit:
+    path:     /{code}/item-delivery-issue
+    defaults: { _controller: "TallyBundle:SalesOnline:edit" }
+
+
+itemissue_approve:
+    path:     /{id}/{process}/approve
+    defaults: { _controller: "TallyBundle:SalesOnline:approve" }
+    options:
+           expose: true
+
+itemissue_update:
+    path:     /{id}/update
+    defaults: { _controller: "TallyBundle:SalesOnline:update" }
+    methods:  [POST, PUT]
+
+itemissue_item:
+    path:     /issue-item-details
+    defaults: { _controller: "TallyBundle:SalesOnline:salesItem" }
+
+itemissue_print_invoice:
+    path:     /{invoice}/invoice
+    defaults: { _controller: "TallyBundle:SalesOnline:invoicePrint" }
+
+itemissue_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "TallyBundle:SalesOnline:deleteEmptyInvoice" }

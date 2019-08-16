@@ -1,106 +1,108 @@
 assets_item:
     path:     /
-    defaults: { _controller: "AssetsBundle:Item:index" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:index" }
 
 assetsitem_show:
     path:     /{id}/show
-    defaults: { _controller: "AssetsBundle:Item:show" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:show" }
 
 assetsitem_new:
     path:     /new
-    defaults: { _controller: "AssetsBundle:Item:new" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:new" }
 
 assetsitem_create:
     path:     /create
-    defaults: { _controller: "AssetsBundle:Item:create" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:create" }
     methods:  POST
 
 assetsitem_edit:
     path:     /{id}/edit
-    defaults: { _controller: "AssetsBundle:Item:edit" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:edit" }
 
 
-assetsitem_edit_web:
-    path:     /{id}/edit-web
-    defaults: { _controller: "AssetsBundle:Item:editWeb" }
 
-assetsitem_web_status:
-    path:     /{id}/item-web-status
-    defaults: { _controller: "AssetsBundle:Item:webStatus" }
-
-assets_assetsitem_inline_modify:
+assetsitem_inline_modify:
     path:     /item-inline-update
-    defaults: { _controller: "AssetsBundle:Item:updateSalesPrice" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:updateSalesPrice" }
     methods:  POST
     options:
             expose: true
 
 assetsitem_gallery:
     path:     /{item}/upload
-    defaults: { _controller: "AssetsBundle:Item:uploadItemImage" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:uploadItemImage" }
     options:
            expose: true
 
 assetsitem_status:
     path:     /{id}/status
-    defaults: { _controller: "AssetsBundle:Item:status" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:status" }
 
 assetsitem_is_web:
     path:     /{id}/is-web
-    defaults: { _controller: "AssetsBundle:Item:isWeb" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:isWeb" }
 
 assetsitem_update:
     path:     /{id}/update
-    defaults: { _controller: "AssetsBundle:Item:update" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:update" }
     methods:  [POST, PUT]
+
+assetsitem_edit_web:
+    path:     /{id}/edit-assets
+    defaults: { _controller: "AssetsBundle:ProductGroup:editAssets" }
+
+assetsitem_web_status:
+    path:     /{id}/item-web-status
+    defaults: { _controller: "AssetsBundle:ProductGroup:webStatus" }
+
 
 assetsitem_web_update:
     path:     /{id}/web-update
-    defaults: { _controller: "AssetsBundle:Item:updateWeb" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:updateAssets" }
     methods:  [POST, PUT]
 
 assetsitem_delete:
     path:     /{id}/delete
-    defaults: { _controller: "AssetsBundle:Item:delete" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:delete" }
 
 assetsitem_search:
     path:     /search
-    defaults: { _controller: "AssetsBundle:Item:autoSearch" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:autoSearch" }
     options:
            expose: true
 
 assetsitem_search_all:
     path:     /all-search
-    defaults: { _controller: "AssetsBundle:Item:autoSearchItemAll" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:autoSearchItemAll" }
     options:
            expose: true
 
 assets_assetsitem_inline_update:
     path:     /{vendor}/vendor-item
-    defaults: { _controller: "AssetsBundle:Item:vendorItem" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:vendorItem" }
     options:
            expose: true
 
 assetsitem_price:
     path:      /price
-    defaults: { _controller: "AssetsBundle:Item:price" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:price" }
     methods:  [POST]
 
 assetsitem_inline_discount_search:
     path:     /inline-discount-search
-    defaults: { _controller: "AssetsBundle:Item:discountSelect" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:discountSelect" }
     options:
            expose: true
 
 assetsitem_inline_tag_search:
     path:     /inline-tag-search
-    defaults: { _controller: "AssetsBundle:Item:tagSelect" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:tagSelect" }
     options:
            expose: true
 
 assetsitem_inline_update:
     path:     /inline-item-update
-    defaults: { _controller: "AssetsBundle:Item:inlineItemUpdate" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:inlineItemUpdate" }
     methods:  POST
     options:
             expose: true
@@ -108,7 +110,7 @@ assetsitem_inline_update:
 
 assets_assetsitem_gallery:
     path:     /{item}/item-upload
-    defaults: { _controller: "AssetsBundle:Item:uploadItemImage" }
+    defaults: { _controller: "AssetsBundle:ProductGroup:uploadItemImage" }
     methods:  POST
     options:
            expose: true

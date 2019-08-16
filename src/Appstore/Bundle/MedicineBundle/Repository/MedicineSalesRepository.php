@@ -651,100 +651,102 @@ class MedicineSalesRepository extends EntityRepository
         $em = $this->_em;
 
             $items = json_decode($process->getJsonItem(),true);
-            foreach ($items as $item):
-                $sales = new MedicineSales();
-                $sales->setMedicineConfig($option->getMedicineConfig());
-                $sales->setAndroidDevice($process->getAndroidDevice());
-                $sales->setAndroidProcess($process);
-                $sales->setInvoice($item['invoiceId']);
-                $sales->setDeviceSalesId($item['invoiceId']);
-                $sales->setSubTotal($item['subTotal']);
-                if(isset($item['discount']) and $item['discount'] > 0){
-                    $sales->setDiscount($item['discount']);
-                    $sales->setDiscountType($item['discountType']);
-                    $sales->setDiscountCalculation($item['discountCalculation']);
-                }
-                $sales->setNetTotal($item['total']);
-                if($item['total'] < $item['receive']){
-                    $sales->setReceived($item['total']);
-                }else{
-                    $sales->setReceived($item['receive']);
-                    $sales->setDue($item['total'] - $item['receive']);
-                }
-                $sales->setVat($item['vat']);
-                if(isset($item['transactionMethod']) and $item['transactionMethod']){
-                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
-                    if($method){
+            if($items){
+                foreach ($items as $item):
+                    $sales = new MedicineSales();
+                    $sales->setMedicineConfig($option->getMedicineConfig());
+                    $sales->setAndroidDevice($process->getAndroidDevice());
+                    $sales->setAndroidProcess($process);
+                    $sales->setInvoice($item['invoiceId']);
+                    $sales->setDeviceSalesId($item['invoiceId']);
+                    $sales->setSubTotal($item['subTotal']);
+                    if(isset($item['discount']) and $item['discount'] > 0){
+                        $sales->setDiscount($item['discount']);
+                        $sales->setDiscountType($item['discountType']);
+                        $sales->setDiscountCalculation($item['discountCalculation']);
+                    }
+                    $sales->setNetTotal($item['total']);
+                    if($item['total'] < $item['receive']){
+                        $sales->setReceived($item['total']);
+                    }else{
+                        $sales->setReceived($item['receive']);
+                        $sales->setDue($item['total'] - $item['receive']);
+                    }
+                    $sales->setVat($item['vat']);
+                    if(isset($item['transactionMethod']) and $item['transactionMethod']){
+                        $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                        if($method){
+                            $sales->setTransactionMethod($method);
+                        }
+                    }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
+                        $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
                         $sales->setTransactionMethod($method);
                     }
-                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
-                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
-                    $sales->setTransactionMethod($method);
-                }
-                if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
-                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
-                    if($bank){
-                        $sales->setAccountBank($bank);
+                    if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
+                        $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
+                        if($bank){
+                            $sales->setAccountBank($bank);
+                        }
+                        if(isset($item['paymentCard']) and $item['paymentCard']){
+                            $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
+                            $sales->setPaymentCard($card);
+                        }
                     }
-                    if(isset($item['paymentCard']) and $item['paymentCard']){
-                        $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
-                        $sales->setPaymentCard($card);
+                    if(isset($item['paymentCardNo']) and $item['paymentCardNo']) {
+                        $sales->setCardNo($item['paymentCardNo']);
                     }
-                }
-                if(isset($item['paymentCardNo']) and $item['paymentCardNo']) {
-                    $sales->setCardNo($item['paymentCardNo']);
-                }
-                if(isset($item['transactionId']) and $item['transactionId']) {
-                    $sales->setCardNo($item['transactionId']);
-                }
-                if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
-                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
-                    if($mobile){
-                        $sales->setAccountMobileBank($mobile);
+                    if(isset($item['transactionId']) and $item['transactionId']) {
+                        $sales->setCardNo($item['transactionId']);
                     }
-                }
-                if(isset($item['paymentMobile']) and $item['paymentMobile']) {
-                    $sales->setPaymentMobile($item['paymentMobile']);
-                }
-                if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
-                    $sales->setCustomer($customer);
-                }elseif(($item['customerId']) and $item['customerId'] > 0 ){
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'id'=>$item['customerId']));
-                    $sales->setCustomer($customer);
-                }else{
-                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
-                    $sales->setCustomer($customer);
-                }
-                if(($item['createdBy']) and $item['createdBy'] > 0){
-                    $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
-                    $sales->setCreatedBy($createdBy);
-                }
-                if(($item['salesBy']) and $item['salesBy'] > 0){
-                     $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
-                     $sales->setSalesBy($salesBy);
-                }
-                if($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge() > 0){
-                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
-                    $sales->setDiscount($serviceCharge['discount']);
-                    $sales->setNetTotal($serviceCharge['total']);
-                    $sales->setReceived($serviceCharge['total']);
-                }elseif($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge() > 0){
-                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
-                    $sales->setDiscount($serviceCharge['discount']);
-                    $sales->setNetTotal($serviceCharge['total']);
-                    $sales->setReceived($serviceCharge['total']);
-                }
-                $created = new \DateTime($item['created']);
-                $sales->setCreated($created);
-                $sales->setUpdated($created);
-                $sales->setProcess("Device");
-                $sales->setPaymentStatus("Paid");
-                $em->persist($sales);
-                $em->flush();
+                    if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
+                        $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
+                        if($mobile){
+                            $sales->setAccountMobileBank($mobile);
+                        }
+                    }
+                    if(isset($item['paymentMobile']) and $item['paymentMobile']) {
+                        $sales->setPaymentMobile($item['paymentMobile']);
+                    }
+                    if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                        $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
+                        $sales->setCustomer($customer);
+                    }elseif(($item['customerId']) and $item['customerId'] > 0 ){
+                        $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'id'=>$item['customerId']));
+                        $sales->setCustomer($customer);
+                    }else{
+                        $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
+                        $sales->setCustomer($customer);
+                    }
+                    if(($item['createdBy']) and $item['createdBy'] > 0){
+                        $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
+                        $sales->setCreatedBy($createdBy);
+                    }
+                    if(($item['salesBy']) and $item['salesBy'] > 0){
+                        $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
+                        $sales->setSalesBy($salesBy);
+                    }
+                    if($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge() > 0){
+                        $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                        $sales->setDiscount($serviceCharge['discount']);
+                        $sales->setNetTotal($serviceCharge['total']);
+                        $sales->setReceived($serviceCharge['total']);
+                    }elseif($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge() > 0){
+                        $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                        $sales->setDiscount($serviceCharge['discount']);
+                        $sales->setNetTotal($serviceCharge['total']);
+                        $sales->setReceived($serviceCharge['total']);
+                    }
+                    $created = new \DateTime($item['created']);
+                    $sales->setCreated($created);
+                    $sales->setUpdated($created);
+                    $sales->setProcess("Device");
+                    $sales->setPaymentStatus("Paid");
+                    $em->persist($sales);
+                    $em->flush();
 
-           endforeach;
-           $this->insertApiSalesItem( $option, $process);
+                endforeach;
+                $this->insertApiSalesItem( $option, $process);
+            }
 
          /*
           $countRecords = $this->countNumberSalesSubItem($process->getId());
@@ -779,32 +781,33 @@ class MedicineSalesRepository extends EntityRepository
         $conf = $option->getMedicineConfig();
 
         $items = json_decode($process->getJsonSubItem(),true);
+        if($items) {
+            foreach ($items as $item):
 
-        foreach ($items as $item):
-
-            $deviceSalesId = $item['salesId'];
-            $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $conf,'deviceSalesId' => $deviceSalesId));
-            if($sales){
-                $salesItem = new MedicineSalesItem();
-                $salesItem->setAndroidProcess($process);
-                $salesItem->setMedicineSales($sales);
-                $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
-                if($stockId){
-                    $salesItem->setMedicineStock($stockId);
-                    $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                $deviceSalesId = $item['salesId'];
+                $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $conf, 'deviceSalesId' => $deviceSalesId));
+                if ($sales) {
+                    $salesItem = new MedicineSalesItem();
+                    $salesItem->setAndroidProcess($process);
+                    $salesItem->setMedicineSales($sales);
+                    $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
+                    if ($stockId) {
+                        $salesItem->setMedicineStock($stockId);
+                        $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                    }
+                    $salesItem->setQuantity($item['quantity']);
+                    if (isset($item['unitPrice']) and $item['unitPrice']) {
+                        $salesItem->setSalesPrice(floatval($item['unitPrice']));
+                    }
+                    $salesItem->setSubTotal($item['subTotal']);
+                    $em->persist($salesItem);
+                    $em->flush();
+                    if ($salesItem->getMedicineStock()) {
+                        $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(), 'sales');
+                    }
                 }
-                $salesItem->setQuantity($item['quantity']);
-                if(isset($item['unitPrice']) and $item['unitPrice']) {
-                    $salesItem->setSalesPrice(floatval($item['unitPrice']));
-                }
-                $salesItem->setSubTotal($item['subTotal']);
-                $em->persist($salesItem);
-                $em->flush();
-                if($salesItem->getMedicineStock()){
-                    $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $salesItem->getMedicineStock(), 'sales' );
-                }
-            }
-        endforeach;
+            endforeach;
+        }
 
         /*$countRecords = $this->countNumberSalesSubItem($process->getId());
         if($process->getItemCount() == $countRecords){

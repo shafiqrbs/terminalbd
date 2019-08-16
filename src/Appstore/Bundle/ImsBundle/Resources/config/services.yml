@@ -1,4 +1,0 @@
-services:
-#    ims.example:
-#        class: Appstore\Bundle\ImsBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]

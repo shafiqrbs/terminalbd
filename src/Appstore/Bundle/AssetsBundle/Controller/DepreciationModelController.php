@@ -69,10 +69,10 @@ class DepreciationModelController extends Controller
 	 */
 	private function createCreateForm(DepreciationModel $entity)
 	{
-		$inventory = $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->find(4);
+		$option = $this->getUser()->getGlobalOption();
 		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
-		$em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-		$form = $this->createForm(new DepreciationModelType($em,$inventory,$depreciation), $entity, array(
+		$em = $this->getDoctrine()->getRepository('AssetsBundle:AssetsCategory');
+		$form = $this->createForm(new DepreciationModelType($em,$option,$depreciation), $entity, array(
 			'action' => $this->generateUrl('assets_model_create'),
 			'method' => 'POST',
 			'attr' => array(
@@ -175,11 +175,11 @@ class DepreciationModelController extends Controller
 	 */
 	private function createEditForm(DepreciationModel $entity)
 	{
-		$inventory = $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->find(4);
-		$em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $option = $this->getUser()->getGlobalOption();
+		$em = $this->getDoctrine()->getRepository('AssetsBundle:AssetsCategory');
 		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
 
-		$form = $this->createForm(new DepreciationModelType($em,$inventory,$depreciation), $entity, array(
+		$form = $this->createForm(new DepreciationModelType($em,$option,$depreciation), $entity, array(
 			'action' => $this->generateUrl('assets_model_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(

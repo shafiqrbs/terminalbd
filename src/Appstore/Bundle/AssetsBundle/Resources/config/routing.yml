@@ -28,7 +28,11 @@ assets_stockitem:
 
 assets_item:
     resource: "@AssetsBundle/Resources/config/routing/item.yml"
-    prefix:   /item
+    prefix:   /product-group
+
+assets_item_issue:
+    resource: "@AssetsBundle/Resources/config/routing/itemissue.yml"
+    prefix:   /item-issue
 
 assets_item_brand:
     resource: "@AssetsBundle/Resources/config/routing/itembrand.yml"
@@ -37,6 +41,10 @@ assets_item_brand:
 assets_category:
     prefix:     /category
     resource: "@AssetsBundle/Resources/config/routing/category.yml"
+
+voucher_item:
+    resource: "@AssetsBundle/Resources/config/routing/voucheritem.yml"
+    prefix:    /opening-item
 
 assets_depreciation:
     path:     /depreciation

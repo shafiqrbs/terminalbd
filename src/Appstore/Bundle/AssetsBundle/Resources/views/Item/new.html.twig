@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="item-title">
-                    Form Details
+                    Add New Product Group
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -18,7 +18,7 @@
                         <a href="{{ path('item') }}">Item</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Item Details</a></li>
+                    <li><a href="#">Product Group Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -34,21 +34,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Item Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Product Group Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('item_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('item_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn black" href="{{ path('assets_item') }}"><i class="icon-th-list"></i>&nbsp;Product Group</a>
                             </div>
                         </div>
 

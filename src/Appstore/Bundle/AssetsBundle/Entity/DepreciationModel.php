@@ -3,10 +3,9 @@
 namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
+
 
 /**
  * Depreciation
@@ -26,12 +25,12 @@ class DepreciationModel
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="depreciationModel" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="depreciationModel" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="depreciationModel" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="depreciationModel" )
 	 **/
 	private  $item;
 
@@ -94,28 +93,28 @@ class DepreciationModel
 
 
 	/**
-	 * @return Category
+	 * @return AssetsCategory
 	 */
 	public function getCategory() {
 		return $this->category;
 	}
 
 	/**
-	 * @param Category $category
+	 * @param AssetsCategory $category
 	 */
 	public function setCategory( $category ) {
 		$this->category = $category;
 	}
 
 	/**
-	 * @return Item
+	 * @return ProductGroup
 	 */
 	public function getItem() {
 		return $this->item;
 	}
 
 	/**
-	 * @param Item $item
+	 * @param ProductGroup $item
 	 */
 	public function setItem( $item ) {
 		$this->item = $item;

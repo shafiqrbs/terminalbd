@@ -6,6 +6,7 @@ use Appstore\Bundle\AssetsBundle\Entity\AssetsCategory;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
+use Appstore\Bundle\TallyBundle\Entity\Category;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -53,10 +54,10 @@ class AccountHead
     private  $expendituries;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", mappedBy="accountHead" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $assetsCategories;
+    private  $tallyCategories;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountHead" )
@@ -626,12 +627,13 @@ class AccountHead
         $this->inventoryVendor = $inventoryVendor;
     }
 
+
     /**
-     * @return AssetsCategory
+     * @return Category
      */
-    public function getAssetsCategories()
+    public function getTallyCategories()
     {
-        return $this->assetsCategories;
+        return $this->tallyCategories;
     }
 
 }

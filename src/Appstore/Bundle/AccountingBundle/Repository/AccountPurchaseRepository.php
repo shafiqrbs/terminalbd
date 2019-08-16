@@ -508,6 +508,40 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 
     }
 
+    public function insertTallyAccountPurchase(\Appstore\Bundle\TallyBundle\Entity\Purchase $entity)
+    {
+
+        $global = $entity->getGlobalOption();
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($global);
+        $accountPurchase->setTallyPurchase($entity);
+        $accountPurchase->setAccountVendor($entity->getVendor());
+        $accountPurchase->setAccountBank( $entity->getAccountBank() );
+        $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+        if (!empty( $entity->getTransactionMethod())) {
+            $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
+        }
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
+        $accountPurchase->setGrn($entity->getGrn());
+        $accountPurchase->setProcessHead('tally');
+        $accountPurchase->setProcessType('Purchase');
+        $accountPurchase->setCreated($entity->getCreated());
+        $accountPurchase->setUpdated($entity->getUpdated());
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        $this->updateVendorBalance($accountPurchase);
+        if($accountPurchase->getPayment() > 0 and !empty($accountPurchase->getTransactionMethod()) ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
+        return $accountPurchase;
+
+    }
+
     public function insertMedicineAccountPurchase(MedicinePurchase $entity)
     {
 

@@ -1,0 +1,42 @@
+tally_category:
+    prefix:     /category
+    resource: "@TallyBundle/Resources/config/routing/category.yml"
+
+tally_stockitem:
+    resource: "@TallyBundle/Resources/config/routing/stockitem.yml"
+    prefix:   /stockitem
+
+tally_purchase:
+    resource: "@TallyBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+tally_item:
+    resource: "@TallyBundle/Resources/config/routing/item.yml"
+    prefix:   /product-item
+
+tally_item_issue:
+    resource: "@TallyBundle/Resources/config/routing/itemissue.yml"
+    prefix:   /item-issue
+
+tally_item_brand:
+    resource: "@TallyBundle/Resources/config/routing/itembrand.yml"
+    prefix:   /item-brand
+
+tally_tariff:
+    resource: "@TallyBundle/Resources/config/routing/tariff.yml"
+    prefix:   /tax-tariff
+
+tally_tariff_upload:
+    resource: "@TallyBundle/Resources/config/routing/tariffupload.yml"
+    prefix:   /tariff-upload
+
+purchase_item:
+    resource: "@TallyBundle/Resources/config/routing/purchaseitem.yml"
+    prefix:    /opening-item
+
+
+tally_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: TallyBundle:Default:index }
+
+

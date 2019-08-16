@@ -1,0 +1,24 @@
+assets_stockitem:
+    path:     /
+    defaults: { _controller: "TallyBundle:StockItem:index" }
+    options:
+        expose: true
+
+assets_stockitem_show:
+    path:     /{item}/show
+    defaults: { _controller: "TallyBundle:StockItem:show" }
+
+assets_barcode_branch_stock:
+    path:     /barcode-wise-branch-stock
+    defaults: { _controller: "TallyBundle:StockItem:barcodeBranchStock" }
+
+assets_barcode_stock:
+    path:     /barcode-wise-stock
+    defaults: { _controller: "TallyBundle:StockItem:barcodeStock" }
+
+assets_barcode_wise_branch_stock:
+    path:     /{barcode}/single-barcode-wise-branch-stock
+    defaults: { _controller: "TallyBundle:StockItem:singleBarcodeBranchStock" }
+    methods:  GET
+    options:
+            expose: true

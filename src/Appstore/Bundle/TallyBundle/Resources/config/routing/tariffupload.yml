@@ -1,0 +1,23 @@
+tariffupload:
+    path:     /
+    defaults: { _controller: "TallyBundle:TaxTariffUpload:index" }
+
+tariffupload_new:
+    path:     /new
+    defaults: { _controller: "TallyBundle:TaxTariffUpload:new" }
+
+tariffupload_create:
+    path:     /create
+    defaults: { _controller: "TallyBundle:TaxTariffUpload:create" }
+    methods:  POST
+
+tariffupload_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TallyBundle:TaxTariffUpload:delete" }
+
+
+tariffupload_migration:
+    path:     /{id}/migration
+    defaults: { _controller: "TallyBundle:TaxTariffUpload:excelDataImport" }
+
+

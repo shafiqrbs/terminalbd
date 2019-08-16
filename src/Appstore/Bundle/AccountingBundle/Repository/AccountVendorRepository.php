@@ -120,5 +120,27 @@ class AccountVendorRepository extends EntityRepository
         return $data;
     }
 
+    public function newVendorCreate($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['companyName'];
+        $address = isset($data['companyAddress']) ? $data['companyAddress']:'';
+        $entity = $this->findOneBy(array('globalOption' => $globalOption ,'companyName' => $name ,'mobile' => $mobile));
+        if($entity){
+            return $entity;
+        }elseif(!empty($mobile) and !empty($name)){
+            $entity = new AccountVendor();
+            $entity->setCompanyName($name);
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setAddress($address);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+        return false;
+    }
+
 
 }

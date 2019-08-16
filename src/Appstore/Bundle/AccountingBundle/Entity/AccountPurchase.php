@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\AssetsBundle\Entity\VoucherItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendor;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
@@ -50,6 +51,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $expenditureItems;
 
+
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="accountPurchases" , cascade={"detach","merge"} )
          **/
@@ -65,6 +67,12 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $purchase;
+
+         /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $tallyPurchase;
 
         /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
@@ -170,6 +178,13 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          */
         private $payment = 0;
 
+         /**
+         * @var float
+         *
+         * @ORM\Column(name="commission", type="float", nullable=true)
+         */
+        private $commission = 0;
+
         /**
          * @var float
          *
@@ -187,6 +202,13 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @var string
          *
+         * @ORM\Column(name="voucherType", type="string", length = 60, nullable=true)
+         */
+        private $voucherType = "bill";
+
+        /**
+         * @var string
+         *
          * @ORM\Column(name="companyName", type="string", length = 256, nullable=true)
          */
         private $companyName;
@@ -197,6 +219,13 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\Column(name="grn", type="string", length = 50, nullable=true)
          */
         private $grn;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="memo", type="string", length = 50, nullable=true)
+         */
+        private $memo;
 
 
         /**
@@ -811,21 +840,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->businessPurchase = $businessPurchase;
         }
 
-        /**
-         * @return BusinessVendor
-         */
-        public function getBusinessVendor()
-        {
-            return $this->businessVendor;
-        }
 
-        /**
-         * @param BusinessVendor $businessVendor
-         */
-        public function setBusinessVendor($businessVendor)
-        {
-            $this->businessVendor = $businessVendor;
-        }
 
         /**
          * @return string
@@ -939,6 +954,78 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setAccountHead($accountHead)
         {
             $this->accountHead = $accountHead;
+        }
+
+        /**
+         * @return string
+         */
+        public function getVoucherType()
+        {
+            return $this->voucherType;
+        }
+
+        /**
+         * @param string $voucherType
+         */
+        public function setVoucherType($voucherType)
+        {
+            $this->voucherType = $voucherType;
+        }
+
+        /**
+         * @return VoucherItem
+         */
+        public function getVoucherItems()
+        {
+            return $this->voucherItems;
+        }
+
+        /**
+         * @return string
+         */
+        public function getMemo()
+        {
+            return $this->memo;
+        }
+
+        /**
+         * @param string $memo
+         */
+        public function setMemo($memo)
+        {
+            $this->memo = $memo;
+        }
+
+        /**
+         * @return float
+         */
+        public function getCommission()
+        {
+            return $this->commission;
+        }
+
+        /**
+         * @param float $commission
+         */
+        public function setCommission($commission)
+        {
+            $this->commission = $commission;
+        }
+
+        /**
+         * @return \Appstore\Bundle\TallyBundle\Entity\Purchase
+         */
+        public function getTallyPurchase()
+        {
+            return $this->tallyPurchase;
+        }
+
+        /**
+         * @param \Appstore\Bundle\TallyBundle\Entity\Purchase $tallyPurchase
+         */
+        public function setTallyPurchase($tallyPurchase)
+        {
+            $this->tallyPurchase = $tallyPurchase;
         }
 
     }

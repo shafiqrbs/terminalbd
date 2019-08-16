@@ -11,6 +11,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\AccountingBundle\Entity\Vendor;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsCategory;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
@@ -31,6 +32,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\TallyBundle\Entity\Category;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -772,6 +774,12 @@ class GlobalOption
      **/
     private $medicineBrands;
 
+    /* ===============      Assets =======================================  */
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $tallyCategories;
 
     /**
      * @var \DateTime
@@ -2042,6 +2050,33 @@ class GlobalOption
     public function getAndroids()
     {
         return $this->androids;
+    }
+
+
+    /**
+     * @return Category
+     */
+    public function getParentTallyCategories()
+    {
+        $arrs = array();
+        foreach ($this->getTallyCategories() as $cat){
+
+            /* @var $cat Category */
+           if($cat->getLevel() == 1){
+               $arrs[] = $cat;
+           }
+            return $arrs;
+        }
+        return false;
+
+    }
+
+    /**
+     * @return Category
+     */
+    public function getTallyCategories()
+    {
+        return $this->tallyCategories;
     }
 
 

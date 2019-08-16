@@ -1,0 +1,39 @@
+purchaseitem:
+    path:     /
+    defaults: { _controller: "TallyBundle:PurchaseItem:index" }
+
+tally_purchaseitem_new:
+    path:     /new
+    defaults: { _controller: "TallyBundle:PurchaseItem:new" }
+
+tally_purchaseitem_create:
+    path:     /create
+    defaults: { _controller: "TallyBundle:PurchaseItem:create" }
+    methods:  POST
+
+tally_purchaseitem_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TallyBundle:PurchaseItem:delete" }
+
+
+tally_purchaseitem_approve:
+    path:     /{id}/approved
+    defaults: { _controller: "TallyBundle:PurchaseItem:approve" }
+
+tally_purchaseitem_inline_update:
+    path:     /{id}/inline-update
+    defaults: { _controller: "TallyBundle:PurchaseItem:inlineUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+tally_purchaseitem_attribute:
+    path:     /{id}/add-attrubute
+    defaults: { _controller: "TallyBundle:PurchaseItem:edit" }
+
+
+tally_purchaseitem_update:
+    path:     /{id}/update
+    defaults: { _controller: "TallyBundle:PurchaseItem:update" }
+    methods:  [POST, PUT]
+

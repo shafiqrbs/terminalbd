@@ -52,7 +52,7 @@ class AppKernel extends Kernel
            new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
            /* new SunCat\MobileDetectBundle\MobileDetectBundle(),*/
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
-            new Appstore\Bundle\ImsBundle\ImsBundle(),
+            new Appstore\Bundle\TallyBundle\TallyBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),
             new Appstore\Bundle\HospitalBundle\HospitalBundle(),
@@ -68,6 +68,7 @@ class AppKernel extends Kernel
             new Appstore\Bundle\ElectionBundle\ElectionBundle(),
             new Appstore\Bundle\AssetsBundle\AssetsBundle(),
             new Appstore\Bundle\ServiceBundle\ServiceBundle(),
+            new Appstore\Bundle\ProcurementBundle\ProcurementBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

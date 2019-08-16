@@ -2,8 +2,6 @@
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
@@ -156,8 +154,6 @@ class ProductRepository extends EntityRepository
 
     public function getFeatureCategoryProduct($inventory,$data,$limit){
 
-        exit;
-
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin("product.masterItem",'masterItem');
         $qb->leftJoin('product.goodsItems','goodsitems');
@@ -247,65 +243,16 @@ class ProductRepository extends EntityRepository
         $vendor     = isset($data['item']['vendor']) ? $data['item']['vendor'] :'NULL';
         $itemBrand  = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
 
-        $qb = $this->createQueryBuilder('item');
-        $qb->select('COUNT(item.id) AS count');
-        $qb->where("item.globalOption = :option");
-        $qb->setParameter('option', $option);
-        $qb->andWhere('item.name = :masterId');
-        $qb->setParameter('masterId', $masterItem);
-
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.id) countid');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option);
         $count = $qb->getQuery()->getOneOrNullResult();
-        $result = $count['count'];
+        $result = $count['countid'];
         return $result;
 
     }
 
-    public function checkInstantDuplicateSKU(InventoryConfig $inventory,$data)
-    {
-
-
-        $masterItem = $data['masterItem'];
-        $vendor = isset($data['vendor']) ? $data['vendor'] :'NULL';
-        $itemColor = isset ($data['color']) ? $data['color']:'NULL';
-        $itemSize = isset($data['size']) ? $data['size'] : 'NULL';
-        $itemBrand = isset($data['brand'])? $data['brand']:'NULL';
-
-        $qb = $this->createQueryBuilder('item');
-        $qb->join('item.masterItem', 'm');
-        $qb->select('COUNT(item.id) AS totalNumber');
-        $qb->where("item.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-
-        $existMasterItem = $this->_em->getRepository('InventoryBundle:Product')->findOneBy(array('name'=> $data['masterItem']))->getId();
-        $qb->andWhere('item.masterItem = :masterId');
-        $qb->setParameter('masterId', $existMasterItem);
-
-        if($inventory->getIsSize() == 1) {
-            $itemSize = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('name'=> $itemSize ));
-            $qb->andWhere('item.size = :itemSize');
-            $qb->setParameter('itemSize', $itemSize);
-        }
-        if($inventory->getIsColor() == 1) {
-            $itemColor = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('name'=> $itemColor));
-            $qb->andWhere('item.color = :itemColor');
-            $qb->setParameter('itemColor', $itemColor);
-        }
-        if($inventory->getIsVendor() == 1) {
-            $vendor = $this->_em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=> $inventory,'companyName'=> $vendor ));
-            $qb->andWhere('item.vendor = :vendor');
-            $qb->setParameter('vendor', $vendor);
-        }
-        if($inventory->getIsBrand() == 1) {
-            $itemBrand = $this->_em->getRepository( 'InventoryBundle:ItemBrand' )->findOneBy(array( 'inventoryConfig' => $inventory, 'name' => $itemBrand ));
-            $qb->andWhere('item.brand = :itemBrand');
-            $qb->setParameter('itemBrand', $itemBrand);
-        }
-        $count = $qb->getQuery()->getOneOrNullResult();
-        $result = $count['totalNumber'];
-        return $result;
-
-
-    }
 
     public function findWithSearch($data)
     {

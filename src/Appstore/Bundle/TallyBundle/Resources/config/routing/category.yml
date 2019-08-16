@@ -1,0 +1,39 @@
+tallycategory:
+    path:     /
+    defaults: { _controller: "TallyBundle:Category:index" }
+
+tallycategory_show:
+    path:     /{id}/show
+    defaults: { _controller: "TallyBundle:Category:show" }
+
+tallycategory_new:
+    path:     /new
+    defaults: { _controller: "TallyBundle:Category:new" }
+
+tallycategory_create:
+    path:     /create
+    defaults: { _controller: "TallyBundle:Category:create" }
+    methods:  POST
+
+tallycategory_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TallyBundle:Category:edit" }
+
+
+tallycategory_update:
+    path:     /{id}/update
+    defaults: { _controller: "TallyBundle:Category:update" }
+    methods:  [POST, PUT]
+
+
+tallycategory_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TallyBundle:Category:delete" }
+
+tallycategory_status:
+    path:     /{id}/delete
+    defaults: { _controller: "TallyBundle:Category:status" }
+
+tallycategory_meta_delete:
+    path:     /{id}/meta-category-delete
+    defaults: { _controller: "TallyBundle:Category:deleteMeta" }

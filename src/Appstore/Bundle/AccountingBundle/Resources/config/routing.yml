@@ -102,6 +102,11 @@ accounting_account_purchase:
     resource: "@AccountingBundle/Resources/config/routing/accountpurchase.yml"
     prefix:   /purchase
 
+accounting_account_voucher:
+    resource: "@AccountingBundle/Resources/config/routing/accountvoucher.yml"
+    prefix:   /voucher
+
+
 accounting_account_sales:
     resource: "@AccountingBundle/Resources/config/routing/accountsales.yml"
     prefix:   /sales
@@ -169,6 +174,5 @@ report_customer_ledger:
 report_customer_ledger_print:
     path:     /customer/oustanding-print
     defaults: { _controller: "AccountingBundle:Report:customerOutstandingPrint" }
-
 
 

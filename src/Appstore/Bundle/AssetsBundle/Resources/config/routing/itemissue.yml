@@ -1,0 +1,47 @@
+itemissue:
+    path:     /
+    defaults: { _controller: "AssetsBundle:SalesOnline:index" }
+
+
+itemissue_show:
+    path:     /{id}/show
+    defaults: { _controller: "AssetsBundle:SalesOnline:show" }
+
+itemissue_show_preview:
+    path:     /{id}/show-preview
+    defaults: { _controller: "AssetsBundle:SalesOnline:showPreview" }
+    methods:  GET
+    options:
+            expose: true
+
+itemissue_new:
+    path:     /new
+    defaults: { _controller: "AssetsBundle:SalesOnline:new" }
+
+itemissue_edit:
+    path:     /{code}/item-delivery-issue
+    defaults: { _controller: "AssetsBundle:SalesOnline:edit" }
+
+
+itemissue_approve:
+    path:     /{id}/{process}/approve
+    defaults: { _controller: "AssetsBundle:SalesOnline:approve" }
+    options:
+           expose: true
+
+itemissue_update:
+    path:     /{id}/update
+    defaults: { _controller: "AssetsBundle:SalesOnline:update" }
+    methods:  [POST, PUT]
+
+itemissue_item:
+    path:     /issue-item-details
+    defaults: { _controller: "AssetsBundle:SalesOnline:salesItem" }
+
+itemissue_print_invoice:
+    path:     /{invoice}/invoice
+    defaults: { _controller: "AssetsBundle:SalesOnline:invoicePrint" }
+
+itemissue_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "AssetsBundle:SalesOnline:deleteEmptyInvoice" }

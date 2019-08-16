@@ -3,12 +3,10 @@
 namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\Vendor;
+use Appstore\Bundle\TallyBundle\Entity\Category;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -65,18 +63,18 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", inversedBy="assetProducts" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="items" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsCategory", inversedBy="childProducts" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="childProducts" )
 	 **/
 	private  $parentCategory;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsItemBrand", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Brand", inversedBy="products" )
 	 **/
 	private  $brand;
 

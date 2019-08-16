@@ -63,7 +63,7 @@ class AssetsCategoryType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12 AssetsCategory'),
                 'class' => 'Appstore\Bundle\AssetsBundle\Entity\AssetsCategory',
                 'property' => 'nestedLabel',
-                'choices'=> $this->ExpenseCategoryChoiceList()
+                'choices'=> $this->categoryChoiceList()
             ))
             ->add('status')
 
@@ -92,7 +92,7 @@ class AssetsCategoryType extends AbstractType
     /**
      * @return mixed
      */
-    protected function ExpenseCategoryChoiceList()
+    protected function categoryChoiceList()
     {
         return $this->em->getFlatCategoryTree($this->globalOption);
 

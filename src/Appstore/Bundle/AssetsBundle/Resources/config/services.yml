@@ -14,3 +14,23 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+
+    appstore.tally.item.event.listener:
+        class: Appstore\Bundle\TallyBundle\EventListener\ItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.tally.purchase.event.listener:
+        class: Appstore\Bundle\TallyBundle\EventListener\PurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.tally.sales.event.listener:
+        class: Appstore\Bundle\TallyBundle\EventListener\SalesListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.tally.purchase.item.event.listener:
+        class: Appstore\Bundle\TallyBundle\EventListener\PurchaseItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }

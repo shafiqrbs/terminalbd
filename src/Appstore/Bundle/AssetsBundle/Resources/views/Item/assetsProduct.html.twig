@@ -1,0 +1,362 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN item HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="item-title">
+                    {{ entity.name }} Details
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('inventory_item') }}">Product</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#"> {{ entity.name }} Details</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END item HEADER-->
+        <!-- BEGIN item CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Product Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn blue" href="{{ path('inventory_item') }}"><i class="icon-th-list"></i>&nbsp;Stock</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="portlet-body form"  >
+                        {% include('flash-message.html.twig') %}
+                        <!-- BEGIN FORM-->
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class="row-fluid">
+                            <div class="span8">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Product<span class="required">*</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.name) }}{{ form_errors(form.name) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Category</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.category) }}
+                                        {{ form_errors(form.category) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span8">
+
+
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" >Warning Label</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.warningLabel) }}
+                                                {{ form_errors(form.warningLabel) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span8">
+                                        <div class="control-group">
+                                            <label class="control-label" >Warning Text</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.itemWarning) }}
+                                                {{ form_errors(form.itemWarning) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" >Description</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}
+                                                {{ form_errors(form.content) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix" style="height:5px"></div>
+
+                            </div>
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="productUnit">Unit</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.productUnit) }}
+                                                {{ form_errors(form.productUnit) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Brand</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.brand) }}{{ form_errors(form.brand) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Manufacture</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.manufacture) }}
+                                                {{ form_errors(form.manufacture) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Preferred Vendor </label>
+                                            <div class="controls">
+                                                {{ form_widget(form.vendor) }}
+                                                {{ form_errors(form.vendor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Country</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.country) }}
+                                                {{ form_errors(form.country) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <!--/span-->
+                        {% if  entity.itemMetaAttributes is defined and  entity.itemMetaAttributes is not empty %}
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Item Attributes</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            {% for attribute in entity.itemMetaAttributes %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label">{{ attribute.categoryMeta.metaKey }}</label>
+
+                                            <div class="controls">
+                                                <input type="hidden" name="attributeId[]"
+                                                       value="{{ attribute.categoryMeta.id }}">
+                                                <input type="text" id="" name="value[]" class="m-wrap span12 tooltips"
+                                                       placeholder=""
+                                                       data-original-title="{{ attribute.categoryMeta.metaValue }}"
+                                                       data-trigger="hover" value="{{ attribute.value }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% elseif  entity.category is defined and entity.category is not empty and entity.category.categoryMetas is  not empty %}
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Item Attributes</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            {% for itemAttributes in entity.category.categoryMetas %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label">{{ itemAttributes.metaKey }}</label>
+
+                                            <div class="controls">
+                                                <input type="hidden" name="attributeId[]"
+                                                       value="{{ itemAttributes.id }}">
+                                                <input type="text" id="" name="value[]" class="m-wrap span12 tooltips"
+                                                       placeholder=""
+                                                       data-original-title="{{ itemAttributes.metaValue }}"
+                                                       data-trigger="hover" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Setup Product Serial Format</div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Item Prefix</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.itemPrefix) }}
+                                        {{ form_errors(form.itemPrefix) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Serial Generation</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.serialGeneration) }}
+                                        {{ form_errors(form.serialGeneration) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Serial Format</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.serialFormat) }}
+                                        {{ form_errors(form.serialFormat) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                        {#<div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
+                                <a href="javascript:" class="btn yellow pull-right addmore"><i class="icon-plus"></i> Add More</a>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>f
+                        <div class="row-fluid clone-block" id="clone-block">
+                            <div class="clone">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <input type="hidden" name="metaId[]" value="">
+                                        <input type="text" name="metaKey[]" class="m-wrap span12"
+                                               placeholder="Label name" value="">
+                                    </div>
+                                </div>
+                                <div class="span8">
+                                    <div class="control-group">
+                                        <input type="text" name="metaValue[]" class="m-wrap span12"
+                                               placeholder="Label value" value="">
+                                    </div>
+                                </div>
+                                <div class="span1">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <a href="javascript:" class="btn red  remove hidden mini"><i
+                                                        class="icon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if  entity.itemKeyValues is defined and entity.itemKeyValues is not empty %}
+                            <ol class="dd-list singleSortable ui-sortable">
+                                {% for meta in entity.itemKeyValues %}
+                                    <li style="display:list-item" class="dd-item dd3-item removeAttr-{{ meta.id }}" id="menuItem_{{ meta.id }}">
+                                        <div class="menuDiv">
+                                            <div>
+                                                <div data-id="{{ meta.id }}" class="itemTitle dd-handle dd3-handle"></div>
+                                                <div class="row-fluid trash" id="remove-{{ meta.id }}" style="margin-left: 30px!important">
+                                                    <div class="span3 ">
+                                                        <div class="control-group">
+                                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
+                                                            <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                                   placeholder="Label name" value="{{ meta.metaKey }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <div class="control-group">
+                                                            <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                                   placeholder="Label value" value="{{ meta.metaValue }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span1">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <a href="javascript:" data-id="{{ meta.id }}"
+                                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
+                                                                   class="btn red  removeAttr mini"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+#}
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right">
+                                <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                        <!-- END FORM-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <style>
+        .popover {
+            width: 250px !important;
+        }
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/style.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/item.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    NestSortable.init();
+    InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
+{% endblock %}

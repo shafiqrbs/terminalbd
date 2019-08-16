@@ -3,9 +3,10 @@
 namespace Appstore\Bundle\AssetsBundle\Form;
 
 use Appstore\Bundle\AssetsBundle\Entity\Depreciation;
+use Appstore\Bundle\AssetsBundle\Repository\AssetsCategoryRepository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
-use Product\Bundle\ProductBundle\Repository\CategoryRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -17,18 +18,20 @@ class DepreciationModelType extends AbstractType
 	/** @var  Depreciation */
 	private $depreciation;
 
-	/** @var  InventoryConfig */
-	private $inventoryConfig;
+	/** @var  GlobalOption */
+	private $option;
 
-	/** @var  CategoryRepository */
+	/** @var  AssetsCategoryRepository */
 	private $em;
 
-	function __construct(CategoryRepository $em , InventoryConfig $inventoryConfig , Depreciation $depreciation)
+	function __construct(AssetsCategoryRepository $em , GlobalOption $option , Depreciation $depreciation)
 	{
 		$this->em = $em;
-		$this->inventoryConfig = $inventoryConfig;
+        $this->option = $option;
 		$this->depreciation = $depreciation;
 	}
+
+
 
 
 
@@ -90,13 +93,13 @@ class DepreciationModelType extends AbstractType
 			    'required'    => true,
 			    'empty_value' => '---Select parent category---',
 			    'attr'=>array('class'=>'category m-wrap span12 select2'),
-			    'class' => 'ProductProductBundle:Category',
+			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\AssetsCategory',
 			    'property' => 'nestedLabel',
 			    'choices'=> $this->categoryChoiceList()
 		    ))
 		    ->add('item', 'entity', array(
 			    'required'    => true,
-			    'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
+			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\ProductGroup',
 			    'empty_value' => '---Choose a item ---',
 			    'property' => 'name',
 			    'attr'=>array('class'=>'span12 select2'),
@@ -104,6 +107,7 @@ class DepreciationModelType extends AbstractType
 				    return $er->createQueryBuilder('p')
 				              ->where("p.status = 1")
 				              ->andWhere("p.productType ='assets'")
+				              ->andWhere("p.globalOption ={$this->option->getId()}")
 				              ->orderBy("p.name","ASC");
 			    },
 		    ));
@@ -119,12 +123,6 @@ class DepreciationModelType extends AbstractType
 				                               new NotBlank(array('message'=>'Please add  depreciation rate'))
 			                               )));
 	    }
-
-
-
-
-
-
 
     }
     
@@ -146,12 +144,11 @@ class DepreciationModelType extends AbstractType
         return 'model';
     }
 
-	/**
-	 * @return mixed
-	 */
-	protected function categoryChoiceList()
-	{
-		return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
-
-	}
+    /**
+     * @return mixed
+     */
+    protected function categoryChoiceList()
+    {
+        return $categoryTree = $this->em->getFlatCategoryTree($this->option);
+    }
 }

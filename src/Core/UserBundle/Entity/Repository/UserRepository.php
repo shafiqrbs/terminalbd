@@ -145,6 +145,19 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $assets = array('tally');
+        $result = array_intersect($arrSlugs, $assets);
+        if (!empty($result)) {
+            $array['Tally'] = array(
+                'ROLE_RECEIVE'                                     => 'Item Receive',
+                'ROLE_STOCK'                                       => 'Item Stock',
+                'ROLE_RECEIVE_APPROVE'                             => 'Item Approve',
+                'ROLE_ISSUE'                                       => 'Item Issue',
+                'ROLE_ISSUE_APPROVE'                               => 'Item Approve',
+                'ROLE_SETTING'                                     => 'Item Setting',
+            );
+        }
+
         $assets = array('assets');
         $result = array_intersect($arrSlugs, $assets);
         if (!empty($result)) {
