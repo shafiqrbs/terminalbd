@@ -66,10 +66,10 @@ class PurchaseItemRepository extends EntityRepository
         }
     }
 
-    public function findWithSearch(GlobalOption $globalOption, $data)
+    public function findWithSearch($config, $data)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.globalOption = :config')->setParameter('config', $globalOption->getId()) ;
+        $qb->where('e.config = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
@@ -122,7 +122,6 @@ class PurchaseItemRepository extends EntityRepository
         $product = $data['productItem'];
         $subTotal = $data['quantity'] * $data['price'];
         $product = $em->getRepository('TallyBundle:Item')->find($product);
-
         if($product->getVatProduct()){
 
             /* @var $vat TaxTariff */
@@ -241,7 +240,7 @@ class PurchaseItemRepository extends EntityRepository
         $qb->join('e.item', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.item = :item')->setParameter('item', $stockItem->getId());
-        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
         $qb->andWhere('e.mode = :mode')->setParameter('mode', 'purchase');
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
@@ -253,8 +252,8 @@ class PurchaseItemRepository extends EntityRepository
         $qb->join('e.item', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.item = :item')->setParameter('item', $stockItem->getId());
-        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
-        $qb->andWhere('e.mode = :mode')->setParameter('mode', 'opening');
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+    //    $qb->andWhere('e.mode = :mode')->setParameter('mode', 'opening');
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }

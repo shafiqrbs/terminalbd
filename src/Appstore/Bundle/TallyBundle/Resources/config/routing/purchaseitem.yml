@@ -1,4 +1,4 @@
-purchaseitem:
+tally_purchaseitem:
     path:     /
     defaults: { _controller: "TallyBundle:PurchaseItem:index" }
 
@@ -10,6 +10,11 @@ tally_purchaseitem_create:
     path:     /create
     defaults: { _controller: "TallyBundle:PurchaseItem:create" }
     methods:  POST
+
+tally_purchaseitem_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TallyBundle:PurchaseItem:edit" }
+
 
 tally_purchaseitem_delete:
     path:     /{id}/delete
@@ -29,11 +34,16 @@ tally_purchaseitem_inline_update:
 
 tally_purchaseitem_attribute:
     path:     /{id}/add-attrubute
-    defaults: { _controller: "TallyBundle:PurchaseItem:edit" }
+    defaults: { _controller: "TallyBundle:PurchaseItem:attribute" }
 
 
 tally_purchaseitem_update:
     path:     /{id}/update
     defaults: { _controller: "TallyBundle:PurchaseItem:update" }
+    methods:  [POST, PUT]
+
+tally_purchaseitem_attribute_update:
+    path:     /{id}/attribute-update
+    defaults: { _controller: "TallyBundle:PurchaseItem:updateAttribute" }
     methods:  [POST, PUT]
 

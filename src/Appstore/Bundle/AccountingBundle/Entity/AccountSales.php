@@ -9,6 +9,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -77,6 +78,12 @@ class AccountSales
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $sales;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Sales", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $tallySales;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountSales" )
@@ -351,7 +358,7 @@ class AccountSales
     }
 
     /**
-     * @return mixed
+     * @return Sales
      */
     public function getSales()
     {
@@ -359,7 +366,7 @@ class AccountSales
     }
 
     /**
-     * @param mixed $sales
+     * @param Sales $sales
      */
     public function setSales($sales)
     {
@@ -764,6 +771,22 @@ class AccountSales
     public function setAccountHead($accountHead)
     {
         $this->accountHead = $accountHead;
+    }
+
+    /**
+     * @return \Appstore\Bundle\TallyBundle\Entity\Sales
+     */
+    public function getTallySales()
+    {
+        return $this->tallySales;
+    }
+
+    /**
+     * @param \Appstore\Bundle\TallyBundle\Entity\Sales $tallySales
+     */
+    public function setTallySales($tallySales)
+    {
+        $this->tallySales = $tallySales;
     }
 
 

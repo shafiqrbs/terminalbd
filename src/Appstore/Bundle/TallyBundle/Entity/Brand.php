@@ -29,6 +29,11 @@ class Brand
      **/
     private  $globalOption;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="brands" )
+     **/
+    private  $config;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="brand")
      */
@@ -235,6 +240,22 @@ class Brand
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

@@ -26,10 +26,12 @@ class Category
      */
     private $id;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="tallyCategories")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="categories" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    protected $globalOption;
+    private $config;
 
 
     /**
@@ -38,10 +40,16 @@ class Category
     private  $accountHead;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\CategoryMeta", mappedBy="tallyCategory" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\CategoryMeta", mappedBy="category" )
      * @ORM\OrderBy({"metaKey" = "ASC"})
      **/
     protected $categoryMetas;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="category" )
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    protected $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="category" )
@@ -450,6 +458,22 @@ class Category
     public function setSku($sku)
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

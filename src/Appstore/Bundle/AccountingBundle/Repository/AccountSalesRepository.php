@@ -1095,8 +1095,25 @@ class AccountSalesRepository extends EntityRepository
 		$accountCash->execute();
 	}
 
+    /* =============  All Sales Reverse Module ================= */
 
 
+    public function salesAdjustmentReverse(AccountSalesAdjustment $adjustment)
+    {
 
+        $entity = $this->findOneBy(array('globalOption'=>$adjustment->getGlobalOption(),'sourceInvoice'=>$adjustment->getAccountRefNo(),'processHead'=>'Sales-adjustment'));
+        if($entity){
+            $em = $this->_em;
+            $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.processHead = 'Sales'");
+            $transaction->execute();
+            $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.accountSales ={$entity->getId()} AND e.processHead = 'Sales'");
+            $accountCash->execute();
+            $em->remove($entity);
+            $em->flush();
+
+        }
+
+
+    }
 
 }

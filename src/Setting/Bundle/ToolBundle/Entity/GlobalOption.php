@@ -33,6 +33,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\TallyBundle\Entity\Category;
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -774,12 +775,13 @@ class GlobalOption
      **/
     private $medicineBrands;
 
-    /* ===============      Assets =======================================  */
+    /* ===================      Tally      =======================================  */
+
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
-    private $tallyCategories;
+    private $tallyConfig;
 
     /**
      * @var \DateTime
@@ -2054,29 +2056,11 @@ class GlobalOption
 
 
     /**
-     * @return Category
+     * @return TallyConfig
      */
-    public function getParentTallyCategories()
+    public function getTallyConfig()
     {
-        $arrs = array();
-        foreach ($this->getTallyCategories() as $cat){
-
-            /* @var $cat Category */
-           if($cat->getLevel() == 1){
-               $arrs[] = $cat;
-           }
-            return $arrs;
-        }
-        return false;
-
-    }
-
-    /**
-     * @return Category
-     */
-    public function getTallyCategories()
-    {
-        return $this->tallyCategories;
+        return $this->tallyConfig;
     }
 
 

@@ -35,10 +35,10 @@ class PurchaseOpeningItemType extends AbstractType
             ->add('item', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\TallyBundle\Entity\Item',
-                'empty_value' => 'Choose a brand',
+                'empty_value' => 'Choose a product item name',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'constraints' => array( new NotBlank( array( 'message' => 'Please select product group name' ))),
+                'constraints' => array( new NotBlank( array( 'message' => 'Please select product item name' ))),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->Where("b.status = 1")

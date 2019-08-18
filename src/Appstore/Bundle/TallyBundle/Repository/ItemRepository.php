@@ -4,6 +4,8 @@ namespace Appstore\Bundle\TallyBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\TallyBundle\Entity\Product;
 use Appstore\Bundle\TallyBundle\Entity\Item;
+use Appstore\Bundle\TallyBundle\Entity\Purchase;
+use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
 use Appstore\Bundle\TallyBundle\Entity\VoucherItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -230,7 +232,7 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function checkDuplicateSKU(GlobalOption $option,$data)
+    public function checkDuplicateSKU($config,$data)
     {
 
 
@@ -242,8 +244,8 @@ class ItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('COUNT(e.id) countid');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $option);
+        $qb->where("e.config = :config");
+        $qb->setParameter('config', $config);
         $qb->andWhere("e.productType = :type")->setParameter('type', $type);
         $qb->andWhere("e.name = :name")->setParameter('name', $masterItem);
         if($category){
@@ -262,7 +264,7 @@ class ItemRepository extends EntityRepository
     }
 
 
-    public function findWithSearch($data)
+    public function findWithSearch($config,$data)
     {
 
         $item = isset($data['item'])? $data['item'] :'';
@@ -274,6 +276,7 @@ class ItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.status IS NOT NULL");
+        $qb->andWhere("item.config = :config")->setParameter('config', $config);
         if (!empty($item)) {
             $qb->andWhere("item.name = :name");
             $qb->setParameter('name', $item);
@@ -310,7 +313,7 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
 
         }
-        $qb->orderBy('item.updated','DESC');
+        $qb->orderBy('item.name','ASC');
         $qb->getQuery();
         return  $qb;
 
@@ -391,12 +394,12 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete($item, GlobalOption $inventory)
+    public function searchAutoComplete($item, $config)
     {
 
         $search = strtolower($item);
         $query = $this->createQueryBuilder('i');
-        $query->join('i.inventoryConfig', 'ic');
+        $query->join('i.config', 'ic');
         $query->leftJoin('i.stockItems', 'stockItem');
         $query->select('i.id as id');
         $query->addSelect('i.name as name');
@@ -405,8 +408,8 @@ class ItemRepository extends EntityRepository
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
         $query->andWhere("i.purchaseQuantity > 0 ");
-        $query->andWhere("ic.id = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
+        $query->andWhere("ic.id = :config");
+        $query->setParameter('config', $config);
         $query->groupBy('i.id');
         $query->orderBy('i.name', 'ASC');
         $query->setMaxResults( '30' );
@@ -414,19 +417,19 @@ class ItemRepository extends EntityRepository
 
     }
 
-     public function searchAutoCompleteAllItem($item, GlobalOption $inventory)
+     public function searchAutoCompleteAllItem($item,  $inventory)
     {
 
         $search = strtolower($item);
         $query = $this->createQueryBuilder('i');
-        $query->join('i.inventoryConfig', 'ic');
+        $query->join('i.config', 'ic');
         $query->select('i.id as id');
         $query->addSelect('i.name as name');
         $query->addSelect('i.skuSlug as text');
         $query->addSelect('i.sku as sku');
         $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
+        $query->setParameter('inventory', $inventory);
         $query->groupBy('i.id');
         $query->orderBy('i.name', 'ASC');
         $query->setMaxResults( '30' );
@@ -450,10 +453,10 @@ class ItemRepository extends EntityRepository
             $quantity = $em->getRepository('MedicineBundle:MedicineDamage')->damageStockItemUpdate($stock);
             $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'opening'){
-            $quantity = $em->getRepository('PurchaseItem.php')->openingStockItemUpdate($stock);
+            $quantity = $em->getRepository('TallyBundle:PurchaseItem')->openingStockItemUpdate($stock);
             $stock->setOpeningQuantity($quantity);
         }else{
-            $qnt = $em->getRepository('PurchaseItem.php')->purchaseStockItemUpdate($stock);
+            $qnt = $em->getRepository('TallyBundle:PurchaseItem')->purchaseStockItemUpdate($stock);
             $stock->setPurchaseQuantity($qnt);
         }
         $em->persist($stock);
@@ -470,17 +473,17 @@ class ItemRepository extends EntityRepository
         $em->flush();
     }
 
-    public function getPurchaseUpdateQnt(AccountPurchase $entity){
+    public function getPurchaseUpdateQnt(Purchase $entity){
 
         $em = $this->_em;
 
-        /** @var $item VoucherItem  */
+        /** @var $item PurchaseItem  */
 
-        if($entity->getVoucherItems()){
+        if($entity->getPurchaseItems()){
 
-            foreach($entity->getVoucherItems() as $item ){
+            foreach($entity->getPurchaseItems() as $item ){
                 /** @var  $stock Item */
-                $stock = $item->getProductGroup();
+                $stock = $item->getItem();
                 $this->updateRemovePurchaseQuantity($stock);
             }
         }

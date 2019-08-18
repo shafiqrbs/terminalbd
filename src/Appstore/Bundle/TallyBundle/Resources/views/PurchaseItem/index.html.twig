@@ -32,7 +32,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Opening Item Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="red btn" href="{{ path('voucheritem_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="red btn" href="{{ path('tally_purchaseitem_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
                             </div>
                         </div>
 
@@ -46,7 +46,9 @@
                             <thead class="flip-content ">
                             <tr class="head-grey">
                                 <th class="numeric" ><i class="icon icon-reorder"></i></th>
-                                <th class="numeric" >Product Group</th>
+                                <th class="numeric" >Type</th>
+                                <th class="numeric" >Category</th>
+                                <th class="numeric" >Product</th>
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Barcode</th>
                                 <th class="numeric" >Quantity</th>
@@ -60,38 +62,40 @@
                             {% for entity in pagination %}
                                 <tr>
                                     <td><span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                    <td class="numeric" >{{ entity.productGroup.name }}</td>
+                                    <td class="numeric" >{{ entity.item.productType|capitalize }}</td>
+                                    <td class="numeric" >{{ entity.item.category.name }}</td>
+                                    <td class="numeric" >{{ entity.item.name }}</td>
                                     <td class="numeric" >
                                         {% if entity.process == "Approved" %}
                                             {{ entity.name }}
                                         {% else %}
-                                            <a class="editable" data-name="Name" href="#"  data-url="{{ path('voucheritem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product name">{{ entity.name }}</a>      {% endif %}
+                                            <a class="editable" data-name="Name" href="#"  data-url="{{ path('tally_purchaseitem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product name">{{ entity.name }}</a>      {% endif %}
                                     </td>
                                     <td class="numeric" >
                                         {% if entity.process == "Approved" %}
                                             {{ entity.barcode }}
                                         {% else %}
-                                            <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('voucheritem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product barcode">{{ entity.barcode }}</a>     {% endif %}
+                                            <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('tally_purchaseitem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product barcode">{{ entity.barcode }}</a>     {% endif %}
 
                                     </td>
                                     <td class="numeric" >
                                         {% if entity.process == "Approved" %}
                                             {{ entity.quantity }}
                                         {% else %}
-                                            <a class="editable" data-name="Quantity" href="#"  data-url="{{ path('voucheritem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product quantity">{{ entity.quantity }}</a>      {% endif %}
+                                            <a class="editable" data-name="Quantity" href="#"  data-url="{{ path('tally_purchaseitem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product quantity">{{ entity.quantity }}</a>      {% endif %}
                                     </td>
                                     <td class="numeric" >
                                         {% if entity.process == "Approved" %}
                                             {{ entity.price }}
                                         {% else %}
-                                            <a class="editable" data-name="Price" href="#"  data-url="{{ path('voucheritem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product price">{{ entity.price }}</a>     {% endif %}
+                                            <a class="editable" data-name="Price" href="#"  data-url="{{ path('tally_purchaseitem_inline_update',{'id':entity.id }) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product price">{{ entity.price }}</a>     {% endif %}
                                     </td>
                                     <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                     <td class="numeric" >
                                         <div class="actions">
                                             <div class="btn-group">
-                                        <a href="{{ path('voucheritem_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                        <a href="{{ path('voucheritem_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a><a href="{{ path('voucheritem_approve', { 'id': entity.id }) }}" class="btn blue mini approve" ><i class="icon-refresh"></i> Approve</a></div></div>
+                                        <a href="{{ path('tally_purchaseitem_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                        <a href="{{ path('tally_purchaseitem_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a><a href="{{ path('tally_purchaseitem_approve', { 'id': entity.id }) }}" class="btn blue mini approve" ><i class="icon-refresh"></i> Approve</a></div></div>
                                     </td>
                                 </tr>
                                 <tr id="show-{{ entity.id }}" class="showing-overview">
@@ -144,7 +148,6 @@
     changeMonth: true,
     changeYear: true,
     });
-    ApproveProcess();
     EditableInit();
 {% endblock %}
 

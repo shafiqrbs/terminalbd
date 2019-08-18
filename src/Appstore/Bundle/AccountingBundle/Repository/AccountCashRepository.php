@@ -577,12 +577,14 @@ class AccountCashRepository extends EntityRepository
         if($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "bank" and $entity->getAccountBank() ){
             /* Current Asset Bank Cash Debit */
             $cash->setAccountBank($entity->getAccountBank());
-        }elseif($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "mobile" and $entity->getAccountMobileBank() ){
+        }elseif($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "mobile" and $entity->getAccountMobileBank()){
             /* Current Asset Mobile Account Debit */
             $cash->setAccountMobileBank($entity->getAccountMobileBank());
             $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
             $cash->setAccountHead($account);
+
         }else{
+
             /* Cash - Cash Debit */
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }

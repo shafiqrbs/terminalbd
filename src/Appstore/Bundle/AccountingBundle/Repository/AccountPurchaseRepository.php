@@ -516,7 +516,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setTallyPurchase($entity);
-        $accountPurchase->setAccountVendor($entity->getVendor());
+        $accountPurchase->setAccountVendor($entity->getAccountVendor());
         $accountPurchase->setAccountBank( $entity->getAccountBank() );
         $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
         if (!empty( $entity->getTransactionMethod())) {
@@ -524,7 +524,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         }
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
+        $accountPurchase->setCompanyName($entity->getAccountVendor()->getCompanyName());
         $accountPurchase->setGrn($entity->getGrn());
         $accountPurchase->setProcessHead('tally');
         $accountPurchase->setProcessType('Purchase');

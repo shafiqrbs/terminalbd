@@ -59,15 +59,15 @@ class ItemMeatAttributeRepository extends EntityRepository
 
             foreach ($data['attributeId'] as $value) {
 
-                $metaAttribute = $this->_em->getRepository('TallyBundle:ItemMetaAttribute')->findOneBy(array('voucherItem'=>$reEntity,'categoryMeta' => $value));
+                $metaAttribute = $this->_em->getRepository('TallyBundle:ItemMetaAttribute')->findOneBy(array('purchaseItem'=>$reEntity,'categoryMeta' => $value));
                 if(!empty($metaAttribute)){
                     $this->updateMetaAttribute($metaAttribute,$data['value'][$i]);
                 }else{
-                    $itemAttribute= $this->_em->getRepository('TallyCategoryMeta.php')->find($value);
+                    $itemAttribute= $this->_em->getRepository('TallyBundle:CategoryMeta')->find($value);
                     $entity = new ItemMetaAttribute();
                     $entity->setValue($data['value'][$i]);
                     $entity->setCategoryMeta($itemAttribute);
-                    $entity->setVoucherItem($reEntity);
+                    $entity->setPurchaseItem($reEntity);
                     $em->persist($entity);
                 }
                 $i++;

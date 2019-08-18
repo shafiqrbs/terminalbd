@@ -7,6 +7,7 @@ use Appstore\Bundle\TallyBundle\Entity\Category;
 use Appstore\Bundle\TallyBundle\Form\TallyCategoryType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -38,7 +39,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('TallyBundle:Category')->findBy(array('globalOption' => $option),array( 'parent' => 'asc' , 'name' => 'asc' ));
+        $entities = $em->getRepository('TallyBundle:Category')->findBy(array('globalOption' => $option->getTallyConfig()),array( 'parent' => 'asc' , 'name' => 'asc' ));
         $pagination = $this->paginate($entities);
         return $this->render('TallyBundle:TallyCategory:index.html.twig', array(
             'entities' => $pagination,
@@ -60,7 +61,7 @@ class CategoryController extends Controller
         $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setGlobalOption($globalOption);
+            $entity->setConfig($globalOption->getTallyConfig());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -69,7 +70,6 @@ class CategoryController extends Controller
             $this->getDoctrine()->getRepository('TallyBundle:CategoryMeta')->pageMeta($entity,$data);
             return $this->redirect($this->generateUrl('tallycategory_new', array('id' => $entity->getId())));
         }
-
         return $this->render('TallyBundle:TallyCategory:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -235,7 +235,7 @@ class CategoryController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('TallyCategory'));
+        return $this->redirect($this->generateUrl('tallycategory'));
     }
 
 
@@ -262,13 +262,13 @@ class CategoryController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('TallyCategory'));
+        return $this->redirect($this->generateUrl('tallycategory'));
     }
 
     public function deleteMetaAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('ProductProductBundle:CategoryMeta')->find($id);
+        $entity = $em->getRepository('TallyBundle:CategoryMeta')->find($id);
 
         if ($entity) {
             $em->remove($entity);
@@ -276,7 +276,7 @@ class CategoryController extends Controller
             return new Response('success');
         }
         return new Response('invalid');
-        exit;
+
     }
 
 

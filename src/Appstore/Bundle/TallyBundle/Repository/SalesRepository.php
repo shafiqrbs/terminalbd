@@ -2,8 +2,8 @@
 
 namespace Appstore\Bundle\TallyBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\TallyBundle\Entity\InventoryConfig;
+use Appstore\Bundle\TallyBundle\Entity\Sales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -135,7 +135,7 @@ class SalesRepository extends EntityRepository
     {
 
         /* @var InventoryConfig $config */
-        $config = $user->getGlobalOption()->getInventoryConfig();
+        $config = $user->getGlobalOption()->getTallyConfig();
         $branch = $user->getProfile()->getBranches();
         $existArray = array(
             'ROLE_DOMAIN_INVENTORY_MANAGER',
@@ -148,15 +148,10 @@ class SalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.customer', 'c');
         $qb->leftJoin('s.salesBy', 'u');
-        $qb->where("s.inventoryConfig = :config");
+        $qb->where("s.config = :config");
         $qb->setParameter('config', $config);
         $qb->andWhere("s.salesMode = :mode");
         $qb->setParameter('mode', $mode);
-        if ($branch and $mode == 'online'){
-            $qb->andWhere("s.branches is NULL OR s.branches =".$branch->getId());
-        }elseif($config->getIsBranch() == 1 and empty($branch) and $user->getCheckRoleGlobal(array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) and ! $user->getCheckRoleGlobal($existArray) ){
-            $qb->andWhere("s.createdBy =".$user->getId());
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
@@ -178,7 +173,7 @@ class SalesRepository extends EntityRepository
 	{
 
 		$query = $this->createQueryBuilder('e');
-		$query->join('e.inventoryConfig', 'ic');
+		$query->join('e.config', 'ic');
 		$query->select('e.invoice as id');
 		$query->addSelect('e.invoice as text');
 		$query->where($query->expr()->like("e.invoice", "'$q%'"  ));
@@ -194,7 +189,7 @@ class SalesRepository extends EntityRepository
     public function salesReport( User $user , $data)
     {
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
         $qb->leftJoin('s.transactionMethod', 't');
@@ -213,7 +208,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('(s.discount) as discount');
         $qb->addSelect('(s.vat) as vat');
         $qb->addSelect('SUM(si.purchasePrice * si.quantity) as purchasePrice');
-        $qb->where("s.inventoryConfig = :config");
+        $qb->where("s.config = :config");
         $qb->setParameter('config', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -232,7 +227,7 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
@@ -245,7 +240,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('SUM(s.totalItem) totalItem');
         $qb->addSelect('SUM(s.discount) as discount');
         $qb->addSelect('SUM(s.vat) as vat');
-        $qb->where("s.inventoryConfig = :config");
+        $qb->where("s.config = :config");
         $qb->setParameter('config', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -264,14 +259,14 @@ class SalesRepository extends EntityRepository
     public function salesUserPurchasePriceReport(User $user,$data)
     {
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
         $qb->join('s.salesItems','si');
         $qb->select('u.username as salesBy');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
-        $qb->where("s.inventoryConfig = :inventory");
+        $qb->where("s.config = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -292,14 +287,14 @@ class SalesRepository extends EntityRepository
 	public function inventorySalesMonthly(User $user , $data =array())
 	{
 
-		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+		$config =  $user->getGlobalOption()->getTallyConfig()->getId();
 		$compare = new \DateTime();
 		$year =  $compare->format('Y');
 		$year = isset($data['year'])? $data['year'] :$year;
 		$sql = "SELECT DATE_FORMAT(sales.created,'%M') as month , MONTH (sales.created) as monthId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
                 SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due
                 FROM Sales as sales
-                WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
+                WHERE sales.config_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year
                 GROUP BY month ORDER BY monthId ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->bindValue('config', $config);
@@ -320,7 +315,7 @@ class SalesRepository extends EntityRepository
     public function inventorySalesDaily(User $user , $data =array())
     {
 
-        $config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $config =  $user->getGlobalOption()->getTallyConfig()->getId();
         $compare = new \DateTime();
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
@@ -329,7 +324,7 @@ class SalesRepository extends EntityRepository
         $sql = "SELECT DATE_FORMAT(sales.created,'%d-%m-%Y') as date , DATE (sales.created) as dateId ,SUM(sales.total) AS total,SUM(sales.subTotal) AS subTotal,
                 SUM(sales.discount) AS discount,SUM(sales.vat) AS vat,SUM(sales.payment) AS receive,SUM(sales.due) AS due
                 FROM Sales as sales
-                WHERE sales.inventoryConfig_id = :config AND sales.process = :process AND MONTHNAME(sales.created) =:month  AND YEAR(sales.created) =:year
+                WHERE sales.config_id = :config AND sales.process = :process AND MONTHNAME(sales.created) =:month  AND YEAR(sales.created) =:year
                 GROUP BY date ORDER BY dateId ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
@@ -349,14 +344,14 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $compare = new \DateTime();
         $year =  $compare->format('Y');
         $year = isset($data['year'])? $data['year'] :$year;
         $sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month,SUM(sales.total) AS total
                 FROM Sales as sales
-                WHERE sales.inventoryConfig_id = :inventoryConfig AND sales.process = :process  AND YEAR(sales.created) =:year
+                WHERE sales.config_id = :inventoryConfig AND sales.process = :process  AND YEAR(sales.created) =:year
                 GROUP BY month , salesBy ORDER BY salesBy ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('inventoryConfig', $inventory);
@@ -371,7 +366,7 @@ class SalesRepository extends EntityRepository
 	{
 
 		$userBranch = $user->getProfile()->getBranches();
-		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
+		$config =  $user->getGlobalOption()->getTallyConfig()->getId();
 
 		$compare = new \DateTime();
 		$year =  $compare->format('Y');
@@ -380,7 +375,7 @@ class SalesRepository extends EntityRepository
 
 		$sql = "SELECT sales.salesBy_id as salesBy, MONTH (sales.created) as month, SUM(sales.total) AS total
                 FROM Sales as sales
-                WHERE sales.inventoryConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                WHERE sales.config_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
                 GROUP BY month , salesBy ORDER BY salesBy ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->bindValue('config', $config);
@@ -398,7 +393,7 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $ids = array();
         foreach ($x as $y){
@@ -409,7 +404,7 @@ class SalesRepository extends EntityRepository
         $qb->join('s.salesItems','si');
         $qb->select('s.id as salesId');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
-        $qb->where("s.inventoryConfig = :inventory");
+        $qb->where("s.config = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -432,8 +427,8 @@ class SalesRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('s.id');
-        $qb->from('InventoryBundle:Sales','s');
-        $qb->where("s.inventoryConfig = :inventory");
+        $qb->from('TallyBundle:Sales','s');
+        $qb->where("s.config = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
         $qb->orderBy('s.id','DESC');
         $qb->setMaxResults(1);
@@ -450,7 +445,7 @@ class SalesRepository extends EntityRepository
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
-            ->from('InventoryBundle:SalesItem','si')
+            ->from('TallyBundle:SalesItem','si')
             ->select('sum(si.subTotal) as total , sum(si.quantity) as totalItem')
             ->where('si.sales = :sales')
             ->setParameter('sales', $sales ->getId())
@@ -477,7 +472,7 @@ class SalesRepository extends EntityRepository
             $sales->setDiscount(0);
             $sales->setVat(0);
         }
-	    if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+	    if ($sales->getTallyConfig()->getVatEnable() == 1 && $sales->getTallyConfig()->getVatPercentage() > 0) {
 		    $totalAmount = $sales->getTotal();
 		    $vat = $this->getCulculationVat($sales,$totalAmount);
 		    $sales->setVat($vat);
@@ -517,16 +512,16 @@ class SalesRepository extends EntityRepository
     public function todaySalesOverview(User $user , $mode='')
     {
 
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $inventory = $user->getGlobalOption()->getTallyConfig();
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
-        $qb->from('InventoryBundle:Sales','s');
+        $qb->from('TallyBundle:Sales','s');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.inventoryConfig = :inventory')
+        $qb->where('s.config = :inventory')
             ->andWhere('s.salesMode =:mode')
             ->andWhere('s.paymentStatus IN (:pStatus)')
             ->andWhere('s.updated >= :today_startdatetime')
@@ -548,14 +543,14 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
       //  $qb->join('s.salesItems','si');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, count(s.totalItem) as totalItem, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
        // $qb->addSelect('SUM(si.quantity * si.purchasePrice) as purchasePrice');
        // $qb->addSelect('SUM(si.quantity) as quantity');
-        $qb->where('s.inventoryConfig = :inventory');
+        $qb->where('s.config = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -570,7 +565,7 @@ class SalesRepository extends EntityRepository
     public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.salesItems','si');
@@ -578,7 +573,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('COUNT(si.id) AS totalItem');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS purchasePrice');
         $qb->addSelect('SUM(si.quantity * si.salesPrice) AS salesPrice');
-        $qb->where('s.inventoryConfig = :inventory');
+        $qb->where('s.config = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -595,12 +590,12 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.transactionMethod','t');
         $qb->select('t.name as transactionName , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.inventoryConfig = :inventory');
+        $qb->where('s.config = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -617,11 +612,11 @@ class SalesRepository extends EntityRepository
     public function reportSalesModeOverview(User $user,$data)
     {
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->select('s.salesMode as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.inventoryConfig = :inventory');
+        $qb->where('s.config = :inventory');
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -639,11 +634,11 @@ class SalesRepository extends EntityRepository
     {
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
         $qb->select('s.process as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.inventoryConfig = :inventory');
+        $qb->where('s.config = :inventory');
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
         if ($userBranch){
@@ -657,7 +652,7 @@ class SalesRepository extends EntityRepository
     public  function reportSalesItem(User $user , $data = ''){
 
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.salesItems','si');
         $qb->join('si.item','item');
@@ -669,7 +664,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('si.salesPrice');
         $qb->addSelect('item.name AS name');
         $qb->addSelect('pi.barcode AS barcode');
-        $qb->where("s.inventoryConfig = :inventory");
+        $qb->where("s.config = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -685,9 +680,9 @@ class SalesRepository extends EntityRepository
 
     public  function reportSalesItemDetails(User $user, $data=''){
         $userBranch = $user->getProfile()->getBranches();
-        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $inventory =  $user->getGlobalOption()->getTallyConfig()->getId();
         $qb = $this->_em->createQueryBuilder();
-        $qb->from('InventoryBundle:SalesItem','si');
+        $qb->from('TallyBundle:SalesItem','si');
         $qb->join('si.sales','s');
         $qb->leftJoin('s.customer','customer');
         $qb->join('si.item','item');
@@ -707,7 +702,7 @@ class SalesRepository extends EntityRepository
         $qb->addSelect('si.quantity AS quantity');
         $qb->addSelect('si.salesPrice AS salesPrice');
         $qb->addSelect('item.sku AS name');
-        $qb->where("s.inventoryConfig = :inventory");
+        $qb->where("s.config = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
@@ -724,16 +719,16 @@ class SalesRepository extends EntityRepository
     public function todaySales(User $user , $mode = '')
     {
 
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $inventory = $user->getGlobalOption()->getTallyConfig();
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
-        $qb->from('InventoryBundle:Sales','s');
+        $qb->from('TallyBundle:Sales','s');
         $qb->select('s')
-            ->where('s.inventoryConfig = :inventory')
+            ->where('s.config = :inventory')
             ->andWhere('s.salesMode =:mode')
             ->andWhere('s.created >= :today_startdatetime')
             ->andWhere('s.created <= :today_enddatetime');
@@ -759,11 +754,11 @@ class SalesRepository extends EntityRepository
         echo $query->getId();
 
         $qb = $this->_em->createQueryBuilder();
-        $qb->from('InventoryBundle:Sales','sales');
+        $qb->from('TallyBundle:Sales','sales');
         $qb->select('sales');
         $qb->innerJoin('sales.salesItems','salesItems');
         $qb->innerJoin('salesItems.purchaseItem','purchaseitem');
-        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->where("sales.config = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
         if(!empty($saleId)){
             $qb->andWhere("sales.salesCode = :code");
@@ -779,7 +774,7 @@ class SalesRepository extends EntityRepository
 
     public function getCulculationVat(Sales $sales,$totalAmount)
     {
-        $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVatPercentage())/100 );
+        $vat = ( ($totalAmount * (int)$sales->getTallyConfig()->getVatPercentage())/100 );
         return round($vat);
     }
 

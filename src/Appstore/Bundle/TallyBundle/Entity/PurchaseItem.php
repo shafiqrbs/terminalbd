@@ -75,6 +75,12 @@ class PurchaseItem
     private  $globalOption;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="purchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $config;
+
 
     /**
      * @var string
@@ -1116,6 +1122,22 @@ class PurchaseItem
     public function setRebatePercent($rebatePercent)
     {
         $this->rebatePercent = $rebatePercent;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

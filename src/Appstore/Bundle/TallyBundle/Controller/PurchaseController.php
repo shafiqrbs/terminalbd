@@ -39,7 +39,7 @@ class PurchaseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
         $data = $_REQUEST;
         $entities = $this->getDoctrine()->getRepository('TallyBundle:Purchase')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
@@ -53,11 +53,12 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Purchase();
-        $config = $this->getUser()->getGlobalOption();
-        $entity->setGlobalOption($config);
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $entity->setConfig($config);
         $entity->setCreatedBy($this->getUser());
-        $entity->setSourceInvoice('Local');
+        $entity->setProcessType('Local');
         $entity->setUpdated($entity->getCreated());
+        $entity->setReceiveDate($entity->getCreated());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
@@ -112,14 +113,17 @@ class PurchaseController extends Controller
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $tti = $invoice->getTotalTaxIncidence() > 0 ? $invoice->getTotalTaxIncidence() : 0;
         $rebate = $invoice->getRebate() > 0 ? $invoice->getRebate() : 0;
-        $netTotal = ($subTotal + $tti);
+        $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
         $payment = $invoice->getPayment() > 0 ? $invoice->getPayment() : 0;
+        $discount = $invoice->getDiscount() > 0 ? $invoice->getDiscount() : 0;
         $data = array(
             'subTotal'  => $subTotal,
             'tti'       => $tti,
             'rebate'    => $rebate,
             'netTotal'  => $netTotal,
             'payment'   => $payment,
+            'discount'  => $discount,
+            'due'       => ($netTotal-$payment),
             'invoiceParticulars' => $invoiceParticulars ,
             'msg' => $msg ,
             'success' => 'success'
@@ -160,7 +164,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     /**
@@ -168,6 +172,23 @@ class PurchaseController extends Controller
      */
     public function invoiceDiscountUpdateAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $discount = (float)$request->request->get('discount');
+        $invoice = $request->request->get('purchase');
+        $entity = $em->getRepository('TallyBundle:Purchase')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        $total = ($subTotal  - $discount);
+        $vat = 0;
+        if($total > $discount ){
+            $entity->setDiscount(round($discount));
+            $entity->setNetTotal(round($total + $entity->getTotalTaxIncidence()));
+        }else{
+            $entity->setDiscount(0);
+            $entity->setNetTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+        }
+        $em->flush();
+        $result = $this->returnResultData($entity);
+        return new Response(json_encode($result));
 
     }
 
@@ -196,7 +217,6 @@ class PurchaseController extends Controller
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
-            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
             $entity->setUpdated($entity->getCreated());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -247,6 +267,7 @@ class PurchaseController extends Controller
 
         $purchase = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
         if (!empty($purchase) and empty($purchase->getApprovedBy())) {
+
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('approved');
             $purchase->setApprovedBy($this->getUser());
@@ -260,15 +281,14 @@ class PurchaseController extends Controller
                 $purchase->setUpdated($datetime);
             }
             $em->flush();
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
+            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertTallyAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
-            $this->getDoctrine()->getRepository('TallyBundle:Purchase')->updateVendorBalance($purchase);
             $this->getDoctrine()->getRepository('TallyBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
     /**

@@ -39,11 +39,14 @@ tally_purchase_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "TallyBundle:Purchase:approved" }
 
-tally_purchase_item_approve:
-    path:     /{id}/item-approve
-    defaults: { _controller: "TallyBundle:Purchase:itemApprove" }
-
 tally_purchase_particular_delete:
     path:     /{invoice}/{id}/item-delete
     defaults: { _controller: "TallyBundle:Purchase:invoiceParticularDelete" }
+
+tally_purchase_discount_update:
+    path:     /dicount-update
+    defaults: { _controller: "TallyBundle:Purchase:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
 

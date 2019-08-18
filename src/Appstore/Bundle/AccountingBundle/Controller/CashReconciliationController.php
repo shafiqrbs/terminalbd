@@ -103,11 +103,14 @@ class CashReconciliationController extends Controller
             $date = $datetime->format("Y-m-d");
         }
         $data = array('startDate' => $date,'endDate'=>$date);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
+
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $this->getDoctrine()->getRepository('AccountingBundle:CashReconciliation')->systemCashUpdate($this->getUser(),$entity);
         return $this->render('AccountingBundle:CashReconciliation:new.html.twig', array(
             'entity' => $entity,
+            'transactionCashOverviews'          => $transactionCashOverview,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
             'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\TallyBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AssetsBundle\Entity\DepreciationModel;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
@@ -37,6 +38,12 @@ class Item
 	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="products" )
 	 **/
 	private  $globalOption;
+
+
+    /**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="items" )
+	 **/
+	private  $config;
 
 
     /**
@@ -301,6 +308,13 @@ class Item
     private $disposalQuantity = 0;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="assetsQuantity", type="integer", nullable=true)
+     */
+    private $assetsQuantity = 0;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="barcode", type="string", nullable=true)
@@ -516,14 +530,14 @@ class Item
 
 
 	/**
-	 * @return Vendor
+	 * @return AccountVendor
 	 */
 	public function getVendor() {
 		return $this->vendor;
 	}
 
 	/**
-	 * @param Vendor $vendor
+	 * @param AccountVendor $vendor
 	 */
 	public function setVendor( $vendor ) {
 		$this->vendor = $vendor;
@@ -662,7 +676,7 @@ class Item
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/assets/product-group/';
+        return 'uploads/domain/'.$this->getConfig()->getGlobalOption()->getId().'/assets/product-group/';
     }
 
     public function upload()
@@ -1197,6 +1211,38 @@ class Item
     public function setVatName($vatName)
     {
         $this->vatName = $vatName;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAssetsQuantity()
+    {
+        return $this->assetsQuantity;
+    }
+
+    /**
+     * @param int $assetsQuantity
+     */
+    public function setAssetsQuantity($assetsQuantity)
+    {
+        $this->assetsQuantity = $assetsQuantity;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

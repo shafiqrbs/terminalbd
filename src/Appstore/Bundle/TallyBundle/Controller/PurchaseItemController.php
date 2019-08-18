@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\TallyBundle\Controller;
 
 use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
+use Appstore\Bundle\TallyBundle\Form\OpeningItemEditType;
 use Appstore\Bundle\TallyBundle\Form\PurchaseItemType;
 use Appstore\Bundle\TallyBundle\Form\PurchaseOpeningItemType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -37,7 +38,7 @@ class PurchaseItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
         $entities = $em->getRepository('TallyBundle:PurchaseItem')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         return $this->render('TallyBundle:PurchaseItem:index.html.twig', array(
@@ -61,13 +62,15 @@ class PurchaseItemController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+            $entity->setConfig($config);
+            $entity->setMode('opening');
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('PurchaseItem'));
+            return $this->redirect($this->generateUrl('tally_purchaseitem'));
         }
         return $this->render('TallyBundle:PurchaseItem:opening.html.twig', array(
             'entity' => $entity,
@@ -97,6 +100,7 @@ class PurchaseItemController extends Controller
     }
 
 
+
     /**
      * Displays a form to create a new Particular entity.
      *
@@ -111,6 +115,29 @@ class PurchaseItemController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+
+    /**
+     * Creates a form to create a Particular entity.
+     *
+     * @param PurchaseItem $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(PurchaseItem $entity)
+    {
+        $config = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new OpeningItemEditType($config), $entity, array(
+            'action' => $this->generateUrl('tally_purchaseitem_update',array('id'=>$entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
 
     /**
@@ -130,28 +157,11 @@ class PurchaseItemController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->generateSerialNo($entity);
-        return $this->render('TallyBundle:PurchaseItem:new.html.twig', array(
+        return $this->render('TallyBundle:PurchaseItem:editOpening.html.twig', array(
             'entity'      => $entity,
             'purchaseInfo'      => $entity->getPurchase(),
             'form'   => $editForm->createView(),
         ));
-    }
-
-    /**
-    * Creates a form to edit a PurchaseItem entity.
-    *
-    * @param PurchaseItem $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(PurchaseItem $entity)
-    {
-        $option = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new PurchaseItemType($option), $entity, array(
-            'action' => $this->generateUrl('tally_purchaseitem_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-        return $form;
     }
 
 
@@ -174,6 +184,73 @@ class PurchaseItemController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             $this->getDoctrine()->getRepository('TallyBundle:ItemMetaAttribute')->insertProductMeta($entity,$data);
+            return $this->redirect($this->generateUrl('tally_purchaseitem_edit', array('id' => $id)));
+        }
+        return $this->render('TallyBundle:PurchaseItem:editOpening.html.twig', array(
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+
+
+    /**
+     * Displays a form to edit an existing PurchaseItem entity.
+     *
+     */
+    public function attributeAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /* @var $entity PurchaseItem */
+
+        $entity = $em->getRepository('TallyBundle:PurchaseItem')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+
+        $editForm = $this->createAttributeForm($entity);
+        $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->generateSerialNo($entity);
+        return $this->render('TallyBundle:PurchaseItem:new.html.twig', array(
+            'entity'      => $entity,
+            'purchaseInfo'      => $entity->getPurchase(),
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+    /**
+    * Creates a form to edit a PurchaseItem entity.
+    *
+    * @param PurchaseItem $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createAttributeForm(PurchaseItem $entity)
+    {
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseItemType($option), $entity, array(
+            'action' => $this->generateUrl('tally_purchaseitem_attribute_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+        return $form;
+    }
+
+
+    public function updateAttributeAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('TallyBundle:PurchaseItem')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $editForm = $this->createAttributeForm($entity);
+        $editForm->handleRequest($request);
+        $data = $request->request->all();
+        if ($editForm->isValid()) {
+            $em->flush();
+            $this->getDoctrine()->getRepository('TallyBundle:ItemMetaAttribute')->insertProductMeta($entity,$data);
             return $this->redirect($this->generateUrl('tally_purchaseitem_attribute', array('id' => $id)));
         }
         return $this->render('TallyBundle:PurchaseItem:new.html.twig', array(
@@ -181,6 +258,7 @@ class PurchaseItemController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
+
 
     public function inlineUpdateAction(Request $request)
     {
@@ -258,7 +336,7 @@ class PurchaseItemController extends Controller
      * Status a Page entity.
      *
      */
-    public function approveAction(Request $request, $id)
+    public function approveAction($id)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -269,7 +347,7 @@ class PurchaseItemController extends Controller
         }
         $entity->setProcess("Approved");
         $em->flush();
-        $this->getDoctrine()->getRepository('TallyBundle:Item')->updateRemovePurchaseQuantity($entity->getProductGroup(),'opening');
+        $this->getDoctrine()->getRepository('TallyBundle:Item')->updateRemovePurchaseQuantity($entity->getItem(),'opening');
         $this->get('session')->getFlashBag()->add(
             'success',"Item has been approved successfully"
         );

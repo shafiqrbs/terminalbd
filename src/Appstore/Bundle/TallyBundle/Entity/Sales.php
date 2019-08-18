@@ -4,6 +4,8 @@ namespace Appstore\Bundle\TallyBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseOrder;
+use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -27,59 +29,44 @@ class Sales
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="sales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="sales" )
      **/
-    private $inventoryConfig;
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", inversedBy="sales" )
-     **/
-    private $androidProcess;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Reverse", mappedBy="sales" )
-     **/
-    private $reverse;
-
+    private $config;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="sales" )
      **/
-
     private $branches;
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesImport", inversedBy="sales" )
-     **/
-    private $salesImport;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="sales" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private $salesItems;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", mappedBy="sales" , cascade={"remove"} )
-     **/
-    private $salesReturn;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", mappedBy="salesAdjustmentInvoice" , cascade={"remove"} )
-     **/
-    private $salesReturnAdjustment;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="sales", cascade={"remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="tallySales", cascade={"remove"} )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $accountSales;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="sales", cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private $stockItems;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="sales"  )
      **/
     private $customer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="sales"  )
+     **/
+    private $purchaseOrder;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="sales"  )
+     **/
+    private $purchaseRequisition;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesUser" )
@@ -260,6 +247,23 @@ class Sales
      * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="supplementaryDuty", type="float", nullable = true)
+     */
+    private $supplementaryDuty = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="totaTaxIncidence", type="float", nullable = true)
+     */
+    private $totaTaxIncidence = 0;
+
+
+
 
     /**
      * @var float
@@ -1038,20 +1042,93 @@ class Sales
 		$this->profit = $profit;
 	}
 
+
     /**
-     * @return InventoryAndroidProcess
+     * @return TallyConfig
      */
-    public function getAndroidProcess()
+    public function getConfig()
     {
-        return $this->androidProcess;
+        return $this->config;
     }
 
     /**
-     * @param InventoryAndroidProcess $androidProcess
+     * @param TallyConfig $config
      */
-    public function setAndroidProcess($androidProcess)
+    public function setConfig($config)
     {
-        $this->androidProcess = $androidProcess;
+        $this->config = $config;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSupplementaryDuty()
+    {
+        return $this->supplementaryDuty;
+    }
+
+    /**
+     * @param float $supplementaryDuty
+     */
+    public function setSupplementaryDuty($supplementaryDuty)
+    {
+        $this->supplementaryDuty = $supplementaryDuty;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotaTaxIncidence()
+    {
+        return $this->totaTaxIncidence;
+    }
+
+    /**
+     * @param float $totaTaxIncidence
+     */
+    public function setTotaTaxIncidence($totaTaxIncidence)
+    {
+        $this->totaTaxIncidence = $totaTaxIncidence;
+    }
+
+    /**
+     * @return PurchaseOrder
+     */
+    public function getPurchaseOrder()
+    {
+        return $this->purchaseOrder;
+    }
+
+    /**
+     * @param PurchaseOrder $purchaseOrder
+     */
+    public function setPurchaseOrder($purchaseOrder)
+    {
+        $this->purchaseOrder = $purchaseOrder;
+    }
+
+    /**
+     * @return PurchaseRequisition
+     */
+    public function getPurchaseRequisition()
+    {
+        return $this->purchaseRequisition;
+    }
+
+    /**
+     * @param PurchaseRequisition $purchaseRequisition
+     */
+    public function setPurchaseRequisition($purchaseRequisition)
+    {
+        $this->purchaseRequisition = $purchaseRequisition;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 }

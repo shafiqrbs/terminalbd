@@ -4,6 +4,7 @@ namespace Appstore\Bundle\TallyBundle\Form;
 
 use Appstore\Bundle\TallyBundle\Entity\Category;;
 
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Appstore\Bundle\TallyBundle\Repository\CategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -18,17 +19,18 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class ItemEditType extends AbstractType
 {
 
-    /** @var GlobalOption */
+    /** @var TallyConfig */
 
-    public  $option;
+    public  $config;
 
     /** @var  CategoryRepository */
     private $em;
 
-    function __construct(GlobalOption $option , CategoryRepository $em)
+    function __construct(TallyConfig $config , CategoryRepository $em)
     {
         $this->em = $em;
-        $this->option = $option;
+        $this->config = $config;
+
     }
 
     /**
@@ -86,7 +88,7 @@ class ItemEditType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->Where("b.status = 1")
-                        ->andWhere("b.globalOption = {$this->option->getId()}");
+                        ->andWhere("b.globalOption = {$this->config->getId()}");
                 },
             ))
             ->add('vendor', 'entity', array(
@@ -98,7 +100,7 @@ class ItemEditType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.globalOption = {$this->option->getId()}");
+                        ->andWhere("b.globalOption = {$config->getGlobalOption()->getId()}");
                 },
             ))
             ->add('productGroup', 'entity', array(
@@ -187,7 +189,7 @@ class ItemEditType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getFlatCategoryTree($this->option);
+        return $categoryTree = $this->em->getFlatCategoryTree($this->config);
     }
 
 }

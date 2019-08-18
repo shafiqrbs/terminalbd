@@ -33,7 +33,7 @@ class SalesListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
+    public function getLastCode(LifecycleEventArgs $args, $datetime, Sales $entity)
     {
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
@@ -44,10 +44,10 @@ class SalesListener
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.globalOption = :inventory')
+            ->where('s.config = :inventory')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('inventory', $entity->getGlobalOption())
+            ->setParameter('inventory', $entity->getConfig())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();

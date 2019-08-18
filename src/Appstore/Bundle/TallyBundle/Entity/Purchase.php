@@ -3,6 +3,10 @@
 namespace Appstore\Bundle\TallyBundle\Entity;
 
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -30,10 +34,23 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         protected $globalOption;
 
 
-         /**
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="purchase" )
+         * @ORM\JoinColumn(onDelete="CASCADE")
+         **/
+        private $config;
+
+
+        /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="purchase"  )
          **/
         private  $purchaseItems;
+
+
+         /**
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="purchase"  )
+         **/
+        private  $purchaseOrder;
 
 
         /**
@@ -170,24 +187,9 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          /**
          * @var float
          *
-         * @ORM\Column(name="commission", type="float", nullable=true)
+         * @ORM\Column(name="discount", type="float", nullable=true)
          */
-        private $commission = 0;
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="balance", type="float", nullable=true)
-         */
-        private $balance = 0;
-
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
-         */
-        private $accountRefNo;
-
+        private $discount = 0;
 
         /**
          * @var string
@@ -199,17 +201,18 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @var string
          *
-         * @ORM\Column(name="memo", type="string", length = 50, nullable=true)
+         * @ORM\Column(name="challanNo", type="string", length = 50, nullable=true)
          */
-        private $memo;
+        private $challanNo;
 
 
         /**
          * @var string
          *
-         * @ORM\Column(name="sourceInvoice", type="string", length=50, nullable=true)
+         * @ORM\Column(name="lcNo", type="string", length = 50, nullable=true)
          */
-        private $sourceInvoice;
+        private $lcNo;
+
 
         /**
          * @var integer
@@ -224,6 +227,14 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\Column(name="remark", type="text", nullable = true)
          */
         private $remark;
+
+        /**
+         * @var \DateTime
+         *
+         * @ORM\Column(name="poDate", type="date", nullable = true)
+         */
+        private $poDate;
+
 
         /**
          * @var \DateTime
@@ -253,12 +264,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          */
         private $process;
 
-        /**
-         * @var string
-         *
-         * @ORM\Column(name="processHead", type="string", length=100, nullable = true)
-         */
-        private $processHead;
 
         /**
          * @var string
@@ -323,24 +328,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @return mixed
          */
-        public function getVendor()
-        {
-            return $this->vendor;
-        }
-
-        /**
-         * @param mixed $vendor
-         */
-        public function setVendor($vendor)
-        {
-            $this->vendor = $vendor;
-        }
-
-
-
-        /**
-         * @return mixed
-         */
         public function getCreatedBy()
         {
             return $this->createdBy;
@@ -355,7 +342,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         }
 
         /**
-         * @return datetime
+         * @return \DateTime
          */
         public function getReceiveDate()
         {
@@ -363,7 +350,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         }
 
         /**
-         * @param datetime $receiveDate
+         * @param \DateTime $receiveDate
          */
         public function setReceiveDate($receiveDate)
         {
@@ -403,43 +390,11 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->process = $process;
         }
 
-        /**
-         * @return mixed
-         */
-        public function getToUser()
-        {
-            return $this->toUser;
-        }
 
         /**
-         * @param mixed $toUser
-         */
-        public function setToUser($toUser)
-        {
-            $this->toUser = $toUser;
-        }
-
-        /**
-         * @return float
-         */
-        public function getTotalAmount()
-        {
-            return $this->totalAmount;
-        }
-
-        /**
-         * @param float $totalAmount
-         */
-        public function setTotalAmount($totalAmount)
-        {
-            $this->totalAmount = $totalAmount;
-        }
-
-
-
-        /**
-         * Purchase
-         * Purchase Return
+         * Local
+         * Foreign
+         * Service
          * @return string
          */
         public function getProcessType()
@@ -471,21 +426,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->globalOption = $globalOption;
         }
 
-        /**
-         * @return float
-         */
-        public function getPurchaseAmount()
-        {
-            return $this->purchaseAmount;
-        }
-
-        /**
-         * @param float $purchaseAmount
-         */
-        public function setPurchaseAmount($purchaseAmount)
-        {
-            $this->purchaseAmount = $purchaseAmount;
-        }
 
         /**
          * @return float
@@ -503,37 +443,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->payment = $payment;
         }
 
-        /**
-         * @return float
-         */
-        public function getBalance()
-        {
-            return $this->balance;
-        }
 
-        /**
-         * @param float $balance
-         */
-        public function setBalance($balance)
-        {
-            $this->balance = $balance;
-        }
-
-        /**
-         * @return string
-         */
-        public function getAccountRefNo()
-        {
-            return $this->accountRefNo;
-        }
-
-        /**
-         * @param string $accountRefNo
-         */
-        public function setAccountRefNo($accountRefNo)
-        {
-            $this->accountRefNo = $accountRefNo;
-        }
 
         /**
          * @return int
@@ -551,35 +461,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->code = $code;
         }
 
-
-        /**
-         * Set processHead
-         * @param string $processHead
-         * Purchase
-         * Purchase Return
-         * Sales
-         * Sales Return
-         * Journal
-         * Bank
-         * Expenditure
-         * Payroll
-         * Petty Cash
-         * @return Transaction
-         */
-
-
-        public function getProcessHead()
-        {
-            return $this->processHead;
-        }
-
-        /**
-         * @param string $processHead
-         */
-        public function setProcessHead($processHead)
-        {
-            $this->processHead = $processHead;
-        }
 
         /**
          * @return TransactionMethod
@@ -630,13 +511,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->remark = $remark;
         }
 
-        /**
-         * @return AccountCash
-         */
-        public function getAccountCash()
-        {
-            return $this->accountCash;
-        }
 
         /**
          * @return mixed
@@ -654,169 +528,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->accountMobileBank = $accountMobileBank;
         }
 
-        /**
-         * @return HmsPurchase
-         */
-        public function getHmsPurchase()
-        {
-            return $this->hmsPurchase;
-        }
 
-        /**
-         * @param mixed $hmsPurchase
-         */
-        public function setHmsPurchase($hmsPurchase)
-        {
-            $this->hmsPurchase = $hmsPurchase;
-        }
-
-
-        /**
-         * @return HmsVendor
-         */
-        public function getHmsVendor()
-        {
-            return $this->hmsVendor;
-        }
-
-        /**
-         * @param HmsVendor $hmsVendor
-         */
-        public function setHmsVendor($hmsVendor)
-        {
-            $this->hmsVendor = $hmsVendor;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getRestaurantPurchase()
-        {
-            return $this->restaurantPurchase;
-        }
-
-        /**
-         * @param mixed $restaurantPurchase
-         */
-        public function setRestaurantPurchase($restaurantPurchase)
-        {
-            $this->restaurantPurchase = $restaurantPurchase;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getRestaurantVendor()
-        {
-            return $this->restaurantVendor;
-        }
-
-        /**
-         * @param mixed $restaurantVendor
-         */
-        public function setRestaurantVendor($restaurantVendor)
-        {
-            $this->restaurantVendor = $restaurantVendor;
-        }
-
-        /**
-         * @return DmsPurchase
-         */
-        public function getDmsPurchase()
-        {
-            return $this->dmsPurchase;
-        }
-
-        /**
-         * @param DmsPurchase $dmsPurchase
-         */
-        public function setDmsPurchase($dmsPurchase)
-        {
-            $this->dmsPurchase = $dmsPurchase;
-        }
-
-        /**
-         * @return DmsVendor
-         */
-        public function getDmsVendor()
-        {
-            return $this->dmsVendor;
-        }
-
-        /**
-         * @param DmsVendor $dmsVendor
-         */
-        public function setDmsVendor($dmsVendor)
-        {
-            $this->dmsVendor = $dmsVendor;
-        }
-
-
-        /**
-         * @return MedicineVendor
-         */
-        public function getMedicineVendor()
-        {
-            return $this->medicineVendor;
-        }
-
-        /**
-         * @param MedicineVendor $medicineVendor
-         */
-        public function setMedicineVendor($medicineVendor)
-        {
-            $this->medicineVendor = $medicineVendor;
-        }
-
-        /**
-         * @return BusinessPurchase
-         */
-        public function getBusinessPurchase()
-        {
-            return $this->businessPurchase;
-        }
-
-        /**
-         * @param BusinessPurchase $businessPurchase
-         */
-        public function setBusinessPurchase($businessPurchase)
-        {
-            $this->businessPurchase = $businessPurchase;
-        }
-
-
-
-        /**
-         * @return string
-         */
-        public function getSourceInvoice()
-        {
-            return $this->sourceInvoice;
-        }
-
-        /**
-         * @param string $sourceInvoice
-         */
-        public function setSourceInvoice($sourceInvoice)
-        {
-            $this->sourceInvoice = $sourceInvoice;
-        }
-
-        /**
-         * @return MedicinePurchase
-         */
-        public function getMedicinePurchase()
-        {
-            return $this->medicinePurchase;
-        }
-
-        /**
-         * @param MedicinePurchase $medicinePurchase
-         */
-        public function setMedicinePurchase($medicinePurchase)
-        {
-            $this->medicinePurchase = $medicinePurchase;
-        }
 
         /**
          * @return AccountVendor
@@ -834,95 +546,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->accountVendor = $accountVendor;
         }
 
-	    /**
-	     * @return HotelPurchase
-	     */
-	    public function getHotelPurchase() {
-		    return $this->hotelPurchase;
-	    }
-
-	    /**
-	     * @param HotelPurchase $hotelPurchase
-	     */
-	    public function setHotelPurchase( $hotelPurchase ) {
-		    $this->hotelPurchase = $hotelPurchase;
-	    }
-
-	    /**
-	     * @return string
-	     */
-	    public function getCompanyName(){
-		    return $this->companyName;
-	    }
-
-	    /**
-	     * @param string $companyName
-	     */
-	    public function setCompanyName( string $companyName ) {
-		    $this->companyName = $companyName;
-	    }
-
-	    /**
-	     * @return string
-	     */
-	    public function getGrn(){
-		    return $this->grn;
-	    }
-
-	    /**
-	     * @param string $grn
-	     */
-	    public function setGrn( string $grn ) {
-		    $this->grn = $grn;
-	    }
-
-        /**
-         * @return ExpenditureItem
-         */
-        public function getExpenditureItems()
-        {
-            return $this->expenditureItems;
-        }
-
-        /**
-         * @return AccountHead
-         */
-        public function getAccountHead()
-        {
-            return $this->accountHead;
-        }
-
-        /**
-         * @param AccountHead $accountHead
-         */
-        public function setAccountHead($accountHead)
-        {
-            $this->accountHead = $accountHead;
-        }
-
-        /**
-         * @return string
-         */
-        public function getVoucherType()
-        {
-            return $this->voucherType;
-        }
-
-        /**
-         * @param string $voucherType
-         */
-        public function setVoucherType($voucherType)
-        {
-            $this->voucherType = $voucherType;
-        }
-
-        /**
-         * @return VoucherItem
-         */
-        public function getVoucherItems()
-        {
-            return $this->voucherItems;
-        }
 
         /**
          * @return string
@@ -940,21 +563,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->memo = $memo;
         }
 
-        /**
-         * @return float
-         */
-        public function getCommission()
-        {
-            return $this->commission;
-        }
-
-        /**
-         * @param float $commission
-         */
-        public function setCommission($commission)
-        {
-            $this->commission = $commission;
-        }
 
         /**
          * @return PurchaseItem
@@ -1138,6 +746,126 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setVatDeductionSource($vatDeductionSource)
         {
             $this->vatDeductionSource = $vatDeductionSource;
+        }
+
+        /**
+         * @return float
+         */
+        public function getDiscount()
+        {
+            return $this->discount;
+        }
+
+        /**
+         * @param float $discount
+         */
+        public function setDiscount($discount)
+        {
+            $this->discount = $discount;
+        }
+
+        /**
+         * @return string
+         */
+        public function getGrn()
+        {
+            return $this->grn;
+        }
+
+        /**
+         * @param string $grn
+         */
+        public function setGrn($grn)
+        {
+            $this->grn = $grn;
+        }
+
+        /**
+         * @return string
+         */
+        public function getChallanNo()
+        {
+            return $this->challanNo;
+        }
+
+        /**
+         * @param string $challanNo
+         */
+        public function setChallanNo($challanNo)
+        {
+            $this->challanNo = $challanNo;
+        }
+
+        /**
+         * @return string
+         */
+        public function getLcNo()
+        {
+            return $this->lcNo;
+        }
+
+        /**
+         * @param string $lcNo
+         */
+        public function setLcNo($lcNo)
+        {
+            $this->lcNo = $lcNo;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getPoDate()
+        {
+            return $this->poDate;
+        }
+
+        /**
+         * @param mixed $poDate
+         */
+        public function setPoDate($poDate)
+        {
+            $this->poDate = $poDate;
+        }
+
+        /**
+         * @return AccountPurchase
+         */
+        public function getAccountPurchase()
+        {
+            return $this->accountPurchase;
+        }
+
+        /**
+         * @return PurchaseOrder
+         */
+        public function getPurchaseOrder()
+        {
+            return $this->purchaseOrder;
+        }
+
+        /**
+         * @param PurchaseOrder $purchaseOrder
+         */
+        public function setPurchaseOrder($purchaseOrder)
+        {
+            $this->purchaseOrder = $purchaseOrder;
+        }
+
+        /**
+         * @return TallyConfig
+         */
+        public function getConfig()
+        {
+            return $this->config;
+        }
+
+        /**
+         * @param TallyConfig $config
+         */
+        public function setConfig($config)
+        {
+            $this->config = $config;
         }
 
     }

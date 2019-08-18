@@ -87,13 +87,13 @@ class CategoryRepository extends MaterializedPathRepository
         return $array;
     }
 
-    public function getFlatCategoryTree($globalOption)
+    public function getFlatCategoryTree($config)
     {
 
         $categories = $this->createQueryBuilder("node")
-            ->where('node.globalOption = :option')
+            ->where('node.config = :config')
             ->andWhere('node.level = :level')
-            ->setParameter('option', $globalOption)
+            ->setParameter('config', $config)
             ->setParameter('level', 1)
             ->orderBy('node.level','ASC')
             ->getQuery()->getResult();

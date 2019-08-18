@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('voucheritem') }}">  Opening Item</a>
+                        <a href="{{ path('tally_purchaseitem') }}">  Opening Item</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>Add Opening Item</li>
@@ -39,8 +39,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="red btn" href="{{ path('voucheritem_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
-                                <a class="btn" href="{{ path('voucheritem') }}"><i class="icon-th-list"></i>&nbsp;  Bill Voucher</a>
+                                <a class="red btn" href="{{ path('tally_purchaseitem_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="btn" href="{{ path('tally_purchaseitem') }}"><i class="icon-th-list"></i>&nbsp;  Manage Purchase</a>
                             </div>
                         </div>
 
@@ -59,10 +59,10 @@
                             <div class="row-fluid">
                                 <div class="span6">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Product Group <span class="required">*</span></label>
+                                        <label class="control-label" for="firstName">Product Item <span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.productGroup) }}
-                                            {{ form_errors(form.productGroup) }}
+                                            {{ form_widget(form.item) }}
+                                            {{ form_errors(form.item) }}
                                         </div>
 
                                     </div>

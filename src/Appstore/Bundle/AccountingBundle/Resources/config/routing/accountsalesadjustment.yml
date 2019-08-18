@@ -13,7 +13,7 @@ account_salesadjustment_create:
 
 account_salesadjustment_reverse:
     path:     /{id}/reverse
-    defaults: { _controller: "AccountingBundle:AccountSalesAdjustment:journalReverse" }
+    defaults: { _controller: "AccountingBundle:AccountSalesAdjustment:reverse" }
 
 account_salesadjustment_approve:
     path:     /{id}/payment-approve
@@ -31,8 +31,4 @@ account_salesadjustment_delete:
     options:
            expose: true
 
-account_salesadjustment_approve_delete:
-    path:     /{id}/approve-delete
-    defaults: { _controller: "AccountingBundle:AccountSalesAdjustment:approveDelete" }
-    options:
-           expose: true
+

@@ -1,47 +1,47 @@
-itemissue:
+tally_itemissue:
     path:     /
-    defaults: { _controller: "TallyBundle:SalesOnline:index" }
+    defaults: { _controller: "TallyBundle:Issue:index" }
 
 
-itemissue_show:
+tally_itemissue_show:
     path:     /{id}/show
-    defaults: { _controller: "TallyBundle:SalesOnline:show" }
+    defaults: { _controller: "TallyBundle:Issue:show" }
 
-itemissue_show_preview:
+tally_itemissue_show_preview:
     path:     /{id}/show-preview
-    defaults: { _controller: "TallyBundle:SalesOnline:showPreview" }
+    defaults: { _controller: "TallyBundle:Issue:showPreview" }
     methods:  GET
     options:
             expose: true
 
-itemissue_new:
+tally_itemissue_new:
     path:     /new
-    defaults: { _controller: "TallyBundle:SalesOnline:new" }
+    defaults: { _controller: "TallyBundle:Issue:new" }
 
-itemissue_edit:
+tally_itemissue_edit:
     path:     /{code}/item-delivery-issue
-    defaults: { _controller: "TallyBundle:SalesOnline:edit" }
+    defaults: { _controller: "TallyBundle:Issue:edit" }
 
 
-itemissue_approve:
+tally_itemissue_approve:
     path:     /{id}/{process}/approve
-    defaults: { _controller: "TallyBundle:SalesOnline:approve" }
+    defaults: { _controller: "TallyBundle:Issue:approve" }
     options:
            expose: true
 
-itemissue_update:
+tally_itemissue_update:
     path:     /{id}/update
-    defaults: { _controller: "TallyBundle:SalesOnline:update" }
+    defaults: { _controller: "TallyBundle:Issue:update" }
     methods:  [POST, PUT]
 
-itemissue_item:
+tally_itemissue_item:
     path:     /issue-item-details
-    defaults: { _controller: "TallyBundle:SalesOnline:salesItem" }
+    defaults: { _controller: "TallyBundle:Issue:salesItem" }
 
-itemissue_print_invoice:
+tally_itemissue_print_invoice:
     path:     /{invoice}/invoice
-    defaults: { _controller: "TallyBundle:SalesOnline:invoicePrint" }
+    defaults: { _controller: "TallyBundle:Issue:invoicePrint" }
 
-itemissue_empty_delete:
+tally_itemissue_empty_delete:
     path:     /delete/empty-invoice
-    defaults: { _controller: "TallyBundle:SalesOnline:deleteEmptyInvoice" }
+    defaults: { _controller: "TallyBundle:Issue:deleteEmptyInvoice" }

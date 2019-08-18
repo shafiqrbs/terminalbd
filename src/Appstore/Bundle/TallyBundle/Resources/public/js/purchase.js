@@ -81,7 +81,10 @@ var form = $("#purchaseItem").validate({
                 $('.tti').html(obj['tti']);
                 $('.rebate').html(obj['rebate']);
                 $('.netTotal').val(obj['netTotal']);
-                $('#payment').val(obj['payment']);
+                $('.due').val(obj['due']);
+                $('.discount').html(obj['discount']);
+                $('.discount').val(obj['discount']);
+                $('#paymentTotal').val(obj['netTotal']);
                 $('form#purchaseItem')[0].reset();
                 $('#quantity').val('1');
 
@@ -109,6 +112,9 @@ $('#invoiceParticulars').on("click", ".item-delete", function(e) {
                     $('.tti').html(obj['tti']);
                     $('.rebate').html(obj['rebate']);
                     $('.netTotal').val(obj['netTotal']);
+                    $('.due').val(obj['due']);
+                    $('.discount').html(obj['discount']);
+                    $('.discount').val(obj['discount']);
                     $('#paymentTotal').val(obj['netTotal']);
 
                 }
@@ -116,6 +122,33 @@ $('#invoiceParticulars').on("click", ".item-delete", function(e) {
         }
     });
     e.preventDefault();
+});
+
+$(document).on('change', '.discount', function() {
+
+
+    var discount = parseFloat($(this).val());
+    var purchase = parseInt($('#purchaseId').val());
+
+    $.ajax({
+        url: Routing.generate('tally_purchase_discount_update'),
+        type: 'POST',
+        data:'discount=' + discount+'&purchase='+purchase,
+        success: function(response) {
+            obj =JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('.tti').html(obj['tti']);
+            $('.rebate').html(obj['rebate']);
+            $('.netTotal').val(obj['netTotal']);
+            $('.due').val(obj['due']);
+            $('.discount').html(obj['discount']);
+            $('.discount').val(obj['discount']);
+            $('#paymentTotal').val(obj['netTotal']);
+
+        }
+
+    })
 
 });
 

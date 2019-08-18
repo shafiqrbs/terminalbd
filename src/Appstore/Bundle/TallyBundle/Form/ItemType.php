@@ -2,13 +2,13 @@
 
 namespace Appstore\Bundle\TallyBundle\Form;
 
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Appstore\Bundle\TallyBundle\Repository\AssetsCategoryRepository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\ItemTypeGrouping;
 use Appstore\Bundle\InventoryBundle\Repository\ItemTypeGroupingRepository;
 use Appstore\Bundle\TallyBundle\Repository\CategoryRepository;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -20,17 +20,17 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class ItemType extends AbstractType
 {
 
-    /** @var GlobalOption */
+    /** @var TallyConfig */
 
-    public  $globalOption;
+    public  $config;
 
     /** @var  CategoryRepository */
     private $em;
 
-    function __construct(GlobalOption $globalOption , CategoryRepository $em)
+    function __construct(TallyConfig $config , CategoryRepository $em)
     {
         $this->em = $em;
-        $this->globalOption = $globalOption;
+        $this->config = $config;
     }
 
 
@@ -94,7 +94,8 @@ class ItemType extends AbstractType
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
-                        ->Where("b.status = 1");
+                        ->Where("b.status = 1")
+                        ->andWhere("b.config = {$this->config->getId()}");
                 },
             ))
             ->add('file')
@@ -126,6 +127,6 @@ class ItemType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getFlatCategoryTree($this->globalOption);
+        return $categoryTree = $this->em->getFlatCategoryTree($this->config);
     }
 }

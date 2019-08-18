@@ -26,12 +26,12 @@ use Setting\Bundle\ToolBundle\Event\Glo;
 class PurchaseRepository extends EntityRepository
 {
 
-    public function findWithSearch($globalOption,$data = '')
+    public function findWithSearch($config,$data = '')
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption->getId());
-        $this->handleSearchBetween($qb,$globalOption,$data);
+        $qb->where("e.config = :config");
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->addOrderBy('e.id','DESC');
         $result = $qb->getQuery();
@@ -318,7 +318,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
      * @param $data
      */
 
-    protected function handleSearchBetween($qb,GlobalOption $globalOption,$data)
+    protected function handleSearchBetween($qb,$data)
     {
         if(empty($data))
         {
@@ -334,18 +334,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
-                $globalOption->getMainApp()->getSlug();
-               /* if($globalOption->getMainApp()->getSlug() == 'miss'){
-                    $qb->leftJoin('e.medicineVendor','v');
-                }elseif($globalOption->getMainApp()->getSlug() == 'inventory'){
-                    $qb->leftJoin('e.vendor','v');
-                }else{
-                    $qb->leftJoin('e.accountVendor','v');
-                }
-                if(!empty($vendor)){
-                    $qb->andWhere("v.companyName = :vendor");
-                    $qb->setParameter('vendor', $vendor);
-                }*/
+
                 $qb->andWhere($qb->expr()->like("e.companyName", "'%$vendor%'" ));
                 if (!empty($startDate) and !empty($endDate) ) {
 	                $compareTo = new \DateTime($startDate);

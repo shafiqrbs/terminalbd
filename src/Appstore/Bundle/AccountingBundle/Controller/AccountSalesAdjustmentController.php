@@ -169,7 +169,7 @@ class AccountSalesAdjustmentController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
 	/**
@@ -180,7 +180,7 @@ class AccountSalesAdjustmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountSalesAdjustment entity.');
+            throw $this->createNotFoundException('Unable to find account sales adjustment entity.');
         }
         $em->remove($entity);
         $em->flush();
@@ -189,32 +189,16 @@ class AccountSalesAdjustmentController extends Controller
     }
 
 
-    /**
-     * Deletes a AccountSalesAdjustment entity.
-     *
-     */
-    public function approveDeleteAction(AccountSalesAdjustment $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountSalesAdjustment entity.');
-        }
-        $em->remove($entity);
-        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->approvedDeleteRecord($entity,'BalanceTransfer');
-        $em->flush();
-        return new Response('success');
-        exit;
-    }
 
 
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNT_REVERSE,ROLE_DOMAIN")
 	 */
 
-	public function journalReverseAction(AccountSalesAdjustment $entity){
+	public function reverseAction(AccountSalesAdjustment $entity){
 
 		$em = $this->getDoctrine()->getManager();
-		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesAdjustmentReverse($entity);
 		$entity->setProcess(null);
 		$entity->setApprovedBy(null);
 		$entity->setSales(0);

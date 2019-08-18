@@ -218,11 +218,3 @@ services:
           tags:
             - { name: kernel.event_listener, event: setting_tool.post.hotel_invoice_sms , method: sendSms }
 
-  appstore.tally.tariff.import:
-      class: Appstore\Bundle\TallyBundle\Importer\TariffExcel
-      calls:
-            - [ setContainer, [ @service_container ] ]
-
-  appstore_tally.importer.tariff.import:
-      class: Appstore\Bundle\TallyBundle\Importer\TariffDataReader
-      arguments: [ @phpexcel ]

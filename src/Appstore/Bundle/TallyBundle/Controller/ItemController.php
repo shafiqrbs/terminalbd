@@ -42,8 +42,8 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('TallyBundle:Item')->findAll();
+        $option = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $entities = $em->getRepository('TallyBundle:Item')->findWithSearch($option,$data);
         $pagination = $this->paginate($entities);
         return $this->render('TallyBundle:Item:index.html.twig', array(
             'entities' => $pagination,
@@ -58,7 +58,7 @@ class ItemController extends Controller
 
     public function createAction(Request $request)
     {
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $em = $this->getDoctrine()->getManager();
         $entity = new Item();
         $form = $this->createCreateForm($entity);
@@ -66,14 +66,14 @@ class ItemController extends Controller
         $data = $request->request->all();
 
         if ($form->isValid()) {
-            $checkData = $this->getDoctrine()->getRepository('TallyBundle:Item')->checkDuplicateSKU($config,$data);
+            $checkData = $this->getDoctrine()->getRepository('TallyBundle:Item')->checkDuplicateSKU($config->getId(),$data);
             if($checkData == 0 ) {
                 if($entity->getVatName()){
                     $vatId =  explode("-",$entity->getVatName());
                     $vat = $this->getDoctrine()->getRepository('TallyBundle:TaxTariff')->findOneBy(array('hsCode'=>$vatId[0]));
                     $entity->setVatProduct($vat);
                 }
-                $entity->setGlobalOption($config);
+                $entity->setConfig($config);
                 $entity->upload();
                 $em->persist($entity);
                 $em->flush();
@@ -110,7 +110,7 @@ class ItemController extends Controller
     private function createCreateForm(Item $entity)
     {
         $em = $this->getDoctrine()->getRepository('TallyBundle:Category');
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new ItemType($config,$em), $entity, array(
             'action' => $this->generateUrl('tallyitem_create'),
             'method' => 'POST',
@@ -165,7 +165,6 @@ class ItemController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $em->getRepository('TallyBundle:Item')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
@@ -174,7 +173,6 @@ class ItemController extends Controller
         return $this->render('TallyBundle:Item:new.html.twig', array(
 
             'entity'        => $entity,
-            'inventory'     => $inventory,
             'form'          => $editForm->createView(),
 
         ));
@@ -191,7 +189,7 @@ class ItemController extends Controller
     private function createEditForm(Item $entity)
     {
         $em = $this->getDoctrine()->getRepository('TallyBundle:Category');
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new ItemType($config,$em), $entity, array(
             'action' => $this->generateUrl('tallyitem_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -232,7 +230,7 @@ class ItemController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-             return $this->redirect($this->generateUrl('item'));
+             return $this->redirect($this->generateUrl('tallyitem'));
         }
 
         return $this->render('TallyBundle:Item:new.html.twig', array(
@@ -270,7 +268,7 @@ class ItemController extends Controller
     private function createWebForm(Item $entity)
     {
         $em = $this->getDoctrine()->getRepository('TallyBundle:AssetsCategory');
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new ItemEditType($config,$em), $entity, array(
             'action' => $this->generateUrl('tallyitem_web_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -424,7 +422,7 @@ class ItemController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $inventory = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
             $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
@@ -434,7 +432,7 @@ class ItemController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $inventory = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
             $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->searchAutoCompleteAllItem($item,$inventory);
         }
         return new JsonResponse($item);

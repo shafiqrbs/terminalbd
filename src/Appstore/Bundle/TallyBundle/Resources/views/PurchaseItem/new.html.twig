@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Bill Voucher GRN # {{ purchaseInfo.grn }}
+                    Purchase GRN # {{ purchaseInfo.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_voucher') }}">  Bill Voucher</a>
+                        <a href="{{ path('tally_purchaseitem') }}">  Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="{{ path('account_voucher_show',{'id':purchaseInfo.id}) }}">  Bill Voucher Details</a></li>
+                    <li><a href="{{ path('tally_purchase_show',{'id':purchaseInfo.id}) }}">  Purchase Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -35,13 +35,13 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Bill Voucher Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
 
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="red btn" href="{{ path('tally_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
                                 <a class="btn yellow" href="{{ path('tally_purchase_show',{'id':purchaseInfo.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a>
-                                <a class="btn" href="{{ path('tally_purchase') }}"><i class="icon-th-list"></i>&nbsp;  Bill Voucher</a>
+                                <a class="btn" href="{{ path('tally_purchase') }}"><i class="icon-th-list"></i>&nbsp;  Purchase</a>
                             </div>
                         </div>
 
