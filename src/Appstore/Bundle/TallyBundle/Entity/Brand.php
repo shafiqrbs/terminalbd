@@ -25,11 +25,6 @@ class Brand
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="brand" )
-     **/
-    private  $globalOption;
-
-     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="brands" )
      **/
     private  $config;
@@ -43,6 +38,12 @@ class Brand
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="brand")
      */
     protected $products;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="brand")
+     */
+    protected $stockItems;
 
 
     /**
@@ -256,6 +257,14 @@ class Brand
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

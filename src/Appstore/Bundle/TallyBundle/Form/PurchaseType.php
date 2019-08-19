@@ -35,7 +35,7 @@ class PurchaseType extends AbstractType
     {
         $builder
 
-            ->add('accountVendor', 'entity', array(
+            ->add('vendor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor ---',

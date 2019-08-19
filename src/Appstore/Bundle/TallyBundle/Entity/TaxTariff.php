@@ -35,6 +35,11 @@ class TaxTariff
     protected $items;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="hsCode")
+     */
+    protected $stockItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\TaxTariffMatrixItem", mappedBy="taxTariff")
      */
     protected $taxTariffMatrixItems;

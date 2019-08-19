@@ -54,6 +54,12 @@ class PurchaseItem
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy = "purchaseItem", cascade={"persist"} )
+     **/
+    private  $stockItems;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="purchaseItems")
      **/
     private  $itemWarning;
@@ -358,6 +364,14 @@ class PurchaseItem
      * @ORM\Column(name="subTotal", type="float", nullable = true)
      */
     private $subTotal;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable = true)
+     */
+    private $total;
 
 
     /**
@@ -1138,6 +1152,30 @@ class PurchaseItem
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
     }
 
 

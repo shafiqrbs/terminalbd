@@ -300,7 +300,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
+                                <div class="clearfix"><br/></div>
                                 <div class="row-fluid customer">
                                     <div class="span12">
                                         <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
@@ -311,7 +311,7 @@
                                         <input style="margin-left:0!important;" type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Customer location" value="">
                                     </div>
                                 </div>
-                                <div class="clearfix"></div>
+                                <div class="clearfix"><br/></div>
                                 <div class="row-fluid customer">
                                     <div class="span12">
                                         <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
@@ -356,106 +356,6 @@
                             <!--/span-->
                             <!-- END FORM-->
                         </div>
-
-                    </div>
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>List of Customer base Sales</div>
-                    </div>
-                    <div class="portlet-body">
-                        <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                            <thead class="flip-content ">
-                            <tr class="head-blue">
-                                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                <th class="numeric" >Invoice</th>
-                                <th class="numeric" >Date</th>
-                                <th class="numeric" >Item</th>
-                                <th class="numeric" >Sub-Total</th>
-                                <th class="numeric" >Discount</th>
-                                <th class="numeric" >Net Total</th>
-                                <th class="numeric" >Payment</th>
-                                <th class="numeric" >Due</th>
-                                <th class="numeric" >Sales By</th>
-                                <th class="numeric" >Transaction</th>
-                                <th class="numeric" >Process</th>
-                                <th class="numeric" >Action</th>
-                            </tr>
-                            </thead>
-                            <tbody id="sales">
-                            {% for dailySales in todaySales %}
-                                <tr id="delete-{{ dailySales.id }}">
-                                    <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                    <td class="numeric" >{{ dailySales.invoice }}</td>
-                                    <td class="numeric" >{{ dailySales.updated|date('d-m-Y') }}</td>
-                                    <td class="numeric" >{{ dailySales.totalItem }}</td>
-                                    <td class="numeric" >{{ dailySales.subTotal|number_format  }}</td>
-                                    <td class="numeric" >{{ dailySales.discount|number_format  }}</td>
-                                    <th class="numeric" >{{ dailySales.total|number_format  }}</th>
-                                    <th class="numeric" >{{ dailySales.payment|number_format }}</th>
-                                    <th class="numeric" >{{ dailySales.due|number_format }}</th>
-                                    <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy }}{% endif %}</td>
-                                    <td class="numeric" >{% if dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
-                                    <td class="numeric" >{% if dailySales.process is not empty %}{{ dailySales.process }}{% endif %}</td>
-                                    <td class="numeric" >
-                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
-                                            <a href="{{ path('inventory_salesonline_show', { 'id': dailySales.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                            {% if entity.config.onlineSalesPrinter == 'pos'  %}
-                                                <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':dailySales.id}) }}"  class="btn green mini onlinePosPrintIndividual" ><i class="icon-print"></i></a>
-                                            {% else %}
-                                                <a href="{{ path('inventory_sales_print_invoice',{'invoice':dailySales.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if dailySales.paymentStatus == "Pending" or dailySales.process == "In-progress" or dailySales.process == "Courier" %}
-                                            <a href="{{ path('inventory_salesonline_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                            {% if dailySales.id != entity.id  %}
-                                                <a title="Are you sure went to delete ?" data-id="{{ dailySales.id }}" data-url="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                            {% endif %}
-                                        {% endif %}
-                                        {#{% if dailySales.paymentStatus == "Due" %}
-                                            <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini blue" ><i class="icon-money"></i></a>
-                                        {% endif %}#}
-                                    </td>
-                                </tr>
-                                <tr id="show-{{ dailySales.id }}" class="showing-overview">
-                                    <td colspan="12">
-                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
-                                            <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                <thead class="flip-content ">
-                                                <tr class="head-green">
-                                                    <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                    <th class="numeric" >Item</th>
-                                                    <th class="numeric" >Barcode</th>
-                                                    <th class="numeric" >Serial No</th>
-                                                    <th class="numeric" >Quantity</th>
-                                                    <th class="numeric" >Estimate price</th>
-                                                    <th class="numeric" >Sales price</th>
-                                                    <th class="numeric" >Sub-total</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for salesItem in dailySales.salesItems %}
-                                                    <tr>
-                                                        <td class="numeric" >{{ loop.index }}</td>
-                                                        <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                        <td class="numeric" >{{ salesItem.serialNo }}</td>
-                                                        <td class="numeric" >{{ salesItem.quantity }}</td>
-                                                        <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                                                        <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                        <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -625,7 +525,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
+    '@TallyBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -633,9 +533,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/posprint.js'
-    '@InventoryBundle/Resources/public/js/editable.js'
-    '@InventoryBundle/Resources/public/js/sales-online.js'
+    '@TallyBundle/Resources/public/js/editable.js'
+    '@TallyBundle/Resources/public/js/issue.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

@@ -17,6 +17,7 @@ use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\TallyBundle\Entity\StockItem;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -52,6 +53,11 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="branch" )
      **/
     private $payrolls;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="branch" )
+     **/
+    private $stockItems;
 
     /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="branches" )
@@ -507,6 +513,14 @@ class Branches
     public function getPayrolls()
     {
         return $this->payrolls;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

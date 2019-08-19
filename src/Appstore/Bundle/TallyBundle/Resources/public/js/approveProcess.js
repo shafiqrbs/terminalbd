@@ -33,6 +33,7 @@ $(document).on("click", ".delete , .remove", function() {
 
 
 $(document).on("click", ".approve", function() {
+
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
     $('#confirm-content').confirmModal({

@@ -51,6 +51,12 @@ class Category
      **/
     protected $items;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="category" )
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    protected $stockItems;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="category" )
      * @ORM\OrderBy({"metaKey" = "ASC"})
@@ -474,6 +480,14 @@ class Category
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

@@ -94,8 +94,8 @@
                             {% for entity in entities %}
                                 <tr id="delete-{{ entity.id }}">
                                     <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                    <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                    <td class="numeric" >{% if entity.accountVendor is not empty %}{{ entity.accountVendor.companyName }}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.grn }}</td>
+                                    <td class="numeric" >{% if entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
                                     <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.totalTaxIncidence|number_format }}</td>
                                     <td class="numeric" >{{ entity.netTotal|number_format }}</td>
@@ -128,7 +128,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@BusinessBundle/Resources/public/js/approveProcess.js'
+    '@TallyBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

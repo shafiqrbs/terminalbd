@@ -166,11 +166,15 @@ class PurchaseItemRepository extends EntityRepository
 
         }
         $entity->setPurchase($invoice);
+        $entity->setConfig($invoice->getConfig());
         $entity->setItem($product);
         $entity->setName($data['name']);
         $entity->setPrice($data['price']);
         $entity->setQuantity($data['quantity']);
         $entity->setSubTotal($subTotal);
+        $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+        $purchasePrice = ($entity->getTotal() / $entity->getQuantity());
+        $entity->setPurchasePrice($purchasePrice);
         $em->persist($entity);
         $em->flush();
 
@@ -214,7 +218,7 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function purchaseItemUpdate(VoucherItem $item,$fieldName)
+    public function purchaseItemUpdate(PurchaseItem $item,$fieldName)
     {
         $qb = $this->createQueryBuilder('e');
         if($fieldName == 'sales'){
@@ -283,4 +287,55 @@ class PurchaseItemRepository extends EntityRepository
 
         }
     }
+
+
+    public function getManualSalesItem($inventory,$data)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.item', 'item');
+        $qb->join('pi.purchase', 'purchase');
+        $qb->join('purchase.inventoryConfig', 'ic');
+        $qb->select('pi');
+        $qb->where($qb->expr()->in("pi.id", $data ));
+        $qb->andWhere("ic.id = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        $qb->orderBy('item.name','ASC');
+        return $qb->getQuery()->getResult();
+
+    }
+
+    public function returnPurchaseItemDetails($config,$barcode)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.item', 'item');
+        $qb->select('pi');
+        $qb->where("pi.barcode = :barcode" );;
+        $qb->setParameter('barcode', $barcode);
+        $qb->andWhere("pi.config = :config");
+        $qb->setParameter('config', $config);
+        return $qb->getQuery()->getSingleResult();
+
+    }
+
+    public function searchAutoComplete($item,$config)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.stockItems', 'stockitem');
+        $qb->select('pi.barcode as id');
+        $qb->addSelect('pi.barcode as text');
+        $qb->addSelect('SUM(stockitem.quantity) as item_name');
+        $qb->where($qb->expr()->like("pi.barcode", "'$item%'"  ));
+        $qb->andWhere("pi.config = :config");
+        $qb->setParameter('config', $config);
+        $qb->orderBy('p.updated', 'ASC');
+        $qb->setMaxResults( '10' );
+        return $qb->getQuery()->getResult();
+
+    }
+
+
+
 }

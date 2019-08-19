@@ -2,11 +2,14 @@
 
 namespace Appstore\Bundle\TallyBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * StockItem
@@ -32,6 +35,12 @@ class StockItem
     protected  $config;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TaxTariff", inversedBy="stockItems")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    protected $hsCode;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="stockItems")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
@@ -49,6 +58,11 @@ class StockItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $sales;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="stockItems")
+     */
+    protected $branch;
 
 
     /**
@@ -81,8 +95,42 @@ class StockItem
      **/
     private  $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="purchaseStockReturns")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="purchaseStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
+    private $purchaseStockReturn;
+
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="salesStockReturns")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="salesStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
+    private $salesStockReturn;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="assetsStockReturns")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="assetsStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
+    private $assetsStockReturn;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float", nullable = true)
+     */
+    private $price = 0;
+
+
+     /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable = true)
@@ -109,40 +157,103 @@ class StockItem
     /**
      * @var float
      *
-     * @ORM\Column(name="vatPercent", type="float", nullable = true)
+     * @ORM\Column(name="customsDuty", type="float", nullable=true)
      */
-    private $vatPercent = 0;
-
-
-     /**
-     * @var float
-     *
-     * @ORM\Column(name="vat", type="float", nullable = true)
-     */
-    private $vat = 0;
+    private $customsDuty = 0.00;
 
 
     /**
      * @var float
      *
-     * @ORM\Column(name="supplementaryDutyPercent", type="float", nullable = true)
+     * @ORM\Column(name="customsDutyPercent", type="float", nullable=true)
      */
-    private $supplementaryDutyPercent = 0;
+    private $customsDutyPercent = 0.00;
 
-
-     /**
-     * @var float
-     *
-     * @ORM\Column(name="supplementaryDuty", type="float", nullable = true)
-     */
-    private $supplementaryDuty = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="totaTaxIncidence", type="float", nullable = true)
+     * @ORM\Column(name="supplementaryDuty", type="float", nullable=true)
      */
-    private $totaTaxIncidence = 0;
+    private $supplementaryDuty = 0.00;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="supplementaryDutyPercent", type="float", nullable=true)
+     */
+    private $supplementaryDutyPercent = 0.00;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valueAddedTax", type="float", nullable=true)
+     */
+    private $valueAddedTax = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valueAddedTaxPercent", type="float", nullable=true)
+     */
+    private $valueAddedTaxPercent = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceIncomeTax", type="float", nullable=true)
+     */
+    private $advanceIncomeTax = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceIncomeTaxPercent", type="float", nullable=true)
+     */
+    private $advanceIncomeTaxPercent = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="recurringDeposit", type="float", nullable=true)
+     */
+    private $recurringDeposit = 0.00;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="recurringDepositPercent", type="float", nullable=true)
+     */
+    private $recurringDepositPercent = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceTradeVat", type="float", nullable=true)
+     */
+    private $advanceTradeVat = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceTradeVatPercent", type="float", nullable=true)
+     */
+    private $advanceTradeVatPercent = 0.00;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="totalTaxIncidence", type="float", nullable=true)
+     */
+    private $totalTaxIncidence = 0.00;
+
 
     /**
      * @var float
@@ -152,12 +263,79 @@ class StockItem
     private $subTotal = 0;
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable = true)
+     */
+    private $total = 0;
+
+
     /**
      * @var integer
      *
      * @ORM\Column(name="quantity", type="integer")
      */
     private $quantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="openingQuantity", type="integer")
+     */
+    private $openingQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseQuantity", type="integer")
+     */
+    private $purchaseQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer")
+     */
+    private $purchaseReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer")
+     */
+    private $salesQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReturnQuantity", type="integer")
+     */
+    private $salesReturnQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="assetsQuantity", type="integer")
+     */
+    private $assetsQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="assetsReturnQuantity", type="integer")
+     */
+    private $assetsReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQuantity", type="integer")
+     */
+    private $damageQuantity;
+
+
 
     /**
      * @var string
@@ -195,7 +373,7 @@ class StockItem
     private $assuranceToCustomer;
 
     /**
-     * @var datetime
+     * @var DateTime
      *
      * @ORM\Column(name="expiredDate", type="datetime", nullable=true)
      */
@@ -270,56 +448,6 @@ class StockItem
         $this->created = $created;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getVendor()
-    {
-        return $this->vendor;
-    }
-
-    /**
-     * @param mixed $vendor
-     */
-    public function setVendor($vendor)
-    {
-        $this->vendor = $vendor;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param mixed $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
     /**
      * @return mixed
@@ -414,86 +542,6 @@ class StockItem
     /**
      * @return mixed
      */
-    public function getSalesItem()
-    {
-        return $this->salesItem;
-    }
-
-    /**
-     * @param mixed $salesItem
-     */
-    public function setSalesItem($salesItem)
-    {
-        $this->salesItem = $salesItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSalesReturnItem()
-    {
-        return $this->salesReturnItem;
-    }
-
-    /**
-     * @param mixed $salesReturnItem
-     */
-    public function setSalesReturnItem($salesReturnItem)
-    {
-        $this->salesReturnItem = $salesReturnItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseReturnItem()
-    {
-        return $this->purchaseReturnItem;
-    }
-
-    /**
-     * @param mixed $purchaseReturnItem
-     */
-    public function setPurchaseReturnItem($purchaseReturnItem)
-    {
-        $this->purchaseReturnItem = $purchaseReturnItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseReplaceItem()
-    {
-        return $this->purchaseReplaceItem;
-    }
-
-    /**
-     * @param mixed $purchaseReplaceItem
-     */
-    public function setPurchaseReplaceItem($purchaseReplaceItem)
-    {
-        $this->purchaseReplaceItem = $purchaseReplaceItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSalesItemReplace()
-    {
-        return $this->salesItemReplace;
-    }
-
-    /**
-     * @param mixed $salesItemReplace
-     */
-    public function setSalesItemReplace($salesItemReplace)
-    {
-        $this->salesItemReplace = $salesItemReplace;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getDamage()
     {
         return $this->damage;
@@ -507,229 +555,6 @@ class StockItem
         $this->damage = $damage;
     }
 
-    /**
-     * @return OrderItem
-     */
-    public function getOrderItem()
-    {
-        return $this->orderItem;
-    }
-
-    /**
-     * @param OrderItem $orderItem
-     */
-    public function setOrderItem($orderItem)
-    {
-        $this->orderItem = $orderItem;
-    }
-
-    /**
-     * @return ProductUnit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * @param ProductUnit $unit
-     */
-    public function setUnit($unit)
-    {
-        $this->unit = $unit;
-    }
-
-    /**
-     * @return Product
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * @param Product $product
-     */
-    public function setProduct($product)
-    {
-        $this->product = $product;
-    }
-
-    /**
-     * @return ItemBrand
-     */
-    public function getBrand()
-    {
-        return $this->brand;
-    }
-
-    /**
-     * @param ItemBrand $brand
-     */
-    public function setBrand($brand)
-    {
-        $this->brand = $brand;
-    }
-
-    /**
-     * @return ItemSize
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param ItemSize $size
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
-
-    /**
-     * @return ItemColor
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
-
-    /**
-     * @param ItemColor $color
-     */
-    public function setColor($color)
-    {
-        $this->color = $color;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductName()
-    {
-        return $this->productName;
-    }
-
-    /**
-     * @param string $productName
-     */
-    public function setProductName($productName)
-    {
-        $this->productName = $productName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVendorName()
-    {
-        return $this->vendorName;
-    }
-
-    /**
-     * @param string $vendorName
-     */
-    public function setVendorName($vendorName)
-    {
-        $this->vendorName = $vendorName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBrandName()
-    {
-        return $this->brandName;
-    }
-
-    /**
-     * @param string $brandName
-     */
-    public function setBrandName($brandName)
-    {
-        $this->brandName = $brandName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSizeName()
-    {
-        return $this->sizeName;
-    }
-
-    /**
-     * @param string $sizeName
-     */
-    public function setSizeName($sizeName)
-    {
-        $this->sizeName = $sizeName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getColorName()
-    {
-        return $this->colorName;
-    }
-
-    /**
-     * @param string $colorName
-     */
-    public function setColorName($colorName)
-    {
-        $this->colorName = $colorName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUnitName()
-    {
-        return $this->unitName;
-    }
-
-    /**
-     * @param string $unitName
-     */
-    public function setUnitName($unitName)
-    {
-        $this->unitName = $unitName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCategoryName()
-    {
-        return $this->categoryName;
-    }
-
-    /**
-     * @param string $categoryName
-     */
-    public function setCategoryName($categoryName)
-    {
-        $this->categoryName = $categoryName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param mixed $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 
     /**
      * @return mixed
@@ -798,49 +623,17 @@ class StockItem
     /**
      * @return float
      */
-    public function getVatPercent()
+    public function getCustomsDuty()
     {
-        return $this->vatPercent;
+        return $this->customsDuty;
     }
 
     /**
-     * @param float $vatPercent
+     * @param float $customsDuty
      */
-    public function setVatPercent($vatPercent)
+    public function setCustomsDuty($customsDuty)
     {
-        $this->vatPercent = $vatPercent;
-    }
-
-    /**
-     * @return float
-     */
-    public function getVat()
-    {
-        return $this->vat;
-    }
-
-    /**
-     * @param float $vat
-     */
-    public function setVat($vat)
-    {
-        $this->vat = $vat;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSupplementaryDutyPercent()
-    {
-        return $this->supplementaryDutyPercent;
-    }
-
-    /**
-     * @param float $supplementaryDutyPercent
-     */
-    public function setSupplementaryDutyPercent($supplementaryDutyPercent)
-    {
-        $this->supplementaryDutyPercent = $supplementaryDutyPercent;
+        $this->customsDuty = $customsDuty;
     }
 
     /**
@@ -862,17 +655,177 @@ class StockItem
     /**
      * @return float
      */
-    public function getTotaTaxIncidence()
+    public function getValueAddedTax()
     {
-        return $this->totaTaxIncidence;
+        return $this->valueAddedTax;
     }
 
     /**
-     * @param float $totaTaxIncidence
+     * @param float $valueAddedTax
      */
-    public function setTotaTaxIncidence($totaTaxIncidence)
+    public function setValueAddedTax($valueAddedTax)
     {
-        $this->totaTaxIncidence = $totaTaxIncidence;
+        $this->valueAddedTax = $valueAddedTax;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceIncomeTax()
+    {
+        return $this->advanceIncomeTax;
+    }
+
+    /**
+     * @param float $advanceIncomeTax
+     */
+    public function setAdvanceIncomeTax($advanceIncomeTax)
+    {
+        $this->advanceIncomeTax = $advanceIncomeTax;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRecurringDeposit()
+    {
+        return $this->recurringDeposit;
+    }
+
+    /**
+     * @param float $recurringDeposit
+     */
+    public function setRecurringDeposit($recurringDeposit)
+    {
+        $this->recurringDeposit = $recurringDeposit;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceTradeVat()
+    {
+        return $this->advanceTradeVat;
+    }
+
+    /**
+     * @param float $advanceTradeVat
+     */
+    public function setAdvanceTradeVat($advanceTradeVat)
+    {
+        $this->advanceTradeVat = $advanceTradeVat;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalTaxIncidence()
+    {
+        return $this->totalTaxIncidence;
+    }
+
+    /**
+     * @param float $totalTaxIncidence
+     */
+    public function setTotalTaxIncidence($totalTaxIncidence)
+    {
+        $this->totalTaxIncidence = $totalTaxIncidence;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceTradeVatPercent()
+    {
+        return $this->advanceTradeVatPercent;
+    }
+
+    /**
+     * @param float $advanceTradeVatPercent
+     */
+    public function setAdvanceTradeVatPercent($advanceTradeVatPercent)
+    {
+        $this->advanceTradeVatPercent = $advanceTradeVatPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRecurringDepositPercent()
+    {
+        return $this->recurringDepositPercent;
+    }
+
+    /**
+     * @param float $recurringDepositPercent
+     */
+    public function setRecurringDepositPercent($recurringDepositPercent)
+    {
+        $this->recurringDepositPercent = $recurringDepositPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceIncomeTaxPercent()
+    {
+        return $this->advanceIncomeTaxPercent;
+    }
+
+    /**
+     * @param float $advanceIncomeTaxPercent
+     */
+    public function setAdvanceIncomeTaxPercent($advanceIncomeTaxPercent)
+    {
+        $this->advanceIncomeTaxPercent = $advanceIncomeTaxPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValueAddedTaxPercent()
+    {
+        return $this->valueAddedTaxPercent;
+    }
+
+    /**
+     * @param float $valueAddedTaxPercent
+     */
+    public function setValueAddedTaxPercent($valueAddedTaxPercent)
+    {
+        $this->valueAddedTaxPercent = $valueAddedTaxPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSupplementaryDutyPercent()
+    {
+        return $this->supplementaryDutyPercent;
+    }
+
+    /**
+     * @param float $supplementaryDutyPercent
+     */
+    public function setSupplementaryDutyPercent($supplementaryDutyPercent)
+    {
+        $this->supplementaryDutyPercent = $supplementaryDutyPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCustomsDutyPercent()
+    {
+        return $this->customsDutyPercent;
+    }
+
+    /**
+     * @param float $customsDutyPercent
+     */
+    public function setCustomsDutyPercent($customsDutyPercent)
+    {
+        $this->customsDutyPercent = $customsDutyPercent;
     }
 
     /**
@@ -972,7 +925,7 @@ class StockItem
     }
 
     /**
-     * @return datetime
+     * @return mixed
      */
     public function getExpiredDate()
     {
@@ -980,11 +933,299 @@ class StockItem
     }
 
     /**
-     * @param datetime $expiredDate
+     * @param mixed $expiredDate
      */
     public function setExpiredDate($expiredDate)
     {
         $this->expiredDate = $expiredDate;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * @param Branches $branch
+     */
+    public function setBranch($branch)
+    {
+        $this->branch = $branch;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpeningQuantity()
+    {
+        return $this->openingQuantity;
+    }
+
+    /**
+     * @param int $openingQuantity
+     */
+    public function setOpeningQuantity($openingQuantity)
+    {
+        $this->openingQuantity = $openingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseQuantity()
+    {
+        return $this->purchaseQuantity;
+    }
+
+    /**
+     * @param int $purchaseQuantity
+     */
+    public function setPurchaseQuantity($purchaseQuantity)
+    {
+        $this->purchaseQuantity = $purchaseQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseReturnQuantity()
+    {
+        return $this->purchaseReturnQuantity;
+    }
+
+    /**
+     * @param int $purchaseReturnQuantity
+     */
+    public function setPurchaseReturnQuantity($purchaseReturnQuantity)
+    {
+        $this->purchaseReturnQuantity = $purchaseReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReturnQuantity()
+    {
+        return $this->salesReturnQuantity;
+    }
+
+    /**
+     * @param int $salesReturnQuantity
+     */
+    public function setSalesReturnQuantity($salesReturnQuantity)
+    {
+        $this->salesReturnQuantity = $salesReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAssetsQuantity()
+    {
+        return $this->assetsQuantity;
+    }
+
+    /**
+     * @param int $assetsQuantity
+     */
+    public function setAssetsQuantity($assetsQuantity)
+    {
+        $this->assetsQuantity = $assetsQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAssetsReturnQuantity()
+    {
+        return $this->assetsReturnQuantity;
+    }
+
+    /**
+     * @param int $assetsReturnQuantity
+     */
+    public function setAssetsReturnQuantity($assetsReturnQuantity)
+    {
+        $this->assetsReturnQuantity = $assetsReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param int $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
+    }
+
+    /**
+     * @return Brand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param Brand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return TaxTariff
+     */
+    public function getHsCode()
+    {
+        return $this->hsCode;
+    }
+
+    /**
+     * @param TaxTariff $hsCode
+     */
+    public function setHsCode($hsCode)
+    {
+        $this->hsCode = $hsCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseStockReturn()
+    {
+        return $this->purchaseStockReturn;
+    }
+
+    /**
+     * @param mixed $purchaseStockReturn
+     */
+    public function setPurchaseStockReturn($purchaseStockReturn)
+    {
+        $this->purchaseStockReturn = $purchaseStockReturn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSalesStockReturn()
+    {
+        return $this->salesStockReturn;
+    }
+
+    /**
+     * @param mixed $salesStockReturn
+     */
+    public function setSalesStockReturn($salesStockReturn)
+    {
+        $this->salesStockReturn = $salesStockReturn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAssetsStockReturn()
+    {
+        return $this->assetsStockReturn;
+    }
+
+    /**
+     * @param mixed $assetsStockReturn
+     */
+    public function setAssetsStockReturn($assetsStockReturn)
+    {
+        $this->assetsStockReturn = $assetsStockReturn;
     }
 
 }

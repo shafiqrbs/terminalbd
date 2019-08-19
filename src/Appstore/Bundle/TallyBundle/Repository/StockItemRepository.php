@@ -1,21 +1,13 @@
 <?php
 
 namespace Appstore\Bundle\TallyBundle\Repository;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\InventoryBundle\Entity\Damage;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
-use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
-use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
-use Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem;
-use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\TallyBundle\Entity\Purchase;
+use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
+use Appstore\Bundle\TallyBundle\Entity\StockItem;
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
+use Appstore\Bundle\TallyBundle\Entity\TaxTariff;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ItemStockRepository
@@ -166,6 +158,123 @@ class StockItemRepository extends EntityRepository
     }
 
 
+    public function updateRemovePurchaseQuantity(TallyConfig $config , $item = 0 , $fieldName = ''){
+
+        $em = $this->_em;
+        $entity = new StockItem();
+        if($fieldName == 'sales'){
+            $entity->setSalesQuantity($qnt);
+        }elseif($fieldName == 'sales-return'){
+
+        }elseif($fieldName == 'purchase-return'){
+
+        }elseif($fieldName == 'assets'){
+        }elseif($fieldName == 'assets-return'){
+
+        }elseif($fieldName == 'damage'){
+
+        }elseif($fieldName == 'opening'){
+
+        }elseif($fieldName == 'purchase'){
+
+            /* @var $item PurchaseItem */
+
+            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $item ,'process' => 'purchase'));
+
+            if($exist){
+                $entity = $exist;
+            }
+            $entity->setQuantity($item->getQuantity());
+            $entity->setPurchaseQuantity($item->getQuantity());
+            $entity->setItem($item->getItem());
+            if($item->getItem()->getVatProduct()){
+
+                $subTotal = $item->getSubTotal();
+
+                /* @var $vat TaxTariff */
+                $vat = $item->getItem()->getVatProduct();
+
+                if($vat->getCustomsDuty() > 0){
+                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
+                    $entity->setCustomsDuty($amount);
+                }
+                if($vat->getSupplementaryDuty() > 0){
+                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
+                    $entity->setSupplementaryDuty($amount);
+                }
+
+                if($vat->getValueAddedTax() > 0){
+                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
+                    $entity->setValueAddedTax($amount);
+                }
+
+                if($vat->getAdvanceIncomeTax() > 0){
+                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
+                    $entity->setAdvanceIncomeTax($cd);
+                }
+
+                if($vat->getRecurringDeposit() > 0){
+                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
+                    $entity->setRecurringDeposit($cd);
+                }
+
+                if($vat->getAdvanceTradeVat() > 0){
+                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
+                    $entity->setAdvanceTradeVat($cd);
+                }
+
+                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
+                $entity->setTotalTaxIncidence($TTI);
+
+            }
+            if($item->getItem()->getVatProduct()){
+                $entity->setHsCode($item->getItem()->getVatProduct());
+            }
+            if($item->getItem()->getBrand()){
+                $entity->setBrand($item->getItem()->getBrand());
+            }
+            if($item->getItem()->getVatProduct()){
+                $entity->setCategory($item->getItem()->getCategory());
+            }
+            $entity->setVendor($item->getPurchase()->getVendor());
+            $entity->setPrice($item->getPrice());
+            $entity->setPurchasePrice($item->getPurchasePrice());
+            $entity->setSubTotal($item->getSubTotal());
+            $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+        }
+
+        $entity->setConfig($config);
+        $em->persist($entity);
+        $em->flush();
+    }
+
+    private function getTaxTariffCalculation($subTotal,$tariff)
+    {
+        $value = 0;
+        $value = (($subTotal * $tariff)/100);
+        return $value;
+    }
+
+    public function getPurchaseInsertQnt(Purchase $entity){
+
+        $em = $this->_em;
+
+        /** @var $item PurchaseItem  */
+
+        if($entity->getPurchaseItems()){
+
+            foreach($entity->getPurchaseItems() as $item ){
+                $this->updateRemovePurchaseQuantity($item->getConfig(),$item,'purchase');
+            }
+        }
+    }
+
     public function getStockPriceOverview($inventory,$data)
     {
         $qb = $this->createQueryBuilder('e');
@@ -184,7 +293,6 @@ class StockItemRepository extends EntityRepository
 
     public function stockItem($inventory,$data)
     {
-
 
         $qb = $this->createQueryBuilder('stock');
         $qb->join('stock.item', 'item');

@@ -46,6 +46,13 @@ class Item
 	private  $config;
 
 
+
+    /**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="item" )
+	 **/
+	private  $stockItems;
+
+
     /**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Setting", inversedBy="items" )
 	 **/
@@ -1243,6 +1250,14 @@ class Item
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

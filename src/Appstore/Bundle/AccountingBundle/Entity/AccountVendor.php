@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\TallyBundle\Entity\Purchase;
+use Appstore\Bundle\TallyBundle\Entity\StockItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -41,7 +43,17 @@ class AccountVendor
      */
     protected $accountPurchases;
 
-      /**
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="vendor")
+     */
+    protected $stockItems;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", mappedBy="vendor")
+     */
+    protected $tallyPurchase;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="accountVendor")
      */
     protected $accountPurchaseCommissions;
@@ -465,6 +477,22 @@ class AccountVendor
     public function getBusinessInvoiceParticulars()
     {
         return $this->businessInvoiceParticulars;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getTallyPurchase()
+    {
+        return $this->tallyPurchase;
     }
 
 

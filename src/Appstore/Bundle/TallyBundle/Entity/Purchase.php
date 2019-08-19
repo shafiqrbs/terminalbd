@@ -54,9 +54,9 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="accountPurchases" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="tallyPurchase" , cascade={"detach","merge"} )
          **/
-        private  $accountVendor;
+        private  $vendor;
 
 
          /**
@@ -529,41 +529,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         }
 
 
-
-        /**
-         * @return AccountVendor
-         */
-        public function getAccountVendor()
-        {
-            return $this->accountVendor;
-        }
-
-        /**
-         * @param AccountVendor $accountVendor
-         */
-        public function setAccountVendor($accountVendor)
-        {
-            $this->accountVendor = $accountVendor;
-        }
-
-
-        /**
-         * @return string
-         */
-        public function getMemo()
-        {
-            return $this->memo;
-        }
-
-        /**
-         * @param string $memo
-         */
-        public function setMemo($memo)
-        {
-            $this->memo = $memo;
-        }
-
-
         /**
          * @return PurchaseItem
          */
@@ -866,6 +831,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setConfig($config)
         {
             $this->config = $config;
+        }
+
+        /**
+         * @return AccountVendor
+         */
+        public function getVendor()
+        {
+            return $this->vendor;
+        }
+
+        /**
+         * @param AccountVendor $vendor
+         */
+        public function setVendor($vendor)
+        {
+            $this->vendor = $vendor;
         }
 
     }

@@ -149,12 +149,12 @@ class UserRepository extends EntityRepository
         $result = array_intersect($arrSlugs, $assets);
         if (!empty($result)) {
             $array['Tally'] = array(
-                'ROLE_RECEIVE'                                     => 'Item Receive',
-                'ROLE_STOCK'                                       => 'Item Stock',
-                'ROLE_RECEIVE_APPROVE'                             => 'Item Approve',
-                'ROLE_ISSUE'                                       => 'Item Issue',
-                'ROLE_ISSUE_APPROVE'                               => 'Item Approve',
-                'ROLE_SETTING'                                     => 'Item Setting',
+                'ROLE_TALLY_RECEIVE'                                     => 'Item Receive',
+                'ROLE_TALLY_STOCK'                                       => 'Item Stock',
+                'ROLE_TALLY_RECEIVE_APPROVE'                             => 'Item Approve',
+                'ROLE_TALLY_ISSUE'                                       => 'Item Issue',
+                'ROLE_TALLY_ISSUE_APPROVE'                               => 'Item Approve',
+                'ROLE_TALLY_SETTING'                                     => 'Item Setting',
             );
         }
 

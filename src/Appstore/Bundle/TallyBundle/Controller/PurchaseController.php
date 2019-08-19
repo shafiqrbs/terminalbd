@@ -70,9 +70,9 @@ class PurchaseController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getId();
-        $entity = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
-        $products = $em->getRepository('TallyBundle:Item')->findAll(array('globalOption' => $config));
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $entity = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('config' => $config , 'id' => $id));
+        $products = $em->getRepository('TallyBundle:Item')->findAll(array('config' => $config));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -248,10 +248,10 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $config = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $entity = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('config' => $config , 'id' => $id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Vendor entity.');
+            throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
         return $this->render('TallyBundle:Purchase:show.html.twig', array(
             'entity'      => $entity,
@@ -284,8 +284,11 @@ class PurchaseController extends Controller
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertTallyAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             $this->getDoctrine()->getRepository('TallyBundle:Item')->getPurchaseUpdateQnt($purchase);
+            $this->getDoctrine()->getRepository('TallyBundle:StockItem')->getPurchaseInsertQnt($purchase);
             return new Response('success');
+
         } else {
+
             return new Response('failed');
         }
 
