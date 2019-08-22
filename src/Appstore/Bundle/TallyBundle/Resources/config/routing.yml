@@ -34,6 +34,10 @@ purchase_item:
     resource: "@TallyBundle/Resources/config/routing/purchaseitem.yml"
     prefix:    /opening-item
 
+tally_report:
+    resource: "@TallyBundle/Resources/config/routing/tallyreport.yml"
+    prefix:    /report
+
 
 tally_homepage:
     path:     /hello/{name}
