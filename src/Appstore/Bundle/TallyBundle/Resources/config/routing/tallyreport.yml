@@ -1,0 +1,19 @@
+tallyreport_mushok_4_3:
+    path:     /taxes/mushok_4_3/
+    defaults: { _controller: "TallyBundle:TallyReport:mushukFourThree" }
+
+tallyreport_mushok_6_1:
+    path:     /taxes/mushok_6_1/
+    defaults: { _controller: "TallyBundle:TallyReport:mushukSixOne" }
+
+tallyreport_mushok_6_2:
+    path:     /taxes/mushok_6_2/
+    defaults: { _controller: "TallyBundle:TallyReport:mushukSixTwo" }
+
+tallyreport_mushok_6_2_1:
+    path:     /taxes/mushok_6_2_1/
+    defaults: { _controller: "TallyBundle:TallyReport:mushukSixTwoOne" }
+
+tallyreport_mushok_6_3:
+    path:     /taxes/mushok_6_3/
+    defaults: { _controller: "TallyBundle:TallyReport:mushukSixThree" }
