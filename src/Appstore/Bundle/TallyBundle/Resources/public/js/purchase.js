@@ -81,7 +81,7 @@ var form = $("#purchaseItem").validate({
                 $('.tti').html(obj['tti']);
                 $('.rebate').html(obj['rebate']);
                 $('.netTotal').val(obj['netTotal']);
-                $('.due').val(obj['due']);
+                $('.due').html(obj['due']);
                 $('.discount').html(obj['discount']);
                 $('.discount').val(obj['discount']);
                 $('#paymentTotal').val(obj['netTotal']);
@@ -112,7 +112,7 @@ $('#invoiceParticulars').on("click", ".item-delete", function(e) {
                     $('.tti').html(obj['tti']);
                     $('.rebate').html(obj['rebate']);
                     $('.netTotal').val(obj['netTotal']);
-                    $('.due').val(obj['due']);
+                    $('.due').html(obj['due']);
                     $('.discount').html(obj['discount']);
                     $('.discount').val(obj['discount']);
                     $('#paymentTotal').val(obj['netTotal']);
@@ -141,7 +141,7 @@ $(document).on('change', '.discount', function() {
             $('.tti').html(obj['tti']);
             $('.rebate').html(obj['rebate']);
             $('.netTotal').val(obj['netTotal']);
-            $('.due').val(obj['due']);
+            $('.due').html(obj['due']);
             $('.discount').html(obj['discount']);
             $('.discount').val(obj['discount']);
             $('#paymentTotal').val(obj['netTotal']);
@@ -182,7 +182,7 @@ $('form#purchase').on('keypress', 'input', function (e) {
     }
 });
 
-$(document).on('click', '#purchase_payment', function() {
+$(document).on('click', '#purchase_payment,#purchase_discount', function() {
     $(this).val('');
 });
 

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\TallyBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -129,9 +130,35 @@ class StockItemController extends Controller
             $branchStocks = $em->getRepository('InventoryBundle:StockItem')->singleBarcodeWiseBranchItem($user, $purchaseItem);
         }
         return new Response($branchStocks);
-        exit;
-
     }
 
+    public function searchAutoCompleteAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+            $item = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->searchAutoComplete($item,$config);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function itemAutoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+            $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->searchAutoComplete($item,$config);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function itemPurchaseDetailsAction(Request $request)
+    {
+
+        $item = $request->request->get('item');
+        $inventory = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $data = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->itemPurchaseDetails($inventory, $item);
+        return new Response($data);
+    }
 
 }

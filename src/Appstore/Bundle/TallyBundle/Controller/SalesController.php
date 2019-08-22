@@ -4,6 +4,7 @@ namespace Appstore\Bundle\TallyBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\TallyBundle\Entity\Item;
+use Appstore\Bundle\TallyBundle\Entity\StockItem;
 use Appstore\Bundle\TallyBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -56,6 +57,7 @@ class SalesController extends Controller
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('TallyBundle:Sales:index.html.twig', array(
             'entities' => $pagination,
+            'inventoryConfig' => $user->getGlobalOption()->getTallyConfig(),
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
@@ -70,7 +72,7 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Sales();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $globalOption = $this->getUser()->getGlobalOption();
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
         $entity->setCustomer($customer);
@@ -99,7 +101,7 @@ class SalesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $entities = $em->getRepository('TallyBundle:SalesItem')->salesItems($inventory, $data);
         $pagination = $this->paginate($entities);
         return $this->render('TallyBundle:Sales:salesItem.html.twig', array(
@@ -113,36 +115,18 @@ class SalesController extends Controller
      * @Secure(roles="ROLE_TALLY_ISSUE,ROLE_DOMAIN")
      */
 
-    public function searchAction(Request $request)
+    public function barcodeSearchAction(Request $request)
     {
+        $msg ='';
         $em = $this->getDoctrine()->getManager();
         $sales = $request->request->get('sales');
         $barcode = $request->request->get('barcode');
         $sales = $em->getRepository('TallyBundle:Sales')->find($sales);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getTallyConfig();
         $purchaseItem = $em->getRepository('TallyBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
-        $checkQuantity = $this->getDoctrine()->getRepository('TallyBundle:SalesItem')->checkSalesQuantity($purchaseItem);
-        $itemStock = $purchaseItem->getItemStock();
-
-        $branch = $this->getUser()->getProfile()->getBranches();
-        $branchStockItem = $this->getDoctrine()->getRepository('TallyBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
-        $msg ='';
-
-        /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-        $device = '';
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $device = 'mobile' ;
-        }
-        if (!empty($branch) and $branchStockItem == 'invalid' ) {
-
-            $sales = $this->getDoctrine()->getRepository('TallyBundle:Sales')->updateSalesTotalPrice($sales);
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
-
-        }elseif(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
-
-            $this->getDoctrine()->getRepository('TallyBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
+        $checkQuantity = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->checkSalesQuantity($purchaseItem['id']);
+        if(!empty($purchaseItem) and $purchaseItem['remainingQuantity'] > 0 and  $purchaseItem['remainingQuantity'] >= $checkQuantity) {
+            $this->getDoctrine()->getRepository('TallyBundle:StockItem')->insertSalesItems($sales,$purchaseItem['id']);
             $sales = $this->getDoctrine()->getRepository('TallyBundle:Sales')->updateSalesTotalPrice($sales);
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
@@ -153,87 +137,43 @@ class SalesController extends Controller
         }
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
-        exit;
-    }
-
-    public function returnResultData(Sales $entity,$msg=''){
-
-        $salesItems = $this->getDoctrine()->getRepository('TallyBundle:SalesItem')->getSalesItems($entity);
-        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
-        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
-        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
-        $due = $entity->getDue();
-        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
-        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-        $data = array(
-            'msg' => $msg,
-            'salesSubTotal' => $subTotal,
-            'salesTotal' => $netTotal,
-            'payment' => $payment ,
-            'due' => $due,
-            'discount' => $discount,
-            'vat' => $vat,
-            'salesItems' => $salesItems ,
-            'success' => 'success'
-        );
-
-        return $data;
 
     }
+
 
     /**
      * @Secure(roles="ROLE_TALLY_ISSUE,ROLE_DOMAIN")
      */
 
-	public function salesDiscountUpdateAction(Request $request)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$discountType = $request->request->get('discountType');
-		$discountCal = (float)$request->request->get('discount');
-		$sales = $request->request->get('sales');
-		$sales = $em->getRepository('TallyBundle:Sales')->find($sales);
-		$subTotal = $sales->getSubTotal();
-		$total = 0;
-		if($discountType == 'Flat' and $discountCal > 0){
-			$total = ($subTotal  - $discountCal);
-			$discount = $discountCal;
-		}elseif($discountType == 'Percentage' and $discountCal > 0){
-			$discount = ($subTotal * $discountCal)/100;
-			$total = ($subTotal  - $discount);
-		}
-		$vat = 0;
-		if($total > 0  and $total > $discountCal ){
-			if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-				$vat = $em->getRepository('TallyBundle:Sales')->getCulculationVat($sales,$total);
-				$sales->setVat($vat);
-			}
-			$sales->setDiscountType($discountType);
-			$sales->setDiscountCalculation($discountCal);
-			$sales->setDiscount(round($discount));
-			$sales->setTotal(round($total + $vat));
-			$sales->setDue(round($sales->getTotal()));
+    public function salesItemSaveAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $salesId = $request->request->get('salesId');
+        $purchaseItemId = $request->request->get('purchaseItemId');
+        $quantity = $request->request->get('quantity');
+        $salesPrice = $request->request->get('salesPrice');
+        $checkQuantity = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->checkSalesQuantity($purchaseItemId);
+        $sales = $this->getDoctrine()->getRepository('TallyBundle:Sales')->find($salesId);
+        if(!empty($purchaseItemId) && $quantity > 0 && $checkQuantity['remainingQuantity'] >= $quantity ){
+            $salesItem = new StockItem();
+            $salesItem->setSales($sales);
+            $salesItem->setQuantity($quantity);
+            $salesItem->setSalesPrice($salesPrice);
+            $salesItem->setSubTotal($quantity * $salesPrice);
+            $em->persist($salesItem);
+            $em->flush();
+            $sales = $this->getDoctrine()->getRepository('TallyBundle:Sales')->updateSalesTotalPrice($sales);
+            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
+        } else {
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+        }
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
 
-		}else{
-
-			if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-				$vat = $em->getRepository('TallyBundle:Sales')->getCulculationVat($sales->getSubTotal(),$total);
-				$sales->setVat($vat);
-			}
-			$sales->setDiscountType('Flat');
-			$sales->setDiscountCalculation(0);
-			$sales->setDiscount(0);
-			$sales->setTotal(round($subTotal + $vat));
-			$sales->setDue(round($sales->getTotal()));
-		}
-		$em->persist($sales);
-		$em->flush();
-		$data = $this->returnResultData($sales);
-		return new Response(json_encode($data));
-		exit;
-	}
+    }
 
 
-	/**
+    /**
      * @Secure(roles="ROLE_TALLY_ISSUE,ROLE_DOMAIN")
      */
 
@@ -264,11 +204,92 @@ class SalesController extends Controller
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
         } else {
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-         }
+        }
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
-        exit;
+
     }
+
+
+    public function returnResultData(Sales $entity,$msg=''){
+
+        $salesItems = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->getSalesItems($entity);
+        $subTotal               = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $total                  = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $netTotal               = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
+        $payment                = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $vat                    = $entity->getValueAddedTax() > 0 ? $entity->getValueAddedTax() : 0;
+        $tti                    = $entity->getTotalTaxIncidence() > 0 ? $entity->getTotalTaxIncidence() : 0;
+        $discount               = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $type    = $entity->getDiscountType();
+        if($type == "Percentage"){
+            $discountCalculation    = $entity->getDiscountCalculation() > 0 ? $entity->getDiscountCalculation()."%" : 0;
+        }else{
+            $discountCalculation    = $entity->getDiscountCalculation() > 0 ? $entity->getDiscountCalculation() : 0;
+        }
+        $data = array(
+            'msg' => $msg,
+            'subTotal' => $subTotal,
+            'total' => $total,
+            'netTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => ($netTotal-$payment),
+            'discount' => $discount,
+            'discountCalculation' => $discountCalculation,
+            'vat' => $vat,
+            'tti' => $tti,
+            'salesItems' => $salesItems ,
+            'success' => 'success'
+        );
+
+        return $data;
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_TALLY_ISSUE,ROLE_DOMAIN")
+     */
+
+	public function salesDiscountUpdateAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$discountType = $request->request->get('discountType');
+		$discountCal = (float)$request->request->get('discount');
+		$sales = $request->request->get('sales');
+		$sales = $em->getRepository('TallyBundle:Sales')->find($sales);
+		$subTotal = $sales->getSubTotal();
+		$total = 0;
+		if($discountType == 'Flat' and $discountCal > 0){
+			$total = ($subTotal  - $discountCal);
+			$discount = $discountCal;
+		}elseif($discountType == 'Percentage' and $discountCal > 0){
+			$discount = ($subTotal * $discountCal)/100;
+			$total = ($subTotal  - $discount);
+		}
+		$vat = 0;
+		if($total > 0  and $total > $discountCal ){
+			$sales->setDiscountType($discountType);
+			$sales->setDiscountCalculation($discountCal);
+			$sales->setDiscount(round($discount));
+			$sales->setNetTotal(round($sales->getTotal() - $sales->getDiscount()));
+			$sales->setDue(round($sales->getTotal()));
+
+		}else{
+
+			$sales->setDiscountType('Flat');
+			$sales->setDiscountCalculation(0);
+			$sales->setDiscount(0);
+            $sales->setNetTotal(round($sales->getTotal() - $sales->getDiscount()));
+            $sales->setDue(round($sales->getNetTotal()));
+		}
+		$em->persist($sales);
+		$em->flush();
+		$data = $this->returnResultData($sales);
+		return new Response(json_encode($data));
+
+	}
+
+
 
 
     /**
@@ -277,8 +298,8 @@ class SalesController extends Controller
      */
     public function showAction(Sales $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
-        if ($inventory == $entity->getInventoryConfig()->getId()) {
+        $inventory = $this->getUser()->getGlobalOption()->getConfig()->getId();
+        if ($inventory == $entity->getConfig()->getId()) {
             return $this->render('TallyBundle:Sales:show.html.twig', array(
                 'entity' => $entity,
             ));
@@ -296,7 +317,7 @@ class SalesController extends Controller
     public function editAction($code)
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $entity = $em->getRepository('TallyBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
 
         if (!$entity) {
@@ -321,7 +342,7 @@ class SalesController extends Controller
     public function resetAction(Sales $sales)
     {
         $em = $this->getDoctrine()->getManager();
-        foreach ($sales->getSalesItems() as $salesItem ) {
+        foreach ($sales->getStockItems() as $salesItem ) {
             $em->remove($salesItem);
         }
         $em->flush();
@@ -385,7 +406,7 @@ class SalesController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
-            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
+            if ($entity->getConfig()->getVatEnable() == 1 && $entity->getConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('TallyBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
@@ -410,7 +431,7 @@ class SalesController extends Controller
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
 
-            if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
+            if (in_array('CustomerSales', $entity->getConfig()->getDeliveryProcess())) {
                 if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                     $dispatcher = $this->container->get('event_dispatcher');
                     $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
@@ -424,14 +445,13 @@ class SalesController extends Controller
 
                 $em->getRepository('TallyBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('TallyBundle:StockItem')->insertSalesStockItem($entity);
-                $em->getRepository('TallyBundle:GoodsItem')->updateEcommerceItem($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                 return $this->redirect($this->generateUrl('inventory_sales_new'));
             }
         }
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $todaySales = $em->getRepository('TallyBundle:Sales')->todaySales($inventory,$mode='pos');
         $todaySalesOverview = $em->getRepository('TallyBundle:Sales')->todaySalesOverview($inventory , $mode='pos');
         return $this->render('TallyBundle:Sales:pos.html.twig', array(
@@ -515,7 +535,7 @@ class SalesController extends Controller
     public function itemDeleteAction(Sales $sales, $salesItem)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('TallyBundle:SalesItem')->find($salesItem);
+        $entity = $em->getRepository('TallyBundle:StockItem')->find($salesItem);
         if (!$salesItem) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
@@ -524,7 +544,6 @@ class SalesController extends Controller
         $sales = $this->getDoctrine()->getRepository('TallyBundle:Sales')->updateSalesTotalPrice($sales);
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
-        exit;
 
     }
 
@@ -532,7 +551,7 @@ class SalesController extends Controller
     {
         $securityContext = $this->container->get('security.authorization_checker');
         $item = $request->request->get('item');
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
 
         /* Device Detection code desktop or mobile */
@@ -568,7 +587,7 @@ class SalesController extends Controller
 
     public function deleteEmptyInvoiceAction()
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $entities = $this->getDoctrine()->getRepository('TallyBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
@@ -674,7 +693,7 @@ class SalesController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $inventory = $this->getUser()->getGlobalOption()->getConfig();
             $item = $this->getDoctrine()->getRepository('TallyBundle:Sales')->searchAutoComplete($item,$inventory);
         }
         return new JsonResponse($item);
@@ -704,7 +723,7 @@ class SalesController extends Controller
     public function invoicePrintAction($invoice)
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $entity = $em->getRepository('TallyBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $invoice));
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
@@ -725,7 +744,7 @@ class SalesController extends Controller
     public function chalanPrintAction($invoice)
     {
 
-        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $config = $this->getUser()->getGlobalOption()->getConfig();
         $entity = $this->getDoctrine()->getRepository('TallyBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'invoice' => $invoice));
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
@@ -746,9 +765,9 @@ class SalesController extends Controller
         $printer -> initialize();
 
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
         $entity = $this->getDoctrine()->getRepository('TallyBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-        $option = $entity->getInventoryConfig()->getGlobalOption();
+        $option = $entity->getConfig()->getGlobalOption();
         $this->approvedOrder($entity);
 
         /** ===================Company Information=================================== */
@@ -919,8 +938,8 @@ class SalesController extends Controller
         $printer -> initialize();
 
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $option = $entity->getInventoryConfig()->getGlobalOption();
+        $inventory = $this->getUser()->getGlobalOption()->getConfig();
+        $option = $entity->getConfig()->getGlobalOption();
 
         /** ===================Company Information=================================== */
         if(!empty($entity->getBranches())){

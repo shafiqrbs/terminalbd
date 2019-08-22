@@ -52,6 +52,12 @@ class StockItem
      */
     protected $purchaseItem;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", inversedBy="stockItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $purchase;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Sales", inversedBy="stockItems")
@@ -246,6 +252,21 @@ class StockItem
      */
     private $advanceTradeVatPercent = 0.00;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rebatePercent", type="float", nullable=true)
+     */
+    private $rebatePercent = 0.00;
+
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="rebate", type="float", nullable=true)
+     */
+    private $rebate = 0.00;
+
 
     /**
      * @var float
@@ -274,42 +295,42 @@ class StockItem
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="integer", nullable = true)
      */
     private $quantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="openingQuantity", type="integer")
+     * @ORM\Column(name="openingQuantity", type="integer", nullable = true)
      */
     private $openingQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="purchaseQuantity", type="integer")
+     * @ORM\Column(name="purchaseQuantity", type="integer", nullable = true)
      */
     private $purchaseQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="purchaseReturnQuantity", type="integer")
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable = true)
      */
     private $purchaseReturnQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="salesQuantity", type="integer")
+     * @ORM\Column(name="salesQuantity", type="integer", nullable = true)
      */
     private $salesQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="salesReturnQuantity", type="integer")
+     * @ORM\Column(name="salesReturnQuantity", type="integer", nullable = true)
      */
     private $salesReturnQuantity;
 
@@ -317,21 +338,21 @@ class StockItem
     /**
      * @var integer
      *
-     * @ORM\Column(name="assetsQuantity", type="integer")
+     * @ORM\Column(name="assetsQuantity", type="integer", nullable = true)
      */
     private $assetsQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="assetsReturnQuantity", type="integer")
+     * @ORM\Column(name="assetsReturnQuantity", type="integer", nullable = true)
      */
     private $assetsReturnQuantity;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="damageQuantity", type="integer")
+     * @ORM\Column(name="damageQuantity", type="integer", nullable = true)
      */
     private $damageQuantity;
 
@@ -343,6 +364,13 @@ class StockItem
      * @ORM\Column(name="process", type="string", nullable = true)
      */
     private $process;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length = 40, nullable = true)
+     */
+    private $mode;
 
     /**
      * @var string
@@ -1226,6 +1254,70 @@ class StockItem
     public function setAssetsStockReturn($assetsStockReturn)
     {
         $this->assetsStockReturn = $assetsStockReturn;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
+    }
+
+    /**
+     * @param Purchase $purchase
+     */
+    public function setPurchase($purchase)
+    {
+        $this->purchase = $purchase;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRebatePercent()
+    {
+        return $this->rebatePercent;
+    }
+
+    /**
+     * @param float $rebatePercent
+     */
+    public function setRebatePercent($rebatePercent)
+    {
+        $this->rebatePercent = $rebatePercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRebate()
+    {
+        return $this->rebate;
+    }
+
+    /**
+     * @param float $rebate
+     */
+    public function setRebate($rebate)
+    {
+        $this->rebate = $rebate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 }

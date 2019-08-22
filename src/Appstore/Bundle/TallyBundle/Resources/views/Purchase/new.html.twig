@@ -81,6 +81,7 @@
                         <thead>
                         <tr>
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                            <th class="span1">Barcode</th>
                             <th class="span4">Item</th>
                             <th class="span3">Product</th>
                             <th class="span1">Qnt</th>
@@ -99,6 +100,7 @@
                             {% for item in entity.PurchaseItems %}
                                 <tr id="remove-{{ item.id }}">
                                     <td>{{ loop.index }}</td>
+                                    <td >{{ item.barcode }}</td>
                                     <td >{{ item.item.name }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.quantity }}</td>
@@ -119,27 +121,27 @@
                             <td colspan="15" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="10" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                            <td colspan="11" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                             <td class="span2"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                          <tr>
-                            <td colspan="10" class="span9"><span class="pull-right"><strong>Total Tax Incidence TK.</strong> =</span></td>
+                            <td colspan="11" class="span9"><span class="pull-right"><strong>Total Tax Incidence TK.</strong> =</span></td>
                             <td class="span2"><strong class="tti">{{ entity.totalTaxIncidence|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="10" class="span9"><span class="pull-right"><strong>Rebate TK.</strong> =</span></td>
+                            <td colspan="11" class="span9"><span class="pull-right"><strong>Rebate TK.</strong> =</span></td>
                             <td class="span2"><strong class="rebate">{{ entity.rebate|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="10" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="11" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="10" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                            <td colspan="11" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
                             <td class="span2"><strong class="netTotal">{{ entity.netTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>

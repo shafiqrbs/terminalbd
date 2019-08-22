@@ -2086,6 +2086,7 @@ class TransactionRepository extends EntityRepository
     {
         $amount = ($accountPurchase->getPurchaseAmount() - $accountPurchase->getPayment());
         if($amount > 0){
+            $subAccount = NULL;
             $transaction = new Transaction();
             $transaction->setGlobalOption($accountPurchase->getGlobalOption());
             $transaction->setProcessHead('Purchase');
@@ -2094,11 +2095,11 @@ class TransactionRepository extends EntityRepository
             $transaction->setUpdated($accountPurchase->getUpdated());
             /* Current Liabilities-Purchase Account payable */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
-            if($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'miss'){
+            if($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'miss' and $accountPurchase->getMedicineVendor()){
                 $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMedicineVendorAccount($accountPurchase->getMedicineVendor());
-            }elseif ($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'inventory'){
+            }elseif ($accountPurchase->getGlobalOption()->getMainApp()->getSlug() == 'inventory' and $accountPurchase->getVendor()){
                 $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertInventoryVendorAccount($accountPurchase->getVendor());
-            }else{
+            }elseif($accountPurchase->getAccountVendor()){
                 $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($accountPurchase->getAccountVendor());
             }
             $transaction->setSubAccountHead($subAccount);

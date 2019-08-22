@@ -98,6 +98,13 @@ class TallyConfig
     private $address;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="profitPercent", type="smallint",  nullable=true)
+     */
+    private $profitPercent = 20;
+
+     /**
      * @var smallint
      *
      * @ORM\Column(name="vatPercentage", type="smallint",  nullable=true)
@@ -1326,7 +1333,7 @@ class TallyConfig
     /**
      * @return boolean
      */
-    public function getisAttribute()
+    public function isAttribute()
     {
         return $this->isAttribute;
     }
@@ -1337,6 +1344,22 @@ class TallyConfig
     public function setIsAttribute($isAttribute)
     {
         $this->isAttribute = $isAttribute;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProfitPercent()
+    {
+        return $this->profitPercent;
+    }
+
+    /**
+     * @param int $profitPercent
+     */
+    public function setProfitPercent($profitPercent)
+    {
+        $this->profitPercent = $profitPercent;
     }
 
 

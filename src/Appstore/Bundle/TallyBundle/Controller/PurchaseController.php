@@ -261,15 +261,15 @@ class PurchaseController extends Controller
     public function approvedAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
 
         /* @var $purchase Purchase */
 
-        $purchase = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
+        $purchase = $em->getRepository('TallyBundle:Purchase')->findOneBy(array('config' => $config , 'id' => $id));
         if (!empty($purchase) and empty($purchase->getApprovedBy())) {
 
             $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('approved');
+            $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() === 0 ){
                 $purchase->setTransactionMethod(NULL);
@@ -283,8 +283,8 @@ class PurchaseController extends Controller
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertTallyAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
-            $this->getDoctrine()->getRepository('TallyBundle:Item')->getPurchaseUpdateQnt($purchase);
             $this->getDoctrine()->getRepository('TallyBundle:StockItem')->getPurchaseInsertQnt($purchase);
+            $this->getDoctrine()->getRepository('TallyBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
 
         } else {

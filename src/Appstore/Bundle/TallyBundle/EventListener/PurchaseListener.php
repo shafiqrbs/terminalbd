@@ -33,7 +33,7 @@ class PurchaseListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
+    public function getLastCode(LifecycleEventArgs $args, $datetime, Purchase $entity)
     {
 
         $start = $datetime->format('Y-m-01 00:00:00');
@@ -42,7 +42,7 @@ class PurchaseListener
         $qb = $entityManager->getRepository('TallyBundle:Purchase')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.globalOption = :inventory')->setParameter('inventory', $entity->getGlobalOption())
+            ->where('s.config = :config')->setParameter('config', $entity->getConfig())
             ->andWhere('s.created >= :start') ->setParameter('start', $start)
             ->andWhere('s.created <= :end')->setParameter('end', $end);
         $lastCode = $qb->getQuery()->getSingleScalarResult();

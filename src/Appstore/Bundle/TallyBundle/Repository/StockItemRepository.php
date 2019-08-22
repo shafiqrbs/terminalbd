@@ -1,8 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\TallyBundle\Repository;
+use Appstore\Bundle\TallyBundle\Entity\Item;
 use Appstore\Bundle\TallyBundle\Entity\Purchase;
 use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
+use Appstore\Bundle\TallyBundle\Entity\Sales;
 use Appstore\Bundle\TallyBundle\Entity\StockItem;
 use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Appstore\Bundle\TallyBundle\Entity\TaxTariff;
@@ -158,7 +160,7 @@ class StockItemRepository extends EntityRepository
     }
 
 
-    public function updateRemovePurchaseQuantity(TallyConfig $config , $item = 0 , $fieldName = ''){
+    public function processStockQuantity(TallyConfig $config , $id = 0 , $fieldName = ''){
 
         $em = $this->_em;
         $entity = new StockItem();
@@ -169,21 +171,48 @@ class StockItemRepository extends EntityRepository
         }elseif($fieldName == 'purchase-return'){
 
         }elseif($fieldName == 'assets'){
+
         }elseif($fieldName == 'assets-return'){
 
         }elseif($fieldName == 'damage'){
 
         }elseif($fieldName == 'opening'){
 
+            /* @var $item PurchaseItem */
+
+            $item = $em->getRepository('TallyBundle:PurchaseItem')->find($id);
+
+            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $id ,'mode' => 'opening'));
+            if($exist){
+                $entity = $exist;
+            }
+            $entity->setQuantity($item->getQuantity());
+            $entity->setOpeningQuantity($item->getQuantity());
+            $entity->setItem($item->getItem());
+            if($item->getItem()->getBrand()){
+                $entity->setBrand($item->getItem()->getBrand());
+            }
+            if($item->getItem()->getCategory()){
+                $entity->setCategory($item->getItem()->getCategory());
+            }
+            $entity->setPurchaseItem($item);
+            $entity->setPrice($item->getPrice());
+            $entity->setPurchasePrice($item->getPurchasePrice());
+            $entity->setSalesPrice($item->getSalesPrice());
+            $entity->setSubTotal($item->getSubTotal());
+            $entity->setTotal($entity->getSubTotal());
+            $entity->setMode('opening');
+
         }elseif($fieldName == 'purchase'){
 
             /* @var $item PurchaseItem */
 
-            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $item ,'process' => 'purchase'));
+            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $item ,'mode' => 'purchase'));
 
             if($exist){
                 $entity = $exist;
             }
+
             $entity->setQuantity($item->getQuantity());
             $entity->setPurchaseQuantity($item->getQuantity());
             $entity->setItem($item->getItem());
@@ -239,19 +268,49 @@ class StockItemRepository extends EntityRepository
             if($item->getItem()->getBrand()){
                 $entity->setBrand($item->getItem()->getBrand());
             }
-            if($item->getItem()->getVatProduct()){
+            if($item->getItem()->getCategory()){
                 $entity->setCategory($item->getItem()->getCategory());
             }
+            $entity->setPurchaseItem($item);
+            $entity->setPurchase($item->getPurchase());
             $entity->setVendor($item->getPurchase()->getVendor());
             $entity->setPrice($item->getPrice());
             $entity->setPurchasePrice($item->getPurchasePrice());
             $entity->setSubTotal($item->getSubTotal());
             $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
         }
-
         $entity->setConfig($config);
+        $entity->setProcess('Approved');
         $em->persist($entity);
         $em->flush();
+    }
+
+    public function getItemUpdateQuantity($item , $fieldName = '')
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        if($fieldName == 'sales'){
+            $qb->select('SUM(e.salesQuantity) AS quantity');
+        }elseif($fieldName == 'sales-return'){
+            $qb->select('SUM(e.salesReturnQuantity) AS quantity');
+        }elseif($fieldName == 'purchase'){
+            $qb->select('SUM(e.purchaseQuantity) AS quantity');
+        }elseif($fieldName == 'purchase-return'){
+            $qb->select('SUM(e.purchaseReturnQuantity) AS quantity');
+        }elseif($fieldName == 'damage'){
+            $qb->select('SUM(e.purchaseReturnQuantity) AS quantity');
+        }elseif($fieldName == 'opening'){
+            $qb->select('SUM(e.openingQuantity) AS quantity');
+        }elseif($fieldName == 'assets'){
+            $qb->select('SUM(e.assetsQuantity) AS quantity');
+        }elseif($fieldName == 'assets-return'){
+            $qb->select('SUM(e.assetsReturnQuantity) AS quantity');
+        }
+        $qb->where("e.item ={$item}");
+        $qb->andWhere("e.process = :process")->setParameter('process','Approved');
+        $quantity = $qb->getQuery()->getOneOrNullResult();
+        return $quantity['quantity'];
+
     }
 
     private function getTaxTariffCalculation($subTotal,$tariff)
@@ -270,7 +329,7 @@ class StockItemRepository extends EntityRepository
         if($entity->getPurchaseItems()){
 
             foreach($entity->getPurchaseItems() as $item ){
-                $this->updateRemovePurchaseQuantity($item->getConfig(),$item,'purchase');
+                $this->processStockQuantity($item->getConfig(),$item,'purchase');
             }
         }
     }
@@ -735,455 +794,6 @@ class StockItemRepository extends EntityRepository
 
     }
 
-    public function insertPurchaseStockItem(Purchase $purchase){
-
-        $em = $this->_em;
-
-        /* @var $purchaseItem PurchaseItem */
-
-        foreach($purchase->getPurchaseItems() as $purchaseItem ) {
-
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('purchaseItem' => $purchaseItem->getId(),'process'=>'purchase')))) {
-
-                $entity = new StockItem();
-                $entity->setInventoryConfig($purchase->getInventoryConfig());
-                $entity->setPurchaseItem($purchaseItem);
-                $entity->setItem($purchaseItem->getItem());
-                $entity->setQuantity($purchaseItem->getQuantity());
-                $entity->setCreatedBy($purchaseItem->getPurchase()->getCreatedBy());
-                $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-                $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-                $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getCategory())) {
-                    $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                    $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-                }
-
-                if (!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                    $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                    $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-                }
-
-
-                if (!empty($purchaseItem->getItem()->getSize())) {
-                    $entity->setSize($purchaseItem->getItem()->getSize());
-                    $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getColor())) {
-                    $entity->setColor($purchaseItem->getItem()->getColor());
-                    $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-                }
-
-                $entity->setProcess('purchase');
-                $em->persist($entity);
-                $em->flush();
-
-            }
-
-        }
-
-    }
-
-    public function insertPurchaseReturnStockItem($purchaseReturn){
-
-        $em = $this->_em;
-
-        /* @var $purchaseReturnItem PurchaseReturnItem */
-
-        foreach($purchaseReturn->getPurchaseReturnItems() as $purchaseReturnItem ) {
-
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('purchaseReturnItem' => $purchaseReturnItem->getId(),'process' => 'purchaseReturn')))) {
-
-                $entity = new StockItem();
-                $entity->setInventoryConfig($purchaseReturn->getInventoryConfig());
-                $entity->setPurchaseItem($purchaseReturnItem->getPurchaseItem());
-                $entity->setPurchaseReturnItem($purchaseReturnItem);
-                $entity->setItem($purchaseReturnItem->getPurchaseItem()->getItem());
-                $entity->setQuantity('-' . $purchaseReturnItem->getQuantity());
-                $entity->setCreatedBy($purchaseReturn->getCreatedBy());
-
-                $purchaseItem = $purchaseReturnItem->getPurchaseItem();
-                $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-                $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-                $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getCategory())) {
-                    $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                    $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-                }
-
-                if (!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                    $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                    $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getSize())) {
-                    $entity->setSize($purchaseItem->getItem()->getSize());
-                    $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getColor())) {
-                    $entity->setColor($purchaseItem->getItem()->getColor());
-                    $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-                }
-                $entity->setProcess('purchaseReturn');
-                $em->persist($entity);
-                $em->flush();
-            }
-
-        }
-
-    }
-
-    public function insertPurchaseReturnReplaceStockItem($purchaseReturn,$purchaseReturnItem,$curQuantity = 0){
-
-        $em = $this->_em;
-
-            $entity = new StockItem();
-            $entity->setInventoryConfig($purchaseReturn->getInventoryConfig());
-            $entity->setPurchaseItem($purchaseReturnItem->getPurchaseItem());
-            $entity->setPurchaseReplaceItem($purchaseReturnItem);
-            $entity->setItem($purchaseReturnItem->getPurchaseItem()->getItem());
-            $entity->setQuantity($curQuantity);
-            $entity->setCreatedBy($purchaseReturn->getCreatedBy());
-            $entity->setProcess('purchaseReturnReplace');
-            $em->persist($entity);
-            $em->flush();
-
-    }
-
-    public function insertSalesStockItem(Sales $sales){
-
-        $em = $this->_em;
-        /* @var $row SalesItem */
-        foreach ($sales->getSalesItems() as $row ) {
-
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('salesItem' => $row->getId())))){
-
-                $entity = new StockItem();
-                $entity->setInventoryConfig($sales->getInventoryConfig());
-                $entity->setSalesItem($row);
-                $entity->setPurchaseItem($row->getPurchaseItem());
-                $entity->setItem($row->getItem());
-                $quantity = '-' . $row->getQuantity();
-                $entity->setQuantity($quantity);
-                $entity->setCreatedBy($sales->getCreatedBy());
-
-                $item = $row->getItem();
-                $purchaseItem = $row->getPurchaseItem();
-
-                $entity->setProduct($item->getMasterItem());
-                $entity->setProductName($item->getMasterItem()->getName());
-                if(!empty($purchaseItem)){
-                    $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                    $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-                }
-                if (!empty($item->getMasterItem()->getCategory())) {
-                    $entity->setCategory($item->getMasterItem()->getCategory());
-                    $entity->setCategoryName($item->getMasterItem()->getCategory()->getName());
-                }
-
-                if (!empty($item->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($item->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($item->getMasterItem()->getProductUnit()->getName());
-                }
-
-                if (!empty($purchaseItem) and !empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                    $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                    $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-                }
-
-                if (!empty($item->getSize())) {
-                    $entity->setSize($item->getSize());
-                    $entity->setSizeName($item->getSize()->getName());
-                }
-
-                if (!empty($item->getColor())) {
-                    $entity->setColor($item->getColor());
-                    $entity->setColorName($item->getColor()->getName());
-                }
-                $entity->setProcess('sales');
-                $em->persist($entity);
-                $em->flush();
-            }
-        }
-
-
-
-    }
-
-    public function insertSalesManualStockItem(Sales $sales){
-
-        $em = $this->_em;
-
-        /* @var SalesItem $row */
-
-        foreach ($sales->getSalesItems() as $row ){
-
-            $entity = new StockItem();
-            $entity->setInventoryConfig($sales->getInventoryConfig());
-            $entity->setSalesItem($row);
-            $entity->setPurchaseItem($row->getPurchaseItem());
-            $entity->setItem($row->getItem());
-            $quantity = '-'.$row->getQuantity();
-            $entity->setQuantity($quantity);
-            $entity->setCreatedBy($sales->getCreatedBy());
-
-            $entity->setProduct($row->getItem()->getMasterItem());
-            $entity->setProductName($row->getItem()->getMasterItem()->getName());
-            if(!empty($row->getItem()->getMasterItem()->getCategory())){
-                $entity->setCategory($row->getItem()->getMasterItem()->getCategory());
-                $entity->setCategoryName($row->getItem()->getMasterItem()->getCategory()->getName());
-            }
-
-            if(!empty($row->getItem()->getMasterItem()->getProductUnit())) {
-                $entity->setUnit($row->getItem()->getMasterItem()->getProductUnit());
-                $entity->setUnitName($row->getItem()->getMasterItem()->getProductUnit()->getName());
-            }
-
-            if(!empty($row->getItem()->getSize())){
-                $entity->setSize($row->getItem()->getSize());
-                $entity->setSizeName($row->getItem()->getSize()->getName());
-            }
-
-            if(!empty($row->getItem()->getColor())){
-                $entity->setColor($row->getItem()->getColor());
-                $entity->setColorName($row->getItem()->getColor()->getName());
-            }
-
-            $entity->setProcess('sales');
-            $em->persist($entity);
-        }
-
-        $em->flush();
-
-    }
-
-    public function insertSalesReturnStockItem(SalesReturn $salesReturn){
-
-        $em = $this->_em;
-
-        /* @var $row SalesReturnItem */
-
-        foreach ($salesReturn ->getSalesReturnItems() as $row ) {
-
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('salesReturnItem' => $row->getId(), 'process' => 'salesReturn')))) {
-
-                $entity = new StockItem();
-                $entity->setInventoryConfig($salesReturn->getInventoryConfig());
-                $entity->setPurchaseItem($row->getSalesItem()->getPurchaseItem());
-                $entity->setSalesReturnItem($row);
-                $entity->setItem($row->getSalesItem()->getItem());
-                $quantity = $row->getQuantity();
-                $entity->setQuantity($quantity);
-                $entity->setCreatedBy($salesReturn->getCreatedBy());
-
-                $purchaseItem = $row->getSalesItem()->getPurchaseItem();
-
-                $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-                $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-                $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getCategory())) {
-                    $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                    $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-                }
-
-                if (!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                    $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                    $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getSize())) {
-                    $entity->setSize($purchaseItem->getItem()->getSize());
-                    $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-                }
-
-                if (!empty($purchaseItem->getItem()->getColor())) {
-                    $entity->setColor($purchaseItem->getItem()->getColor());
-                    $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-                }
-                $entity->setProcess('salesReturn');
-                $em->persist($entity);
-                $em->flush();
-            }
-        }
-
-    }
-
-    public function insertDamageItem(Damage $damage){
-
-        if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('damage' => $damage->getId(), 'process' => 'damage')))) {
-
-            $em = $this->_em;
-            $entity = new StockItem();
-            $entity->setInventoryConfig($damage->getInventoryConfig());
-            $entity->setPurchaseItem($damage->getPurchaseItem());
-            $entity->setDamage($damage);
-            $entity->setItem($damage->getItem());
-            $quantity = $damage->getQuantity();
-            $entity->setQuantity('-' . $quantity);
-            $entity->setCreatedBy($damage->getCreatedBy());
-
-            $purchaseItem = $damage->getPurchaseItem();
-
-            $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-            $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-            $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-            $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-            if (!empty($purchaseItem->getItem()->getMasterItem()->getCategory())) {
-                $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-            }
-
-            if (!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-            }
-
-            if (!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-            }
-
-            if (!empty($purchaseItem->getItem()->getSize())) {
-                $entity->setSize($purchaseItem->getItem()->getSize());
-                $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-            }
-
-            if (!empty($purchaseItem->getItem()->getColor())) {
-                $entity->setColor($purchaseItem->getItem()->getColor());
-                $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-            }
-            $entity->setProcess('damage');
-            $em->persist($entity);
-            $em->flush();
-        }
-
-    }
-
-    public function insertOnlineOrder(Order $order){
-
-        $em = $this->_em;
-        foreach ($order ->getOrderItems() as $orderItem ) {
-            $entity = new StockItem();
-            $entity->setInventoryConfig($orderItem->getPurchaseItem()->getPurchase()->getInventoryConfig());
-            $entity->setPurchaseItem($orderItem->getPurchaseItem());
-            $entity->setOrderItem($orderItem);
-            $entity->setItem($orderItem->getPurchaseItem()->getItem());
-            $quantity = $orderItem->getQuantity();
-            $entity->setQuantity('-' . $quantity);
-            $entity->setCreatedBy($orderItem->getOrder()->getCreatedBy());
-
-            $purchaseItem = $orderItem->getPurchaseItem();
-
-            $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-            $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-            $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-            $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-            if(!empty($purchaseItem->getItem()->getMasterItem()->getCategory())){
-                $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-            }
-
-            if(!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-            }
-
-            if(!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-            }
-
-            if(!empty($purchaseItem->getItem()->getSize())){
-                $entity->setSize($purchaseItem->getItem()->getSize());
-                $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-            }
-
-            if(!empty($purchaseItem->getItem()->getColor())){
-                $entity->setColor($purchaseItem->getItem()->getColor());
-                $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-            }
-
-            $entity->setProcess('online');
-            $em->persist($entity);
-            $em->flush();
-        }
-
-    }
-
-    public function insertOnlineOrderItemReturn(OrderItem $entity){
-
-        $em = $this->_em;
-        $entity = new StockItem();
-        $entity->setInventoryConfig($entity->getInventoryConfig());
-        $entity->setPurchaseItem($entity->getPurchaseItem());
-        $entity->setDamage($entity);
-        $entity->setItem($entity->getItem());
-        $quantity = $entity->getQuantity();
-        $entity->setQuantity('-'.$quantity);
-        $entity->setCreatedBy($entity->getCreatedBy());
-        $entity->setProcess('onlineReturn');
-
-        $purchaseItem = $entity->getPurchaseItem();
-
-        $entity->setProduct($purchaseItem->getItem()->getMasterItem());
-        $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-        $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-        $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-        if(!empty($purchaseItem->getItem()->getMasterItem()->getCategory())){
-            $entity->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-            $entity->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-        }
-
-        if(!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-            $entity->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-            $entity->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-        }
-
-        if(!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-            $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-            $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-        }
-
-        if(!empty($purchaseItem->getItem()->getSize())){
-            $entity->setSize($purchaseItem->getItem()->getSize());
-            $entity->setSizeName($purchaseItem->getItem()->getSize()->getName());
-        }
-
-        if(!empty($purchaseItem->getItem()->getColor())){
-            $entity->setColor($purchaseItem->getItem()->getColor());
-            $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
-        }
-        $em->persist($entity);
-        $em->flush();
-
-    }
 
     public  function getStockOverview($inventory,$data=''){
 
@@ -1623,11 +1233,24 @@ class StockItemRepository extends EntityRepository
         return $result;
     }
 
+
+    public function stockItemUpdateQuantity(Item $item , $mode = "")
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.item = :item')->setParameter('item', $item->getId());
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('e.mode = :mode')->setParameter('mode', $mode);
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+
     public function saleaItemStockReverse(Sales $sales)
     {
         $em = $this->_em;
-        /* @var SalesItem $item */
-        foreach ($sales->getSalesItems() as $item ){
+        /* @var $item StockItem */
+        foreach ($sales->getStockItems() as $item ){
             $StockItem = $em->createQuery('DELETE InventoryBundle:StockItem e WHERE e.salesItem = '.$item->getId());
             $StockItem->execute();
         }
@@ -1653,19 +1276,290 @@ class StockItemRepository extends EntityRepository
         return abs($quantity);
     }
 
-    public function getPurchaseItemSalesQuantity(Purchase $purchase , $process = '')
+
+
+    /* ========================= Sales ==================================================== */
+
+    public function checkSalesQuantity($purchaseItem)
     {
-        $data = array();
-        foreach ($purchase->getPurchaseItems() as $purchaseItem){
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.quantity) AS quantity');
-        $qb->where('e.purchaseItem='.$purchaseItem->getId());
-        $qb->andWhere("e.process IN (:process)")->setParameter('process',$process);
-        $quantity = $qb->getQuery()->getOneOrNullResult()['quantity'];
-            $data[$purchaseItem->getId()] = abs($quantity);
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.sales','sales');
+        $qb->addSelect('SUM(stock.salesQuantity) as quantity ');
+        $qb->where("stock.purchaseItem = :purchaseItem");
+        $qb->setParameter('purchaseItem', $purchaseItem);
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier','Hold')));
+        $quantity =  $qb->getQuery()->getOneOrNullResult();
+        if(!empty($quantity['quantity'])){
+            return $quantity['quantity'];
+        }else{
+            return 0;
+        }
+    }
+
+    public function insertSalesItems(Sales $sales, $purchaseItem)
+    {
+        $em = $this->_em;
+
+        $item = $em->getRepository('TallyBundle:PurchaseItem')->find($purchaseItem);
+
+        /* @var $item PurchaseItem */
+
+        $entity = $this->findOneBy(array('mode'=>'sales','sales'=> $sales,'purchaseItem'=> $purchaseItem));
+
+        if(!empty($entity)){
+
+            $qnt = ($entity->getSalesQuantity()+1);
+            $entity->setQuantity('-'.$qnt);
+            $entity->setSalesQuantity($qnt);
+            $entity->setSubTotal($item->getSalesPrice() * $entity->getSalesQuantity());
+            if($item->getItem()->getVatProduct()){
+
+                $subTotal = $entity->getSubTotal();
+
+                /* @var $vat TaxTariff */
+                $vat = $item->getItem()->getVatProduct();
+
+                if($vat->getCustomsDuty() > 0){
+                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
+                    $entity->setCustomsDuty($amount);
+                }
+                if($vat->getSupplementaryDuty() > 0){
+                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
+                    $entity->setSupplementaryDuty($amount);
+                }
+
+                if($vat->getValueAddedTax() > 0){
+                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
+                    $entity->setValueAddedTax($amount);
+                }
+
+                if($vat->getAdvanceIncomeTax() > 0){
+                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
+                    $entity->setAdvanceIncomeTax($cd);
+                }
+
+                if($vat->getRecurringDeposit() > 0){
+                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
+                    $entity->setRecurringDeposit($cd);
+                }
+
+                if($vat->getAdvanceTradeVat() > 0){
+                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
+                    $entity->setAdvanceTradeVat($cd);
+                }
+
+                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
+                $entity->setTotalTaxIncidence($TTI);
+
+            }
+            $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+
+        }else{
+
+            $entity = new StockItem();
+            $entity->setQuantity('-1');
+            $entity->setSalesQuantity(1);
+            $entity->setSales($sales);
+            $entity->setItem($item->getItem());
+            $entity->setSalesPrice($item->getSalesPrice());
+            $entity->setPrice($item->getSalesPrice());
+            $entity->setSubTotal($item->getSalesPrice());
+            if($item->getItem()->getVatProduct()){
+
+                /* @var $vat TaxTariff */
+                $vat = $item->getItem()->getVatProduct();
+
+                if($vat->getCustomsDuty() > 0){
+                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
+                    $entity->setCustomsDuty($amount);
+                }
+                if($vat->getSupplementaryDuty() > 0){
+                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
+                    $entity->setSupplementaryDuty($amount);
+                }
+
+                if($vat->getValueAddedTax() > 0){
+                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
+                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
+                    $entity->setValueAddedTax($amount);
+                }
+
+                if($vat->getAdvanceIncomeTax() > 0){
+                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
+                    $entity->setAdvanceIncomeTax($cd);
+                }
+
+                if($vat->getRecurringDeposit() > 0){
+                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
+                    $entity->setRecurringDeposit($cd);
+                }
+
+                if($vat->getAdvanceTradeVat() > 0){
+                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
+                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
+                    $entity->setAdvanceTradeVat($cd);
+                }
+
+                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
+                $entity->setTotalTaxIncidence($TTI);
+
+            }
+            if($item->getItem()->getVatProduct()){
+                $entity->setHsCode($item->getItem()->getVatProduct());
+            }
+            if($item->getItem()->getBrand()){
+                $entity->setBrand($item->getItem()->getBrand());
+            }
+            if($item->getItem()->getCategory()){
+                $entity->setCategory($item->getItem()->getCategory());
+            }
+            $entity->setPurchaseItem($item);
+            if($item->getPurchase()) {
+                $entity->setPurchase($item->getPurchase());
+                $entity->setVendor($item->getPurchase()->getVendor());
+            }
+            $entity->setPurchasePrice($item->getPurchasePrice());
+            $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+        }
+        $entity->setConfig($sales->getConfig());
+        $entity->setMode('sales');
+        $em->persist($entity);
+        $em->flush();
+    }
+
+
+
+    public function getSalesItems(Sales $sales , $device = '' )
+    {
+        $isAttribute = $sales->getConfig()->isAttribute();
+        $entities = $sales->getStockItems();
+
+        $data = '';
+        $i = 1;
+        /* @var $entity StockItem */
+
+        foreach( $entities as $entity){
+
+            $option = '';
+            if(!empty($entity->getPurchaseItem()->getExternalSerial())){
+
+                $salesSerials = explode(",",$entity->getSerialNo());
+                $serials = explode(",",$entity->getPurchaseItem()->getExternalSerial());
+                $option .="<select class='serial-no' id='serialNo-{$entity->getId()}' name='serialNo' multiple='multiple'>";
+                $option .="<option>--Serial no--</option>";
+                foreach ($serials as $serial){
+                    $selected = in_array($serial,$salesSerials) ? 'selected=selected':'';
+                    $option.="<option {$selected} value='{$serial}'>{$serial}</option>";
+                }
+                $option .="</select>";
+            }
+
+            if (!empty($entity->getItem()) and !empty($entity->getItem()->getProductUnit())){
+                $unit = '-'.$entity->getItem()->getProductUnit()->getName();
+            } else{
+                $unit = '';
+            }
+
+
+
+            $itemName = $entity->getItem()->getName();
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}</td>";
+            $data .= "<td>{$entity->getPurchaseItem()->getBarcode()}</td>";
+            $data .= "<td>{$itemName}</td>";
+            if ($isAttribute == 1){
+                $data .= "<td>{$option}</td>";
+            }
+            $data .="<td>";
+            $data .="<input type='text' name='quantity[]' rel='{$entity->getId()}'  id='quantity-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getSalesQuantity()}' min=1 max={$entity->getPurchaseItem()->getQuantity()} placeholder='{$entity->getPurchaseItem()->getQuantity()}'>";
+            $data .="</td>";
+            $data .="<td>";
+            $data .="<input type='text' name='price[]' rel='{$entity->getId()}'  id='price-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getQuantity()}' min=1 max='{$entity->getPurchaseItem()->getQuantity()}' placeholder='{$entity->getPurchaseItem()->getQuantity()}'>";
+            $data .="</td>";
+            $data .="<td><span id='itemSubTotal-{$entity->getId()}' >{$entity->getSubTotal()}</td>";
+            $data .="<td>{$entity->getValueAddedTaxPercent()}</td>";
+            $data .="<td><span id='itemVat-{$entity->getId()}' >{$entity->getValueAddedTax()}</td>";
+            $data .="<td><span id='itemTotalTaxIncidence-{$entity->getId()}' >{$entity->getTotalTaxIncidence()}</td>";
+            $data .="<td><span id='itemTotal-{$entity->getId()}' >{$entity->getTotal()}</td>";
+            $data .="<td>";
+            if ($isAttribute == 1 and !empty($entity->getPurchaseItem()->getExternalSerial())) {
+                $data .= "<a id='{$entity->getId()}'  data-url='/tally/sales/{$entity->getId()}/update-serial-no' href='javascript:' class='btn blue mini serialSave' ><i class='icon-save'></i></a>";
+            }
+            $data .="<a id='{$entity->getId()}'  rel='/tally/item-sales/{$entity->getSales()->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
+            $data .="</td>";
+            $data .='</tr>';
+            $i++;
+        }
+        return $data;
+    }
+
+    public function itemPurchaseDetails(TallyConfig $inventory,$item)
+    {
+
+        $data ='';
+        $qb = $this->createQueryBuilder('stock');
+        $qb->leftJoin('stock.purchase','purchase');
+        $qb->join('stock.purchaseItem','purchaseItem');
+        $qb->select('SUM(stock.quantity) as quantity ');
+        $qb->addSelect('purchase.grn as grn','purchase.receiveDate as receiveDate');
+        $qb->addSelect('purchaseItem.barcode as barcode','purchaseItem.id as id','purchaseItem.salesPrice as salesPrice','purchaseItem.externalSerial as externalSerial');
+        $qb->where("stock.item = :item")->setParameter('item', $item);
+        $qb->andWhere("stock.config = :config")->setParameter('config', $inventory->getId());
+        $qb->having("SUM(stock.quantity) > 0");
+        $qb->groupBy("stock.purchaseItem");
+
+        $results =  $qb->getQuery()->getArrayResult();
+
+        foreach($results as $purchaseItem  ) {
+
+            $grn = $purchaseItem['grn'];
+            $received = $purchaseItem['receiveDate']->format('d-m-Y');
+            $isAttribute = $inventory->isAttribute();
+            $option ="";
+            if(!empty($entity['externalSerial'])){
+                $salesSerials = explode(",",$entity['externalSerial']);
+                $serials = explode(",",$entity->getPurchaseItem()->getExternalSerial());
+                $option .="<select class='serial-no' id='serialNo-{$entity->getId()}' name='serialNo' multiple='multiple'>";
+                $option .="<option>--Serial no--</option>";
+                foreach ($serials as $serial){
+                    $selected = in_array($serial,$salesSerials) ? 'selected=selected':'';
+                    $option.="<option {$selected} value='{$serial}'>{$serial}</option>";
+                }
+                $option .="</select>";
+            }
+
+
+            $ongoingSalesQnt = $this->_em->getRepository('TallyBundle:StockItem')->checkSalesQuantity($purchaseItem['id']);
+            $remaining = $purchaseItem['quantity'] - $ongoingSalesQnt;
+            $data .= "<tr>";
+            $data .= "<td>{$purchaseItem['barcode']}</td>";
+            $data .= "<td>{$received}/{$grn}</td>";
+            $data .= "<td>{$purchaseItem['quantity']}</td>";
+            $data .= "<td>{$ongoingSalesQnt}</td>";
+            $data .= "<td>{$remaining}</td>";
+            if ($isAttribute == 1){
+                $data .= "<td>{$option}</td>";
+            }
+            $data .= "<td><input type='number'   id='salesPrice-{$purchaseItem['id']}' class='td-inline-input' value='{$purchaseItem['salesPrice']}' placeholder='Enter sales price'></td>";
+            $data .= "<td><div class='input-appned'><input type='number'  id='salesQuantity-{$purchaseItem['id']}' class='td-inline-input quantity' value='1' min=1 max={$remaining} placeholder='{$remaining}'><a class='btn mini blue addSales' href='javascript:' id='{$purchaseItem['id']}'><i class='icon-shopping-cart'></i> Add</a></div></td>";
+            $data .= "</tr>";
         }
         return $data;
 
     }
+
+
 
 }

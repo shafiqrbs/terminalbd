@@ -20,14 +20,6 @@ tally_sales_online_item_search:
     options:
             expose: true
 
-
-tally_sales_item_purchase:
-    path:     /item-purchase-details
-    defaults: { _controller: "TallyBundle:Sales:itemPurchaseDetails" }
-    methods:  POST
-    options:
-            expose: true
-
 tally_branch_stock_item:
     path:     /{item}/branch-stock-item-details
     defaults: { _controller: "TallyBundle:Sales:branchStockItemDetails" }
@@ -71,12 +63,27 @@ tally_sales_discount_update:
     options:
             expose: true
 
-tally_sales_item_update:
-    path:     /sales/item/update
+tally_sales_barcode_item_add:
+    path:     /add-stock-barcode-item
+    defaults: { _controller: "TallyBundle:Sales:barcodeSearch" }
+    options:
+           expose: true
+
+
+tally_sales_sales_item_insert:
+    path:     /insert-sales-barcode-item
+    defaults: { _controller: "TallyBundle:Sales:salesItemSave" }
+    methods:  POST
+    options:
+            expose: true
+
+tally_sales_sales_item_update:
+    path:     /update-sales-barcode-item
     defaults: { _controller: "TallyBundle:Sales:salesItemUpdate" }
     methods:  POST
     options:
             expose: true
+
 
 tally_sales_approve:
     path:     /{id}/approve

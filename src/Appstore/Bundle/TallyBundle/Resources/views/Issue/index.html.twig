@@ -105,7 +105,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Customer</th>
-                                    {% if inventoryConfig.isBranch == 1 %}<td class="numeric">Branch</td>{% endif %}
+                                    {% if config.isBranch == 1 %}<td class="numeric">Branch</td>{% endif %}
                                     <th class="numeric" >Sales By</th>
                                     <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Process</th>
@@ -124,22 +124,20 @@
                                         <th class="numeric" >{{ entity.due|number_format }}</th>
                                         <td class="numeric" >{% if entity.customer and entity.customer.name != 'Default'  %}{{ entity.customer.name }}/{{ entity.customer.mobile }}{% endif %}</td>
                                         {#<td class="numeric" >{% if entity.customer and entity.customer.name != 'Default'  %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue">{{ entity.customer.name }}/{{ entity.customer.mobile }}</a>{% endif %}</td>#}
-                                        {% if inventoryConfig.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
+                                        {% if config.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
                                         <td class="numeric"> {{ entity.salesBy }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric"> {{ entity.process|capitalize }}</td>
                                         <td class="numeric"> {% if entity.revised == 1  %}<a class="btn yellow mini" href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}">Revised</a>{% endif %}</td>
-                                        <td class="numeric"> {% if entity.salesReturn is not empty %}Return{% endif %}</td>
+                                        <td class="numeric"> </td>
 
                                         <td class="numeric" >
-                                            {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
+                                            <div class="actions">
+                                                <div class="btn-group">
+                                            {% if entity.stockItems is defined and  entity.stockItems is not empty  %}
                                                 <a href="{{ path('tally_itemissue_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                                 {#<a data-toggle="modal" href="#responsive" rel="{{ path('tally_itemissue_show_preview', { 'id': entity.id }) }}" class="btn purple mini sales-preview" ><i class="icon-eye-open"></i></a>#}
-                                                {% if inventoryConfig.onlineSalesPrinter == 'pos'  %}
-                                                    <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':entity.id}) }}"  class="btn green mini onlinePosPrintIndividual" ><i class="icon-print"></i></a>
-                                                {% else %}
-                                                    <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
-                                                {% endif %}
+
                                             {% endif %}
 
                                             {% if entity.paymentStatus == "Pending" or entity.process == "In-progress" or entity.process == "Courier" %}
@@ -149,6 +147,8 @@
                                             {% if ((entity.paymentStatus == "Due" and entity.due > 0 and app.user.granted("ROLE_DOMAIN_INVENTORY_DUE")) or (entity.process == 'Done' and entity.due > 0  and app.user.granted("ROLE_DOMAIN"))) %}
                                                 <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow" ><i class="icon-money"></i></a>
                                             {% endif %}
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

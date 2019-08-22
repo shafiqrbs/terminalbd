@@ -322,6 +322,13 @@ class Item
     private $assetsQuantity = 0;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="assetsReturnQuantity", type="integer", nullable=true)
+     */
+    private $assetsReturnQuantity = 0;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="barcode", type="string", nullable=true)
@@ -1258,6 +1265,22 @@ class Item
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAssetsReturnQuantity()
+    {
+        return $this->assetsReturnQuantity;
+    }
+
+    /**
+     * @param int $assetsReturnQuantity
+     */
+    public function setAssetsReturnQuantity($assetsReturnQuantity)
+    {
+        $this->assetsReturnQuantity = $assetsReturnQuantity;
     }
 
 

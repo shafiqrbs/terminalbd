@@ -399,18 +399,15 @@ class ItemRepository extends EntityRepository
 
         $search = strtolower($item);
         $query = $this->createQueryBuilder('i');
-        $query->join('i.config', 'ic');
-        $query->leftJoin('i.stockItems', 'stockItem');
         $query->select('i.id as id');
         $query->addSelect('i.name as name');
-        $query->addSelect('i.skuSlug as text');
+        $query->addSelect('i.slug as text');
         $query->addSelect('i.sku as sku');
-        $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
-        $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
-        $query->andWhere("i.purchaseQuantity > 0 ");
-        $query->andWhere("ic.id = :config");
+        $query->addSelect('i.remainingQuantity as remainingQuantity');
+        $query->where($query->expr()->like("i.slug", "'$search%'"  ));
+        $query->andWhere("i.remainingQuantity > 0 ");
+        $query->andWhere("i.config = :config");
         $query->setParameter('config', $config);
-        $query->groupBy('i.id');
         $query->orderBy('i.name', 'ASC');
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
@@ -440,24 +437,31 @@ class ItemRepository extends EntityRepository
     public function updateRemovePurchaseQuantity(Item $stock , $fieldName = '', $minStock = 0 ){
 
         $em = $this->_em;
+
         if($fieldName == 'sales'){
-            $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
-            $stock->setSalesQuantity($qnt);
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'sales');
+            $stock->setSalesQuantity($quantity);
         }elseif($fieldName == 'sales-return'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockUpdate($stock);
+            $quantity = $this->_em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'sales-return');
             $stock->setSalesReturnQuantity($quantity);
-        }elseif($fieldName == 'purchase-return'){
-            $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockUpdate($stock);
-            $stock->setPurchaseReturnQuantity($qnt);
+        }elseif($fieldName == 'purchase'){
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'purchase');
+            $stock->setPurchaseQuantity($quantity);
+         }elseif($fieldName == 'purchase-return'){
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'purchase-return');
+            $stock->setPurchaseReturnQuantity($quantity);
         }elseif($fieldName == 'damage'){
-            $quantity = $em->getRepository('MedicineBundle:MedicineDamage')->damageStockItemUpdate($stock);
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'damage');
             $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'opening'){
-            $quantity = $em->getRepository('TallyBundle:PurchaseItem')->openingStockItemUpdate($stock);
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'opening');
             $stock->setOpeningQuantity($quantity);
-        }else{
-            $qnt = $em->getRepository('TallyBundle:PurchaseItem')->purchaseStockItemUpdate($stock);
-            $stock->setPurchaseQuantity($qnt);
+        }elseif($fieldName == 'assets'){
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'assets');
+            $stock->setAssetsQuantity($quantity);
+        }elseif($fieldName == 'assets-return'){
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'assets-return');
+            $stock->setAssetsReturnQuantity($quantity);
         }
         $em->persist($stock);
         $em->flush();
@@ -484,7 +488,7 @@ class ItemRepository extends EntityRepository
             foreach($entity->getPurchaseItems() as $item ){
                 /** @var  $stock Item */
                 $stock = $item->getItem();
-                $this->updateRemovePurchaseQuantity($stock);
+                $this->updateRemovePurchaseQuantity($stock,'purchase');
             }
         }
     }
@@ -517,7 +521,6 @@ class ItemRepository extends EntityRepository
         $em->flush();
         $this->remainingQnt($stock);
     }
-
 
 
 

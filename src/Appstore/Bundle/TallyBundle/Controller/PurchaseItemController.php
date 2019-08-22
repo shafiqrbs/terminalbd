@@ -34,12 +34,34 @@ class PurchaseItemController extends Controller
      * Lists all PurchaseItem entities.
      *
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
-        $entities = $em->getRepository('TallyBundle:PurchaseItem')->findWithSearch($config,$data);
+        $entities = $em->getRepository('TallyBundle:PurchaseItem')->findWithSearch($config,'opening',$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('TallyBundle:PurchaseItem:index.html.twig', array(
+            'config' => $config,
+            'pagination' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+
+    /**
+     * Lists all PurchaseItem entities.
+     *
+     */
+
+    public function purchaseIndexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $data = array('process'=>'Approved');
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $entities = $em->getRepository('TallyBundle:PurchaseItem')->findWithSearch($config,'purchase',$data);
         $pagination = $this->paginate($entities);
         return $this->render('TallyBundle:PurchaseItem:index.html.twig', array(
             'config' => $config,
@@ -65,6 +87,8 @@ class PurchaseItemController extends Controller
             $config = $this->getUser()->getGlobalOption()->getTallyConfig();
             $entity->setConfig($config);
             $entity->setMode('opening');
+            $entity->setPurchasePrice($entity->getPrice());
+            $entity->setSubTotal($entity->getPrice() * $entity->getQuantity());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -87,7 +111,7 @@ class PurchaseItemController extends Controller
      */
     private function createCreateForm(PurchaseItem $entity)
     {
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new PurchaseOpeningItemType($config), $entity, array(
             'action' => $this->generateUrl('tally_purchaseitem_create'),
             'method' => 'POST',
@@ -126,7 +150,7 @@ class PurchaseItemController extends Controller
      */
     private function createEditForm(PurchaseItem $entity)
     {
-        $config = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new OpeningItemEditType($config), $entity, array(
             'action' => $this->generateUrl('tally_purchaseitem_update',array('id'=>$entity->getId())),
             'method' => 'POST',
@@ -227,8 +251,8 @@ class PurchaseItemController extends Controller
     */
     private function createAttributeForm(PurchaseItem $entity)
     {
-        $option = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new PurchaseItemType($option), $entity, array(
+
+        $form = $this->createForm(new PurchaseItemType(), $entity, array(
             'action' => $this->generateUrl('tally_purchaseitem_attribute_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -269,35 +293,26 @@ class PurchaseItemController extends Controller
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
-            $process = 'set'.$data['name'];
-            $entity->$process((float)$data['value']);
-            $entity->setSalesSubTotal((float)$data['value'] * $entity->getQuantity());
-            $em->flush();
+            $entity->setSalesPrice((float)$data['value']);
         }
-
         if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
+            $entity->setPrice((float)$data['value']);
             $entity->setPurchasePrice((float)$data['value']);
-            $entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
-            $em->flush();
-            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+            $entity->setSubTotal((float)$data['value'] * $entity->getQuantity());
         }
-        $salesQnt = $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->getPurchaseItemQuantity($entity,array('sales','damage','purchaseReturn'));
-        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
+        if($data['name'] == 'Quantity' and 0 < (float)$data['value'] ){
             $entity->setQuantity((int)$data['value']);
-            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getPurchasePrice());
-            $entity->setSalesSubTotal((int)$data['value'] * $entity->getSalesPrice());
-            $em->flush();
-            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($entity->getPurchase());
+            $entity->setPurchasePrice((int)$data['value'] * $entity->getPurchasePrice());
+            $entity->setSubTotal((int)$data['value'] * $entity->getSalesPrice());
         }
-
         if($data['name'] == 'Barcode'){
             $existBarcode = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->findBy(array('barcode' => $data['value']));
             if(empty($existBarcode)){
                 $process = 'set'.$data['name'];
                 $entity->$process($data['value']);
-                $em->flush();
             }
         }
+        $em->flush();
         exit;
 
     }
@@ -347,6 +362,7 @@ class PurchaseItemController extends Controller
         }
         $entity->setProcess("Approved");
         $em->flush();
+        $this->getDoctrine()->getRepository('TallyBundle:StockItem')->processStockQuantity($entity->getConfig(),$entity->getId(),'opening');
         $this->getDoctrine()->getRepository('TallyBundle:Item')->updateRemovePurchaseQuantity($entity->getItem(),'opening');
         $this->get('session')->getFlashBag()->add(
             'success',"Item has been approved successfully"

@@ -101,7 +101,7 @@ class PurchaseType extends AbstractType
             ))
             ->add('challanNo','text', array('attr'=>array('class'=>'m-wrap span12 challan inputs','placeholder'=>'Enter challan no')))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
-            ->add('netTotal','text', array('attr'=>array('class'=>'m-wrap span12 inputs netTotal','placeholder'=>'Enter total amount')))
+            ->add('netTotal','text', array('attr'=>array('class'=>'m-wrap span12 inputs netTotal','readonly'=>'readonly','placeholder'=>'Enter total amount')))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter narration')))
             ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 inputs discount','placeholder'=>'Enter discount amount')))
             ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')

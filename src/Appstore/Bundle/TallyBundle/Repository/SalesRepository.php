@@ -441,49 +441,41 @@ class SalesRepository extends EntityRepository
         return $lastId;
     }
 
-    public function updateSalesTotalPrice(Sales $sales,$import ='')
+    public function updateSalesTotalPrice(Sales $entity,$import ='')
     {
         $em = $this->_em;
-        $total = $em->createQueryBuilder()
-            ->from('TallyBundle:SalesItem','si')
-            ->select('sum(si.subTotal) as total , sum(si.quantity) as totalItem')
-            ->where('si.sales = :sales')
-            ->setParameter('sales', $sales ->getId())
-            ->getQuery()->getSingleResult();
-        if($import == 'import'){
-            $sales->setPayment($total['total']);
-        }
-
+        $total = $this->createQueryBuilder('e')
+            ->join('e.stockItems','si')
+            ->select('sum(si.subTotal) as subTotal','sum(si.total) as total','sum(si.rebate) as rebate','sum(si.valueAddedTax) as valueAddedTax','sum(si.totalTaxIncidence) as totalTaxIncidence')
+            ->where('e.id = :entity')
+            ->setParameter('entity', $entity->getId())
+            ->getQuery()->getOneOrNullResult();
 
         if($total['total'] > 0){
-	        $subTotal = $total['total'];
-            $sales->setSubTotal($total['total']);
-            $sales->setTotal($total['total'] + $sales->getVat());
-            $sales->setDue($total['total']+ $sales->getVat());
-            $sales->setTotalItem($total['totalItem']);
-	        $sales->setDiscount($this->getUpdateDiscount($sales,$subTotal));
-	        $sales->setTotal(floor($subTotal - $sales->getDiscount()));
-	        $sales->setDue(floor($subTotal - $sales->getDiscount()));
+            $subTotal = $total['total'];
+            $entity->setSubTotal($subTotal);
+            $entity->setValueAddedTax($total['valueAddedTax']);
+            $entity->setRebate($total['rebate']);
+            $entity->setTotalTaxIncidence($total['totalTaxIncidence']);
+            $entity->setTotal($subTotal + $total['totalTaxIncidence'] - $total['rebate']);
+            $entity->setNetTotal($subTotal + $total['totalTaxIncidence'] - $total['rebate'] - $entity->getDiscount());
         }else{
-            $sales->setSubTotal(0);
-            $sales->setTotal(0);
-            $sales->setDue(0);
-            $sales->setTotalItem(0);
-            $sales->setDiscount(0);
-            $sales->setVat(0);
+            $entity->setSubTotal(0);
+            $entity->setTotal(0);
+            $entity->setNetTotal(0);
+            $entity->setValueAddedTax(0);
+            $entity->setTotalTaxIncidence(0);
+            $entity->setDiscount(0);
+            $entity->setDiscountCalculation(0);
         }
-	    if ($sales->getTallyConfig()->getVatEnable() == 1 && $sales->getTallyConfig()->getVatPercentage() > 0) {
-		    $totalAmount = $sales->getTotal();
-		    $vat = $this->getCulculationVat($sales,$totalAmount);
-		    $sales->setVat($vat);
-	    }
 
-        $em->persist($sales);
+        $em->persist($entity);
         $em->flush();
-
-        return $sales;
+        return $entity;
 
     }
+
+
 
 	public function getUpdateDiscount(Sales $invoice,$subTotal)
 	{
@@ -519,9 +511,9 @@ class SalesRepository extends EntityRepository
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
-        $qb->from('TallyBundle:Sales','s');
-        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
-        $qb->where('s.config = :inventory')
+        $qb->from('TallyBundle:Sales','s')
+        ->select('sum(s.subTotal) as subTotal','sum(s.netTotal) as total','sum(s.payment) as payment','sum(s.rebate) as rebate','sum(s.valueAddedTax) as totalVat','sum(s.totalTaxIncidence) as totalTaxIncidence','sum(s.discount) as totalDiscount','(COALESCE(SUM(s.netTotal),0) - COALESCE(SUM(s.payment),0)) AS totalDue','COUNT(s.id) as totalVoucher')
+            ->Where('s.config = :inventory')
             ->andWhere('s.salesMode =:mode')
             ->andWhere('s.paymentStatus IN (:pStatus)')
             ->andWhere('s.updated >= :today_startdatetime')

@@ -14,6 +14,10 @@ tally_item:
     resource: "@TallyBundle/Resources/config/routing/item.yml"
     prefix:   /product-item
 
+tally_item_sales:
+    resource: "@TallyBundle/Resources/config/routing/sales.yml"
+    prefix:   /item-sales
+
 tally_item_issue:
     resource: "@TallyBundle/Resources/config/routing/itemissue.yml"
     prefix:   /item-issue
@@ -32,7 +36,7 @@ tally_tariff_upload:
 
 purchase_item:
     resource: "@TallyBundle/Resources/config/routing/purchaseitem.yml"
-    prefix:    /opening-item
+    prefix:    /purchase-item
 
 
 tally_homepage:

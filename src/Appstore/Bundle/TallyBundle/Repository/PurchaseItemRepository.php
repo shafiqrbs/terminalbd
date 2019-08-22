@@ -4,6 +4,7 @@ namespace Appstore\Bundle\TallyBundle\Repository;
 use Appstore\Bundle\TallyBundle\Entity\Purchase;
 use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
 use Appstore\Bundle\TallyBundle\Entity\Item;
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Appstore\Bundle\TallyBundle\Entity\TaxTariff;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -26,7 +27,7 @@ class PurchaseItemRepository extends EntityRepository
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $business = isset($data['name'])? $data['name'] :'';
         $brand = isset($data['brandName'])? $data['brandName'] :'';
-        $mode = isset($data['mode'])? $data['mode'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
         $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
@@ -40,8 +41,8 @@ class PurchaseItemRepository extends EntityRepository
         if(!empty($brand)){
             $qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
         }
-        if(!empty($mode)){
-            $qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
+        if(!empty($process)){
+            $qb->andWhere($qb->expr()->like("e.process", "'%$process%'"  ));
         }
         if(!empty($vendor)){
             $qb->join('e.vendor','v');
@@ -66,10 +67,11 @@ class PurchaseItemRepository extends EntityRepository
         }
     }
 
-    public function findWithSearch($config, $data)
+    public function findWithSearch($config, $mode , $data)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.config = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.mode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
@@ -111,6 +113,13 @@ class PurchaseItemRepository extends EntityRepository
         $value = 0;
         $value = (($subTotal * $tariff)/100);
         return $value;
+    }
+
+    private function salesPriceCalculation(TallyConfig $config , $price)
+    {
+        $percent = (($price * $config->getProfitPercent())/100);
+        $salesPrice = ($price + $percent);
+        return $salesPrice;
     }
 
 
@@ -170,11 +179,14 @@ class PurchaseItemRepository extends EntityRepository
         $entity->setItem($product);
         $entity->setName($data['name']);
         $entity->setPrice($data['price']);
+        $entity->setPurchase($data['price']);
         $entity->setQuantity($data['quantity']);
         $entity->setSubTotal($subTotal);
         $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
         $purchasePrice = ($entity->getTotal() / $entity->getQuantity());
         $entity->setPurchasePrice($purchasePrice);
+        $salesPrice = $this->salesPriceCalculation($invoice->getConfig(),$purchasePrice);
+        $entity->setSalesPrice($salesPrice);
         $em->persist($entity);
         $em->flush();
 
@@ -192,10 +204,11 @@ class PurchaseItemRepository extends EntityRepository
             $total = ($entity->getSubTotal() + $entity->getTotalTaxIncidence() - $entity->getRebate());
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}</td>";
+            $data .= "<td>{$entity->getBarcode()}</td>";
             $data .= "<td>{$entity->getItem()->getName()}</td>";
             $data .= "<td>{$entity->getName()}</td>";
-            $data .= "<td>{$entity->getPrice()}</td>";
             $data .= "<td>{$entity->getQuantity()}</td>";
+            $data .= "<td>{$entity->getPrice()}</td>";
             $data .= "<td>{$entity->getSubTotal()}</td>";
             $data .= "<td>{$entity->getValueAddedTaxPercent()}</td>";
             $data .= "<td>{$entity->getValueAddedTax()}</td>";
@@ -309,12 +322,11 @@ class PurchaseItemRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('pi');
-        $qb->join('pi.item', 'item');
-        $qb->select('pi');
-        $qb->where("pi.barcode = :barcode" );;
-        $qb->setParameter('barcode', $barcode);
-        $qb->andWhere("pi.config = :config");
-        $qb->setParameter('config', $config);
+        $qb->join('pi.stockItems', 'stock');
+        $qb->select('pi.id');
+        $qb->addSelect('SUM(stock.quantity) as remainingQuantity');
+        $qb->where("pi.barcode = :barcode" )->setParameter('barcode', $barcode);
+        $qb->andWhere("pi.config = :config")->setParameter('config', $config);
         return $qb->getQuery()->getSingleResult();
 
     }
@@ -330,11 +342,13 @@ class PurchaseItemRepository extends EntityRepository
         $qb->where($qb->expr()->like("pi.barcode", "'$item%'"  ));
         $qb->andWhere("pi.config = :config");
         $qb->setParameter('config', $config);
-        $qb->orderBy('p.updated', 'ASC');
+        $qb->orderBy('pi.updated', 'ASC');
         $qb->setMaxResults( '10' );
         return $qb->getQuery()->getResult();
 
     }
+
+
 
 
 
