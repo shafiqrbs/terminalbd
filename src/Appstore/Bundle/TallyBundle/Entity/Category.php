@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\TallyBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
+use Appstore\Bundle\TallyBundle\Entity\CategoryMeta;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;

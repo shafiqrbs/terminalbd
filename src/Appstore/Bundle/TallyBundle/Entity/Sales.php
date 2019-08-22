@@ -244,9 +244,16 @@ class Sales
 	/**
      * @var float
      *
-     * @ORM\Column(name="vat", type="float", nullable=true)
+     * @ORM\Column(name="valueAddedTax", type="float", nullable=true)
      */
-    private $vat = 0;
+    private $valueAddedTax = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rebate", type="float", nullable=true)
+     */
+    private $rebate = 0;
 
     /**
      * @var float
@@ -258,9 +265,9 @@ class Sales
     /**
      * @var float
      *
-     * @ORM\Column(name="totaTaxIncidence", type="float", nullable = true)
+     * @ORM\Column(name="totalTaxIncidence", type="float", nullable = true)
      */
-    private $totaTaxIncidence = 0;
+    private $totalTaxIncidence = 0;
 
 
 
@@ -271,6 +278,15 @@ class Sales
      * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total = 0;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="netTotal", type="float", nullable=true)
+     */
+    private $netTotal = 0;
+
 
 
     /**
@@ -451,30 +467,6 @@ class Sales
     }
 
 
-    /**
-     * @return salesItem
-     */
-    public function getSalesItems()
-    {
-        return $this->salesItems;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
     /**
      * @return string
@@ -1075,21 +1067,6 @@ class Sales
         $this->supplementaryDuty = $supplementaryDuty;
     }
 
-    /**
-     * @return float
-     */
-    public function getTotaTaxIncidence()
-    {
-        return $this->totaTaxIncidence;
-    }
-
-    /**
-     * @param float $totaTaxIncidence
-     */
-    public function setTotaTaxIncidence($totaTaxIncidence)
-    {
-        $this->totaTaxIncidence = $totaTaxIncidence;
-    }
 
     /**
      * @return PurchaseOrder
@@ -1129,6 +1106,70 @@ class Sales
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRebate()
+    {
+        return $this->rebate;
+    }
+
+    /**
+     * @param float $rebate
+     */
+    public function setRebate($rebate)
+    {
+        $this->rebate = $rebate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getNetTotal()
+    {
+        return $this->netTotal;
+    }
+
+    /**
+     * @param float $netTotal
+     */
+    public function setNetTotal($netTotal)
+    {
+        $this->netTotal = $netTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValueAddedTax()
+    {
+        return $this->valueAddedTax;
+    }
+
+    /**
+     * @param float $valueAddedTax
+     */
+    public function setValueAddedTax($valueAddedTax)
+    {
+        $this->valueAddedTax = $valueAddedTax;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalTaxIncidence()
+    {
+        return $this->totalTaxIncidence;
+    }
+
+    /**
+     * @param float $totalTaxIncidence
+     */
+    public function setTotalTaxIncidence($totalTaxIncidence)
+    {
+        $this->totalTaxIncidence = $totalTaxIncidence;
     }
 
 }

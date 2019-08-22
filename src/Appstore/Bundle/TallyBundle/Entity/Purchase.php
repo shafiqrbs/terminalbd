@@ -47,6 +47,12 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $purchaseItems;
 
 
+          /**
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="purchase"  )
+         **/
+        private  $stockItems;
+
+
          /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="purchase"  )
          **/
@@ -847,6 +853,14 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setVendor($vendor)
         {
             $this->vendor = $vendor;
+        }
+
+        /**
+         * @return StockItem
+         */
+        public function getStockItems()
+        {
+            return $this->stockItems;
         }
 
     }

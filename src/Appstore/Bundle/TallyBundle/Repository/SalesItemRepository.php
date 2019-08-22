@@ -1,13 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\TallyBundle\Repository;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\TallyBundle\Entity\Sales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+
 
 /**
  * SalesItemRepository
@@ -225,7 +222,7 @@ class SalesItemRepository extends EntityRepository
     }
 
 
-    public function insertSalesItems($sales,$purchaseItem,$customPrice = 0 )
+    public function insertSalesItems(Sales $sales,$purchaseItem,$customPrice = 0 )
     {
         $em = $this->_em;
         $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));

@@ -34,7 +34,7 @@ class PurchaseItemListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args,PurchaseItem $entity)
+    public function getLastCode(LifecycleEventArgs $args , PurchaseItem $entity)
     {
 
         $entityManager = $args->getEntityManager();
@@ -42,14 +42,13 @@ class PurchaseItemListener
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.globalOption = :option')
-            ->setParameter('option', $entity->getGlobalOption());
+            ->where('s.config = :config')->setParameter('config', $entity->getConfig()->getId())
+            ->andWhere('s.item = :item')->setParameter('item', $entity->getItem()->getId());
             $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {
             return 0;
         }
-
         return $lastCode;
     }
 

@@ -118,7 +118,6 @@ class IssueController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $todaySales = $em->getRepository('TallyBundle:Sales')->todaySales($this->getUser(),$mode = 'general-sales');
         $todaySalesOverview = $em->getRepository('TallyBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
         if(!in_array($entity->getProcess(),array('In-progress','Created'))) {
             return $this->redirect($this->generateUrl('tally_itemissue_show', array('id' => $entity->getId())));
@@ -135,7 +134,6 @@ class IssueController extends Controller
         }
         return $this->render('TallyBundle:Issue:'.$theme.'.html.twig', array(
             'entity' => $entity,
-            'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
             'form' => $editForm->createView(),
         ));
@@ -212,7 +210,7 @@ class IssueController extends Controller
         }
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
-        exit;
+
     }
 
     /**
@@ -264,7 +262,7 @@ class IssueController extends Controller
         $em->flush();
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
-        exit;
+
     }
 
 
@@ -278,7 +276,6 @@ class IssueController extends Controller
         $salesItemId = $request->request->get('salesItemId');
         $quantity = $request->request->get('quantity');
         $salesPrice = $request->request->get('salesPrice');
-        $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('TallyBundle:SalesItem')->find($salesItemId);
 

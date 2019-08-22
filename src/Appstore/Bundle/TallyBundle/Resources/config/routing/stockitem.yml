@@ -1,24 +1,49 @@
-assets_stockitem:
+tally_stockitem:
     path:     /
     defaults: { _controller: "TallyBundle:StockItem:index" }
     options:
         expose: true
 
-assets_stockitem_show:
+tally_stockitem_show:
     path:     /{item}/show
     defaults: { _controller: "TallyBundle:StockItem:show" }
 
-assets_barcode_branch_stock:
+tally_barcode_branch_stock:
     path:     /barcode-wise-branch-stock
     defaults: { _controller: "TallyBundle:StockItem:barcodeBranchStock" }
 
-assets_barcode_stock:
+tally_barcode_stock:
     path:     /barcode-wise-stock
     defaults: { _controller: "TallyBundle:StockItem:barcodeStock" }
 
-assets_barcode_wise_branch_stock:
+tally_barcode_wise_branch_stock:
     path:     /{barcode}/single-barcode-wise-branch-stock
     defaults: { _controller: "TallyBundle:StockItem:singleBarcodeBranchStock" }
     methods:  GET
+    options:
+            expose: true
+
+tally_stcok_barcode_autocomplete_search:
+    path:     /barcode-item-search
+    defaults: { _controller: "TallyBundle:StockItem:searchAutoComplete" }
+    options:
+            expose: true
+
+tally_stcok_item_autocomplete_search:
+    path:     /item-search
+    defaults: { _controller: "TallyBundle:StockItem:itemAutoSearch" }
+    options:
+            expose: true
+
+tally_sales_invoice_name:
+    path:      /{invoice}/sales-invoice
+    defaults: { _controller: "TallyBundle:Sales:searchSalesInvoiceName" }
+    options:
+            expose: true
+
+tally_sales_item_purchase:
+    path:     /item-purchase-details
+    defaults: { _controller: "TallyBundle:StockItem:itemPurchaseDetails" }
+    methods:  POST
     options:
             expose: true

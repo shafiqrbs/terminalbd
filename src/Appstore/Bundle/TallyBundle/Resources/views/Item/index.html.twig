@@ -135,7 +135,7 @@
                                                 <a href="{{ path('tallyitem_edit_web', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-retweet"></i></a>
                                             {% endif %}
                                             <a  href="{{ path('tallyitem_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-pencil"></i></a>
-                                            {% if entity.purchaseQuantity > 0 %}
+                                            {% if entity.purchaseQuantity == 0 and entity.openingQuantity == 0 and entity.remainingQuantity == 0 %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif  %}
                                         </td>

@@ -431,12 +431,22 @@ class GlobalOption
      **/
 
     private $megaMenu;
+
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255  , nullable=true )
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="organizationName", type="string", length=255  , nullable=true )
+     */
+    private $organizationName;
+
+
     /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(length=255, unique=true)
@@ -2061,6 +2071,22 @@ class GlobalOption
     public function getTallyConfig()
     {
         return $this->tallyConfig;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganizationName()
+    {
+        return $this->organizationName;
+    }
+
+    /**
+     * @param string $organizationName
+     */
+    public function setOrganizationName($organizationName)
+    {
+        $this->organizationName = $organizationName;
     }
 
 

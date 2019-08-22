@@ -511,12 +511,12 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
     public function insertTallyAccountPurchase(\Appstore\Bundle\TallyBundle\Entity\Purchase $entity)
     {
 
-        $global = $entity->getGlobalOption();
+        $global = $entity->getConfig()->getGlobalOption();
         $em = $this->_em;
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($global);
         $accountPurchase->setTallyPurchase($entity);
-        $accountPurchase->setAccountVendor($entity->getAccountVendor());
+        $accountPurchase->setAccountVendor($entity->getVendor());
         $accountPurchase->setAccountBank( $entity->getAccountBank() );
         $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
         if (!empty( $entity->getTransactionMethod())) {
@@ -524,7 +524,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         }
         $accountPurchase->setPurchaseAmount($entity->getNetTotal());
         $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setCompanyName($entity->getAccountVendor()->getCompanyName());
+        $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
         $accountPurchase->setGrn($entity->getGrn());
         $accountPurchase->setProcessHead('tally');
         $accountPurchase->setProcessType('Purchase');

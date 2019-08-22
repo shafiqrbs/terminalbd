@@ -113,94 +113,37 @@ var InventorySales = function(sales) {
     $(document).on('change', '#barcode', function() {
 
         var barcode = $('#barcode').val();
-        if(barcode == ''){
+        if(barcode === ''){
             $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
             return false;
         }
         $.ajax({
-            url: Routing.generate('tally_sales_item_search'),
+            url: Routing.generate('tally_sales_barcode_item_add'),
             type: 'POST',
             data:'barcode='+barcode+'&sales='+sales,
             success: function(response){
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
                 $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
 
-        })
-    });
-
-    $(document).on('change', '#barcodeNo', function() {
-
-        var barcode = $('#barcodeNo').val();
-        if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('tally_sales_online_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
-            },
-        })
-    });
-
-    $(document).on('click', '.addSales', function() {
-
-        var barcode = $(this).attr('id');
-        if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('tally_sales_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
-            },
         })
     });
 
     $(document).on('change', '#item', function() {
 
         var item = $('#item').val();
-        if(item == ''){
+        if(item === ''){
             $('#stockItemDetails').hide();
             return false;
         }
@@ -216,70 +159,179 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on("click", ".customPrice", function() {
+    $("#barcodeNo").select2({
 
-        var rel = $(this).attr('rel');
-        var estimatePrice = parseInt($('#estimatePrice-'+rel).val());
-        var quantity = parseInt($('#quantity-'+rel).val());
-        if($(this).is(':checked'))
-        {
-            $("#salesPrice-"+rel).attr("readonly", false).focus().val(estimatePrice);
+        placeholder: "Enter specific barcode",
+        allowClear: true,
+        ajax: {
 
-        }else{
+            url: Routing.generate('tally_stcok_barcode_autocomplete_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.text }, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        minimumInputLength:1
+    });
 
-            var customPrice = 0;
-            $("#salesPrice-"+rel).attr("readonly", true).focus().val(estimatePrice);
-            var subTotal  = (quantity * estimatePrice);
-            $("#subTotalShow-"+rel).html(subTotal);
-            $.ajax({
-                url: Routing.generate('tally_sales_item_update'),
-                type: 'POST',
-                data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+estimatePrice+'&customPrice='+customPrice,
-                success: function(response) {
-                    obj = JSON.parse(response);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#due').val(obj['due']);
-                    $('.dueAmount').html(obj['due']);
-                    $('.subTotal').html(obj['salesSubTotal']);
-                    $('#vat').html(obj['salesVat']);
-                    $('#discount').html(obj['discount']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#wrongBarcode').html(obj['msg']);
-                },
+    $(document).on('change', '#barcodeNo', function() {
 
-            })
+        var barcode = $('#barcodeNo').val();
+        alert(barcode);
+        if(barcode === ''){
+            $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
+            return false;
         }
+        $.ajax({
+            url: Routing.generate('tally_sales_barcode_item_add'),
+            type: 'POST',
+            data:'barcode='+barcode+'&sales='+sales,
+            success: function(response) {
+                $('#barcode').focus().val('');
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+                FormComponents.init();
+            },
+        })
+    });
+
+    $(".select2Item").select2({
+
+        placeholder: "Search item name",
+        ajax: {
+            url: Routing.generate('tally_stcok_item_autocomplete_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){
+
+            //return item.name +' => '+ (item.remainingQuantity)
+            return item.name
+
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name}, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        allowClear: true,
+        minimumInputLength:1
+    });
+
+    $(document).on('change', '#item', function() {
+
+        var item = $('#item').val();
+        if(item === ''){
+            $('#stockItemDetails').hide();
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('tally_sales_item_purchase'),
+            type: 'POST',
+            data:'item='+ item +'&sales=' + sales,
+            success: function(response) {
+                $('#stockItemDetails').show();
+                $('#itemDetails').html(response);
+                $(".editable").editable();
+            },
+        })
+    });
+
+    $(document).on('click', '.addSales', function() {
+
+        var purchaseItemId = $(this).attr('id');
+        var quantity = parseFloat($('#salesQuantity-'+purchaseItemId).val());
+        var price = parseFloat($('#salesPrice-'+purchaseItemId).val());
+        console.log(purchaseItemId);
+        if(purchaseItemId === ''){
+            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('tally_sales_sales_item_insert'),
+            type: 'POST',
+            data:'salesId='+ sales +'&purchaseItemId='+ purchaseItemId +'&quantity='+ quantity +'&salesPrice='+ price,
+            success: function(response) {
+                $('#barcode').focus().val('');
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+            },
+        })
     });
 
     $(document).on('change', '.quantity , .salesPrice', function() {
 
         var rel = $(this).attr('rel');
 
-        var quantity = parseFloat($('#quantity-'+rel).val());
+        var quantity = parseFloat($('#salesQuantity-'+rel).val());
         var price = parseFloat($('#salesPrice-'+rel).val());
-        if($('#customPrice-'+rel).is(':checked')){
-            var customPrice = 1;
-        }else{
-            var customPrice = 0;
-        }
         var subTotal  = (quantity * price);
-        $("#subTotalShow-"+rel).html(subTotal);
+        $("#itemSubTotal-"+rel).html(subTotal);
 
         $.ajax({
-            url: Routing.generate('tally_sales_item_update'),
+            url: Routing.generate('tally_sales_sales_item_update'),
             type: 'POST',
-            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
+            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price,
             success: function(response) {
                 obj = JSON.parse(response);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
                 $('#wrongBarcode').html(obj['msg']);
             },
 
@@ -315,14 +367,14 @@ var InventorySales = function(sales) {
                         obj = JSON.parse(response);
                         if ('success' == obj['success']) {
                             $('#remove-' + id).hide();
-                            $('#paymentSubTotal').val(obj['salesTotal']);
-                            $('.salesTotal').html(obj['salesTotal']);
-                            $('#due').val(obj['due']);
-                            $('.dueAmount').html(obj['due']);
-                            $('.subTotal').html(obj['salesSubTotal']);
-                            $('#vat').html(obj['salesVat']);
-                            $('#discount').html(obj['discount']);
-                            $('#paymentTotal').val(obj['salesTotal']);
+                            $('.subTotal').html(obj['subTotal']);
+                            $('.total').html(obj['total']);
+                            $('.netTotal').html(obj['netTotal']);
+                            $('.due').html(obj['due']);
+                            $('.vat').html(obj['tti']);
+                            $('.discount').html(obj['discount']);
+                            $('.discountCalculation').html(obj['discountCalculation']);
+                            $('.paymentTotal').html(obj['netTotal']);
                             $('#wrongBarcode').html(obj['msg']);
                         }
 
@@ -359,14 +411,14 @@ var InventorySales = function(sales) {
             data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
             success: function(response) {
                 obj = JSON.parse(response);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
                 $('#wrongBarcode').html(obj['msg']);
             }
 
@@ -391,14 +443,14 @@ var InventorySales = function(sales) {
             data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
             success: function(response) {
                 obj = JSON.parse(response);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.vat').html(obj['tti']);
+                $('.discount').html(obj['discount']);
+                $('.discountCalculation').html(obj['discountCalculation']);
+                $('.paymentTotal').html(obj['netTotal']);
                 $('#wrongBarcode').html(obj['msg']);
             }
 
@@ -460,48 +512,13 @@ var InventorySales = function(sales) {
     });
 
 
-    $(".select2Item").select2({
 
-        placeholder: "Search item, color, size & brand name",
-        ajax: {
-            url: Routing.generate('item_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){
-
-            //return item.name +' => '+ (item.remainingQuantity)
-            return item.name
-
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.name}, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
 
     $(".select2Location").select2({
 
         placeholder: "Search location name",
         ajax: {
-            url: Routing.generate('tally_location_search'),
+            url: Routing.generate('domain_location_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
@@ -532,38 +549,6 @@ var InventorySales = function(sales) {
         minimumInputLength:1
     });
 
-    $("#barcodeNo").select2({
-
-        placeholder: "Enter specific barcode",
-        allowClear: true,
-        ajax: {
-
-            url: Routing.generate('tally_purchaseitem_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text }, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        minimumInputLength:1
-    });
 
 
 }
