@@ -156,6 +156,7 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_ASSETS')){
                     $menu = $this->AssetsMenu($menu);
+                    $menu = $this->TallyMenu($menu);
                 }
             }
 
@@ -678,18 +679,19 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
         $menu['Fixed Assets']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'))->setAttribute('icon', 'icon-th-list');
         $menu['Fixed Assets']->addChild('Asset Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Item', array('route' => 'assets_item'))
-            ->setAttribute('icon', 'icon-hdd');
-        $menu['Fixed Assets']['Asset Stock']->addChild('Barcode wise Stock', array('route' => 'inventory_barcode_branch_stock'));
-        $menu['Fixed Assets']['Asset Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'));
-        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Item Details', array('route' => 'assets_stockitem'));
+        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Item', array('route' => 'assets_stockitem'));
+        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Details', array('route' => 'assets_stockitem_details'));
+        $menu['Fixed Assets']['Asset Stock']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
+        $menu['Fixed Assets']->addChild('Asset Voucher')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Fixed Assets']['Asset Voucher']->addChild('Voucher', array('route' => 'assets_purchase'));
+        $menu['Fixed Assets']['Asset Voucher']->addChild('New Voucher', array('route' => 'assets_purchase_new'));
         $menu['Fixed Assets']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Master Data']->addChild('Depreciation Model', array('route' => 'assets_model'));
         $menu['Fixed Assets']['Master Data']->addChild('Depreciation Setup', array('route' => 'assets_depreciation'));
         $menu['Fixed Assets']['Master Data']->addChild('Setting Data', array('route' => 'assets_particular'));
         $menu['Fixed Assets']->addChild('Category & Item')->setAttribute('icon', 'icon icon-cog')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Category & Item']->addChild('Category', array('route' => 'assetscategory'));
-        $menu['Fixed Assets']['Category & Item']->addChild('Product', array('route' => 'assets_item'));
+        $menu['Fixed Assets']['Category & Item']->addChild('Product', array('route' => 'assetsitem'));
         $menu['Fixed Assets']['Category & Item']->addChild('Brand', array('route' => 'assetsitembrand'));
         $menu['Fixed Assets']['Category & Item']->addChild('Vendor', array('route' => 'account_vendor'));
        return $menu;
@@ -707,29 +709,31 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-archive')
             ->setAttribute('dropdown', true);
 
-        $menu['Tally Management']->addChild('Manage Asset')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Tally Management']->addChild('Manage sales')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Tally Management']['Manage sales']->addChild("Sales", array('route' => 'tally_itemissue'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']['Manage sales']->addChild("Add Sales", array('route' => 'tally_itemissue_new'))->setAttribute('icon', 'icon-th-list');
 
-        $menu['Tally Management']['Asset Distribution']->addChild("Add Distribution", array('route' => 'assets_distribution'))->setAttribute('icon', 'icon-th-list');
-
-        $menu['Tally Management']->addChild('Asset Ledger')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Asset Ledger']->addChild("All Ledger", array('route' => 'assets_ledger'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Asset Ledger']->addChild("Product", array('route' => 'assets_ledger_product'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Asset Ledger']->addChild("Item", array('route' => 'assets_ledger_item'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Asset Ledger']->addChild("Category", array('route' => 'assets_ledger_category'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Asset Ledger']->addChild("Branch", array('route' => 'assets_ledger_branch'))->setAttribute('icon', 'icon-th-list');
         $menu['Tally Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Purchase']->addChild("Local", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Add Local", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Foreign", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Add Foreign", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Service", array('route' => 'assets_disposal_new'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']->addChild('Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Stock']->addChild('Inventory', array('route' => 'assets_item'));
-        $menu['Tally Management']['Stock']->addChild('Assets', array('route' => 'assets_item'));
+        $menu['Tally Management']['Purchase']->addChild("Local", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']['Purchase']->addChild("Add Local", array('route' => 'tally_purchase_new'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']['Purchase']->addChild("Foreign", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']['Purchase']->addChild("Add Foreign", array('route' => 'tally_purchase_new'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']['Purchase']->addChild("Service", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
+        $menu['Tally Management']->addChild('Reports')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Tally Management']['Reports']->addChild("Mushok 4.3", array('route' => 'tallyreport_mushok_4_3'));
+        $menu['Tally Management']['Reports']->addChild("Mushok 6.1", array('route' => 'tallyreport_mushok_6_1'));
+        $menu['Tally Management']['Reports']->addChild("Mushok 6.2", array('route' => 'tallyreport_mushok_6_2'));
+        $menu['Tally Management']['Reports']->addChild("Mushok 6.2.1", array('route' => 'tallyreport_mushok_6_2_1'));
+        $menu['Tally Management']['Reports']->addChild("Mushok 6.3", array('route' => 'tallyreport_mushok_6_3'));
+
+        $menu['Tally Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Tally Management']['Manage Stock']->addChild('Stock', array('route' => 'tallyitem'));
+        $menu['Tally Management']['Manage Stock']->addChild('Add Stock', array('route' => 'tallyitem_new'));
+        $menu['Tally Management']['Manage Stock']->addChild('Stock Details', array('route' => 'tallyitem'));
         $menu['Tally Management']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Master Data']->addChild('Category', array('route' => 'assetscategory'));
-        $menu['Tally Management']['Master Data']->addChild('Product', array('route' => 'assets_item'));
-        $menu['Tally Management']['Master Data']->addChild('Brand', array('route' => 'assetsitembrand'));
+        $menu['Tally Management']['Master Data']->addChild('Category', array('route' => 'tallycategory'));
+        $menu['Tally Management']['Master Data']->addChild('VAT Product', array('route' => 'taxtariff'));
+        $menu['Tally Management']['Master Data']->addChild('Brand', array('route' => 'tallybrand'));
         $menu['Tally Management']['Master Data']->addChild('Vendor', array('route' => 'account_vendor'));
         return $menu;
 

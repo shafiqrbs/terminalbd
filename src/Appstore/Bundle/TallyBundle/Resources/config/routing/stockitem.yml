@@ -23,27 +23,3 @@ tally_barcode_wise_branch_stock:
     options:
             expose: true
 
-tally_stcok_barcode_autocomplete_search:
-    path:     /barcode-item-search
-    defaults: { _controller: "TallyBundle:StockItem:searchAutoComplete" }
-    options:
-            expose: true
-
-tally_stcok_item_autocomplete_search:
-    path:     /item-search
-    defaults: { _controller: "TallyBundle:StockItem:itemAutoSearch" }
-    options:
-            expose: true
-
-tally_sales_invoice_name:
-    path:      /{invoice}/sales-invoice
-    defaults: { _controller: "TallyBundle:Sales:searchSalesInvoiceName" }
-    options:
-            expose: true
-
-tally_sales_item_purchase:
-    path:     /item-purchase-details
-    defaults: { _controller: "TallyBundle:StockItem:itemPurchaseDetails" }
-    methods:  POST
-    options:
-            expose: true

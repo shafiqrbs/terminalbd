@@ -31,6 +31,12 @@ class PurchaseReturn
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="purchaseReturn" , cascade={"detach","merge"} )
+     **/
+    private  $purchaseStockReturns;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseReturns" , cascade={"detach","merge"} )
      **/
     private  $purchase;

@@ -159,7 +159,6 @@ class StockItemRepository extends EntityRepository
 
     }
 
-
     public function processStockQuantity(TallyConfig $config , $id = 0 , $fieldName = ''){
 
         $em = $this->_em;
@@ -320,6 +319,27 @@ class StockItemRepository extends EntityRepository
         return $value;
     }
 
+    public function getSalesItemUpdate(Sales $entity){
+
+        $em = $this->_em;
+
+        /** @var $item StockItem  */
+
+        if($entity->getStockItems()){
+
+            /* @var $item StockItem */
+
+            foreach($entity->getStockItems() as $item ){
+                $item->setProcess('Approved');
+                $item->setAssetsQuantity($item->getSalesQuantity());
+                $item->setSalesQuantity(0);
+                $em->persist($entity);
+                $em->flush();
+            }
+        }
+    }
+
+
     public function getPurchaseInsertQnt(Purchase $entity){
 
         $em = $this->_em;
@@ -327,7 +347,6 @@ class StockItemRepository extends EntityRepository
         /** @var $item PurchaseItem  */
 
         if($entity->getPurchaseItems()){
-
             foreach($entity->getPurchaseItems() as $item ){
                 $this->processStockQuantity($item->getConfig(),$item,'purchase');
             }
@@ -350,19 +369,19 @@ class StockItemRepository extends EntityRepository
 
     }
 
-    public function stockItem($inventory,$data)
+    public function modeWiseStockItem($inventory,$mode ='purchase',$data)
     {
 
         $qb = $this->createQueryBuilder('stock');
         $qb->join('stock.item', 'item');
-        $qb->leftJoin('item.masterItem', 'm');
-        $qb->leftJoin('m.productUnit', 'u');
-        $qb->select("item.name AS name");
-        $qb->addSelect("item.id AS itemId");
-        $qb->addSelect("item.sku AS sku");
-        $qb->addSelect("u.name AS unit");
-        $qb->where("stock.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
+        $qb->join('stock.category', 'category');
+        $qb->leftJoin('item.productUnit', 'u');
+        $qb->select("item.id AS itemId","item.name AS name","item.sku AS sku","u.name AS unit");
+        $qb->addSelect("SUM(stock.assetsQuantity) AS assetsQuantity","SUM(stock.salesQuantity) AS salesQuantity");
+        $qb->addSelect('category.name');
+        $qb->addSelect('u.name as unit');
+        $qb->where("stock.config = :inventory")->setParameter('inventory', $inventory);
+        $qb->andWhere("stock.mode = :mode")->setParameter('mode', $mode);
         $this->handleWithSearch($qb,$data);
         $qb->orderBy('item.name','ASC');
         $qb->groupBy('item.id');
@@ -1282,7 +1301,6 @@ class StockItemRepository extends EntityRepository
 
     public function checkSalesQuantity($purchaseItem)
     {
-
         $qb = $this->createQueryBuilder('stock');
         $qb->join('stock.sales','sales');
         $qb->addSelect('SUM(stock.salesQuantity) as quantity ');
@@ -1296,6 +1314,65 @@ class StockItemRepository extends EntityRepository
         }else{
             return 0;
         }
+    }
+
+    public function updateSalesItemPrice(StockItem $entity)
+    {
+        $em = $this->_em;
+        $subTotal = ($entity->getSalesPrice() * $entity->getSalesQuantity());
+        $entity->setSubTotal($subTotal);
+        if($entity->getItem()->getVatProduct()){
+
+            /* @var $vat TaxTariff */
+            $vat = $entity->getItem()->getVatProduct();
+            $subTotal = $entity->getSubTotal();
+            $entity->setHsCode($entity->getItem()->getVatProduct());
+            if($vat->getSupplementaryDuty() > 0){
+                $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
+                $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
+                $entity->setSupplementaryDuty($amount);
+            }
+
+            if($vat->getValueAddedTax() > 0){
+                $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
+                $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
+                $entity->setValueAddedTax($amount);
+            }
+
+            if($vat->getAdvanceIncomeTax() > 0){
+                $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
+                $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
+                $entity->setAdvanceIncomeTax($cd);
+            }
+
+            if($vat->getRecurringDeposit() > 0){
+                $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
+                $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
+                $entity->setRecurringDeposit($cd);
+            }
+
+            if($vat->getAdvanceTradeVat() > 0){
+                $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
+                $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
+                $entity->setAdvanceTradeVat($cd);
+            }
+
+            $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
+            $entity->setTotalTaxIncidence($TTI);
+        }
+        $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
+        if($entity->getPurchaseItem()->getAssuranceToCustomer()){
+            $entity->setAssuranceType($entity->getPurchaseItem()->getAssuranceType());
+            $entity->setAssuranceFromVendor($entity->getPurchaseItem()->getAssuranceFromVendor()->getName());
+            $entity->setAssuranceToCustomer($entity->getPurchaseItem()->getAssuranceToCustomer()->getName());
+            if($entity->getPurchaseItem()->getAssuranceToCustomer() and $entity->getPurchaseItem()->getAssuranceToCustomer()->getDays() > 0){
+                $effected = $entity->getUpdated();
+                $datetime = $effected->add(new \DateInterval("P{$entity->getPurchaseItem()->getAssuranceToCustomer()->getDays()}D"));
+                $entity->setExpiredDate($datetime);
+            }
+        }
+        $em->persist($entity);
+        $em->flush();
     }
 
     public function insertSalesItems(Sales $sales, $purchaseItem)
@@ -1314,124 +1391,29 @@ class StockItemRepository extends EntityRepository
             $entity->setQuantity('-'.$qnt);
             $entity->setSalesQuantity($qnt);
             $entity->setSubTotal($item->getSalesPrice() * $entity->getSalesQuantity());
-            if($item->getItem()->getVatProduct()){
-
-                $subTotal = $entity->getSubTotal();
-
-                /* @var $vat TaxTariff */
-                $vat = $item->getItem()->getVatProduct();
-
-                if($vat->getCustomsDuty() > 0){
-                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
-                    $entity->setCustomsDuty($amount);
-                }
-                if($vat->getSupplementaryDuty() > 0){
-                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
-                    $entity->setSupplementaryDuty($amount);
-                }
-
-                if($vat->getValueAddedTax() > 0){
-                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
-                    $entity->setValueAddedTax($amount);
-                }
-
-                if($vat->getAdvanceIncomeTax() > 0){
-                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
-                    $entity->setAdvanceIncomeTax($cd);
-                }
-
-                if($vat->getRecurringDeposit() > 0){
-                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
-                    $entity->setRecurringDeposit($cd);
-                }
-
-                if($vat->getAdvanceTradeVat() > 0){
-                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
-                    $entity->setAdvanceTradeVat($cd);
-                }
-
-                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
-                $entity->setTotalTaxIncidence($TTI);
-
-            }
-            $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
-
+            $this->updateSalesItemPrice($entity);
         }else{
-
             $entity = new StockItem();
             $entity->setQuantity('-1');
             $entity->setSalesQuantity(1);
+            $entity->setPurchaseItem($item);
             $entity->setSales($sales);
             $entity->setItem($item->getItem());
             $entity->setSalesPrice($item->getSalesPrice());
             $entity->setPrice($item->getSalesPrice());
             $entity->setSubTotal($item->getSalesPrice());
-            if($item->getItem()->getVatProduct()){
-
-                /* @var $vat TaxTariff */
-                $vat = $item->getItem()->getVatProduct();
-
-                if($vat->getCustomsDuty() > 0){
-                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
-                    $entity->setCustomsDuty($amount);
-                }
-                if($vat->getSupplementaryDuty() > 0){
-                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
-                    $entity->setSupplementaryDuty($amount);
-                }
-
-                if($vat->getValueAddedTax() > 0){
-                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
-                    $entity->setValueAddedTax($amount);
-                }
-
-                if($vat->getAdvanceIncomeTax() > 0){
-                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
-                    $entity->setAdvanceIncomeTax($cd);
-                }
-
-                if($vat->getRecurringDeposit() > 0){
-                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
-                    $entity->setRecurringDeposit($cd);
-                }
-
-                if($vat->getAdvanceTradeVat() > 0){
-                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
-                    $entity->setAdvanceTradeVat($cd);
-                }
-
-                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
-                $entity->setTotalTaxIncidence($TTI);
-
-            }
-            if($item->getItem()->getVatProduct()){
-                $entity->setHsCode($item->getItem()->getVatProduct());
-            }
+            $this->updateSalesItemPrice($entity);
             if($item->getItem()->getBrand()){
                 $entity->setBrand($item->getItem()->getBrand());
             }
             if($item->getItem()->getCategory()){
                 $entity->setCategory($item->getItem()->getCategory());
             }
-            $entity->setPurchaseItem($item);
             if($item->getPurchase()) {
                 $entity->setPurchase($item->getPurchase());
                 $entity->setVendor($item->getPurchase()->getVendor());
             }
             $entity->setPurchasePrice($item->getPurchasePrice());
-            $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
         }
         $entity->setConfig($sales->getConfig());
         $entity->setMode('sales');
@@ -1457,7 +1439,7 @@ class StockItemRepository extends EntityRepository
 
                 $salesSerials = explode(",",$entity->getSerialNo());
                 $serials = explode(",",$entity->getPurchaseItem()->getExternalSerial());
-                $option .="<select class='serial-no' id='serialNo-{$entity->getId()}' name='serialNo' multiple='multiple'>";
+                $option .="<select class='serial-no m-wrap inputs span12' id='serialNo-{$entity->getId()}' name='serialNo[]' multiple='multiple'>";
                 $option .="<option>--Serial no--</option>";
                 foreach ($serials as $serial){
                     $selected = in_array($serial,$salesSerials) ? 'selected=selected':'';
@@ -1472,21 +1454,26 @@ class StockItemRepository extends EntityRepository
                 $unit = '';
             }
 
+            if($entity->getPurchaseItem()->getName()){
+                $itemName = $entity->getItem()->getName().'-'.$entity->getPurchaseItem()->getName();
+            }else{
+                $itemName = $entity->getItem()->getName();
+            }
+            $hsCode = ($entity->getItem()->getVatProduct()) ? $entity->getItem()->getVatProduct()->getHsCode():'';
 
-
-            $itemName = $entity->getItem()->getName();
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getPurchaseItem()->getBarcode()}</td>";
             $data .= "<td>{$itemName}</td>";
+            $data .= "<td>{$hsCode}</td>";
             if ($isAttribute == 1){
                 $data .= "<td>{$option}</td>";
             }
             $data .="<td>";
-            $data .="<input type='text' name='quantity[]' rel='{$entity->getId()}'  id='quantity-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getSalesQuantity()}' min=1 max={$entity->getPurchaseItem()->getQuantity()} placeholder='{$entity->getPurchaseItem()->getQuantity()}'>";
+            $data .="<input type='text' name='quantity[]' rel='{$entity->getId()}'  id='salesQuantity-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getSalesQuantity()}' min=1 max={$entity->getPurchaseItem()->getQuantity()} placeholder='{$entity->getPurchaseItem()->getQuantity()}'>";
             $data .="</td>";
             $data .="<td>";
-            $data .="<input type='text' name='price[]' rel='{$entity->getId()}'  id='price-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getQuantity()}' min=1 max='{$entity->getPurchaseItem()->getQuantity()}' placeholder='{$entity->getPurchaseItem()->getQuantity()}'>";
+            $data .="<input type='text' name='price[]' rel='{$entity->getId()}'  id='salesPrice-{$entity->getId()}' class='td-inline-input salesPrice' value='{$entity->getSalesPrice()}' placeholder='{$entity->getSalesPrice()}'>";
             $data .="</td>";
             $data .="<td><span id='itemSubTotal-{$entity->getId()}' >{$entity->getSubTotal()}</td>";
             $data .="<td>{$entity->getValueAddedTaxPercent()}</td>";
@@ -1513,8 +1500,8 @@ class StockItemRepository extends EntityRepository
         $qb->leftJoin('stock.purchase','purchase');
         $qb->join('stock.purchaseItem','purchaseItem');
         $qb->select('SUM(stock.quantity) as quantity ');
-        $qb->addSelect('purchase.grn as grn','purchase.receiveDate as receiveDate');
-        $qb->addSelect('purchaseItem.barcode as barcode','purchaseItem.id as id','purchaseItem.salesPrice as salesPrice','purchaseItem.externalSerial as externalSerial');
+        $qb->addSelect('purchase.grn as grn');
+        $qb->addSelect('purchaseItem.name as name','purchaseItem.barcode as barcode','purchaseItem.id as id','purchaseItem.salesPrice as salesPrice','purchaseItem.externalSerial as externalSerial','stock.updated as receiveDate');
         $qb->where("stock.item = :item")->setParameter('item', $item);
         $qb->andWhere("stock.config = :config")->setParameter('config', $inventory->getId());
         $qb->having("SUM(stock.quantity) > 0");
@@ -1528,38 +1515,31 @@ class StockItemRepository extends EntityRepository
             $received = $purchaseItem['receiveDate']->format('d-m-Y');
             $isAttribute = $inventory->isAttribute();
             $option ="";
-            if(!empty($entity['externalSerial'])){
-                $salesSerials = explode(",",$entity['externalSerial']);
-                $serials = explode(",",$entity->getPurchaseItem()->getExternalSerial());
-                $option .="<select class='serial-no' id='serialNo-{$entity->getId()}' name='serialNo' multiple='multiple'>";
+            if(!empty($purchaseItem['externalSerial'])){
+                $serials = explode(",",$purchaseItem['externalSerial']);
+                $option .="<select class='serial-no' id='serialNo-{$purchaseItem['id']}' name='serialNo' multiple='multiple'>";
                 $option .="<option>--Serial no--</option>";
                 foreach ($serials as $serial){
-                    $selected = in_array($serial,$salesSerials) ? 'selected=selected':'';
-                    $option.="<option {$selected} value='{$serial}'>{$serial}</option>";
+                    $option.="<option value='{$serial}'>{$serial}</option>";
                 }
                 $option .="</select>";
             }
-
-
             $ongoingSalesQnt = $this->_em->getRepository('TallyBundle:StockItem')->checkSalesQuantity($purchaseItem['id']);
             $remaining = $purchaseItem['quantity'] - $ongoingSalesQnt;
             $data .= "<tr>";
             $data .= "<td>{$purchaseItem['barcode']}</td>";
+            $data .= "<td>{$purchaseItem['name']}</td>";
             $data .= "<td>{$received}/{$grn}</td>";
-            $data .= "<td>{$purchaseItem['quantity']}</td>";
             $data .= "<td>{$ongoingSalesQnt}</td>";
             $data .= "<td>{$remaining}</td>";
-            if ($isAttribute == 1){
-                $data .= "<td>{$option}</td>";
-            }
-            $data .= "<td><input type='number'   id='salesPrice-{$purchaseItem['id']}' class='td-inline-input' value='{$purchaseItem['salesPrice']}' placeholder='Enter sales price'></td>";
-            $data .= "<td><div class='input-appned'><input type='number'  id='salesQuantity-{$purchaseItem['id']}' class='td-inline-input quantity' value='1' min=1 max={$remaining} placeholder='{$remaining}'><a class='btn mini blue addSales' href='javascript:' id='{$purchaseItem['id']}'><i class='icon-shopping-cart'></i> Add</a></div></td>";
+            $data .= "<td>{$option}</td>";
+            $data .= "<td><input type='number'   id='purchaseSalesPrice-{$purchaseItem['id']}' class='td-inline-input' value='{$purchaseItem['salesPrice']}' placeholder='Enter sales price'></td>";
+            $data .= "<td><div class='input-appned'><input type='number'  id='purchaseQuantity-{$purchaseItem['id']}' class='td-inline-input quantity' value='1' min=1 max={$remaining} placeholder='{$remaining}'><a class='btn mini blue addSales' href='javascript:' id='{$purchaseItem['id']}'><i class='icon-shopping-cart'></i> Add</a></div></td>";
             $data .= "</tr>";
         }
         return $data;
 
     }
-
 
 
 }

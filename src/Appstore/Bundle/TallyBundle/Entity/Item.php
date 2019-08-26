@@ -34,11 +34,6 @@ class Item
      */
     private $id;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="products" )
-	 **/
-	private  $globalOption;
-
 
     /**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="items" )
@@ -46,11 +41,15 @@ class Item
 	private  $config;
 
 
-
     /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="item" )
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="item" )
 	 **/
 	private  $stockItems;
+
+    /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Damage", mappedBy="item" )
+	 **/
+	private  $damages;
 
 
     /**
@@ -91,7 +90,7 @@ class Item
 	private  $depreciationModel;
 
     /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="items" )
 	 **/
 	private  $vendor;
 
@@ -101,30 +100,30 @@ class Item
     private  $productUnit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", inversedBy="item" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="item" )
      **/
     private  $purchaseItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemMetaAttribute", mappedBy="product" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemMetaAttribute", mappedBy="item" , cascade={"remove"}  )
      **/
     private  $itemMetaAttributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemKeyValue", mappedBy="product" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemKeyValue", mappedBy="item" , cascade={"remove"}  )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private  $itemKeyValues;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="product")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="item")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private  $itemWarning;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="product")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="tallyProduct")
      */
     protected $country;
 
@@ -1281,6 +1280,14 @@ class Item
     public function setAssetsReturnQuantity($assetsReturnQuantity)
     {
         $this->assetsReturnQuantity = $assetsReturnQuantity;
+    }
+
+    /**
+     * @return Damage
+     */
+    public function getDamages()
+    {
+        return $this->damages;
     }
 
 

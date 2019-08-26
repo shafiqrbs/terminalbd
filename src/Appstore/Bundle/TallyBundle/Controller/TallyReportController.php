@@ -42,7 +42,15 @@ class TallyReportController extends Controller
 
     public function mushukSixOneAction(){
 
-        $html = $this->renderView('TallyBundle:Report:mushok_6_1.html.twig');
+       // $purchaseItem = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->find(50);
+        $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->find(8);
+        $purchaseItems = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->findBy(array('item'=>8,'mode'=>'purchase'),array('updated'=>"DESC"));
+        $html = $this->renderView(
+            'TallyBundle:Report:mushok_6_1.html.twig', array(
+                'purchaseItems' => $purchaseItems,
+                'item' => $item,
+            )
+        );
 
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);
@@ -57,8 +65,14 @@ class TallyReportController extends Controller
 
     public function mushukSixTwoAction(){
 
-        $html = $this->renderView('TallyBundle:Report:mushok_6_2.html.twig');
-
+        $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->find(8);
+        $salesItem = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->findBy(array('item' => 8 ,'mode'=>'sales'),array('updated'=>"DESC"));
+        $html = $this->renderView(
+            'TallyBundle:Report:mushok_6_2.html.twig', array(
+                'salesItems' => $salesItem,
+                'item' => $item,
+            )
+        );
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);
         $snappy->setOption('orientation', 'Landscape');

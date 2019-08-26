@@ -6,6 +6,10 @@ tally_purchase_item:
     path:     /purchase
     defaults: { _controller: "TallyBundle:PurchaseItem:purchaseIndex" }
 
+tally_purchase_item_vat:
+    path:     /vat-item
+    defaults: { _controller: "TallyBundle:PurchaseItem:indexVatItem" }
+
 tally_purchaseitem_new:
     path:     /new
     defaults: { _controller: "TallyBundle:PurchaseItem:new" }

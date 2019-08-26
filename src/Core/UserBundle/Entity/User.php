@@ -30,7 +30,6 @@ use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineInstantPurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
@@ -269,6 +268,48 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
 	 **/
 	protected $customerInvoice;
+
+
+	/* ----------------------------------CustomerInvoice --------------------------*/
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 **/
+	protected $purchaseOrder;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="checkedBy" , cascade={"persist", "remove"})
+	 **/
+	protected $purchaseOrderCheckedBy;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 **/
+	protected $purchaseOrderApprovedBy;
+
+
+	/* ----------------------------------CustomerInvoice --------------------------*/
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 **/
+	protected $distributionCreate;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="checkedBy" , cascade={"persist", "remove"})
+	 **/
+	protected $distributionCheckedBy;
+
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 **/
+	protected $distributionApprovedBy;
 
 
 	/* ----------------------------------inventory------------------*/

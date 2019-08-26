@@ -54,6 +54,16 @@ class Branches
      **/
     private $payrolls;
 
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="branch" )
+     **/
+    private $distributions;
+
+       /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="branch" )
+     **/
+    private $products;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="branch" )
      **/
@@ -83,6 +93,11 @@ class Branches
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="branches" )
      **/
     private  $profiles;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="employeeBranch" )
+     **/
+    private  $employeeProfiles;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="branches")

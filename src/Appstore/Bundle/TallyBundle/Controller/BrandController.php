@@ -12,27 +12,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * TallyBrand controller.
+ * Brand controller.
  *
  */
 class BrandController extends Controller
 {
 
     /**
-     * Lists all TallyBrand entities.
+     * Lists all Brand entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('Brand.php')->findBy(array('globalOption'=>$config),array('name'=>'asc'));
-        return $this->render('TallyBundle:TallyBrand:index.html.twig', array(
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $entities = $em->getRepository('TallyBundle:Brand')->findBy(array('config'=>$config),array('name'=>'asc'));
+        return $this->render('TallyBundle:Brand:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new TallyBrand entity.
+     * Creates a new Brand entity.
      *
      */
     public function createAction(Request $request)
@@ -50,17 +50,17 @@ class BrandController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('TallyBrand'));
+            return $this->redirect($this->generateUrl('Brand'));
         }
 
-        return $this->render('TallyBundle:TallyBrand:new.html.twig', array(
+        return $this->render('TallyBundle:Brand:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a TallyBrand entity.
+     * Creates a form to create a Brand entity.
      *
      * @param Brand $entity The entity
      *
@@ -80,7 +80,7 @@ class BrandController extends Controller
     }
 
     /**
-     * Displays a form to create a new TallyBrand entity.
+     * Displays a form to create a new Brand entity.
      *
      */
     public function newAction()
@@ -88,55 +88,55 @@ class BrandController extends Controller
         $entity = new Brand();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('TallyBundle:TallyBrand:new.html.twig', array(
+        return $this->render('TallyBundle:Brand:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a TallyBrand entity.
+     * Finds and displays a Brand entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('Brand.php')->find($id);
+        $entity = $em->getRepository('TallyBundle:Brand')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TallyBrand entity.');
+            throw $this->createNotFoundException('Unable to find Brand entity.');
         }
 
-       return $this->render('TallyBundle:TallyBrand:show.html.twig', array(
+       return $this->render('TallyBundle:Brand:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
 
     /**
-     * Displays a form to edit an existing TallyBrand entity.
+     * Displays a form to edit an existing Brand entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('Brand.php')->find($id);
+        $entity = $em->getRepository('TallyBundle:Brand')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TallyBrand entity.');
+            throw $this->createNotFoundException('Unable to find Brand entity.');
         }
 
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('TallyBundle:TallyBrand:new.html.twig', array(
+        return $this->render('TallyBundle:Brand:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a TallyBrand entity.
+    * Creates a form to edit a Brand entity.
     *
     * @param Brand $entity The entity
     *
@@ -155,17 +155,17 @@ class BrandController extends Controller
          return $form;
     }
     /**
-     * Edits an existing TallyBrand entity.
+     * Edits an existing Brand entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('Brand.php')->find($id);
+        $entity = $em->getRepository('TallyBundle:Brand')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find TallyBrand entity.');
+            throw $this->createNotFoundException('Unable to find Brand entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -179,14 +179,14 @@ class BrandController extends Controller
             return $this->redirect($this->generateUrl('tallybrand_edit', array('id' => $id)));
         }
 
-        return $this->render('TallyBundle:TallyBrand:new.html.twig', array(
+        return $this->render('TallyBundle:Brand:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
 
     /**
-     * Deletes a TallyBrand entity.
+     * Deletes a Brand entity.
      *
      */
     public function deleteAction(Ass $entity)
@@ -214,7 +214,7 @@ class BrandController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('tallybrand'));
+        return $this->redirect($this->generateUrl('Brand'));
     }
 
     public function autoSearchAction(Request $request)
@@ -222,12 +222,12 @@ class BrandController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
           $config = $this->getUser()->getGlobalOption();
-          $item = $this->getDoctrine()->getRepository('Brand.php')->searchAutoComplete($item,$config);
+          $item = $this->getDoctrine()->getRepository('TallyBundle:Brand')->searchAutoComplete($item,$config);
         }
         return new JsonResponse($item);
     }
 
-    public function searchTallyBrandNameAction($brand)
+    public function searchBrandNameAction($brand)
     {
         return new JsonResponse(array(
             'id'=> $brand,

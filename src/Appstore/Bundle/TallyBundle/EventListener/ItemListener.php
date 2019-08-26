@@ -38,7 +38,7 @@ class ItemListener
         $qb = $entityManager->getRepository('TallyBundle:Item')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-	        ->where('s.globalOption = :option')->setParameter('option', $entity->getGlobalOption()->getId());
+	        ->where('s.config = :config')->setParameter('config', $entity->getConfig()->getId());
         $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {
             return 0;

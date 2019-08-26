@@ -1,0 +1,53 @@
+assets_purchaseitem:
+    path:     /opening
+    defaults: { _controller: "TallyBundle:PurchaseItem:index" }
+
+assets_purchase_item:
+    path:     /purchase
+    defaults: { _controller: "TallyBundle:PurchaseItem:purchaseIndex" }
+
+assets_purchaseitem_new:
+    path:     /new
+    defaults: { _controller: "TallyBundle:PurchaseItem:new" }
+
+assets_purchaseitem_create:
+    path:     /create
+    defaults: { _controller: "TallyBundle:PurchaseItem:create" }
+    methods:  POST
+
+assets_purchaseitem_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TallyBundle:PurchaseItem:edit" }
+
+
+assets_purchaseitem_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TallyBundle:PurchaseItem:delete" }
+
+
+assets_purchaseitem_approve:
+    path:     /{id}/approved
+    defaults: { _controller: "TallyBundle:PurchaseItem:approve" }
+
+assets_purchaseitem_inline_update:
+    path:     /{id}/inline-update
+    defaults: { _controller: "TallyBundle:PurchaseItem:inlineUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+assets_purchaseitem_attribute:
+    path:     /{id}/add-attrubute
+    defaults: { _controller: "TallyBundle:PurchaseItem:attribute" }
+
+
+assets_purchaseitem_update:
+    path:     /{id}/update
+    defaults: { _controller: "TallyBundle:PurchaseItem:update" }
+    methods:  [POST, PUT]
+
+assets_purchaseitem_attribute_update:
+    path:     /{id}/attribute-update
+    defaults: { _controller: "TallyBundle:PurchaseItem:updateAttribute" }
+    methods:  [POST, PUT]
+

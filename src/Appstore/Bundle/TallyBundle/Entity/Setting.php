@@ -27,10 +27,6 @@ class Setting
      **/
     private $items;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\TaxTariffMatrixItem", mappedBy="taxIncidence" )
-     **/
-    private $taxTariffMatrixItems;
 
     /**
      * @var string

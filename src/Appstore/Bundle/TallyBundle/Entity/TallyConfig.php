@@ -36,6 +36,11 @@ class TallyConfig
      **/
     private $stockItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\WearHouse", mappedBy="config" , cascade={"persist", "remove"})
+     **/
+    private $wearHouse;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="config" , cascade={"persist", "remove"})
@@ -54,7 +59,7 @@ class TallyConfig
     private $sales;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Sales", mappedBy="config" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", mappedBy="config" , cascade={"persist", "remove"})
      **/
     private $purchase;
 
@@ -364,9 +369,65 @@ class TallyConfig
     /**
      * @var boolean
      *
-     * @ORM\Column(name="customInvoice", type="boolean",  nullable=true)
+     * @ORM\Column(name="regularInvoice", type="boolean",  nullable=true)
      */
-    private $customInvoice = false;
+    private $regularInvoice = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="posInvoice", type="boolean",  nullable=true)
+     */
+    private $posInvoice = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="workOrderInvoice", type="boolean",  nullable=true)
+     */
+    private $workOrderInvoice = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="assetsIssue", type="boolean",  nullable=true)
+     */
+    private $assetsIssue = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="inventoryIssue", type="boolean",  nullable=true)
+     */
+    private $inventoryIssue = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="requisitionIssue", type="boolean",  nullable=true)
+     */
+    private $requisitionIssue = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="serviceInvoice", type="boolean",  nullable=true)
+     */
+    private $serviceInvoice = true;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="localPurchase", type="boolean",  nullable=true)
+     */
+    private $localPurchase = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="foreignPurchase", type="boolean",  nullable=true)
+     */
+    private $foreignPurchase = false;
 
     /**
      * @var boolean
@@ -1360,6 +1421,158 @@ class TallyConfig
     public function setProfitPercent($profitPercent)
     {
         $this->profitPercent = $profitPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegularInvoice()
+    {
+        return $this->regularInvoice;
+    }
+
+    /**
+     * @param bool $regularInvoice
+     */
+    public function setRegularInvoice($regularInvoice)
+    {
+        $this->regularInvoice = $regularInvoice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPosInvoice()
+    {
+        return $this->posInvoice;
+    }
+
+    /**
+     * @param bool $posInvoice
+     */
+    public function setPosInvoice($posInvoice)
+    {
+        $this->posInvoice = $posInvoice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWorkOrderInvoice()
+    {
+        return $this->workOrderInvoice;
+    }
+
+    /**
+     * @param bool $workOrderInvoice
+     */
+    public function setWorkOrderInvoice($workOrderInvoice)
+    {
+        $this->workOrderInvoice = $workOrderInvoice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAssetsIssue()
+    {
+        return $this->assetsIssue;
+    }
+
+    /**
+     * @param bool $assetsIssue
+     */
+    public function setAssetsIssue($assetsIssue)
+    {
+        $this->assetsIssue = $assetsIssue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInventoryIssue()
+    {
+        return $this->inventoryIssue;
+    }
+
+    /**
+     * @param bool $inventoryIssue
+     */
+    public function setInventoryIssue($inventoryIssue)
+    {
+        $this->inventoryIssue = $inventoryIssue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequisitionIssue()
+    {
+        return $this->requisitionIssue;
+    }
+
+    /**
+     * @param bool $requisitionIssue
+     */
+    public function setRequisitionIssue($requisitionIssue)
+    {
+        $this->requisitionIssue = $requisitionIssue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLocalPurchase()
+    {
+        return $this->localPurchase;
+    }
+
+    /**
+     * @param bool $localPurchase
+     */
+    public function setLocalPurchase($localPurchase)
+    {
+        $this->localPurchase = $localPurchase;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getForeignPurchase()
+    {
+        return $this->foreignPurchase;
+    }
+
+    /**
+     * @param bool $foreignPurchase
+     */
+    public function setForeignPurchase($foreignPurchase)
+    {
+        $this->foreignPurchase = $foreignPurchase;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isServiceInvoice()
+    {
+        return $this->serviceInvoice;
+    }
+
+    /**
+     * @param bool $serviceInvoice
+     */
+    public function setServiceInvoice($serviceInvoice)
+    {
+        $this->serviceInvoice = $serviceInvoice;
+    }
+
+    /**
+     * @return WearHouse
+     */
+    public function getWearHouse()
+    {
+        return $this->wearHouse;
     }
 
 

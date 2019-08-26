@@ -20,7 +20,7 @@ tally_purchase_update:
     methods:  [POST, PUT]
 
 tally_purchase_particular_add:
-    path:     /{invoice}/particular-add
+    path:     /{id}/particular-add
     defaults: { _controller: "TallyBundle:Purchase:addParticular" }
     methods:  POST
     options:

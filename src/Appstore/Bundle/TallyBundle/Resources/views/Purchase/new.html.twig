@@ -45,7 +45,7 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
-            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('tally_purchase_particular_add',{'invoice':entity.id}) }}">
+            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('tally_purchase_particular_add',{'id':entity.id}) }}">
             <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >

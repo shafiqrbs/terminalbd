@@ -86,13 +86,14 @@
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <label class="control-label" for="vatName">Vat Product</label>
+                                        <label class="control-label" for="vatName">Vat Product with HS Code</label>
                                         <div class="controls">
                                             {{ form_widget(form.vatName) }}
                                             {{ form_errors(form.vatName) }}
                                         </div>
                                     </div>
                                 </div>
+                                <div class="clearfix">&nbsp;</div>
                                 <div class="row-fluid">
                                     <div class="span8">
                                         <div class="control-group">
@@ -178,5 +179,4 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    ApproveProcess();
 {% endblock %}

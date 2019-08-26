@@ -55,6 +55,26 @@ class PurchaseItemController extends Controller
      *
      */
 
+    public function indexVatItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $entities = $em->getRepository('TallyBundle:PurchaseItem')->findWithVatItemSearch($config,'purchase',$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('TallyBundle:PurchaseItem:vatIndex.html.twig', array(
+            'config' => $config,
+            'pagination' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+
+    /**
+     * Lists all PurchaseItem entities.
+     *
+     */
+
     public function purchaseIndexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -89,11 +109,17 @@ class PurchaseItemController extends Controller
             $entity->setMode('opening');
             $entity->setPurchasePrice($entity->getPrice());
             $entity->setSubTotal($entity->getPrice() * $entity->getQuantity());
+            if($entity->getAssuranceFromVendor() and $entity->getAssuranceFromVendor()->getDays() > 0 and $entity->getEffectedDate()){
+                $effected = $entity->getEffectedDate();
+                $datetime = $effected->add(new \DateInterval("P{$entity->getAssuranceFromVendor()->getDays()}D"));
+                $entity->setExpiredDate($datetime);
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
+            $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->generateSerialNo($entity);
             return $this->redirect($this->generateUrl('tally_purchaseitem'));
         }
         return $this->render('TallyBundle:PurchaseItem:opening.html.twig', array(

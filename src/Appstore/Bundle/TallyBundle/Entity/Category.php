@@ -34,36 +34,43 @@ class Category
      **/
     private $config;
 
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="tallyCategories" )
-     **/
-    private  $accountHead;
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\CategoryMeta", mappedBy="category" )
      * @ORM\OrderBy({"metaKey" = "ASC"})
      **/
     protected $categoryMetas;
 
+
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="category" )
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="category")
      **/
     protected $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="category")
+     **/
+    protected $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="parentCategory")
+     **/
+    protected $childProducts;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="category" )
-     * @ORM\OrderBy({"name" = "ASC"})
      **/
     protected $stockItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="category" )
-     * @ORM\OrderBy({"metaKey" = "ASC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     protected $depreciationModel;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="tallyCategories" )
+     **/
+    private  $accountHead;
 
 
     /**

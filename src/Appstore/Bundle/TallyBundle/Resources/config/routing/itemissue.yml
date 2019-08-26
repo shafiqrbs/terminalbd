@@ -7,19 +7,13 @@ tally_itemissue_show:
     path:     /{id}/show
     defaults: { _controller: "TallyBundle:Issue:show" }
 
-tally_itemissue_show_preview:
-    path:     /{id}/show-preview
-    defaults: { _controller: "TallyBundle:Issue:showPreview" }
-    methods:  GET
-    options:
-            expose: true
 
 tally_itemissue_new:
     path:     /new
     defaults: { _controller: "TallyBundle:Issue:new" }
 
 tally_itemissue_edit:
-    path:     /{code}/item-delivery-issue
+    path:     /{code}/item-issue
     defaults: { _controller: "TallyBundle:Issue:edit" }
 
 

@@ -1,3 +1,7 @@
+tally_config:
+    prefix:     /config
+    resource: "@TallyBundle/Resources/config/routing/config.yml"
+
 tally_category:
     prefix:     /category
     resource: "@TallyBundle/Resources/config/routing/category.yml"
@@ -21,6 +25,10 @@ tally_item_sales:
 tally_item_issue:
     resource: "@TallyBundle/Resources/config/routing/itemissue.yml"
     prefix:   /item-issue
+
+tally_assets_issue:
+    resource: "@TallyBundle/Resources/config/routing/assetsissue.yml"
+    prefix:   /assets-issue
 
 tally_item_brand:
     resource: "@TallyBundle/Resources/config/routing/itembrand.yml"

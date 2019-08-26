@@ -10,8 +10,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
-use Appstore\Bundle\AccountingBundle\Entity\Vendor;
-use Appstore\Bundle\AssetsBundle\Entity\AssetsCategory;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
@@ -31,6 +30,7 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
+use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\TallyBundle\Entity\Category;
 use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
@@ -104,6 +104,12 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting", mappedBy="globalOption" )
      **/
     protected $payrollSetting;
+
+
+      /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", mappedBy="globalOption" )
+     **/
+    protected $procurementConfig;
 
 
     /**
@@ -191,6 +197,7 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blackout", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $blackout;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="globalOption" , cascade={"persist", "remove"} )
      * @ORM\OrderBy({"updated" = "DESC"})
@@ -233,7 +240,7 @@ class GlobalOption
     protected $accountingConfig;
 
    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountProfit", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountProfit", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $accountProfit;
 
@@ -787,11 +794,17 @@ class GlobalOption
 
     /* ===================      Tally      =======================================  */
 
-
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $tallyConfig;
+
+    /* ===================      Tally      =======================================  */
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $assetsConfig;
 
     /**
      * @var \DateTime
@@ -2087,6 +2100,22 @@ class GlobalOption
     public function setOrganizationName($organizationName)
     {
         $this->organizationName = $organizationName;
+    }
+
+    /**
+     * @return ProcurementConfig
+     */
+    public function getProcurementConfig()
+    {
+        return $this->procurementConfig;
+    }
+
+    /**
+     * @return AssetsConfig
+     */
+    public function getAssetsConfig()
+    {
+        return $this->assetsConfig;
     }
 
 

@@ -38,6 +38,11 @@ class ProductUnit
     protected $masterProducts;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="productUnit")
+     */
+    protected $tallyProducts;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="productUnit")
      */
     protected $goodsItem;

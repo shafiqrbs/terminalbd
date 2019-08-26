@@ -62,25 +62,24 @@ class PurchaseOpeningItemType extends AbstractType
                     'widget' => 'single_text',
                     'placeholder' => array(
                         'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-
                     ),
                     'format' => 'dd-MM-yyyy',
                     'attr' => array('class'=>'m-wrap span12 dateCalendar','autocomplete' => "off"),
                     'view_timezone' => 'Asia/Dhaka')
             )
 
-            ->add('expiredDate', 'date', array(
-                    'widget' => 'single_text',
-                    'placeholder' => array(
-                        'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-
-                    ),
-                    'format' => 'dd-MM-yyyy',
-                    'attr' => array('class'=>'m-wrap span12 dateCalendar','autocomplete' => "off"),
-                    'view_timezone' => 'Asia/Dhaka')
-            )
-
-            ->add('itemWarning', 'entity', array(
+            ->add('assuranceFromVendor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
+                'empty_value' => 'Choose a item warning',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1");
+                },
+            ))
+            ->add('assuranceToCustomer', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
                 'empty_value' => 'Choose a item warning',

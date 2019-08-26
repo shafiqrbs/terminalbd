@@ -29,12 +29,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private $id;
 
         /**
-         * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="tallyPurchase")
-         **/
-        protected $globalOption;
-
-
-        /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="purchase" )
          * @ORM\JoinColumn(onDelete="CASCADE")
          **/
@@ -42,19 +36,19 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="purchase"  )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="tallyPurchase"  )
          **/
         private  $purchaseItems;
 
 
-          /**
+        /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="purchase"  )
          **/
         private  $stockItems;
 
 
          /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="purchase"  )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="purchases"  )
          **/
         private  $purchaseOrder;
 
@@ -414,22 +408,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setProcessType($processType)
         {
             $this->processType = $processType;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getGlobalOption()
-        {
-            return $this->globalOption;
-        }
-
-        /**
-         * @param mixed $globalOption
-         */
-        public function setGlobalOption($globalOption)
-        {
-            $this->globalOption = $globalOption;
         }
 
 

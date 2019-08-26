@@ -29,6 +29,16 @@ class Particular
 	private  $type;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="department" )
+	 **/
+	private  $distributionDepartment;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="depreciationStatus" )
+	 **/
+	private  $products;
+
+	/**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

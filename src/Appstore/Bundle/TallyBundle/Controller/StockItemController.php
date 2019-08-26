@@ -154,7 +154,6 @@ class StockItemController extends Controller
 
     public function itemPurchaseDetailsAction(Request $request)
     {
-
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getTallyConfig();
         $data = $this->getDoctrine()->getRepository('TallyBundle:StockItem')->itemPurchaseDetails($inventory, $item);

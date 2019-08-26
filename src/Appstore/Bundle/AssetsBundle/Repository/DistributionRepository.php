@@ -14,18 +14,16 @@ class DistributionRepository extends EntityRepository
 	public function findWithSearch($data)
 	{
 
+
 		$item = isset($data['item'])? $data['item'] :'';
 		$branch = isset($data['branch'])? $data['branch'] :'';
 		$category = isset($data['category'])? $data['category'] :'';
 		$parent = isset($data['parent'])? $data['parent'] :'';
 		$depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
-
-
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.product', 'item');
-		$qb->join('item.item', 'm');
-		$qb->where("item.status IS NOT NULL");
-		if (!empty($item)) {
+	//	$qb->join('item.item', 'm');
+		/*if (!empty($item)) {
 			$qb->andWhere("m.name = :name");
 			$qb->setParameter('name', $item);
 		}
@@ -60,8 +58,7 @@ class DistributionRepository extends EntityRepository
 			$qb->andWhere("b.name = :branch");
 			$qb->setParameter('branch', $branch);
 
-		}
-		$qb->orderBy('item.updated','DESC');
+		}*/
 		$qb->getQuery();
 		return  $qb;
 

@@ -28,11 +28,15 @@ assets_stockitem:
 
 assets_item:
     resource: "@AssetsBundle/Resources/config/routing/item.yml"
-    prefix:   /product-group
+    prefix:   /item
 
-assets_item_issue:
-    resource: "@AssetsBundle/Resources/config/routing/itemissue.yml"
-    prefix:   /item-issue
+assets_purchase:
+    resource: "@AssetsBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+assets_purchase_item:
+    resource: "@AssetsBundle/Resources/config/routing/purchaseitem.yml"
+    prefix:   /purchase-item
 
 assets_item_brand:
     resource: "@AssetsBundle/Resources/config/routing/itembrand.yml"

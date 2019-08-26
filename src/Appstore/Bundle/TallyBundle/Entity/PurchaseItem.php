@@ -2,13 +2,13 @@
 
 namespace Appstore\Bundle\TallyBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Event\Glo;
+
+
 
 /**
  * VoucherItem
@@ -33,6 +33,12 @@ class PurchaseItem
      **/
     private  $item;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Damage", mappedBy="purchaseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $damages;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", inversedBy="purchaseItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -44,7 +50,7 @@ class PurchaseItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", inversedBy="purchaseItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $purchase;
+    private  $tallyPurchase;
 
 
     /**
@@ -58,11 +64,15 @@ class PurchaseItem
      **/
     private  $stockItems;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="purchaseItems")
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="purchaseItemFromVendors")
      **/
-    private  $itemWarning;
+    private  $assuranceFromVendor;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemWarning", inversedBy="purchaseItemForCustomers")
+     **/
+    private  $assuranceToCustomer;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemMetaAttribute", mappedBy="purchaseItem" , cascade={"remove"}  )
@@ -70,15 +80,9 @@ class PurchaseItem
     private  $itemMetaAttributes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\ItemKeyValue", inversedBy="purchaseItems" , cascade={"remove"}  )
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="purchaseItem" , cascade={"remove"}  )
      **/
-    private  $itemKeyValues;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="purchaseItems" )
-     **/
-    private  $globalOption;
+    private  $products;
 
 
     /**
@@ -778,21 +782,6 @@ class PurchaseItem
         $this->remark = $remark;
     }
 
-    /**
-     * @return GlobalOption
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param GlobalOption $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 
     /**
      * @return string
@@ -1176,6 +1165,54 @@ class PurchaseItem
     public function setTotal($total)
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return ItemWarning
+     */
+    public function getAssuranceFromVendor()
+    {
+        return $this->assuranceFromVendor;
+    }
+
+    /**
+     * @param ItemWarning $assuranceFromVendor
+     */
+    public function setAssuranceFromVendor($assuranceFromVendor)
+    {
+        $this->assuranceFromVendor = $assuranceFromVendor;
+    }
+
+    /**
+     * @return ItemWarning
+     */
+    public function getAssuranceToCustomer()
+    {
+        return $this->assuranceToCustomer;
+    }
+
+    /**
+     * @param ItemWarning $assuranceToCustomer
+     */
+    public function setAssuranceToCustomer($assuranceToCustomer)
+    {
+        $this->assuranceToCustomer = $assuranceToCustomer;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getTallyPurchase()
+    {
+        return $this->tallyPurchase;
+    }
+
+    /**
+     * @param Purchase $tallyPurchase
+     */
+    public function setTallyPurchase($tallyPurchase)
+    {
+        $this->tallyPurchase = $tallyPurchase;
     }
 
 

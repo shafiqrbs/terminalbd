@@ -54,10 +54,16 @@ class AccountHead
     private  $expendituries;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="accountHead" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $tallyCategories;
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", mappedBy="accountHead" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $assetsCategories;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountHead" )
@@ -154,6 +160,18 @@ class AccountHead
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $subTransactions;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="accountHeadDebit" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $depreciationModelDebit;
+
+	/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="accountHeadCredit" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $depreciationModelCredit;
 
 	/**
 	 * @var string

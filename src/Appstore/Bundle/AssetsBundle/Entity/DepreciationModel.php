@@ -35,12 +35,17 @@ class DepreciationModel
 	private  $item;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="depreciation" )
+	 **/
+	private  $products;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="depreciationModelDebit" )
 	 **/
 	private  $accountHeadDebit;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="depreciationModelDebit" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="depreciationModelCredit" )
 	 **/
 	private  $accountHeadCredit;
 

@@ -32,25 +32,24 @@ class PurchaseOrder
      */
     private $id;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="PurchaseOrders" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", inversedBy="purchaseOrders" )
      **/
-    private  $globalOption;
+    private  $config;
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="PurchaseOrder" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrder" )
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="PurchaseOrderCheckedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrderCheckedBy" )
      **/
     private  $checkedBy;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="PurchaseOrderApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrderApprovedBy" )
      **/
     private  $approvedBy;
 
@@ -59,23 +58,27 @@ class PurchaseOrder
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", mappedBy="purchase" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private  $purchaseItems;
+    private  $purchaseOrderItems;
 
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", mappedBy="purchaseOrder" , cascade={"remove"})
+
+	 /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="purchaseOrder" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $purchaseRequisitionItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", mappedBy="purchaseOrder" , cascade={"remove"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $purchases;
+
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="purchases" , cascade={"detach","merge"} )
 	 **/
 	private  $vendor;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="purchaseOrder" , cascade={"detach","merge"} )
-	 **/
-	private  $purchases;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementAttachFile", mappedBy="purchaseOrder" , cascade={"detach","merge"} )
@@ -1048,6 +1051,30 @@ class PurchaseOrder
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return PurchaseOrderItem
+     */
+    public function getPurchaseOrderItems()
+    {
+        return $this->purchaseOrderItems;
+    }
+
+    /**
+     * @return PurchaseOrder
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param PurchaseOrder $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 }

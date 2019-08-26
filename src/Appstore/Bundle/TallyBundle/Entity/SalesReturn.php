@@ -26,9 +26,14 @@ class SalesReturn implements CodeAwareEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="salesReturn" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="salesReturn" )
      **/
-    private  $inventoryConfig;
+    private  $config;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="salesReturn" )
+     **/
+    private  $salesStockReturns;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="salesReturns" )
@@ -415,6 +420,30 @@ class SalesReturn implements CodeAwareEntity
 	public function setSalesAccount( $salesAccount ) {
 		$this->salesAccount = $salesAccount;
 	}
+
+    /**
+     * @return \Proxies\__CG__\Appstore\Bundle\TallyBundle\Entity\TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getSalesStockReturns()
+    {
+        return $this->salesStockReturns;
+    }
 
 
 }

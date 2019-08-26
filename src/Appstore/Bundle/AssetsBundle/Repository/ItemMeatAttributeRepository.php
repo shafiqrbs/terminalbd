@@ -15,21 +15,20 @@ class ItemMeatAttributeRepository extends EntityRepository
     public function insertProductCategoryMeta($reEntity,$data)
     {
 
+
         $em = $this->_em;
         $i=0;
 
         if(isset($data['attributeId'])){
             foreach ($data['attributeId'] as $value) {
 
-                $metaAttribute = $this->_em->getRepository('AssetsBundle:ItemMetaAttribute')->findOneBy(array('product'=>$reEntity,'categoryMeta' => $value));
+                $metaAttribute = $this->_em->getRepository('AssetsBundle:ItemMetaAttribute')->findOneBy(array('item' => $reEntity,'categoryMeta' => $value));
                 if(!empty($metaAttribute)){
-                    exit;
                     $this->updateMetaAttribute($metaAttribute,$data['value'][$i]);
                 }else{
-                    exit;
-                    $itemAttribute= $this->_em->getRepository('AssetsBundle:AssetsCategoryMeta')->find($value);
+                    $itemAttribute= $this->_em->getRepository('AssetsBundle:CategoryMeta')->find($value);
                     $entity = new ItemMetaAttribute();
-                    $entity->setProduct($reEntity);
+                    $entity->setItem($reEntity);
                     $entity->setValue($data['value'][$i]);
                     $entity->setCategoryMeta($itemAttribute);
                     $em->persist($entity);
@@ -59,15 +58,15 @@ class ItemMeatAttributeRepository extends EntityRepository
 
             foreach ($data['attributeId'] as $value) {
 
-                $metaAttribute = $this->_em->getRepository('AssetsBundle:ItemMetaAttribute')->findOneBy(array('voucherItem'=>$reEntity,'categoryMeta' => $value));
+                $metaAttribute = $this->_em->getRepository('AssetsBundle:ItemMetaAttribute')->findOneBy(array('purchaseItem'=>$reEntity,'categoryMeta' => $value));
                 if(!empty($metaAttribute)){
                     $this->updateMetaAttribute($metaAttribute,$data['value'][$i]);
                 }else{
-                    $itemAttribute= $this->_em->getRepository('AssetsBundle:AssetsCategoryMeta')->find($value);
+                    $itemAttribute= $this->_em->getRepository('AssetsBundle:CategoryMeta')->find($value);
                     $entity = new ItemMetaAttribute();
                     $entity->setValue($data['value'][$i]);
                     $entity->setCategoryMeta($itemAttribute);
-                    $entity->setVoucherItem($reEntity);
+                    $entity->setPurchaseItem($reEntity);
                     $em->persist($entity);
                 }
                 $i++;

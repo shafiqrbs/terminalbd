@@ -78,11 +78,25 @@ class PurchaseItemRepository extends EntityRepository
         return  $result;
     }
 
+    public function findWithVatItemSearch($config, $mode , $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','item');
+        $qb->where('e.config = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.mode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('item.vatProduct IS NOT NULL');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery();
+        return  $result;
+    }
+
+
     public function updatePurchaseTotalPrice(Purchase $entity)
     {
         $em = $this->_em;
         $total = $this->createQueryBuilder('si')
-            ->join('si.purchase','e')
+            ->join('si.tallyPurchase','e')
             ->select('sum(si.subTotal) as total','sum(si.rebate) as rebate','sum(si.valueAddedTax) as valueAddedTax','sum(si.totalTaxIncidence) as totalTaxIncidence')
             ->where('e.id = :entity')
             ->setParameter('entity', $entity ->getId())
@@ -122,15 +136,11 @@ class PurchaseItemRepository extends EntityRepository
         return $salesPrice;
     }
 
-
-    public function insertPurchaseItems(Purchase $invoice, $data)
+    public function updatePurchaseItemPrice(PurchaseItem $entity)
     {
-
         $em = $this->_em;
-        $entity = new PurchaseItem();
-        $product = $data['productItem'];
-        $subTotal = $data['quantity'] * $data['price'];
-        $product = $em->getRepository('TallyBundle:Item')->find($product);
+        $subTotal = $entity->getSubTotal();
+        $product = $entity->getItem();
         if($product->getVatProduct()){
 
             /* @var $vat TaxTariff */
@@ -172,25 +182,17 @@ class PurchaseItemRepository extends EntityRepository
             }
             $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
             $entity->setTotalTaxIncidence($TTI);
-
         }
-        $entity->setPurchase($invoice);
-        $entity->setConfig($invoice->getConfig());
-        $entity->setItem($product);
-        $entity->setName($data['name']);
-        $entity->setPrice($data['price']);
-        $entity->setPurchase($data['price']);
-        $entity->setQuantity($data['quantity']);
-        $entity->setSubTotal($subTotal);
         $entity->setTotal($entity->getSubTotal() + $entity->getTotalTaxIncidence());
         $purchasePrice = ($entity->getTotal() / $entity->getQuantity());
         $entity->setPurchasePrice($purchasePrice);
-        $salesPrice = $this->salesPriceCalculation($invoice->getConfig(),$purchasePrice);
+        $salesPrice = $this->salesPriceCalculation($entity->getConfig(),$purchasePrice);
         $entity->setSalesPrice($salesPrice);
         $em->persist($entity);
-        $em->flush();
+        $em->flush($entity);
 
     }
+
 
     public function getPurchaseItems(Purchase $sales)
     {

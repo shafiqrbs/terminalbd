@@ -23,6 +23,12 @@ class ParticularType
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", mappedBy="type" )
+     **/
+    private  $particulars;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

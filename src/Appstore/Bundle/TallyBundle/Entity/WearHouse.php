@@ -24,23 +24,17 @@ class WearHouse
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="wearHouses" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", inversedBy="wearHouse" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $globalOption;
+    private $config;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="wearHouse")
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $purchaseItems;
-
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\SalesItem", mappedBy="wearHouse")
-     * @ORM\OrderBy({"sorting" = "ASC"})
-     **/
-    private $salesItems;
 
 
     /**
@@ -261,6 +255,22 @@ class WearHouse
     public function setSalesItems($salesItems)
     {
         $this->salesItems = $salesItems;
+    }
+
+    /**
+     * @return TallyConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param TallyConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

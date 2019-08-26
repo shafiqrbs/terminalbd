@@ -55,6 +55,12 @@ class Profile
     protected $employeePayroll;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="employee")
+     **/
+    protected $distributionUser;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation", inversedBy="designationProfiles")
      **/
     protected $designation;
@@ -63,6 +69,11 @@ class Profile
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="profiles" )
      */
     protected $branches;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="employeeProfiles" )
+     */
+    protected $employeeBranch;
 
     /**
      * @var string
@@ -939,6 +950,22 @@ class Profile
     public function setGender($gender)
     {
         $this->gender = $gender;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getEmployeeBranch()
+    {
+        return $this->employeeBranch;
+    }
+
+    /**
+     * @param Branches $employeeBranch
+     */
+    public function setEmployeeBranch($employeeBranch)
+    {
+        $this->employeeBranch = $employeeBranch;
     }
 
 

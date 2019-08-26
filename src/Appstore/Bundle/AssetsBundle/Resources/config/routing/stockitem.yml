@@ -1,8 +1,10 @@
 assets_stockitem:
     path:     /
     defaults: { _controller: "AssetsBundle:StockItem:index" }
-    options:
-        expose: true
+
+assets_stockitem_details:
+    path:     /
+    defaults: { _controller: "AssetsBundle:StockItem:indexDetails" }
 
 assets_stockitem_show:
     path:     /{item}/show

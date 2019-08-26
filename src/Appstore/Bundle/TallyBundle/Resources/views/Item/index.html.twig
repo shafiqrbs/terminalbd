@@ -85,9 +85,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead>
                                 <tr class="head-green">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Type</td>
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Group</td>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Name </th>
+                                    <th class="numeric" >HS Code</th>
                                     <th class="numeric" ><span class="tooltips" data-original-title="Stock Keeping Unit">SKU</span></th>
 <th class="numeric" ><span class="tooltips" data-original-title="Purchase Price">PP</span></th>
 <th class="numeric" ><span class="tooltips" data-original-title="Maximum Retail Price">MRP</span></th>
@@ -115,9 +116,10 @@
                                 <tbody class="flip-content ">
                                 {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.productType|capitalize }}</td>
+                                        <td class="numeric" >{% if entity.productGroup is not empty %}{{ entity.productGroup.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.category.name }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{% if entity.vatProduct is not empty %}{{ entity.vatProduct.hsCode }}{% endif %}</td>
                                         <td class=""><a class="editable tooltips" data-name="Sku" href="#"  data-url="{{ path('tallyitem_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter Stock Keeping Unit">{{entity.sku}}</a></td>
                                         <td class="numeric" ><a class="editable tooltips" data-name="PurchasePrice" href="#"  data-url="{{ path('tallyitem_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter approx. purchase price">{{entity.purchasePrice}}</a></td>
                                         <td class="numeric" ><a class="editable tooltips" data-name="SalesPrice" href="#"  data-url="{{ path('tallyitem_inline_modify') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter sales price">{{entity.salesPrice}}</a></td>
@@ -131,7 +133,7 @@
                                         <td class="numeric" >{{ entity.orderCreateItem }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric" >
-                                            {% if  entity.productType == 'assets' %}
+                                            {% if  entity.productType == 'Assets' %}
                                                 <a href="{{ path('tallyitem_edit_web', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-retweet"></i></a>
                                             {% endif %}
                                             <a  href="{{ path('tallyitem_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-pencil"></i></a>

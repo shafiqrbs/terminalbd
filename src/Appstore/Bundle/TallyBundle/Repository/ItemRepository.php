@@ -6,6 +6,8 @@ use Appstore\Bundle\TallyBundle\Entity\Product;
 use Appstore\Bundle\TallyBundle\Entity\Item;
 use Appstore\Bundle\TallyBundle\Entity\Purchase;
 use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
+use Appstore\Bundle\TallyBundle\Entity\Sales;
+use Appstore\Bundle\TallyBundle\Entity\StockItem;
 use Appstore\Bundle\TallyBundle\Entity\VoucherItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -23,67 +25,83 @@ use Doctrine\ORM\EntityRepository;
 class ItemRepository extends EntityRepository
 {
 
-    public function findFrontendProductWithSearch($inventory, $data , $limit = 0)
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleWithSearch($qb,$data)
     {
-        if (!empty($data['sortBy'])) {
+        if(!empty($data))
+        {
+            $item = isset($data['item'])? $data['item'] :'';
+            $color = isset($data['color'])? $data['color'] :'';
+            $size = isset($data['size'])? $data['size'] :'';
+            $vendor = isset($data['vendor'])? $data['vendor'] :'';
+            $brand = isset($data['brand'])? $data['brand'] :'';
+            $category = isset($data['category'])? $data['category'] :'';
+            $unit = isset($data['unit'])? $data['unit'] :'';
+            $barcode = isset($data['barcode'])? $data['barcode'] :'';
 
-            $sortBy = explode('=?=', $data['sortBy']);
-             $sort = $sortBy[0];
-             $order = $sortBy[1];
+            if (!empty($barcode)) {
+
+                $qb->join('e.purchaseItem', 'p');
+                $qb->andWhere("p.barcode = :barcode");
+                $qb->setParameter('barcode', $barcode);
+            }
+
+            if (!empty($item)) {
+                $qb->andWhere("m.name = :name");
+                $qb->setParameter('name', $item);
+            }
+            if (!empty($color)) {
+                $qb->join('item.color', 'c');
+                $qb->andWhere("c.name = :color");
+                $qb->setParameter('color', $color);
+            }
+            if (!empty($size)) {
+                $qb->join('item.size', 's');
+                $qb->andWhere("s.name = :size");
+                $qb->setParameter('size', $size);
+            }
+            if (!empty($vendor)) {
+                $qb->join('item.vendor', 'v');
+                $qb->andWhere("v.companyName = :vendor");
+                $qb->setParameter('vendor', $vendor);
+            }
+
+            if (!empty($brand)) {
+                $qb->join('item.brand', 'b');
+                $qb->andWhere("b.name = :brand");
+                $qb->setParameter('brand', $brand);
+            }
+
+            if (!empty($category)) {
+                $qb->join('m.category','cat');
+                $qb->andWhere("cat.name = :category");
+                $qb->setParameter('category', $category);
+            }
+
+            if (!empty($unit)) {
+                $qb->join('m.productUnit','u');
+                $qb->andWhere("b.name = :unit");
+                $qb->setParameter('unit', $unit);
+            }
+
         }
 
-        $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.item",'masterItem');
-        $qb->leftJoin('product.brand','brand');
-        $qb->where("product.purchaseQuantity > 0");
-        $qb->andWhere("product.status = 1");
-        $qb->andWhere("product.isWeb = 1");
-        $qb->andWhere("product.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
+    }
 
-        if (!empty($data['brand'])) {
-            $qb->andWhere("masterItem.brand = :brand");
-            $qb->setParameter('brand', $data['brand']);
-        }
+    public function modeWiseStockItem($inventory,$mode ='purchase',$data)
+    {
 
-        if (!empty($data['tag'])) {
-            $qb->leftJoin('masterItem.tag','tag');
-            $qb->andWhere("tag.id = :tagId");
-            $qb->setParameter('tagId', $data['tag']);
-        }
-
-        if (!empty($data['discount'])) {
-            $qb->andWhere("masterItem.discount >= :discount");
-            $qb->setParameter('discount', $data['discount']);
-        }
-
-        if (!empty($data['category'])) {
-            $qb
-                ->join('masterItem.category', 'category')
-                ->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
-                        $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
-                    )
-                );
-        }
-        if (!empty($data['product'])) {
-             $search = strtolower($data['product']);
-            $qb->andWhere($qb->expr()->like(strtolower("product.name"), "'$search%'"  ));
-        }
-
-        if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
-            $qb->orderBy('product.name','ASC');
-        }else{
-            $qb->orderBy($sort ,$order);
-        }
-        if($limit > 0 ) {
-            $qb->setMaxResults($limit);
-        }
-
-        $res = $qb->getQuery();
-        return  $res;
+        $qb = $this->createQueryBuilder('item');
+        $qb->where("item.config = :inventory")->setParameter('inventory', $inventory);
+        $qb->andWhere("item.productType = :type")->setParameter('type', "Assets");
+        $this->handleWithSearch($qb,$data);
+        $qb->orderBy('item.name','ASC');
+        $qb->getQuery();
+        return  $qb;
 
     }
 
@@ -160,7 +178,6 @@ class ItemRepository extends EntityRepository
 
     public function getFeatureCategoryProduct($inventory,$data,$limit){
 
-        exit;
 
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin("product.masterItem",'masterItem');
@@ -439,7 +456,7 @@ class ItemRepository extends EntityRepository
         $em = $this->_em;
 
         if($fieldName == 'sales'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'sales');
+            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'sales');
             $stock->setSalesQuantity($quantity);
         }elseif($fieldName == 'sales-return'){
             $quantity = $this->_em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'sales-return');
@@ -477,6 +494,8 @@ class ItemRepository extends EntityRepository
         $em->flush();
     }
 
+
+
     public function getPurchaseUpdateQnt(Purchase $entity){
 
         $em = $this->_em;
@@ -493,33 +512,21 @@ class ItemRepository extends EntityRepository
         }
     }
 
-
-    public function getSalesUpdateQnt(MedicineSales $invoice){
+    public function getSalesUpdateQnt(Sales $entity){
 
         $em = $this->_em;
 
-        /** @var $item MedicineSalesItem */
-        if($invoice->getMedicineSalesItems()){
-            foreach($invoice->getMedicineSalesItems() as $item ){
-                /** @var  $stock MedicineStock */
-                $stock = $item->getMedicineStock();
-                $qnt = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
-                $stock->setSalesQuantity($qnt);
-                $em->persist($stock);
-                $em->flush();
-                $this->remainingQnt($stock);
+        /** @var $item StockItem  */
+
+        if($entity->getStockItems()){
+
+            foreach($entity->getStockItems() as $item ){
+
+                /** @var  $stock Item */
+                $stock = $item->getItem();
+                $this->updateRemovePurchaseQuantity($stock,'assets');
             }
         }
-    }
-
-    public function updateRemoveSalesQuantity(MedicineStock $stock){
-
-        $em = $this->_em;
-        $qnt = $em->getRepository('MedicineBundle:MedicineSalesItem')->salesStockItemUpdate($stock);
-        $stock->setPurchaseQuantity($qnt);
-        $em->persist($stock);
-        $em->flush();
-        $this->remainingQnt($stock);
     }
 
 

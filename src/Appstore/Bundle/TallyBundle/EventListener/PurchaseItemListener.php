@@ -23,7 +23,6 @@ class PurchaseItemListener
             $entity->setCode($lastCode+1);
             $barcode = $this->getBarcode($entity);
             $entity->setBarcode($barcode);
-
         }
     }
 

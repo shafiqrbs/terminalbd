@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseOrder;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -57,11 +58,6 @@ class Sales
      **/
     private $customer;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="sales"  )
-     **/
-    private $purchaseOrder;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="sales"  )
@@ -72,6 +68,7 @@ class Sales
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesUser" )
      **/
     private $salesBy;
+
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -270,6 +267,12 @@ class Sales
     private $totalTaxIncidence = 0;
 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchaseRequisitionNo", type="string", nullable=true)
+     */
+    private $purchaseRequisitionNo;
 
 
     /**
@@ -1170,6 +1173,23 @@ class Sales
     public function setTotalTaxIncidence($totalTaxIncidence)
     {
         $this->totalTaxIncidence = $totalTaxIncidence;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getPurchaseRequisitionNo()
+    {
+        return $this->purchaseRequisitionNo;
+    }
+
+    /**
+     * @param string $purchaseRequisitionNo
+     */
+    public function setPurchaseRequisitionNo($purchaseRequisitionNo)
+    {
+        $this->purchaseRequisitionNo = $purchaseRequisitionNo;
     }
 
 }

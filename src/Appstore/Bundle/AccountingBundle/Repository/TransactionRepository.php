@@ -831,6 +831,8 @@ class TransactionRepository extends EntityRepository
 
     }
 
+
+
     public function salesReturnTransaction(SalesReturn $entity, AccountSales $accountSales)
     {
         $this->insertSalesReturnDebit($entity,$accountSales);
@@ -2444,6 +2446,131 @@ class TransactionRepository extends EntityRepository
 		}
 
 	}
+
+
+    public function tallySalesTransaction(\Appstore\Bundle\TallyBundle\Entity\Sales $entity,$accountSales)
+    {
+        $this->insertTallySalesItem($entity,$accountSales);
+        $this->insertTallySalesCash($entity,$accountSales);
+        $this->insertTallySalesAccountReceivable($entity,$accountSales);
+        $this->insertTallySalesVatAccountPayable($entity,$accountSales);
+    }
+
+    private function insertTallySalesItem(\Appstore\Bundle\TallyBundle\Entity\Sales $entity , AccountSales $accountSales)
+    {
+        $amount =  $entity->getNetTotal();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
+        }
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Goods');
+        /* Sales Revenue - Sales goods account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
+        $transaction->setAmount('-'.$amount);
+        $transaction->setCredit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
+    private function insertTallySalesCash(\Appstore\Bundle\TallyBundle\Entity\Sales $entity , AccountSales $accountSales)
+    {
+        $amount = $entity->getPayment();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($entity->getUpdated());
+
+            /* Cash - Cash various */
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                if($accountSales->getAccountBank()){
+                    $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                    $transaction->setSubAccountHead($subAccount);
+                }
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                if($accountSales->getAccountMobileBank()){
+                    $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                    $transaction->setSubAccountHead($subAccount);
+                }
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    private function insertTallySalesAccountReceivable(\Appstore\Bundle\TallyBundle\Entity\Sales $entity, AccountSales $accountSales)
+    {
+
+        $amount = ($entity->getNetTotal() - $entity->getPayment());
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountReceivable');
+            /* Assets Account - Account Receivable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCustomerAccount($entity->getCustomer());
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+    private function insertTallySalesVatAccountPayable(\Appstore\Bundle\TallyBundle\Entity\Sales $entity, AccountSales $accountSales)
+    {
+
+        $amount = $entity->getTotalTaxIncidence();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountPayable');
+            /* Current Liabilities - Sales Vat & Tax */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
 
 
 

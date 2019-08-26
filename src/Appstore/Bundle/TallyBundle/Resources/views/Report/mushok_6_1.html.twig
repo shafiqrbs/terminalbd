@@ -197,15 +197,16 @@
                         </tr>
                         <tr class="style_23" valign="top" id="__TOC_0">
                             <td colspan="19" style=" overflow:hidden;">
-                                Body Handle
+                              HS Code:  {{ item.vatProduct.hsCode }}-{{ item.name }}
                             </td>
                         </tr>
+                        {% for purchaseItem in purchaseItems %}
                         <tr valign="top">
                             <td class="style_32" style=" overflow:hidden;">
                                 <div>1</div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_2" style=" text-align:center;">২০১৯-০৮-০১</div>
+                                <div id="__bookmark_2" style=" text-align:center;">{{ purchaseItem.updated|date('d-m-y') }}</div>
                             </td>
                             <td class="style_33" style=" overflow:hidden;" align="left">
                                 <span id="__bookmark_3" style=" text-align:center;">০.০০</span>
@@ -213,25 +214,28 @@
                                 <span>unit</span>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_4" style=" text-align:center;">০.০০</div>
+                                <div id="__bookmark_4" style=" text-align:center;">{{ purchaseItem.price }}</div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div>
+                                <div>{% if purchaseItem.tallyPurchase is not empty %}{{ purchaseItem.tallyPurchase.challanNo }}{% endif %}
                                     <div style="visibility:hidden">&nbsp;</div>
                                 </div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
                                 <div id="__bookmark_5" style=" text-align:center;">
+                                    {% if purchaseItem.tallyPurchase is not empty %} {{ purchaseItem.tallyPurchase.receiveDate|date('d-m-Y') }}{% endif %}
                                     <div style="visibility:hidden">&nbsp;</div>
                                 </div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
                                 <div id="__bookmark_6" style=" text-align:center;">
+                                    {% if purchaseItem.tallyPurchase is not empty %}   {{ purchaseItem.tallyPurchase.vendor.companyName }} {% endif %}
                                     <div style="visibility:hidden">&nbsp;</div>
                                 </div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
                                 <div id="__bookmark_7" style=" text-align:center;">
+                                    {% if purchaseItem.tallyPurchase is not empty %}            {{ purchaseItem.tallyPurchase.vendor.address|raw }} {% endif %}
                                     <div style="visibility:hidden">&nbsp;</div>
                                 </div>
                             </td>
@@ -240,22 +244,22 @@
                                     <div style="visibility:hidden">&nbsp;</div>
                                 </div>
                             </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                Body Handle ffa afa faf fa sdf afda faf adfaf dfaf
+                            <td class="style_33" style=" overflow:hidden;" align="center">
+                                {{ purchaseItem.item.name }} - {{ purchaseItem.name }}
                             </td>
                             <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
+                                <span style=" text-align:center;">{{ purchaseItem.quantity|number_format }}</span>
                                 <span id="AUTOGENBOOKMARK_53_6947ad6d-c6e4-42d6-9343-e3ed79d1bc2a">&nbsp;</span>
-                                <span>unit</span>
+                                <span> {% if purchaseItem.item.productUnit is not empty %} {{ purchaseItem.item.productUnit.name }}{% endif %}</span>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
+                                <div style=" text-align:center;">{{ purchaseItem.subTotal|number_format }}</div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
+                                <div style=" text-align:center;">{{ purchaseItem.total|number_format }}</div>
                             </td>
                             <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
+                                <div style=" text-align:center;">{{ purchaseItem.totalTaxIncidence|number_format }}</div>
                             </td>
                             <td class="style_36" style=" overflow:hidden;" align="center">
                                 <span style=" text-align:center;">০.০০</span>
@@ -280,368 +284,8 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr valign="top">
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>2</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_17" style=" text-align:center;">২০১৯-০৮-১৮</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span id="__bookmark_18" style=" text-align:center;">০.০০</span>
-                                <span id="AUTOGENBOOKMARK_56_5cac4449-7a8f-4080-b10d-7cff24962c69">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_19" style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>PD-1004</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_20" style=" text-align:center;">2019-08-18</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_21" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_22" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_23" style=" text-align:center;">135792468</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span>Body Handle</span>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০.০০</span>
-                                <span id="AUTOGENBOOKMARK_58_5d4c4d3b-82d2-43f3-a948-ffe7f6b8126e">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১৪৫.৭০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">২১.৮৫৫০০</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
-                                <span id="AUTOGENBOOKMARK_59_86e8b0aa-f2ca-415b-bf09-82cf82269955">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                                <div style="display: none;">0</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০.০০</span>
-                                <span id="AUTOGENBOOKMARK_60_9d057931-7620-47cb-a095-579a1ef5b48f">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১৪৫.৭০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_31" style="display: none; text-align:center;">Purchase</div>
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>3</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_32" style=" text-align:center;">২০১৯-০৮-১৮</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span id="__bookmark_33" style=" text-align:center;">১০.০০</span>
-                                <span id="AUTOGENBOOKMARK_61_ab36e27b-c6cc-43d8-add3-4f86a89aa6cf">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_34" style=" text-align:center;">১৪৫.৭০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>PD-1005</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_35" style=" text-align:center;">2019-08-18</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_36" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_37" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_38" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span>Body Handle</span>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০০.০০</span>
-                                <span id="AUTOGENBOOKMARK_63_823ebfed-7d14-481a-8dd7-02cddee64b39">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১,৪৫৭.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">২১৮.৫৫</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
-                                <span id="AUTOGENBOOKMARK_64_af6d08bc-aac1-4f78-8b70-956dea4206a8">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                                <div style="display: none;">0</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১১০.০০</span>
-                                <span id="AUTOGENBOOKMARK_65_a31c51f4-34a5-440f-8b6d-6a8a5c87bc03">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১,৬০২.৭০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_46" style="display: none; text-align:center;">Purchase</div>
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>4</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_47" style=" text-align:center;">২০১৯-০৮-১৯</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span id="__bookmark_48" style=" text-align:center;">১১০.০০</span>
-                                <span id="AUTOGENBOOKMARK_66_4b27c75c-4989-4211-b973-613168eb6ec7">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_49" style=" text-align:center;">১,৬০২.৭০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>MRP-CONS-1003</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_50" style=" text-align:center;">2019-08-19</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_51" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_52" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_53" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span>Body Handle</span>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
-                                <span id="AUTOGENBOOKMARK_68_0de50801-7bf1-4cb0-9fd9-1208f29ac2d6">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">৩.০০</span>
-                                <span id="AUTOGENBOOKMARK_69_2913c5bf-e04a-4d2b-aeaa-6cf7f49da81c">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">৪৩.৭১</div>
-                                <div style="display: none;">43.71</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০৭.০০</span>
-                                <span id="AUTOGENBOOKMARK_70_f6a5e6ea-2f31-4fed-a2ea-6a2b713265a0">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১,৫৫৮.৯৯</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_61" style="display: none; text-align:center;">Consumption</div>
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>5</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_62" style=" text-align:center;">২০১৯-০৮-১৯</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span id="__bookmark_63" style=" text-align:center;">১০৭.০০</span>
-                                <span id="AUTOGENBOOKMARK_71_8ae84e7c-2222-4392-a341-7023523a9586">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_64" style=" text-align:center;">১,৫৫৮.৯৯</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>MRP-CONS-1004</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_65" style=" text-align:center;">2019-08-19</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_66" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_67" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_68" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span>Body Handle</span>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
-                                <span id="AUTOGENBOOKMARK_73_4d693487-95f7-4352-b1a6-ee046949a78d">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">৩.০০</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">৪৩.৭১</div>
-                                <div style="display: none;">43.71</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০৪.০০</span>
-                                <span id="AUTOGENBOOKMARK_75_99583b62-acea-476f-b97c-c28214691bfe">&nbsp;</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১,৫১৫.২৮</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>6</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_77" style=" text-align:center;">২০১৯-০৮-১৯</div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span id="__bookmark_78" style=" text-align:center;">১০৪.০০</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_79" style=" text-align:center;">১,৫১৫.২৮</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div>MRP-CONS-1005</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_80" style=" text-align:center;">2019-08-19</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_81" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_82" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div id="__bookmark_83" style=" text-align:center;">
-                                    <div style="visibility:hidden">&nbsp;</div>
-                                </div>
-                            </td>
-                            <td class="style_33" style=" overflow:hidden;" align="left">
-                                <span>Body Handle</span>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">০.০০</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">০.০০</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১.০০</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১৪.৫৭</div>
-                            </td>
-                            <td class="style_36" style=" overflow:hidden;" align="center">
-                                <span style=" text-align:center;">১০৩.০০</span>
-                                <span>unit</span>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-                                <div style=" text-align:center;">১,৫০০.৭১</div>
-                            </td>
-                            <td class="style_32" style=" overflow:hidden;">
-
-                            </td>
-                        </tr>
-                        <tr class="style_24" valign="top">
+                        {% endfor %}
+                       {# <tr class="style_24" valign="top">
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;"></td>
@@ -653,16 +297,16 @@
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;">
-                                <div style=" text-align:right;">১১০.০০</div>
+                                <div style=" text-align:right;">{{ purchaseItem.quantity|number_format }}</div>
                             </td>
                             <td style=" overflow:hidden;">
-                                <div style=" text-align:right;">১,৬০২.৭০</div>
+                                <div style=" text-align:right;">{{ purchaseItem.subTotal|number_format }}</div>
                             </td>
                             <td style=" overflow:hidden;">
-                                <div style=" text-align:right;">০.০০</div>
+                                <div style=" text-align:right;">{{ purchaseItem.total|number_format }}</div>
                             </td>
                             <td style=" overflow:hidden;">
-                                <div style=" text-align:right;">২৪০.৪১</div>
+                                <div style=" text-align:right;">{{ purchaseItem.totalTaxIncidence|number_format }}</div>
                             </td>
                             <td style=" overflow:hidden;">
                                 <div style=" text-align:right;">৭.০০</div>
@@ -673,7 +317,8 @@
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;"></td>
                             <td style=" overflow:hidden;"></td>
-                        </tr>
+                        </tr>#}
+
                         </tbody></table>
                 </td>
             </tr>

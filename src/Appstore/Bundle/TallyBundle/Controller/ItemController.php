@@ -267,7 +267,7 @@ class ItemController extends Controller
      */
     private function createWebForm(Item $entity)
     {
-        $em = $this->getDoctrine()->getRepository('TallyBundle:AssetsCategory');
+        $em = $this->getDoctrine()->getRepository('TallyBundle:Category');
         $config = $this->getUser()->getGlobalOption()->getTallyConfig();
         $form = $this->createForm(new ItemEditType($config,$em), $entity, array(
             'action' => $this->generateUrl('tallyitem_web_update', array('id' => $entity->getId())),
@@ -297,7 +297,11 @@ class ItemController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
+            if($entity->getVatName()){
+                $vatId =  explode("-",$entity->getVatName());
+                $vat = $this->getDoctrine()->getRepository('TallyBundle:TaxTariff')->findOneBy(array('hsCode'=>$vatId[0]));
+                $entity->setVatProduct($vat);
+            }
             if(!empty($entity->upload())){ $entity->removeUpload(); }
             $entity->upload();
             $em->flush();

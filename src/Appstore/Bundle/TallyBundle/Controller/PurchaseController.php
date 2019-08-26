@@ -4,6 +4,7 @@ namespace Appstore\Bundle\TallyBundle\Controller;
 
 use Appstore\Bundle\TallyBundle\Entity\Purchase;
 use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
+use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Appstore\Bundle\TallyBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -134,21 +135,33 @@ class PurchaseController extends Controller
     }
 
 
-    public function addParticularAction(Request $request, $invoice)
+    public function addParticularAction(Request $request, $id)
     {
 
-        $purchase = $this->getDoctrine()->getRepository('TallyBundle:Purchase')->find($invoice);
+        $purchase = $this->getDoctrine()->getRepository('TallyBundle:Purchase')->find($id);
         $em = $this->getDoctrine()->getManager();
         $productItem = $request->request->get('productItem');
         $particular = $request->request->get('name');
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('price');
-        $invoiceItems = array('productItem' => $productItem , 'name' => $particular , 'quantity' => $quantity,'price' => $price);
-        $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->insertPurchaseItems($purchase, $invoiceItems);
+        $item = $this->getDoctrine()->getRepository('TallyBundle:Item')->find($productItem);
+
+        $entity = new PurchaseItem();
+        $entity->setTallyPurchase($purchase);
+        $subTotal = $quantity * $price;
+        $entity->setConfig($purchase->getConfig());
+        $entity->setItem($item);
+        $entity->setName($particular);
+        $entity->setPrice($price);
+        $entity->setPurchase($price);
+        $entity->setQuantity($quantity);
+        $entity->setSubTotal($subTotal);
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->updatePurchaseItemPrice($entity);
         $invoice = $this->getDoctrine()->getRepository('TallyBundle:PurchaseItem')->updatePurchaseTotalPrice($purchase);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
 
     }
 
@@ -230,7 +243,7 @@ class PurchaseController extends Controller
         if($entity->getProcess() == 'Approved'){
             $this->approvedAction($entity->getId());
         }
-        $products = $em->getRepository('TallyBundle:Item')->findAll(array('globalOption' => $entity->getGlobalOption()));
+        $products = $em->getRepository('TallyBundle:Item')->findAll(array('config' => $entity->getConfig()));
         return $this->render("TallyBundle:Purchase:new.html.twig",array(
             'entity' => $entity,
             'id' => 'purchase',

@@ -1,61 +1,28 @@
-inventory_salesonline:
+tally_issue:
     path:     /
-    defaults: { _controller: "InventoryBundle:SalesOnline:index" }
-
-tally_issue_customer:
-    path:     /customer
-    defaults: { _controller: "InventoryBundle:SalesOnline:customer" }
-
-tally_issue_show:
-    path:     /{id}/show
-    defaults: { _controller: "InventoryBundle:SalesOnline:show" }
-
-tally_issue_show_preview:
-    path:     /{id}/show-preview
-    defaults: { _controller: "InventoryBundle:SalesOnline:showPreview" }
-    methods:  GET
-    options:
-            expose: true
-
-inventory_sales_online_item_search:
-    path:     /search
-    defaults: { _controller: "InventoryBundle:SalesOnline:search" }
-    methods:  POST
-    options:
-            expose: true
+    defaults: { _controller: "TallyBundle:Issue:index" }
 
 tally_issue_new:
     path:     /new
-    defaults: { _controller: "InventoryBundle:SalesOnline:new" }
+    defaults: { _controller: "TallyBundle:Issue:new" }
 
 tally_issue_edit:
     path:     /{code}/online
-    defaults: { _controller: "InventoryBundle:SalesOnline:edit" }
-
-inventory_online_pos_print_individual:
-    path:     /{id}/online-pos-print-indivisual
-    defaults: { _controller: "InventoryBundle:SalesOnline:onlinePosPrintIndividual" }
-
-tally_issue_posprint:
-    path:     /online-pos-print
-    defaults: { _controller: "InventoryBundle:SalesOnline:onlinePosPrint" }
-    methods:  [POST, PUT]
-    options:
-            expose: true
+    defaults: { _controller: "TallyBundle:Issue:edit" }
 
 tally_issue_update:
     path:     /{id}/update
-    defaults: { _controller: "InventoryBundle:SalesOnline:update" }
+    defaults: { _controller: "TallyBundle:Issue:update" }
     methods:  [POST, PUT]
 
 tally_issue_print_invoice:
     path:     /{invoice}/invoice
-    defaults: { _controller: "InventoryBundle:SalesOnline:invoicePrint" }
+    defaults: { _controller: "TallyBundle:Issue:invoicePrint" }
 
-inventory_online_sales_reverse:
+tally_issue_sales_reverse:
     path:     /{invoice}/invoice-reverse
-    defaults: { _controller: "InventoryBundle:SalesOnline:reverse" }
+    defaults: { _controller: "TallyBundle:Issue:reverse" }
 
 tally_issue_empty_delete:
     path:     /delete/empty-invoice
-    defaults: { _controller: "InventoryBundle:SalesOnline:deleteEmptyInvoice" }
+    defaults: { _controller: "TallyBundle:Issue:deleteEmptyInvoice" }

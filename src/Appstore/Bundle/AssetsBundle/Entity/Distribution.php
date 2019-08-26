@@ -49,18 +49,18 @@ class Distribution
 
 	/**
 	 * @Gedmo\Blameable(on="create")
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="sales" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="distributionCreate" )
 	 **/
 	private  $createdBy;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesApprovedBy" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="distributionApprovedBy" )
 	 **/
 	private  $approvedBy;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesCheckedBy" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="distributionCheckedBy" )
 	 **/
 	private  $checkedBy;
 

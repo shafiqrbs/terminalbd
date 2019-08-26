@@ -78,8 +78,6 @@ class DistributionlType extends AbstractType
 			    },
 		    ));
 
-
-	    ;
     }
     
     /**

@@ -451,24 +451,22 @@ class SalesRepository extends EntityRepository
             ->setParameter('entity', $entity->getId())
             ->getQuery()->getOneOrNullResult();
 
-        if($total['total'] > 0){
-            $subTotal = $total['total'];
-            $entity->setSubTotal($subTotal);
+        if($total['subTotal'] > 0){
+            $entity->setSubTotal($total['subTotal']);
             $entity->setValueAddedTax($total['valueAddedTax']);
             $entity->setRebate($total['rebate']);
             $entity->setTotalTaxIncidence($total['totalTaxIncidence']);
-            $entity->setTotal($subTotal + $total['totalTaxIncidence'] - $total['rebate']);
-            $entity->setNetTotal($subTotal + $total['totalTaxIncidence'] - $total['rebate'] - $entity->getDiscount());
+            $entity->setTotal($total['subTotal'] + $total['totalTaxIncidence'] - $total['rebate']);
+            $entity->setNetTotal($entity->getTotal() - $entity->getDiscount());
         }else{
             $entity->setSubTotal(0);
             $entity->setTotal(0);
             $entity->setNetTotal(0);
             $entity->setValueAddedTax(0);
             $entity->setTotalTaxIncidence(0);
-            $entity->setDiscount(0);
-            $entity->setDiscountCalculation(0);
         }
-
+        $entity->setDiscount(0);
+        $entity->setDiscountCalculation(0);
         $em->persist($entity);
         $em->flush();
         return $entity;

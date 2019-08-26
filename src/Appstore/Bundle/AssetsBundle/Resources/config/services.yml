@@ -14,6 +14,27 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.assets.item.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\ItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.assets.purchase.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\PurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.assets.sales.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\SalesListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+
+    appstore.assets.purchase.item.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\PurchaseItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
 
     appstore.tally.item.event.listener:
         class: Appstore\Bundle\TallyBundle\EventListener\ItemListener

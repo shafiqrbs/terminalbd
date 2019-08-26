@@ -1,41 +1,41 @@
-assetsitembrand:
+tallybrand:
     path:     /
-    defaults: { _controller: "TallyBundle:ItemBrand:index" }
+    defaults: { _controller: "TallyBundle:Brand:index" }
 
-assetsitembrand_search:
+tallybrand_search:
     path:     /search
-    defaults: { _controller: "TallyBundle:ItemBrand:autoSearch" }
+    defaults: { _controller: "TallyBundle:Brand:autoSearch" }
     options:
             expose: true
 
-assetsitembrand_name:
+tallybrand_name:
     path:      /{brand}/brand-name
-    defaults: { _controller: "TallyBundle:ItemBrand:searchItemBrandName" }
+    defaults: { _controller: "TallyBundle:Brand:searchBrandName" }
     options:
             expose: true
 
-assetsitembrand_show:
+tallybrand_show:
     path:     /{id}/show
-    defaults: { _controller: "TallyBundle:ItemBrand:show" }
+    defaults: { _controller: "TallyBundle:Brand:show" }
 
-assetsitembrand_new:
+tallybrand_new:
     path:     /new
-    defaults: { _controller: "TallyBundle:ItemBrand:new" }
+    defaults: { _controller: "TallyBundle:Brand:new" }
 
-assetsitembrand_create:
+tallybrand_create:
     path:     /create
-    defaults: { _controller: "TallyBundle:ItemBrand:create" }
+    defaults: { _controller: "TallyBundle:Brand:create" }
     methods:  POST
 
-assetsitembrand_edit:
+tallybrand_edit:
     path:     /{id}/edit
-    defaults: { _controller: "TallyBundle:ItemBrand:edit" }
+    defaults: { _controller: "TallyBundle:Brand:edit" }
 
-assetsitembrand_update:
+tallybrand_update:
     path:     /{id}/update
-    defaults: { _controller: "TallyBundle:ItemBrand:update" }
+    defaults: { _controller: "TallyBundle:Brand:update" }
     methods:  [POST, PUT]
 
-assetsitembrand_delete:
+tallybrand_delete:
     path:     /{id}/delete
-    defaults: { _controller: "TallyBundle:ItemBrand:delete" }
+    defaults: { _controller: "TallyBundle:Brand:delete" }

@@ -588,6 +588,46 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
+    /* =============   Tally Module ================= */
+
+    public function insertAccountSalesTally(\Appstore\Bundle\TallyBundle\Entity\Sales $entity) {
+
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setAccountBank( $entity->getAccountBank() );
+        $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
+        $accountSales->setGlobalOption( $entity->getConfig()->getGlobalOption() );
+        $accountSales->setTallySales( $entity );
+        $accountSales->setSourceInvoice( $entity->getInvoice() );
+        $accountSales->setCustomer( $entity->getCustomer() );
+        $accountSales->setTotalAmount( $entity->getNetTotal() );
+        if ($entity->getPayment() > 0){
+            $accountSales->setAmount($entity->getPayment());
+        }else{
+            $accountSales->setAmount(0);
+        }
+        if ( $entity->getPayment() > 0 ) {
+            $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
+        }
+        $accountSales->setApprovedBy($entity->getApprovedBy());
+        if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
+            $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
+        }
+        $accountSales->setProcessHead('Tally');
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $accountSales->setCreated($entity->getCreated());
+        $accountSales->setUpdated($entity->getUpdated());
+        $em->persist($accountSales);
+        $em->flush();
+        $sales = $this->updateCustomerBalance($accountSales);
+        if($accountSales->getAmount() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        }
+        return $sales;
+
+    }
+
 
 
 	/* =============   Inventory Module ================= */

@@ -23,7 +23,7 @@ class ItemKeyValueRepository extends EntityRepository
         if(isset($data['metaKey']) OR isset($data['metaValue']) ){
             foreach ($data['metaKey'] as $value) {
                 $metaId = isset($data['metaId'][$i]) ? $data['metaId'][$i] : 0 ;
-                $itemKeyValue = $this->_em->getRepository('InventoryBundle:ItemKeyValue')->findOneBy(array('purchaseVendorItem'=>$reEntity,'id' => $metaId));
+                $itemKeyValue = $this->_em->getRepository('AssetsBundle:ItemKeyValue')->findOneBy(array('purchaseVendorItem'=>$reEntity,'id' => $metaId));
                 if(!empty($metaId) and !empty($itemKeyValue)){
                     $this->updateMetaAttribute($itemKeyValue,$data['metaKey'][$i],$data['metaValue'][$i]);
                 }else{

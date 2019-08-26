@@ -102,30 +102,22 @@ class StockItem
     private  $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="purchaseStockReturns")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseReturn", inversedBy="purchaseStockReturns")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="purchaseStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     *   @ORM\JoinColumn(name="purchaseReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * })
      */
-    private $purchaseStockReturn;
+    private $purchaseReturn;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="salesStockReturns")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\SalesReturn", inversedBy="salesStockReturns")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="salesStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     *   @ORM\JoinColumn(name="salesReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * })
      */
-    private $salesStockReturn;
+    private $salesReturn;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", inversedBy="assetsStockReturns")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="assetsStockReturn", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * })
-     */
-    private $assetsStockReturn;
 
 
     /**
@@ -1318,6 +1310,38 @@ class StockItem
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return PurchaseReturn
+     */
+    public function getPurchaseReturn()
+    {
+        return $this->purchaseReturn;
+    }
+
+    /**
+     * @param PurchaseReturn $purchaseReturn
+     */
+    public function setPurchaseReturn($purchaseReturn)
+    {
+        $this->purchaseReturn = $purchaseReturn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSalesReturn()
+    {
+        return $this->salesReturn;
+    }
+
+    /**
+     * @param mixed $salesReturn
+     */
+    public function setSalesReturn($salesReturn)
+    {
+        $this->salesReturn = $salesReturn;
     }
 
 }

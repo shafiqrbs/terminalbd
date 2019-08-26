@@ -18,14 +18,10 @@ class IssueType extends AbstractType
     /** @var GlobalOption */
     public  $globalOption;
 
-    /** @var  LocationRepository */
-    private $location;
-
-
-    function __construct(GlobalOption $globalOption,  LocationRepository $location )
+    function __construct(GlobalOption $globalOption)
     {
         $this->globalOption = $globalOption;
-        $this->location = $location;
+
     }
 
 

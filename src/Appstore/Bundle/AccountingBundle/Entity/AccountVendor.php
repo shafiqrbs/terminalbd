@@ -39,6 +39,16 @@ class AccountVendor
     private  $accountHead;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="vendor" )
+     **/
+    private  $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="vendor" )
+     **/
+    private  $products;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
      */
     protected $accountPurchases;

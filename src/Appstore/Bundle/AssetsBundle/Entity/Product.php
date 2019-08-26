@@ -29,9 +29,9 @@ class Product
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="products" )
 	 **/
-	private  $globalOption;
+	private  $config;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", inversedBy="products" )
@@ -51,7 +51,7 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", inversedBy="products" )
 	 **/
 	private  $purchaseItem;
 
@@ -63,7 +63,7 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="items" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="products" )
 	 **/
 	private  $category;
 
@@ -845,6 +845,22 @@ class Product
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return AssetsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param AssetsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

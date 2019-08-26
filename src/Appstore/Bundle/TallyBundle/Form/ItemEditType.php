@@ -42,7 +42,6 @@ class ItemEditType extends AbstractType
 
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Enter product item name')))
-            ->add('vatName','text', array('attr'=>array('class'=>'m-wrap span12 selectVatSearch','placeholder'=>'Enter vat name')))
             ->add('country', 'entity', array(
                 'required'      => true,
                 'expanded'      =>false,
@@ -88,7 +87,7 @@ class ItemEditType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->Where("b.status = 1")
-                        ->andWhere("b.globalOption = {$this->config->getId()}");
+                        ->andWhere("b.config = {$this->config->getId()}");
                 },
             ))
             ->add('vendor', 'entity', array(
@@ -100,7 +99,7 @@ class ItemEditType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.globalOption = {$config->getGlobalOption()->getId()}");
+                        ->andWhere("b.globalOption = {$this->config->getGlobalOption()->getId()}");
                 },
             ))
             ->add('productGroup', 'entity', array(
@@ -160,9 +159,8 @@ class ItemEditType extends AbstractType
                     'manual' => 'Manual'
                 ),
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=>3)))
-            ->add('file')
-        ;
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>10)))
+            ->add('file');
     }
     
     /**

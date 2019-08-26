@@ -126,15 +126,16 @@
                         </tr>
                         <tr class="style_21" valign="top">
                             <td colspan="19" style=" overflow:hidden;">
-                                Pressure Cooker 2.5 ltr
+                                HS Code:  {{ item.vatProduct.hsCode }}-{{ item.name }}
                             </td>
                         </tr>
+                        {% for salesItem in salesItems %}
                         <tr valign="top">
                             <td class="style_35" style=" overflow:hidden;">
-                                <div>1</div>
+                                <div>{{ loop.index }}</div>
                             </td>
                             <td class="style_35" style=" overflow:hidden;">
-                                <div style=" text-align:center;">2019-07-01</div>
+                                <div style=" text-align:center;">{{ salesItem.updated|date('d-m-Y') }}</div>
                             </td>
                             <td class="style_37" style=" overflow:hidden;" align="left">
                                 <div style=" text-align:right;">০.০০</div>
@@ -165,7 +166,7 @@
                                 <div style=" text-align:center;"></div>
                             </td>
                             <td class="style_37" style=" overflow:hidden;" align="left">
-                                Pressure Cooker 2.5 ltr
+                            {% if salesItem.purchaseItem is not empty %}   {{ salesItem.purchaseItem.name }} {% endif %}
                             </td>
                             <td class="style_37" style=" overflow:hidden;" align="left">
                                 <span>০.০০</span>
@@ -191,6 +192,7 @@
 
                             </td>
                         </tr>
+                        {% endfor %}
                         <tr valign="top">
                             <td class="style_35" style=" overflow:hidden;">
                                 <div>2</div>

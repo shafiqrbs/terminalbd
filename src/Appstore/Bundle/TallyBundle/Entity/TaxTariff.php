@@ -24,10 +24,6 @@ class TaxTariff
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="taxTariffs" )
-     **/
-    private  $globalOption;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="vatProduct")
@@ -39,10 +35,6 @@ class TaxTariff
      */
     protected $stockItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\TaxTariffMatrixItem", mappedBy="taxTariff")
-     */
-    protected $taxTariffMatrixItems;
 
 
     /**

@@ -1,0 +1,10 @@
+tally_config_manage:
+    path:     /
+    defaults: { _controller: "TallyBundle:Config:manage" }
+
+
+tally_config_update:
+    path:     /update
+    defaults: { _controller: "TallyBundle:Config:update" }
+    methods:  [POST, PUT]
+

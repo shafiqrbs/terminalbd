@@ -34,11 +34,24 @@ class StockItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
+        $entities = $em->getRepository('AssetsBundle:Item')->findWithSearch($inventory,'assets',$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('AssetsBundle:Item:index.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function indexDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,'assets',$data);
         $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('InventoryBundle:StockItem:index.html.twig', array(
+        return $this->render('AssetsBundle:Item:index.html.twig', array(
             'entities' => $pagination,
             'stockOverview' => $stockOverview,
             'searchForm' => $data,

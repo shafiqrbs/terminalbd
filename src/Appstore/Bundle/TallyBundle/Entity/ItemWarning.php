@@ -31,6 +31,20 @@ class ItemWarning
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="assuranceFromVendor" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $purchaseItemFromVendors;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="assuranceToCustomer" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $purchaseItemForCustomers;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)
@@ -116,6 +130,22 @@ class ItemWarning
         return $this->item;
     }
 
+
+    /**
+     * @return PurchaseItem
+     */
+    public function getPurchaseItemForCustomers()
+    {
+        return $this->purchaseItemForCustomers;
+    }
+
+    /**
+     * @return PurchaseItem
+     */
+    public function getPurchaseItemFromVendors()
+    {
+        return $this->purchaseItemFromVendors;
+    }
 
 
 }
