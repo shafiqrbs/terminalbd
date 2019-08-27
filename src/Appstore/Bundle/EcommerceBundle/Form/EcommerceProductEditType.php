@@ -9,6 +9,7 @@ use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EcommerceProductEditType extends AbstractType
@@ -113,7 +114,21 @@ class EcommerceProductEditType extends AbstractType
 			->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
 
-            ->add('file')
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        ),
+                        'mimeTypesMessage' => 'Please upload a valid png,jpg,jpeg,gif extension',
+                    ))
+                )
+            ))
 			->add('tag', 'entity', array(
 				'required'    => true,
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
