@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PromotionType extends AbstractType
@@ -29,7 +30,22 @@ class PromotionType extends AbstractType
                     'Promotion'       => 'Promotion'
                 ),
             ))
-            ->add('file','file', array('attr'=>array('class'=>'default')));
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        ),
+                        'mimeTypesMessage' => 'Please upload a valid png,jpg,jpeg,gif extension',
+                    ))
+                )
+            ));
+
     }
     
     /**
@@ -47,6 +63,6 @@ class PromotionType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_ecommercebundle_promotion';
+        return 'promotion';
     }
 }

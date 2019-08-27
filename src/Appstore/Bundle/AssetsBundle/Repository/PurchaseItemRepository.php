@@ -169,11 +169,6 @@ class PurchaseItemRepository extends EntityRepository
             $data .= "<td>{$entity->getQuantity()}</td>";
             $data .= "<td>{$entity->getPrice()}</td>";
             $data .= "<td>{$entity->getSubTotal()}</td>";
-            $data .= "<td>{$entity->getValueAddedTaxPercent()}</td>";
-            $data .= "<td>{$entity->getValueAddedTax()}</td>";
-            $data .= "<td>{$entity->getTotalTaxIncidence()}</td>";
-            $data .= "<td>{$entity->getRebate()}</td>";
-            $data .= "<td>{$total}</td>";
             $data .= "<td><a id='{$entity->getId()}'  data-url='/assets/purchase/{$sales->getId()}/{$entity->getId()}/item-delete' href='javascript:' class='btn red mini item-delete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';
             $i++;

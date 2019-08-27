@@ -119,7 +119,7 @@ class Coupon
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="endDate", type="datetime")
+     * @ORM\Column(name="endDate", type="datetime", nullable=true)
      */
     private $endDate;
 

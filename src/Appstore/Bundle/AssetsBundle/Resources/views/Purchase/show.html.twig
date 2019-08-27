@@ -38,8 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('tally_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
-                                <a class="btn black" href="{{ path('tally_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
+                                <a class="btn red" href="{{ path('assets_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                                <a class="btn black" href="{{ path('assets_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 
@@ -98,10 +98,6 @@
                                             <th class="span1">Qnt</th>
                                             <th class="span1">Price</th>
                                             <th class="span1">Amount</th>
-                                            <th class="span1">Vat(%)</th>
-                                            <th class="span1">Vat</th>
-                                            <th class="span1">TTI</th>
-                                            <th class="span1">Rebate</th>
                                             <th class="span1">Sub-Total</th>
                                             <th class="span1"><i class="icon-trash"></i></th>
                                         </tr>
@@ -119,17 +115,13 @@
                                                     <td>{{ item.quantity }}</td>
                                                     <td>{{ item.price }}</td>
                                                     <td>{{ item.subTotal|number_format }}</td>
-                                                    <td>{{ item.valueAddedTaxPercent }}</td>
-                                                    <td>{{ item.valueAddedTax }}</td>
-                                                    <td>{{ item.totalTaxIncidence }}</td>
-                                                    <td>{{ item.rebate }}</td>
-                                                    <td>{{ (item.subTotal + item.totalTaxIncidence - item.rebate)|number_format }}</td>
+                                                    <td>{{ (item.subTotal)|number_format }}</td>
                                                     <td> <div class="actions">
                                                             <div class="btn-group">
                                                                 {% if entity.process != 'approved' %}
-                                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('tally_purchaseitem_delete', { 'id': item.id }) }}" id="{{  item.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('assets_purchaseitem_delete', { 'id': item.id }) }}" id="{{  item.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                                 {% endif %}
-                                                                <a href="{{ path('tally_purchaseitem_attribute', { 'id': item.id }) }}"  class="btn yellow mini" ><i class="icon-plus-sign"></i> Attribute</a>
+                                                                <a href="{{ path('assets_purchaseitem_attribute', { 'id': item.id }) }}"  class="btn yellow mini" ><i class="icon-plus-sign"></i> Attribute</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -139,36 +131,26 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="15" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="11" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                                             <td class="span2"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Total Tax Incidence TK.</strong> =</span></td>
-                                            <td class="span2"><strong class="tti">{{ entity.totalTaxIncidence|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Rebate TK.</strong> =</span></td>
-                                            <td class="span2"><strong class="rebate">{{ entity.rebate|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                             <td class="span2"><strong class="rebate">{{ entity.discount|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
                                             <td class="span2"><strong class="netTotal">{{ entity.netTotal|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         {% if entity.netTotal > entity.payment %}
                                         <tr>
-                                            <td colspan="13" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                                             <td class="span2"><strong class="netTotal">{{ (entity.netTotal - entity.payment)|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
@@ -188,7 +170,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done') %}
-                                    <a  href="javascript:"  data-url="{{ path('tally_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('assets_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
                                 </div>

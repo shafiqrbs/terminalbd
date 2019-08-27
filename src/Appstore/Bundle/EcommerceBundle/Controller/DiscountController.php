@@ -82,7 +82,7 @@ class DiscountController extends Controller
             'action' => $this->generateUrl('ecommerce_discount_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -120,7 +120,7 @@ class DiscountController extends Controller
             'action' => $this->generateUrl('ecommerce_discount_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -199,7 +199,11 @@ class DiscountController extends Controller
 
     public function statusAction(Discount $entity)
     {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getManager();
+        if ($inventory != $entity->getEcommerceConfig()) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
         $status = $entity->getStatus();
         if($status == 1){
             $entity->setStatus(0);
@@ -207,6 +211,9 @@ class DiscountController extends Controller
             $entity->setStatus(1);
         }
         $em->flush();
+        if($status != 1){
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->removeDiscount($inventory->getId(),$entity->getId());
+        }
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );

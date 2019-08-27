@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AssetsBundle\Form;
 
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -13,13 +14,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PurchaseOpeningItemType extends AbstractType
 {
 
-    /** @var TallyConfig */
+    /** @var AssetsConfig */
 
     public  $config;
 
 
 
-    function __construct(TallyConfig $config)
+    function __construct(AssetsConfig $config)
     {
 
         $this->config = $config;
@@ -35,7 +36,7 @@ class PurchaseOpeningItemType extends AbstractType
 
             ->add('item', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\Item',
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Item',
                 'empty_value' => 'Choose a product item name',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -70,7 +71,7 @@ class PurchaseOpeningItemType extends AbstractType
 
             ->add('assuranceFromVendor', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemWarning',
                 'empty_value' => 'Choose a item warning',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -81,7 +82,7 @@ class PurchaseOpeningItemType extends AbstractType
             ))
             ->add('assuranceToCustomer', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemWarning',
                 'empty_value' => 'Choose a item warning',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),

@@ -198,14 +198,21 @@ class PromotionController extends Controller
 
     public function statusAction(Promotion $entity)
     {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getManager();
         $status = $entity->getStatus();
+        if ($inventory != $entity->getEcommerceConfig()) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
         if($status == 1){
             $entity->setStatus(0);
         } else{
             $entity->setStatus(1);
         }
         $em->flush();
+        if($entity->getStatus() != 1){
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->removePromotion($inventory->getId(),$entity->getId());
+        }
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );

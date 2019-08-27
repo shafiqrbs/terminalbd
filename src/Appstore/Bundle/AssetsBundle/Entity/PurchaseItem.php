@@ -680,19 +680,7 @@ class PurchaseItem
         $this->itemMetaAttributes = $itemMetaAttributes;
     }
 
-    /**
-     * @return ItemKeyValue
-     */
-    public function getItemKeyValues() {
-        return $this->itemKeyValues;
-    }
 
-    /**
-     * @param ItemKeyValue $itemKeyValues
-     */
-    public function setItemKeyValues( $itemKeyValues ) {
-        $this->itemKeyValues = $itemKeyValues;
-    }
 
     /**
      * @return string

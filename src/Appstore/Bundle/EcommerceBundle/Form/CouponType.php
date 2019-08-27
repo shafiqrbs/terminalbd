@@ -50,7 +50,7 @@ class CouponType extends AbstractType
 
                 ),
                 'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span5 datePicker'),
+                'attr' => array('class'=>'m-wrap span5 date-picker'),
                 'view_timezone' => 'Asia/Dhaka'))
             ->add('endDate', 'date', array(
                 'widget' => 'single_text',
@@ -59,7 +59,7 @@ class CouponType extends AbstractType
 
                 ),
                 'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span5 datePicker'),
+                'attr' => array('class'=>'m-wrap span5 date-picker'),
                 'view_timezone' => 'Asia/Dhaka'))
 
         ;

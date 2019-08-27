@@ -444,25 +444,6 @@ class ItemController extends Controller
 
 	}
 
-	public function discountSelectAction()
-	{
-		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		$entities = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->findBy(
-			array('ecommerceConfig' => $config,'status'=>1)
-		);
-		$type = '';
-		$items = array();
-		$items[]=array('value' => '','text'=> '---Add Discount---');
-		foreach ($entities as $entity):
-			if($entity->getType() == "percentage"){
-				$type ='%';
-			}
-			$items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'('.$entity->getDiscountAmount().')'.$type);
-		endforeach;
-		return new JsonResponse($items);
-
-
-	}
 
 	public function quantityApplicableAction(Item $item)
 	{
@@ -478,20 +459,43 @@ class ItemController extends Controller
 
 	}
 
-	public function tagSelectAction()
-	{
-		$getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		$entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Promotion');
-		$items = array();
-		foreach ($entities as $entity):
-			$items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
-		endforeach;
-		return new JsonResponse($items);
+    public function discountSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->findBy(
+            array('ecommerceConfig' => $config,'status'=>1)
+        );
+        $type = '';
+        $items = array();
+        $items[]=array('value' => '','text'=> '---Add Discount---');
+        foreach ($entities as $entity):
+            if($entity->getType() == "percentage"){
+                $type ='%';
+            }
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'('.$entity->getDiscountAmount().')'.$type);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Discount');
+        return new JsonResponse($items);
 
 
-	}
+    }
 
-	public function inlineItemUpdateAction(Request $request)
+    public function tagSelectAction()
+    {
+        $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Promotion');
+        $items = array();
+        $items[]=array('value' => '','text'=> '---Add Promotion---');
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Promotion');
+        return new JsonResponse($items);
+
+    }
+
+
+    public function inlineItemUpdateAction(Request $request)
 	{
 		$data = $request->request->all();
 		$em = $this->getDoctrine()->getManager();
@@ -503,28 +507,28 @@ class ItemController extends Controller
 		if($data['name'] == 'Discount'){
 
 			$discount = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
-			$discountPrice = $em->getRepository('EcommerceBundle:Item')->getCulculationDiscountPrice($entity,$discount);
-			$entity->setDiscountPrice($discountPrice);
-			$em->getRepository('EcommerceBundle:ItemSub')->subItemDiscountPrice($entity,$discount);
-			$entity->$setName($discount);
-		
+			if($discount){
+                $discountPrice = $em->getRepository('EcommerceBundle:Item')->getCulculationDiscountPrice($entity,$discount);
+                if($discountPrice > 0){
+                    $entity->setDiscountPrice($discountPrice);
+                    $entity->setDiscount($discount);
+                    $em->getRepository('EcommerceBundle:ItemSub')->subItemDiscountPrice($entity,$entity->getDiscount());
+                }
+            }else{
+                $entity->setDiscount(NULL);
+                $entity->setDiscountPrice(NULL);
+            }
+
 		}elseif($data['name'] == 'Promotion'){
-
 			$setValue = $em->getRepository('EcommerceBundle:Promotion')->find($data['value']);
-			$entity->$setName($setValue);
-
-		}else{
-
-			$entity->$setName($data['value']);
-			if(!empty($entity->getDiscount())){
-				$discountPrice = $em->getRepository('EcommerceBundle:Item')->getCulculationDiscountPrice($entity,$entity->getDiscount());
-				$entity->setDiscountPrice($discountPrice);
-				$em->getRepository('EcommerceBundle:ItemSub')->subItemDiscountPrice($entity,$entity->getDiscount());
-			}
-
+			if($setValue){
+                $entity->setPromotion($setValue);
+            }else {
+                $entity->setPromotion(NULL);
+            }
 		}
 		$em->persist($entity);
-		$em->flush($entity);
+		$em->flush();
 		exit;
 
 	}
@@ -553,6 +557,26 @@ class ItemController extends Controller
 		exit;
 
 	}
+
+    public function statusAction(Item $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->getStatus();
+        if ($inventory != $entity->getEcommerceConfig()) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
+        if($status == 1){
+            $entity->setStatus(0);
+        } else{
+            $entity->setStatus(1);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('ecommerce_item'));
+    }
 
 
 }

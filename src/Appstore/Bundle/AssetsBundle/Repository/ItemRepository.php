@@ -92,6 +92,63 @@ class ItemRepository extends EntityRepository
 
     }
 
+
+    public function findTypeWithSearch($config,$type,$data)
+    {
+
+        $item = isset($data['item'])? $data['item'] :'';
+        $branch = isset($data['branch'])? $data['branch'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $parent = isset($data['parent'])? $data['parent'] :'';
+        $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
+
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->where("item.status IS NOT NULL");
+        $qb->andWhere("item.config = :config")->setParameter('config', $config);
+        $qb->andWhere("item.productType = :type")->setParameter('type', $type);
+        if (!empty($item)) {
+            $qb->andWhere("item.name = :name");
+            $qb->setParameter('name', $item);
+        }
+
+        if (!empty($category)) {
+            $qb->join('item.category', 'c');
+            $qb->andWhere("c.name = :category");
+            $qb->setParameter('category', $category);
+        }
+
+        if (!empty($parent)) {
+            $qb->join('item.parentCategory', 'pc');
+            $qb->andWhere("pc.name = :parent");
+            $qb->setParameter('parent', $parent);
+        }
+
+        if (!empty($depreciation)) {
+            $qb->join('item.depreciation', 'd');
+            $qb->andWhere("d.id = :depreciation");
+            $qb->setParameter('depreciation', $depreciation);
+        }
+
+        if (!empty($vendor)) {
+            $qb->join('item.vendor', 'v');
+            $qb->andWhere("v.companyName = :vendor");
+            $qb->setParameter('vendor', $vendor);
+        }
+
+        if (!empty($branch)) {
+
+            $qb->join('item.branch', 'b');
+            $qb->andWhere("b.name = :branch");
+            $qb->setParameter('branch', $branch);
+
+        }
+        $qb->orderBy('item.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
     public function modeWiseStockItem($inventory,$mode ='purchase',$data)
     {
 

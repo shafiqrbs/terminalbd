@@ -39,7 +39,7 @@ class PurchaseItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
         $entities = $em->getRepository('AssetsBundle:PurchaseItem')->findWithSearch($config,'opening',$data);
         $pagination = $this->paginate($entities);
         return $this->render('AssetsBundle:PurchaseItem:index.html.twig', array(
@@ -60,7 +60,7 @@ class PurchaseItemController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $data = array('process'=>'Approved');
-        $config = $this->getUser()->getGlobalOption()->getTallyConfig()->getId();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
         $entities = $em->getRepository('AssetsBundle:PurchaseItem')->findWithSearch($config,'purchase',$data);
         $pagination = $this->paginate($entities);
         return $this->render('AssetsBundle:PurchaseItem:index.html.twig', array(
@@ -84,7 +84,7 @@ class PurchaseItemController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+            $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
             $entity->setConfig($config);
             $entity->setMode('opening');
             $entity->setPurchasePrice($entity->getPrice());
@@ -100,7 +100,7 @@ class PurchaseItemController extends Controller
                 'success',"Data has been added successfully"
             );
             $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->generateSerialNo($entity);
-            return $this->redirect($this->generateUrl('tally_purchaseitem'));
+            return $this->redirect($this->generateUrl('assets_purchaseitem'));
         }
         return $this->render('AssetsBundle:PurchaseItem:opening.html.twig', array(
             'entity' => $entity,
@@ -117,9 +117,9 @@ class PurchaseItemController extends Controller
      */
     private function createCreateForm(PurchaseItem $entity)
     {
-        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new PurchaseOpeningItemType($config), $entity, array(
-            'action' => $this->generateUrl('tally_purchaseitem_create'),
+            'action' => $this->generateUrl('assets_purchaseitem_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -156,9 +156,9 @@ class PurchaseItemController extends Controller
      */
     private function createEditForm(PurchaseItem $entity)
     {
-        $config = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new OpeningItemEditType($config), $entity, array(
-            'action' => $this->generateUrl('tally_purchaseitem_update',array('id'=>$entity->getId())),
+            'action' => $this->generateUrl('assets_purchaseitem_update',array('id'=>$entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -214,7 +214,7 @@ class PurchaseItemController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             $this->getDoctrine()->getRepository('AssetsBundle:ItemMetaAttribute')->insertProductMeta($entity,$data);
-            return $this->redirect($this->generateUrl('tally_purchaseitem_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('assets_purchaseitem_edit', array('id' => $id)));
         }
         return $this->render('AssetsBundle:PurchaseItem:editOpening.html.twig', array(
             'entity'      => $entity,
@@ -259,7 +259,7 @@ class PurchaseItemController extends Controller
     {
 
         $form = $this->createForm(new PurchaseItemType(), $entity, array(
-            'action' => $this->generateUrl('tally_purchaseitem_attribute_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('assets_purchaseitem_attribute_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
         return $form;
@@ -281,7 +281,7 @@ class PurchaseItemController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             $this->getDoctrine()->getRepository('AssetsBundle:ItemMetaAttribute')->insertProductMeta($entity,$data);
-            return $this->redirect($this->generateUrl('tally_purchaseitem_attribute', array('id' => $id)));
+            return $this->redirect($this->generateUrl('assets_purchaseitem_attribute', array('id' => $id)));
         }
         return $this->render('AssetsBundle:PurchaseItem:new.html.twig', array(
             'entity'      => $entity,

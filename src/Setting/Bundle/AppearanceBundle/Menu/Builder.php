@@ -678,10 +678,11 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']->addChild('Asset Disposal')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
         $menu['Fixed Assets']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'))->setAttribute('icon', 'icon-th-list');
-        $menu['Fixed Assets']->addChild('Asset Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Item', array('route' => 'assets_stockitem'));
-        $menu['Fixed Assets']['Asset Stock']->addChild('Stock Details', array('route' => 'assets_stockitem_details'));
-        $menu['Fixed Assets']['Asset Stock']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
+        $menu['Fixed Assets']->addChild('Product Inventory')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
+        $menu['Fixed Assets']['Product Inventory']->addChild('Assets',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Assets')));
+        $menu['Fixed Assets']['Product Inventory']->addChild('Inventory',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Inventory')));
+        $menu['Fixed Assets']['Product Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
+        $menu['Fixed Assets']['Product Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
         $menu['Fixed Assets']->addChild('Asset Voucher')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Voucher']->addChild('Voucher', array('route' => 'assets_purchase'));
         $menu['Fixed Assets']['Asset Voucher']->addChild('New Voucher', array('route' => 'assets_purchase_new'));

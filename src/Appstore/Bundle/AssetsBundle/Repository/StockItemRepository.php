@@ -159,12 +159,72 @@ class StockItemRepository extends EntityRepository
 
     }
 
+    public function findWithSearch($config,$data)
+    {
+
+        $item = isset($data['item'])? $data['item'] :'';
+        $branch = isset($data['branch'])? $data['branch'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $parent = isset($data['parent'])? $data['parent'] :'';
+        $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
+
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->join("item.item",'iItem');
+        $qb->join("item.purchaseItem",'purchaseItem');
+        $qb->select("SUM(item.openingQuantity) as openingQuantity","SUM(item.quantity) as remainingQuantity","SUM(item.purchaseQuantity) as purchaseQuantity","SUM(item.damageQuantity) as damageQuantity","SUM(item.salesQuantity) as salesQuantity","SUM(item.salesReturnQuantity) as salesReturnQuantity","SUM(item.purchaseReturnQuantity) as purchaseReturnQuantity");
+        $qb->addSelect("purchaseItem.id as id","purchaseItem.barcode as barcode");
+        $qb->addSelect("iItem.name as productName");
+        $qb->where("item.process='Approved'");
+        $qb->andWhere("item.config = :config")->setParameter('config', $config);
+        if (!empty($item)) {
+            $qb->andWhere("item.name = :name");
+            $qb->setParameter('name', $item);
+        }
+
+        if (!empty($category)) {
+            $qb->join('item.category', 'c');
+            $qb->andWhere("c.name = :category");
+            $qb->setParameter('category', $category);
+        }
+
+        if (!empty($parent)) {
+            $qb->join('item.parentCategory', 'pc');
+            $qb->andWhere("pc.name = :parent");
+            $qb->setParameter('parent', $parent);
+        }
+
+        if (!empty($depreciation)) {
+            $qb->join('item.depreciation', 'd');
+            $qb->andWhere("d.id = :depreciation");
+            $qb->setParameter('depreciation', $depreciation);
+        }
+
+        if (!empty($vendor)) {
+            $qb->join('item.vendor', 'v');
+            $qb->andWhere("v.companyName = :vendor");
+            $qb->setParameter('vendor', $vendor);
+        }
+
+        if (!empty($branch)) {
+
+            $qb->join('item.branch', 'b');
+            $qb->andWhere("b.name = :branch");
+            $qb->setParameter('branch', $branch);
+
+        }
+        $qb->groupBy('item.purchaseItem');
+        $qb->orderBy('iItem.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
     public function processStockQuantity(AssetsConfig $config , $id = 0 , $fieldName = ''){
 
         $em = $this->_em;
         $entity = new StockItem();
         if($fieldName == 'sales'){
-            $entity->setSalesQuantity($qnt);
+          //  $entity->setSalesQuantity($qnt);
         }elseif($fieldName == 'sales-return'){
 
         }elseif($fieldName == 'purchase-return'){
@@ -215,55 +275,6 @@ class StockItemRepository extends EntityRepository
             $entity->setQuantity($item->getQuantity());
             $entity->setPurchaseQuantity($item->getQuantity());
             $entity->setItem($item->getItem());
-            if($item->getItem()->getVatProduct()){
-
-                $subTotal = $item->getSubTotal();
-
-                /* @var $vat TaxTariff */
-                $vat = $item->getItem()->getVatProduct();
-
-                if($vat->getCustomsDuty() > 0){
-                    $entity->setCustomsDutyPercent($vat->getCustomsDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getCustomsDuty());
-                    $entity->setCustomsDuty($amount);
-                }
-                if($vat->getSupplementaryDuty() > 0){
-                    $entity->setSupplementaryDutyPercent($vat->getSupplementaryDuty());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getSupplementaryDuty());
-                    $entity->setSupplementaryDuty($amount);
-                }
-
-                if($vat->getValueAddedTax() > 0){
-                    $entity->setValueAddedTaxPercent($vat->getValueAddedTax());
-                    $amount = $this->getTaxTariffCalculation($subTotal,$vat->getValueAddedTax());
-                    $entity->setValueAddedTax($amount);
-                }
-
-                if($vat->getAdvanceIncomeTax() > 0){
-                    $entity->setAdvanceIncomeTaxPercent($vat->getAdvanceIncomeTax());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceIncomeTax());
-                    $entity->setAdvanceIncomeTax($cd);
-                }
-
-                if($vat->getRecurringDeposit() > 0){
-                    $entity->setRecurringDepositPercent($vat->getRecurringDeposit());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getRecurringDeposit());
-                    $entity->setRecurringDeposit($cd);
-                }
-
-                if($vat->getAdvanceTradeVat() > 0){
-                    $entity->setAdvanceTradeVatPercent($vat->getAdvanceTradeVat());
-                    $cd = $this->getTaxTariffCalculation($subTotal,$vat->getAdvanceTradeVat());
-                    $entity->setAdvanceTradeVat($cd);
-                }
-
-                $TTI = ($entity->getCustomsDuty() + $entity->getSupplementaryDuty() + $entity->getValueAddedTax() + $entity->getAdvanceIncomeTax() + $entity->getRecurringDeposit() + $entity->getAdvanceTradeVat());
-                $entity->setTotalTaxIncidence($TTI);
-
-            }
-            if($item->getItem()->getVatProduct()){
-                $entity->setHsCode($item->getItem()->getVatProduct());
-            }
             if($item->getItem()->getBrand()){
                 $entity->setBrand($item->getItem()->getBrand());
             }
@@ -271,8 +282,8 @@ class StockItemRepository extends EntityRepository
                 $entity->setCategory($item->getItem()->getCategory());
             }
             $entity->setPurchaseItem($item);
-            $entity->setPurchase($item->getPurchase());
-            $entity->setVendor($item->getPurchase()->getVendor());
+            $entity->setPurchase($item->getAssetsPurchase());
+            $entity->setVendor($item->getAssetsPurchase()->getVendor());
             $entity->setPrice($item->getPrice());
             $entity->setPurchasePrice($item->getPurchasePrice());
             $entity->setSubTotal($item->getSubTotal());
@@ -280,7 +291,8 @@ class StockItemRepository extends EntityRepository
         }
         $entity->setConfig($config);
         $entity->setProcess('Approved');
-        $em->persist($entity);
+        $em->persist($entity);            $entity->setVendor($item->getPurchase()->getVendor());
+
         $em->flush();
     }
 

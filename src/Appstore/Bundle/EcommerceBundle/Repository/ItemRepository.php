@@ -420,10 +420,11 @@ class ItemRepository extends EntityRepository
 
     public function getCulculationDiscountPrice(Item $purchase , Discount $discount)
     {
-        if($discount->getType() == 'percentage'){
+        $discountPrice = "";
+        if($discount->getType() == 'percentage' and $purchase->getSalesPrice() > $discount->getDiscountAmount() ){
             $price = ( ($purchase->getSalesPrice() * (int)$discount->getDiscountAmount())/100 );
             $discountPrice = $purchase->getSalesPrice() - $price;
-        }else{
+        }elseif($purchase->getSalesPrice() > $discount->getDiscountAmount()){
             $discountPrice = ( $purchase->getSalesPrice() - (int)$discount->getDiscountAmount());
         }
         return $discountPrice;
@@ -653,6 +654,38 @@ class ItemRepository extends EntityRepository
             }
         }
         return $data;
+    }
+
+    public function removeDiscount($config,$discount){
+
+            $qb = $this->_em->createQueryBuilder();
+            $q = $qb->update('EcommerceBundle:Item', 'e')
+            ->set('e.discount', '?1')
+            ->set('e.discountPrice', '?2')
+            ->where('e.discount = ?3')
+            ->andWhere('e.ecommerceConfig = ?4')
+            ->setParameter(1,NULL)
+            ->setParameter(2,0)
+            ->setParameter(3, $discount)
+            ->setParameter(4, $config)
+            ->getQuery();
+        $q->execute();
+
+    }
+
+    public function removePromotion($config,$discount){
+
+        $qb = $this->_em->createQueryBuilder();
+        $q = $qb->update('EcommerceBundle:Item', 'e')
+            ->set('e.promotion', '?1')
+            ->where('e.promotion = ?2')
+            ->andWhere('e.ecommerceConfig = ?3')
+            ->setParameter(1,NULL)
+            ->setParameter(2, $discount)
+            ->setParameter(3, $config)
+            ->getQuery();
+        $qr = $q->execute();
+
     }
 
 }

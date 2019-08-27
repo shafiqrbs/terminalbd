@@ -30,9 +30,10 @@ ecommerce_item_delete:
     path:     /{id}/delete
     defaults: { _controller: "EcommerceBundle:Item:delete" }
 
+
 ecommerce_item_status:
     path:     /{id}/product-status
-    defaults: { _controller: "EcommerceBundle:Item:webStatus" }
+    defaults: { _controller: "EcommerceBundle:Item:status" }
 
 ecommerce_item_copy:
     path:     /{id}/item-copy

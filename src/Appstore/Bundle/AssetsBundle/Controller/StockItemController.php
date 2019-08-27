@@ -30,30 +30,16 @@ class StockItemController extends Controller
     }
 
 
-    public function indexAction()
+    public function indexAction( $type = 'Assets')
     {
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
-        $entities = $em->getRepository('AssetsBundle:Item')->findWithSearch($inventory,'assets',$data);
+        $entities = $em->getRepository('AssetsBundle:Item')->findTypeWithSearch($inventory,$type,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AssetsBundle:Item:index.html.twig', array(
+        return $this->render('AssetsBundle:Item:typeIndex.html.twig', array(
             'entities' => $pagination,
-            'searchForm' => $data,
-        ));
-    }
-
-    public function indexDetailsAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,'assets',$data);
-        $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
-        $pagination = $this->paginate($entities);
-        return $this->render('AssetsBundle:Item:index.html.twig', array(
-            'entities' => $pagination,
-            'stockOverview' => $stockOverview,
             'searchForm' => $data,
         ));
     }
@@ -62,30 +48,17 @@ class StockItemController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
         $data = $_REQUEST;
-        $branchStocks ='';
-        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItems($user->getGlobalOption(),$data);
+        $inventory = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $entities = $em->getRepository('AssetsBundle:StockItem')->findWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
-        if($entities){
-            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->barcodeWiseStock($user,$pagination);
-        }
-        return $this->render('InventoryBundle:StockItem:barcodeStock.html.twig', array(
-            'branchStocks'          => $branchStocks,
-            'pagination'            => $pagination,
-            'searchForm'            => $data,
+        return $this->render('AssetsBundle:StockItem:index.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 
-    public function indexResultsAction()
-    {
-        $datatable = $this->get('app.datatable.stockitem');
-        $datatable->buildDatatable();
 
-        $query = $this->get('sg_datatables.query')->getQueryFrom($datatable);
-
-        return $query->getResponse();
-    }
     /**
      * Creates a new StockItem entity.
      *

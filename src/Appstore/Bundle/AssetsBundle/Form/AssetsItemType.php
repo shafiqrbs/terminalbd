@@ -50,7 +50,14 @@ class AssetsItemType extends AbstractType
                     new NotBlank( array( 'message' => 'Please add  product item' ) )
                 )
             ))
-            ->add( 'productType', 'hidden', array('attr' => array('value'=>'Assets')))
+            ->add('productType', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'Inventory' => 'Inventory',
+                    'Assets' => 'Assets',
+                ),
+            ))
             ->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select product category---',
