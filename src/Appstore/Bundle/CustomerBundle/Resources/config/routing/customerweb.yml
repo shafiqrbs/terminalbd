@@ -1,0 +1,42 @@
+customerweb:
+    path:     /{module}/module
+    defaults: { _controller: "CustomerBundle:Customer:module" }
+
+customerweb_payment:
+    path:     /payment
+    defaults: { _controller: "CustomerBundle:WebContent:payment" }
+
+customerweb_profile:
+    path:     /profile
+    defaults: { _controller: "CustomerBundle:WebContent:profile" }
+    methods:  POST
+
+customerweb_ticket:
+    path:     /ticket
+    defaults: { _controller: "CustomerBundle:WebContent:ticket" }
+
+customerweb_invoice:
+    path:     /invoice
+    defaults: { _controller: "CustomerBundle:WebContent:new" }
+
+customerweb_invoice_new:
+    path:     /invoice-new
+    defaults: { _controller: "CustomerBundle:WebContent:new" }
+
+customerweb_invoice_delete:
+    path:     /{id}/invoice
+    defaults: { _controller: "CustomerBundle:WebContent:invoiceDelete" }
+
+customerweb_invoice_create:
+    path:     /invoice-create
+    defaults: { _controller: "CustomerBundle:WebContent:create" }
+    methods:  [POST]
+
+customerweb_report_ledger:
+    path:     /ledger
+    defaults: { _controller: "CustomerBundle:WebContent:create" }
+
+customerweb_report_cashoverview:
+    path:     /ledger
+    defaults: { _controller: "CustomerBundle:WebContent:create" }
+

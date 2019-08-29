@@ -30,6 +30,10 @@ agent_client:
     resource: "@CustomerBundle/Resources/config/routing/agentclient.yml"
     prefix:   /agent
 
+customer_website:
+    resource: "@CustomerBundle/Resources/config/routing/customerweb.yml"
+    prefix:   /{shop}/content
+
 domain_customer_homepage:
     path:     /{shop}/dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }

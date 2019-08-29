@@ -101,15 +101,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
+                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            {{ form_widget(form.sidebarTooltip) }}
-                                            {{ form_errors(form.sidebarTooltip) }}
-                                            Sidebar Tooltip
+                                            {{ form_widget(form.registrationForm) }}
+                                            {{ form_errors(form.registrationForm) }}
+                                            Show Registration Form
                                         </div>
                                     </div>
                                 </div>
+
 
                             </div>
                             <div class="span4">
@@ -157,6 +158,15 @@
                                             {{ form_widget(form.showNewsLetter) }}
                                             {{ form_errors(form.showNewsLetter) }}
                                             Newsletter Box
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            {{ form_widget(form.sidebarTooltip) }}
+                                            {{ form_errors(form.sidebarTooltip) }}
+                                            Sidebar Tooltip
                                         </div>
                                     </div>
                                 </div>
@@ -582,6 +592,15 @@
                                     <div class="controls">
                                         {{ form_widget(form.contentAlign) }}
                                         {{ form_errors(form.contentAlign) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Placeholder Color</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.placeholderColor) }}
+                                        {{ form_errors(form.placeholderColor) }}
                                     </div>
                                 </div>
                             </div>
@@ -1538,6 +1557,18 @@
                                     <div class="controls">
                                         {{ form_widget(form.siteCssStyle) }}
                                         <p>Site related all css add here.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">&nbsp;</div>
+                         <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="messengerScript">Site Messenger JavaScript</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.messengerScript) }}
+                                        <p>Please messenger related script input here.</p>
                                     </div>
                                 </div>
                             </div>

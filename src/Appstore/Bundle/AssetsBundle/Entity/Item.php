@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AssetsBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AssetsBundle\Entity\DepreciationModel;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
@@ -52,6 +53,11 @@ class Item
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ItemMetaAttribute", mappedBy="item" )
 	 **/
 	private  $itemMetaAttributes;
+
+    /**
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="assetsItem" )
+	 **/
+	private  $accountHead;
 
 
     /**
@@ -1259,6 +1265,14 @@ class Item
     public function getDamages()
     {
         return $this->damages;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
     }
 
 

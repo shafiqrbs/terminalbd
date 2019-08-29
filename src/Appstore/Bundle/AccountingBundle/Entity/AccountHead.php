@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
-use Appstore\Bundle\AssetsBundle\Entity\AssetsCategory;
+use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
@@ -173,7 +173,14 @@ class AccountHead
      **/
     private  $depreciationModelCredit;
 
-	/**
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="accountHead" )
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $assetsItem;
+
+    /**
 	 * @var string
 	 *
 	 * @ORM\Column(name="motherAccount", type="string", length=50, nullable=true)
@@ -653,6 +660,31 @@ class AccountHead
     {
         return $this->tallyCategories;
     }
+
+    /**
+     * @return \Appstore\Bundle\AssetsBundle\Entity\Category
+     */
+    public function getAssetsCategories()
+    {
+        return $this->assetsCategories;
+    }
+
+    /**
+     * @return Item
+     */
+    public function getAssetsItem()
+    {
+        return $this->assetsItem;
+    }
+
+    /**
+     * @param Item $assetsItem
+     */
+    public function setAssetsItem($assetsItem)
+    {
+        $this->assetsItem = $assetsItem;
+    }
+
 
 }
 

@@ -142,7 +142,15 @@ class TemplateCustomize
      *
      * @ORM\Column(name="contactForm", type="boolean", nullable=true)
      */
-    private $contactForm = true;
+    private $contactForm = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="registrationForm", type="boolean", nullable=true)
+     */
+    private $registrationForm = true;
 
 
     /**
@@ -195,6 +203,13 @@ class TemplateCustomize
      * @ORM\Column(name="siteTitle", type="string", length=255, nullable=true)
      */
     private $siteTitle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="messengerScript", type="text", nullable=true)
+     */
+    private $messengerScript;
 
     /**
      * @var string
@@ -319,6 +334,14 @@ class TemplateCustomize
      * @ORM\Column(name="homeBgColor", type="string", length=20, nullable=true)
      */
     private $homeBgColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="placeholderColor", type="string", length=20, nullable=true)
+     */
+    private $placeholderColor;
 
     /**
      * @var string
@@ -3147,6 +3170,54 @@ class TemplateCustomize
     public function setAndroidAnchorHoverColor($androidAnchorHoverColor)
     {
         $this->androidAnchorHoverColor = $androidAnchorHoverColor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegistrationForm()
+    {
+        return $this->registrationForm;
+    }
+
+    /**
+     * @param bool $registrationForm
+     */
+    public function setRegistrationForm($registrationForm)
+    {
+        $this->registrationForm = $registrationForm;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessengerScript()
+    {
+        return $this->messengerScript;
+    }
+
+    /**
+     * @param string $messengerScript
+     */
+    public function setMessengerScript($messengerScript)
+    {
+        $this->messengerScript = $messengerScript;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlaceholderColor()
+    {
+        return $this->placeholderColor;
+    }
+
+    /**
+     * @param string $placeholderColor
+     */
+    public function setPlaceholderColor($placeholderColor)
+    {
+        $this->placeholderColor = $placeholderColor;
     }
 
 

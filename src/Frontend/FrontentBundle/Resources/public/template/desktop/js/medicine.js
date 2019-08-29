@@ -111,7 +111,6 @@ $(document).on( "change", ".modalChange", function( e ) {
 });
 
 
-
 $(document).on( "click", ".productToCart", function(e){
 
     var cartForm = $(this).closest("form");

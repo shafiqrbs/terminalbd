@@ -1,3 +1,6 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
 assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
     prefix:   /assets
@@ -126,9 +129,6 @@ setting_location:
     resource: "@SettingLocationBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 fos_comment_api:
     type: rest

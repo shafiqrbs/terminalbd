@@ -40,14 +40,7 @@ class ItemEditType extends AbstractType
 
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Enter product item name')))
-            ->add('productType', 'choice', array(
-                'required'    => true,
-                'attr'=>array('class'=>'span12'),
-                'choices' => array(
-                    'Inventory' => 'Inventory',
-                    'Assets' => 'Assets',
-                ),
-            ))
+
             ->add('country', 'entity', array(
                 'required'      => true,
                 'expanded'      =>false,

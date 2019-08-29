@@ -17,16 +17,18 @@ class ParticularType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 	    $builder
-		    ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  brand name'),
+		    ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  setting name'),
            'constraints' =>array(
-               new NotBlank(array('message'=>'Please add  brand name'))
+               new NotBlank(array('message'=>'Please add  setting name'))
            )))
 		    ->add('type', 'entity', array(
 			    'required'    => true,
 			    'empty_value' => '---Choose a Setting Type---',
 			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\ParticularType',
 			    'property' => 'name',
-			    'constraints' =>array(new NotBlank(array('message'=>'Please add  setting type'))),
+			    'constraints' =>array(
+			        new NotBlank(array('message'=>'Please add setting type'))
+                ),
 			    'attr'=>array('class'=>'span12 m-wrap'),
 			    'query_builder' => function(EntityRepository $er){
 				    return $er->createQueryBuilder('p')

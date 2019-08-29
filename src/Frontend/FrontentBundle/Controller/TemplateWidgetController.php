@@ -102,9 +102,13 @@ class TemplateWidgetController extends Controller
         $detect = new MobileDetect();
         if( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'ecommerce') {
             $template = 'Template/Mobile/Widget';
+        }elseif( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'website') {
+            $template = 'Template/Mobile/Widget';
         }elseif( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
             $template = 'Template/Mobile/Medicine/EcommerceWidget';
-        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'ecommerce'){
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'website'){
+            $template = 'Template/Desktop/Widget';
+         }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'ecommerce'){
             $template = 'Template/Desktop/Widget';
         }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
             $template = 'Template/Desktop/Medicine/EcommerceWidget';

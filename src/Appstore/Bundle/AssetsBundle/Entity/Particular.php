@@ -4,7 +4,6 @@ namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
 
 /**
  * Particular
@@ -29,6 +28,11 @@ class Particular
 	private  $type;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="particulars" )
+	 **/
+	private  $config;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="department" )
 	 **/
 	private  $distributionDepartment;
@@ -47,9 +51,8 @@ class Particular
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="slug", type="string", length=255)
+     * @Gedmo\Slug(fields={"name"}, updatable=false, separator="-")
+     * @ORM\Column(length=255, unique=true)
      */
     private $slug;
 
@@ -156,6 +159,22 @@ class Particular
 	public function setType( $type ) {
 		$this->type = $type;
 	}
+
+    /**
+     * @return AssetsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param AssetsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
 
 
 }

@@ -1051,3 +1051,34 @@ ul.icon-circle-fadein .skype span
 .icon-button:hover .icon-google-plus {
     color: white;
 }
+
+#captcha , #captcha-msg{
+    font-size: 14px!important;
+    color: #0A0302;
+}
+#question{
+    float: left;
+    text-align: left;
+    font-size: 16px;
+    color: #ff2515;
+    line-height: 32px;
+    font-weight: bold;
+
+}
+#ans {
+    border: 2px solid #ff2515;
+    width: 70px;
+    height: 30px;
+    text-align: center;
+    font-size: 16px;
+    color: #000;
+}
+#success, #fail{
+    display: none;
+}
+
+#verify, #success, #fail{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}

@@ -4,6 +4,7 @@ namespace Setting\Bundle\ContentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ContactPageRepository
@@ -164,5 +165,6 @@ class ContactPageRepository extends EntityRepository
             return false;
         }
     }
+
 
 }

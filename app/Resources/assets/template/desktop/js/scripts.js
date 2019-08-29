@@ -322,7 +322,10 @@ $(document).ready(function(){
             rules: {
     
                 "Core_userbundle_user[profile][name]": {required: true},
-                "Core_userbundle_user[email]": {required: false},
+                "Core_userbundle_user[email]": {
+                    required: false,
+                    remote:'/checking-user-email'
+                },
                 "Core_userbundle_user[profile][mobile]": {
                     required: true,
                     remote:'/checking-username'
@@ -337,6 +340,9 @@ $(document).ready(function(){
                 "Core_userbundle_user[profile][mobile]":{
                     required: "Enter valid mobile no",
                     remote: "This mobile no is already registered. Please try to another no."
+                },
+                 "Core_userbundle_user[profile][email]":{
+                    remote: "This email is already registered. Please try to another email."
                 },
                 "Core_userbundle_user[profile][location]": "Enter your location",
                 "Core_userbundle_user[profile][termsConditionAccept]": "Please read terms & condition and agree"
@@ -372,6 +378,57 @@ $(document).ready(function(){
                 });
             }
         });
+
+        $("#registrationForm").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_email": {
+                required: false,
+                remote:'/checking-member-email'
+            },
+            "registration_mobile": {
+                required: true,
+                remote:'/checking-member'
+            },
+            "registration_facebookId": {required: false},
+            "registration_address": {required: false}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_mobile":{
+                required: "Enter valid mobile no",
+                remote: "This mobile no is already registered. Please try to another no."
+            },
+            "registration_email":{
+                remote: "This email is already registered. Please try to another email."
+            },
+
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_mobile": {placement:'top',html:true},
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response){},
+                complete: function(response){
+
+                }
+            });
+        }
+    });
 
         $("#loginForm").validate({
 
@@ -419,4 +476,32 @@ $(document).ready(function(){
             }
 
         });
+
+    var total;
+    function getRandom(){return Math.ceil(Math.random()* 20);}
+    function createSum(){
+        var randomNum1 = getRandom(),
+            randomNum2 = getRandom();
+        total =randomNum1 + randomNum2;
+        $( "#question" ).text( randomNum1 + " + " + randomNum2 + "=" );
+        $("#ans").val('');
+        checkInput();
+    }
+
+    function checkInput(){
+        var input = $("#ans").val(),
+            slideSpeed = 200,
+            hasInput = !!input,
+            valid = hasInput && input == total;
+        $('#verify').toggle(!hasInput);
+        $('#registrationSubmitForm').prop('disabled', !valid);
+        $('#success').toggle(valid);
+        $('#fail').toggle(hasInput && !valid);
+    }
+
+    createSum();
+    // On "reset button" click, generate new random sum
+    $('#registrationSubmitForm').click(createSum);
+    // On user input, check value
+    $( "#ans" ).keyup(checkInput);
 });

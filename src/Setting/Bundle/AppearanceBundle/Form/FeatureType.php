@@ -9,6 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class FeatureType extends AbstractType
@@ -35,7 +36,6 @@ class FeatureType extends AbstractType
     {
         $builder
             ->add('name','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Enter Feature Title Information')))
-            ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap')))
 
             ->add('category', 'entity', array(
@@ -152,6 +152,22 @@ class FeatureType extends AbstractType
                     'Tag'               => 'Tag',
                     'Discount'          => 'Discount'
                 ),
+            ))
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        )
+                    )),
+                    new NotBlank(array('message'=>'Please upload category image'))
+
+                )
             ));
     }
     

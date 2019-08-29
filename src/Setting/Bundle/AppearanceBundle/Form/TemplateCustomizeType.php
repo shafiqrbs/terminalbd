@@ -20,6 +20,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSocialIcon')
             ->add('mobileLogin')
             ->add('contactForm')
+            ->add('registrationForm')
             ->add('mobileShowLogo')
             ->add('mobileHomeShowLogo')
             ->add('topBar')
@@ -399,8 +400,13 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 numeric',
                 'placeholder'=>'')
             ))
+            ->add('messengerScript','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 6,'placeholder'=>'Enter messenger script')))
             ->add('metaDescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'placeholder'=>'Enter meta description')))
             ->add('metaKeyword','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5,'placeholder'=>'Enter meta keywords')))
+            ->add('placeholderColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('mobileHeaderBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')

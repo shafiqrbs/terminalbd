@@ -29,6 +29,13 @@ webservice_security_signin:
     defaults: { _controller:  "UserBundle:Security:domainLogin" }
     methods:  POST
 
+webservice_member_signup:
+    path:     /{subdomain}/register-member-insert
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:insertMember }
+    methods:  POST
+    options:
+            expose: true
+
 webservice_product_cookie_base_list:
     path:     /cookie/product-list
     defaults: { _controller: FrontendBundle:EcommerceWidget:cookieBaseProductList }
@@ -200,6 +207,27 @@ webservice_customer_confirm:
 webservice_customer_checking:
     path:      /checking-username
     defaults: { _controller: FrontendBundle:WebServiceCustomer:userChecking }
+    methods:  GET
+    options:
+            expose: true
+
+webservice_member_checking:
+    path:      /checking-member
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:memberChecking }
+    methods:  GET
+    options:
+            expose: true
+
+webservice_customer_checking_email:
+    path:      /checking-user-email
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:userCheckingEmail }
+    methods:  GET
+    options:
+            expose: true
+
+webservice_member_checking_email:
+    path:      /checking-member-email
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:memberCheckingEmail }
     methods:  GET
     options:
             expose: true

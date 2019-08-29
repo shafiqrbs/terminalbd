@@ -94,6 +94,13 @@ class Category
     private $sorting = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="categoryType", type="string", nullable=true)
+     */
+    private $categoryType;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="permission", type="string")
@@ -422,6 +429,22 @@ class Category
     public function getCategoryMetas()
     {
         return $this->categoryMetas;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryType()
+    {
+        return $this->categoryType;
+    }
+
+    /**
+     * @param string $categoryType
+     */
+    public function setCategoryType($categoryType)
+    {
+        $this->categoryType = $categoryType;
     }
 }
 

@@ -24,8 +24,8 @@ class ParticularController extends Controller
 	public function indexAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-		$entities = $em->getRepository( 'AssetsBundle:Particular' )->findBy(array( 'inventoryConfig' =>$inventory),array( 'name' =>'asc'));
+		$inventory = $this->getUser()->getGlobalOption()->getAssetsConfig();
+		$entities = $em->getRepository( 'AssetsBundle:Particular' )->findBy(array( 'config' =>$inventory),array( 'type' =>'asc','name' =>'asc'));
 
 		return $this->render('AssetsBundle:Particular:index.html.twig', array(
 			'entities' => $entities,
@@ -42,13 +42,15 @@ class ParticularController extends Controller
 		$form->handleRequest($request);
 
 		if ($form->isValid()) {
+            $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig();
 			$em = $this->getDoctrine()->getManager();
+            $entity->setConfig($inventory);
 			$em->persist($entity);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been added successfully"
 			);
-			return $this->redirect($this->generateUrl('particular'));
+			return $this->redirect($this->generateUrl('assets_particular'));
 		}
 
 		return $this->render('AssetsBundle:Particular:new.html.twig', array(
@@ -67,10 +69,10 @@ class ParticularController extends Controller
 	private function createCreateForm(Particular $entity)
 	{
 		$form = $this->createForm(new ParticularType(), $entity, array(
-			'action' => $this->generateUrl('particular_create'),
+			'action' => $this->generateUrl('assets_particular_create'),
 			'method' => 'POST',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -133,10 +135,10 @@ class ParticularController extends Controller
 	private function createEditForm(Particular $entity)
 	{
 		$form = $this->createForm(new ParticularType(), $entity, array(
-			'action' => $this->generateUrl('particular_update', array('id' => $entity->getId())),
+			'action' => $this->generateUrl('assets_particular_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -164,7 +166,7 @@ class ParticularController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been updated successfully"
 			);
-			return $this->redirect($this->generateUrl('particular_edit', array('id' => $id)));
+			return $this->redirect($this->generateUrl('assets_particular_edit', array('id' => $id)));
 		}
 
 		return $this->render('AssetsBundle:Particular:new.html.twig', array(
@@ -202,15 +204,15 @@ class ParticularController extends Controller
 			);
 		}
 
-		return $this->redirect($this->generateUrl('particular'));
+		return $this->redirect($this->generateUrl('assets_particular'));
 	}
 
 	public function autoSearchAction(Request $request)
 	{
 		$item = $_REQUEST['q'];
 		if ($item) {
-			$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-			$item = $this->getDoctrine()->getRepository( 'AssetsBundle:Particular' )->searchAutoComplete($item,$inventory);
+			$inventory = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
+			$item = $this->getDoctrine()->getRepository( 'AssetsBundle:Particular' )->searchAutoComplete($inventory,$item);
 		}
 		return new JsonResponse($item);
 	}

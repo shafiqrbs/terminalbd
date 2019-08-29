@@ -5,6 +5,7 @@ namespace Appstore\Bundle\AssetsBundle\Form;
 use Appstore\Bundle\AccountingBundle\Repository\AccountHeadRepository;
 use Appstore\Bundle\AssetsBundle\Repository\AssetsCategoryRepository;
 use Appstore\Bundle\AssetsBundle\Repository\CategoryRepository;
+use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,6 +47,14 @@ class CategoryType extends AbstractType
 
                 )
             ))
+            ->add('categoryType', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'choices' => array(
+                    'Inventory' => 'Inventory',
+                    'Assets' => 'Assets',
+                ),
+            ))
             ->add('accountHead', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
@@ -66,8 +75,22 @@ class CategoryType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
-            ->add('status')
 
+            ->add('parent', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Category',
+                'empty_value' => 'Choose a Parent Category',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.config = {$this->globalOption->getAssetsConfig()->getId()}")
+                        ->andWhere("b.level = 1");
+                },
+            ))
+
+            ->add('status')
 
         ;
     }

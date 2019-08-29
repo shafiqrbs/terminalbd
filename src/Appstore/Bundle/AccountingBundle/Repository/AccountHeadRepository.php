@@ -5,12 +5,14 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * AccountHeadRepository
@@ -301,8 +303,25 @@ class AccountHeadRepository extends EntityRepository
         }
     }
 
+    public function insertCapitalAssetsAccount(GlobalOption $option ,PurchaseItem $entity)
+    {
 
-
-
-
+        /* @var $exist AccountHead */
+        $exist = $this->findOneBy(array('assetsItem' => $entity->getItem()));
+        if ($exist) {
+            $exist->setName($entity->getName());
+            $this->_em->flush();
+            return $exist;
+        } else {
+            $head = new AccountHead();
+            $head->setGlobalOption($option);
+            $head->setName($entity->getItem()->getName());
+            $head->setSource('Assets');
+            $head->setAssetsItem($entity->getItem());
+            $head->setParent($entity->getItem()->getCategory()->getAccountHead());
+            $this->_em->persist($head);
+            $this->_em->flush();
+            return $head;
+        }
+    }
 }

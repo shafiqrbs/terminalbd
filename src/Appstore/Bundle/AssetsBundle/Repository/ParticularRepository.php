@@ -15,7 +15,7 @@ class ParticularRepository extends EntityRepository
 	{
 		$qb = $this->createQueryBuilder('e');
 		$qb->select('count(e.id)');
-		$count = $qb->getQuery()->getSingleScalarResult();
+		$count = $qb->getqb()->getSingleScalarResult();
 		if($count > 0 ){
 			return $count+1;
 		}else{
@@ -24,16 +24,17 @@ class ParticularRepository extends EntityRepository
 
 	}
 
-	public function searchAutoComplete($q)
+	public function searchAutoComplete($config,$q)
 	{
-		$query = $this->createQueryBuilder('e');
-		$query->select('e.name as id');
-		$query->addSelect('e.name as text');
-		$query->where($query->expr()->like("e.name", "'$q%'"  ));
-		$query->groupBy('e.id');
-		$query->orderBy('e.name', 'ASC');
-		$query->setMaxResults( '10' );
-		return $query->getQuery()->getResult();
+		$qb = $this->createQueryBuilder('e');
+		$qb->select('e.name as id');
+		$qb->addSelect('e.name as text');
+        $qb->where("e.config = :config")->setParameter('config', $config);
+		$qb->andWhere($qb->expr()->like("e.name", "'$q%'"  ));
+		$qb->groupBy('e.id');
+		$qb->orderBy('e.name', 'ASC');
+		$qb->setMaxResults( '10' );
+		return $qb->getqb()->getResult();
 
 	}
 }

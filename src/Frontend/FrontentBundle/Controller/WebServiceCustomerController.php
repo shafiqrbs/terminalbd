@@ -94,6 +94,70 @@ class WebServiceCustomerController extends Controller
      *
      */
 
+    public function memberCheckingAction(Request $request)
+    {
+
+        $intlMobile = $request->query->get('registration_mobile',NULL,true);
+        $em = $this->getDoctrine()->getManager();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=> $mobile));
+
+        if( count($entity) > 0 ){
+            $valid = 'false';
+        }else{
+            $valid = 'true';
+        }
+        echo $valid;
+        exit;
+    }
+
+    /**
+     * Creates a new User entity.
+     *
+     */
+
+    public function userCheckingEmailAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $email = $request->query->get('Core_userbundle_user[profile][email]',NULL,true);
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('email'=> $email));
+        if( count($entity) > 0 ){
+            $valid = 'false';
+        }else{
+            $valid = 'true';
+        }
+        echo $valid;
+        exit;
+    }
+
+    /**
+     * Creates a new User entity.
+     *
+     */
+
+    public function memberCheckingEmailAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $email = $request->query->get('registration_email',NULL,true);
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('email'=> $email));
+        if( count($entity) > 0 ){
+            $valid = 'false';
+        }else{
+            $valid = 'true';
+        }
+        echo $valid;
+        exit;
+    }
+
+
+
+    /**
+     * Creates a new User entity.
+     *
+     */
+
     public function createAction($subdomain, Request $request)
     {
 
@@ -196,8 +260,9 @@ class WebServiceCustomerController extends Controller
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity->getProfile()->setMobile($mobile);
+        $a = mt_rand(1000,9999);
         if ($form->isValid()) {
-            $entity->setPlainPassword("1234");
+            $entity->setPlainPassword($a);
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
             if(empty($entity->getEmail())){
@@ -210,14 +275,46 @@ class WebServiceCustomerController extends Controller
             $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
             $this->get('security.context')->setToken($token);
             $this->get('session')->set('_security_main',serialize($token));
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
+
+            // $dispatcher = $this->container->get('event_dispatcher');
+            // $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
             return new Response('success');
         }else{
             return new Response('invalid');
         }
-
     }
+
+    public function insertMemberAction($subdomain, Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new User();
+        $data = $request->request->all();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $intlMobile = $data['registration_mobile'];
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity->setPlainPassword("1234");
+        $entity->setEnabled(true);
+        $entity->setUsername($mobile);
+        if(empty($data['registration_mobile'])){
+            $entity->setEmail($mobile.'@gmail.com');
+        }else{
+            $entity->setEmail($data['registration_email']);
+        }
+        $entity->setRoles(array('ROLE_CUSTOMER','ROLE_MEMBER'));
+        $entity->setUserGroup('customer');
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository('UserBundle:Profile')->insertNewMember($entity,$data);
+        $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+        $this->get('security.context')->setToken($token);
+        $this->get('session')->set('_security_main',serialize($token));
+        /*$dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));*/
+        return new Response('success');
+
+
+}
 
     public function confirmAction($subdomain)
     {

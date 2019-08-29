@@ -294,7 +294,7 @@ class PurchaseController extends Controller
             }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertTallyAccountPurchase($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            $em->getRepository('AccountingBundle:Transaction')->itemDistributionTransaction($accountPurchase);
             $this->getDoctrine()->getRepository('AssetsBundle:StockItem')->getPurchaseInsertQnt($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');

@@ -450,6 +450,7 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureWidget';
         }
 
+
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'features'                  => $features,
             'globalOption'              => $globalOption,
@@ -480,6 +481,7 @@ class EcommerceWidgetController extends Controller
 
     public function sliderMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
+
         return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
             'widget'                => $widget,
             'globalOption'          => $globalOption
@@ -503,7 +505,7 @@ class EcommerceWidgetController extends Controller
     {
 
         $limit = $widget->getModuleShowLimit() > 0 ? $widget->getFeatureBrandLimit():8;
-        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption,$limit);
+        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getSliderFeatureCategory($globalOption,$limit);
         return $this->render('@Frontend/Template/Mobile/EcommerceWidget/categoryWidget.html.twig', array(
             'entities'              => $entities,
             'widget'                => $widget,
@@ -530,20 +532,26 @@ class EcommerceWidgetController extends Controller
         $datalimit = $widget->getCategoryLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
+        $featureCategory = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->findOneBy(array('globalOption' => $globalOption, 'category' => $category));
         $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
+
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/categoryProductWidget';
         }else{
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/CategoryWidget';
         }
+
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'          => $products->getResult(),
+            'products'                  => $products->getResult(),
             'globalOption'              => $globalOption,
             'widget'                    => $widget,
+            'featureCategory'           => $featureCategory,
             'category'                  => $category,
         ));
     }

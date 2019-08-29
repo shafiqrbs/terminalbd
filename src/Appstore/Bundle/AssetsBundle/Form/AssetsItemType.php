@@ -50,14 +50,7 @@ class AssetsItemType extends AbstractType
                     new NotBlank( array( 'message' => 'Please add  product item' ) )
                 )
             ))
-            ->add('productType', 'choice', array(
-                'required'    => true,
-                'attr'=>array('class'=>'span12'),
-                'choices' => array(
-                    'Inventory' => 'Inventory',
-                    'Assets' => 'Assets',
-                ),
-            ))
+
             ->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select product category---',
@@ -68,6 +61,11 @@ class AssetsItemType extends AbstractType
                 ),
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
+            ))
+
+            ->add('salesPrice', 'choice', array(
+                'label' => 'Choose your car',
+                'choices' => $this->ParticularChoiceList(),
             ))
 
             ->add('productGroup', 'entity', array(
@@ -128,5 +126,14 @@ class AssetsItemType extends AbstractType
     protected function categoryChoiceList()
     {
         return $categoryTree = $this->em->getFlatCategoryTree($this->config);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getCategoryOptionGroup()
+    {
+        return $this->em->getCategoryOptionGroup($this->config);
+
     }
 }

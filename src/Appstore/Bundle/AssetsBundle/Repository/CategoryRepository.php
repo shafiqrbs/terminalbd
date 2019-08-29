@@ -3,6 +3,7 @@
 namespace  Appstore\Bundle\AssetsBundle\Repository;
 
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Util\Debug;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -218,6 +219,23 @@ class CategoryRepository  extends MaterializedPathRepository
         }
 
         return $data;
+
+    }
+
+    public function getCategoryOptionGroup(AssetsConfig $config)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e');
+        $qb->orderBy('e.name', 'ASC')->addOrderBy('e.parent', 'ASC');
+        $qb->where('e.config = :config ')->setParameter('config',$config);
+        $qb->andWhere('e.parent IS NOT NULL');
+        $products = $qb->getQuery()->execute();
+        $choices = [];
+        foreach ($products as $product) {
+            $choices[$product->getparent()->getName()][$product->getId()] =  $product->getName();
+        }
+        return $choices;
 
     }
 

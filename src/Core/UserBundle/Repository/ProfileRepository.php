@@ -9,6 +9,8 @@
 namespace Core\UserBundle\Repository;
 
 
+use Core\UserBundle\Entity\Profile;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 class ProfileRepository extends EntityRepository {
@@ -59,4 +61,18 @@ class ProfileRepository extends EntityRepository {
         $em->flush();
     }
 
-} 
+    public function insertNewMember(User $entity, $data = '')
+    {
+        $em = $this->_em;
+        $profile = new Profile();
+        $profile->setUser($entity);
+        $profile->setMobile($entity->getUsername());
+        $profile->setName($data['registration_name']);
+        $profile->setAddress($data['registration_address']);
+        $profile->setFacebookId($data['registration_facebookId']);
+        $profile->setEmail($data['registration_email']);
+        $em->persist($profile);
+        $em->flush();
+    }
+
+}

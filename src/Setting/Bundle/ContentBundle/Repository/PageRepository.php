@@ -5,6 +5,8 @@ namespace Setting\Bundle\ContentBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ContentBundle\Entity\Page;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\Module;
 
 /**
  * PageRepository
@@ -28,6 +30,18 @@ class PageRepository extends EntityRepository
         }
         $qb->orderBy('e.name', 'ASC');
         return $qb->getQuery()->getResult();
+    }
+
+    public function findModuleContentList(GlobalOption $doamin,$module)
+    {
+
+        $query = $this->createQueryBuilder('p')
+            ->where('p.status = 1')
+            ->andWhere('p.globalOption = :option')->setParameter('option', $doamin->getId())
+            ->andWhere('p.module = :module')->setParameter('module', $module)
+            ->orderBy('p.ordering','ASC')
+            ->getQuery();
+        return $query;
     }
 
 
@@ -119,10 +133,8 @@ class PageRepository extends EntityRepository
         $repository = $em->getRepository('SettingContentBundle:Page');
         $query = $repository->createQueryBuilder('p')
             ->where('p.status = 1')
-            ->andWhere('p.globalOption = :option')
-            ->setParameter('option', $doamin)
-            ->andWhere('p.module = :module')
-            ->setParameter('module', $module)
+            ->andWhere('p.globalOption = :option')->setParameter('option', $doamin)
+            ->andWhere('p.module = :module')->setParameter('module', $module)
             ->setMaxResults($limit)
             ->orderBy('p.ordering','ASC')
             ->getQuery()->getResult();

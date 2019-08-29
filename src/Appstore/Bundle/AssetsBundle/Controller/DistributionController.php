@@ -83,7 +83,8 @@ class DistributionController extends Controller
 	 */
 	private function createCreateForm(Distribution $entity)
 	{
-		$form = $this->createForm(new DistributionlType(), $entity, array(
+		$option = $this->getUser()->getGlobalOption();
+	    $form = $this->createForm(new DistributionlType($option), $entity, array(
 			'action' => $this->generateUrl('assets_distribution_create'),
 			'method' => 'POST',
 			'attr' => array(
@@ -149,7 +150,8 @@ class DistributionController extends Controller
 	 */
 	private function createEditForm(Distribution $entity)
 	{
-		$form = $this->createForm(new DistributionlType(), $entity, array(
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new DistributionlType($option), $entity, array(
 			'action' => $this->generateUrl('assets_distribution_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(

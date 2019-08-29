@@ -14,6 +14,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -37,8 +38,6 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class TransactionRepository extends EntityRepository
 {
-
-
 
     /**
      * @param $qb
@@ -442,6 +441,7 @@ class TransactionRepository extends EntityRepository
         $this->insertPurchaseCash($purchase,$accountPurchase);
         $this->insertPurchaseAccountPayable($purchase,$accountPurchase);
     }
+
 
     private function insertInventoryAsset($purchase,$accountPurchase)
     {
@@ -2571,8 +2571,44 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function itemDistributionTransaction($purchase,$accountPurchase,$source='')
+    {
+        $this->insertPurchaseCash($purchase,$accountPurchase);
+        $this->insertPurchaseAccountPayable($purchase,$accountPurchase);
+        $this->insertFixedAssets($purchase,$accountPurchase);
+        $this->insertPurchaseExpense($purchase,$accountPurchase);
+    }
 
+    public function insertFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\Purchase $purchase,$accountPurchase)
+    {
+        /* @var $item PurchaseItem */
 
+        foreach ($purchase->getPurchaseItems() as $item) {
+            if($item->getItem()->getProductType() == "Assets"){
+                $accountHead = $item->getItem()->getCategory()->getAccountHead();
+                $transaction = new Transaction();
+                $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+                $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+                $transaction->setProcessHead('Assets');
+                $transaction->setProcess('Depreciation');
+                /* Assets Account - Capital Assets */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCapitalAssetsAccount($accountPurchase->getGlobalOption(),$item);
+                $transaction->setSubAccountHead($subAccount);
+                $transaction->setAmount($item->getSubTotal());
+                $transaction->setDebit($item->getSubTotal());
+                $this->_em->persist($transaction);
+                $this->_em->flush();
+            }
+
+        }
+
+    }
+
+    public function insertPurchaseExpense(\Appstore\Bundle\AssetsBundle\Entity\Purchase $purchase)
+    {
+
+    }
 
 
 }

@@ -1,4 +1,3 @@
-
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
@@ -6,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Setting Lists
+                    {{ module.name }} Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('assets_particular') }}">Setting</a>
+                        <a href="{{ path('page') }}">Pages</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Setting Lists</a></li>
+                    <li><a href="#">{{ module.name }} Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,16 +30,9 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Setting Information</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('assets_particular_new') }}"> <i class="icon-plus-sign"></i> Add Setting </a>
-                            </div>
-                        </div>
+                        <div class="caption"><i class="icon-reorder"></i>{{ module.name }} Information</div>
                     </div>
-
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
@@ -48,29 +40,41 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Type</th>
-                                    <th class="numeric" >Name </th>
-                                    <th class="numeric" >Status</th>
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <th class="numeric" >Created </th>
+                                    {%  set sort = app.request.query.get('sort') %}
+                                    {%  set direction = app.request.query.get('direction') %}
+                                    <th {% if pagination.isSorted('name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'name') }}{% if( direction == 'desc' and sort == 'name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Action</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                {% for entity in entities %}
+                                {% for entity in pagination %}
                                     <tr>
-                                        <td>{{ entity.type.name }}</td>
-                                        <td class="numeric" ><a href="{{ path('assets_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active {% endif %}</td>
+                                        <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+
                                         <td class="numeric" >
-                                            <a href="{{ path('assets_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('assets_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a class="btn mini blue-stripe btn-action" href="{{ path('page_show', { 'id': entity.id }) }}">View</a>
+                                        </td>
+                                    </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="6">
+                                            <table class="inner-table">
+                                                <tr><td>Content</td><td>{{ entity.content|raw }}</td></tr>
+                                            </table>
                                         </td>
                                     </tr>
                                 {% endfor %}
 
                                 </tbody>
                             </table>
-
+                            <div class="pagination" >
+                                {{ knp_pagination_render(pagination) }}
+                            </div>
                         </div>
                     </div>
                 </div>

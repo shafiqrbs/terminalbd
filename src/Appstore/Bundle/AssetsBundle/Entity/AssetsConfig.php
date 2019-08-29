@@ -36,6 +36,11 @@ class AssetsConfig
      **/
     private $stockItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", mappedBy="config" , cascade={"persist", "remove"})
+     **/
+    private $particulars;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="config" , cascade={"persist", "remove"})
@@ -1558,12 +1563,14 @@ class AssetsConfig
         $this->serviceInvoice = $serviceInvoice;
     }
 
+
+
     /**
-     * @return WearHouse
+     * @return Particular
      */
-    public function getWearHouse()
+    public function getParticulars()
     {
-        return $this->wearHouse;
+        return $this->particulars;
     }
 
 

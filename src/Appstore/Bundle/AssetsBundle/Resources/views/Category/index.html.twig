@@ -48,9 +48,11 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
+                                    <th class="numeric" >Type</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Parent</th>
                                     <th class="numeric" >Account Head</th>
+                                    <th class="numeric" >Parent Head</th>
                                     <th class="numeric" >Action</th>
 
                                 </tr>
@@ -59,9 +61,11 @@
 
                                 {% for entity in entities %}
                                     <tr>
+                                        <td>{{ entity.categoryType }}</td>
                                         <td class="numeric" ><a href="{{ path('assetscategory_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric">{% if entity.parent is not empty %}{{ entity.parent.name|default('---') }}{% endif %}</td>
                                         <td class="numeric">{% if entity.accountHead is not empty %}{{ entity.accountHead.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.accountHead is not empty %}{{ entity.parent.accountHead.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini green-stripe btn-action" href="{{ path('assetscategory_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>

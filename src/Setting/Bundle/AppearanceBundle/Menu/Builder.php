@@ -651,16 +651,16 @@ class Builder extends ContainerAware
 
         $menu['Fixed Assets']->addChild('Manage Asset')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Manage Asset']->addChild("All Asset", array('route' => 'assets_product'))->setAttribute('icon', 'icon-th-list');
-        if($user->getGlobalOption()->getTallyConfig()->getCategories()){
-            foreach ($user->getGlobalOption()->getTallyConfig()->getParentCategories() as $category):
+        if($user->getGlobalOption()->getAssetsConfig()->getCategories()){
+            foreach ($user->getGlobalOption()->getAssetsConfig()->getParentCategories() as $category):
                 $menu['Fixed Assets']['Manage Asset']->addChild("{$category->getName()}", array('route' => 'assets_product', 'routeParameters' => array('parent' => $category->getSlug())))->setAttribute('icon', 'icon-th-list');
             endforeach;
         }
 
         $menu['Fixed Assets']->addChild('Asset Distribution')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Distribution']->addChild("All Distribution", array('route' => 'assets_distribution'))->setAttribute('icon', 'icon-th-list');
-        if($user->getGlobalOption()->getTallyConfig()->getCategories()){
-            foreach ($user->getGlobalOption()->getTallyConfig()->getParentCategories() as $category):
+        if($user->getGlobalOption()->getAssetsConfig()->getCategories()){
+            foreach ($user->getGlobalOption()->getAssetsConfig()->getParentCategories() as $category):
                 $menu['Fixed Assets']['Asset Distribution']->addChild("{$category->getName()}", array('route' => 'assets_distribution', 'routeParameters' => array('parent' => $category->getSlug())))->setAttribute('icon', 'icon-th-list');
             endforeach;
         }

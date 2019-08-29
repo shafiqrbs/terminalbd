@@ -9,6 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class FeatureCategoryType extends AbstractType
@@ -33,9 +34,6 @@ class FeatureCategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file','file', array('attr'=>array('class'=>'default'),'constraints' =>array(
-                new NotBlank(array('message'=>'Please attach category image'))
-            )))
             ->add('category', 'entity', array(
                 'required'    => true,
                 'constraints' =>array(
@@ -46,6 +44,22 @@ class FeatureCategoryType extends AbstractType
                 'class' => 'ProductProductBundle:Category',
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
+            ))
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        )
+                    )),
+                    new NotBlank(array('message'=>'Please upload category image'))
+
+                )
             ));
     }
     

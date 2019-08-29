@@ -170,5 +170,20 @@ $(document).ready(function () {
         return false;
     });
 
+    $(".contact-panel").on("click", function () {
+        var $this = $(this);
+        var action = $this.attr("data-action");
+        var side = $this.attr("data-side");
+        $(".sidebar." + side).trigger("sidebar:" + action);
+        return false;
+    });
+    $(".registration-event").on("click", function () {
+        var $this = $(this);
+        var action = $this.attr("data-action");
+        var side = $this.attr("data-side");
+        $(".sidebar." + side).trigger("sidebar:" + action).show();
+        return false;
+    });
+
 });
 
