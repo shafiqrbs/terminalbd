@@ -480,7 +480,7 @@ class AccountSalesRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         if(empty($data)){
 
-            $datetime = new \DateTime("2019-07-01");
+            $datetime = new \DateTime("2019-08-01");
             $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
 

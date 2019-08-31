@@ -3,8 +3,7 @@
 namespace Appstore\Bundle\AssetsBundle\Form;
 
 use Appstore\Bundle\AssetsBundle\Entity\Depreciation;
-use Appstore\Bundle\AssetsBundle\Repository\AssetsCategoryRepository;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\AssetsBundle\Repository\CategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -21,18 +20,15 @@ class DepreciationModelType extends AbstractType
 	/** @var  GlobalOption */
 	private $option;
 
-	/** @var  AssetsCategoryRepository */
+	/** @var  CategoryRepository */
 	private $em;
 
-	function __construct(AssetsCategoryRepository $em , GlobalOption $option , Depreciation $depreciation)
+	function __construct(CategoryRepository $em , GlobalOption $option , Depreciation $depreciation)
 	{
 		$this->em = $em;
         $this->option = $option;
 		$this->depreciation = $depreciation;
 	}
-
-
-
 
 
 	/**
@@ -48,7 +44,7 @@ class DepreciationModelType extends AbstractType
            'constraints' =>array(
                new NotBlank(array('message'=>'Please add  depreciation rate'))
            )))
-		    ->add('accountHeadDebit', 'entity', array(
+		    /*->add('accountHeadDebit', 'entity', array(
 			    'required'    => true,
 			    'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
 			    'empty_value' => '---Choose a debit head---',
@@ -80,7 +76,7 @@ class DepreciationModelType extends AbstractType
 				              ->andWhere("e.parent > 0")
 				              ->orderBy("e.name");
 			    }
-		    ))
+		    ))*/
 		    ->add('assetsType', 'choice', array(
 			    'required'    => true,
 			    'attr'=>array('class'=>'span12 m-wrap'),
@@ -93,21 +89,22 @@ class DepreciationModelType extends AbstractType
 			    'required'    => true,
 			    'empty_value' => '---Select parent category---',
 			    'attr'=>array('class'=>'category m-wrap span12 select2'),
-			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\AssetsCategory',
+			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\Category',
 			    'property' => 'nestedLabel',
 			    'choices'=> $this->categoryChoiceList()
 		    ))
 		    ->add('item', 'entity', array(
 			    'required'    => true,
-			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\ProductGroup',
+			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\Item',
 			    'empty_value' => '---Choose a item ---',
 			    'property' => 'name',
 			    'attr'=>array('class'=>'span12 select2'),
 			    'query_builder' => function(EntityRepository $er){
 				    return $er->createQueryBuilder('p')
-				              ->where("p.status = 1")
-				              ->andWhere("p.productType ='assets'")
-				              ->andWhere("p.globalOption ={$this->option->getId()}")
+                              ->join('p.category','c')
+                              ->where("p.status = 1")
+				              ->andWhere("c.categoryType ='Assets'")
+				              ->andWhere("p.config ={$this->option->getAssetsConfig()->getId()}")
 				              ->orderBy("p.name","ASC");
 			    },
 		    ));
@@ -119,9 +116,9 @@ class DepreciationModelType extends AbstractType
 	    }else{
 		    $builder
 			    ->add('rate','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  depreciation rate'),
-			                               'constraints' =>array(
-				                               new NotBlank(array('message'=>'Please add  depreciation rate'))
-			                               )));
+               'constraints' =>array(
+                   new NotBlank(array('message'=>'Please add  depreciation rate'))
+               )));
 	    }
 
     }
@@ -149,6 +146,6 @@ class DepreciationModelType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getFlatCategoryTree($this->option);
+        return $categoryTree = $this->em->getFlatCategoryTree($this->option->getAssetsConfig()->getId());
     }
 }

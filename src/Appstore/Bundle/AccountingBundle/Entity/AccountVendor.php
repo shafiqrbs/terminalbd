@@ -63,6 +63,16 @@ class AccountVendor
      */
     protected $tallyPurchase;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", mappedBy="vendor")
+     */
+    protected $assetsPurchase;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="vendor")
+     */
+    protected $assetsPurchaseItems;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission", mappedBy="accountVendor")
      */

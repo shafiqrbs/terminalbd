@@ -41,8 +41,13 @@ class CouponType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add coupon quantity'))
                 )))
-
-            ->add('percentage')
+            ->add('discountCalculation', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices' => array(
+                    'percentage'       => 'Percentage',
+                    'taka'       => 'Taka'
+                ),
+            ))
             ->add('startDate', 'date', array(
                 'widget' => 'single_text',
                 'placeholder' => array(

@@ -302,6 +302,35 @@ class AccountCashRepository extends EntityRepository
 
     }
 
+    public function purchaseExpense(User $user,$transactionMethods,$data = '')
+    {
+        $date = isset($data['date'])  ? $data['date'] : '';
+        $globalOption = $user->getGlobalOption();
+        $processHeads = array("Purchase","Expenditure",'Journal');
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.credit > 0");
+        $start = date('Y-m-d 00:00:00',strtotime($date));
+        $qb->andWhere("e.updated >= :startDate");
+        $qb->setParameter('startDate', $start);
+        $end = date('Y-m-d 23:59:59',strtotime($date));
+        $qb->andWhere("e.updated <= :endDate");
+        $qb->setParameter('endDate',$end);
+        $qb->andWhere("e.credit > 0");
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        $qb->andWhere("e.processHead IN(:processHeads)");
+        $qb->setParameter('processHeads',array_values($processHeads));
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.processHead','ASC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+
 
     /**
      * @param $qb

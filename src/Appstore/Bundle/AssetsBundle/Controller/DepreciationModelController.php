@@ -71,12 +71,12 @@ class DepreciationModelController extends Controller
 	{
 		$option = $this->getUser()->getGlobalOption();
 		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
-		$em = $this->getDoctrine()->getRepository('AssetsBundle:AssetsCategory');
+		$em = $this->getDoctrine()->getRepository('AssetsBundle:Category');
 		$form = $this->createForm(new DepreciationModelType($em,$option,$depreciation), $entity, array(
 			'action' => $this->generateUrl('assets_model_create'),
 			'method' => 'POST',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -112,10 +112,10 @@ class DepreciationModelController extends Controller
 
 		$data = array();
 		if(!empty($entity)){
-			if(!empty($entity->getItem())){
+			if($entity->getItem()){
 				$data[] = array('item' => $entity->getItem()->getId());
 			}
-			if(!empty($entity->getCategory())){
+			if($entity->getCategory()){
 				$data[] = array('category' => $entity->getCategory()->getId());
 			}
 		}
@@ -126,11 +126,9 @@ class DepreciationModelController extends Controller
 		if(!empty($products->getQuery()->getResult())){
 
 			foreach ($products->getQuery()->getResult() as $product):
-				if($product->isCustomDepreciation() != 1){
-					$product->setDepreciation($entity);
-					$em->persist($product);
-					$em->flush();
-				}
+                $product->setDepreciation($entity);
+                $em->persist($product);
+                $em->flush();
 			endforeach;
 			$this->get('session')->getFlashBag()->add(
 				'success',"Depreciation rate has been added successfully"
@@ -176,14 +174,14 @@ class DepreciationModelController extends Controller
 	private function createEditForm(DepreciationModel $entity)
 	{
         $option = $this->getUser()->getGlobalOption();
-		$em = $this->getDoctrine()->getRepository('AssetsBundle:AssetsCategory');
+		$em = $this->getDoctrine()->getRepository('AssetsBundle:Category');
 		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
 
 		$form = $this->createForm(new DepreciationModelType($em,$option,$depreciation), $entity, array(
 			'action' => $this->generateUrl('assets_model_update', array('id' => $entity->getId())),
 			'method' => 'PUT',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -274,7 +272,7 @@ class DepreciationModelController extends Controller
                 if($product->getStraightLineValue() > 0){
                     $product->getStraightLineValue();
 	                $currentBookValue = ($product->getBookValue() - $product->getStraightLineValue());
-					$product->setBookValue($currentBookValue);
+					$product->setBookValue(doubleval($currentBookValue));
 					$depValue = ($product->getDepreciationValue() + $product->getStraightLineValue());
 					$product->setDepreciationValue($depValue);
 					$em->persist($product);
@@ -289,6 +287,8 @@ class DepreciationModelController extends Controller
 			}else{
 
 				if($product->getReducingBalancePercentage()){
+
+				    $product->getReducingBalancePercentage();
 					$depValue = ($product->getBookValue() * $product->getReducingBalancePercentage())/100;
 					$bookValue = ($product->getBookValue() - $depValue);
 					$product->setBookValue($bookValue);
@@ -330,8 +330,8 @@ class DepreciationModelController extends Controller
 		}
 		$em = $this->getDoctrine()->getManager();
 		$bookValue = ($product->getPurchasePrice() - ($product->getSalvageValue() + $straightValue));
-		$product->setBookValue($bookValue);
-		$product->setDepreciationValue($straightValue);
+		$product->setBookValue(doubleval($bookValue));
+		$product->setDepreciationValue(doubleval($straightValue));
 		$product->setStraightLineValue($straightValue);
 		$straightPercentage = (($straightValue * 100)/$product->getPurchasePrice());
 		$product->setStraightLinePercentage($straightPercentage);
@@ -360,8 +360,8 @@ class DepreciationModelController extends Controller
 		$depValue = ((($product->getPurchasePrice() - $product->getSalvageValue()) * $rate)/100);
 		$bookValue = ($product->getPurchasePrice() - ($product->getSalvageValue() + $depValue));
 
-		$product->setBookValue($bookValue);
-		$product->setDepreciationValue($depValue);
+		$product->setBookValue(doubleval($bookValue));
+		$product->setDepreciationValue(doubleval($depValue));
 		$product->setReducingBalancePercentage($rate);
 		$product->setDepreciationRate($rate);
 		$em->persist($product);

@@ -87,6 +87,15 @@ class Coupon
     private $quantity;
 
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="discountCalculation", type="string", length = 20, nullable = true)
+     */
+    private $discountCalculation;
+
+
     /**
      * @var integer
      *
@@ -386,6 +395,22 @@ class Coupon
     public function setRemainingQuantity($remainingQuantity)
     {
         $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscountCalculation()
+    {
+        return $this->discountCalculation;
+    }
+
+    /**
+     * @param int $discountCalculation
+     */
+    public function setDiscountCalculation($discountCalculation)
+    {
+        $this->discountCalculation = $discountCalculation;
     }
 
 

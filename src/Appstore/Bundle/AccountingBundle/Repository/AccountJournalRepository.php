@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
@@ -549,6 +550,29 @@ class AccountJournalRepository extends EntityRepository
 		}
 
 	}
+
+	public function openingAssetsItemJournal(PurchaseItem $item)
+    {
+        $journalSource = "assets-{$item->getId()}";
+        $entity = new AccountJournal();
+        $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
+        $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+
+        $entity->setGlobalOption($item->getConfig()->getGlobalOption());
+        $entity->setTransactionType('Debit');
+        $entity->setAmount($item->getSubTotal());
+        $entity->setApprovedBy($item->getApprovedBy());
+        $entity->setCreatedBy($item->getApprovedBy());
+        $entity->setAccountHeadCredit($accountHeadCredit);
+        $entity->setAccountHeadDebit($accountCashHead);
+        $entity->setToUser($item->getApprovedBy());
+        $entity->setJournalSource($journalSource);
+        $entity->setRemark("Hotel purchase as investment,Ref GRN no.{$item->getBarcode()}");
+        $entity->setProcess('approved');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        return $entity;
+    }
 
 
 }

@@ -267,7 +267,7 @@ class CashReconciliationController extends Controller
             'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
 
         ));
-        $date = date("d-m-y");
+        $date = $entity->getCreated()->format('d-m-Y');
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);

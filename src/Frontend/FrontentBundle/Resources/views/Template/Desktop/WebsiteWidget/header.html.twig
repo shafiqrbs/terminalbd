@@ -443,6 +443,11 @@
                         <a href="javascript:" class="sidebar-panel" data-action="toggle" data-side="right"><span><i class="fa fa-comments"></i></span></a>
                     </li>
                 {% endif %}
+                 {% if globalOption.templateCustomize.registrationForm == 1 %}
+                    <li class="">
+                        <a href="javascript:" class="registration-event" data-action="toggle" data-side="right"><span><i class="fa fa-sign-in"></i></span></a>
+                    </li>
+                {% endif %}
                 {% if  app.user  %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">

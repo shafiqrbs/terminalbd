@@ -222,7 +222,7 @@ class ItemController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-             return $this->redirect($this->generateUrl('tallyitem'));
+             return $this->redirect($this->generateUrl('assetsitem'));
         }
 
         return $this->render('AssetsBundle:Item:new.html.twig', array(

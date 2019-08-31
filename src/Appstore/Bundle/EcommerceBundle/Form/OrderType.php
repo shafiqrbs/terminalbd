@@ -38,6 +38,17 @@ class OrderType extends AbstractType
             ->add('deliveryDate','date', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Receive product date(Approximately)','data-original-title'=>'Please receive your product date(Approximately).',),
                 'constraints' =>array(new NotBlank(array('message'=>'Please input required')))
             ))
+            ->add('deliverySlot', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'empty_value' => '---Delivery Time---',
+                'choices' => array(
+                    'Morning'       => 'Morning 10-12',
+                    'evening'       => 'Evening 03-06',
+                    'night'         => 'Night   06-10',
+                )
+            ))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span8 m-wrap'),
                 'expanded'      =>false,

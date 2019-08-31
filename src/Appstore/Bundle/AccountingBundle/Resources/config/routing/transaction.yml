@@ -30,6 +30,10 @@ account_transaction_mobilebank:
     path:     /mobile-cash
     defaults: { _controller: "AccountingBundle:Transaction:mobileBank" }
 
+account_transaction_purchase_expense:
+    path:     /transaction-purchase-expense
+    defaults: { _controller: "AccountingBundle:Transaction:purchaseExpense" }
+
 account_transaction_monthly:
     path:     /transaction-monthly
     defaults: { _controller: "AccountingBundle:Transaction:monthly" }

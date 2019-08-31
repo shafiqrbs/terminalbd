@@ -22,8 +22,8 @@ class ProductListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $branch = $entity->getBranch()->getBranchCode().'-';
-            $entity->setBranchSerialNo(sprintf("%s%s",$branch, str_pad($entity->getCode(),6, '0', STR_PAD_LEFT)));
+        //    $branch = $entity->getBranch()->getBranchCode().'-';
+           // $entity->setBranchSerialNo(sprintf("%s%s",$branch, str_pad($entity->getCode(),6, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -39,7 +39,7 @@ class ProductListener
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
-
+/*
         $entityManager = $args->getEntityManager();
         $qb = $entityManager->getRepository('AssetsBundle:Product')->createQueryBuilder('s');
         $qb
@@ -49,6 +49,6 @@ class ProductListener
         if (empty($lastCode)) {
             return 0;
         }
-        return $lastCode;
+        return $lastCode;*/
     }
 }

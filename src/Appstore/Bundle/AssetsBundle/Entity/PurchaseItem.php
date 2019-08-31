@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AssetsBundle\Entity;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +50,12 @@ class PurchaseItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $assetsPurchase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="assetsPurchaseItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $vendor;
 
 
     /**
@@ -1180,6 +1187,22 @@ class PurchaseItem
     public function setAssetsPurchase($assetsPurchase)
     {
         $this->assetsPurchase = $assetsPurchase;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
     }
 
 

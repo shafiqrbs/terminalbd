@@ -114,6 +114,13 @@ class Order
     private $delivery = 'delivery';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="deliverySlot", type="string", length=100,  nullable=true)
+     */
+    private $deliverySlot;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="deliveryDate", type="datetime" , nullable=true)
      */
@@ -1048,6 +1055,22 @@ class Order
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliverySlot()
+    {
+        return $this->deliverySlot;
+    }
+
+    /**
+     * @param string $deliverySlot
+     */
+    public function setDeliverySlot($deliverySlot)
+    {
+        $this->deliverySlot = $deliverySlot;
     }
 
 

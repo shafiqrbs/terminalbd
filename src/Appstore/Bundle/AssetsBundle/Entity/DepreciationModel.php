@@ -25,12 +25,12 @@ class DepreciationModel
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="depreciationModel" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", inversedBy="depreciationModel" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="depreciationModel" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="depreciationModel" )
 	 **/
 	private  $item;
 
@@ -98,28 +98,28 @@ class DepreciationModel
 
 
 	/**
-	 * @return AssetsCategory
+	 * @return Category
 	 */
 	public function getCategory() {
 		return $this->category;
 	}
 
 	/**
-	 * @param AssetsCategory $category
+	 * @param Category $category
 	 */
 	public function setCategory( $category ) {
 		$this->category = $category;
 	}
 
 	/**
-	 * @return ProductGroup
+	 * @return Item
 	 */
 	public function getItem() {
 		return $this->item;
 	}
 
 	/**
-	 * @param ProductGroup $item
+	 * @param Item $item
 	 */
 	public function setItem( $item ) {
 		$this->item = $item;

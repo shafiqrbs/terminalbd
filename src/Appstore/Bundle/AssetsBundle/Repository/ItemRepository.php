@@ -2,13 +2,11 @@
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\TallyBundle\Entity\Product;
-use Appstore\Bundle\TallyBundle\Entity\Item;
-use Appstore\Bundle\TallyBundle\Entity\Purchase;
-use Appstore\Bundle\TallyBundle\Entity\PurchaseItem;
-use Appstore\Bundle\TallyBundle\Entity\Sales;
-use Appstore\Bundle\TallyBundle\Entity\StockItem;
-use Appstore\Bundle\TallyBundle\Entity\VoucherItem;
+use Appstore\Bundle\AssetsBundle\Entity\Item;
+use Appstore\Bundle\AssetsBundle\Entity\Purchase;
+use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
+use Appstore\Bundle\AssetsBundle\Entity\Sales;
+use Appstore\Bundle\AssetsBundle\Entity\StockItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Event\Glo;
@@ -308,7 +306,7 @@ class ItemRepository extends EntityRepository
     public function checkDuplicateSKU($config,$data)
     {
 
-        $type = $data['item']['productType'];
+  //      $type = $data['item']['productType'];
         $masterItem = $data['item']['name'];
         $vendor     = isset($data['item']['vendor']) ? $data['item']['vendor'] :'NULL';
         $brand  = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
@@ -318,7 +316,7 @@ class ItemRepository extends EntityRepository
         $qb->select('COUNT(e.id) countid');
         $qb->where("e.config = :config");
         $qb->setParameter('config', $config);
-        $qb->andWhere("e.productType = :type")->setParameter('type', $type);
+     //   $qb->andWhere("e.productType = :type")->setParameter('type', $type);
         $qb->andWhere("e.name = :name")->setParameter('name', $masterItem);
         if($category){
             $qb->andWhere("e.category = :category")->setParameter('category', $category);
@@ -510,28 +508,28 @@ class ItemRepository extends EntityRepository
         $em = $this->_em;
 
         if($fieldName == 'sales'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'sales');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'sales');
             $stock->setSalesQuantity($quantity);
         }elseif($fieldName == 'sales-return'){
-            $quantity = $this->_em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'sales-return');
+            $quantity = $this->_em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'sales-return');
             $stock->setSalesReturnQuantity($quantity);
         }elseif($fieldName == 'purchase'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'purchase');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'purchase');
             $stock->setPurchaseQuantity($quantity);
          }elseif($fieldName == 'purchase-return'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'purchase-return');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'purchase-return');
             $stock->setPurchaseReturnQuantity($quantity);
         }elseif($fieldName == 'damage'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'damage');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'damage');
             $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'opening'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'opening');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock->getId(),'opening');
             $stock->setOpeningQuantity($quantity);
         }elseif($fieldName == 'assets'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'assets');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'assets');
             $stock->setAssetsQuantity($quantity);
         }elseif($fieldName == 'assets-return'){
-            $quantity = $em->getRepository('TallyBundle:StockItem')->getItemUpdateQuantity($stock,'assets-return');
+            $quantity = $em->getRepository('AssetsBundle:StockItem')->getItemUpdateQuantity($stock,'assets-return');
             $stock->setAssetsReturnQuantity($quantity);
         }
         $em->persist($stock);

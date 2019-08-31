@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\TallyBundle\Entity\Category;
+use Appstore\Bundle\AssetsBundle\Entity\Category;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -51,7 +51,13 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="products" )
+	 **/
+	private  $item;
+
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="products" )
 	 **/
 	private  $purchaseItem;
 
@@ -63,18 +69,18 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", inversedBy="products" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", inversedBy="childProducts" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", inversedBy="childProducts" )
 	 **/
 	private  $parentCategory;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Brand", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Brand", inversedBy="products" )
 	 **/
 	private  $brand;
 
@@ -861,6 +867,22 @@ class Product
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return Item
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param Item $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
     }
 
 

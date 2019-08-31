@@ -41,6 +41,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $purchaseItems;
 
 
+
         /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="purchase"  )
          **/
@@ -54,13 +55,13 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="tallyPurchase" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="assetsPurchase" , cascade={"detach","merge"} )
          **/
         private  $vendor;
 
 
          /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="tallyPurchase" , cascade={"detach","merge"} )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="assetsPurchase" , cascade={"detach","merge"} )
          **/
         private  $accountPurchase;
 

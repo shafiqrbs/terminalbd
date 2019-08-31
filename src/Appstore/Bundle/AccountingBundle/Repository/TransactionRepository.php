@@ -477,8 +477,6 @@ class TransactionRepository extends EntityRepository
             $transaction->setUpdated($accountPurchase->getUpdated());
 
             /* Cash - Cash various */
-
-            /* Cash - Cash various */
             if($purchase->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
@@ -2573,10 +2571,11 @@ class TransactionRepository extends EntityRepository
 
     public function itemDistributionTransaction($purchase,$accountPurchase,$source='')
     {
-        $this->insertPurchaseCash($purchase,$accountPurchase);
-        $this->insertPurchaseAccountPayable($purchase,$accountPurchase);
+        if(!empty($accountPurchase->getTransactionMethod()) and $accountPurchase->getPayment() > 0){
+            $this->insertGlobalPurchaseCash($accountPurchase);
+        }
+        $this->insertGlobalPurchaseAccountPayable($accountPurchase);
         $this->insertFixedAssets($purchase,$accountPurchase);
-        $this->insertPurchaseExpense($purchase,$accountPurchase);
     }
 
     public function insertFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\Purchase $purchase,$accountPurchase)
@@ -2584,7 +2583,8 @@ class TransactionRepository extends EntityRepository
         /* @var $item PurchaseItem */
 
         foreach ($purchase->getPurchaseItems() as $item) {
-            if($item->getItem()->getProductType() == "Assets"){
+            if($item->getItem()->getCategory()->getCategoryType() == "Assets"){
+
                 $accountHead = $item->getItem()->getCategory()->getAccountHead();
                 $transaction = new Transaction();
                 $transaction->setGlobalOption($accountPurchase->getGlobalOption());
@@ -2599,14 +2599,70 @@ class TransactionRepository extends EntityRepository
                 $transaction->setDebit($item->getSubTotal());
                 $this->_em->persist($transaction);
                 $this->_em->flush();
+
+            }elseif($item->getItem()->getCategory()->getCategoryType() == "Inventory"){
+
+                $accountHead = $item->getItem()->getCategory()->getAccountHead();
+                $transaction = new Transaction();
+                $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+                $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+                $transaction->setProcessHead('Expense');
+                $transaction->setProcess('Expense');
+                /* Assets Account - Capital Assets */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
+                $transaction->setAmount($item->getSubTotal());
+                $transaction->setDebit($item->getSubTotal());
+                $this->_em->persist($transaction);
+                $this->_em->flush();
             }
 
         }
 
     }
 
-    public function insertPurchaseExpense(\Appstore\Bundle\AssetsBundle\Entity\Purchase $purchase)
+    public function openingItemDistributionTransaction($purchase,$journal)
     {
+        $this->insertAccountJournalCreditTransaction($journal);
+        $this->insertOpeningFixedAssets($purchase,$journal);
+    }
+
+
+    public function insertOpeningFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\PurchaseItem $item,$journal)
+    {
+        /* @var $item PurchaseItem */
+
+        if($item->getItem()->getCategory()->getCategoryType() == "Assets"){
+
+            $accountHead = $item->getItem()->getCategory()->getAccountHead();
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($journal->getGlobalOption());
+            $transaction->setAccountRefNo($journal->getAccountRefNo());
+            $transaction->setProcessHead('Assets');
+            $transaction->setProcess('Depreciation');
+            /* Assets Account - Capital Assets */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCapitalAssetsAccount($journal->getGlobalOption(),$item);
+            $transaction->setSubAccountHead($subAccount);
+            $transaction->setAmount($item->getSubTotal());
+            $transaction->setDebit($item->getSubTotal());
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }elseif($item->getItem()->getCategory()->getCategoryType() == "Inventory"){
+
+            $accountHead = $item->getItem()->getCategory()->getAccountHead();
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($journal->getGlobalOption());
+            $transaction->setAccountRefNo($journal->getAccountRefNo());
+            $transaction->setProcessHead('Expense');
+            $transaction->setProcess('Expense');
+            /* Assets Account - Capital Assets */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
+            $transaction->setAmount($item->getSubTotal());
+            $transaction->setDebit($item->getSubTotal());
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
 
     }
 

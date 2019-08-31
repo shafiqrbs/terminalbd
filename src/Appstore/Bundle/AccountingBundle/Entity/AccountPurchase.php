@@ -75,6 +75,12 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $tallyPurchase;
 
         /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+         **/
+        private  $assetsPurchase;
+
+        /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
          * @ORM\JoinColumn(name="hmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
@@ -1026,6 +1032,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setTallyPurchase($tallyPurchase)
         {
             $this->tallyPurchase = $tallyPurchase;
+        }
+
+        /**
+         * @return \Appstore\Bundle\AssetsBundle\Entity\Purchase
+         */
+        public function getAssetsPurchase()
+        {
+            return $this->assetsPurchase;
+        }
+
+        /**
+         * @param \Appstore\Bundle\AssetsBundle\Entity\Purchase $assetsPurchase
+         */
+        public function setAssetsPurchase($assetsPurchase)
+        {
+            $this->assetsPurchase = $assetsPurchase;
         }
 
     }

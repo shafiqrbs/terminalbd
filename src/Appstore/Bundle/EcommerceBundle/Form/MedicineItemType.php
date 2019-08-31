@@ -22,7 +22,7 @@ class MedicineItemType extends AbstractType
         $builder
 
             ->add('itemName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span3 input','placeholder'=>'MRP')))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span3 input','readonly'=>'readonly','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','placeholder'=>'Quantity')));
     }
 

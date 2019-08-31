@@ -76,13 +76,13 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Received</th>
-                                    <th class="numeric" >Branch</th>
+                                  {#  <th class="numeric" >Branch</th>#}
                                     <th class="numeric" >Product Name </th>
                                     <th class="numeric" >Item</th>
                                     <th class="numeric" >Category</th>
-                                    <th class="numeric" >PR</th>
+                                   {# <th class="numeric" >PR</th>#}
                                     <th class="numeric" >Serial No</th>
-                                    <th class="numeric" >Branch Code</th>
+                                   {# <th class="numeric" >Branch Code</th>#}
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Service Price</th>
                                     <th class="numeric" >Dep Rate</th>
@@ -101,13 +101,13 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.branch.name }}</td>
+                                       {# <td class="numeric" >{{ entity.branch.name }}</td>#}
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.item.name }}</td>
                                         <td class="numeric" >{{ entity.category.name }}</td>
-                                        <td class="numeric" >{{ entity.purchaseRequisition }}</td>
+                                      {#  <td class="numeric" >{{ entity.purchaseRequisition }}</td>#}
                                         <td class="numeric" >{{ entity.serialNo }}</td>
-                                        <td class="numeric" >{{ entity.branchSerialNo }}</td>
+                                      {#  <td class="numeric" >{{ entity.branchSerialNo }}</td>#}
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{{ entity.servicePrice }}</td>
                                         <td class="numeric" >{{ entity.depreciationRate|number_format }}%</td>

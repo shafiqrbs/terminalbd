@@ -156,7 +156,7 @@
                                                     {% endif %}
                                                 </div>
                                             {% else %}
-                                                {{ item.quantity }}
+                                                {{ orderItem.quantity }}
                                             {% endif %}
                                             </td>
                                         <td class="numeric" >{{ orderItem.price }}</td>
@@ -366,13 +366,17 @@
                                 </div>
                             </div>
                             <div class="row-fluid">
-                                <div class="span6">
-
-                                </div>
+                                <div class="span3"></div>
                                 <div class="span3">
                                     <div class="control-group pull-right">
                                         {{ form_widget(orderForm.deliveryDate) }}
                                         {{ form_errors(orderForm.deliveryDate) }}
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group pull-right">
+                                        {{ form_widget(orderForm.deliverySlot) }}
+                                        {{ form_errors(orderForm.deliverySlot) }}
                                     </div>
                                 </div>
                                 <div class="span3">

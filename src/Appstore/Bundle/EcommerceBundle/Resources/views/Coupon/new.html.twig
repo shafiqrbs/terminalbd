@@ -79,14 +79,19 @@
 
                                 <div class="span4">
                                     <div class="row-fluid">
-                                        <div class="span6">
-                                            <label class="control-label" for="percentage"> Is Percentage {{ form_widget(form.percentage) }}</label>
-                                        </div>
+
                                         <div class="span6">
                                             <label class="control-label" for="price">Discount Amount</label>
                                             <div class="controls">
                                                 {{ form_widget(form.amount) }}
                                                 {{ form_errors(form.amount) }}
+                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <label class="control-label" for="price">&nbsp;</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.discountCalculation) }}
+                                                {{ form_errors(form.discountCalculation) }}
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +127,7 @@
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
-                                                <label class="control-label" for="notes">Coupon Date</label>
+                                                <label class="control-label" for="notes">Coupon Validity</label>
                                                 <div class="controls">
 
                                                     {{ form_widget(form.startDate) }}

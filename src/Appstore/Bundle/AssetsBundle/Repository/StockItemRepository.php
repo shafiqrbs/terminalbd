@@ -265,8 +265,8 @@ class StockItemRepository extends EntityRepository
         }elseif($fieldName == 'purchase'){
 
             /* @var $item PurchaseItem */
-
-            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $item ,'mode' => 'purchase'));
+            $item = $em->getRepository('AssetsBundle:PurchaseItem')->find($id);
+            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $id ,'mode' => 'purchase'));
 
             if($exist){
                 $entity = $exist;
@@ -291,8 +291,7 @@ class StockItemRepository extends EntityRepository
         }
         $entity->setConfig($config);
         $entity->setProcess('Approved');
-        $em->persist($entity);            $entity->setVendor($item->getPurchase()->getVendor());
-
+        $em->persist($entity);
         $em->flush();
     }
 
@@ -317,7 +316,7 @@ class StockItemRepository extends EntityRepository
         }elseif($fieldName == 'assets-return'){
             $qb->select('SUM(e.assetsReturnQuantity) AS quantity');
         }
-        $qb->where("e.item ={$item}");
+        $qb->where("e.item ={$item->getId()}");
         $qb->andWhere("e.process = :process")->setParameter('process','Approved');
         $quantity = $qb->getQuery()->getOneOrNullResult();
         return $quantity['quantity'];

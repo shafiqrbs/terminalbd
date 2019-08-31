@@ -268,6 +268,41 @@ class TransactionController extends Controller
 
     }
 
+    public function purchaseExpenseAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        if(empty($data)){
+            $compare = new \DateTime("now");
+            $data['date'] = $compare->format('Y-m-d');
+        }
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->purchaseExpense($user,$transactionMethods,$data);
+        $pagination = $this->paginate($entities);
+        $globalOption = $this->getUser()->getGlobalOption();
+
+        $date ="purchase-expense-{$data['date']}.pdf";
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction:purchaseExpense.html.twig', array(
+                'entities' => $pagination,
+                'searchForm' => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Transaction/Report:purchaseExpensePdf.html.twig', array(
+                    'globalOption'                  => $globalOption,
+                    'entities'                      => $pagination,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,$date);
+        }
+
+    }
+
     public function monthlyAction()
     {
         $em = $this->getDoctrine()->getManager();

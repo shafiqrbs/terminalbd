@@ -142,7 +142,7 @@ class ProductLedgerRepository extends EntityRepository
 		$accountSales->setCategory($entity->getCategory());
 		$accountSales->setBranch($entity->getBranch());
 		$accountSales->setDebit($entity->getPurchasePrice());
-		$accountSales->setNarration('Receive Product on the opening item');
+		$accountSales->setNarration('Receive Product service');
 		$accountSales->setProcess('approved');
 		$em->persist($accountSales);
 		$em->flush();

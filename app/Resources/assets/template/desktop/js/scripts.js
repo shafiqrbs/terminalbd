@@ -501,7 +501,7 @@ $(document).ready(function(){
 
     createSum();
     // On "reset button" click, generate new random sum
-    $('#registrationSubmitForm').click(createSum);
+ //   $('#registrationSubmitForm').click(createSum);
     // On user input, check value
     $( "#ans" ).keyup(checkInput);
 });

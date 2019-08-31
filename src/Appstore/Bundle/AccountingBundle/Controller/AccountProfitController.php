@@ -51,7 +51,6 @@ class AccountProfitController extends Controller
     {
 
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyProfitLoss($this->getUser());
-        var_dump($overview);
         $sales = round($overview['sales'] + $overview['salesAdjustment']['sales']);
         $purchase = round($overview['purchase'] + $overview['salesAdjustment']['purchase']);
         $expenditure = round ($overview['expenditure']);

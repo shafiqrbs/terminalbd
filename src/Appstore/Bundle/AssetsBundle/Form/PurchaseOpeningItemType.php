@@ -47,6 +47,19 @@ class PurchaseOpeningItemType extends AbstractType
                         ->andWhere("b.config = {$this->config->getId()}");
                 },
             ))
+            ->add('vendor', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
+                'empty_value' => '---Choose a vendor ---',
+                'property' => 'companyName',
+                'attr'=>array('class'=>'span12 m-wrap vendor'),
+                'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->config->getGlobalOption()->getId());
+                },
+            ))
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12'))) ->add( 'name', 'text', array(
                 'attr'        => array( 'class' => 'm-wrap span12', 'placeholder' => 'Enter  product item' ),
                 'constraints' => array( new NotBlank( array( 'message' => 'Please add  product item name' )))

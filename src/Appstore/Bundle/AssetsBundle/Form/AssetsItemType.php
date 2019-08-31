@@ -63,11 +63,6 @@ class AssetsItemType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
 
-            ->add('salesPrice', 'choice', array(
-                'label' => 'Choose your car',
-                'choices' => $this->ParticularChoiceList(),
-            ))
-
             ->add('productGroup', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AssetsBundle\Entity\Setting',

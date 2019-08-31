@@ -229,6 +229,13 @@ class PurchaseItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function insertProductSerialNo(Purchase $purchase)
+    {
+        foreach ($purchase->getPurchaseItems() as $item):
+            $this->generateSerialNo($item);
+        endforeach;
+    }
+
     public function generateSerialNo(PurchaseItem $entity){
 
         /* @var $product Item */
@@ -240,7 +247,7 @@ class PurchaseItemRepository extends EntityRepository
         $format = $product->getSerialFormat();
         $generation = $product->getSerialGeneration();
 
-        if($generation == 'auto'){
+        if($generation == 'auto' and empty($entity->getExternalSerial())){
             $serialNos = array();
             for($qnt = 1; $entity->getQuantity() >= $qnt; $qnt++ ){
                 $generate = str_pad($qnt,$format, '0', STR_PAD_LEFT);
@@ -252,6 +259,18 @@ class PurchaseItemRepository extends EntityRepository
             $em->persist($entity);
             $em->flush($entity);
 
+        }elseif($generation == 'manual' and empty($entity->getExternalSerial())){
+
+            $serialNos = array();
+            for($qnt = 1; $entity->getQuantity() >= $qnt; $qnt++ ){
+                $generate = str_pad($qnt,$format, '0', STR_PAD_LEFT);
+                $serialNos[] = $prefix.$entity->getBarcode().'/'.$generate;
+            }
+            $entity->setInternalSerial($serialNos);
+            $comma_separated = implode(",", $serialNos);
+            $entity->setExternalSerial($comma_separated);
+            $em->persist($entity);
+            $em->flush($entity);
         }
     }
 

@@ -368,8 +368,12 @@ class PurchaseItemController extends Controller
         }
         $entity->setProcess("Approved");
         $em->flush();
+        $journal = $em->getRepository('AccountingBundle:AccountJournal')->openingAssetsItemJournal($entity);
+        $em->getRepository('AccountingBundle:Transaction')->openingItemDistributionTransaction($entity,$journal);
+        $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->generateSerialNo($entity);
         $this->getDoctrine()->getRepository('AssetsBundle:StockItem')->processStockQuantity($entity->getConfig(),$entity->getId(),'opening');
         $this->getDoctrine()->getRepository('AssetsBundle:Item')->updateRemovePurchaseQuantity($entity->getItem(),'opening');
+        $this->getDoctrine()->getRepository('AssetsBundle:Product')->insertPurchaseItemToAssetsProduct($entity);
         $this->get('session')->getFlashBag()->add(
             'success',"Item has been approved successfully"
         );

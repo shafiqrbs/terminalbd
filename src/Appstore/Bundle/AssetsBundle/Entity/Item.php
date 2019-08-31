@@ -11,7 +11,6 @@ use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\LocationBundle\Entity\Country;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\ItemWarning;
@@ -47,6 +46,12 @@ class Item
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="item" )
 	 **/
 	private  $stockItems;
+
+
+     /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="item" )
+	 **/
+	private  $products;
 
 
     /**
@@ -1273,6 +1278,14 @@ class Item
     public function getAccountHead()
     {
         return $this->accountHead;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 
 

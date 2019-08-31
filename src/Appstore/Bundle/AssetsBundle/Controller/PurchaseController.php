@@ -281,8 +281,8 @@ class PurchaseController extends Controller
         if (!empty($purchase) and empty($purchase->getApprovedBy())) {
 
             $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
-            $purchase->setApprovedBy($this->getUser());
+          //  $purchase->setProcess('Approved');
+         //   $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() === 0 ){
                 $purchase->setTransactionMethod(NULL);
             }
@@ -293,9 +293,11 @@ class PurchaseController extends Controller
                 $purchase->setUpdated($datetime);
             }
             $em->flush();
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertTallyAccountPurchase($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->itemDistributionTransaction($accountPurchase);
+            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAssetsAccountPurchase($purchase);
+            $em->getRepository('AccountingBundle:Transaction')->itemDistributionTransaction($purchase,$accountPurchase);
+            $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->insertProductSerialNo($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:StockItem')->getPurchaseInsertQnt($purchase);
+            $this->getDoctrine()->getRepository('AssetsBundle:Product')->insertReceiveItem($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
 

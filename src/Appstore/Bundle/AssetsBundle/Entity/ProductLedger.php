@@ -4,7 +4,7 @@ namespace Appstore\Bundle\AssetsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
+
 
 /**
  * Depreciation
@@ -29,12 +29,12 @@ class ProductLedger
 	private  $branch;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="ledgers" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", inversedBy="ledgers" )
 	 **/
 	private  $category;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="ledgers" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="ledgers" )
 	 **/
 	private  $item;
 
@@ -120,42 +120,42 @@ class ProductLedger
 	}
 
 	/**
-	 * @return mixed
+	 * @return Category
 	 */
 	public function getCategory() {
 		return $this->category;
 	}
 
 	/**
-	 * @param mixed $category
+	 * @param Category $category
 	 */
 	public function setCategory( $category ) {
 		$this->category = $category;
 	}
 
 	/**
-	 * @return mixed
+	 * @return Item
 	 */
 	public function getItem() {
 		return $this->item;
 	}
 
 	/**
-	 * @param mixed $item
+	 * @param Item $item
 	 */
 	public function setItem( $item ) {
 		$this->item = $item;
 	}
 
 	/**
-	 * @return mixed
+	 * @return Product
 	 */
 	public function getProduct() {
 		return $this->product;
 	}
 
 	/**
-	 * @param mixed $product
+	 * @param Product $product
 	 */
 	public function setProduct( $product ) {
 		$this->product = $product;

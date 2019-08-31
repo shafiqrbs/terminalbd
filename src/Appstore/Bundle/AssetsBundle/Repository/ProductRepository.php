@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
+use Appstore\Bundle\AssetsBundle\Entity\Purchase;
+use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
@@ -254,7 +256,7 @@ class ProductRepository extends EntityRepository
     }
 
 
-    public function findWithSearch($data)
+    public function findWithSearch($data = array())
     {
 
         $item = isset($data['item'])? $data['item'] :'';
@@ -426,97 +428,60 @@ class ProductRepository extends EntityRepository
 
     }
 
-    public function updateRemainingQuantity(Item $item)
+    public function insertReceiveItem(Purchase $sales)
     {
-	    $em = $this->_em;
-    	$reminQnt = (($item->getPurchaseQuantity() + $item->getSalesQuantity()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn() + $item->getDamageQuantity()));
-    	$item->setRemainingQnt($reminQnt);
-	    $em->flush();
-    }
-
-    public function getItemUpdatePriceQnt($purchase){
-
         $em = $this->_em;
-        foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
-            $entity = $purchaseItem->getItem();
+        /** @var  $item PurchaseItem */
 
-            /** @var Item $entity */
+        $status = $this->_em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
+        $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->find(1);
 
-            $qnt = ($entity->getPurchaseQuantity() + $purchaseItem->getQuantity());
-            $entity->setPurchaseQuantity($qnt);
-            $entity->setUpdated($purchase->getCreated());
-            $em->persist($entity);
-            $em->flush();
+        foreach($sales->getPurchaseItems() as $item ){
+
+            if($item->getItem()->getCategory()->getCategoryType() == 'Assets'){
+                $this->insertPurchaseItemToAssetsProduct($item);
+            }
         }
     }
 
-    public function insertReceiveItem(Sales $sales)
+    public function insertPurchaseItemToAssetsProduct(PurchaseItem $item)
     {
-	    $em = $this->_em;
+        if(!empty($item->getExternalSerial())){
 
-	    /** @var  $item SalesItem */
+            $comma_separated = explode(",", $item->getExternalSerial());
 
-	    $status = $this->_em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
-	    $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->find(1);
+            foreach ($comma_separated as $serialNo):
 
-	    foreach($sales->getSalesItems() as $item ){
+                $product = new Product();
+                $product->setConfig($item->getConfig());
+                $product->setPurchaseItem($item);
+                $product->setSerialNo($serialNo);
+                $product->setName($item->getName());
+                //  $product->setBranch($item->getSales()->getBranches());
+                if($item->getAssetsPurchase()){
+                    $product->setVendor($item->getAssetsPurchase()->getVendor());
+                }
+                //   $product->setPurchaseRequisition('PR-'.$item->getSales()->getPurchaseRequisition()->getGrn());
+                $product->setItem($item->getItem());
+                $product->setCategory($item->getItem()->getCategory());
+                $product->setParentCategory($product->getCategory()->getParent());
+                $product->setPurchasePrice($item->getPurchasePrice());
+                $product->setBookValue($item->getPurchasePrice());
+                $product->setAssuranceType($item->getAssuranceType());
+                $product->setExpiredDate($item->getExpiredDate());
+                $product->setDepreciationStatus($status);
+                $product->setDepreciation($depreciation);
+                $em->persist($product);
+                $em->flush($product);
+                $this->_em->getRepository('AssetsBundle:ProductLedger')->insertProductLedger($product);
 
-	    	if($item->getItem()->getProductType() == 'assets'){
-	    		if(!empty($item->getSerialNo())){
-	    			foreach ($item->getSerialNo() as $serialNo):
-
-					    $product = new Product();
-					    $product->setSalesItem($item);
-					    $product->setSerialNo($serialNo);
-					    $product->setName($item->getPurchaseItem()->getName());
-					    $product->setBranch($item->getSales()->getBranches());
-					    $product->setPurchaseItem($item->getPurchaseItem());
-					    $product->setVendor($item->getPurchaseItem()->getPurchase()->getVendor());
-					    $product->setPurchaseRequisition('PR-'.$item->getSales()->getPurchaseRequisition()->getGrn());
-					    $product->setItem($item->getItem());
-					    $product->setCategory($item->getItem()->getMasterItem()->getCategory());
-					    $product->setParentCategory($product->getCategory()->getParent());
-					    $product->setPurchasePrice($item->getPurchasePrice());
-					    $product->setBookValue($item->getPurchasePrice());
-					    $product->setAssuranceType($item->getAssuranceType());
-					    $product->setExpiredDate($item->getExpiredDate());
-					    $product->setDepreciationStatus($status);
-					    $product->setDepreciation($depreciation);
-					    $em->persist($product);
-					    $em->flush($product);
-					    $this->_em->getRepository('AssetsBundle:ProductLedger')->insertProductLedger($product);
-
-					endforeach;
-			    }
-
-		    }
-	    }
-    }
-
-
-    public function getCulculationDiscountPrice(Item $item , Discount $discount)
-    {
-        if($discount->getType() == 'percentage'){
-            $dpPrice = ( ($item->getSalesDistributorPrice() * (int)$discount->getDiscountAmount())/100 );
-            $dpDiscountPrice = $item->getSalesDistributorPrice() - $dpPrice;
-            $item->setDpDiscountPrice(round($dpDiscountPrice));
-            $regPrice = ( ($item->getSalesPrice() * (int)$discount->getDiscountAmount())/100 );
-            $salesDiscountPrice = $item->getSalesPrice() - $regPrice;
-            $item->setDiscountPrice(round($salesDiscountPrice));
-        }else{
-            $dpDiscountPrice = ( $item->getSalesDistributorPrice() - (int)$discount->getDiscountAmount());
-            $item->setDpDiscountPrice(round($dpDiscountPrice));
-            $salesDiscountPrice = ( $item->getSalesPrice() - (int)$discount->getDiscountAmount());
-            $item->setDiscountPrice(round($salesDiscountPrice));
+            endforeach;
         }
-        $item->setDiscount($discount);
-        $this->_em->persist($item);
-        $this->_em->flush();
-
-
-
     }
+
+
+
 
 
 }
