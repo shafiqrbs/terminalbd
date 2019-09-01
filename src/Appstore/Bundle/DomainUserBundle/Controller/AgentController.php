@@ -3,7 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 use Core\UserBundle\Form\AgentEditType;
 use Core\UserBundle\Form\AgentSignType;
-use Core\UserBundle\Form\DomainEditProfileType;
+use Core\UserBundle\Form\MemberEditProfileType;
 use FOS\UserBundle\Model\UserManager;
 use Appstore\Bundle\DomainUserBundle\Form\DomainEditUserType;
 use Core\UserBundle\Entity\User;

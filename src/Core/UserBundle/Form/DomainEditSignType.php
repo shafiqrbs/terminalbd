@@ -48,7 +48,7 @@ class DomainEditSignType extends AbstractType
                         new Length(array('max'=>200))
                     ))
             );
-            $builder->add('profile', new DomainEditProfileType($this->globalOption ,$this->location,$this->designation));
+            $builder->add('profile', new MemberEditProfileType($this->globalOption ,$this->location,$this->designation));
 
     }
 

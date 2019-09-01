@@ -6,7 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerEditProfileType;
-use Core\UserBundle\Form\DomainEditProfileType;
+use Core\UserBundle\Form\MemberEditProfileType;
 use Frontend\FrontentBundle\Service\Cart;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Form\DomainSearchType;

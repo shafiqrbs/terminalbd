@@ -12,7 +12,7 @@
 namespace Core\UserBundle\Controller;
 
 use Core\UserBundle\Entity\User;
-use Core\UserBundle\Form\DomainEditProfileType;
+use Core\UserBundle\Form\MemberEditProfileType;
 use Core\UserBundle\Form\DomainUserProfileType;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;

@@ -176,6 +176,12 @@ class Profile
      */
     private $additionalPhone;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="occupation", type="string", nullable=true)
+     */
+    private $occupation;
 
     /**
      * @var string
@@ -966,6 +972,22 @@ class Profile
     public function setEmployeeBranch($employeeBranch)
     {
         $this->employeeBranch = $employeeBranch;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOccupation()
+    {
+        return $this->occupation;
+    }
+
+    /**
+     * @param string $occupation
+     */
+    public function setOccupation($occupation)
+    {
+        $this->occupation = $occupation;
     }
 
 

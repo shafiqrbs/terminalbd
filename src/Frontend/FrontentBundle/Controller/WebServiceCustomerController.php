@@ -177,6 +177,7 @@ class WebServiceCustomerController extends Controller
             if(empty($entity->getEmail())){
                 $entity->setEmail($mobile.'@gmail.com');
             }
+            $entity->setGlobalOption($globalOption);
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $em->persist($entity);
             $em->flush();
@@ -233,6 +234,7 @@ class WebServiceCustomerController extends Controller
             if(empty($entity->getEmail())){
                 $entity->setEmail($mobile.'@gmail.com');
             }
+            $entity->setGlobalOption($globalOption);
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $entity->setUserGroup('customer');
             $em->persist($entity);
@@ -268,6 +270,7 @@ class WebServiceCustomerController extends Controller
             if(empty($entity->getEmail())){
                 $entity->setEmail($mobile.'@gmail.com');
             }
+            $entity->setGlobalOption($globalOption);
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $entity->setUserGroup('customer');
             $em->persist($entity);
@@ -291,27 +294,33 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $data = $request->request->all();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
-        $intlMobile = $data['registration_mobile'];
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        $entity->setPlainPassword("1234");
-        $entity->setEnabled(true);
-        $entity->setUsername($mobile);
-        if(empty($data['registration_mobile'])){
-            $entity->setEmail($mobile.'@gmail.com');
-        }else{
-            $entity->setEmail($data['registration_email']);
+        if($globalOption) {
+            $intlMobile = $data['registration_mobile'];
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $entity->setPlainPassword("1234");
+            $entity->setEnabled(true);
+            $entity->setUsername($mobile);
+            if (empty($data['registration_email'])) {
+                $entity->setEmail($mobile . '@gmail.com');
+            } else {
+                $entity->setEmail($data['registration_email']);
+            }
+            $entity->setGlobalOption($globalOption);
+            $entity->setRoles(array('ROLE_CUSTOMER','ROLE_MEMBER'));
+            $entity->setUserGroup('customer');
+            $em->persist($entity);
+            $em->flush();
+            $this->getDoctrine()->getRepository('UserBundle:Profile')->insertNewMember($entity, $data);
+            $data = array('name' => $data['registration_name'],'email' => $data['registration_email'],'address' => $data['registration_address'],'facebookId' => $data['registration_facebookId']);
+             $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+            $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);
+            /*$dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));*/
+            return new Response('success');
         }
-        $entity->setRoles(array('ROLE_CUSTOMER','ROLE_MEMBER'));
-        $entity->setUserGroup('customer');
-        $em->persist($entity);
-        $em->flush();
-        $this->getDoctrine()->getRepository('UserBundle:Profile')->insertNewMember($entity,$data);
-        $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
-        $this->get('security.context')->setToken($token);
-        $this->get('session')->set('_security_main',serialize($token));
-        /*$dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));*/
-        return new Response('success');
+        return new Response('failed');
 
 
 }

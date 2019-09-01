@@ -42,7 +42,9 @@ domain_customer_domainpage:
     path:     /domaindas-hboard/
     defaults: { _controller: "CustomerBundle:Customer:customerDomain" }
 
-
+customerweb_profile:
+    path:     /{shop}/profile
+    defaults: { _controller: "CustomerBundle:Profile:edit" }
 
 
 

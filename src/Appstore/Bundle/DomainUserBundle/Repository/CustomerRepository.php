@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -404,6 +405,34 @@ class CustomerRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
             return $data = array('customer' => $entity, 'status'=>'valid');
+        }
+
+    }
+
+    public function insertStudentMember(User $user,$data)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'user' => $user->getId()));
+        if(empty($exist)){
+            $entity = new Customer();
+            $entity->setMobile($user->getUsername());
+            if(isset($data['name']) && $data['name'] !=""){
+                $entity->setName($data['name']);
+            }
+            if(isset($data['email']) && $data['email'] !=""){
+                $entity->setEmail($data['email']);
+            }
+            if(isset($data['facebookId']) && $data['facebookId'] !=""){
+                $entity->setFacebookId($data['facebookId']);
+            }
+            if(isset($data['address']) && $data['address'] !=""){
+                $entity->setAddress($data['address']);
+            }
+            $entity->setUser($user->getId());
+            $entity->setGlobalOption($user->getGlobalOption());
+            $entity->setCustomerType('member');
+            $em->persist($entity);
+            $em->flush();
         }
 
     }

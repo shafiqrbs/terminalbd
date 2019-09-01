@@ -6,11 +6,6 @@ customerweb_payment:
     path:     /payment
     defaults: { _controller: "CustomerBundle:WebContent:payment" }
 
-customerweb_profile:
-    path:     /profile
-    defaults: { _controller: "CustomerBundle:WebContent:profile" }
-    methods:  POST
-
 customerweb_ticket:
     path:     /ticket
     defaults: { _controller: "CustomerBundle:WebContent:ticket" }

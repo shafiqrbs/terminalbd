@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
@@ -17,6 +18,8 @@ use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Customer
  *
@@ -46,6 +49,7 @@ class Customer
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", mappedBy="customer" )
      **/
     private  $accountHead;
+
 
 	/**
 	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", mappedBy="customer")
@@ -101,8 +105,6 @@ class Customer
      * @ORM\OrderBy({"companyName" = "ASC"})
      */
     protected $medicineVendor;
-
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="customer" )
@@ -161,6 +163,13 @@ class Customer
     /**
      * @var integer
      *
+     * @ORM\Column(name="user", type="integer",  nullable=true)
+     */
+    private $user;
+
+     /**
+     * @var integer
+     *
      * @ORM\Column(name="code", type="integer",  nullable=true)
      */
     private $code;
@@ -192,6 +201,20 @@ class Customer
      * @ORM\Column(name="name", type="string", length=100, nullable =true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nid", type="string", length=100, nullable =true)
+     */
+    private $nid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="about", type="text", nullable =true)
+     */
+    private $about;
 
     /**
      * @var string
@@ -240,7 +263,7 @@ class Customer
      *
      * @ORM\Column(name="religion", type="string", length=100, nullable =true)
      */
-    private $religion ="Islam" ;
+    private $religion ="Muslim" ;
 
     /**
      * @var string
@@ -401,6 +424,65 @@ class Customer
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="higherEducation", type="string", nullable=true)
+     */
+    private $higherEducation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="spouseName", type="string", nullable=true)
+     */
+    private $spouseName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="spouseOccupation", type="string", nullable=true)
+     */
+    private $spouseOccupation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="spouseDesignation", type="string", nullable=true)
+     */
+    private $spouseDesignation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="memberDesignation", type="string", nullable=true)
+     */
+    private $memberDesignation;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="studentBatch", type="string", nullable=true)
+     */
+    private $studentBatch;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="batchYear", type="string", nullable=true)
+     */
+    private $batchYear;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="additionalPhone", type="string", nullable=true)
+     */
+    private $additionalPhone;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -420,6 +502,16 @@ class Customer
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @Assert\File(maxSize="1M")
+     */
+    public $file;
 
 
     /**
@@ -1214,6 +1306,270 @@ class Customer
 	public function getAccountVendor() {
 		return $this->accountVendor;
 	}
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStudentBatch()
+    {
+        return $this->studentBatch;
+    }
+
+    /**
+     * @param string $studentBatch
+     */
+    public function setStudentBatch($studentBatch)
+    {
+        $this->studentBatch = $studentBatch;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBatchYear()
+    {
+        return $this->batchYear;
+    }
+
+    /**
+     * @param string $batchYear
+     */
+    public function setBatchYear($batchYear)
+    {
+        $this->batchYear = $batchYear;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHigherEducation()
+    {
+        return $this->higherEducation;
+    }
+
+    /**
+     * @param string $higherEducation
+     */
+    public function setHigherEducation($higherEducation)
+    {
+        $this->higherEducation = $higherEducation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpouseDesignation()
+    {
+        return $this->spouseDesignation;
+    }
+
+    /**
+     * @param string $spouseDesignation
+     */
+    public function setSpouseDesignation($spouseDesignation)
+    {
+        $this->spouseDesignation = $spouseDesignation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpouseOccupation()
+    {
+        return $this->spouseOccupation;
+    }
+
+    /**
+     * @param string $spouseOccupation
+     */
+    public function setSpouseOccupation($spouseOccupation)
+    {
+        $this->spouseOccupation = $spouseOccupation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpouseName()
+    {
+        return $this->spouseName;
+    }
+
+    /**
+     * @param string $spouseName
+     */
+    public function setSpouseName($spouseName)
+    {
+        $this->spouseName = $spouseName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNid()
+    {
+        return $this->nid;
+    }
+
+    /**
+     * @param string $nid
+     */
+    public function setNid($nid)
+    {
+        $this->nid = $nid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbout()
+    {
+        return $this->about;
+    }
+
+    /**
+     * @param string $about
+     */
+    public function setAbout($about)
+    {
+        $this->about = $about;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalPhone()
+    {
+        return $this->additionalPhone;
+    }
+
+    /**
+     * @param string $additionalPhone
+     */
+    public function setAdditionalPhone($additionalPhone)
+    {
+        $this->additionalPhone = $additionalPhone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param int $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param Page $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return Page
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/' . $this->path;
+    }
+
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/customer';
+    }
+
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+            $this->path = null ;
+        }
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename ;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMemberDesignation()
+    {
+        return $this->memberDesignation;
+    }
+
+    /**
+     * @param string $memberDesignation
+     */
+    public function setMemberDesignation($memberDesignation)
+    {
+        $this->memberDesignation = $memberDesignation;
+    }
+
 
 }
 
