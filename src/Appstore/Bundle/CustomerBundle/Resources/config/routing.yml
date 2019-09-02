@@ -34,6 +34,10 @@ customer_website:
     resource: "@CustomerBundle/Resources/config/routing/customerweb.yml"
     prefix:   /{shop}/content
 
+member_invoice:
+    resource: "@CustomerBundle/Resources/config/routing/customerinvoice.yml"
+    prefix:   /{shop}/invoice
+
 domain_customer_homepage:
     path:     /{shop}/dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
@@ -45,6 +49,15 @@ domain_customer_domainpage:
 customerweb_profile:
     path:     /{shop}/profile
     defaults: { _controller: "CustomerBundle:Profile:edit" }
+
+
+    path:     /{shop}/profile
+    defaults: { _controller: "CustomerBundle:Profile:edit" }
+
+customerweb_profile_update:
+    path:      /{shop}/profile-update
+    defaults: { _controller: "CustomerBundle:Profile:update" }
+    methods:  [POST, PUT]
 
 
 

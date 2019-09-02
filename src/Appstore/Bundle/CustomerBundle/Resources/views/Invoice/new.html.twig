@@ -1,0 +1,306 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN category HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="category-title">
+                    Customer Invoice #  <strong>{{ entity.invoice }}</strong>
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('business_invoice') }}">Customer Invoice</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Manage Customer Invoice</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END category HEADER-->
+        <!-- BEGIN category CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Invoice Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn black" href="{{ path('business_invoice') }}"><i class="icon-th-list"></i> Invoice</a>
+                                <a class="btn red" href="{{ path('business_invoice_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <!-- BEGIN FORM-->
+                            <div class="clearfix"></div>
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <div class="span12" id="particular-table">
+                                        <table class="table table-bordered table-striped table-condensed table-fixed">
+                                            <thead>
+                                            <tr>
+                                                <th class="span1"> Si/No</th>
+                                                <th class="span8">Particular</th>
+                                                <th class="span2">Unit Price</th>
+                                                <th class="span1">Amount</th>
+                                             </tr>
+                                            </thead>
+                                            <tbody id="invoiceParticulars">
+                                            {% set subTotal =0 %}
+                                            {% for item in particulars %}
+                                            {% set subTotal = subTotal + item.salesPrice %}
+                                                <tr id="remove-{{ item.id }}">
+                                                    <td  class="">{{ loop.index }}.</td>
+                                                    <td class="">{{ item.name }}</td>
+                                                    <td class="">{{ item.salesPrice }}</td>
+                                                    <td class="">
+                                                        <input type="hidden" name="itemId[]" value="{{ item.id }}" >
+                                                         <input type="number" class="amount td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice[]" value="{{ item.salesPrice }}" > </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                                <td class="span1"><strong class="subTotal">{{ subTotal|number_format }}</strong></td>
+                                            </tr>
+
+
+                                            </tfoot>
+                                        </table>
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                </div>
+                                <div class="span4 payment-info">
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Outstanding TK.</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" ></span></label>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" style="background: #222222" for="firstName"><span id="balance" class="label" style="color:red">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px;color:red" >{{ subTotal|number_format }}</span></label>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
+                                                <div class="controls">
+                                                    {{ form_errors(form.received) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12 input-append-border">
+                                            {{ form_widget(form.transactionMethod) }}
+                                            {{ form_errors(form.transactionMethod) }}
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div id="cartMethod">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    {{ form_widget(form.cardNo) }}
+                                                    {{ form_errors(form.cardNo) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                {{ form_widget(form.paymentCard) }}
+                                                {{ form_errors(form.paymentCard) }}
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                {{ form_widget(form.accountBank) }}
+                                                {{ form_errors(form.accountBank) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="bkashMethod">
+                                        <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                {{ form_widget(form.accountMobileBank) }}
+                                                {{ form_errors(form.accountMobileBank) }}
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    {{ form_widget(form.paymentMobile) }}
+                                                    {{ form_errors(form.paymentMobile) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    {{ form_widget(form.transactionId) }}
+                                                    {{ form_errors(form.transactionId) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="clearfix"></div>
+                                    <div class="row-fluid">
+                                        <div class="span12 input-append-border">
+                                            <div class="row-fluid">
+                                                {{ form_widget(form.comment) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box yellow">
+                                <div class="pull-right">
+                                    <div class="action">
+                                        <div class="btn-group">
+                                            <input type="hidden" id="paymentTotal" name="paymentTotal" value="{{ subTotal }}">
+                                            <button type="button" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <div class="clearfix"></div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    .td-inline-input{
+        height: 15px!important;
+        line-height: 13px!important;
+        font-size: 13px!important;
+        border: 2px solid #4d90fe!important;
+        width: 100px;
+        margin-bottom:0!important;
+    }
+    .td-inline-input-qnt{
+        height: 15px!important;
+        line-height: 13px!important;
+        font-size: 13px!important;
+        border: 2px solid #4d90fe!important;
+        width: 40px;
+        margin-bottom:0!important;
+    }
+
+</style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@BusinessBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@CustomerBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+
+    $(document).on('change', '.transactionMethod', function() {
+
+        var paymentMethod = $(this).val();
+
+        if( paymentMethod == 2){
+        $('#cartMethod').css({ 'display': "block" });
+        $('#bkashMethod').hide();
+        }else if( paymentMethod == 3){
+        $('#bkashMethod').css({ 'display': "block" });
+        $('#cartMethod').hide();
+        }else{
+        $('#cartMethod').hide();
+        $('#bkashMethod').hide();
+        }
+
+    });
+
+    $(document).on("click", "#receiveBtn", function() {
+
+        $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+        $('form#invoiceForm').submit();
+        }
+        });
+    });
+
+
+    $(document).on('keyup', ".amount", function() {
+        var sum = 0;
+        $(".amount").each(function(){
+            sum += +parseFloat($(this).val());
+        });
+        $(".subTotal").html(sum);
+        $(".due").html(sum);
+        $("#paymentTotal").val(sum);
+    });
+
+    $(document).on('keyup', '#businessInvoice_received', function() {
+
+        var payment     = parseInt($('#businessInvoice_received').val()  != '' ? $('#businessInvoice_received').val() : 0 );
+        var paymentTotal =  parseInt($('#paymentTotal').val());
+        var dueAmount = (paymentTotal-payment);
+        if(dueAmount > 0){
+        $('#balance').html('Due Tk.');
+        $('.due').html(dueAmount);
+        }else{
+        var balance =  payment - paymentTotal ;
+        $('#balance').html('Return Tk.');
+        $('.due').html(balance);
+        }
+    });
+
+
+{% endblock %}

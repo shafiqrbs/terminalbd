@@ -156,7 +156,7 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_ASSETS')){
                     $menu = $this->AssetsMenu($menu);
-                    $menu = $this->TallyMenu($menu);
+                  //  $menu = $this->TallyMenu($menu);
                 }
             }
 

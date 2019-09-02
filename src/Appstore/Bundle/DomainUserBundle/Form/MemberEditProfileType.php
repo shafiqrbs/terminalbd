@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\UserBundle\Form;
+namespace Appstore\Bundle\DomainUserBundle\Form;
 
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\Type\ProfileType;
@@ -56,8 +56,16 @@ class MemberEditProfileType extends AbstractType
             ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your father name')))
-            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your mother name')))
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your father name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input father name')),
+                )
+            ))
+            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your mother name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input mother name')),
+                )
+            ))
             ->add('spouseName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse name')))
             ->add('spouseOccupation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse occupation')))
             ->add('spouseDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse designation')))
@@ -72,6 +80,7 @@ class MemberEditProfileType extends AbstractType
             ->add('batchYear','text', array('attr'=>array('class'=>'m-wrap span8 batch-year','placeholder'=>'Batch year ie: 1990,1991,2010 etc')))
             ->add('religion', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
+                'empty_value' => '---Choose a relation---',
                 'choices' => array(
                     'Muslim' => 'Muslim',
                     'Hinduism' => 'Hinduism',
@@ -82,16 +91,19 @@ class MemberEditProfileType extends AbstractType
             ))
             ->add('studentBatch', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span8'),
+                'empty_value' => '---Choose a Batch---',
                 'choices' => array('SSC' => 'SSC','HSC' => 'HSC','Others' => 'Others'),
 
             ))
             ->add('maritalStatus', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span6'),
+                'empty_value' => '---Choose a Marital Status---',
                 'choices' => array('Married' => 'Married','Un-married' => 'Un-married','Single' => 'Single'),
 
             ))
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span6'),
+                'empty_value' => '---Choose a Blood Group---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
 
             ))

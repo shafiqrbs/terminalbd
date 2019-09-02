@@ -70,6 +70,36 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertCustomerInvoiceParticular(BusinessInvoice $invoice, $data)
+    {
+       foreach ($data['itemId'] as $key => $value):
+
+           $em = $this->_em;
+
+           $particular = $this->findOneBy(array('businessInvoice'=>$invoice,'businessParticular'=>$value));
+           if($particular){
+               $entity = $particular;
+           }else{
+               $entity = new BusinessInvoiceParticular();
+           }
+
+            $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($value);
+
+            $entity->setBusinessInvoice($invoice);
+            $entity->setBusinessParticular($particular);
+            $entity->setParticular($particular->getName());
+            $entity->setPrice($data['salesPrice'][$key]);
+            $entity->setQuantity(1);
+            $entity->setSubQuantity(1);
+            $entity->setTotalQuantity(1);
+            $entity->setSubTotal($data['salesPrice'][$key]);
+            $em->persist($entity);
+            $em->flush();
+        endforeach;
+
+
+    }
+
     public function insertCommissionInvoiceParticular(BusinessInvoice $invoice, $data)
     {
         $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 1;

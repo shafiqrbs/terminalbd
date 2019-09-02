@@ -504,4 +504,22 @@ $(document).ready(function(){
  //   $('#registrationSubmitForm').click(createSum);
     // On user input, check value
     $( "#ans" ).keyup(checkInput);
+
+    $(document).on( "change", ".userMobile", function( e ) {
+
+        var mobile = $(this).val();
+        var url = $(this).attr("data-action");
+        $.get(url,{ mobile:mobile} ).done(function(response) {
+            $("#mobile-validate").html(response);
+        }).always(function() {
+            $('#mobile-confirm').notifyModal({
+                duration : 10000,
+                placement : 'center',
+                overlay : true,
+                type : 'notify',
+                icon : false
+            });
+        });
+
+    });
 });

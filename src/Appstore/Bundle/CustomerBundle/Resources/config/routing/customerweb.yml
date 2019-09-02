@@ -10,23 +10,6 @@ customerweb_ticket:
     path:     /ticket
     defaults: { _controller: "CustomerBundle:WebContent:ticket" }
 
-customerweb_invoice:
-    path:     /invoice
-    defaults: { _controller: "CustomerBundle:WebContent:new" }
-
-customerweb_invoice_new:
-    path:     /invoice-new
-    defaults: { _controller: "CustomerBundle:WebContent:new" }
-
-customerweb_invoice_delete:
-    path:     /{id}/invoice
-    defaults: { _controller: "CustomerBundle:WebContent:invoiceDelete" }
-
-customerweb_invoice_create:
-    path:     /invoice-create
-    defaults: { _controller: "CustomerBundle:WebContent:create" }
-    methods:  [POST]
-
 customerweb_report_ledger:
     path:     /ledger
     defaults: { _controller: "CustomerBundle:WebContent:create" }

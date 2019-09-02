@@ -43,6 +43,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
         $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+        $createdBy = isset($data['createdBy'])? $data['createdBy'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -50,6 +51,9 @@ class BusinessInvoiceRepository extends EntityRepository
         if (!empty($customerName)) {
             $qb->join('e.customer','c');
             $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
+        }
+        if (!empty($createdBy)) {
+            $qb->andWhere("e.createdBy = :user")->setParameter('user', $createdBy);
         }
 
         if (!empty($customerMobile)) {

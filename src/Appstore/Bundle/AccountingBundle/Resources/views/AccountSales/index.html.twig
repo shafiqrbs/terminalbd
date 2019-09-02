@@ -122,6 +122,7 @@
                                     <th class="numeric" >Invoice</th>
                                     <th {% if entities.isSorted('e.processHead') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Receive Mode', 'e.processHead') }}{% if( direction == 'desc' and sort == 'e.processHead') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Ref No.</th>
+                                    <th class="numeric" >Received By</th>
                                     <th class="numeric" >Method</th>
                                     <th class="numeric" >Sales</th>
                                     <th class="numeric" >Received</th>
@@ -140,6 +141,7 @@
                                         <td class="numeric" >{{ entity.sourceInvoice }}</td>
                                         <td class="numeric" >{{ entity.processHead|capitalize }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{{ entity.username }}</td>
                                          <td class="numeric" >
                                              {% if entity.method is defined and entity.method is not empty %}{{ entity.method }}{% endif %}
                                          </td>

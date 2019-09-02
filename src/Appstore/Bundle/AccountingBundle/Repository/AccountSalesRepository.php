@@ -166,9 +166,11 @@ class AccountSalesRepository extends EntityRepository
         $qb->leftJoin('e.transactionMethod','transactionMethod');
         $qb->leftJoin('e.accountMobileBank','mobile');
         $qb->leftJoin('e.accountBank','bank');
+        $qb->leftJoin('e.createdBy','user');
         $qb->select('customer.name as customerName','customer.mobile as customerMobile');
         $qb->addSelect('transactionMethod.name as method');
         $qb->addSelect('mobile.name as mobileName');
+        $qb->addSelect('user.username as username');
         $qb->addSelect('bank.name as bankName');
         $qb->addSelect('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.totalAmount as totalAmount','e.amount as amount','e.balance as balance','e.sourceInvoice as sourceInvoice','e.processHead as processHead','e.process as process','e.remark');
         $qb->where("e.globalOption = :globalOption");

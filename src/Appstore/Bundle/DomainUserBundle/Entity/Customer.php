@@ -13,6 +13,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Core\UserBundle\Doctrine\DQL\Date;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -329,9 +330,9 @@ class Customer
     private $bloodGroup;
 
     /**
-     * @var string
+     * @var Date
      *
-     * @ORM\Column(name="dob", type="string", nullable =true)
+     * @ORM\Column(name="dob", type="datetime", nullable=true)
      */
     private $dob;
 
@@ -1101,21 +1102,7 @@ class Customer
         $this->alternativeRelation = $alternativeRelation;
     }
 
-    /**
-     * @return string
-     */
-    public function getDob()
-    {
-        return $this->dob;
-    }
 
-    /**
-     * @param string $dob
-     */
-    public function setDob($dob)
-    {
-        $this->dob = $dob;
-    }
 
     /**
      * @return DmsInvoice
@@ -1568,6 +1555,22 @@ class Customer
     public function setMemberDesignation($memberDesignation)
     {
         $this->memberDesignation = $memberDesignation;
+    }
+
+    /**
+     * @return Date
+     */
+    public function getDob()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * @param Date $dob
+     */
+    public function setDob($dob)
+    {
+        $this->dob = $dob;
     }
 
 
