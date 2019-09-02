@@ -108,9 +108,7 @@ class EcommerceProductEditType extends AbstractType
 			->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
 
 			->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
-			                                 'constraints' =>array(
-				                                 new NotBlank(array('message'=>'Please add sales price'))
-			                                 )))
+                'constraints' =>array( new NotBlank(array('message'=>'Please add sales price')))))
 			->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
 

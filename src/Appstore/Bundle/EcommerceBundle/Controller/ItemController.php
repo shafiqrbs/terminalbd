@@ -9,6 +9,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductEditType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductSubItemType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductType;
+use Appstore\Bundle\EcommerceBundle\Form\ProductImageType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,6 +173,86 @@ class ItemController extends Controller
 	}
 
 	/**
+	 * Displays a form to edit an existing Item entity.
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 */
+
+	public function uploadAction(Item $entity)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$editForm = $this->uploadEditForm($entity);
+		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+		return $this->render('EcommerceBundle:Item:upload.html.twig', array(
+			'entity'            => $entity,
+			'ecommerceConfig'   => $config,
+			'form'              => $editForm->createView(),
+
+		));
+	}
+
+    /**
+     * Creates a form to edit a Item entity.
+     *
+     * @param Item $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function uploadEditForm(Item $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new ProductImageType($em,$inventory), $entity, array(
+            'action' => $this->generateUrl('ecommerce_item_upload_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'action',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Edits an existing Item entity.
+     *
+     */
+
+    public function uploadUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $entity = $em->getRepository('EcommerceBundle:Item')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Item entity.');
+        }
+        $editForm = $this->uploadEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
+            $em->flush();
+             $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('ecommerce_item'));
+        }
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        return $this->render('EcommerceBundle:Item:upload.html.twig', array(
+            'entity'            => $entity,
+            'ecommerceConfig'   => $config,
+            'form'              => $editForm->createView(),
+        ));
+    }
+
+
+
+
+
+    /**
 	 * Creates a form to edit a Item entity.
 	 *
 	 * @param Item $entity The entity

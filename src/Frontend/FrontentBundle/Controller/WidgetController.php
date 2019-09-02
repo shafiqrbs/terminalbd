@@ -111,30 +111,6 @@ class WidgetController extends Controller
 
     }
 
-    public function admissionAction()
-    {
-        $admissions                     = $this->getDoctrine()->getRepository('SettingContentBundle:Admission')->findModuleContent(5);
-        return $this->render('@Frontend/Widget/admission.html.twig', array(
-            'admissions'           => $admissions,
-        ));
-    }
 
-
-
-    public function newsAction()
-    {
-        $newses                    = $this->getDoctrine()->getRepository('SettingContentBundle:Mews')->findModuleContent(5);
-        return $this->render('@Frontend/Widget/news.html.twig', array(
-            'newses'           => $newses,
-        ));
-    }
-
-    public function noticeAction()
-    {
-        $notices                     = $this->getDoctrine()->getRepository('SettingContentBundle:NoticeBoard')->findBy();
-        return $this->render('@Frontend/Widget/notice.html.twig', array(
-            'notices'           => $notices,
-        ));
-    }
 
 }

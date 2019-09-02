@@ -103,9 +103,9 @@
                                          </td>
                                         <td class="numeric" >
                                             {% if entity.webPath %}
-                                                <span class="btn mini blue"  >Yes</span>
+                                                <a class="btn mini blue"  href="{{ path('ecommerce_item_upload',{id:entity.id}) }}"  >Yes</a>
                                             {% else %}
-                                                <span class="btn mini yellow">No</span>
+                                                <span href="{{ path('ecommerce_item_upload',{id:entity.id}) }}" class="btn mini yellow">No</span>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
