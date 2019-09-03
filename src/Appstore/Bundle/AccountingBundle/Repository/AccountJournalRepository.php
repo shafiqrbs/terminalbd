@@ -556,18 +556,18 @@ class AccountJournalRepository extends EntityRepository
         $journalSource = "assets-{$item->getId()}";
         $entity = new AccountJournal();
         $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
-        $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+        $accountCashHead = $item->getItem()->getCategory()->getAccountHead();
 
         $entity->setGlobalOption($item->getConfig()->getGlobalOption());
         $entity->setTransactionType('Debit');
         $entity->setAmount($item->getSubTotal());
         $entity->setApprovedBy($item->getApprovedBy());
         $entity->setCreatedBy($item->getApprovedBy());
+        $entity->setToUser($item->getStakeholder());
         $entity->setAccountHeadCredit($accountHeadCredit);
         $entity->setAccountHeadDebit($accountCashHead);
-        $entity->setToUser($item->getApprovedBy());
         $entity->setJournalSource($journalSource);
-        $entity->setRemark("Hotel purchase as investment,Ref GRN no.{$item->getBarcode()}");
+        $entity->setRemark("Assets purchase item as investment,Ref GRN no.{$item->getBarcode()}");
         $entity->setProcess('approved');
         $this->_em->persist($entity);
         $this->_em->flush();

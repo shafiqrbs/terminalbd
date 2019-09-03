@@ -53,11 +53,28 @@ class PurchaseOpeningItemType extends AbstractType
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
                 'attr'=>array('class'=>'span12 m-wrap vendor'),
-                'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
                         ->andWhere("e.globalOption =".$this->config->getGlobalOption()->getId());
+                },
+            ))
+
+            ->add('stakeholder', 'entity', array(
+                'required'    => true,
+                'class' => 'Core\UserBundle\Entity\User',
+                'empty_value' => '---Choose a stakeholder---',
+                'property' => 'userFullName',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'constraints' =>array(new NotBlank(array('message'=>'Please select to stakeholder name'))),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('u')
+                        ->join('u.profile','p')
+                        ->where("u.isDelete != 1")
+                        ->andWhere("u.domainOwner = 2")
+                        ->andWhere("p.userGroup = 'Stakeholder'")
+                        ->andWhere("u.globalOption ={$this->config->getGlobalOption()->getId()}")
+                        ->orderBy("u.username", "ASC");
                 },
             ))
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12'))) ->add( 'name', 'text', array(

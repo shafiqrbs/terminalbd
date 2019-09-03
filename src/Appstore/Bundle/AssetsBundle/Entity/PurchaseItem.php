@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AssetsBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
+use Core\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,6 +32,18 @@ class PurchaseItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $stakeholder;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseItemApproves" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $approvedBy;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Damage", mappedBy="purchaseItem" )
@@ -1203,6 +1216,38 @@ class PurchaseItem
     public function setVendor($vendor)
     {
         $this->vendor = $vendor;
+    }
+
+    /**
+     * @return User
+     */
+    public function getStakeholder()
+    {
+        return $this->stakeholder;
+    }
+
+    /**
+     * @param User $stakeholder
+     */
+    public function setStakeholder($stakeholder)
+    {
+        $this->stakeholder = $stakeholder;
+    }
+
+    /**
+     * @return User
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param User $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
     }
 
 

@@ -107,19 +107,20 @@ class DepreciationModelController extends Controller
 	public function depreciationAction(DepreciationModel $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
+		$config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
 		set_time_limit(0);
 		ignore_user_abort(true);
 
 		$data = array();
 		if(!empty($entity)){
 			if($entity->getItem()){
-				$data[] = array('item' => $entity->getItem()->getId());
+				$data = array('item' => $entity->getItem()->getName());
 			}
 			if($entity->getCategory()){
-				$data[] = array('category' => $entity->getCategory()->getId());
+				$data = array('category' => $entity->getCategory()->getName());
 			}
 		}
-		$products = $this->getDoctrine()->getRepository('AssetsBundle:Product')->findWithSearch($data);
+		$products = $this->getDoctrine()->getRepository('AssetsBundle:Product')->findWithSearch($config,$data);
 
 		/* @var $product Product */
 

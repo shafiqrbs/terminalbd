@@ -362,11 +362,11 @@ class PurchaseItemController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AssetsBundle:PurchaseItem')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
         $entity->setProcess("Approved");
+        $entity->setApprovedBy($this->getUser());
         $em->flush();
         $journal = $em->getRepository('AccountingBundle:AccountJournal')->openingAssetsItemJournal($entity);
         $em->getRepository('AccountingBundle:Transaction')->openingItemDistributionTransaction($entity,$journal);

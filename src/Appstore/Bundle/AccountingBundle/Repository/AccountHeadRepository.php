@@ -292,6 +292,9 @@ class AccountHeadRepository extends EntityRepository
             }elseif($profile->getUserGroup() ==  "stock-holder"){
                 $parent = $this->findOneBy(array('slug' => 'capital-investment'));
                 $head->setParent($parent);
+            }elseif($profile->getUserGroup() ==  "stakeholder"){
+                $parent = $this->findOneBy(array('slug' => 'capital-investment'));
+                $head->setParent($parent);
             }
             $head->setGlobalOption($entity->getGlobalOption());
             $head->setName($profile->getName());
@@ -307,6 +310,7 @@ class AccountHeadRepository extends EntityRepository
     {
 
         /* @var $exist AccountHead */
+
         $exist = $this->findOneBy(array('assetsItem' => $entity->getItem()));
         if ($exist) {
             $exist->setName($entity->getName());

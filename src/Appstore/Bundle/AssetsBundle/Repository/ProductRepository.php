@@ -256,33 +256,33 @@ class ProductRepository extends EntityRepository
     }
 
 
-    public function findWithSearch($data = array())
+    public function findWithSearch($config , $data = '')
     {
-
-        $item = isset($data['item'])? $data['item'] :'';
+        var_dump($data);
+        echo $item = isset($data['item'])? $data['item'] :'';
         $branch = isset($data['branch'])? $data['branch'] :'';
         $category = isset($data['category'])? $data['category'] :'';
         $parent = isset($data['parent'])? $data['parent'] :'';
 	    $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
-
-
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.status IS NOT NULL");
-        if (!empty($item)) {
-            $qb->andWhere("item.name = :name");
-            $qb->setParameter('name', $item);
+        exit;
+        $qb->andWhere("item.config = :config")->setParameter('config', $config);
+        if($item){
+            $qb->join('item.item', 'i');
+            $qb->andWhere($qb->expr()->like("i.name", "'$item%'"));
+            echo $item;
+            exit;
         }
 
         if (!empty($category)) {
             $qb->join('item.category', 'c');
-            $qb->andWhere("c.name = :category");
-            $qb->setParameter('category', $category);
+            $qb->andWhere($qb->expr()->like("c.name", "'%$category%'"  ));
         }
 
         if (!empty($parent)) {
             $qb->join('item.parentCategory', 'pc');
-            $qb->andWhere("pc.name = :parent");
-            $qb->setParameter('parent', $parent);
+            $qb->andWhere($qb->expr()->like("pc.name", "'%$parent%'"  ));
         }
 
         if (!empty($depreciation)) {
@@ -434,10 +434,7 @@ class ProductRepository extends EntityRepository
 
         /** @var  $item PurchaseItem */
 
-        $status = $this->_em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
-        $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->find(1);
-
-        foreach($sales->getPurchaseItems() as $item ){
+         foreach($sales->getPurchaseItems() as $item ){
 
             if($item->getItem()->getCategory()->getCategoryType() == 'Assets'){
                 $this->insertPurchaseItemToAssetsProduct($item);
@@ -447,6 +444,10 @@ class ProductRepository extends EntityRepository
 
     public function insertPurchaseItemToAssetsProduct(PurchaseItem $item)
     {
+        $em = $this->_em;
+        $status = $this->_em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
+        $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->find(1);
+
         if(!empty($item->getExternalSerial())){
 
             $comma_separated = explode(",", $item->getExternalSerial());

@@ -339,8 +339,6 @@ class TransactionRepository extends EntityRepository
             $transaction->setSubAccountHead($subAccount);
 
         }
-
-
         if(!empty($entity->getBranches())){
             $transaction->setBranches($entity->getBranches());
         }
@@ -2622,14 +2620,13 @@ class TransactionRepository extends EntityRepository
 
     public function openingItemDistributionTransaction($purchase,$journal)
     {
-        $this->insertAccountJournalCreditTransaction($journal);
+        $this->insertPurchaseItemJournalCreditTransaction($journal);
         $this->insertOpeningFixedAssets($purchase,$journal);
     }
 
 
-    public function insertOpeningFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\PurchaseItem $item,$journal)
+    public function insertOpeningFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\PurchaseItem $item,AccountJournal $journal)
     {
-        /* @var $item PurchaseItem */
 
         if($item->getItem()->getCategory()->getCategoryType() == "Assets"){
 
@@ -2663,6 +2660,29 @@ class TransactionRepository extends EntityRepository
             $this->_em->persist($transaction);
             $this->_em->flush();
         }
+
+    }
+
+    public function insertPurchaseItemJournalCreditTransaction(AccountJournal $entity)
+    {
+
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setProcessHead('Journal');
+        $transaction->setProcess($entity->getAccountHeadCredit()->getParent()->getName());
+        $transaction->setAccountRefNo($entity->getAccountRefNo());
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setAccountHead($entity->getAccountHeadCredit());
+        $transaction->setAmount('-'.$entity->getAmount());
+        $transaction->setCredit($entity->getAmount());
+
+        /* Current Asset Capital Investment */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(49));
+        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
+        $transaction->setSubAccountHead($subAccount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
 
     }
 

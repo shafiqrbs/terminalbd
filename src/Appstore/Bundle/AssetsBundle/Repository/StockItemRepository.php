@@ -316,7 +316,7 @@ class StockItemRepository extends EntityRepository
         }elseif($fieldName == 'assets-return'){
             $qb->select('SUM(e.assetsReturnQuantity) AS quantity');
         }
-        $qb->where("e.item ={$item->getId()}");
+        $qb->where("e.item ={$item}");
         $qb->andWhere("e.process = :process")->setParameter('process','Approved');
         $quantity = $qb->getQuery()->getOneOrNullResult();
         return $quantity['quantity'];
