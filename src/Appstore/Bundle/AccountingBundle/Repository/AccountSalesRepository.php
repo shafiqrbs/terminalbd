@@ -472,7 +472,7 @@ class AccountSalesRepository extends EntityRepository
         $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
 		$operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
-		$data =  ['sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures];
+		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures);
 		return $data;
 
 	}
@@ -480,23 +480,12 @@ class AccountSalesRepository extends EntityRepository
     public function reportMonthlyProfitLoss(User $user,$data = array())
     {
         $globalOption = $user->getGlobalOption();
-        if(empty($data)){
-
-            $datetime = new \DateTime("2019-08-01");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
-
         $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
         $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
         $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
         $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
-        $data =  ['sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']];
+        $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;
 
     }
@@ -592,14 +581,14 @@ class AccountSalesRepository extends EntityRepository
 
     /* =============   Tally Module ================= */
 
-    public function insertAccountSalesTally(\Appstore\Bundle\TallyBundle\Entity\Sales $entity) {
+    public function insertAccountSalesTally(\Appstore\Bundle\AssetsBundle\Entity\Sales $entity) {
 
         $em = $this->_em;
         $accountSales = new AccountSales();
         $accountSales->setAccountBank( $entity->getAccountBank() );
         $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
         $accountSales->setGlobalOption( $entity->getConfig()->getGlobalOption() );
-        $accountSales->setTallySales( $entity );
+        $accountSales->setAssetsSales( $entity );
         $accountSales->setSourceInvoice( $entity->getInvoice() );
         $accountSales->setCustomer( $entity->getCustomer() );
         $accountSales->setTotalAmount( $entity->getNetTotal() );
@@ -612,10 +601,7 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
         }
         $accountSales->setApprovedBy($entity->getApprovedBy());
-        if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
-            $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
-        }
-        $accountSales->setProcessHead('Tally');
+        $accountSales->setProcessHead('Assets');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());

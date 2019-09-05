@@ -5,10 +5,6 @@ assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
     prefix:   /assets
 
-tally:
-    resource: "@TallyBundle/Resources/config/routing.yml"
-    prefix:   /tally
-
 assets_service:
     resource: "@ServiceBundle/Resources/config/routing.yml"
     prefix:   /asset-maintenance

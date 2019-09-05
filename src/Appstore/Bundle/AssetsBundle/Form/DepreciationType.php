@@ -28,13 +28,24 @@ class DepreciationType extends AbstractType
 			    'required'    => true,
 			    'attr'=>array('class'=>'span12 m-wrap'),
 			    'choices' => array(
+                    'day' => 'Day',
 				    'monthly' => 'Monthly',
 				    'quarterly' => 'Quarterly',
 				    'half-year' => 'Half-Year',
 				    'yearly' => 'Yearly'
 			    ),
 		    ))
-		    ->add('model', 'choice', array(
+            ->add('effected', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices' => array(
+                    '1 month' => 'Monthly',
+                    '4 months' => 'Quarterly',
+                    '6 months' => 'Half-Year',
+                    '12 months' => 'Yearly'
+                ),
+            ))
+            ->add('model', 'choice', array(
 			    'required'    => true,
 			    'attr'=>array('class'=>'span12 m-wrap'),
 			    'choices' => array(
@@ -43,14 +54,6 @@ class DepreciationType extends AbstractType
 				),
 		    ))
 
-		    ->add('yearEnd', 'choice', array(
-			    'required'    => true,
-			    'attr'=>array('class'=>'span12 m-wrap'),
-			    'choices' => array(
-				    'calendar' => 'Calendar Year',
-				    'fiscal' => 'Fiscal Year',
-			    ),
-		    ))
 		    ->add('policy', 'choice', array(
 			    'required'    => true,
 			    'attr'=>array('class'=>'span12 m-wrap'),
@@ -60,14 +63,6 @@ class DepreciationType extends AbstractType
 			    ),
 		    ))
 
-			->add('policy', 'choice', array(
-			    'required'    => true,
-			    'attr'=>array('class'=>'span12 m-wrap'),
-			    'choices' => array(
-				    'straight-line' => 'Straight Line Method',
-				    'reducing-balance' => 'Reducing Balance Method',
-			    ),
-		    ))
 	    ;
     }
     

@@ -25,6 +25,16 @@ class DepreciationModel
     private $id;
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="depreciationModels" )
+	 **/
+	private  $config;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Depreciation", inversedBy="depreciationModels" )
+	 **/
+	private  $depreciation;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", inversedBy="depreciationModel" )
 	 **/
 	private  $category;
@@ -38,6 +48,16 @@ class DepreciationModel
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="depreciation" )
 	 **/
 	private  $products;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch", mappedBy="depreciation" )
+	 **/
+	private  $depreciationBatch;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ProductLedger", mappedBy="depreciation" )
+	 **/
+	private  $ledgers;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="depreciationModelDebit" )
@@ -84,6 +104,13 @@ class DepreciationModel
 	 * @ORM\Column(name="status", type="boolean")
 	 */
 	private $status = true;
+
+    /**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="isDefault", type="boolean")
+	 */
+	private $isDefault = false;
 
 
 	/**
@@ -223,6 +250,70 @@ class DepreciationModel
 	public function setDepreciationYear( $depreciationYear ) {
 		$this->depreciationYear = $depreciationYear;
 	}
+
+    /**
+     * @return AssetsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param AssetsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return ProductLedger
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @return Depreciation
+     */
+    public function getDepreciation()
+    {
+        return $this->depreciation;
+    }
+
+    /**
+     * @param Depreciation $depreciation
+     */
+    public function setDepreciation($depreciation)
+    {
+        $this->depreciation = $depreciation;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * @param bool $isDefault
+     */
+    public function setIsDefault($isDefault)
+    {
+        $this->isDefault = $isDefault;
+    }
 
 
 }

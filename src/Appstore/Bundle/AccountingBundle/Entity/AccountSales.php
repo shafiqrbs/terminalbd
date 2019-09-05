@@ -80,10 +80,11 @@ class AccountSales
     private  $sales;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Sales", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Sales", inversedBy="accountSales" )
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    private  $tallySales;
+    private  $assetsSales;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountSales" )
@@ -787,6 +788,22 @@ class AccountSales
     public function setTallySales($tallySales)
     {
         $this->tallySales = $tallySales;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAssetsSales()
+    {
+        return $this->assetsSales;
+    }
+
+    /**
+     * @param mixed $assetsSales
+     */
+    public function setAssetsSales($assetsSales)
+    {
+        $this->assetsSales = $assetsSales;
     }
 
 

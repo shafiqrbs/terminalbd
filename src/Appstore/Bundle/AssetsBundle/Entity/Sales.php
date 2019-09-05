@@ -40,7 +40,7 @@ class Sales
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="tallySales", cascade={"remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="assetsSales", cascade={"remove"} )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $accountSales;

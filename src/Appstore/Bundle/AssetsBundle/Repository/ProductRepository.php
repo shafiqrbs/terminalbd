@@ -1,6 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
+use Appstore\Bundle\AssetsBundle\Entity\Depreciation;
+use Appstore\Bundle\AssetsBundle\Entity\DepreciationModel;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
@@ -9,6 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * ItemTypeGroupingRepository
@@ -19,140 +23,6 @@ use Doctrine\ORM\EntityRepository;
 class ProductRepository extends EntityRepository
 {
 
-    public function findFrontendProductWithSearch($inventory, $data , $limit = 0)
-    {
-        if (!empty($data['sortBy'])) {
-
-            $sortBy = explode('=?=', $data['sortBy']);
-             $sort = $sortBy[0];
-             $order = $sortBy[1];
-        }
-
-        $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.item",'masterItem');
-        $qb->leftJoin('product.brand','brand');
-        $qb->where("product.purchaseQuantity > 0");
-        $qb->andWhere("product.status = 1");
-        $qb->andWhere("product.isWeb = 1");
-        $qb->andWhere("product.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-
-        if (!empty($data['brand'])) {
-            $qb->andWhere("masterItem.brand = :brand");
-            $qb->setParameter('brand', $data['brand']);
-        }
-
-        if (!empty($data['tag'])) {
-            $qb->leftJoin('masterItem.tag','tag');
-            $qb->andWhere("tag.id = :tagId");
-            $qb->setParameter('tagId', $data['tag']);
-        }
-
-        if (!empty($data['discount'])) {
-            $qb->andWhere("masterItem.discount >= :discount");
-            $qb->setParameter('discount', $data['discount']);
-        }
-
-        if (!empty($data['category'])) {
-            $qb
-                ->join('masterItem.category', 'category')
-                ->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
-                        $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
-                    )
-                );
-        }
-        if (!empty($data['product'])) {
-             $search = strtolower($data['product']);
-            $qb->andWhere($qb->expr()->like(strtolower("product.name"), "'$search%'"  ));
-        }
-
-        if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
-            $qb->orderBy('product.name','ASC');
-        }else{
-            $qb->orderBy($sort ,$order);
-        }
-        if($limit > 0 ) {
-            $qb->setMaxResults($limit);
-        }
-
-        $res = $qb->getQuery();
-        return  $res;
-
-    }
-
-    public function filterFrontendProductWithSearch($data , $limit = 0)
-    {
-        if (!empty($data['sortBy'])) {
-
-            $sortBy = explode('=?=', $data['sortBy']);
-            $sort = $sortBy[0];
-            $order = $sortBy[1];
-        }
-
-        $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.masterItem",'masterItem');
-        $qb->leftJoin('product.goodsItems','goodsitems');
-        $qb->where("product.isWeb = 1");
-        $qb->andWhere("product.status = 1");
-        $qb->andWhere("product.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-
-        if (!empty($data['brand'])) {
-            $qb->andWhere("product.brand IN(:brand)");
-            $qb->setParameter('brand',$data['brand']);
-        }
-
-        if (!empty($data['size'])) {
-            $qb->andWhere("goodsitems.size IN(:size)");
-            $qb->setParameter('size',$data['size']);
-        }
-
-        if (!empty($data['color'])) {
-            $qb->leftJoin('goodsitems.colors','colors');
-            $qb->andWhere("colors.id IN(:color)");
-            $qb->setParameter('color',$data['color']);
-        }
-
-        if (!empty($data['promotion'])) {
-            $qb->andWhere("product.promotion IN(:promotion)");
-            $qb->setParameter('promotion',$data['promotion']);
-        }
-
-        if (!empty($data['tag'])) {
-            $qb->andWhere("product.tag IN(:tag)");
-            $qb->setParameter('tag',$data['tag']);
-        }
-
-        if (!empty($data['discount'])) {
-            $qb->andWhere("product.discount IN(:discount)");
-            $qb->setParameter('discount',$data['discount']);
-        }
-
-        if (!empty($data['priceStart'])) {
-            $qb->andWhere(' product.salesPrice >= :priceStart');
-            $qb->setParameter('priceStart',$data['priceStart']);
-        }
-
-        if (!empty($data['priceEnd'])) {
-            $qb->andWhere(' product.salesPrice <= :priceEnd');
-            $qb->setParameter('priceEnd',$data['priceEnd']);
-        }
-
-        if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
-        }else{
-            $qb->orderBy($sort ,$order);
-        }
-        if($limit > 0 ) {
-            $qb->setMaxResults($limit);
-        }
-        $res = $qb->getQuery();
-        return  $res;
-
-    }
 
     public function getFeatureCategoryProduct($inventory,$data,$limit){
 
@@ -203,44 +73,8 @@ class ProductRepository extends EntityRepository
     }
 
 
-    public  function getSumPurchaseItem($inventory , $excelImporter = ''){
-
-        $qb = $this->createQueryBuilder('item');
-        $qb->join('item.purchaseItems', 'pItem');
-        $qb->join('pItem.purchase', 'purchase');
-        $qb->select('item.id as id');
-        $qb->addSelect('SUM(pItem.quantity) as quantity ');
-        $qb->where("purchase.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-        $qb->where("purchase.process = :process");
-        $qb->setParameter('process', 'imported');
-
-        /*if(!empty($excelImporter)){
-
-            $purchaseIds = array();
-            $purchases = $this->_em->getRepository('InventoryBundle:Purchase')->findBy(array('purchaseImport' => $excelImporter, 'process' => 'imported' ));
-            foreach ($purchases as $purchase){
-                $purchaseIds = $purchase->getId();
-            }
-            $qb->andWhere("purchase.id IN (:ids)");
-            $qb->setParameter('ids',array_values($purchaseIds));
-        }*/
-
-        $qb->groupBy('item.id');
-        $result = $qb->getQuery()->getResult();
-        foreach ($result as $row ){
-            $entity = $this->find($row['id']);
-            $entity->setPurchaseQuantity($row['quantity']);
-            $this->_em->persist($entity);
-            $this->_em->flush($entity);
-        }
-
-    }
-
     public function checkDuplicateSKU(GlobalOption $option,$data)
     {
-
-
         $masterItem = $data['item']['name'];
         $vendor     = isset($data['item']['vendor']) ? $data['item']['vendor'] :'NULL';
         $itemBrand  = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
@@ -256,25 +90,28 @@ class ProductRepository extends EntityRepository
     }
 
 
-    public function findWithSearch($config , $data = '')
+    public function findWithSearch($config,$data = array())
     {
-        var_dump($data);
-        echo $item = isset($data['item'])? $data['item'] :'';
+
+        $item = isset($data['item'])? $data['item'] :'';
         $branch = isset($data['branch'])? $data['branch'] :'';
         $category = isset($data['category'])? $data['category'] :'';
         $parent = isset($data['parent'])? $data['parent'] :'';
 	    $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
+	    $effectedDate = isset($data['effectedDate'])? $data['effectedDate'] :'';
+
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.status IS NOT NULL");
-        exit;
         $qb->andWhere("item.config = :config")->setParameter('config', $config);
+
+        if (!empty($effectedDate)) {
+            $end = date('Y-m-01 23:59:59',strtotime($effectedDate));
+            $qb->andWhere("item.depreciationEffectedDate <= :date")->setParameter('date',$end);
+        }
         if($item){
             $qb->join('item.item', 'i');
             $qb->andWhere($qb->expr()->like("i.name", "'$item%'"));
-            echo $item;
-            exit;
         }
-
         if (!empty($category)) {
             $qb->join('item.category', 'c');
             $qb->andWhere($qb->expr()->like("c.name", "'%$category%'"  ));
@@ -305,12 +142,28 @@ class ProductRepository extends EntityRepository
 
         }
         $qb->orderBy('item.updated','DESC');
-        $qb->getQuery();
         return  $qb;
 
     }
 
-	public function depreciationGenerate($data)
+    public function updateDepreciationModelProduct(DepreciationModel $entity,$data )
+    {
+        $item = isset($data['item'])? $data['item'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+
+        $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->findOneBy(array('config'=>$entity->getConfig(),'isDefault'=>1));
+
+        $qb = $this->_em->createQueryBuilder();
+        $q = $qb->update('AssetsBundle:Product','e');
+        $q->set('e.depreciation', $entity->getId());
+        $q->where("e.config = :config")->setParameter('config', $entity->getConfig()->getId());
+        $q->andWhere("e.depreciation = :depreciation")->setParameter('depreciation',$depreciation->getId());
+        if($item){ $q->andWhere('e.item = ?1')->setParameter(1, $item);}
+        if($category) { $q->andWhere('e.category = ?2')->setParameter(2, $category);}
+        $p = $q->getQuery()->execute();
+    }
+
+    public function depreciationGenerate($data)
 	{
 
 		$item = isset($data['item'])? $data['item'] :'';
@@ -385,7 +238,7 @@ class ProductRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete($item, InventoryConfig $inventory)
+    public function searchAutoComplete($item, AssetsConfig $inventory)
     {
 
         $search = strtolower($item);
@@ -408,7 +261,7 @@ class ProductRepository extends EntityRepository
 
     }
 
-     public function searchAutoCompleteAllItem($item, InventoryConfig $inventory)
+     public function searchAutoCompleteAllItem($item, AssetsConfig $inventory)
     {
 
         $search = strtolower($item);
@@ -445,10 +298,11 @@ class ProductRepository extends EntityRepository
     public function insertPurchaseItemToAssetsProduct(PurchaseItem $item)
     {
         $em = $this->_em;
-        $status = $this->_em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
-        $depreciation = $this->_em->getRepository('AssetsBundle:DepreciationModel')->find(1);
+        $status = $em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
 
-        if(!empty($item->getExternalSerial())){
+        $depreciation = $em->getRepository('AssetsBundle:DepreciationModel')->findOneBy(array('config' => $item->getConfig(),'isDefault' => 1));
+
+        if($item->getExternalSerial()){
 
             $comma_separated = explode(",", $item->getExternalSerial());
 
@@ -460,10 +314,13 @@ class ProductRepository extends EntityRepository
                 $product->setSerialNo($serialNo);
                 $product->setName($item->getName());
                 //  $product->setBranch($item->getSales()->getBranches());
+                //  $product->setPurchaseRequisition('PR-'.$item->getSales()->getPurchaseRequisition()->getGrn());
                 if($item->getAssetsPurchase()){
                     $product->setVendor($item->getAssetsPurchase()->getVendor());
                 }
-                //   $product->setPurchaseRequisition('PR-'.$item->getSales()->getPurchaseRequisition()->getGrn());
+                if($item->getVendor()){
+                    $product->setVendor($item->getVendor());
+                }
                 $product->setItem($item->getItem());
                 $product->setCategory($item->getItem()->getCategory());
                 $product->setParentCategory($product->getCategory()->getParent());
@@ -473,6 +330,7 @@ class ProductRepository extends EntityRepository
                 $product->setExpiredDate($item->getExpiredDate());
                 $product->setDepreciationStatus($status);
                 $product->setDepreciation($depreciation);
+                $product->setDepreciationEffectedDate($this->effectedDateSetup($depreciation->getDepreciation()));
                 $em->persist($product);
                 $em->flush($product);
                 $this->_em->getRepository('AssetsBundle:ProductLedger')->insertProductLedger($product);
@@ -481,8 +339,15 @@ class ProductRepository extends EntityRepository
         }
     }
 
+    private function effectedDateSetup(Depreciation $depreciation)
+    {
+        $em = $this->_em;
+        $effected = $depreciation->getEffected();
+        $cur = date('d-m-Y');
+        $effectiveDate = date('Y-m-t', strtotime("+{$effected}", strtotime($cur)));
+        return $date = new  \DateTime($effectiveDate);
 
-
+    }
 
 
 }

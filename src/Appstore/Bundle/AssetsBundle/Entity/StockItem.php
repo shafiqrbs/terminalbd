@@ -59,9 +59,15 @@ class StockItem
     protected $sales;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="stockItems")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="stockItems")
      */
     protected $branch;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Damage", inversedBy="stockItems" )
+     **/
+    private  $damage;
 
 
     /**

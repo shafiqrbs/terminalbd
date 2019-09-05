@@ -36,6 +36,37 @@ class Category
      **/
     protected $categoryMetas;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="category")
+     **/
+    protected $depreciationModel;
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="category")
+     **/
+    protected $products;
+
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="category")
+     **/
+    protected $items;
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="category")
+     **/
+    protected $stockItems;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="parentCategory")
+     **/
+    protected $childProducts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ProductLedger", mappedBy="category")
+     **/
+    protected $ledgers;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="assetsCategories" )
      **/
@@ -69,16 +100,18 @@ class Category
     private $parent;
 
     /**
+     * @ORM\OneToMany(targetEntity="Category" , mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $children;
+
+    /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="level", type="integer", nullable=true)
      */
     private $level;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Category" , mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
-     **/
-    private $children;
+
 
     /**
      * @Gedmo\TreePath(separator="/")

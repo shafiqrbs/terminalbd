@@ -631,14 +631,14 @@ class PurchaseItem
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getExpiredDate() {
         return $this->expiredDate;
     }
 
     /**
-     * @param string $expiredDate
+     * @param \DateTime $expiredDate
      */
     public function setExpiredDate( $expiredDate ) {
         $this->expiredDate = $expiredDate;

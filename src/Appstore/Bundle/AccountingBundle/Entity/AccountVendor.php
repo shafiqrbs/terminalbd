@@ -38,10 +38,12 @@ class AccountVendor
      **/
     private  $accountHead;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="vendor" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="vendor" )
      **/
     private  $items;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="vendor" )
@@ -49,19 +51,15 @@ class AccountVendor
     private  $products;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="vendor" )
+     **/
+    private  $stockItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
      */
     protected $accountPurchases;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\StockItem", mappedBy="vendor")
-     */
-    protected $stockItems;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", mappedBy="vendor")
-     */
-    protected $tallyPurchase;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", mappedBy="vendor")

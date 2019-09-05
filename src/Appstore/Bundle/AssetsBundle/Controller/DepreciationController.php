@@ -18,11 +18,10 @@ class DepreciationController extends Controller
 	public function editAction()
 	{
 		$em = $this->getDoctrine()->getManager();
-
-		$entity = $em->getRepository( 'AssetsBundle:Depreciation' )->find(1);
-
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+		$entity = $em->getRepository( 'AssetsBundle:Depreciation' )->findOneBy(array('config'=>$config));
 		if (!$entity) {
-			throw $this->createNotFoundException('Unable to find Depreciation entity.');
+            $entity = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->insertDefaultDepreciation($config);
 		}
 		$editForm = $this->createEditForm($entity);
 		return $this->render('AssetsBundle:Depreciation:new.html.twig', array(
@@ -44,7 +43,7 @@ class DepreciationController extends Controller
 			'action' => $this->generateUrl('assets_depreciation_update'),
 			'method' => 'PUT',
 			'attr' => array(
-				'class' => 'horizontal-form',
+				'class' => 'form-horizontal',
 				'novalidate' => 'novalidate',
 			)
 		));
@@ -57,8 +56,8 @@ class DepreciationController extends Controller
 	public function updateAction(Request $request)
 	{
 		$em = $this->getDoctrine()->getManager();
-
-		$entity = $em->getRepository( 'AssetsBundle:Depreciation' )->find(1);
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+		$entity = $em->getRepository( 'AssetsBundle:Depreciation' )->findOneBy(array('config' => $config));
 
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Depreciation entity.');
@@ -72,6 +71,7 @@ class DepreciationController extends Controller
 			$this->get('session')->getFlashBag()->add(
 				'success',"Data has been updated successfully"
 			);
+			$this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->updateDefaultDepreciation($entity);
 			return $this->redirect($this->generateUrl('assets_depreciation'));
 		}
 		return $this->render('AssetsBundle:Depreciation:new.html.twig', array(

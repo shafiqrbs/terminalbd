@@ -72,12 +72,21 @@ class MemberEditProfileType extends AbstractType
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your email address')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no','autoComplete'=>false)))
-            ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter member occupation')))
+
             ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
              ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span6')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
 
-            ->add('batchYear','text', array('attr'=>array('class'=>'m-wrap span8 batch-year','placeholder'=>'Batch year ie: 1990,1991,2010 etc')))
+            ->add('batchYear','number', array('attr'=>array('class'=>'m-wrap span8 batch-year','autocomplete'=>'off','placeholder'=>'Batch year ie: 1990,1991,2010 etc'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter batch year ie: 1990,1991,2010 etc')),
+                )
+            ))
+            ->add('profession','number', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter member occupation'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter member occupation')),
+                )
+            ))
             ->add('religion', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose a relation---',
@@ -91,6 +100,8 @@ class MemberEditProfileType extends AbstractType
             ))
             ->add('studentBatch', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span8'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select student batch'))),
                 'empty_value' => '---Choose a Batch---',
                 'choices' => array('SSC' => 'SSC','HSC' => 'HSC','Others' => 'Others'),
 
@@ -98,7 +109,7 @@ class MemberEditProfileType extends AbstractType
             ->add('maritalStatus', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span6'),
                 'empty_value' => '---Choose a Marital Status---',
-                'choices' => array('Married' => 'Married','Un-married' => 'Un-married','Single' => 'Single'),
+                'choices' => array('Married' => 'Married','Single' => 'Single'),
 
             ))
             ->add('bloodGroup', 'choice', array(

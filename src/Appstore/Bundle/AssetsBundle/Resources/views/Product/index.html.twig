@@ -76,6 +76,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Received</th>
+                                    <th class="numeric">Depreciation</th>
                                   {#  <th class="numeric" >Branch</th>#}
                                     <th class="numeric" >Product Name </th>
                                     <th class="numeric" >Item</th>
@@ -89,9 +90,6 @@
                                     <th class="numeric" >Dep Price</th>
                                     <th class="numeric" >Book Value</th>
                                     <th class="numeric" >Salvage Value</th>
-                                    <th class="numeric" >Assurance</th>
-                                    <th class="numeric" >Expired</th>
-                                    <th class="numeric" >Vendor</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -100,7 +98,8 @@
 
                                 {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-y') }}</td>
+                                        <td class="numeric" >{{ entity.depreciationEffectedDate|date('M,y') }}</td>
                                        {# <td class="numeric" >{{ entity.branch.name }}</td>#}
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.item.name }}</td>
@@ -111,12 +110,10 @@
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{{ entity.servicePrice }}</td>
                                         <td class="numeric" >{{ entity.depreciationRate|number_format }}%</td>
-                                        <td class="numeric" >{{ entity.depreciationValue }}</td>
-                                        <td class="numeric" >{{ entity.bookValue }}</td>
+                                        <td class="numeric" >{{ entity.depreciationValue|number_format }}</td>
+                                        <td class="numeric" >{{ entity.bookValue|number_format }}</td>
                                         <td class="numeric" ><a class="editable" data-name="SalvageValue" href="#"  data-url="{{ path('assets_product_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter salvage value">{{ entity.salvageValue }}</a></td>
-                                        <td class="numeric" >{{ entity.assuranceType }}</td>
-                                        <td class="numeric" >{{ entity.expiredDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
+
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 <a  data-type="select" class="btn red mini editable" id="depreciationStatus" data-name="DepreciationStatus" href="#" data-source="{{ path('assets_product_depreciation_status') }}"  data-url="{{ path('assets_product_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.depreciationStatus is not empty %}{{ entity.depreciationStatus.id }}{% endif %}" data-original-title="Change depreciation status">{% if entity.depreciationStatus is not empty %}{{ entity.depreciationStatus.name }}{% endif %}</a>
@@ -134,7 +131,9 @@
 
                                 </tbody>
                             </table>
-
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
                         </div>
                     </div>
                 </div>

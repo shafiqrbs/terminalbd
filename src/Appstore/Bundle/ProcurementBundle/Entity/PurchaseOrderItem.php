@@ -26,13 +26,13 @@ class PurchaseOrderItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", inversedBy="purchaseOrderItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="purchaseOrderItems" )
      **/
     private  $item;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\PurchaseItem", mappedBy="purchaseOrderItem" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="purchaseOrderItem" , cascade={"remove"})
      **/
     private  $purchaseItems;
 

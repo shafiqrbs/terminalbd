@@ -52,7 +52,6 @@ class AppKernel extends Kernel
            new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
            /* new SunCat\MobileDetectBundle\MobileDetectBundle(),*/
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
-            new Appstore\Bundle\TallyBundle\TallyBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),
             new Appstore\Bundle\HospitalBundle\HospitalBundle(),

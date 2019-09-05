@@ -28,7 +28,7 @@ class Distribution
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="distributions" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="distributions" )
 	 **/
 	private  $branch;
 

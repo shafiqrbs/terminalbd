@@ -37,10 +37,6 @@ class ProductUnit
      */
     protected $masterProducts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="productUnit")
-     */
-    protected $tallyProducts;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="productUnit")
@@ -127,6 +123,12 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationStock", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $educationStocks;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="productUnit" , cascade={"persist", "remove"})
+     **/
+    private $assetsItems;
 
 
     /**

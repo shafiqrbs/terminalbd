@@ -55,15 +55,20 @@ class Product
 	 **/
 	private  $item;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ProductLedger", mappedBy="product")
+     **/
+    protected $ledgers;
 
-	/**
+
+    /**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="products" )
 	 **/
 	private  $purchaseItem;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="branchProducts" )
 	 **/
 	private  $branch;
 
@@ -218,6 +223,14 @@ class Product
 	 * @ORM\Column(name="code", type="integer",  nullable=true)
 	 */
 	private $code;
+
+	/**
+	 * @var DateTime
+	 *
+	 * @ORM\Column(name="depreciationEffectedDate", type="date",  nullable=true)
+	 */
+	private $depreciationEffectedDate;
+
 
 	/**
 	 * @var \DateTime
@@ -499,14 +512,14 @@ class Product
 	}
 
 	/**
-	 * @return DateTime
+	 * @return \DateTime
 	 */
 	public function getExpiredDate() {
 		return $this->expiredDate;
 	}
 
 	/**
-	 * @param DateTime $expiredDate
+	 * @param \DateTime $expiredDate
 	 */
 	public function setExpiredDate( $expiredDate ) {
 		$this->expiredDate = $expiredDate;
@@ -885,6 +898,21 @@ class Product
         $this->item = $item;
     }
 
+    /**
+     * @return DateTime
+     */
+    public function getDepreciationEffectedDate()
+    {
+        return $this->depreciationEffectedDate;
+    }
+
+    /**
+     * @param DateTime $depreciationEffectedDate
+     */
+    public function setDepreciationEffectedDate($depreciationEffectedDate)
+    {
+        $this->depreciationEffectedDate = $depreciationEffectedDate;
+    }
 
 }
 

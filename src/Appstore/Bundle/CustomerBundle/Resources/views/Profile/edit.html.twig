@@ -142,7 +142,7 @@
                                 <!--/span-->
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >Batch</label>
+                                        <label class="control-label" >Batch <span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.studentBatch) }}
                                             {{ form_errors(form.studentBatch) }}
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >Occupation</label>
+                                        <label class="control-label" >Occupation <span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                             <i class="icon-font"></i>
@@ -166,7 +166,7 @@
                                 <!--/span-->
                                <div class="span6 ">
                                    <div class="control-group">
-                                       <label class="control-label" >Batch Year</label>
+                                       <label class="control-label" >Batch Year <span class="required">*</span></label>
                                        <div class="controls">
                                            <div class="input-icon left">
                                                <i class="icon-font"></i>
@@ -358,6 +358,7 @@
                                         <div class="controls">
                                             {{ form_widget(form.about) }}
                                             {{ form_errors(form.about) }}
+                                            <p class="help">You can write something about yourself.</p>
                                         </div>
                                     </div>
                                 </div>

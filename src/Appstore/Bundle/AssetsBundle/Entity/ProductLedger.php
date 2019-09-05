@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
- * Depreciation
+ * ProductLedger
  *
  * @ORM\Table("assets_ledger")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\ProductLedgerRepository")
@@ -24,7 +24,7 @@ class ProductLedger
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="ledgers" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="ledgers" )
 	 **/
 	private  $branch;
 
@@ -42,6 +42,16 @@ class ProductLedger
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", inversedBy="ledgers" )
 	 **/
 	private  $product;
+
+    /**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", inversedBy="ledgers" )
+	 **/
+	private  $depreciation;
+
+    /**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch", inversedBy="ledgers" )
+	 **/
+	private  $batch;
 
 
 	/**
@@ -79,6 +89,12 @@ class ProductLedger
 	 */
 	private $process;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="depreciationDate", type="datetime")
+     */
+    private $depreciationDate;
+
 
 	/**
 	 * @var \DateTime
@@ -86,6 +102,7 @@ class ProductLedger
 	 * @ORM\Column(name="created", type="datetime")
 	 */
 	private $created;
+
 
 	/**
 	 * @var \DateTime
@@ -258,6 +275,54 @@ class ProductLedger
 	public function setUpdated( $updated ) {
 		$this->updated = $updated;
 	}
+
+    /**
+     * @return DepreciationModel
+     */
+    public function getDepreciation()
+    {
+        return $this->depreciation;
+    }
+
+    /**
+     * @param DepreciationModel $depreciation
+     */
+    public function setDepreciation($depreciation)
+    {
+        $this->depreciation = $depreciation;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDepreciationDate()
+    {
+        return $this->depreciationDate;
+    }
+
+    /**
+     * @param \DateTime $depreciationDate
+     */
+    public function setDepreciationDate($depreciationDate)
+    {
+        $this->depreciationDate = $depreciationDate;
+    }
+
+    /**
+     * @return DepreciationBatch
+     */
+    public function getBatch()
+    {
+        return $this->batch;
+    }
+
+    /**
+     * @param DepreciationBatch $batch
+     */
+    public function setBatch($batch)
+    {
+        $this->batch = $batch;
+    }
 
 
 }

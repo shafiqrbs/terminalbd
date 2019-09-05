@@ -26,10 +26,6 @@ class Country
      */
     protected $vendors;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Item", mappedBy="country")
-     */
-    protected $tallyProduct;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="country")
@@ -50,6 +46,11 @@ class Country
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="country")
      */
     protected $stockItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="country")
+     */
+    protected $assetsItems;
 
 
     /**

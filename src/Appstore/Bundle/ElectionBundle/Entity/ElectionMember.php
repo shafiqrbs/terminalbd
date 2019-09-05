@@ -109,12 +109,18 @@ class ElectionMember
     protected $education;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", inversedBy="reference")
+	 * @ORM\ManyToOne(targetEntity="ElectionMember", inversedBy="reference")
 	 * @ORM\JoinColumns({
 	 *   @ORM\JoinColumn(name="referenceMember", referencedColumnName="id", onDelete="SET NULL", nullable=true)
 	 * })
 	 */
 	private $referenceMember;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ElectionMember" , mappedBy="referenceMember")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $reference;
 
 
 	/**

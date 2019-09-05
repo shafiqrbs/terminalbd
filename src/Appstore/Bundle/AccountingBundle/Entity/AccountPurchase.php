@@ -69,12 +69,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $purchase;
 
          /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
-         * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-         **/
-        private  $tallyPurchase;
-
-        /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
          * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/

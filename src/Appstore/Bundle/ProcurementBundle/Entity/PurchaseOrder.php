@@ -67,12 +67,6 @@ class PurchaseOrder
      **/
     private  $purchaseRequisitionItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TallyBundle\Entity\Purchase", mappedBy="purchaseOrder" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private  $purchases;
-
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="purchases" , cascade={"detach","merge"} )

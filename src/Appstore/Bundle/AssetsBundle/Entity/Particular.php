@@ -28,6 +28,16 @@ class Particular
 	private  $type;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ProductLedger", mappedBy="branch" )
+	 **/
+	private  $ledgers;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="branch" )
+	 **/
+	private  $branchProducts;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="particulars" )
 	 **/
 	private  $config;
@@ -41,6 +51,16 @@ class Particular
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="depreciationStatus" )
 	 **/
 	private  $products;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="branch" )
+	 **/
+	private  $stockItems;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="branch" )
+	 **/
+	private  $distributions;
 
 	/**
      * @var string
@@ -174,6 +194,46 @@ class Particular
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return ProductLedger
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getBranchProducts()
+    {
+        return $this->branchProducts;
+    }
+
+    /**
+     * @return Distribution
+     */
+    public function getDistributionDepartment()
+    {
+        return $this->distributionDepartment;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @return Distribution
+     */
+    public function getDistributions()
+    {
+        return $this->distributions;
     }
 
 

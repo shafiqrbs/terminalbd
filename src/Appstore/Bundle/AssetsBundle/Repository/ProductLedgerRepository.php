@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
+use Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
 use Appstore\Bundle\AssetsBundle\Entity\ProductLedger;
 use \Doctrine\ORM\EntityRepository;
@@ -96,12 +97,12 @@ class ProductLedgerRepository extends EntityRepository
 
 		$em = $this->_em;
 		$accountSales = new ProductLedger();
-
 		$accountSales->setProduct($entity);
 		$accountSales->setItem($entity->getItem());
 		$accountSales->setCategory($entity->getCategory());
 		$accountSales->setBranch($entity->getBranch());
 		$accountSales->setDebit($entity->getPurchasePrice());
+		$accountSales->setDepreciationDate($entity->getDepreciationEffectedDate());
 		$accountSales->setNarration('Receive Product on the opening item');
 		$accountSales->setProcess('approved');
 		$em->persist($accountSales);
@@ -111,18 +112,20 @@ class ProductLedgerRepository extends EntityRepository
 
 	}
 
-	public function insertProductDepreciation(Product $entity,$amount)
+	public function insertProductDepreciation(DepreciationBatch $batch,Product $entity,$amount)
 	{
 
 		$em = $this->_em;
 		$accountSales = new ProductLedger();
-
 		$accountSales->setProduct($entity);
 		$accountSales->setItem($entity->getItem());
 		$accountSales->setCategory($entity->getCategory());
 		$accountSales->setBranch($entity->getBranch());
 		$accountSales->setCredit($amount);
-		$accountSales->setNarration('Receive Product on the opening item');
+		$accountSales->setDepreciation($entity->getDepreciation());
+		$accountSales->setBatch($batch);
+		$accountSales->setDepreciationDate($entity->getDepreciationEffectedDate());
+		$accountSales->setNarration('Receive Product on the depreciation item');
 		$accountSales->setProcess('approved');
 		$em->persist($accountSales);
 		$em->flush();
@@ -150,6 +153,18 @@ class ProductLedgerRepository extends EntityRepository
 		return $accountSalesClose;
 
 	}
+
+	public function getBatchWiseDepreciation($batch)
+    {
+        $array = array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','i');
+        $qb->select("i.id AS itemId" , "SUM(e.credit) AS amount");
+        $qb->where("e.batch = :batch")->setParameter('batch', $batch);
+        $qb->groupBy('i.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
 
 
 }

@@ -792,14 +792,8 @@ class GlobalOption
      **/
     private $medicineBrands;
 
-    /* ===================      Tally      =======================================  */
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\TallyConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $tallyConfig;
-
-    /* ===================      Tally      =======================================  */
+    /* ===================      Fixed Assets      =======================================  */
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})

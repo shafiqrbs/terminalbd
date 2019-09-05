@@ -30,11 +30,25 @@ class AssetsConfig
      **/
     private $globalOption;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="config" , cascade={"persist", "remove"})
      **/
     private $stockItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="config" , cascade={"persist", "remove"})
+     **/
+    private $depreciationModels;
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Depreciation", mappedBy="config" , cascade={"persist", "remove"})
+     **/
+    private $depreciation;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch", mappedBy="config" , cascade={"persist", "remove"})
+     **/
+    private $depreciationBatches;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", mappedBy="config" , cascade={"persist", "remove"})
@@ -46,6 +60,11 @@ class AssetsConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="config" , cascade={"persist", "remove"})
      **/
     private $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="config")
+     **/
+    protected $products;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Brand", mappedBy="config" , cascade={"persist", "remove"})
@@ -1571,6 +1590,30 @@ class AssetsConfig
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return DepreciationModel
+     */
+    public function getDepreciationModels()
+    {
+        return $this->depreciationModels;
+    }
+
+    /**
+     * @return DepreciationBatch
+     */
+    public function getDepreciationBatches()
+    {
+        return $this->depreciationBatches;
+    }
+
+    /**
+     * @return Depreciation
+     */
+    public function getDepreciation()
+    {
+        return $this->depreciation;
     }
 
 

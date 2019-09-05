@@ -49,9 +49,20 @@ class Item
 
 
      /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Damage", mappedBy="item" )
+	 **/
+	private  $damages;
+
+
+     /**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="item" )
 	 **/
 	private  $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ProductLedger", mappedBy="item")
+     **/
+    protected $ledgers;
 
 
     /**
@@ -104,7 +115,7 @@ class Item
 	private  $vendor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="tallyProducts" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="assetsItems" )
      **/
     private  $productUnit;
 
@@ -122,7 +133,7 @@ class Item
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="tallyProduct")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="assetsItems")
      */
     protected $country;
 

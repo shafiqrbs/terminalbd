@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AssetsBundle\Controller;
 
+use Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,11 +25,15 @@ class DepreciationModelController extends Controller
 	 */
 	public function indexAction()
 	{
-		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
-		$em = $this->getDoctrine()->getManager();
-		$entities = $em->getRepository( 'AssetsBundle:DepreciationModel' )->findBy(array(),array( 'name' =>'asc'));
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+        $depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->findOneBy(array("config"=>$config));
+        $entities = $em->getRepository( 'AssetsBundle:DepreciationModel' )->findBy(array('config'=>$config),array( 'id' =>'DESC'));
+		$existDepreciation = $em->getRepository('AssetsBundle:DepreciationBatch')->existDepreciation($config->getId());
+
 		return $this->render('AssetsBundle:DepreciationModel:index.html.twig', array(
 			'depreciation' => $depreciation,
+			'existDepreciation' => $existDepreciation,
 			'entities' => $entities,
 		));
 	}
@@ -44,6 +49,8 @@ class DepreciationModelController extends Controller
 
 		if ($form->isValid()) {
 			$em = $this->getDoctrine()->getManager();
+			$config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+			$entity->setConfig($config);
 			$em->persist($entity);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
@@ -100,43 +107,6 @@ class DepreciationModelController extends Controller
 		));
 	}
 
-	/**
-	 * Finds and displays a DepreciationModel entity.
-	 *
-	 */
-	public function depreciationAction(DepreciationModel $entity)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
-		set_time_limit(0);
-		ignore_user_abort(true);
-
-		$data = array();
-		if(!empty($entity)){
-			if($entity->getItem()){
-				$data = array('item' => $entity->getItem()->getName());
-			}
-			if($entity->getCategory()){
-				$data = array('category' => $entity->getCategory()->getName());
-			}
-		}
-		$products = $this->getDoctrine()->getRepository('AssetsBundle:Product')->findWithSearch($config,$data);
-
-		/* @var $product Product */
-
-		if(!empty($products->getQuery()->getResult())){
-
-			foreach ($products->getQuery()->getResult() as $product):
-                $product->setDepreciation($entity);
-                $em->persist($product);
-                $em->flush();
-			endforeach;
-			$this->get('session')->getFlashBag()->add(
-				'success',"Depreciation rate has been added successfully"
-			);
-		}
-		return $this->redirect($this->generateUrl('assets_model'));
-	}
 
 	/**
 	 * Displays a form to edit an existing DepreciationModel entity.
@@ -251,21 +221,49 @@ class DepreciationModelController extends Controller
 		return $this->redirect($this->generateUrl('assets_model'));
 	}
 
+    /**
+     * Finds and displays a DepreciationModel entity.
+     *
+     */
+    public function depreciationAction(DepreciationModel $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
+        set_time_limit(0);
+        ignore_user_abort(true);
 
-	public function generateAction(DepreciationModel $entity)
+        $data = array();
+        if(!empty($entity)){
+            if($entity->getItem() and $entity->getCategory()) {
+                $data = array('item' => $entity->getItem()->getId(),'category' => $entity->getCategory()->getId());
+            }elseif($entity->getItem()){
+                $data = array('item' => $entity->getItem()->getId());
+            }elseif($entity->getCategory()){
+                $data = array('category' => $entity->getCategory()->getId());
+            }
+        }
+        $this->getDoctrine()->getRepository('AssetsBundle:Product')->updateDepreciationModelProduct($entity,$data);
+        $this->get('session')->getFlashBag()->add(
+            'success',"Depreciation rate has been added successfully"
+        );
+        return $this->redirect($this->generateUrl('assets_model'));
+    }
+
+    public function generateAction(DepreciationModel $entity)
 	{
 		$em = $this->getDoctrine()->getManager();
 		set_time_limit(0);
 		ignore_user_abort(true);
-
-		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
-		$data = array('depreciation' => $entity->getId());
-		$products = $this->getDoctrine()->getRepository('AssetsBundle:Product')->findWithSearch($data);
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
+		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->findOneBy(array('config'=>$config));
+		$data = array('depreciation' => $entity->getId(),'effectedDate' => date("d-m-Y"));
+		$products = $this->getDoctrine()->getRepository('AssetsBundle:Product')->findWithSearch($config,$data);
 
 		/* @var $product Product */
 
-		if(!empty($products->getQuery()->getResult())){
+		if($products->getQuery()->getResult()){
 
+            $batch = $this->getDoctrine()->getRepository('AssetsBundle:DepreciationBatch')->insertBatch($entity);
 			foreach ($products->getQuery()->getResult() as $product):
 
 			if($depreciation->getPolicy() == 'straight-line'){
@@ -276,35 +274,39 @@ class DepreciationModelController extends Controller
 					$product->setBookValue(doubleval($currentBookValue));
 					$depValue = ($product->getDepreciationValue() + $product->getStraightLineValue());
 					$product->setDepreciationValue($depValue);
-					$em->persist($product);
-					$em->flush($product);
-					$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($product,$product->getStraightLineValue());
+                    $nextDepreciation = $this->updateNextDepreciationDate($product->getDepreciationEffectedDate()->format('Y-m-d'));
+                    $product->setDepreciationEffectedDate($nextDepreciation);
+                    $em->persist($product);
+					$em->flush();
+					$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($batch,$product,$product->getStraightLineValue());
 
 				}else{
 
-					$this->generateStraightLineValue($entity,$product);
+					$this->generateStraightLineValue($entity,$batch,$product);
 				}
 
 			}else{
 
 				if($product->getReducingBalancePercentage()){
-
 				    $product->getReducingBalancePercentage();
 					$depValue = ($product->getBookValue() * $product->getReducingBalancePercentage())/100;
 					$bookValue = ($product->getBookValue() - $depValue);
 					$product->setBookValue($bookValue);
 					$depValue = ($product->getDepreciationValue() + $depValue);
 					$product->setDepreciationValue($depValue);
-					$em->persist($product);
-                    $em->flush($product);
-					$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($product,$depValue);
+                    $nextDepreciation = $this->updateNextDepreciationDate($product->getDepreciationEffectedDate()->format('Y-m-d'));
+                    $product->setDepreciationEffectedDate($nextDepreciation);
+                    $em->persist($product);
+                    $em->flush();
+					$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($batch,$product,$depValue);
 
 				}else{
-					$this->generateReducingBalance($entity,$product);
+
+					$this->generateReducingBalance($entity,$batch,$product);
 				}
 			}
-
 			endforeach;
+			$this->getDoctrine()->getRepository('AssetsBundle:DepreciationBatch')->updateBatch($batch);
 			$this->get('session')->getFlashBag()->add(
 				'success',"Depreciation has been generated successfully"
 			);
@@ -312,11 +314,13 @@ class DepreciationModelController extends Controller
 		return $this->redirect($this->generateUrl('assets_model'));
 	}
 
-	public function generateStraightLineValue(DepreciationModel $model ,Product $product)
+	public function generateStraightLineValue(DepreciationModel $model, DepreciationBatch $batch ,Product $product)
 	{
-		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
+        $em = $this->getDoctrine()->getManager();
+	    $depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
 		$straightLine = (($product->getPurchasePrice() - $product->getSalvageValue()) / $model->getDepreciationYear());
 		$straightValue = 0;
+
 		if( $depreciation->getDepreciationPulse() == 'monthly'){
 			$month = ($model->getDepreciationYear()*12);
 			$straightValue = ($straightLine/$month);
@@ -327,9 +331,8 @@ class DepreciationModelController extends Controller
 			$month = ($model->getDepreciationYear()*2);
 			$straightValue = ($straightLine/$month);
 		}else{
-			$straightValue =$straightLine;
+			$straightValue = $straightLine;
 		}
-		$em = $this->getDoctrine()->getManager();
 		$bookValue = ($product->getPurchasePrice() - ($product->getSalvageValue() + $straightValue));
 		$product->setBookValue(doubleval($bookValue));
 		$product->setDepreciationValue(doubleval($straightValue));
@@ -337,15 +340,19 @@ class DepreciationModelController extends Controller
 		$straightPercentage = (($straightValue * 100)/$product->getPurchasePrice());
 		$product->setStraightLinePercentage($straightPercentage);
 		$product->setDepreciationRate($straightPercentage);
-		$em->persist($product);
+        $nextDepreciation = $this->updateNextDepreciationDate($product->getDepreciationEffectedDate()->format('Y-m-d'));
+        $product->setDepreciationEffectedDate($nextDepreciation);
+        $em->persist($product);
 		$em->flush();
-		$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($product,$straightValue);
+		$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($batch,$product,$straightValue);
 
 	}
 
-	public function generateReducingBalance(DepreciationModel $model ,Product $product)
+	public function generateReducingBalance(DepreciationModel $model , DepreciationBatch $batch ,Product $product)
 	{
-		$depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
+        $em = $this->getDoctrine()->getManager();
+
+        $depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->find(1);
 		$straightValue = 0;
 		if( $depreciation->getDepreciationPulse() == 'monthly'){
 			$rate = ($model->getRate()/12);
@@ -356,20 +363,39 @@ class DepreciationModelController extends Controller
 		}else{
 			$rate = $model->getRate();
 		}
-		$em = $this->getDoctrine()->getManager();
 
 		$depValue = ((($product->getPurchasePrice() - $product->getSalvageValue()) * $rate)/100);
 		$bookValue = ($product->getPurchasePrice() - ($product->getSalvageValue() + $depValue));
-
 		$product->setBookValue(doubleval($bookValue));
 		$product->setDepreciationValue(doubleval($depValue));
 		$product->setReducingBalancePercentage($rate);
 		$product->setDepreciationRate($rate);
+		$nextDepreciation = $this->updateNextDepreciationDate($product->getDepreciationEffectedDate()->format('Y-m-d'));
+		$product->setDepreciationEffectedDate($nextDepreciation);
 		$em->persist($product);
 		$em->flush();
-		$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($product,$depValue);
+		$this->getDoctrine()->getRepository('AssetsBundle:ProductLedger')->insertProductDepreciation($batch,$product,$depValue);
 
 	}
+
+	public function updateNextDepreciationDate($depreciationDate)
+    {
+
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+        $depreciation = $this->getDoctrine()->getRepository('AssetsBundle:Depreciation')->findOneBy(array('config'=>$config));
+        if( $depreciation->getDepreciationPulse() == 'monthly'){
+            $effectiveDate = date('Y-m-t', strtotime("+1 month -1 day", strtotime($depreciationDate)));
+		}elseif($depreciation->getDepreciationPulse() == 'quarterly'){
+            $effectiveDate = date('Y-m-t', strtotime("+4 months -1 day", strtotime($depreciationDate)));
+        }elseif($depreciation->getDepreciationPulse() == 'half-year'){
+            $effectiveDate = date('Y-m-t', strtotime("+6 months -1 day", strtotime($depreciationDate)));
+        }else{
+            $effectiveDate = date('Y-m-t', strtotime("+12 months -1 day", strtotime($depreciationDate)));
+        }
+        return $date = new  \DateTime($effectiveDate);
+
+    }
+
 
 
 

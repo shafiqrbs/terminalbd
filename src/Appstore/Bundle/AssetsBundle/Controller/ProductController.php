@@ -26,6 +26,7 @@ class ProductController extends Controller
 			$this->get('request')->query->get('page', 1)/*page number*/,
 			25  /*limit per page*/
 		);
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
 		return $pagination;
 	}
 
@@ -38,7 +39,8 @@ class ProductController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
-		$entities = $em->getRepository('AssetsBundle:Product')->findWithSearch($data);
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
+		$entities = $em->getRepository('AssetsBundle:Product')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
 		return $this->render('AssetsBundle:Product:index.html.twig', array(
 			'entities' => $pagination,

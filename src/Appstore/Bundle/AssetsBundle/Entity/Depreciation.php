@@ -10,7 +10,7 @@ use Product\Bundle\ProductBundle\Entity\Category;
  * Depreciation
  *
  * @ORM\Table("assets_depreciation")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\DepreciationRepository")
  */
 class Depreciation
 {
@@ -23,8 +23,19 @@ class Depreciation
      */
     private $id;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="depreciation" )
+     **/
+    private  $config;
 
-	/**
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="depreciation" )
+     **/
+    private  $depreciationModels;
+
+
+    /**
 	 * @var float
 	 *
 	 * @ORM\Column(name="rate", type="float", nullable=true)
@@ -67,7 +78,16 @@ class Depreciation
 	 */
 	private $policy = 'straight-line';
 
-	/**
+    /**
+	 * @var string
+	 *
+	 * @ORM\Column(name="effected", type="string", nullable=true)
+	 */
+	 private $effected;
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -169,6 +189,46 @@ class Depreciation
 	public function setDepreciationYear( $depreciationYear ) {
 		$this->depreciationYear = $depreciationYear;
 	}
+
+    /**
+     * @return string
+     */
+    public function getEffected()
+    {
+        return $this->effected;
+    }
+
+    /**
+     * @param string $effected
+     */
+    public function setEffected($effected)
+    {
+        $this->effected = $effected;
+    }
+
+    /**
+     * @return AssetsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param AssetsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return DepreciationModel
+     */
+    public function getDepreciationModels()
+    {
+        return $this->depreciationModels;
+    }
 
 
 }

@@ -53,14 +53,8 @@ class AccountHead
      **/
     private  $expendituries;
 
-     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TallyBundle\Entity\Category", mappedBy="accountHead" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $tallyCategories;
-
-     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", mappedBy="accountHead" )
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $assetsCategories;

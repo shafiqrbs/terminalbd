@@ -53,6 +53,13 @@ class AccountProfit
     private $updated;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="generateMonth", type="datetime")
+     */
+    private $generateMonth;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="month", type="integer",  nullable = true)
@@ -309,6 +316,22 @@ class AccountProfit
     public function setRevenue($revenue)
     {
         $this->revenue = $revenue;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getGenerateMonth()
+    {
+        return $this->generateMonth;
+    }
+
+    /**
+     * @param \DateTime $generateMonth
+     */
+    public function setGenerateMonth($generateMonth)
+    {
+        $this->generateMonth = $generateMonth;
     }
 
 }
