@@ -31,10 +31,6 @@ class Particular
      **/
     private $hospitalConfig;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", inversedBy="hmsParticulars")
-     **/
-    private $diagnosticReport;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referredDoctor")

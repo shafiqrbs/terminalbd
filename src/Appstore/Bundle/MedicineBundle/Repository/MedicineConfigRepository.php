@@ -32,6 +32,9 @@ class MedicineConfigRepository extends EntityRepository
         $house = $em->createQuery('DELETE MedicineBundle:MedicineStockHouse e WHERE e.medicineConfig = '.$config);
         $house->execute();
 
+        $house = $em->createQuery('DELETE MedicineBundle:MedicineAndroidProcess e WHERE e.medicineConfig = '.$config);
+        $house->execute();
+
         $stock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
        // $stock->execute();
 
