@@ -120,9 +120,8 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $medicineVendor;
 
-
         /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="accountPurchase" )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", inversedBy="accountPurchase" )
          * @ORM\JoinColumn(name="medicinePurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $medicinePurchase;
