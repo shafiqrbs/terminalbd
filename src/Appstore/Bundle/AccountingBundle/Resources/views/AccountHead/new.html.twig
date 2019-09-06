@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="accounthead-title">
-                    Account head Components
+                    Account sub-head
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('accounthead') }}">Account head</a>
+                        <a href="{{ path('accounthead') }}">Account sub-head</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Account head new/edit</a></li>
+                    <li><a href="#">Account sub-head</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -34,49 +34,46 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Account head Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account sub-head Information</div>
                         {% if app.user.granted("ROLE_SUPER_ADMIN") %}
                             <div class="actions">
                                 <div class="btn-group">
-                                    <a class="btn black" href="{{ path('accounthead') }}"><i class="icon-th-list"></i>&nbsp; Create</a>
+                                    <a class="btn black" href="{{ path('accounthead') }}"><i class="icon-th-list"></i>&nbsp; Account Head</a>
                                 </div>
                             </div>
                         {% endif %}
 
                     </div>
-
-                    <div class="portlet-body">
-
-                        <div class="portlet-body form">
-                            {% include('flash-message.html.twig')  %}
-                            <!-- BEGIN FORM-->
-                            {{ form_start(form) }}
-                            {{ form_row(form._token) }}
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" for="name">Name</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.name) }}
-                                                {{ form_errors(form.name) }}
-                                            </div>
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class="row-fluid">
+                            <div class="span6 ">
+                                <div class="control-group">
+                                    <label class="control-label" for="name">Name</label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            <i class="icon-font"></i>
+                                            {{ form_widget(form.name) }}
+                                            {{ form_errors(form.name) }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="parent">Parent</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.parent) }}
-                                                {{ form_errors(form.parent) }}
-                                            </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="parent">Parent</label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            {{ form_widget(form.parent) }}
+                                            {{ form_errors(form.parent) }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3 ">
+                            </div>
+                            <div class="span3 ">
                                 <div class="control-group">
                                     <label class="control-label" for="staus">Status</label>
                                     <div class="controls">
@@ -86,21 +83,20 @@
 
                                 </div>
                             </div>
-                            </div>
-                            <div class="clearfix"><br/></div>
-                            <!--/span-->
-                            <div class="form-actions portlet box grey">
-                                <div class="pull-center">
-                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
-                                    {% if(entity.id > 0 ) %}
-                                        <a href="{{ path('accounthead_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {{ form_end(form) }}
-                            <!-- END FORM-->
                         </div>
+                        <div class="clearfix"><br/></div>
+                        <!--/span-->
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-center">
+                                <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                                {% if(entity.id > 0 ) %}
+                                    <a href="{{ path('accounthead_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                        <!-- END FORM-->
                     </div>
                 </div>
 

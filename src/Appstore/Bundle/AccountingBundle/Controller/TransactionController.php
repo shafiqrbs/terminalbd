@@ -459,12 +459,53 @@ class TransactionController extends Controller
 
     public function balanceSheetAction()
     {
-        $globalOption = $this->getUser()->getglobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);
-        $paginate =$this->paginate($entities);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
 
-        return $this->render('AccountingBundle:Transaction:transactionTrailBalance.html.twig', array(
-            'entities' => $paginate,
+        $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'));
+        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities'));
+        $subHeads = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption);
+
+        $debitStatement = [];
+        $creditStatement = [];
+
+        foreach ($entitiesDebit as $key => $item) {
+            $serviceName = $item['parentName'];
+            $debitStatement[$serviceName][$key] = $item;
+        }
+        foreach ($entitiesCredit as $key => $item) {
+            $headName = $item['parentName'];
+            $creditStatement[$headName][$key] = $item;
+        }
+        return $this->render('AccountingBundle:Transaction:balancesheet.html.twig', array(
+            'debitStatement' => $debitStatement,
+            'creditStatement' => $creditStatement,
+            'subHeads' => $subHeads,
+        ));
+    }
+
+    public function balanceSheetxAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption);
+        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption);
+
+        $debitStatement = array();
+        $creditStatement = array();
+        foreach ($entitiesDebit as $key => $item) {
+            $headName = $item['parentName'];
+            $debitStatement[$headName][$key] = $item;
+        }
+        foreach ($entitiesCredit as $key => $item) {
+            $headName = $item['parentName'];
+            $creditStatement[$headName][$key] = $item;
+        }
+        return $this->render('AccountingBundle:Transaction:balancesheet.html.twig', array(
+            'debitEntities' => $debitStatement,
+            'creditEntities' => $creditStatement,
 
         ));
     }

@@ -25,7 +25,7 @@ class AccountHeadRepository extends EntityRepository
 
 
 
-    public function getAllChildrenAccount($global)
+    public function getBalanceSheetAccount($global)
     {
         $accountHead = $this->findBy(array('isParent' => 1),array('name'=>'ASC'));
         $heads = array();
@@ -46,6 +46,54 @@ class AccountHeadRepository extends EntityRepository
         }
         return $heads;
     }
+
+    public function getChildrenTransactionAccount($parent = '', $option = '')
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->leftJoin('e.parent','p');
+        $query->select('e.id as id');
+        $query->addSelect('e.name as name');
+        $query->addSelect('e.toIncrease as toIncrease');
+        $query->addSelect('e.code as code');
+        $query->addSelect('p.name as parentName');
+        $query->where("e.status =1");
+        if(!empty($parent)) {
+            $query->andWhere("e.parent =:parent");
+            $query->setParameter('parent', $parent);
+        }
+        if(!empty($option)) {
+            $query->andWhere("e.globalOption =:option");
+            $query->setParameter('option', $option);
+        }
+        $query->orderBy('e.name', 'ASC');
+        return $query->getQuery()->getArrayResult();
+
+    }
+
+    public function getAllChildrenAccount($global)
+    {
+        $accountHead = $this->findBy(array('isParent' => 1,'status' => 1),array('name'=>'ASC'));
+        $heads = array();
+        /* @var $child AccountHead */
+        foreach ($accountHead as $row){
+            $childs = $this->getChildrenAccount($row->getId());
+            if($childs){
+                foreach ($childs as $child) {
+                    $heads[$row->getId()][] = $child;
+                    $subs = $this->getChildrenAccount($child['id'],$global);
+                    if ($subs) {
+                        foreach ($subs as $sub) {
+                            $heads[$child['id']][] = $sub;
+                        }
+                    }
+                }
+            }
+        }
+        return $heads;
+    }
+
+
+
     public function getChildrenAccount($parent = '', $option = '')
     {
         $query = $this->createQueryBuilder('e');
@@ -68,6 +116,8 @@ class AccountHeadRepository extends EntityRepository
         return $query->getQuery()->getArrayResult();
 
     }
+
+
 
 
     public function getChildrenAccountHead($parent = '')

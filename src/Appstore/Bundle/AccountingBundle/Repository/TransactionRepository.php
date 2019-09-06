@@ -172,18 +172,37 @@ class TransactionRepository extends EntityRepository
         return $res;
     }
 
-    public function getGroupByAccountHead($globalOption){
+    public function getGroupByAccountHead($globalOption,$heads){
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
-        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName,parent.id as parentId, accountHead.id, accountHead.toIncrease, accountHead.code as code');
+        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName,parent.id as parentId, accountHead.id as accountHeadId, accountHead.toIncrease, accountHead.code as code');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("parent.slug IN (:parent)")->setParameter('parent',$heads);
         $qb->andWhere("accountHead.slug != 'profit-loss'");
         $qb->groupBy('e.accountHead');
         $qb->orderBy('parent.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+    }
+
+    public function getSubHeadAccount($globalOption)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.subAccountHead','subAccountHead');
+        $qb->join('e.accountHead','accountHead');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->groupBy('e.accountHead');
+        $qb->orderBy('accountHead.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row):
+            $array[$row['parentId']] = $row;
+        endforeach;
+        return $array;
     }
 
     public function parentsAccountHead($globalOption,$parent,$data){
