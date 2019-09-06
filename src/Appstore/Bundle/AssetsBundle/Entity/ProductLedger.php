@@ -38,9 +38,11 @@ class ProductLedger
 	 **/
 	private  $item;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", inversedBy="ledgers" )
-	 **/
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", inversedBy="ledgers" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
 	private  $product;
 
     /**

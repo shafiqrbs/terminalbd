@@ -206,6 +206,9 @@ class DomainController extends Controller
         if($option->getBusinessConfig()) {
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
         }
+        if($option->getAssetsConfig()) {
+            $this->getDoctrine()->getRepository('AssetsBundle:AssetsConfig')->reset($option);
+        }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
         $a->remove($dir);

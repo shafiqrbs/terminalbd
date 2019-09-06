@@ -58,6 +58,11 @@ class Particular
 	private  $stockItems;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Disposal", mappedBy="branch" )
+	 **/
+	private  $disposals;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="branch" )
 	 **/
 	private  $distributions;

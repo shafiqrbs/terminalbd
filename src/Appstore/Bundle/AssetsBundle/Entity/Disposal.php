@@ -27,9 +27,17 @@ class Disposal
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="disposals" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="disposals" )
+	 **/
+	private  $config;
+
+
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="disposals" )
 	 **/
 	private  $branch;
+
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DisposalItem", mappedBy="disposal" )
@@ -269,14 +277,14 @@ class Disposal
 	}
 
 	/**
-	 * @return Branches
+	 * @return Particular
 	 */
 	public function getBranch() {
 		return $this->branch;
 	}
 
 	/**
-	 * @param Branches $branch
+	 * @param Particular $branch
 	 */
 	public function setBranch( $branch ) {
 		$this->branch = $branch;
@@ -445,7 +453,21 @@ class Disposal
 		return $this->disposalItems;
 	}
 
+    /**
+     * @return AssetsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
 
+    /**
+     * @param AssetsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
 
 
 }
