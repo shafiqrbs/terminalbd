@@ -143,8 +143,12 @@ class AccountJournalController extends Controller
         $entity = new AccountJournal();
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
         return $this->render('AccountingBundle:AccountJournal:new.html.twig', array(
             'entity' => $entity,
+            'accountHead' => $accountHead,
+            'heads' => $heads,
             'banks' => $banks,
             'form'   => $form->createView(),
         ));
