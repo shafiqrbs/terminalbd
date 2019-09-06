@@ -42,6 +42,10 @@ assets_item_brand:
     resource: "@AssetsBundle/Resources/config/routing/itembrand.yml"
     prefix:   /item-brand
 
+assets_vendor:
+    resource: "@AssetsBundle/Resources/config/routing/vendor.yml"
+    prefix:   /vendor
+
 assets_category:
     prefix:     /category
     resource: "@AssetsBundle/Resources/config/routing/category.yml"

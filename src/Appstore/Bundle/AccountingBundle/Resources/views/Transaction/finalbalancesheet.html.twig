@@ -38,33 +38,45 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="cashPayment box">
+                                <form class="search-form" action="" method="" name="itemSearch">
+                                    <div class="span12 pull-right">
+                                        <select id="accountHead" name="accountHead" class="span3 select2">
+                                            <option value="Cash">--Select account head--</option>
+                                            {% for account in accountHead %}
+                                                <option value="{{ account.id }}">{{ account.name }}</option>
+                                            {% endfor %}
 
+                                        </select>
+                                        <input type="text" id="remark" name="remark"  class=" span6 m-wrap"   placeholder="Remark...">
+                                        <div class="input-append">
+                                            <input  class="" type="hidden" name="parent" id="parent" value="">
+                                            <div class="btn-group"><button id="payment-button" type="button" class="btn green" >Submit</button></div>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                <div class="clearfix"></div>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Parent Head</th>
                                     <th class="numeric" >Account Head</th>
-                                    <th class="numeric" >Debit</th>
-                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric" >Amount</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for key, entity in entities %}
                                   <tr><td colspan="3" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
-                                    {% set totalDebit = 'total'~key  %}
-                                    {% set totalCredit = 'total'~key  %}
-                                    {% set totalDebit =  0   %}
-                                    {% set totalCredit =  0   %}
+                                    {% set total = 'total'~key  %}
+                                    {% set total =  0   %}
                                     {% for val in  entities[key] %}
-                                    {% if val.toIncrease == "Debit" %}
-                                        {% set totalDebit = totalDebit + val.amount|abs %}
-                                    {% elseif val.toIncrease == "Credit" %}
-                                        {% set totalCredit = totalCredit + val.amount|abs %}
-                                    {% endif %}
-                                         <tr><td>&nbsp;</td><td> {{ val.code }} - {{ val.name }}</td><td>{% if val.toIncrease == "Debit" %}{{ val.amount|abs }}{% endif %}</td><td>{% if val.toIncrease == "Credit" %}{{ val.amount|abs }}{% endif %}</td></tr>
+                                        {% set total = total + val.amount %}
+                                         <tr><td>&nbsp;</td><td> {{ val.code }} - {{ val.name }}</td><td> {{ val.amount }}</td></tr>
                                     {% endfor %}
-                                   <tr><td>&nbsp;</td><td>Total</td><td> {{ totalDebit }}</td><td> {{ totalCredit }}</td></tr>
+                                   <tr><td>&nbsp;</td><td>Total</td><td> {{ total }}</td></tr>
                                 {% endfor %}
                               </tbody>
                             </table>

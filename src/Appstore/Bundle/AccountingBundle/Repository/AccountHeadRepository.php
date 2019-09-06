@@ -313,7 +313,7 @@ class AccountHeadRepository extends EntityRepository
 
         $exist = $this->findOneBy(array('assetsItem' => $entity->getItem()));
         if ($exist) {
-            $exist->setName($entity->getName());
+            $exist->setName($entity->getItem()->getName());
             $this->_em->flush();
             return $exist;
         } else {

@@ -2,7 +2,8 @@
 
 namespace Appstore\Bundle\AssetsBundle\Form;
 
-use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
+use Appstore\Bundle\AssetsBundle\Entity\TallyConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -14,13 +15,13 @@ class OpeningItemEditType extends AbstractType
 {
 
 
-    /** @var TallyConfig */
+    /** @var AssetsConfig */
 
     public  $config;
 
 
 
-    function __construct(TallyConfig $config)
+    function __construct(AssetsConfig $config)
     {
 
         $this->config = $config;
@@ -36,7 +37,7 @@ class OpeningItemEditType extends AbstractType
 
             ->add('item', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\Item',
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Item',
                 'empty_value' => 'Choose a product item name',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -48,8 +49,7 @@ class OpeningItemEditType extends AbstractType
                 },
             ))
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12'))) ->add( 'name', 'text', array(
-                'attr'        => array( 'class' => 'm-wrap span12', 'placeholder' => 'Enter  product item' ),
-                'constraints' => array( new NotBlank( array( 'message' => 'Please add  product item name' )))
+                'attr'        => array( 'class' => 'm-wrap span12', 'placeholder' => 'Enter  product item' )
             ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12', 'placeholder' => 'Enter  price'),
                 'constraints' => array( new NotBlank( array( 'message' => 'Please enter item price' )))
@@ -72,7 +72,7 @@ class OpeningItemEditType extends AbstractType
 
             ->add('assuranceFromVendor', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemWarning',
                 'empty_value' => 'Choose a item warning',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -83,7 +83,7 @@ class OpeningItemEditType extends AbstractType
             ))
             ->add('assuranceToCustomer', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\TallyBundle\Entity\ItemWarning',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ItemWarning',
                 'empty_value' => 'Choose a item warning',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),

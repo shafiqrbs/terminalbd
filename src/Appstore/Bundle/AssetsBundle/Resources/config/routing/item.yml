@@ -69,6 +69,12 @@ assetsitem_search:
     options:
            expose: true
 
+assetsitem_search_name:
+    path:     /search-name
+    defaults: { _controller: "AssetsBundle:Item:autoSearch" }
+    options:
+           expose: true
+
 assetsitem_search_all:
     path:     /all-search
     defaults: { _controller: "AssetsBundle:Item:autoSearchItemAll" }

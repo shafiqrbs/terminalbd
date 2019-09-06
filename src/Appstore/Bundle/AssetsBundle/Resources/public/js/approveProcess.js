@@ -73,7 +73,7 @@ $(".select2VatName").select2({
 
     placeholder: "Search vat name",
     ajax: {
-        url: Routing.generate('tallyitem_item_search'),
+        url: Routing.generate('assetsitem_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -101,7 +101,7 @@ $(".select2VatName").select2({
     formatSelection: function(item){return item.name}, // omitted for brevity, see the source of this page
     initSelection: function(element, callback) {
         var id = $(element).val();
-        $.ajax(Routing.generate('tallyitem_item_name', {name : id}), {
+        $.ajax(Routing.generate('assetsitem_search_name', {name : id}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);

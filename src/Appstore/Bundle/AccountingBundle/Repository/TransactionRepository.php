@@ -90,20 +90,29 @@ class TransactionRepository extends EntityRepository
 		return $res;
 	}
 
+    public function stakeHolderWiseCapital($globalOption)
+    {
 
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.accountHead','a');
+        $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS balance');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$globalOption);
+        $qb->andWhere("a.slug = :slug")->setParameter('slug','capital-investment');
+        $qb->andWhere("e.subAccountHead IS NOT NULL");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
 
     public function getCapitalInvestment(GlobalOption $option , AccountProfit $profit)
     {
-        $accountHead = $this->_em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'capital-investment'));
-        $summary = $this->transactionOverview($option,$accountHead);
-        $totalCapital = $summary['balance'];
 
-
+        $summary = $this->stakeHolderWiseCapital($option);
+        $totalCapital = abs($summary['balance']);
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','ach');
         $qb->join('e.accountHead','ac');
         $qb->select('ach.id as subAccountId','COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
-        $qb->addSelect('(COALESCE(SUM(e.debit),0) - COALESCE(SUM(e.credit),0)) AS capital');
+        $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS capital');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$option->getId());
         $qb->andWhere("ac.slug = :slug")->setParameter('slug','capital-investment');
         $qb->groupBy('subAccountId');
@@ -120,11 +129,20 @@ class TransactionRepository extends EntityRepository
 
         $em = $this->_em;
         $subAccount = $em->getRepository('AccountingBundle:AccountHead')->find($row['subAccountId']);
-        $totalProfit = $profit->getProfit();
-        $amount = (($row['capital'] * $totalProfit) / $totalCapital);
 
         $transaction = new Transaction();
+        if($profit->getProfit() > 0){
+            $totalProfit = $profit->getProfit();
+            $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
+            $transaction->setCredit($amount);
+        }else{
+            $totalProfit = $profit->getLoss();
+            $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
+            $transaction->setDebit($amount);
+
+        }
         $transaction->setGlobalOption($profit->getGlobalOption());
+        $transaction->setAccountProfit($profit);
         $transaction->setProcessHead('Profit/Loss');
         $transaction->setProcess('Current Liabilities');
         $transaction->setAccountRefNo($profit->getId());
@@ -133,7 +151,6 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(60));
         $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount($amount);
-        $transaction->setDebit($amount);
         $em->persist($transaction);
         $em->flush();
     }
@@ -161,8 +178,8 @@ class TransactionRepository extends EntityRepository
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
         $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName,parent.id as parentId, accountHead.id, accountHead.toIncrease, accountHead.code as code');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption->getId());
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("accountHead.slug != 'profit-loss'");
         $qb->groupBy('e.accountHead');
         $qb->orderBy('parent.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -368,7 +385,7 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Debit'){
+        if ($entity->getToUser() and !($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Debit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
             $transaction->setSubAccountHead($subAccount);
         }
@@ -2564,8 +2581,10 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcess('Depreciation');
             /* Assets Account - Capital Assets */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
-            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCapitalAssetsAccount($journal->getGlobalOption(),$item);
-            $transaction->setSubAccountHead($subAccount);
+            if($item->getStakeholder()){
+                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCapitalAssetsAccount($journal->getGlobalOption(),$item);
+                $transaction->setSubAccountHead($subAccount);
+            }
             $transaction->setAmount($item->getSubTotal());
             $transaction->setDebit($item->getSubTotal());
             $this->_em->persist($transaction);
@@ -2604,8 +2623,10 @@ class TransactionRepository extends EntityRepository
 
         /* Current Asset Capital Investment */
         $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(49));
-        $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
-        $transaction->setSubAccountHead($subAccount);
+        if($entity->getToUser()){
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
+            $transaction->setSubAccountHead($subAccount);
+        }
         $this->_em->persist($transaction);
         $this->_em->flush();
         return $transaction;

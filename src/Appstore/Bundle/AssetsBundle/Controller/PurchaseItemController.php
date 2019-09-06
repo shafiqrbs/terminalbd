@@ -189,7 +189,7 @@ class PurchaseItemController extends Controller
         $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->generateSerialNo($entity);
         return $this->render('AssetsBundle:PurchaseItem:editOpening.html.twig', array(
             'entity'      => $entity,
-            'purchaseInfo'      => $entity->getPurchase(),
+            'purchaseInfo'      => $entity->getAssetsPurchase(),
             'form'   => $editForm->createView(),
         ));
     }
@@ -243,7 +243,7 @@ class PurchaseItemController extends Controller
         $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->generateSerialNo($entity);
         return $this->render('AssetsBundle:PurchaseItem:new.html.twig', array(
             'entity'      => $entity,
-            'purchaseInfo'      => $entity->getPurchase(),
+            'purchaseInfo'      => $entity->getAssetsPurchase(),
             'form'   => $editForm->createView(),
         ));
     }
@@ -348,7 +348,7 @@ class PurchaseItemController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        exit;
+        return $this->redirect($this->generateUrl('assets_purchase_item'));
 
     }
 

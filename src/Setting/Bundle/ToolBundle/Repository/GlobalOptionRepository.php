@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Repository;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
+use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
@@ -368,6 +369,12 @@ class GlobalOptionRepository extends EntityRepository
         $instituteConfig = $this->_em->getRepository('EducationBundle:EducationConfig')->findOneBy(array('globalOption' => $globalOption));
         if(empty($instituteConfig)){
             $config = new EducationConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+        $assetsConfig = $this->_em->getRepository('AssetsBundle:AssetsConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($assetsConfig)){
+            $config = new AssetsConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }

@@ -66,7 +66,6 @@ class PurchaseOpeningItemType extends AbstractType
                 'empty_value' => '---Choose a stakeholder---',
                 'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'constraints' =>array(new NotBlank(array('message'=>'Please select to stakeholder name'))),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->join('u.profile','p')
@@ -79,7 +78,6 @@ class PurchaseOpeningItemType extends AbstractType
             ))
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12'))) ->add( 'name', 'text', array(
                 'attr'        => array( 'class' => 'm-wrap span12', 'placeholder' => 'Enter  product item' ),
-                'constraints' => array( new NotBlank( array( 'message' => 'Please add  product item name' )))
             ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12', 'placeholder' => 'Enter  price'),
                 'constraints' => array( new NotBlank( array( 'message' => 'Please enter item price' )))

@@ -445,7 +445,19 @@ class TransactionController extends Controller
         ));
     }
 
-    public function transactionTrailBalanceAction()
+    public function trailBalanceAction()
+    {
+        $globalOption = $this->getUser()->getglobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);
+        $paginate =$this->paginate($entities);
+
+        return $this->render('AccountingBundle:Transaction:transactionTrailBalance.html.twig', array(
+            'entities' => $paginate,
+
+        ));
+    }
+
+    public function balanceSheetAction()
     {
         $globalOption = $this->getUser()->getglobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);

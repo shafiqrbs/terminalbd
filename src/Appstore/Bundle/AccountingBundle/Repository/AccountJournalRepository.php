@@ -563,7 +563,9 @@ class AccountJournalRepository extends EntityRepository
         $entity->setAmount($item->getSubTotal());
         $entity->setApprovedBy($item->getApprovedBy());
         $entity->setCreatedBy($item->getApprovedBy());
-        $entity->setToUser($item->getStakeholder());
+        if($item->getStakeholder()){
+            $entity->setToUser($item->getStakeholder());
+        }
         $entity->setAccountHeadCredit($accountHeadCredit);
         $entity->setAccountHeadDebit($accountCashHead);
         $entity->setJournalSource($journalSource);

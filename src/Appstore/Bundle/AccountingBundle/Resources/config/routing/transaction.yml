@@ -47,8 +47,12 @@ account_transaction_journal:
     path:     /journal
     defaults: { _controller: "AccountingBundle:Transaction:transactionJournal" }
 
-account_transaction_trail_balance:
+account_trail_balance:
     path:     /trail-balance
-    defaults: { _controller: "AccountingBundle:Transaction:transactionTrailBalance" }
+    defaults: { _controller: "AccountingBundle:Transaction:trailBalance" }
+
+account_balance_sheet:
+    path:     /balance-sheet
+    defaults: { _controller: "AccountingBundle:Transaction:balanceSheet" }
 
 

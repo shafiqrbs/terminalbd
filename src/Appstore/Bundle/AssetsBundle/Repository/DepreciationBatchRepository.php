@@ -51,12 +51,12 @@ class DepreciationBatchRepository extends EntityRepository
         $totalAmount = 0;
         foreach ($result as $row):
             $totalAmount += $totalAmount +$row['amount'];
-            $array[$row['itemId']] = $row['amount'];
+            $array[$row['itemId']] = round($row['amount']);
         endforeach;
         if($totalAmount > 0){
             $jsonInputItem = json_encode($array);
             $batch->setItems($jsonInputItem);
-            $batch->setAmount($totalAmount);
+            $batch->setAmount(round($totalAmount));
             $em->persist($batch);
             $em->flush();
             $em->getRepository('AccountingBundle:Transaction')->insertDepreciation($batch,$result);

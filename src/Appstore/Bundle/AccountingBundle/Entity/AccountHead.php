@@ -443,7 +443,7 @@ class AccountHead
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSlug()
     {
@@ -451,7 +451,7 @@ class AccountHead
     }
 
     /**
-     * @param mixed $slug
+     * @param string $slug
      */
     public function setSlug($slug)
     {

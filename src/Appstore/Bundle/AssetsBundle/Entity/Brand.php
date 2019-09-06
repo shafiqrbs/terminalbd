@@ -11,7 +11,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * AssetsItemBrand
  *
  * @ORM\Table("assets_brand")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\TallyBundle\Repository\BrandRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\BrandRepository")
  */
 class Brand
 {

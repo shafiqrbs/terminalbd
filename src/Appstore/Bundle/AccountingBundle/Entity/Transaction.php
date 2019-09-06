@@ -75,21 +75,21 @@ class Transaction
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="decimal" , nullable = true)
+     * @ORM\Column(name="amount", type="float" , nullable = true)
      */
     private $amount = 0 ;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="debit", type="decimal" , nullable = true)
+     * @ORM\Column(name="debit", type="float" , nullable = true)
      */
     private $debit = 0 ;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="credit", type="decimal" , nullable = true)
+     * @ORM\Column(name="credit", type="float" , nullable = true)
      */
     private $credit = 0 ;
 
