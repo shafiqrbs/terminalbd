@@ -2,9 +2,6 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
-use Appstore\Bundle\configBundle\Entity\Purchase;
-use Appstore\Bundle\configBundle\Entity\PurchaseItem;
-use Appstore\Bundle\configBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\HotelBundle\Entity\Category;
@@ -687,5 +684,7 @@ class ItemRepository extends EntityRepository
         $qr = $q->execute();
 
     }
+
+
 
 }

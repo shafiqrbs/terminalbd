@@ -207,6 +207,7 @@ class ItemController extends Controller
             'attr' => array(
                 'class' => 'action',
                 'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
             )
         ));
         return $form;
@@ -221,6 +222,8 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
+        $file = $request->files->all();
+
         $entity = $em->getRepository('EcommerceBundle:Item')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
@@ -230,10 +233,20 @@ class ItemController extends Controller
 
         if ($editForm->isValid()) {
 
-            if($entity->upload() && !empty($entity->getFile())){
+           /* if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
+            }*/
+
+            $img = $file['item']['file'];
+
+            $fileName = $img->getClientOriginalName();
+            $imgName =  uniqid(). '.' .$fileName;
+            $path = $entity->getUploadDir().$imgName;
+            if(!file_exists($entity->getUploadDir())){
+                mkdir($entity->getUploadDir(), 0777, true);
             }
-            $entity->upload();
+            $this->get('helper.imageresizer')->resizeImage(512,$path,$img);
+            $entity->setPath($imgName);
             $em->flush();
              $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

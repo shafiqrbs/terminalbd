@@ -120,6 +120,27 @@ class TemplateWidgetController extends Controller
         ));
     }
 
+    public function memberRegistrationAction(GlobalOption $globalOption)
+    {
+        $detect = new MobileDetect();
+        if( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'ecommerce') {
+            $template = 'Template/Mobile/Widget';
+        }elseif( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'website') {
+            $template = 'Template/Mobile/Widget';
+        }elseif( $detect->isMobile() || $detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
+            $template = 'Template/Mobile/Medicine/EcommerceWidget';
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'website'){
+            $template = 'Template/Desktop/Widget';
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'ecommerce'){
+            $template = 'Template/Desktop/Widget';
+        }elseif( !$detect->isMobile() || !$detect->isTablet() and $globalOption->getDomainType() == 'medicine'){
+            $template = 'Template/Desktop/Medicine/EcommerceWidget';
+        }
+        return $this->render('@Frontend/'.$template.'/memberRegister.html.twig', array(
+            'globalOption'             => $globalOption,
+        ));
+    }
+
     public function sidebarAction(GlobalOption $globalOption,Request $request)
     {
 

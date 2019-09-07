@@ -643,7 +643,7 @@ class Item
      *
      * @param Item $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile($file = null)
     {
         $this->file = $file;
     }
@@ -688,7 +688,7 @@ class Item
         return __DIR__.'/../../../../../web/'.$this->getUploadDir();
     }
 
-    protected function getUploadDir()
+    public function getUploadDir()
     {
         return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/item/';
     }
@@ -716,6 +716,15 @@ class Item
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
     }
 
     function deleteImageDirectory()

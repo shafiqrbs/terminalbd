@@ -67,11 +67,20 @@ $(document).on( "click", ".emailSender", function(e){
         $('#loginModal').show('toggle');
 
     });
+
+    $('.login-preview').click(function () {
+
+        $('#registerModal').hide();
+        $('#forgetModal').hide();
+        $('#cart-details').hide();
+        $('#loginModal').show('toggle');
+
+    });
+
     $('.register-btn').click(function () {
 
         $('#loginModal').hide();
-        $('#forgetModal').hide();
-        $('#cart-details').hide();
+        $('#member-register-btn').hide();
         $('#registerModal').show('toggle');
     });
 
@@ -79,16 +88,15 @@ $(document).on( "click", ".emailSender", function(e){
 
         $('#loginModal').hide();
         $('#registerModal').hide();
-        $('#cart-details').hide();
+        $('#member-register-btn').hide();
         $('#forgetModal').show('toggle');
     });
 
-    $('.cart-preview').click(function () {
+    $('.member-register-btn').click(function () {
 
         $('#loginModal').hide();
         $('#registerModal').hide();
-        $('#forgetModal').hide();
-        $('#cart-details').show('toggle');
+        $('#member-register-btn').show('toggle');
     });
 
    

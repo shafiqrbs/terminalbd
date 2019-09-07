@@ -65,7 +65,7 @@
                                         <div data-provides="fileupload" class="fileupload fileupload-new">
                                             <div  class="fileupload-new thumbnail">
                                                 {% if(entity.webPath) %}
-                                                    <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(250,200) }}">
+                                                    <img style="width:300px;height: 250px" class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
                                                 {% else %}
                                                     <img alt="" src="http://www.placehold.it/250x200/EFEFEF/AAAAAA&amp;text=no+image">
                                                 {% endif %}

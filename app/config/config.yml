@@ -66,6 +66,9 @@ services:
         tags:
             - { name: twig.extension }
 
+    helper.imageresizer:
+        class: Setting\Bundle\ToolBundle\Service\ImageResizer
+
 fos_comment:
     db_driver: orm
     class:

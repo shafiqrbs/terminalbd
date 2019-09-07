@@ -53,7 +53,7 @@ class ProductImageType extends AbstractType
                 'required' => true,
                 'constraints' =>array(
                     new File(array(
-                        'maxSize' => '1M',
+                        'maxSize' => '5M',
                         'mimeTypes' => array(
                             'image/png',
                             'image/jpg',

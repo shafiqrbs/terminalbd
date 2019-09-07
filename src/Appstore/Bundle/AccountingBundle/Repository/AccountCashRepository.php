@@ -42,9 +42,9 @@ class AccountCashRepository extends EntityRepository
             $date = new \DateTime();
         }
         $date->add(\DateInterval::createFromDateString('yesterday'));
-        $tillDate = $date->format('Y-m-d 23:59:59');
-        $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
-        $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
+        $tillDate           = $date->format('Y-m-d 23:59:59');
+        $accountBank        =    isset($data['accountBank'])? $data['accountBank'] :'';
+        $accountMobileBank  =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
