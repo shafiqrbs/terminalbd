@@ -790,8 +790,6 @@ class DpsInvoice
         return $this->dpsTreatmentPlans;
     }
 
-
-
     /**
      * @return bool
      */

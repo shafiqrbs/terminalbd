@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Entity;
+namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Doctrine\ORM\Mapping as ORM;

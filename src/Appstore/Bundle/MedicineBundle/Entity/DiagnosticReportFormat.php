@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Entity;
+namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;

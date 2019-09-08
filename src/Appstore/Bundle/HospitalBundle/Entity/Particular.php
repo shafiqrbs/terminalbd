@@ -65,7 +65,7 @@ class Particular
     private $serviceGroup;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="hmsParticulars" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", inversedBy="hmsParticulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $diagnosticReport;
