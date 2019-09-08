@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport;
+use Appstore\Bundle\HospitalBundle\Entity\DiagnosticReport;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Core\UserBundle\Entity\User;
@@ -63,6 +63,12 @@ class Particular
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $serviceGroup;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="hmsParticulars" )
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $diagnosticReport;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
@@ -1311,6 +1317,22 @@ class Particular
     public function setIsDelete($isDelete)
     {
         $this->isDelete = $isDelete;
+    }
+
+    /**
+     * @return DiagnosticReport
+     */
+    public function getDiagnosticReport()
+    {
+        return $this->diagnosticReport;
+    }
+
+    /**
+     * @param DiagnosticReport $diagnosticReport
+     */
+    public function setDiagnosticReport($diagnosticReport)
+    {
+        $this->diagnosticReport = $diagnosticReport;
     }
 
     /**
