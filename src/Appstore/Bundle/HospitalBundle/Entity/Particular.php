@@ -1314,22 +1314,6 @@ class Particular
     }
 
     /**
-     * @return DiagnosticReport
-     */
-    public function getDiagnosticReport()
-    {
-        return $this->diagnosticReport;
-    }
-
-    /**
-     * @param DiagnosticReport $diagnosticReport
-     */
-    public function setDiagnosticReport($diagnosticReport)
-    {
-        $this->diagnosticReport = $diagnosticReport;
-    }
-
-    /**
      * @return HmsInvoiceTemporaryParticular
      */
     public function getHmsInvoiceTemporaryParticular()
