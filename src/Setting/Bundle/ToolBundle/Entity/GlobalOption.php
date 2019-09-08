@@ -30,6 +30,7 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
+use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\TallyBundle\Entity\Category;
@@ -401,6 +402,11 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Attendance", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $attendance;
+
+/**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\OfficeConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $officeConfig;
 
 
     /**
@@ -2110,6 +2116,14 @@ class GlobalOption
     public function getAssetsConfig()
     {
         return $this->assetsConfig;
+    }
+
+    /**
+     * @return OfficeConfig
+     */
+    public function getOfficeConfig()
+    {
+        return $this->officeConfig;
     }
 
 

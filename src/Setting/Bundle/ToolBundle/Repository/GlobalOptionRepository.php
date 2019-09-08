@@ -15,6 +15,7 @@ use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -372,12 +373,21 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
+
         $assetsConfig = $this->_em->getRepository('AssetsBundle:AssetsConfig')->findOneBy(array('globalOption' => $globalOption));
         if(empty($assetsConfig)){
             $config = new AssetsConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
+
+        $officeConfig = $this->_em->getRepository('AssetsBundle:OfficeConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($officeConfig)){
+            $config = new OfficeConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+
         $this->_em->flush();
 
     }
@@ -448,6 +458,14 @@ class GlobalOptionRepository extends EntityRepository
         $ecommerce = new EcommerceConfig();
         $ecommerce->setGlobalOption($globalOption);
         $em->persist($ecommerce);
+
+        $config = new AssetsConfig();
+        $config->setGlobalOption($globalOption);
+        $this->_em->persist($config);
+
+        $config = new OfficeConfig();
+        $config->setGlobalOption($globalOption);
+        $this->_em->persist($config);
 
         $module = $this->_em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'page'));
         $about = new Page();

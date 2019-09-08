@@ -8,10 +8,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * BusinessParticular
  *
- * @ORM\Table( name = "ticket_form")
+ * @ORM\Table( name = "ticket_builder")
  * @ORM\Entity(repositoryClass="")
  */
-class TicketForm
+class TicketBuilder
 {
     /**
      * @var integer

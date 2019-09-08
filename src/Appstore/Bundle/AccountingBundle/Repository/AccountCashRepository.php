@@ -182,21 +182,20 @@ class AccountCashRepository extends EntityRepository
         $transactionBankCash = [];
         $openingBalances = [];
         foreach($result as $row) {
-            $transactionBankCash[$row['accountId']]     = $this->transactionBankCash($row['accountId'],$data);
-            $openingBalances[$row['accountId']]         = $this->openingBalance($user,[2],['accountBank'=> $row['accountId']]);
+            $data['accountBank'] = $row['accountId'];
+            $transactionBankCash[$row['accountId']]     = $this->transactionBankCash($globalOption->getId(),$data);
+            $openingBalances[$row['accountId']]         = $this->openingBalance($user,array(2),$data);
         }
         $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionBankCash' => $transactionBankCash];
         return $arrs;
     }
 
-    public function transactionBankCash($bank,$data)
+    public function transactionBankCash($option,$data)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.accountBank','a');
-      //  $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
-        $qb->where("a.id = :bank");
-        $qb->setParameter('bank', $bank);
+        $qb->where("e.globalOption = :option");
+        $qb->setParameter('option', $option);
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
@@ -211,25 +210,25 @@ class AccountCashRepository extends EntityRepository
         $qb->from('AccountingBundle:AccountMobileBank','accountMobileBank');
         $qb->select('accountMobileBank.id AS accountId , accountMobileBank.name AS mobileBankName');
         $qb->where("accountMobileBank.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
+        $qb->setParameter('globalOption', $globalOption->getId());
         $result = $qb->getQuery()->getArrayResult();
         $transactionMobileCash = [];
         $openingBalances = [];
         foreach($result as $row) {
-            $transactionMobileCash[$row['accountId']]     = $this->transactionMobileCash($row['accountId'],$data);
-            $openingBalances[$row['accountId']] = $this->openingBalance($user,array(3),array('accountMobileBank'=> $row['accountId']));
+            $data['accountMobileBank'] = $row['accountId'];
+            $transactionMobileCash[$row['accountId']]     = $this->transactionMobileCash( $globalOption->getId(),$data);
+            $openingBalances[$row['accountId']] = $this->openingBalance($user,array(3),$data);
         }
         $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionMobileCash' => $transactionMobileCash];
         return $arrs;
     }
 
-    public function transactionMobileCash($mobile,$data)
+    public function transactionMobileCash($option,$data)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.accountMobileBank','a');
         $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
-        $qb->where("a.id = :mobile");
-        $qb->setParameter('mobile', $mobile);
+        $qb->where("e.globalOption = :option");
+        $qb->setParameter('option', $option);
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
