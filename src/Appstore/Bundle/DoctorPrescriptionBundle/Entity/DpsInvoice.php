@@ -52,6 +52,17 @@ class DpsInvoice
      **/
     private  $invoiceParticulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe", mappedBy="dpsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private  $medicineDoctorPrescribes;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", inversedBy="dpsInvoice" , cascade={"remove"} )
+     **/
+    private  $investigations;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="dpsInvoice" , cascade={"remove"} )

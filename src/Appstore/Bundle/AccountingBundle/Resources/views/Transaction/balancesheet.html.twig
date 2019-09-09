@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Account of transaction overview
+                    Account of Balance Sheet
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,11 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('account_transaction') }}">Account of transaction overview</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="javascript:">Account of transaction overview lists</a></li>
+                    <li><a href="javascript:"> Account of Balance Sheet</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -30,15 +26,12 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Assets</div>
                     </div>
-
                     <div class="portlet-body form">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
@@ -115,7 +108,7 @@
                             <div class="clearfix"></div>
                             <div class="form-actions portlet box yellow">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Profit & Loss</div>
+                                    <div class="caption"><i class="icon-reorder"></i> Profit & Loss</div>
                                 </div>
                             </div>
                             <div class="clearfix"><br/></div>
@@ -152,7 +145,6 @@
                                 </tbody>
                             </table>
                             <div class="clearfix"><br/></div>
-
                         </div>
                     </div>
                 </div>

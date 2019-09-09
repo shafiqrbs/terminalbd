@@ -15,4 +15,8 @@ api_portal_app_details:
     path:     /app-details
     defaults: { _controller: BinduBundle:ApiPortal:appDetails }
 
+api_portal_app_customer:
+    path:     /app-customer
+    defaults: { _controller: BinduBundle:ApiPortal:appWiseCustomer }
+
 

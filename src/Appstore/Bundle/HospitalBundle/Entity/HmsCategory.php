@@ -30,7 +30,15 @@ class HmsCategory
      **/
     private  $particulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", mappedBy="category" )
+     **/
+    private  $diagnosticReportCategories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport", mappedBy="department" )
+     **/
+    private  $diagnosticReportDepartments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="department" )

@@ -104,6 +104,24 @@ class ApiPortalController extends Controller
         return $response;
 
     }
+    public function appWiseCustomerAction(Request $request)
+    {
+
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        $id = $_REQUEST['id'];
+        if ($request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            $data =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->apiAppDomain($id);
+        }else{
+            return new Response('Unauthorized access.', 401);
+        }
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($data));
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+
+    }
 
 
 }

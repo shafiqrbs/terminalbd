@@ -1,11 +1,11 @@
 function AccountingApproveProcess(){}
 
-$('.horizontal-form').submit(function(){
-    $("button[type='submit']", this)
-        .html("Please Wait...")
-        .attr('disabled', 'disabled');
-    return true;
-});
+    $('.horizontal-form').submit(function(){
+        $("button[type='submit']", this)
+            .html("Please Wait...")
+            .attr('disabled', 'disabled');
+        return true;
+    });
 
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",
@@ -28,6 +28,7 @@ $('.horizontal-form').submit(function(){
     $(document).on("click", ".editable-submit", function() {
         setTimeout(pageReload, 1000);
     });
+
     function pageReload() {
         location.reload();
     }
@@ -66,9 +67,7 @@ $('.horizontal-form').submit(function(){
     });
 
     $(".select2User").select2({
-
         ajax: {
-
             url: Routing.generate('domain_user_search'),
             dataType: 'json',
             delay: 250,
@@ -261,7 +260,7 @@ $('.horizontal-form').submit(function(){
     minimumInputLength: 1
 });
 
-$(".select2Customer").select2({
+    $(".select2Customer").select2({
 
     ajax: {
 
@@ -384,45 +383,44 @@ $(".select2Customer").select2({
         minimumInputLength: 1
     });
 
-var count = 0;
-$('.addmore').click(function(){
+    var count = 0;
+    $('.addmore').click(function(){
 
-    var $el = $(this);
-    var $cloneBlock = $('#clone-block');
-    var $clone = $cloneBlock.find('.clone:eq(0)').clone();
-    $clone.find('[id]').each(function(){this.id+='someotherpart'});
-    $clone.find(':text,textarea' ).val("");
-    $clone.attr('id', "added"+(++count));
-    $clone.find('.remove').removeClass('hidden');
-    $cloneBlock.append($clone);
-    $('.numeric').numeric();
-});
+        var $el = $(this);
+        var $cloneBlock = $('#clone-block');
+        var $clone = $cloneBlock.find('.clone:eq(0)').clone();
+        $clone.find('[id]').each(function(){this.id+='someotherpart'});
+        $clone.find(':text,textarea' ).val("");
+        $clone.attr('id', "added"+(++count));
+        $clone.find('.remove').removeClass('hidden');
+        $cloneBlock.append($clone);
+        $('.numeric').numeric();
+    });
 
-$('#clone-block').on('click', '.remove', function(){
-    $(this).closest('.clone').remove();
-});
+    $('#clone-block').on('click', '.remove', function(){
+        $(this).closest('.clone').remove();
+    });
 
-$('.trash').on("click", ".remove", function() {
+    $('.trash').on("click", ".remove", function() {
 
-    var url = $(this).attr('data-url');
-    var id = $(this).attr("id");
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            if ('success' == response) {
-                location.reload();
-            }
-        },
-    })
-});
+        var url = $(this).attr('data-url');
+        var id = $(this).attr("id");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                if ('success' == response) {
+                    location.reload();
+                }
+            },
+        })
+    });
 
-$('.amount').on('click', function(event) {
-    $(this).val('');
-});
+    $('.amount').on('click', function(event) {
+        $(this).val('');
+    });
 
-
-$(document).on('keyup', ".amount", function() {
+    $(document).on('keyup', ".amount", function() {
     var sum = 0;
     $(".amount").each(function(){
         sum += +parseFloat($(this).val());

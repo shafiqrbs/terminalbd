@@ -404,7 +404,7 @@ class GlobalOption
     protected $attendance;
 
 /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\OfficeConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\OfficeBundle\Entity\OfficeConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $officeConfig;
 

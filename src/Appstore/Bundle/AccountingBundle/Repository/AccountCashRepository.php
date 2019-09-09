@@ -255,7 +255,7 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-	public function cashReceivePayment(User $user,$data = '')
+	public function cashReceivePayment(User $user , $data = '')
 	{
 
 		$globalOption = $user->getGlobalOption();
