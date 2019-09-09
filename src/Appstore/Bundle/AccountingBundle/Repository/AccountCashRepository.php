@@ -312,19 +312,16 @@ class AccountCashRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.credit > 0");
         $start = date('Y-m-d 00:00:00',strtotime($date));
-        $qb->andWhere("e.updated >= :startDate");
-        $qb->setParameter('startDate', $start);
+        $qb->andWhere("e.updated >= :startDate")->setParameter('startDate', $start);
         $end = date('Y-m-d 23:59:59',strtotime($date));
-        $qb->andWhere("e.updated <= :endDate");
-        $qb->setParameter('endDate',$end);
+        $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$end);
         $qb->andWhere("e.credit > 0");
         $qb->andWhere("t.id IN(:transactionMethod)");
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $qb->andWhere("e.processHead IN(:processHeads)");
         $qb->setParameter('processHeads',array_values($processHeads));
-        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.processHead','ASC');
-        $result = $qb->getQuery();
+        $result = $qb->getQuery()->getResult();
         return $result;
 
     }

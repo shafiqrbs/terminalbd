@@ -50,7 +50,7 @@
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="date" name="date"  class="span11 m-wrap dateCalendar" value="{% if searchForm.date is defined %}{{ searchForm.date }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.date is defined %}{{ searchForm.date }}{% else %} Date{% endif %}  ">
+                                                <input type="text" id="date" name="date"  class="span11 m-wrap dateCalendar" value="{% if searchForm.date is defined and searchForm.date is not empty %}{{ searchForm.date }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.date is defined %}{{ searchForm.date }}{% else %} Date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -76,7 +76,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+
+                                {% set cash = 0 %}
+                                {% set bank = 0 %}
+                                {% set mobile = 0 %}
+
                                 {% for entity in entities %}
+
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.processHead }}</td>
                                         <td class="numeric" >
@@ -102,8 +108,18 @@
                                         <td class="numeric" >{% if entity.credit > 0 and entity.transactionMethod.slug == 'bank'  %}{{ entity.credit|number_format }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.credit > 0 and entity.transactionMethod.slug == 'mobile'  %}{{ entity.credit|number_format }}{% endif %}</td>
                                     </tr>
+                                    {% if entity.credit > 0 and entity.transactionMethod.slug == 'cash'  %}
+                                        {% set cash = cash + entity.credit %}
+                                    {% elseif entity.credit > 0 and entity.transactionMethod.slug == 'bankk'  %}
+                                        {% set bank = bank + entity.credit %}
+                                    {% elseif entity.credit > 0 and entity.transactionMethod.slug == 'mobile'  %}
+                                        {% set mobile = mobile + entity.credit %}
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
+                                <tfoot>
+                                <tre><th>Grand Total</th><th></th><th>{{ cash|number_format }}</th><th>{{ bank|number_format }}</th><th>{{ mobile|number_format }}</th></tre>
+                                </tfoot>
                             </table>
                             <div class="pagination pull-center"  >
                                 {{ knp_pagination_render(entities) }}

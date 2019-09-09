@@ -98,8 +98,7 @@
                                     {% set totalCredit =  0   %}
                                     {% for val in  creditStatement[key] %}
                                     {% set total = totalCredit + val.amount|abs %}
-
-                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.accountHeadId }}  {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
+                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
                                         {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
                                             {% for sub in subHeads %}
                                                 {% if sub.parentId == val.accountHeadId %}
@@ -113,6 +112,47 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
+                            <div class="clearfix"></div>
+                            <div class="form-actions portlet box yellow">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Profit & Loss</div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br/></div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <th class="numeric" >Parent Head</th>
+                                    <th class="numeric" >Account Head</th>
+                                    <th class="numeric" >Sub Head</th>
+                                    <th class="numeric" >Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for key, entity in creditStatement %}
+                                    <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
+                                    {% set totalDebit = 'total'~key  %}
+                                    {% set totalCredit = 'total'~key  %}
+                                    {% set totalDebit =  0   %}
+                                    {% set totalCredit =  0   %}
+                                    {% for val in  creditStatement[key] %}
+                                        {% set total = totalCredit + val.amount|abs %}
+                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
+                                        {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
+                                            {% for sub in subHeads %}
+                                                {% if sub.parentId == val.accountHeadId %}
+                                                    <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|abs|number_format }}</td></tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    {% endfor %}
+                                    <tr><th colspan="3">Total</th><th> {{ totalCredit }}</th></tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="clearfix"><br/></div>
+
                         </div>
                     </div>
                 </div>
@@ -121,25 +161,7 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@AccountingBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@AccountingBundle/Resources/public/js/pettycash.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-{% block documentready %}
-    {{ parent() }}
-    $(".editable").editable();
-    AccountingPettyCashPage();
-{% endblock %}
+
 
 
 
