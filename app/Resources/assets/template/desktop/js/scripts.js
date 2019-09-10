@@ -422,7 +422,9 @@ $(document).ready(function(){
                 data        : new FormData(form),
                 processData : false,
                 contentType : false,
-                success: function(response){},
+                success: function(response){
+                    window.open(response+"#modal","_self");
+                },
                 complete: function(response){
 
                 }

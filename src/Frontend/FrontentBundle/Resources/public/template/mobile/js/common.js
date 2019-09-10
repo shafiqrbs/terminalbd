@@ -59,7 +59,7 @@ $(document).on( "click", ".emailSender", function(e){
         $( "#viewed-item" ).slideToggle( "slow" );
     });
 
-    $('.login-preview').click(function () {
+    $('.cart-preview').click(function () {
 
         $('#registerModal').hide();
         $('#forgetModal').hide();
@@ -71,8 +71,8 @@ $(document).on( "click", ".emailSender", function(e){
     $('.login-preview').click(function () {
 
         $('#registerModal').hide();
-        $('#forgetModal').hide();
         $('#cart-details').hide();
+        $('#member-register-modal').hide();
         $('#loginModal').show('toggle');
 
     });
@@ -80,7 +80,8 @@ $(document).on( "click", ".emailSender", function(e){
     $('.register-btn').click(function () {
 
         $('#loginModal').hide();
-        $('#member-register-btn').hide();
+        $('#cart-details').hide();
+        $('#member-register-modal').hide();
         $('#registerModal').show('toggle');
     });
 
@@ -88,15 +89,17 @@ $(document).on( "click", ".emailSender", function(e){
 
         $('#loginModal').hide();
         $('#registerModal').hide();
-        $('#member-register-btn').hide();
+        $('#cart-details').hide();
+        $('#member-register-modal').hide();
         $('#forgetModal').show('toggle');
     });
 
     $('.member-register-btn').click(function () {
 
         $('#loginModal').hide();
+        $('#cart-details').hide();
         $('#registerModal').hide();
-        $('#member-register-btn').show('toggle');
+        $('#member-register-modal').show('toggle');
     });
 
    

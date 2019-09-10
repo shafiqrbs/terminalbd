@@ -69,13 +69,17 @@
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </div>
                     <div class="menu-notify box-link">
-                        <div class="text-left">{{ app.user }}</div>
+                        <div class="text-center">{{ app.user }}</div>
                         <ul class="social-links">
-                            <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
+                          {#  <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>#}
                             {% if globalOption.templateCustomize.mobileLogin == 1 %}
-                            <li><a href="javascript:" class="member-register-btn"><i class="fa fa-sign-in"></i></a></li>
+                                <li><a href="javascript:" class="member-register-btn"><i class="fa fa-sign-in"></i></a></li>
                             {% endif %}
-                            <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                            {% if app.user %}
+                                <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out"></i></a></li>
+                            {% else %}
+                                <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div id="cart-details">
@@ -115,11 +119,15 @@
                         </div>
                     </div>
                     <div id="login-signip">
+                        {% if globalOption.templateCustomize.mobileLogin == 1 %}
                         {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
+                        {% endif %}
                     </div>
-                        <div id="member-register-btn">
+                    {% if globalOption.templateCustomize.registrationForm == 1 %}
+                        <div id="member-register-modal" style="display: none">
                             {% render controller("FrontendBundle:TemplateWidget:memberRegistration",{'globalOption':globalOption.id}) %}
                         </div>
+                    {% endif %}
                 </div>
             {% endif %}
             <div class="w3agile">
@@ -384,6 +392,42 @@
     .panel-default>.panel-heading+.panel-collapse>.panel-body{
         padding:15px !important;
         text-align: justify;
+    }
+
+    #registration-title{
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: green;
+        font-weight: bold;
+     }
+
+    #question{
+        float: left;
+        text-align: left;
+        font-size: 16px;
+        color: #ff2515;
+        line-height: 32px;
+        font-weight: bold;
+        padding-right: 5px;
+
+    }
+    #ans {
+        border: 2px solid #ff2515;
+        width: 70px;
+        height: 30px;
+        text-align: center;
+        font-size: 16px;
+        color: #000;
+    }
+    #success, #fail{
+        display: none;
+    }
+
+    #verify, #success, #fail{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: left;
     }
 
 </style>

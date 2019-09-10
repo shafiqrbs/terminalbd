@@ -318,7 +318,8 @@ class WebServiceCustomerController extends Controller
             $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);
             /*$dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));*/
-            return new Response('success');
+            $redirect = $this->generateUrl('domain_customer_homepage',array('shop'=>$globalOption->getSlug()));
+            return new Response($redirect);
         }
         return new Response('failed');
 

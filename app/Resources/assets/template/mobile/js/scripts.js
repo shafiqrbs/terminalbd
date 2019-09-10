@@ -366,6 +366,107 @@ $(document).ready(function(){
             }
         }
     });
+
+    var total;
+    function getRandom(){return Math.ceil(Math.random()* 20);}
+    function createSum(){
+        var randomNum1 = getRandom(),
+            randomNum2 = getRandom();
+        total =randomNum1 + randomNum2;
+        $( "#question" ).text( randomNum1 + " + " + randomNum2 + "=" );
+        $("#ans").val('');
+        checkInput();
+    }
+
+    function checkInput(){
+        var input = $("#ans").val(),
+            slideSpeed = 200,
+            hasInput = !!input,
+            valid = hasInput && input == total;
+        $('#verify').toggle(!hasInput);
+        $('#registrationSubmitForm').prop('disabled', !valid);
+        $('#success').toggle(valid);
+        $('#fail').toggle(hasInput && !valid);
+    }
+
+    createSum();
+    // On "reset button" click, generate new random sum
+    //   $('#registrationSubmitForm').click(createSum);
+    // On user input, check value
+    $( "#ans" ).keyup(checkInput);
+
+    $(document).on( "change", ".userMobile", function( e ) {
+
+        var mobile = $(this).val();
+        var url = $(this).attr("data-action");
+        $.get(url,{ mobile:mobile} ).done(function(response) {
+            $("#mobile-validate").html(response);
+        }).always(function() {
+            $('#mobile-confirm').notifyModal({
+                duration : 10000,
+                placement : 'center',
+                overlay : true,
+                type : 'notify',
+                icon : false
+            });
+        });
+
+    });
+
+
+    $("#registrationForm").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_email": {
+                required: false,
+                remote:'/checking-member-email'
+            },
+            "registration_mobile": {
+                required: true,
+                remote:'/checking-member'
+            },
+            "registration_facebookId": {required: false},
+            "registration_address": {required: false}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_mobile":{
+                required: "Enter valid mobile no",
+                remote: "This mobile no is already registered. Please try to another no."
+            },
+            "registration_email":{
+                remote: "This email is already registered. Please try to another email."
+            },
+
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_mobile": {placement:'top',html:true},
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    window.open(response+"#modal","_self");
+                },
+                complete: function(response){
+
+                }
+            });
+        }
+    });
+
 });
 
 

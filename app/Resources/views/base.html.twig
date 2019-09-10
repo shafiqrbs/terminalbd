@@ -77,6 +77,9 @@
         'assets/plugins/jquery-ui/jquery-ui-1.12.1.min.css'
         'assets/plugins/jquery-tree/src/css/jquery.tree.css'
         'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+        'assets/plugins/remodal/css/remodal.css'
+        'assets/plugins/remodal/css/remodal-default-theme.css'
+        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
         'assets/plugins/calculator/SimpleCalculadorajQuery.css'
         'assets/plugins/pop-modal/popModal.min.css'
         'assets/plugins/jquery-checkradios/css/jquery.checkradios.css'
@@ -106,32 +109,32 @@
 <div class="container-fluid">
 <!-- BEGIN LOGO -->
 <a class="brand" href="{{ path('home') }}" style="margin-left:0">
-    {% if app.user.globaloption is not empty and app.user.globaloption is defined %}{{ app.user.globaloption.name }}{% endif %}
+    {% if app.user.globaloption is not empty and app.user.globaloption is defined %}
+        {{ app.user.globaloption.name }}
+    {% endif %}
 </a>
 <!-- END LOGO -->
 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-    {% image 'assets//img/menu-toggler.png'
-    filter='' output='/img/menu-toggler.png' %}
-    <img src="{{ asset_url }}" alt="" />
-    {% endimage %}
-</a>
+    <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+        {% image 'assets//img/menu-toggler.png'
+        filter='' output='/img/menu-toggler.png' %}
+        <img src="{{ asset_url }}" alt="" />
+        {% endimage %}
+    </a>
+    {% if is_granted('ROLE_CUSTOMER') %}
+        {{ include('customer/topbar.html.twig')}}
+    {% else %}
+        {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
+        {{ include('SettingToolBundle:Widget:common.html.twig')}}
+    {% endif %}
 
    {# <div class="navbar hor-menu hidden-phone hidden-tablet">
         <div class="navbar-inner">
             {{ knp_menu_render('SettingAppearanceBundle:HorizontalBuilder:mainMenu', {'template':'SettingAppearanceBundle:Menu:horizontal-menu.html.twig','currentClass': 'active'}) }}
         </div>
     </div>#}
-
-    {% if is_granted('ROLE_CUSTOMER') %}
-        {{ include('customer/topbar.html.twig')}}
-    {% else %}
-       {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
-        {{ include('SettingToolBundle:Widget:common.html.twig')}}
-    {% endif %}
 <!-- END RESPONSIVE MENU TOGGLER -->
 <!-- BEGIN TOP NAVIGATION MENU -->
-
 <!-- END TOP NAVIGATION MENU -->
 </div>
 {#
@@ -311,7 +314,6 @@
         <div class="dialogModal_header"></div>
         <div class="dialogModal_content"></div>
     </div>
-
 </div>
 
 {% javascripts
@@ -374,6 +376,7 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/plugins/jquery.confirm.min.js'
+'assets/plugins/remodal/js/remodal.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/plugins/plupload/js/plupload.full.js'
 'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
