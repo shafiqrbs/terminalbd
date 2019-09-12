@@ -67,10 +67,12 @@ class InvoiceController extends Controller
         $entity = new BusinessInvoice();
         $editForm = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('service','virtual'));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('virtual'));
+        $outstanding = 0;
         return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $this->getUser()->getGlobalOption(),
             'entity' => $entity,
+            'outstanding' => $outstanding,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));

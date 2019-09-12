@@ -48,7 +48,7 @@ class CustomerInvoiceType extends AbstractType
                 )
             ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add PRX ID','data-original-title'=>'Add PRX ID','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
@@ -100,7 +100,7 @@ class CustomerInvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-	        ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')))
+	        ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter remarks')))
 
         ;
     }

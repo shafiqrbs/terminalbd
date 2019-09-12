@@ -16,7 +16,7 @@
     {% set arras = ['ecommerce','medicine'] %}
     {% if globalOption.domainType is not empty and globalOption.domainType == 'website' %}
         {% if globalOption.siteSetting.modules %}
-                <li >
+               {# <li >
                     <a href="javascript:">
                         <i class=" icon-truck"></i>
                         <span class="title">Content</span>
@@ -29,7 +29,7 @@
                         {% endif %}
                         {% endfor %}
                     </ul>
-                </li>
+                </li>#}
             <li >
                 <a href="{{ path('customerweb_profile',{'shop':globalOption.slug}) }}">
                     <i class="icon-user"></i>

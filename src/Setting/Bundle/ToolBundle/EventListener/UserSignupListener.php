@@ -26,7 +26,6 @@ class UserSignupListener extends BaseSmsAwareListener
     public function onUserSignup(UserSignup $event)
     {
         $this->sendSms($event);
-        //$this->sendEmail($event);
     }
 
     private function sendSms($event)
@@ -35,9 +34,7 @@ class UserSignupListener extends BaseSmsAwareListener
         /**
          * @var UserSignup $event
          */
-
         $post = $event->getUser();
-
         $msg = "Your account has been created, Login user your mobile no and  password *148148#";
         $mobile = "88".$post->getProfile()->getMobile();
         $this->gateway->send($msg, $mobile);

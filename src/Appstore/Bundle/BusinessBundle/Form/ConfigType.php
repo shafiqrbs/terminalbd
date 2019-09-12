@@ -42,6 +42,7 @@ class ConfigType extends AbstractType
 			        'event' => 'Event',
 			        'bricks' => 'Bricks',
 			        'sawmill' => 'Sawmill',
+			        'student-association' => 'Student Association',
 		        ),
 	        ))
 	        ->add('stockFormat',

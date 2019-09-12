@@ -8,6 +8,7 @@
 
 namespace Setting\Bundle\ToolBundle\EventListener;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Setting\Bundle\ToolBundle\Event\CustomerApiSignup;
 use Setting\Bundle\ToolBundle\Event\CustomerSignup;
 use Setting\Bundle\ToolBundle\Event\UserSignup;
 use Setting\Bundle\ToolBundle\Service\EasyMailer;
@@ -27,7 +28,6 @@ class CustomerSignupListener extends BaseSmsAwareListener
     public function onCustomerSignup(CustomerSignup $event)
     {
         $this->sendSms($event);
-        //$this->sendEmail($event);
     }
 
 
@@ -40,11 +40,12 @@ class CustomerSignupListener extends BaseSmsAwareListener
 
         $post = $event->getUser();
         $option = $event->getGlobalOption()->getDomain();
-        $mobile = "88".$post->getProfile()->getMobile();
-        $msg = "Your account has been created, User name:$mobile and password:1234 . Thank you for using www.$option";
+        $mobile = "88".$post->getUsername();
+        $msg = "Your account has been created, User name:$mobile. Thank you for using www.$option";
         $this->gateway->send($msg, $mobile);
 
     }
+
 
     private function sendEmail($event)
     {

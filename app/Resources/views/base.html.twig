@@ -95,7 +95,7 @@
     'assets/css/custom.css'
     'assets/css/pages/profile.css'#}
  </head>
-<body class="page-header-fixed  page-footer-fixed page-sidebar-closed {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+<body class="page-header-fixed  page-footer-fixed  {% if is_granted('ROLE_CUSTOMER') is empty %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
 <div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
     {% image 'assets/img/ajax-modal-loading.gif'
     filter='' output='/img/ajax-modal-loading.gif' %}
@@ -273,7 +273,7 @@
 <div class="page-container row-fluid">
     {#{{ dump(app.security.token.user.roles) }}#}
     {% block navigation %}
-        <div class="page-sidebar nav-collapse collapse" >
+        <div class="page-sidebar nav-collapse" >
             <!-- BEGIN SIDEBAR MENU -->
             {% if is_granted('ROLE_CUSTOMER') %}
             {{ include('customer/sidebar.html.twig')}}

@@ -51,31 +51,9 @@
                                 <div class="span8">
                                     <div class="span12" id="particular-table">
                                         <table class="table table-bordered table-striped table-condensed table-fixed">
-                                            <tbody>
-                                            <tr>
-                                                <th class="span8">Monthly Fee</th>
-                                                <th class="span4">200</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="span1"> Start Month</th>
-                                                <th class="span8">January,2019</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="span1"> No of  Month</th>
-                                                <th class="span8"><input type="number" class="amount td-inline-input" name="quantity"  id="quantity" ></th>
-                                            </tr>
-                                             <tr>
-                                                <th class="span1"> Total Amount</th>
-                                                 {% set subTotal =0 %}
-                                                <th class="span8">{{ subTotal }}</th>
-                                            </tr>
-                                            </tbody>
-
-                                        </table>
-                                        {#<table class="table table-bordered table-striped table-condensed table-fixed">
                                             <thead>
                                             <tr>
-                                                <th class="span1">S/N</th>
+                                                <th class="span1"> S/N</th>
                                                 <th class="span8">Particular</th>
                                                 <th class="span2">Unit Price</th>
                                                 <th class="span1">Amount</th>
@@ -91,7 +69,7 @@
                                                     <td class="">{{ item.salesPrice }}</td>
                                                     <td class="">
                                                         <input type="hidden" name="itemId[]" value="{{ item.id }}" >
-                                                         <input type="number" class="amount td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice[]" value="0" > </td>
+                                                         <input type="number" class="amount td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice[]" value="{{ item.salesPrice }}" > </td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -106,7 +84,7 @@
 
 
                                             </tfoot>
-                                        </table>#}
+                                        </table>
                                         <div class="clearfix">&nbsp;</div>
                                     </div>
                                 </div>

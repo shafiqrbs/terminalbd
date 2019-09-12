@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PurchaseType extends AbstractType
 {
     /** @var  HospitalConfig */
+
     public  $option;
 
     public function __construct(GlobalOption $option)

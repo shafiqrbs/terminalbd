@@ -136,7 +136,7 @@ class BusinessConfig
     /**
      * @var string
      *
-     * @ORM\Column(name="businessModel", type="string",  nullable=true)
+     * @ORM\Column(name="businessModel", length=100, type="string",  nullable=true)
      */
     private $businessModel='general';
 

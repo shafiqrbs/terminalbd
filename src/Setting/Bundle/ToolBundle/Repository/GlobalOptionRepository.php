@@ -382,7 +382,7 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $officeConfig = $this->_em->getRepository('AssetsBundle:OfficeConfig')->findOneBy(array('globalOption' => $globalOption));
+        $officeConfig = $this->_em->getRepository('OfficeBundle:OfficeConfig')->findOneBy(array('globalOption' => $globalOption));
         if(empty($officeConfig)){
             $config = new OfficeConfig();
             $config->setGlobalOption($globalOption);

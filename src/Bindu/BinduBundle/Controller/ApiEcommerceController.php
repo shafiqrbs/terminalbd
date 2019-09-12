@@ -343,16 +343,14 @@ class ApiEcommerceController extends Controller
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
 
-            $data['user_id'] = (int) $user->getId();
-            $data['username'] = $mobile;
-            $data['fullName'] = $user->userFullName();
-            $data['email'] = $user->getEmail();
-            $data['password'] = $a;
-            $data['msg'] = "valid";
+            $returnData['user_id'] = (int) $user->getId();
+            $returnData['username'] = $user->getUsername();
+            $returnData['password'] = $a;
+            $returnData['msg'] = "valid";
 
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($returnData));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -373,7 +371,7 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
-            $this->checkApiValidation($request);
+            $setup = $this->checkApiValidation($request);
 
             $name = $data['name'];
             $mobile = $data['mobile'];
@@ -399,6 +397,7 @@ class ApiEcommerceController extends Controller
                 }
                 $user->setRoles(array('ROLE_CUSTOMER'));
                 $user->setUserGroup('customer');
+                $user->setGlobalOption($setup);
                 $user->setEnabled(1);
                 $em->persist($user);
                 $em->flush();
@@ -410,6 +409,8 @@ class ApiEcommerceController extends Controller
                 $profile->setAddress($address);
                 $em->persist($profile);
                 $em->flush();
+                $dispatcher = $this->container->get('event_dispatcher');
+           $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
 
             }else{
 
@@ -418,18 +419,16 @@ class ApiEcommerceController extends Controller
                 $this->get('fos_user.user_manager')->updateUser($user);
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+
             }
 
-            $data['user_id'] = (int) $user->getId();
-            $data['username'] = $mobile;
-            $data['fullName'] = $user->getProfile()->getName();
-            $data['email'] = $user->getEmail();
-            $data['password'] = $a;
-            $data['msg'] = "valid";
-
+            $returnData['user_id'] = (int) $user->getId();
+            $returnData['username'] = $user->getUsername();
+            $returnData['password'] = $a;
+            $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($returnData));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

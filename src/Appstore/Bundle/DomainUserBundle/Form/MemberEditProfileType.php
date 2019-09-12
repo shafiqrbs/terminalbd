@@ -74,13 +74,15 @@ class MemberEditProfileType extends AbstractType
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no','autoComplete'=>false)))
 
             ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
-             ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span6')))
+            ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span6')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
-
-            ->add('batchYear','number', array('attr'=>array('class'=>'m-wrap span8 batch-year','autocomplete'=>'off','placeholder'=>'Batch year ie: 1990,1991,2010 etc'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter batch year ie: 1990,1991,2010 etc')),
-                )
+            ->add('batchYear', 'choice', array(
+                'attr'=>array('class'=>'span8 m-wrap'),
+                'empty_value' => '---Choose a study year---',
+                'choices' => array(
+                    '1 Year' => '1 Year',
+                    '1 Years' => '2 Years',
+                ),
             ))
             ->add('profession','number', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter member occupation'),
                 'constraints' =>array(
@@ -103,7 +105,20 @@ class MemberEditProfileType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select student batch'))),
                 'empty_value' => '---Choose a Batch---',
-                'choices' => array('SSC' => 'SSC','HSC' => 'HSC','Others' => 'Others'),
+                'choices' => array(
+                    '1960-1962' => '1960-1962',
+                    '1963-1965' => '1963-1965',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                    '1960-1962' => '1960-1962',
+                ),
 
             ))
             ->add('maritalStatus', 'choice', array(
