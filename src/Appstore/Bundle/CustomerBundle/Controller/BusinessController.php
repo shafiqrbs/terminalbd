@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Form\CustomerInvoiceType;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Frontend\FrontentBundle\Service\Cart;
@@ -10,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerController extends Controller
+class BusinessController extends Controller
 {
 
 
@@ -34,36 +36,34 @@ class CustomerController extends Controller
         }else{
             $globalOption ='';
         }
-        $domainApp =  $globalOption->getMainApp();
-        if($domainApp == "business"){
-            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $globalOption->getSlug())));
-        }elseif($domainApp == "medicine") {
-            return $this->redirect($this->generateUrl('customer_medicine_dashboard', array('shop' => $globalOption->getSlug())));
+        $businessModel =  $globalOption->getBusinessConfig()->getBusinessModel();
+        if($businessModel == "student-association"){
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
+            $entity = new BusinessInvoice();
+            $editForm = $this->createCreateForm($entity);
+            $Exinvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoice($globalOption->getBusinessConfig());
+            $invoiceCheck = empty($Exinvoice) ? 'False' : "true";
+            $template =  "Student";
+            return $this->render("CustomerBundle:{$template}:dashboard.html.twig", array(
+                'user'         => $user,
+                'globalOption' => $globalOption,
+                'customer' => $customer,
+                'entity' => $entity,
+                'invoiceCheck' => $invoiceCheck,
+                'form' => $editForm->createView(),
+            ));
+        }else{
+            $template =  "Customer";
+            return $this->render("CustomerBundle:{$template}:dashboard.html.twig", array(
+                'user'         => $user,
+                'globalOption' => $globalOption,
+            ));
         }
-        return $this->render("CustomerBundle:Customer:dashboard.html.twig", array(
-            'user'         => $user,
-            'globalOption' => $globalOption,
-        ));
+
 
     }
 
-    public function newAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
-        $entity = new BusinessInvoice();
-        $editForm = $this->createCreateForm($entity);
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $outstanding = 0;
-        return $this->render("CustomerBundle:Invoice:new.html.twig", array(
-            'globalOption' => $this->getUser()->getGlobalOption(),
-            'customer' => $customer,
-            'entity' => $entity,
-            'outstanding' => $outstanding,
-            'form' => $editForm->createView(),
-        ));
 
-    }
 
     /**
      * Creates a form to edit a Invoice entity.wq
@@ -73,9 +73,9 @@ class CustomerController extends Controller
     private function createCreateForm(BusinessInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerInvoiceType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('customerweb_invoice_create', array('shop' => $globalOption->getSlug())),
+
+        $form = $this->createForm(new CustomerInvoiceType($globalOption), $entity, array(
+            'action' => $this->generateUrl('student_invoice_create', array('shop' => $globalOption->getSlug())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -97,66 +97,45 @@ class CustomerController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user));
-
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
-            var_dump($data);
-            exit;
+
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config->getBusinessConfig());
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
+            $entity->setPayment(520);
+            $entity->setDue(520);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success', "Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertCustomerInvoiceParticular($entity, $data);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentInvoiceParticular($entity);
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
-            return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $config->getSlug())));
+            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $config->getSlug())));
         }
 
     }
 
-
-
-    public function customerDomainAction()
+    public function newAction()
     {
-
-        $user = $this->getUser();
-        return $this->render('CustomerBundle:Customer:domain.html.twig', array(
-            'user' => $user,
-            'globalOption' => '',
+        $em = $this->getDoctrine()->getManager();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
+        $entity = new BusinessInvoice();
+        $editForm = $this->createCreateForm($entity);
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $outstanding = 0;
+        return $this->render("CustomerBundle:Invoice:new.html.twig", array(
+            'globalOption' => $this->getUser()->getGlobalOption(),
+            'customer' => $customer,
+            'entity' => $entity,
+            'outstanding' => $outstanding,
+            'form' => $editForm->createView(),
         ));
 
     }
-    
-    public function moduleAction(Module $module)
-    {
-
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContentList($globalOption,$module->getId());
-        $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Customer:module.html.twig', array(
-            'globalOption' => $globalOption,
-            'module' => $module,
-            'pagination' => $pagination,
-        ));
-
-    }
-    public function moduleDetailsAction()
-    {
-        $user = $this->getUser();
-        return $this->render('CustomerBundle:Customer:domain.html.twig', array(
-            'user' => $user,
-            'globalOption' => '',
-        ));
-
-    }
-
-
-
 }

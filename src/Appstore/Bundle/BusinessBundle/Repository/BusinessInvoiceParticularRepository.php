@@ -70,6 +70,62 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertStudentInvoiceParticular(BusinessInvoice $invoice)
+    {
+
+        $date = new \DateTime("now");
+        $em = $this->_em;
+        $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig'=> $invoice->getBusinessConfig(),'slug'=>'registration-fee'));
+
+        $invoiceParticular = $this->findOneBy(array('businessInvoice'=>$invoice,'businessParticular' => $particular));
+        if($invoiceParticular){
+            $entity = $invoiceParticular;
+        }else{
+            $entity = new BusinessInvoiceParticular();
+        }
+        $entity->setBusinessInvoice($invoice);
+        $entity->setBusinessParticular($particular);
+        $entity->setParticular($particular->getName());
+        $entity->setPrice($particular->getSalesPrice());
+        $entity->setQuantity(1);
+        $entity->setSubQuantity(1);
+        $entity->setTotalQuantity(1);
+        $entity->setStartDate($date);
+        $entity->setEndDate($date);
+        $entity->setSubTotal($particular->getSalesPrice());
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
+
+    public function insertStudentMonthlyParticular(BusinessInvoice $invoice, $data)
+    {
+        $em = $this->_em;
+        foreach ($data['itemId'] as $key => $value):
+            $quantity = floatval ($data['quantity'][$key] ? $data['quantity'][$key] : 1 );
+            $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(), 'slug' => $value));
+            $invoiceParticular = $this->findOneBy(array('businessInvoice' => $invoice, 'businessParticular' => $particular));
+            if ($invoiceParticular) {
+                $entity = $invoiceParticular;
+            } else {
+                $entity = new BusinessInvoiceParticular();
+            }
+            $entity->setBusinessInvoice($invoice);
+            $entity->setBusinessParticular($particular);
+          //  $entity->setParticular($particular->getName());
+            $entity->setPrice($data['salesPrice'][$key]);
+            $entity->setQuantity($quantity);
+            $entity->setSubQuantity($quantity);
+            $entity->setTotalQuantity($quantity);
+            $entity->setSubTotal($data['salesPrice'][$key] * $quantity);
+            $em->persist($entity);
+            $em->flush();
+
+        endforeach;
+
+    }
+
     public function insertCustomerInvoiceParticular(BusinessInvoice $invoice, $data)
     {
        foreach ($data['itemId'] as $key => $value):

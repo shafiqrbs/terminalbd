@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Form;
 
+use Appstore\Bundle\DomainUserBundle\Repository\CustomerRepository;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\Type\ProfileType;
 use Doctrine\ORM\EntityRepository;
@@ -22,17 +23,16 @@ class MemberEditProfileType extends AbstractType
 {
 
 
-    /** @var  GlobalOption */
-    private $globalOption;
+    /** @var $em CustomerRepository */
 
-    /** @var  LocationRepository */
-    private $location;
+    private $em;
 
 
-    function __construct(GlobalOption $globalOption, LocationRepository $location)
+
+    function __construct(CustomerRepository $em)
     {
-        $this->globalOption = $globalOption;
-        $this->location = $location;
+        $this->em = $em;
+
     }
 
 
@@ -76,15 +76,7 @@ class MemberEditProfileType extends AbstractType
             ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
             ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span6')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
-            ->add('batchYear', 'choice', array(
-                'attr'=>array('class'=>'span8 m-wrap'),
-                'empty_value' => '---Choose a study year---',
-                'choices' => array(
-                    '1 Year' => '1 Year',
-                    '1 Years' => '2 Years',
-                ),
-            ))
-            ->add('profession','number', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter member occupation'),
+            ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter member occupation'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter member occupation')),
                 )
@@ -100,27 +92,19 @@ class MemberEditProfileType extends AbstractType
                     'Other religions' => 'Other religions',
                 ),
             ))
+            ->add('batchYear', 'choice', array(
+                'attr'=>array('class'=>'span8 m-wrap'),
+                'empty_value' => '---Choose a study year---',
+                'choices' => $this->batchYearChoiceList(),
+            ))
             ->add('studentBatch', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span8'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select student batch'))),
                 'empty_value' => '---Choose a Batch---',
-                'choices' => array(
-                    '1960-1962' => '1960-1962',
-                    '1963-1965' => '1963-1965',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                    '1960-1962' => '1960-1962',
-                ),
-
+                'choices' => $this->studentBatchChoiceList(),
             ))
+
             ->add('maritalStatus', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span6'),
                 'empty_value' => '---Choose a Marital Status---',
@@ -162,15 +146,17 @@ class MemberEditProfileType extends AbstractType
         return 'manage_profile';
     }
 
-    protected function LocationChoiceList()
+    public function studentBatchChoiceList()
     {
-        return $syndicateTree = $this->location->getLocationOptionGroup();
+        return $syndicateTree = $this->em->studentBatchChoiceList();
 
     }
 
-    protected function DesignationChoiceList()
+    public function batchYearChoiceList()
     {
-        return $syndicateTree = $this->designation->getDesignationOptionGroup();
+        return $syndicateTree = $this->em->batchYearChoiceList();
 
     }
+
+
 }

@@ -175,6 +175,13 @@ class Customer
      */
     private $code;
 
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paymentMonth", type="date",  nullable=true)
+     */
+    private $paymentMonth;
+
     /**
      * @var string
      *
@@ -1571,6 +1578,22 @@ class Customer
     public function setDob($dob)
     {
         $this->dob = $dob;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPaymentMonth()
+    {
+        return $this->paymentMonth;
+    }
+
+    /**
+     * @param \DateTime $paymentMonth
+     */
+    public function setPaymentMonth($paymentMonth)
+    {
+        $this->paymentMonth = $paymentMonth;
     }
 
 

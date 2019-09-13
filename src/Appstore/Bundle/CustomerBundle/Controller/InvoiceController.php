@@ -64,16 +64,16 @@ class InvoiceController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
         $entity = new BusinessInvoice();
         $editForm = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('virtual'));
         $outstanding = 0;
         return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $this->getUser()->getGlobalOption(),
+            'customer' => $customer,
             'entity' => $entity,
             'outstanding' => $outstanding,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
 
@@ -89,8 +89,7 @@ class InvoiceController extends Controller
     private function createCreateForm(BusinessInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerInvoiceType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new CustomerInvoiceType($globalOption), $entity, array(
             'action' => $this->generateUrl('customerweb_invoice_create', array('shop' => $globalOption->getSlug())),
             'method' => 'POST',
             'attr' => array(
@@ -108,24 +107,29 @@ class InvoiceController extends Controller
     {
         $data = $request->request->all();
         $config = $this->getUser()->getGlobalOption();
-
         $user = $this->getUser()->getId();
-
         $entity = new BusinessInvoice();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user));
-        if ($form->isValid()) {
+
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config->getBusinessConfig());
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
+            $entity->setPayment($data['paymentTotal']);
+            $entity->setDue($data['paymentTotal']);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success', "Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertCustomerInvoiceParticular($entity, $data);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentMonthlyParticular($entity, $data);
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
             return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $config->getSlug())));
         }
@@ -141,8 +145,7 @@ class InvoiceController extends Controller
     private function createEditForm(BusinessInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerInvoiceType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new CustomerInvoiceType($globalOption), $entity, array(
             'action' => $this->generateUrl('customerweb_invoice_update', array('shop' => $globalOption->getSlug(),'id' =>$entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -125,6 +125,13 @@ class BusinessParticular
     private $name;
 
     /**
+     * @Gedmo\Slug(fields={"name"})
+     * @Doctrine\ORM\Mapping\Column(length=255)
+     */
+    private $slug;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="productionType", type="string", length=30,nullable = true)
@@ -306,18 +313,6 @@ class BusinessParticular
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $path;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="startDate", type="datetime", nullable = true)
-     */
-    private $startDate;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="endDate", type="datetime", nullable = true)
-     */
-    private $endDate;
 
 
     /**
@@ -1042,36 +1037,22 @@ class BusinessParticular
         $this->commission = $commission;
     }
 
+
+
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getStartDate()
+    public function getSlug()
     {
-        return $this->startDate;
+        return $this->slug;
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param string $slug
      */
-    public function setStartDate($startDate)
+    public function setSlug($slug)
     {
-        $this->startDate = $startDate;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getEndDate()
-    {
-        return $this->endDate;
-    }
-
-    /**
-     * @param \DateTime $endDate
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
+        $this->slug = $slug;
     }
 
 }

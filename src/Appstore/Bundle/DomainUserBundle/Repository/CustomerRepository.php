@@ -341,14 +341,14 @@ class CustomerRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
-        if(!empty($data))
+        if($data)
         {
-
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $customer =    isset($data['name'])? $data['name'] :'';
             $location =    isset($data['location'])? $data['location'] :'';
             $customerId =    isset($data['customerId'])? $data['customerId'] :'';
             $customerType =    isset($data['type'])? $data['type'] :'';
+            $studentBatch =    isset($data['studentBatch'])? $data['studentBatch'] :'';
 
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile LIKE :mobile");
@@ -371,6 +371,10 @@ class CustomerRepository extends EntityRepository
             if (!empty($customerType)) {
                 $qb->andWhere("customer.customerType = :type");
                 $qb->setParameter('type',$customerType);
+            }
+            if (!empty($studentBatch)) {
+                $qb->andWhere("customer.studentBatch = :studentBatch");
+                $qb->setParameter('studentBatch',$studentBatch);
             }
         }
 
@@ -649,6 +653,107 @@ class CustomerRepository extends EntityRepository
         $em->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
         return $entity;
 
+    }
+
+    public function studentBatchChoiceList()
+    {
+        $array = array(
+
+            "Batch 60’62" => "Batch 60’62",
+            "Batch 61’63" => "Batch 61’63",
+            "Batch 62’64" => "Batch 62’64",
+            "Batch 63’65" => "Batch 63’65",
+            "Batch 64’66" => "Batch 64’66",
+            "Batch 65’67" => "Batch 65’67",
+            "Batch 66’68" => "Batch 66’68",
+            "Batch 67’69" => "Batch 67’69",
+            "Batch 68’70" => "Batch 68’70",
+            "Batch 69’71" => "Batch 69’71",
+            "Batch 70’72" => "Batch 70’72",
+            "Batch 71’73" => "Batch 71’73",
+            "Batch 72’74" => "Batch 72’74",
+            "Batch 73’75" => "Batch 73’75",
+            "Batch 74’76" => "Batch 74’76",
+            "Batch 75’77" => "Batch 75’77",
+            "Batch 76’78" => "Batch 76’78",
+            "Batch 77’79" => "Batch 77’79",
+            "Batch 78’80" => "Batch 78’80",
+            "Batch 79’81" => "Batch 79’81",
+            "Batch 80’82" => "Batch 80’82",
+            "Batch 81’83" => "Batch 81’83",
+            "Batch 82’84" => "Batch 82’84",
+            "Batch 83’85" => "Batch 83’85",
+            "Batch 84’86" => "Batch 84’86",
+            "Batch 85’87" => "Batch 85’87",
+            "Batch 86’88" => "Batch 86’88",
+            "Batch 87’89" => "Batch 87’89",
+            "Batch 89’91" => "Batch 89’91",
+            "Batch 90’92" => "Batch 90’92",
+            "Batch 91’93" => "Batch 91’93",
+            "Batch 92’94" => "Batch 92’94",
+            "Batch 93’95" => "Batch 93’95",
+            "Batch 94’96" => "Batch 94’96",
+            "Batch 95’97" => "Batch 95’97",
+            "Batch 96’98" => "Batch 96’98",
+            "Batch 97’99" => "Batch 97’99",
+            "Batch 98’2000" => "Batch 98’2000",
+            "Batch 99’2001" => "Batch 99’2001",
+            "Batch 2000’02" => "Batch 2000’02",
+            "Batch 01’03" => "Batch 01’03",
+            "Batch 02’04" => "Batch 02’04",
+            "Batch 03’05" => "Batch 03’05",
+            "Batch 04’06" => "Batch 04’06",
+            "Batch 05’07" => "Batch 05’07",
+            "Batch 06’08" => "Batch 06’08",
+            "Batch 07’09" => "Batch 07’09",
+            "Batch 08’10" => "Batch 08’10",
+            "Batch 09’11" => "Batch 09’11",
+            "Batch 10’12" => "Batch 10’12",
+            "Batch 11’13" => "Batch 11’13",
+            "Batch 12’14" => "Batch 14’14",
+            "Batch 13’15" => "Batch 13’15",
+            "Batch 14’16" => "Batch 14’16",
+            "Batch 15’17" => "Batch 15’17",
+            "Batch 16’18" => "Batch 16’18",
+            "Batch 17’19" => "Batch 17’19",
+            "Batch 18’20" => "Batch 18’20",
+            "Batch 19’21" => "Batch 19’21",
+            "Batch 20’22" => "Batch 20’22",
+            "Batch 21’23" => "Batch 21’23",
+            "Batch 22’24" => "Batch 24’24",
+            "Batch 23’25" => "Batch 23’25",
+            "Batch 24’26" => "Batch 24’26",
+            "Batch 25’27" => "Batch 2527",
+            "Batch 26’28" => "Batch 26’28",
+            "Batch 27’29" => "Batch 27’29",
+            "Batch 28’30" => "Batch 28’30",
+            "Batch 29’31" => "Batch 29’31",
+            "Batch 30’32" => "Batch 30’32",
+        );
+
+        return $array;
+
+
+    }
+
+    public function batchYearChoiceList(){
+
+        $array = array(
+            "1 Year"=> "1 Year",
+            "2 Years"=> "2 Years",
+            "3 Years"=> "3 Years",
+            "4 Years"=> "4 Years",
+            "5 Years"=> "5 Years",
+            "6 Years"=> "6 Years",
+            "7 Years"=> "7 Years",
+            "8 Years"=> "8 Years",
+            "9 Years"=> "9 Years",
+            "10 Years"=> "10 Years",
+            "11 Years"=> "11 Years",
+            "12 Years"=> "12 Years",
+        );
+
+        return $array;
     }
 
 

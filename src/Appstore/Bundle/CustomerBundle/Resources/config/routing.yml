@@ -38,6 +38,14 @@ member_invoice:
     resource: "@CustomerBundle/Resources/config/routing/customerinvoice.yml"
     prefix:   /{shop}/invoice
 
+student_profile:
+    resource: "@CustomerBundle/Resources/config/routing/student.yml"
+    prefix:   /{shop}/student
+
+domain_business_dashboard:
+   resource: "@CustomerBundle/Resources/config/routing/business.yml"
+   prefix:   /{shop}/dashboard
+
 domain_customer_homepage:
     path:     /{shop}/dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
@@ -47,10 +55,6 @@ domain_customer_domainpage:
     defaults: { _controller: "CustomerBundle:Customer:customerDomain" }
 
 customerweb_profile:
-    path:     /{shop}/profile
-    defaults: { _controller: "CustomerBundle:Profile:edit" }
-
-
     path:     /{shop}/profile
     defaults: { _controller: "CustomerBundle:Profile:edit" }
 

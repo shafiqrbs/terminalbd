@@ -20,16 +20,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class CustomerInvoiceType extends AbstractType
 {
 
-    /** @var  LocationRepository */
-    private $location;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption)
     {
-        $this->location         = $location;
         $this->globalOption     = $globalOption;
     }
 
@@ -41,12 +38,6 @@ class CustomerInvoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Enter payment amount'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter payment amount')),
-                )
-            ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add PRX ID','data-original-title'=>'Add PRX ID','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -55,9 +46,11 @@ class CustomerInvoiceType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 transactionMethod'),
+                'empty_value' => '---Choose payment mode---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.slug != 'cash'")
                         ->orderBy("e.id","ASC");
                 }
             ))
@@ -92,7 +85,7 @@ class CustomerInvoiceType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose receive mobile bank account---',
+                'empty_value' => '---Choose receive mobile account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
