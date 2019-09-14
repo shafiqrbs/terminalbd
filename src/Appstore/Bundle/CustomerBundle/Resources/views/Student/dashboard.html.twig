@@ -30,7 +30,7 @@
             <div class="modal-dialog modal-dialog-lg">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Welcome To BHAWS </h2>
+                    <h2>Welcome To {{ globalOption.name }} </h2>
                 </div>
                     {% if invoiceCheck == 'true' %}
                         <p>Please waiting for Confirmation</p>
@@ -48,7 +48,7 @@
                                         <div class="clearfix"></div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <label class="control-label" style="background: #222222" for="firstName"><span id="balance" class="label" style="color:red">Registration Fee.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px;color:red" >510 Taka</span></label>
+                                                <label class="control-label" style="background: #222222" for="firstName"><span id="balance" class="label" style="color:red">Registration Fee.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px;color:red" >{{ particula.salesPrice|number_format }} Taka</span></label>
                                             </div>
                                             <!--/span-->
                                         </div>

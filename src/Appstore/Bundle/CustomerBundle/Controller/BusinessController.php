@@ -38,6 +38,8 @@ class BusinessController extends Controller
         }
         $businessModel =  $globalOption->getBusinessConfig()->getBusinessModel();
         if($businessModel == "student-association"){
+            $config = $globalOption->getBusinessConfig();
+            $particular = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig'=> $config,'slug'=>'registration-fee'));
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
             $entity = new BusinessInvoice();
             $editForm = $this->createCreateForm($entity);
@@ -48,6 +50,7 @@ class BusinessController extends Controller
                 'user'         => $user,
                 'globalOption' => $globalOption,
                 'customer' => $customer,
+                'particular' => $particular,
                 'entity' => $entity,
                 'invoiceCheck' => $invoiceCheck,
                 'form' => $editForm->createView(),
@@ -91,12 +94,16 @@ class BusinessController extends Controller
     public function createAction(Request $request)
     {
         $data = $request->request->all();
-        $config = $this->getUser()->getGlobalOption();
-        $user = $this->getUser()->getId();
+
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+
+        $particular = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig'=> $config,'slug'=>'registration-fee'));
+
         $entity = new BusinessInvoice();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user));
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user->getId()));
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
@@ -104,38 +111,26 @@ class BusinessController extends Controller
         ) {
 
             $em = $this->getDoctrine()->getManager();
-            $entity->setBusinessConfig($config->getBusinessConfig());
+            $entity->setBusinessConfig($config);
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
-            $entity->setPayment(520);
-            $entity->setDue(520);
+            $entity->setReceived($particular->getSalesPrice());
+            $entity->setDue(0);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success', "Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentInvoiceParticular($entity);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentInvoiceParticular($entity,$particular);
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
+            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $config->getSlug())));
+        }else{
+            $this->get('session')->getFlashBag()->add(
+                'warning', "Payment information does not valid"
+            );
             return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $config->getSlug())));
         }
 
     }
 
-    public function newAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
-        $entity = new BusinessInvoice();
-        $editForm = $this->createCreateForm($entity);
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $outstanding = 0;
-        return $this->render("CustomerBundle:Invoice:new.html.twig", array(
-            'globalOption' => $this->getUser()->getGlobalOption(),
-            'customer' => $customer,
-            'entity' => $entity,
-            'outstanding' => $outstanding,
-            'form' => $editForm->createView(),
-        ));
-
-    }
 }

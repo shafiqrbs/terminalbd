@@ -48,7 +48,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $data = array('createdBy'=>$user->getId()) ;
+        $data['createdBy'] = $user->getId();
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Invoice:index.html.twig', array(
@@ -64,14 +64,11 @@ class InvoiceController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
         $entity = new BusinessInvoice();
         $editForm = $this->createCreateForm($entity);
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $outstanding = 0;
         return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $this->getUser()->getGlobalOption(),
-            'customer' => $customer,
             'entity' => $entity,
             'outstanding' => $outstanding,
             'form' => $editForm->createView(),
@@ -108,10 +105,14 @@ class InvoiceController extends Controller
         $data = $request->request->all();
         $config = $this->getUser()->getGlobalOption();
         $user = $this->getUser()->getId();
+
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+
         $entity = new BusinessInvoice();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user));
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user->getId()));
 
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
@@ -119,11 +120,11 @@ class InvoiceController extends Controller
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setBusinessConfig($config->getBusinessConfig());
+            $entity->setBusinessConfig($config);
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
-            $entity->setPayment($data['paymentTotal']);
-            $entity->setDue($data['paymentTotal']);
+            $entity->setReceived($data['paymentTotal']);
+            $entity->setDue(0);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -133,6 +134,15 @@ class InvoiceController extends Controller
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
             return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $config->getSlug())));
         }
+        $this->get('session')->getFlashBag()->add(
+            'warning', "Payment information does not valid"
+        );
+        return $this->render("CustomerBundle:Invoice:new.html.twig", array(
+            'globalOption' => $user->getGlobalOption(),
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ));
+
 
     }
     /**
@@ -173,11 +183,9 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
-	    return $this->render("CustomerBundle:Invoice:new.html.twig", array(
+  	    return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $this->getUser()->getGlobalOption(),
             'entity' => $entity,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
@@ -203,13 +211,10 @@ class InvoiceController extends Controller
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
             return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $globalOption->getSlug())));
         }
-
         $config = $entity->getBusinessConfig();
-	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
         return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $globalOption,
             'entity' => $entity,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
 

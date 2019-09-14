@@ -70,13 +70,11 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
-    public function insertStudentInvoiceParticular(BusinessInvoice $invoice)
+    public function insertStudentInvoiceParticular(BusinessInvoice $invoice,BusinessParticular $particular)
     {
 
         $date = new \DateTime("now");
         $em = $this->_em;
-        $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig'=> $invoice->getBusinessConfig(),'slug'=>'registration-fee'));
-
         $invoiceParticular = $this->findOneBy(array('businessInvoice'=>$invoice,'businessParticular' => $particular));
         if($invoiceParticular){
             $entity = $invoiceParticular;
