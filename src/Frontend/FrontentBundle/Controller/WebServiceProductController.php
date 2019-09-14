@@ -760,7 +760,7 @@ class WebServiceProductController extends Controller
         $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
         $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
-        /** @var GlobalOption $globalOption */
+        /** @var $globalOption GlobalOption */
 
             $data = array(
                 'id' => $product->getId(),

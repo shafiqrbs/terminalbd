@@ -233,20 +233,18 @@ class ItemController extends Controller
 
         if ($editForm->isValid()) {
 
-           /* if($entity->upload() && !empty($entity->getFile())){
+            if($file['item']['file']){
                 $entity->removeUpload();
-            }*/
-
-            $img = $file['item']['file'];
-
-            $fileName = $img->getClientOriginalName();
-            $imgName =  uniqid(). '.' .$fileName;
-            $path = $entity->getUploadDir().$imgName;
-            if(!file_exists($entity->getUploadDir())){
-                mkdir($entity->getUploadDir(), 0777, true);
+                $img = $file['item']['file'];
+                $fileName = $img->getClientOriginalName();
+                $imgName = uniqid() . '.' . $fileName;
+                $path = $entity->getUploadDir() . $imgName;
+                if (!file_exists($entity->getUploadDir())) {
+                    mkdir($entity->getUploadDir(), 0777, true);
+                }
+                $this->get('helper.imageresizer')->resizeImage(512, $path, $img);
+                $entity->setPath($imgName);
             }
-            $this->get('helper.imageresizer')->resizeImage(512,$path,$img);
-            $entity->setPath($imgName);
             $em->flush();
              $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

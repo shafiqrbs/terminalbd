@@ -2,6 +2,7 @@
 
 namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
@@ -158,9 +159,9 @@ class EcommerceWidgetController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
 
-            /* @var InventoryConfig $inventory */
+            /* @var EcommerceConfig $inventory */
 
-            $inventory = $globalOption->getInventoryConfig();
+            $inventory = $globalOption->getEcommerceConfig();
 
             /* Device Detection code desktop or mobile */
 
@@ -172,16 +173,14 @@ class EcommerceWidgetController extends Controller
                 $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
             }
 
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
+            $inventoryCat = $this->getDoctrine()->getRepository('EcommerceBundle:ItemCategoryGrouping')->findOneBy(array('ecommerceConfig' => $inventory));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$searchForm);
-            $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
-            $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
-            $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
-            $discountTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
-            $promotionTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
-            $tagTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
+            $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupBrands($inventory, $searchForm);
+            $discountTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupDiscount($inventory, $searchForm);
+            $promotionTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findPromotionTree($inventory, $searchForm);
+            $tagTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findTagTree($inventory, $searchForm);
         }
 
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
@@ -189,8 +188,8 @@ class EcommerceWidgetController extends Controller
                 'categorySidebar'           => $categorySidebar,
                 'categoryTree'              => $categoryTree,
                 'brandTree'                 => $brandTree,
-                'colorTree'                 => $colorTree,
-                'sizeTree'                  => $sizeTree,
+                'colorTree'                 => '',
+                'sizeTree'                  => '',
                 'discountTree'              => $discountTree,
                 'promotionTree'             => $promotionTree,
                 'tagTree'                   => $tagTree,
@@ -462,8 +461,10 @@ class EcommerceWidgetController extends Controller
     public function featureTemplateMobileWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
     {
 
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/widget.html.twig', array(
+        return $this->render("@Frontend/Template/Mobile/Medicine/EcommerceWedget/FeatureWidget.html.twig", array(
             'features'                  => $features,
             'globalOption'              => $globalOption,
         ));
@@ -492,7 +493,7 @@ class EcommerceWidgetController extends Controller
     public function FeatureBrandWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
 
-        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getFeatureBrandLimit():8;
+        $limit = $widget->getFeatureBrandLimit() > 0 ? $widget->getFeatureBrandLimit():8;
         $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption,$limit);
         return $this->render('@Frontend/Template/Mobile/EcommerceWidget/brandWidget.html.twig', array(
             'entities'              => $entities,
@@ -504,7 +505,7 @@ class EcommerceWidgetController extends Controller
     public function FeatureCategoryWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
 
-        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getFeatureBrandLimit():8;
+        $limit = $widget->getCategoryLimit() > 0 ? $widget->getCategoryLimit():8;
         $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getSliderFeatureCategory($globalOption,$limit);
         return $this->render('@Frontend/Template/Mobile/EcommerceWidget/categoryWidget.html.twig', array(
             'entities'              => $entities,
@@ -542,12 +543,12 @@ class EcommerceWidgetController extends Controller
         $detect = new MobileDetect();
 
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/categoryProductWidget';
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWedget';
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/CategoryWidget';
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
         }
 
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+        return $this->render('@Frontend/'.$theme.'/CategoryWidget.html.twig', array(
             'products'                  => $products->getResult(),
             'globalOption'              => $globalOption,
             'widget'                    => $widget,

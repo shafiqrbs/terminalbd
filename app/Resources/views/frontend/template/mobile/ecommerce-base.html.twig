@@ -40,6 +40,7 @@
     'assets/template/desktop/css/css-loader.css'
     'assets/template/desktop/css/module.css'
     'assets/template/mobile/css/style.css'
+    'assets/template/desktop/css/socialicon.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -86,7 +87,7 @@
 
                 </div>
                 <div id="login-signip">
-                    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
+                {#    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}#}
                 </div>
             </div>
             {% endif %}

@@ -72,7 +72,7 @@
                                                                             class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty %}
                                                                     <strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty %}</strike>{% endif %}{% if product.discount is not empty %} {{ product.discountPrice|number_format() }}{% endif %}
                                                                 </div>
-                                                                <div class="col-xs-3 col-md-3 col-sm-cus-3 text-right"><a class="btn btn-info btn-sm productView"
+                                                                <div class=" col-xs-3 col-md-3 col-sm-cus-3 text-right"><a class="btn btn-info btn-sm productView"
                                                                                                                            data-title="{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}"
                                                                                                                            data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
                                                                                                                            data-type="modal" href="javascript:" id="buy-{{ product.id }}"
@@ -179,19 +179,8 @@
                 </div>
             </div>
         {% endif %}
-        {% if widget.category is defined and widget.category is not empty %}
-            {% for category in widget.category %}
-                <div class="wow fadeInDown feature-carousel" >
-                    <div class="page-title-bar">
-                        <div class="col-md-12" >
-                            <div class="page-title">{{ category.name }}</div>
-                        </div>
-                    </div>
-                    <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id, 'category':category.id}) %}
-                    </div>
-                </div>
-            {% endfor %}
+        {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
+            {% render controller("FrontendBundle:EcommerceWidget:FeatureCategoryWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
         {% endif %}
         {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
             {% render controller("FrontendBundle:EcommerceWidget:FeatureBrandWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}

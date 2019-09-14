@@ -414,6 +414,100 @@ class ItemRepository extends EntityRepository
 
 	}
 
+    public function findGroupBrands(EcommerceConfig $config , $array = array())
+    {
+
+        $brands =  isset($array['brand']) ? $array['brand'] : array();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.brand','brand');
+        $qb->select('brand.id as id');
+        $qb->addSelect('brand.name as name');
+        $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->groupBy('brand.id');
+        $qb->orderBy('brand.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+        $value ='';
+        $value .='<ul class="ul-check-list-brand">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $brands) ? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label" >'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+
+    }
+
+
+    public function findGroupDiscount(EcommerceConfig $config,  $array = array())
+    {
+        $discounts = isset($array['discount']) ? $array['discount'] :array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.discount','discount');
+        $qb->select('discount.id as id');
+        $qb->addSelect('discount.name as name');
+        $qb->where('e.ecommerceConfig ='.$config->getId());
+        $qb->groupBy('discount.id');
+        $qb->orderBy('discount.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $discounts )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="discount[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+
+    }
+
+    public function findPromotionTree(EcommerceConfig $config , $array = array())
+    {
+        $promotions = isset($array['promotion']) ? $array['promotion'] : array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.promotion','promotion');
+        $qb->select('promotion.id as id');
+        $qb->addSelect('promotion.name as name');
+        $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->groupBy('promotion.id');
+        $qb->orderBy('promotion.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $promotions )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="promotion[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+    }
+
+    public function findTagTree(EcommerceConfig $config , $array = array())
+    {
+        $tags = isset($array['tag']) ? $array['tag'] : array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.tag','tag');
+        $qb->select('tag.id as id');
+        $qb->addSelect('tag.name as name');
+        $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->groupBy('tag.id');
+        $qb->orderBy('tag.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $tags )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="tag[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+    }
+
+
+
 
     public function getCulculationDiscountPrice(Item $purchase , Discount $discount)
     {
@@ -652,6 +746,7 @@ class ItemRepository extends EntityRepository
         }
         return $data;
     }
+
 
     public function removeDiscount($config,$discount){
 

@@ -492,15 +492,11 @@ $(document).on( "click", ".btn-number", function(e){
 $(document).on( "click", ".btn-number-cart", function(e){
 
     e.preventDefault();
-
     var url         = $(this).attr('data-url');
-    var productId   = $(this).attr('data-text');
-    var price       = $(this).attr('data-title');
-    var fieldId     = $(this).attr('data-id');
-    var fieldName   = $(this).attr('data-field');
-    var type        = $(this).attr('data-type');
-    var input       = $('#quantity-'+ $(this).attr('data-id'));
-    var currentVal  = parseInt(input.val());
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    input = $("input[name='"+fieldName+"']");
+    currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
             if(currentVal > input.attr('min')) {

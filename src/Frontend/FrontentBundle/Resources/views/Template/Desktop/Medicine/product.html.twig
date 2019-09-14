@@ -106,7 +106,6 @@
                     </div>
 
                     <div class="col-md-6 navbar-right">
-
                         <div style="float: right">
                             <button type="button" class="btn gray-dark-bg  cyan-font btn-cookie" id="list-grid"
                                     data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
@@ -309,10 +308,9 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-{#    sliderPageOwl(4);
     $('body').on('click', '.btn-cookie', function(el) {
     var val = $(this).attr('id');
     Cookies.set('productList', val);
     setTimeout(location.reload(), 1000);
-    });#}
+    });
 {% endblock %}
