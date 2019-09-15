@@ -14,6 +14,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Doctrine\DQL\Date;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -161,6 +162,17 @@ class Customer
 
     protected $location;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="approvedCustomers")
+     **/
+    protected $approvedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="checkedCustomers")
+     **/
+    protected $checkedBy;
+
     /**
      * @var integer
      *
@@ -244,6 +256,13 @@ class Customer
      * @ORM\Column(name="company", type="string", length=255, nullable =true)
      */
     private $company;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string", length=50, nullable =true)
+     */
+    private $process= 'Pending';
 
     /**
      * @var string
@@ -1594,6 +1613,54 @@ class Customer
     public function setPaymentMonth($paymentMonth)
     {
         $this->paymentMonth = $paymentMonth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    }
+
+    /**
+     * @return User
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param User $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCheckedBy()
+    {
+        return $this->checkedBy;
+    }
+
+    /**
+     * @param User $checkedBy
+     */
+    public function setCheckedBy($checkedBy)
+    {
+        $this->checkedBy = $checkedBy;
     }
 
 

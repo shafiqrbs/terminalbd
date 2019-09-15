@@ -21,7 +21,6 @@ function ApproveProcess(){
         e.preventDefault();
     });
 
-
     $(document).on("click", " .approve, .confirm, .remove , .process , .remove-tr , .item-disable , .item-remove", function() {
 
         var id = $(this).attr("data-id");
@@ -239,6 +238,34 @@ function ApproveProcess(){
         e.preventDefault();
 
     });
+
+    $(document).on('click', '.view', function() {
+
+        var url = $(this).attr("data-url");
+        var title = $(this).attr("data-title");
+        $('.dialogModal_header').html(title);
+        $('.dialog_content').dialogModal({
+            topOffset: 0,
+            top: 0,
+            type: '',
+            onOkBut: function(event, el, current) {},
+            onCancelBut: function(event, el, current) {},
+            onLoad: function(el, current) {
+                $.ajax({
+                    url:url,
+                    async: true,
+                    success: function (response) {
+                        el.find('.dialogModal_content').html(response);
+                    }
+                });
+            },
+            onClose: function(el, current) {},
+            onChange: function(el, current) {}
+        });
+
+    });
+
+
 
 
 

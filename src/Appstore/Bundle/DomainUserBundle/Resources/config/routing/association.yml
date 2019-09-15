@@ -1,0 +1,99 @@
+domain_association:
+    path:     /member
+    defaults: { _controller: "DomainUserBundle:Association:index" }
+
+domain_association_member_show:
+    path:     /{id}/association-member-show
+    defaults: { _controller: "DomainUserBundle:Association:memberShow" }
+
+domain_association_sms:
+    path:     /sms
+    defaults: { _controller: "DomainUserBundle:Association:index" }
+
+domain_association_process:
+    path:     /{id}/process
+    defaults: { _controller: "DomainUserBundle:Association:process" }
+
+domain_association_show:
+    path:     /{id}/show
+    defaults: { _controller: "DomainUserBundle:Association:show" }
+
+domain_association_new:
+    path:     /new
+    defaults: { _controller: "DomainUserBundle:Association:new" }
+
+domain_association_create:
+    path:     /create
+    defaults: { _controller: "DomainUserBundle:Association:create" }
+    methods:  POST
+
+domain_association_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DomainUserBundle:Association:edit" }
+
+domain_association_update:
+    path:     /{id}/update
+    defaults: { _controller: "DomainUserBundle:Association:update" }
+    methods:  [POST, PUT]
+
+domain_association_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DomainUserBundle:Association:delete" }
+    options:
+           expose: true
+
+domain_association_search:
+    path:     /Association-search
+    defaults: { _controller: "DomainUserBundle:Association:autoSearch" }
+    options:
+            expose: true
+
+domain_association_name:
+    path:      /{Association}/Association-name
+    defaults: { _controller: "DomainUserBundle:Association:searchAssociationName" }
+    options:
+           expose: true
+
+domain_association_code_search:
+    path:     /Association-code-search
+    defaults: { _controller: "DomainUserBundle:Association:autoCodeSearch" }
+    options:
+            expose: true
+
+domain_association_code:
+    path:      /{Association}/Association-code
+    defaults: { _controller: "DomainUserBundle:Association:searchCode" }
+    options:
+           expose: true
+
+domain_location_search:
+    path:     /location-search
+    defaults: { _controller: "DomainUserBundle:Association:autoLocationSearch" }
+    options:
+            expose: true
+
+domain_location_name:
+    path:      /{location}/location-name
+    defaults: { _controller: "DomainUserBundle:Association:searchLocationName" }
+    options:
+           expose: true
+
+domain_association_auto_name_search:
+    path:     /Association-auto-name-search
+    defaults: { _controller: "DomainUserBundle:Association:searchAutoCompleteName" }
+    options:
+           expose: true
+
+domain_association_ledger:
+    path:     /Association-ledger
+    defaults: { _controller: "AccountingBundle:AccountSales:getAssociationLedger" }
+    options:
+           expose: true
+
+domain_association_sales_ledger:
+    path:     /Association-sales-ledger
+    defaults: { _controller: "AccountingBundle:AccountSales:getAssociationSalesLedger" }
+    options:
+           expose: true
+
+

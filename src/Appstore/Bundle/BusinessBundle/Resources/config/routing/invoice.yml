@@ -80,9 +80,7 @@ business_invoice_banner_sign:
 business_invoice_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "BusinessBundle:Invoice:approve" }
-    methods:  POST
-    options:
-            expose: true
+
 
 business_invoice_update:
     path:     /{id}/update

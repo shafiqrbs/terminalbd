@@ -40,7 +40,7 @@ class CustomerListener
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('AccountingBundle:AccountPurchase')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('DomainUserBundle:Customer')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')

@@ -98,7 +98,7 @@
           <tr>
               <td>{{ entity.created|date('d-m-Y') }}</td>
               <td>{{ entity.invoice }}</td>
-              <td>{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+              <td>{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}<btr/>{{ entity.customer.mobile }}{% endif %}</td>
               <td>
                   <ul>
                   {% for particular in entity.invoiceParticulars  %}

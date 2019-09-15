@@ -705,6 +705,19 @@ class InvoiceController extends Controller
 
     }
 
+    public function approveAction(BusinessInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+        $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setProcess("Done");
+        $entity->setApprovedBy($this->getUser());
+        $em->persist($entity);
+        $em->flush();
+        return new Response("Success");
+    }
+
     public function invoiceGroupApprovedAction()
     {
         set_time_limit(0);

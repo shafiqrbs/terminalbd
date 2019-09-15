@@ -242,8 +242,10 @@ class Builder extends ContainerAware
 
 	        }
 	    }
-	    if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
-		    $menu['Business Management']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+        $menu['Business Management']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or $securityContext->isGranted('ROLE_DOMAIN')) {
+            $menu['Business Management']->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
+        }elseif($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
 		    $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
         }
 

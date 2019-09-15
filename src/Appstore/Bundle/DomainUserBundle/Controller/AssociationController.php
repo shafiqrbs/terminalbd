@@ -10,12 +10,13 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Customer controller.
  *
  */
-class CustomerController extends Controller
+class AssociationController extends Controller
 {
 
 
@@ -33,39 +34,23 @@ class CustomerController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_CRM_ASSOCIATION")
      */
 
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
-        $pagination = $this->paginate($entities);
-        return $this->render('DomainUserBundle:Customer:index.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
-    }
-
-     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
-     */
-
-    public function memberAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
         $data['type'] = "member";
+        $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('DomainUserBundle:Member:member.html.twig', array(
+        return $this->render('DomainUserBundle:Association:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
     }
+
 
     /**
      * Creates a new Customer entity.
@@ -135,16 +120,37 @@ class CustomerController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
+        $config = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config,'id'=> $id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
         }
+        $html = $this->renderView('DomainUserBundle:Association:profile.html.twig',
+            array('entity' => $entity)
+        );
+        return New Response($html);
+    }
 
-        return $this->render('DomainUserBundle:Customer:show.html.twig', array(
-            'entity'      => $entity,
-        ));
+     /**
+     * Finds and displays a Customer entity.
+     *
+     */
+    public function processAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config, 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+        }
+        if ($entity->getProcess() == 'In-progress'){
+            $entity->setProcess('Checked');
+            $entity->setCheckedBy($this->getUser());
+        }elseif ($entity->getProcess() == 'Checked'){
+            $entity->setProcess('Approved');
+            $entity->setApprovedBy($this->getUser());
+        }
+        return New Response("success");
     }
 
     /**

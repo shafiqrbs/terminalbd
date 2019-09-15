@@ -63,6 +63,7 @@ class InvoiceType extends AbstractType
                 'choices' => array(
                     'Done' => 'Done',
                     'Delivered' => 'Delivered',
+                    'In-progress' => 'In-progress',
                     'Hold' => 'Hold',
                     'Quotation' => 'Quotation',
                     'Canceled' => 'Canceled',

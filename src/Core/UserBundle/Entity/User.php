@@ -1047,6 +1047,17 @@ class User extends BaseUser
 	 **/
 	private  $committeeApprovedBy;
 
+    /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="approvedBy"  )
+	 **/
+	private  $approvedCustomers;
+
+
+    /**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="checkedBy"  )
+	 **/
+	private  $checkedCustomers;
+
 
 
 

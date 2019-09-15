@@ -2,6 +2,14 @@ domain_customer:
     path:     /
     defaults: { _controller: "DomainUserBundle:Customer:index" }
 
+domain_association_member:
+    path:     /association-member
+    defaults: { _controller: "DomainUserBundle:Customer:member" }
+
+domain_association_member_show:
+    path:     /{id}/association-member-show
+    defaults: { _controller: "DomainUserBundle:Customer:memberShow" }
+
 domain_customer_sms:
     path:     /sms
     defaults: { _controller: "DomainUserBundle:Customer:index" }

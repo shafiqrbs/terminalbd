@@ -31,6 +31,10 @@ domain_user_customer:
     resource: "@DomainUserBundle/Resources/config/routing/customer.yml"
     prefix:   /crm
 
+domain_user_association:
+    resource: "@DomainUserBundle/Resources/config/routing/association.yml"
+    prefix:   /crm/association
+
 domain_user_notepad:
     resource: "@DomainUserBundle/Resources/config/routing/notepad.yml"
     prefix:   /notepad

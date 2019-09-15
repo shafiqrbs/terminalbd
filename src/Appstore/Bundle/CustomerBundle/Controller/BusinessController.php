@@ -63,7 +63,6 @@ class BusinessController extends Controller
             ));
         }
 
-
     }
 
 
@@ -116,6 +115,7 @@ class BusinessController extends Controller
             $entity->setMobile($customer->getMobile());
             $entity->setReceived($particular->getSalesPrice());
             $entity->setDue(0);
+            $entity->setProcess("In-progress");
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

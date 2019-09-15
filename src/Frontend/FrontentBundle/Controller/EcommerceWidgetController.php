@@ -153,8 +153,9 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
-    public function sidebarTemplateProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
+    public function sidebarTemplateProductFilterAction(Request $request ,GlobalOption $globalOption , $searchForm = array() )
     {
+        $cart = new Cart($request->getSession());
         if(!empty($globalOption)) {
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -168,7 +169,7 @@ class EcommerceWidgetController extends Controller
             $detect = new MobileDetect();
 
             if ($detect->isMobile() || $detect->isTablet()) {
-                $theme = 'Template/Mobile/EcommerceWidget';
+                $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget';
             } else {
                 $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
             }
@@ -184,6 +185,7 @@ class EcommerceWidgetController extends Controller
         }
 
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
+
                 'globalOption'              => $globalOption,
                 'categorySidebar'           => $categorySidebar,
                 'categoryTree'              => $categoryTree,
@@ -194,6 +196,7 @@ class EcommerceWidgetController extends Controller
                 'promotionTree'             => $promotionTree,
                 'tagTree'                   => $tagTree,
                 'searchForm'                => $searchForm,
+                'cart' => $cart,
 
             )
         );
@@ -464,7 +467,7 @@ class EcommerceWidgetController extends Controller
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        return $this->render("@Frontend/Template/Mobile/Medicine/EcommerceWedget/FeatureWidget.html.twig", array(
+        return $this->render("@Frontend/Template/Mobile/Medicine/EcommerceWidget/FeatureWidget.html.twig", array(
             'features'                  => $features,
             'globalOption'              => $globalOption,
         ));
@@ -543,7 +546,7 @@ class EcommerceWidgetController extends Controller
         $detect = new MobileDetect();
 
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWedget';
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget';
         }else{
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
         }

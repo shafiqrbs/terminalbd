@@ -438,8 +438,6 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $entity =  $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig'=>$globalOption->getEcommerceConfig(),'slug'=>$item));
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$entity->getId(),'masterItem'=>1));
-
         $products ='';
         if(!empty($globalOption)){
 
@@ -481,7 +479,7 @@ class WebServiceProductController extends Controller
                     'cart'              => $cart,
                     'product'           => $entity,
                     'products'          => $products,
-                    'subItem'           => $subItem,
+                    'subItem'           => '',
                     'next'              => $next,
                     'previous'          => $previous,
                     'menu'              => $menu,
@@ -760,7 +758,7 @@ class WebServiceProductController extends Controller
         $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
         $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
-        /** @var $globalOption GlobalOption */
+        /** @var GlobalOption $globalOption */
 
             $data = array(
                 'id' => $product->getId(),

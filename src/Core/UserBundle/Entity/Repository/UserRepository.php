@@ -214,6 +214,7 @@ class UserRepository extends EntityRepository
                 'ROLE_BUSINESS_PURCHASE_REVERSE'            => 'Business Purchase Reverse',
                 'ROLE_BUSINESS_REPORT'                      => 'Business Reports',
                 'ROLE_BUSINESS_MANAGER'                     => 'Business Manager',
+                'ROLE_BUSINESS_APPROVE'                     => 'Business Approve',
             );
         }
 
@@ -313,9 +314,12 @@ class UserRepository extends EntityRepository
         }
 
         $array['Customer'] = array(
-            'ROLE_CRM'                  => 'Customer',
-            'ROLE_CUSTOMER_REHAB'       => 'Rehab Patient',
-            'ROLE_CRM_MANAGER'          => 'Manage Customer ',
+            'ROLE_CRM'                          => 'Customer',
+            'ROLE_CUSTOMER_REHAB'               => 'Rehab Patient',
+            'ROLE_CRM_MANAGER'                  => 'Manage Customer ',
+            'ROLE_MEMBER_ASSOCIATION'           => 'Association',
+            'ROLE_MEMBER_ASSOCIATION_MODERATOR'   => 'Association Moderator',
+            'ROLE_MEMBER_ASSOCIATION_ADMIN'     => 'Association Admin',
         );
 
 	    $website = array('website');

@@ -165,55 +165,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
-        window.showPrompt = function() {
-            do {
-                var mobile = prompt("Please enter your mobile no");
-            }
-            while(mobile.length == 11);
-            var url = '/reset-customer-password';
-            $.get(url,{'mobile':mobile},function(data) {
-                alert(data);
-            });
-        }
-        $("#button").on('click',function() {
-           
-        });
-
-        var theButton = document.getElementById("prompt");
-
-        theButton.onclick = function () {
-            var thePrompt = window.open("", "", "widht=500");
-            var theHTML = "";
-
-            theHTML += "<p>The server http://localhost:8888 requires a username and password. The server says: These are restricted files, please authenticate yourself.</p>";
-            theHTML += "<br/>";
-            theHTML += "Username: <input type='text' id='theUser' placeholder='Enter Username...'/>";
-            theHTML += "<br />";
-            theHTML += "Password: <input type='text' id='thePass' placeholder='Enter Password...'/>";
-            theHTML += "<br />";
-            theHTML += "<input type='button' value='OK' id='authOK'/>";
-            thePrompt.document.body.innerHTML = theHTML;
-
-            var theUser = thePrompt.document.getElementById("theUser").value;
-            var thePass = thePrompt.document.getElementById("thePass").value;
-            thePrompt.document.getElementById("authOK").onclick = function () {
-                doAuthentication(theUser, thePass);
-            }
-        }
-
-        function doAuthentication(user, pass) {
-            //do authentication
-        }
     });
 
 </script>
 
 <style>
-
-    .dialogModal.modal .dialogModal_container{
-        width: 850px!important;
-    }
-
     .menu-notify{
         opacity: 0.8;
     }

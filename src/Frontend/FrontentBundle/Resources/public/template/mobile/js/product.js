@@ -53,7 +53,7 @@ $('.threeColumnCarousel .item').each(function(){
 });
 
 $('#FourColumnCarousel').carousel({
-    interval: 80000
+    interval: false
 });
 
 $('.fourColumnCarousel .item').each(function(){
