@@ -102,6 +102,7 @@
                                 <th class="numeric" >Total</th>
                                 <th class="numeric" >Received</th>
                                 <th class="numeric" >Due</th>
+                                <th class="numeric" >Created</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -170,6 +171,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="numeric" >{{ entity.balance|number_format }}</td>
+                                    <td class="numeric" >{{ entity.createdBy }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
