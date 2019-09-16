@@ -187,6 +187,21 @@ class TransactionRepository extends EntityRepository
         return $result;
     }
 
+    public function getProfitLossByAccountHead($globalOption,$heads){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.accountHead','accountHead');
+        $qb->join('accountHead.parent','parent');
+        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName,parent.id as parentId, accountHead.id as accountHeadId, accountHead.toIncrease, accountHead.code as code');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+      //  $qb->andWhere("parent.slug IN (:parent)")->setParameter('parent',$heads);
+        $qb->andWhere("accountHead.slug = 'profit-loss'");
+        $qb->groupBy('e.accountHead');
+        $qb->orderBy('parent.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function getSubHeadAccount($globalOption)
     {
         $qb = $this->createQueryBuilder('e');

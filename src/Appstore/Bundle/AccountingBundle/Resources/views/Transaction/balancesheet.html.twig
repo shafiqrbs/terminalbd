@@ -106,7 +106,7 @@
                                 </tbody>
                             </table>
                             <div class="clearfix"></div>
-                            <div class="form-actions portlet box yellow">
+                            <div class="form-actions portlet box red">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i> Profit & Loss</div>
                                 </div>
@@ -118,23 +118,25 @@
                                     <th class="numeric" >Parent Head</th>
                                     <th class="numeric" >Account Head</th>
                                     <th class="numeric" >Sub Head</th>
-                                    <th class="numeric" >Amount</th>
+                                    <th class="numeric" >Profit/Loss</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for key, entity in creditStatement %}
+                                {% for key, entity in profitStatement %}
                                     <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
                                     {% set totalDebit = 'total'~key  %}
                                     {% set totalCredit = 'total'~key  %}
                                     {% set totalDebit =  0   %}
                                     {% set totalCredit =  0   %}
-                                    {% for val in  creditStatement[key] %}
+                                    {% for val in  profitStatement[key] %}
                                         {% set total = totalCredit + val.amount|abs %}
                                         <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
                                         {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
                                             {% for sub in subHeads %}
                                                 {% if sub.parentId == val.accountHeadId %}
-                                                    <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|abs|number_format }}</td></tr>
+                                                    <tr><td></td><td></td><td>{{ sub.headName }}</td>
+                                                        <td>{{ sub.amount|abs|number_format }}</td>
+                                                    </tr>
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}

@@ -464,10 +464,11 @@ class TransactionController extends Controller
 
         $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'));
         $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities'));
+        $profitLoss = $em->getRepository('AccountingBundle:Transaction')->getProfitLossByAccountHead($globalOption,array('long-term-liabilities'));
         $subHeads = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption);
-
         $debitStatement = [];
         $creditStatement = [];
+        $profitStatement = [];
 
         foreach ($entitiesDebit as $key => $item) {
             $serviceName = $item['parentName'];
@@ -477,9 +478,14 @@ class TransactionController extends Controller
             $headName = $item['parentName'];
             $creditStatement[$headName][$key] = $item;
         }
+        foreach ($profitLoss as $key => $item) {
+            $headName = $item['parentName'];
+            $profitStatement[$headName][$key] = $item;
+        }
         return $this->render('AccountingBundle:Transaction:balancesheet.html.twig', array(
             'debitStatement' => $debitStatement,
             'creditStatement' => $creditStatement,
+            'profitStatement' => $profitStatement,
             'subHeads' => $subHeads,
         ));
     }
