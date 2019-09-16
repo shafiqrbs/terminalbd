@@ -21,7 +21,7 @@ class CustomerListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setCustomerId(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setCustomerId(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
 
         }
     }
@@ -33,7 +33,7 @@ class CustomerListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
+    public function getLastCode(LifecycleEventArgs $args, $datetime, Customer $entity)
     {
 
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
@@ -45,8 +45,8 @@ class CustomerListener
         $qb
             ->select('MAX(s.code)')
             ->where('s.globalOption = :globalOption')
-            ->andWhere('s.updated >= :today_startdatetime')
-            ->andWhere('s.updated <= :today_enddatetime')
+            ->andWhere('s.created >= :today_startdatetime')
+            ->andWhere('s.created <= :today_enddatetime')
             ->setParameter('globalOption', $entity->getGlobalOption())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
