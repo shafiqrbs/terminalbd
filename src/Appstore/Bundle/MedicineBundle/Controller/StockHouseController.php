@@ -159,10 +159,9 @@ class StockHouseController extends Controller
         $form = $this->createStockOutForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('name'=>$entity->getStockName()));
+            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('medicineConfig' => $config,'name' => $entity->getStockName()));
             $remainingQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStockHouse')->getStockRemainingQnt($stock,$entity->getWearHouse());
             if($remainingQnt >= $entity->getStockOut()){
-
                 $em = $this->getDoctrine()->getManager();
                 $entity->setMedicineConfig($config);
                 $entity->setMedicineStock($stock);

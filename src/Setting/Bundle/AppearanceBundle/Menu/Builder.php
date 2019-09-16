@@ -239,11 +239,10 @@ class Builder extends ContainerAware
                     ->setAttribute( 'icon', 'icon-th-list' );
                 $menu['Business Management']['Sales']['Reports']->addChild( 'User Monthly Sales', array( 'route' => 'business_report_sales_user_monthly' ) )
                     ->setAttribute( 'icon', 'icon-th-list' );
-
 	        }
 	    }
         $menu['Business Management']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
-        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or $securityContext->isGranted('ROLE_DOMAIN')) {
+        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu['Business Management']->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
         }elseif($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
 		    $menu['Business Management']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');

@@ -127,7 +127,7 @@ class MedicineStockHouseRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->select('(SUM(e.stockIn)- SUM(e.stockOut)) as remaining');
         $query->where("ms.id = :stock");
-        $query->setParameter('stock', $stock->getId());
+        $query->setParameter('stock',  $stock->getId());
         $query->andWhere("w.id = :wearHouse");
         $query->setParameter('wearHouse', $wearHouse->getId());
         $res = $query->getQuery()->getOneOrNullResult();

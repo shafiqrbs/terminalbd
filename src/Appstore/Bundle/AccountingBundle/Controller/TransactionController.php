@@ -279,14 +279,13 @@ class TransactionController extends Controller
             $data['date'] = $compare->format('Y-m-d');
         }
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->purchaseExpense($user,$transactionMethods,$data);
-        $pagination = $this->paginate($entities);
         $globalOption = $this->getUser()->getGlobalOption();
 
         $date ="purchase-expense-{$data['date']}.pdf";
         if(empty($data['pdf'])){
 
             return $this->render('AccountingBundle:Transaction:purchaseExpense.html.twig', array(
-                'entities' => $pagination,
+                'entities' => $entities,
                 'searchForm' => $data,
             ));
 
@@ -294,7 +293,7 @@ class TransactionController extends Controller
             $html = $this->renderView(
                 'AccountingBundle:Transaction/Report:purchaseExpensePdf.html.twig', array(
                     'globalOption'                  => $globalOption,
-                    'entities'                      => $pagination,
+                    'entities'                      => $entities,
                     'searchForm'                    => $data,
                 )
             );
