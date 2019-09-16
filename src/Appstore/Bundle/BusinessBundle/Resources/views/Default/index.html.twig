@@ -216,7 +216,7 @@
                         </div>
             </div>
         </div>
-        {% if (app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
+        {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
             <div class="portlet-body form">
                 <div class="portlet box blue">
                     <div class="portlet-body">
@@ -291,9 +291,9 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    {% if (app.user.granted("ROLE_BUSINESS_REPORTS"))  %}
-        window.onload = function () {
+    {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
 
+        window.onload = function () {
         var optionsYearlyMonthlySales = {
         animationEnabled: true,
         title: {

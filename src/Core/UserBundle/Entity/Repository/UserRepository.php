@@ -318,7 +318,7 @@ class UserRepository extends EntityRepository
             'ROLE_CUSTOMER_REHAB'               => 'Rehab Patient',
             'ROLE_CRM_MANAGER'                  => 'Manage Customer ',
             'ROLE_MEMBER_ASSOCIATION'           => 'Association',
-            'ROLE_MEMBER_ASSOCIATION_MODERATOR'   => 'Association Moderator',
+            'ROLE_MEMBER_ASSOCIATION_MODERATOR' => 'Association Moderator',
             'ROLE_MEMBER_ASSOCIATION_ADMIN'     => 'Association Admin',
         );
 
