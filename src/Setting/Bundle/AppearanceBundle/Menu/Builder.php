@@ -472,10 +472,12 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
 
             }
-            $menu['Accounting']['Bill & Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-            $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Account Head',        array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Category',        array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Details',        array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
+                $menu['Accounting']['Bill & Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Account Head', array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Category', array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Details', array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
+            }
 
         }
 

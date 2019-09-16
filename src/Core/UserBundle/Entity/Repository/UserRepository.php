@@ -384,6 +384,7 @@ class UserRepository extends EntityRepository
         $qb->where("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');
+        $qb->andWhere('e.enabled = 1');
         $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;

@@ -18,7 +18,7 @@ class SalesUserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $em->getRepository('UserBundle:User')->getEmployeeEntities($globalOption);
         return $this->render('DomainUserBundle:SalesUser:index.html.twig', array(
             'globalOption'  => $globalOption,
             'employees'     => $employees
@@ -29,7 +29,7 @@ class SalesUserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $em->getRepository('UserBundle:User')->getEmployeeEntities($globalOption);
         return $this->render('DomainUserBundle:SalesUser:medicine.html.twig', array(
             'globalOption'  => $globalOption,
             'employees'     => $employees

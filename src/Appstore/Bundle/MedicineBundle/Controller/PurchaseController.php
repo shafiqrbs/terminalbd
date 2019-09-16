@@ -162,7 +162,7 @@ class PurchaseController extends Controller
     /**
      * Creates a form to edit a Invoice entity.wq
      *
-     * @param Invoice $entity The entity
+     * @param MedicinePurchase $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

@@ -5,6 +5,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchaseItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
@@ -118,7 +119,7 @@ class PrepurchaseController extends Controller
     /**
      * Creates a form to edit a Invoice entity.wq
      *
-     * @param Invoice $entity The entity
+     * @param MedicinePurchase $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

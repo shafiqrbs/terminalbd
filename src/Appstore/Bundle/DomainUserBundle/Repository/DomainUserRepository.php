@@ -51,6 +51,9 @@ class DomainUserRepository extends EntityRepository
        $qb->addSelect('u.id as id');
        $qb->addSelect('u.username as username');
        $qb->where('e.globalOption='.$option->getId());
+       $qb->andWhere('u.domainOwner = 2');
+       $qb->andWhere('u.isDelete != 1');
+       $qb->andWhere('u.enabled = 1');
        $qb->andWhere('e.monthlySales > 0');
        $qb->andWhere('e.yearlySales IS NOT NULL');
        $result = $qb->getQuery()->getArrayResult();

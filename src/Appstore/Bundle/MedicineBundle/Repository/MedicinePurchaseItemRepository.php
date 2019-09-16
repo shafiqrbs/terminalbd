@@ -155,9 +155,12 @@ class MedicinePurchaseItemRepository extends EntityRepository
 		$qb->andWhere('mpi.remainingQuantity > 0');
 		$datetime = new \DateTime();
 		$start = $datetime->format('Y-m-d 00:00:00');
-		$qb->andWhere("mpi.expirationEndDate >= :startDate");
+		$end = $datetime->format('Y-m-t 11:59:59');
+		$qb->andWhere("mpi.expirationEndDate <= :startDate");
 		$qb->setParameter('startDate', $start);
-		$count = $qb->getQuery()->getOneOrNullResult()['countId'];
+        $qb->andWhere("mpi.expirationEndDate >= :endDate");
+        $qb->setParameter('endDate', $end);
+        $count = $qb->getQuery()->getOneOrNullResult()['countId'];
 		return  $count;
 	}
 
