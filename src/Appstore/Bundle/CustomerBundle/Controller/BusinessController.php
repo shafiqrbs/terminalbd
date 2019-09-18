@@ -116,7 +116,7 @@ class BusinessController extends Controller
             $entity->setReceived($particular->getSalesPrice());
             $entity->setDue(0);
             $entity->setProcess("In-progress");
-            $entity->setEndDate($entity->getCreated());
+            $entity->setEndDate(new \DateTime("now"));
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
