@@ -186,7 +186,6 @@ class BusinessInvoice
     private $discountCalculation;
 
 
-
     /**
      * @var string
      *
@@ -282,8 +281,8 @@ class BusinessInvoice
     private $startDate;
 
     /**
-     * @var string
-     * @ORM\Column(name="endDate", type="string", length=50, nullable=true)
+     * @var \DateTime
+     * @ORM\Column(name="endDate", type="date", length=50, nullable=true)
      */
     private $endDate;
 
@@ -910,7 +909,7 @@ class BusinessInvoice
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -918,9 +917,9 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $endDate
+     * @param \DateTime $endDate
      */
-    public function setEndDate(string $endDate)
+    public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
     }

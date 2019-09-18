@@ -63,9 +63,44 @@ class Country
     /**
      * @var string
      *
+     * @ORM\Column(name="nicename", type="string", length=255)
+     */
+    private $nicename;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="code", type="string", length=25)
      */
     private $countryCode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phonecode", type="string", length=25)
+     */
+    private $phonecode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numcode", type="string", length=25)
+     */
+    private $numcode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="iso", type="string", length=25)
+     */
+    private $iso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="iso3", type="string", length=25)
+     */
+    private $iso3;
 
 
     /**
@@ -150,12 +185,85 @@ class Country
         return $this->purchaseVendorItems;
     }
 
+
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTradeItem()
+    public function getIso3()
     {
-        return $this->tradeItem;
+        return $this->iso3;
+    }
+
+    /**
+     * @param string $iso3
+     */
+    public function setIso3($iso3)
+    {
+        $this->iso3 = $iso3;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIso()
+    {
+        return $this->iso;
+    }
+
+    /**
+     * @param string $iso
+     */
+    public function setIso($iso)
+    {
+        $this->iso = $iso;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumcode()
+    {
+        return $this->numcode;
+    }
+
+    /**
+     * @param string $numcode
+     */
+    public function setNumcode($numcode)
+    {
+        $this->numcode = $numcode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhonecode()
+    {
+        return $this->phonecode;
+    }
+
+    /**
+     * @param string $phonecode
+     */
+    public function setPhonecode($phonecode)
+    {
+        $this->phonecode = $phonecode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNicename()
+    {
+        return $this->nicename;
+    }
+
+    /**
+     * @param string $nicename
+     */
+    public function setNicename($nicename)
+    {
+        $this->nicename = $nicename;
     }
 }
 

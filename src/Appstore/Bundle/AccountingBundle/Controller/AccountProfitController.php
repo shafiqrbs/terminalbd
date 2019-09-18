@@ -68,7 +68,7 @@ class AccountProfitController extends Controller
         $month = date('m', strtotime( $data['endDate']));
         $year = date('Y', strtotime($data['endDate']));
         $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month,'year' => $year));
-     //   $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
+       // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
         if(!$entity){
             $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyProfitLoss($this->getUser(),$data);
             $sales = round($overview['sales'] + $overview['salesAdjustment']['sales']);

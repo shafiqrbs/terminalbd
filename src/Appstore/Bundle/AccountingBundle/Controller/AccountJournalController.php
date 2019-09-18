@@ -326,13 +326,8 @@ class AccountJournalController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
-    }
 
-    /**
-     * Deletes a AccountJournal entity.
-     *
-     */
+    }
 
 
 	/**

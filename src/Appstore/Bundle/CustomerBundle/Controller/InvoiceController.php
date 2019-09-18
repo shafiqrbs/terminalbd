@@ -63,13 +63,20 @@ class InvoiceController extends Controller
 
     public function newAction()
     {
+
         $em = $this->getDoctrine()->getManager();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
+
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer->getId());
+
         $entity = new BusinessInvoice();
         $editForm = $this->createCreateForm($entity);
         $outstanding = 0;
         return $this->render("CustomerBundle:Invoice:new.html.twig", array(
             'globalOption' => $this->getUser()->getGlobalOption(),
+            'lastInvoice' => $lastInvoice,
             'entity' => $entity,
+            'customer' => $customer,
             'outstanding' => $outstanding,
             'form' => $editForm->createView(),
         ));
@@ -103,16 +110,15 @@ class InvoiceController extends Controller
     public function createAction(Request $request)
     {
         $data = $request->request->all();
-        $config = $this->getUser()->getGlobalOption();
-        $user = $this->getUser()->getId();
-
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getBusinessConfig();
 
         $entity = new BusinessInvoice();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user->getId()));
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer->getId());
 
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
@@ -125,14 +131,15 @@ class InvoiceController extends Controller
             $entity->setMobile($customer->getMobile());
             $entity->setReceived($data['paymentTotal']);
             $entity->setDue(0);
+            $entity->setEndDate(new \DateTime("now"));
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success', "Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentMonthlyParticular($entity, $data);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentMonthlyParticular($entity,$lastInvoice, $data);
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
-            return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $config->getSlug())));
+            return $this->redirect($this->generateUrl('customerweb_invoice', array('shop' => $user->getGlobalOption()->getSlug())));
         }
         $this->get('session')->getFlashBag()->add(
             'warning', "Payment information does not valid"

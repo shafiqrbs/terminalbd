@@ -27,11 +27,11 @@ domain_association_create:
     defaults: { _controller: "DomainUserBundle:Association:create" }
     methods:  POST
 
-domain_association_edit:
+domain_association_profile_edit:
     path:     /{id}/edit
     defaults: { _controller: "DomainUserBundle:Association:edit" }
 
-domain_association_update:
+domain_association_profile_update:
     path:     /{id}/update
     defaults: { _controller: "DomainUserBundle:Association:update" }
     methods:  [POST, PUT]

@@ -95,7 +95,7 @@
                                         <td>{{ entity.process }}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
-                                                <a class="btn mini green" href="{{ path('domain_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                                                <a class="btn mini green" href="{{ path('domain_association_profile_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                              {% endif %}
 
@@ -106,10 +106,10 @@
                                                 <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_member_sms', { 'id': entity.id }) }}" >SMS</a>
 
                                             {% endif %}
-                                            {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") and entity.process == "In-progress") %}
-                                                <a data-title="{{ entity.name }}" class="btn mini view yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Checked</a>        {% endif %}
-                                            {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process == "Checked") %}
-                                                <a data-title="{{ entity.name }}" class="btn mini view yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Approved</a>        {% endif %}
+                                            {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") and entity.process == "Pending") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Pending") %}
+                                                <a data-title="{{ entity.name }}" class="btn mini approve  yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Checked</a>        {% endif %}
+                                            {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process == "Checked") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Checked") %}
+                                                <a data-title="{{ entity.name }}" class="btn mini approve yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Approved</a>        {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

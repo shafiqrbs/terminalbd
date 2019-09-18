@@ -71,7 +71,8 @@ class Item
     protected $itemGalleries;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="items", cascade={"detach","merge"} )
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $country;
 

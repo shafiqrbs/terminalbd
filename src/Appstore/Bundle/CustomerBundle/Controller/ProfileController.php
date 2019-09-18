@@ -46,7 +46,7 @@ class ProfileController extends Controller
         $profile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(),'user' => $user->getId()));
         $editForm = $this->createEditForm($profile);
         $globalOption = $this->getUser()->getGlobalOption();
-        return $this->render('CustomerBundle:Profile:edit.html.twig', array(
+        return $this->render('CustomerBundle:Student:editProfile.html.twig', array(
             'globalOption' => $globalOption,
             'entity'      => $profile,
             'form'   => $editForm->createView(),
@@ -94,7 +94,7 @@ class ProfileController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('customerweb_profile', array('shop' => $user->getGlobalOption()->getSlug())));
         }
-        return $this->render('CustomerBundle:Profile:edit.html.twig', array(
+        return $this->render('CustomerBundle:Student:editProfile.html.twig', array(
             'globalOption'      =>  $user->getGlobalOption(),
             'entity'            => $profile,
             'form'              => $editForm->createView(),

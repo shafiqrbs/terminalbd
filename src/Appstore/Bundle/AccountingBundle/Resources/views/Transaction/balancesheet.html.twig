@@ -52,9 +52,9 @@
                                     {% if val.toIncrease == "Debit" %}
                                         {% set totalDebit = totalDebit + val.amount|abs %}
                                     {% endif %}
-                                         <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
-                                        {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
-                                            {% for sub in subHeads %}
+                                         <tr><td>&nbsp;</td><td colspan="2">{{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
+                                        {% if receiveables is defined and receiveables is not empty %}
+                                            {% for sub in receiveables %}
                                                 {% if sub.parentId == val.accountHeadId %}
                                                     <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|number_format }}</td></tr>
                                                 {% endif %}
@@ -90,10 +90,10 @@
                                     {% set totalDebit =  0   %}
                                     {% set totalCredit =  0   %}
                                     {% for val in  creditStatement[key] %}
-                                    {% set total = totalCredit + val.amount|abs %}
+                                    {% set totalCredit = totalCredit + val.amount|abs %}
                                         <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
-                                        {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
-                                            {% for sub in subHeads %}
+                                        {% if payables is defined and payables is not empty %}
+                                            {% for sub in payables %}
                                                 {% if sub.parentId == val.accountHeadId %}
                                                     <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|abs|number_format }}</td></tr>
                                                 {% endif %}
@@ -131,8 +131,8 @@
                                     {% for val in  profitStatement[key] %}
                                         {% set total = totalCredit + val.amount|abs %}
                                         <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
-                                        {% if subHeads[val.accountHeadId] is defined and subHeads[val.accountHeadId] is not empty %}
-                                            {% for sub in subHeads %}
+                                        {% if subHeadProfits is defined and subHeadProfits is not empty %}
+                                            {% for sub in subHeadProfits %}
                                                 {% if sub.parentId == val.accountHeadId %}
                                                     <tr><td></td><td></td><td>{{ sub.headName }}</td>
                                                         <td>{{ sub.amount|abs|number_format }}</td>

@@ -37,14 +37,14 @@ class BusinessController extends Controller
             $globalOption ='';
         }
         $businessModel =  $globalOption->getBusinessConfig()->getBusinessModel();
-        if($businessModel == "student-association"){
+        if($businessModel == "association"){
             $config = $globalOption->getBusinessConfig();
             $particular = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig'=> $config,'slug'=>'registration-fee'));
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $this->getUser()->getId()));
             $entity = new BusinessInvoice();
             $editForm = $this->createCreateForm($entity);
             $Exinvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoice($globalOption->getBusinessConfig());
-            $invoiceCheck = empty($Exinvoice) ? 'False' : "true";
+            $invoiceCheck = empty($Exinvoice) ? 'false' : "true";
             $template =  "Student";
             return $this->render("CustomerBundle:{$template}:dashboard.html.twig", array(
                 'user'         => $user,
@@ -116,6 +116,7 @@ class BusinessController extends Controller
             $entity->setReceived($particular->getSalesPrice());
             $entity->setDue(0);
             $entity->setProcess("In-progress");
+            $entity->setEndDate($entity->getCreated());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -123,12 +124,12 @@ class BusinessController extends Controller
             );
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentInvoiceParticular($entity,$particular);
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
-            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $config->getSlug())));
+            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $user->getGlobalOption()->getSlug())));
         }else{
             $this->get('session')->getFlashBag()->add(
                 'warning', "Payment information does not valid"
             );
-            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $config->getSlug())));
+            return $this->redirect($this->generateUrl('customer_business_dashboard', array('shop' => $user->getGlobalOption()->getSlug())));
         }
 
     }

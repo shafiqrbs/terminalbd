@@ -2,6 +2,14 @@ customer_order:
     path:     /
     defaults: { _controller: "EcommerceBundle:Order:index" }
 
+customer_order_new:
+    path:     /new
+    defaults: { _controller: "EcommerceBundle:Order:new" }
+
+customer_order_edit:
+    path:     /edit/{id}
+    defaults: { _controller: "EcommerceBundle:Order:edit" }
+
 customer_order_payment:
     path:     /payment/{id}
     defaults: { _controller: "EcommerceBundle:Order:payment" }
@@ -18,7 +26,6 @@ customer_order_data_source:
 customer_order_add_item:
     path:     /item-add-inline/{id}
     defaults: { _controller: "EcommerceBundle:Order:inlineItemAdd" }
-
 
 
 customer_order_item_disable:

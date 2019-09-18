@@ -463,12 +463,16 @@ class TransactionController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
 
         $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'));
-        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities'));
+        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities','current-liabilities'));
         $profitLoss = $em->getRepository('AccountingBundle:Transaction')->getProfitLossByAccountHead($globalOption,array('long-term-liabilities'));
-        $subHeads = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption);
+        $receiveables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption,array('current-assets','fixed-assets'));
+        $payables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption,array('long-term-liabilities','current-liabilities'));
+        $subHeadProfits = $em->getRepository('AccountingBundle:Transaction')->getSubHeadProfitAccount($globalOption);
+
         $debitStatement = [];
         $creditStatement = [];
         $profitStatement = [];
+
 
         foreach ($entitiesDebit as $key => $item) {
             $serviceName = $item['parentName'];
@@ -486,7 +490,9 @@ class TransactionController extends Controller
             'debitStatement' => $debitStatement,
             'creditStatement' => $creditStatement,
             'profitStatement' => $profitStatement,
-            'subHeads' => $subHeads,
+            'receiveables' => $receiveables,
+            'payables' => $payables,
+            'subHeadProfits' => $subHeadProfits,
         ));
     }
 

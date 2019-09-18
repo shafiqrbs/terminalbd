@@ -33,8 +33,6 @@ use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
-use Appstore\Bundle\TallyBundle\Entity\Category;
-use Appstore\Bundle\TallyBundle\Entity\TallyConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -47,7 +45,6 @@ use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
-use Setting\Bundle\ContentBundle\Entity\Admission;
 use Setting\Bundle\ContentBundle\Entity\ContactPage;
 use Setting\Bundle\ContentBundle\Entity\HomePage;
 use Setting\Bundle\ContentBundle\Entity\HomeSlider;
@@ -417,6 +414,8 @@ class GlobalOption
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+
     /**
      * @var string
      *

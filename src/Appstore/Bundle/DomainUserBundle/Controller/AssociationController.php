@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Form\MemberEditProfileType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -143,13 +144,15 @@ class AssociationController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ElectionMember entity.');
         }
-        if ($entity->getProcess() == 'In-progress'){
+        if ($entity->getProcess() == 'Pending'){
             $entity->setProcess('Checked');
             $entity->setCheckedBy($this->getUser());
         }elseif ($entity->getProcess() == 'Checked'){
             $entity->setProcess('Approved');
             $entity->setApprovedBy($this->getUser());
         }
+        $em->persist($entity);
+        $em->flush();
         return New Response("success");
     }
 
@@ -172,25 +175,6 @@ class AssociationController extends Controller
     }
 
     /**
-     * Finds and displays a Customer entity.
-     *
-     */
-    public function rehabAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
-        }
-
-        return $this->render('DomainUserBundle:Customer:rehab.html.twig', array(
-            'entity'      => $entity,
-        ));
-    }
-
-    /**
      * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
      */
     public function editAction($id)
@@ -204,7 +188,7 @@ class AssociationController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Association:editProfile.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -219,9 +203,9 @@ class AssociationController extends Controller
     */
     private function createEditForm(Customer $entity)
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerType($location), $entity, array(
-            'action' => $this->generateUrl('domain_customer_update', array('id' => $entity->getId())),
+        $em = $this->getDoctrine()->getRepository('DomainUserBundle:Customer');
+        $form = $this->createForm(new MemberEditProfileType($em), $entity, array(
+            'action' => $this->generateUrl('domain_association_profile_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -254,7 +238,7 @@ class AssociationController extends Controller
             return $this->redirect($this->generateUrl('domain_customer'));
         }
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Association:editProfile.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -284,8 +268,6 @@ class AssociationController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        exit;
-
         return $this->redirect($this->generateUrl('customer'));
     }
 

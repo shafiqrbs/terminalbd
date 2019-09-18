@@ -115,6 +115,7 @@ class TransactionRepository extends EntityRepository
         $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS capital');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$option->getId());
         $qb->andWhere("ac.slug = :slug")->setParameter('slug','capital-investment');
+        $qb->andWhere("ach.source = :source")->setParameter('source','user');
         $qb->groupBy('subAccountId');
         $qb->orderBy('e.subAccountHead','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -148,7 +149,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountRefNo($profit->getId());
         $transaction->setUpdated($profit->getUpdated());
         /* Inventory Assets - Purchase Goods Received account */
-        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(60));
+        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug"=>"profit-loss")));
         $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount($amount);
         $em->persist($transaction);
@@ -202,20 +203,41 @@ class TransactionRepository extends EntityRepository
         return $result;
     }
 
-    public function getSubHeadAccount($globalOption)
-    {
+    public function getSubHeadProfitAccount($globalOption){
+
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
         $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
-        $qb->groupBy('e.accountHead');
+        $qb->andWhere("accountHead.slug = 'profit-loss'");
+        $qb->groupBy('subAccountHead.id');
         $qb->orderBy('accountHead.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $array = array();
         foreach ($result as $row):
-            $array[$row['parentId']] = $row;
+            $array[$row['subHead']] = $row;
+        endforeach;
+        return $array;
+    }
+
+    public function getSubHeadAccount($globalOption,$parent)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.subAccountHead','subAccountHead');
+        $qb->join('e.accountHead','accountHead');
+        $qb->join('accountHead.parent','parent');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("parent.slug IN(:slugs)")->setParameter('slugs', $parent);
+        $qb->groupBy('subAccountHead.id');
+        $qb->orderBy('accountHead.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row):
+            $array[$row['subHead']] = $row;
         endforeach;
         return $array;
     }
@@ -373,11 +395,11 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if (!empty($entity->getToUser()) and !empty($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Credit'){
+
+        if (!empty($entity->getToUser()) and $entity->getToUser()->getProfile()->getUserGroup() and $entity->getTransactionType() == 'Credit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getProfile());
             $transaction->setSubAccountHead($subAccount);
         }
-
         if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Debit' ){
 
             /* Current Asset Bank Cash Debit */
@@ -391,7 +413,6 @@ class TransactionRepository extends EntityRepository
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
             $transaction->setSubAccountHead($subAccount);
-
         }
 
         if(!empty($entity->getBranches())){
@@ -419,11 +440,10 @@ class TransactionRepository extends EntityRepository
 
         /* Cash - Cash various */
 
-        if ($entity->getToUser() and !($entity->getToUser()->getProfile()->getUserGroup()) and $entity->getTransactionType() == 'Debit'){
+        if ($entity->getToUser() and $entity->getToUser()->getProfile()->getUserGroup() and $entity->getTransactionType() == 'Debit'){
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
             $transaction->setSubAccountHead($subAccount);
         }
-
         if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Credit' ){
 
             /* Current Asset Bank Cash Debit */

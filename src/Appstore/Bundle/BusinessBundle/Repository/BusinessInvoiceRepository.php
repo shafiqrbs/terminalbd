@@ -614,6 +614,23 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
+    public function getLastInvoiceParticular($customer){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb
+            ->select('MAX(e.id)')
+            ->where('e.customer = :customer')
+            ->setParameter('customer', $customer);
+        $lastId = $qb->getQuery()->getSingleScalarResult();
+        if (empty($lastId)) {
+            return false;
+        }
+        $lastCode =  $this->find($lastId);
+        return $lastCode;
+
+    }
+
+
 
 
 }

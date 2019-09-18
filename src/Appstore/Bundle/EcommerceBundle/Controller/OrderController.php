@@ -55,6 +55,49 @@ class OrderController extends Controller
         ));
     }
 
+    public function newAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Order();
+        $config = $this->getUser()->getGlobalOption();
+        $entity->setEcommerceConfig($config->getEcommerceConfig());
+        $entity->setGlobalOption($config);
+        $entity->setCreatedBy($this->getUser());
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
+        $entity->setCustomer($customer);
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('customer_order_edit', array('id' => $entity->getId())));
+
+    }
+
+    public function editAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository('EcommerceBundle:Order')->find($id);
+        $paymentEntity = new  OrderPayment();
+        $orderForm = $this->createEditForm($order);
+        $payment = $this->createEditPaymentForm($paymentEntity,$order);
+
+        if( $order->getGlobalOption()->getDomainType() == 'medicine' ) {
+            $theme = 'medicine';
+        }else{
+            $theme = 'ecommerce';
+        }
+        $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$order);
+        return $this->render("EcommerceBundle:Order/{$theme}:new.html.twig", array(
+            'globalOption' => $order->getGlobalOption(),
+            'entity'                => $order,
+            'orderForm'             => $orderForm->createView(),
+            'salesItem'             => $salesItemForm->createView(),
+            'paymentForm'           => $payment->createView(),
+        ));
+
+    }
+
+
     /**
      * Finds and displays a Order entity.
      *
@@ -148,6 +191,7 @@ class OrderController extends Controller
         ));
 
     }
+
 
     private function createMedicineSalesItemForm(OrderItem $orderItem,Order $order )
     {

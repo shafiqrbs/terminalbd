@@ -124,9 +124,10 @@ class BusinessParticular
      */
     private $name;
 
+
     /**
      * @Gedmo\Slug(fields={"name"})
-     * @Doctrine\ORM\Mapping\Column(length=255)
+     * @Doctrine\ORM\Mapping\Column(length=255,unique=false)
      */
     private $slug;
 

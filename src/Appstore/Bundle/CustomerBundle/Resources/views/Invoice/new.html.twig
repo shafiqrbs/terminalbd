@@ -52,8 +52,8 @@
                                         <table class="table table-bordered table-striped table-condensed table-fixed">
                                             <tbody>
                                             <tr>
-                                                <th class="span8"> Start Month</th>
-                                                <th class="span4" colspan="2">{{ customer.paymentMonth|date('F,y') }}</th>
+                                                <th class="span8"> Last Month</th>
+                                                <th class="span4" colspan="2">{{ lastInvoice.endDate|date('F,y') }}</th>
                                             </tr>
                                             <tr>
                                                 <th class="span8">Monthly Fee</th>
@@ -184,6 +184,7 @@
                                     <div class="action">
                                         <div class="btn-group">
                                             <input type="hidden" id="paymentTotal" name="paymentTotal" value="{{ subTotal }}">
+                                            <input type="hidden" id="lastInvoice" name="lastInvoice" value="{{ lastInvoice.id }}">
                                             <button type="button" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Payment</button>
                                         </div>
                                     </div>

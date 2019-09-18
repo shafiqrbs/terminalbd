@@ -95,6 +95,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Process</th>
+                                    <th class="numeric" >End Date</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -109,6 +110,7 @@
                                         <td class="numeric" >{{ entity.received }}</td>
                                         <td class="numeric" >{{ entity.total - entity.received }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
+                                        <td class="numeric" > {{ entity.endDate|date('d-m-Y') }}</td>
 
                                         <td class="numeric" >
                                             <div class="btn-group">
