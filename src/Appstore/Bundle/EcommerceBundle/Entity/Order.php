@@ -127,6 +127,30 @@ class Order
     private $deliveryDate ;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="customerName", type="string", length=100,  nullable=true)
+     */
+    private $customerName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerMobile", type="string", length=100,  nullable=true)
+     */
+    private $customerMobile;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerEmail", type="string", length=100,  nullable=true)
+     */
+    private $customerEmail;
+
+
+    /**
      * @var text
      *
      * @ORM\Column(name="address", type="text", nullable=true)
@@ -627,7 +651,7 @@ class Order
     }
 
     /**
-     * @return text
+     * @return string
      */
     public function getAddress()
     {
@@ -635,7 +659,7 @@ class Order
     }
 
     /**
-     * @param text $address
+     * @param string $address
      */
     public function setAddress($address)
     {
@@ -1071,6 +1095,54 @@ class Order
     public function setDeliverySlot($deliverySlot)
     {
         $this->deliverySlot = $deliverySlot;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerName()
+    {
+        return $this->customerName;
+    }
+
+    /**
+     * @param string $customerName
+     */
+    public function setCustomerName($customerName)
+    {
+        $this->customerName = $customerName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerMobile()
+    {
+        return $this->customerMobile;
+    }
+
+    /**
+     * @param string $customerMobile
+     */
+    public function setCustomerMobile($customerMobile)
+    {
+        $this->customerMobile = $customerMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
+    }
+
+    /**
+     * @param string $customerEmail
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
     }
 
 

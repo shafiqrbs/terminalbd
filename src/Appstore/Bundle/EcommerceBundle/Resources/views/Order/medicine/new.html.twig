@@ -65,17 +65,16 @@
                                 </div>
                             </div>
                             <div class="span3">
-                                {#<div class="row-fluid">
+                                <div class="row-fluid">
                                     <div class="span12">
                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
                                         <ul class="unstyled" >
-                                            <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
-                                            <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
-                                            <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
-                                            <li>{{ entity.address }}</li>
+                                            <li><strong>Name</strong>: <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="CustomerName" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.customerName }}" data-original-title="Enter Customer Name">{{ entity.customerName }}</a></li>
+                                            <li><strong>Mobile</strong>:<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="CustomerMobile" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.customerMobile }}" data-original-title="Enter Customer Mobile">{{ entity.customerMobile }}</a></li>
+                                            <li><strong>Address</strong>:<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="Address" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.address }}" data-original-title="Enter Customer Mobile">{{ entity.address }}</a></li>
                                         </ul>
                                     </div>
-                                </div>#}
+                                </div>
                             </div>
                             <div class="span3">
                                 <div class="row-fluid">
@@ -271,7 +270,7 @@
                         {{ form_start(paymentForm) }}
                         {{ form_row(paymentForm._token) }}
                         <div class="row-fluid">
-                            <div class="span8">
+                            <div class="span12">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="row-fluid">
@@ -320,50 +319,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
-                            <div class="span4">
-                                <div class="clearfix"></div>
-                                <div class="row-fluid">
-                                    <div class="m-wrap span12">
-                                        <input type="text" style="margin-left: 0!important;" id="customerMobile" name="customerMobile"  class="span8 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile">
-                                        <div class="span3">
-                                            <a href="javascript:" class="pull-right btn btn-large blue  addCustomer span12"><i class="icon-user"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"><br/></div>
-                                <div class="row-fluid customer" id="">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <div class="input-icon left input-height">
-                                                <i class="icon-user"></i>
-                                                <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid customer">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <div class="input-icon left input-height">
-                                                <i class="icon-phone"></i>
-                                                <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid customer">
-                                    <div class="span12 input-append-border">
-                                        <div class="row-fluid">
-                                            <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-
                             </div>
 
                         </div>
@@ -377,45 +334,6 @@
                             </div>
                         </div>
                         <div class="clearfix"><br/> </div>
-                      {#  <div>
-
-                            {{ form_start(orderForm) }}
-                            {{ form_row(orderForm._token) }}
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    {{ form_widget(orderForm.comment) }}
-                                    {{ form_errors(orderForm.comment) }}
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span3"></div>
-                                <div class="span3">
-                                    <div class="control-group pull-right">
-                                        {{ form_widget(orderForm.deliveryDate) }}
-                                        {{ form_errors(orderForm.deliveryDate) }}
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group pull-right">
-                                        {{ form_widget(orderForm.deliverySlot) }}
-                                        {{ form_errors(orderForm.deliverySlot) }}
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="input-append">
-                                                {{ form_widget(orderForm.process) }}
-                                                {{ form_errors(orderForm.process) }}
-                                                <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{ form_end(orderForm) }}
-                        </div>#}
                     </div>
                 </div>
 

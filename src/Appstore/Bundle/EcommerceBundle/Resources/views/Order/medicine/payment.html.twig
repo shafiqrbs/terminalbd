@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('order',{'shop':globalOption.slug}) }}">Manage Order</a>
+                        <a href="{{ path('customer_order') }}">Manage Order</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Order Lists</a></li>
@@ -36,7 +36,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn purple" href="{{ path('order_print_invoice', { 'shop':globalOption.slug,'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a>
-                                <a class="btn yellow" href="{{ path('order',{'shop':globalOption.slug}) }}"><i class="icon-th-list"></i>&nbsp;Orders</a>
+                                <a class="btn yellow" href="{{ path('customer_order') }}"><i class="icon-th-list"></i>&nbsp;Orders</a>
 
                             </div>
                         </div>
@@ -70,10 +70,9 @@
                                     <div class="span12">
                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
                                         <ul class="unstyled" >
-                                            <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
-                                            <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
-                                            <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
-                                            <li>{{ entity.address }}</li>
+                                            <li><strong>Name</strong>: <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="CustomerName" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.customerName }}" data-original-title="Enter Customer Name">{{ entity.customerName }}</a></li>
+                                            <li><strong>Mobile</strong>:<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="CustomerMobile" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.customerMobile }}" data-original-title="Enter Customer Mobile">{{ entity.customerMobile }}</a></li>
+                                            <li><strong>Address</strong>:<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="Address" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.address }}" data-original-title="Enter Customer Mobile">{{ entity.address }}</a></li>
                                         </ul>
                                     </div>
                                 </div>

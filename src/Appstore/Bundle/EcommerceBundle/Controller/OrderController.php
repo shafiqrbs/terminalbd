@@ -251,7 +251,21 @@ class OrderController extends Controller
         return new JsonResponse($item);
     }
 
+    public function inlineOrderUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('EcommerceBundle:Order')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $setName = 'set'.$data['name'];
+        $entity->$setName($data['value']);
+        $em->persist($entity);
+        $em->flush();
+        exit;
 
+    }
 
     public function paymentProcessAction(Request $request ,Order $order)
     {
@@ -259,6 +273,9 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new OrderPayment();
         $entity->setOrder($order);
+        if (!empty($data['customerMobile']) or !empty($data['mobile']) ) {
+            $this->updateOrderInformation($order, $data);
+        }
         if($data['transactionType'] == 'Return'){
             $entity->setTransactionType('Return');
             $entity->setAmount('-'.$data['amount']);
@@ -276,6 +293,24 @@ class OrderController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
         return new Response('success');
+    }
+
+    public function updateOrderInformation(Order $order,$data)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!empty($data['customerMobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($order->getGlobalOption(),$mobile,$data);
+        } elseif(!empty($data['mobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $order->getGlobalOption(), 'mobile' => $mobile ));
+        }
+        $order->setCustomer($customer);
+        $order->setCustomerName($customer->getName());
+        $order->setCustomerMobile($customer->getMobile());
+        $order->setAddress($customer->getAddress());
+        $em->persist($order);
+        $em->flush();
     }
 
 
