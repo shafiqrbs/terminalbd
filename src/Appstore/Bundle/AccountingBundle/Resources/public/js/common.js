@@ -105,6 +105,72 @@ function CommonJs(){
     });
 
 
+     $(document).on("change", ".vendor-ledger-business", function() {
+
+        var vendor = $(this).val();
+        $.get( Routing.generate('account_single_vendor_ledger'),{ vendor:vendor,'type':'business'} )
+            .done(function( data ) {
+                $('#outstanding').html(data);
+            });
+    });
+
+    $('.removeZero').click(function() {
+        $(this).attr('value', '');
+    });
+
+    $(document).on("change", ".accountHead", function(event) {
+        account = $(this).val();
+        $.get( Routing.generate('account_sub_account_select',{ id:account}))
+            .done(function( data ) {
+                $(event.target).closest('.clone').find('.subAccountHead').html(data);
+        });
+    });
+
+    $(document).on('keyup', ".debit", function() {
+        var sum = 0;
+        $(".debit").each(function(){
+            crVal = ($(this).val() === "NaN" ) ? 0 : $(this).val();
+            sum += +parseFloat(crVal);
+        });
+        $(".totalDebit").html(sum);
+        $(".totalDebit").val(sum);
+
+        dabeitVal = $("#totalDebit").val();
+        creditVal = $("#totalCredit").val();
+        console.log(dabeitVal);
+        console.log(creditVal);
+        if(creditVal ===  dabeitVal){
+            $("#submitBtn").attr("disabled", false);
+        }else{
+            $("#submitBtn").attr("disabled", true);
+        }
+
+
+    });
+
+    $(document).on('keyup', ".credit", function() {
+        var sum = 0;
+        $(".credit").each(function(){
+            crVal = ($(this).val() === "NaN" ) ? 0 : $(this).val();
+            sum += +parseFloat(crVal);
+        });
+        $(".totalCredit").html(sum);
+        $(".totalCredit").val(sum);
+
+        dabeitVal = $("#totalDebit").val();
+        creditVal = $("#totalCredit").val();
+        console.log(dabeitVal);
+        console.log(creditVal);
+        if(creditVal ===  dabeitVal){
+            console.log(creditVal);
+            $("#submitBtn").attr("disabled", false);
+        }else{
+            $("#submitBtn").attr("disabled", true);
+        }
+    });
+
+
+
     $(document).on("click", ".delete", function() {
 
         var id = $(this).attr("data-id");

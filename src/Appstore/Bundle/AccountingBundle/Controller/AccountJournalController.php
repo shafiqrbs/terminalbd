@@ -127,11 +127,6 @@ class AccountJournalController extends Controller
       return $form;
     }
 
-    /**
-     * Displays a form to create a new AccountJournal entity.
-     *
-     */
-
 
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
@@ -150,7 +145,7 @@ class AccountJournalController extends Controller
             'accountHead' => $accountHead,
             'heads' => $heads,
             'banks' => $banks,
-            'form'   => $form->createView(),
+          //  'form'   => $form->createView(),
         ));
     }
 

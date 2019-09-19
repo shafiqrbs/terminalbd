@@ -33,6 +33,12 @@ accounthead_inline:
     path:     /inline-update
     defaults: { _controller: "AccountingBundle:AccountHead:inlineUpdate" }
 
+account_sub_account_select:
+    path:     /{id}/sub-account-select
+    defaults: { _controller: "AccountingBundle:AccountHead:subAccountSelect" }
+    options:
+            expose: true
+
 accounthead_parent_select:
     path:     /parent-select
     defaults: { _controller: "AccountingBundle:AccountHead:parentSelect" }

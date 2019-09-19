@@ -10,6 +10,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Form\AccountHeadType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * AccountHead controller.
@@ -257,7 +258,20 @@ class AccountHeadController extends Controller
 
 	}
 
-	public function inlineUpdateAction(Request $request)
+    public function subAccountSelectAction($id)
+    {
+        $global = $this->getUser()->getGlobalOption();
+        $accountHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('parent' => $id , 'globalOption'=> $global , 'status'=>1),array('name'=>'ASC'));
+        $items      = '';
+        $items    .="<option value=''>--Choose Sub-account Head--</option>";
+        foreach ($accountHeads as $entity):
+            $items .="<option value='{$entity->getId()}'>{$entity->getName()}</option>";
+        endforeach;
+        return new Response($items);
+
+    }
+
+    public function inlineUpdateAction(Request $request)
 	{
 		$data = $request->request->all();
 		$em = $this->getDoctrine()->getManager();

@@ -970,7 +970,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-shopping-cart')
                 ->setAttribute('dropdown', true);
             $menu['E-commerce']['Order']->addChild('Order', array('route' => 'customer_order'))->setAttribute('icon', 'icon-truck');
-            $menu['E-commerce']['Order']->addChild('Order Return', array('route' => 'customer_order'))->setAttribute('icon', 'icon-truck');
+            $menu['E-commerce']['Order']->addChild('New Order', array('route' => 'customer_order_new'))->setAttribute('icon', 'icon-shopping-cart');
+           /* $menu['E-commerce']['Order']->addChild('Order Return', array('route' => 'customer_order'))->setAttribute('icon', 'icon-truck');*/
             $menu['E-commerce']['Order']->addChild('Pre-order', array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-truck');
 
         }

@@ -384,6 +384,7 @@ function AccountingApproveProcess(){}
     });
 
     var count = 0;
+
     $('.addmore').click(function(){
 
         var $el = $(this);
@@ -391,6 +392,7 @@ function AccountingApproveProcess(){}
         var $clone = $cloneBlock.find('.clone:eq(0)').clone();
         $clone.find('[id]').each(function(){this.id+='someotherpart'});
         $clone.find(':text,textarea' ).val("");
+        $clone.find(':number' ).val(0);
         $clone.attr('id', "added"+(++count));
         $clone.find('.remove').removeClass('hidden');
         $cloneBlock.append($clone);
