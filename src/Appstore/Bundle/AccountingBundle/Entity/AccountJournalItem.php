@@ -11,7 +11,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
  * AccountJournal
  *
  * @ORM\Table(name="account_journal_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountJournalRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountJournalItemRepository")
  */
 class AccountJournalItem
 {
@@ -26,7 +26,7 @@ class AccountJournalItem
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountJournalItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountJournalItems")
      **/
     protected $accountJournal;
 
@@ -62,6 +62,14 @@ class AccountJournalItem
      * @ORM\Column(name="process", type="string", length=50, nullable = true)
      */
     private $process;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="narration", type="text", length=50, nullable = true)
+     */
+    private $narration;
 
 
     /**
@@ -168,6 +176,22 @@ class AccountJournalItem
     public function setProcess($process)
     {
         $this->process = $process;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNarration()
+    {
+        return $this->narration;
+    }
+
+    /**
+     * @param string $narration
+     */
+    public function setNarration($narration)
+    {
+        $this->narration = $narration;
     }
 
 

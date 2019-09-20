@@ -581,8 +581,10 @@ class Builder extends ContainerAware
        */
 
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
-            $menu['Accounting']->addChild('Balance Transfer', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
-            $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
+
+            $menu['Accounting']->addChild('Double Entry', array('route' => 'account_double_entry'))->setAttribute('icon', 'icon-retweet');
+             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
+            $menu['Accounting']->addChild('Contra Account', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
 

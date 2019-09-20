@@ -14,6 +14,10 @@ accounting_account_sales_restaurant:
     resource: "@AccountingBundle/Resources/config/routing/accountrestaurant.yml"
     prefix:   /restaurant
 
+accounting_double_entry:
+    resource: "@AccountingBundle/Resources/config/routing/doubleentry.yml"
+    prefix:   /double-entry-journal
+
 accounting_customer:
     resource: "@AccountingBundle/Resources/config/routing/accountcustomer.yml"
     prefix:   /account-customer

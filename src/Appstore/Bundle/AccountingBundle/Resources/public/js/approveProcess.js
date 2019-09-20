@@ -392,10 +392,11 @@ function AccountingApproveProcess(){}
         var $clone = $cloneBlock.find('.clone:eq(0)').clone();
         $clone.find('[id]').each(function(){this.id+='someotherpart'});
         $clone.find(':text,textarea' ).val("");
-        $clone.find(':number' ).val(0);
+        $clone.find('.debit' ).val(0);
+        $clone.find('.credit' ).val(0);
         $clone.attr('id', "added"+(++count));
         $clone.find('.remove').removeClass('hidden');
-        $cloneBlock.append($clone);
+        $cloneBlock.prepend($clone);
         $('.numeric').numeric();
     });
 

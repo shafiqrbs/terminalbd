@@ -34,6 +34,17 @@ class ApiEcommerceController extends Controller
         return "invalid";
     }
 
+    public function checkApiWithoutSecretValidation($request)
+    {
+
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        if ($request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            return "valid";
+        }
+        return "invalid";
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -317,7 +328,7 @@ class ApiEcommerceController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
-        if( $this->checkApiValidation($request) == 'invalid') {
+        if( $this->checkApiWithoutSecretValidation($request) == 'invalid') {
 
             return new Response('Unauthorized access.', 401);
 
@@ -327,7 +338,6 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
-            $this->checkApiValidation($request);
             $intlMobile =$data['mobile'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
@@ -372,7 +382,6 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $setup = $this->checkApiValidation($request);
-
             $name = $data['name'];
             $mobile = $data['mobile'];
             $email = $data['email'];

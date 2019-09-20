@@ -29,8 +29,10 @@ class AccountJournalRepository extends EntityRepository
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.accountHeadDebit','accountHeadDebit');
-        $qb->join('e.accountHeadCredit','accountHeadCredit');
+        $qb->leftJoin('e.accountHeadDebit','accountHeadDebit');
+        $qb->leftJoin('e.accountHeadCredit','accountHeadCredit');
+        $qb->leftJoin('e.createdBy','user');
+        $qb->leftJoin('user.profile','userProfile');
         $qb->leftJoin('e.toUser','toUser');
         $qb->leftJoin('toUser.profile','profile');
         $qb->leftJoin('e.transactionMethod','t');
@@ -38,6 +40,7 @@ class AccountJournalRepository extends EntityRepository
         $qb->leftJoin('e.accountBank','ab');
         $qb->select('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.transactionType as transactionType','e.amount as amount','e.remark as remark','e.process as process','e.journalSource as journalSource');
         $qb->addSelect('profile.name as userName');
+        $qb->addSelect('userProfile.name as userProfileName');
         $qb->addSelect('accountHeadDebit.name as accountHeadDebitName');
         $qb->addSelect('accountHeadCredit.name as accountHeadCreditName');
         $qb->addSelect('t.name as methodName');
@@ -51,6 +54,18 @@ class AccountJournalRepository extends EntityRepository
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public function findDoubleEntrySearch(User $user,$data = '')
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
@@ -115,6 +130,7 @@ class AccountJournalRepository extends EntityRepository
             $transactionMethod = isset($data['transactionMethod']) ? $data['transactionMethod'] :'';
             $startDate = isset($data['startDate']) ? $data['startDate'] : '';
             $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
+            $mode =   isset($data['mode']) ? $data['mode'] : '';
 
             if (!empty($accountRefNo)) {
                 $qb->andWhere("e.accountRefNo = :accountRefNo");
@@ -135,6 +151,11 @@ class AccountJournalRepository extends EntityRepository
             if (!empty($accountHead)) {
                 $qb->andWhere("e.accountHeadDebit = :accountHeadDebit");
                 $qb->setParameter('accountHeadDebit', $accountHead);
+             }
+
+			if (!empty($mode)) {
+                $qb->andWhere("e.mode = :mode");
+                $qb->setParameter('mode', $mode);
              }
 
 			if (!empty($startDate) ) {

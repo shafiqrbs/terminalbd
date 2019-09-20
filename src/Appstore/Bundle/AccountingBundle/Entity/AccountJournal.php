@@ -47,6 +47,11 @@ class AccountJournal
     private  $accountCash;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem", mappedBy="accountJournal" , cascade={"detach","merge"} )
+     **/
+    private  $accountJournalItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountJournalDebits" )
      **/
     private  $accountHeadDebit;
@@ -87,7 +92,7 @@ class AccountJournal
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="float")
+     * @ORM\Column(name="amount", type="float",  nullable = true)
      */
     private $amount;
 
@@ -118,6 +123,14 @@ class AccountJournal
      * @ORM\Column(name="process", type="string", length=50, nullable = true)
      */
     private $process;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=50, nullable = true)
+     */
+    private $mode = "journal";
+
 
     /**
      * @var string
@@ -527,6 +540,32 @@ class AccountJournal
     {
         $this->journalSource = $journalSource;
     }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return AccountJournalItem
+     */
+    public function getAccountJournalItems()
+    {
+        return $this->accountJournalItems;
+    }
+
+
 
 
 }

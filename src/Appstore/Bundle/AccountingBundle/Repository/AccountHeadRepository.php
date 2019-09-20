@@ -92,8 +92,6 @@ class AccountHeadRepository extends EntityRepository
         return $heads;
     }
 
-
-
     public function getChildrenAccount($parent = '', $option = '')
     {
         $query = $this->createQueryBuilder('e');
@@ -378,4 +376,6 @@ class AccountHeadRepository extends EntityRepository
             return $head;
         }
     }
+
+
 }
