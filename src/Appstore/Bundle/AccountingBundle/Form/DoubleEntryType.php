@@ -21,6 +21,8 @@ class DoubleEntryType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('transactionType','hidden', array('attr'=>array('value'=>'Debit')));
     }
     
     /**

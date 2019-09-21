@@ -2,20 +2,22 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
-use Appstore\Bundle\AccountingBundle\Form\DoubleEntryType;
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
+use Appstore\Bundle\AccountingBundle\Form\ProfitWithdrawalType;
+use Core\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Form\AccountJournalType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * AccountJournal controller.
  *
  */
-class DoubleEntryController extends Controller
+class ProfitWithdrawalController extends Controller
 {
 
     public function paginate($entities)
@@ -38,13 +40,15 @@ class DoubleEntryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
-        $data['mode'] = "double-entry";
-        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findDoubleEntrySearch( $this->getUser(),$data);
+        $data['mode'] = "withdrawal";
+        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:DoubleEntry:index.html.twig', array(
+       $employees = $em->getRepository('UserBundle:User')->getEmployees($this->getUser()->getGlobalOption());
+        return $this->render('AccountingBundle:ProfitWithdrawal:index.html.twig', array(
             'entities' => $pagination,
+            'overview' => '',
             'searchForm' => $data,
+            'employees' => $employees,
         ));
     }
 
@@ -55,39 +59,47 @@ class DoubleEntryController extends Controller
     public function createAction(Request $request)
     {
         $entity = new AccountJournal();
-        $data = $request->request->all();
-        $form   = $this->createCreateForm($entity);
-        if($data['totalDebit'] == $data['totalDebit']){
-
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ){
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setMode('double-entry');
-            $entity->setAmount($data['totalDebit']);
+            if($entity->getTransactionMethod()->getSlug() == "cash"){
+                $cash = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug" => "cash-in-hand"));
+                $entity->setAccountHeadCredit($cash);
+            }elseif($entity->getTransactionMethod()->getSlug() == "bank"){
+                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug" => "bank-account"));
+                $entity->setAccountHeadCredit($bank);
+            }elseif($entity->getTransactionMethod()->getSlug() == "mobile"){
+                $mobile = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug" => "mobile-account"));
+                $entity->setAccountHeadCredit($mobile);
+            }
+            $profit = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug" => "profit-loss"));
+            $entity->setAccountHeadDebit($profit);
+            $entity->setMode("withdrawal");
+            $entity->setTransactionType("Credit");
             $em->persist($entity);
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournalItem')->insertDoubleEntry($entity,$data);
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_double_entry'));
+            return $this->redirect($this->generateUrl('account_profit_withdrawal'));
         }
         $this->get('session')->getFlashBag()->add(
             'notice',"May be you are missing to select bank or mobile account"
         );
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
-        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
-
-        return $this->render('AccountingBundle:DoubleEntry:new.html.twig', array(
+        return $this->render('AccountingBundle:ProfitWithdrawal:new.html.twig', array(
             'entity' => $entity,
-            'accountHead' => $accountHead,
-            'heads' => $heads,
-            'form' => $form->createView(),
+            'form'   => $form->createView(),
         ));
-
     }
 
     /**
-     * Creates a form to edit a AccountJournal entity.
+     * Creates a form to create a AccountJournal entity.
      *
      * @param AccountJournal $entity The entity
      *
@@ -95,15 +107,16 @@ class DoubleEntryController extends Controller
      */
     private function createCreateForm(AccountJournal $entity)
     {
-        $form = $this->createForm(new DoubleEntryType(),$entity, array(
-            'action' => $this->generateUrl('account_double_entry_create'),
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ProfitWithdrawalType($globalOption), $entity, array(
+            'action' => $this->generateUrl('account_profit_withdrawal_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
             )
         ));
-        return $form;
+      return $form;
     }
 
 
@@ -113,16 +126,18 @@ class DoubleEntryController extends Controller
 
     public function newAction()
     {
-        $entity = new AccountJournal();
         $em = $this->getDoctrine()->getManager();
+        $entity = new AccountJournal();
         $form   = $this->createCreateForm($entity);
+        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
         $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
-        return $this->render('AccountingBundle:DoubleEntry:new.html.twig', array(
+        return $this->render('AccountingBundle:ProfitWithdrawal:new.html.twig', array(
             'entity' => $entity,
             'accountHead' => $accountHead,
             'heads' => $heads,
-            'form' => $form->createView(),
+            'banks' => $banks,
+            'form'   => $form->createView(),
         ));
     }
 
@@ -132,7 +147,19 @@ class DoubleEntryController extends Controller
      */
     public function showAction($id)
     {
-        exit;
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AccountingBundle:AccountJournal')->find($id);
+         if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountJournal entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('AccountingBundle:AccountJournal:show.html.twig', array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        ));
     }
 
 	/**
@@ -144,21 +171,17 @@ class DoubleEntryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AccountingBundle:AccountJournal')->find($id);
-        $editForm = $this->createEditForm($entity);
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
-        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
 
-        $subHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount( $this->getUser()->getGlobalOption()->getId(),$entity);
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('AccountingBundle:DoubleEntry:new.html.twig', array(
-            'entity' => $entity,
-            'accountHead' => $accountHead,
-            'heads' => $heads,
-            'subHeads' => $subHeads,
-            'form'   => $editForm->createView(),
+        return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
         ));
     }
 
@@ -171,17 +194,17 @@ class DoubleEntryController extends Controller
     */
     private function createEditForm(AccountJournal $entity)
     {
-            $form = $this->createForm(new DoubleEntryType(),$entity, array(
-            'action' => $this->generateUrl('account_double_entry_update', array('id' => $entity->getId())),
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ProfitWithdrawalType($globalOption), $entity, array(
+            'action' => $this->generateUrl('account_journal_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
             )
         ));
         return $form;
     }
-
-
     /**
      * Edits an existing AccountJournal entity.
      *
@@ -189,40 +212,47 @@ class DoubleEntryController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all();
+
         $entity = $em->getRepository('AccountingBundle:AccountJournal')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
+
+        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
-        if($data['totalDebit'] == $data['totalDebit']){
+        $editForm->handleRequest($request);
 
-            $em = $this->getDoctrine()->getManager();
-            $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setMode('double-entry');
-            $entity->setAmount($data['totalDebit']);
-            $em->persist($entity);
+        if ($editForm->isValid()) {
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountJournalItem')->insertDoubleEntry($entity,$data);
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            return $this->redirect($this->generateUrl('account_double_entry_edit',array('id'=> $entity->getId())));
 
+            return $this->redirect($this->generateUrl('account_journal_edit', array('id' => $id)));
         }
-        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
 
-        $subHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccount( $this->getUser()->getGlobalOption()->getId(),$entity);
-
-        return $this->render('AccountingBundle:DoubleEntry:new.html.twig', array(
+        return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
             'entity'      => $entity,
-            'heads'      => $heads,
-            'subHeads'      => $subHeads,
-            'form'   => $editForm->createView(),
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         ));
     }
 
+
+    /**
+     * Creates a form to delete a AccountJournal entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('account_journal_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm()
+        ;
+    }
 
     public function paymentAction(Request $request)
     {
@@ -269,7 +299,10 @@ class DoubleEntryController extends Controller
                 $entity->setUpdated($datetime);
             }
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDoubleEntryTransaction($entity);
+            if(!empty($entity->getTransactionMethod())){
+	            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
+            }
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -291,23 +324,21 @@ class DoubleEntryController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 
     /**
-	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
-	 */
-
-    public function itemDeleteAction(AccountJournalItem $item)
+     * Deletes a AccountJournal entity.
+     *
+     */
+    public function stakeholderProfitAction(User $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$item) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
-        $em->remove($item);
-        $em->flush();
-        return new Response('success');
+        $amount = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getStakeHolderProfitAccount($entity);
+        return new Response($amount);
     }
 
 

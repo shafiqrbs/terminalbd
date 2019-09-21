@@ -68,7 +68,7 @@ class AccountCash
     private  $transactionMethod;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountCash")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountCash")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountJournal;

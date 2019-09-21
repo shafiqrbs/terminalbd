@@ -126,6 +126,15 @@ function CommonJs(){
         });
     });
 
+    $(document).on("change", ".userProfit", function(e) {
+        account = $(this).val();
+        $.get( Routing.generate('account_profit_withdrawal_stakeholder',{ id:account}))
+            .done(function( data ) {
+                $('.profit').html(data);
+                $('.profit').val(data);
+        });
+    });
+
     $(document).on('keyup', ".debit", function() {
         var sum = 0;
         $(".debit").each(function(){

@@ -18,6 +18,10 @@ accounting_double_entry:
     resource: "@AccountingBundle/Resources/config/routing/doubleentry.yml"
     prefix:   /double-entry-journal
 
+accounting_profit_withdrawal:
+    resource: "@AccountingBundle/Resources/config/routing/profitwithdrawal.yml"
+    prefix:   /profit-withdrawal
+
 accounting_customer:
     resource: "@AccountingBundle/Resources/config/routing/accountcustomer.yml"
     prefix:   /account-customer

@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
@@ -952,6 +953,65 @@ class AccountCashRepository extends EntityRepository
             $arrays[$result['month']] = $result;
         }
         return $arrays;
+    }
+
+    public function insertDoubleEntry(AccountJournal $journal, AccountJournalItem $journalItem,$method)
+    {
+        $balance = $this->lastInsertCash($journal,"Journal");
+        $em = $this->_em;
+        $cash = new AccountCash();
+        $cash->setGlobalOption($journal->getGlobalOption());
+        $cash->setAccountJournal($journal);
+        $cash->setAccountRefNo($journal->getAccountRefNo());
+        $cash->setProcessHead("Journal");
+        if($method == "cash"){
+
+            $cash->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash')));
+            if($journalItem->getDebit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setDebit($journalItem->getDebit());
+                $cash->setBalance($balance + $journalItem->getDebit());
+            }elseif($journalItem->getCredit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setDebit($journalItem->getCredit());
+                $cash->setBalance($balance + $journalItem->getCredit());
+            }
+
+        }elseif($method == "bank"){
+
+            $cash->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'bank')));
+            if($journalItem->getDebit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setAccountBank($journalItem->getAccountSubHead()->getAccountBank());
+                $cash->setDebit($journalItem->getDebit());
+                $cash->setBalance($balance + $journalItem->getDebit());
+            }elseif($journalItem->getCredit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setAccountBank($journalItem->getAccountSubHead()->getAccountBank());
+                $cash->setDebit($journalItem->getCredit());
+                $cash->setBalance($balance + $journalItem->getCredit());
+            }
+
+        }elseif($method == "mobile"){
+
+            $cash->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug' => 'mobile')));
+            if($journalItem->getDebit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setAccountMobileBank($journalItem->getAccountSubHead()->getAccountMobileBank());
+                $cash->setDebit($journalItem->getDebit());
+                $cash->setBalance($balance + $journalItem->getDebit());
+            }elseif($journalItem->getCredit()  > 0 ){
+                $cash->setAccountHead($journalItem->getAccountHead());
+                $cash->setAccountMobileBank($journalItem->getAccountSubHead()->getAccountMobileBank());
+                $cash->setDebit($journalItem->getCredit());
+                $cash->setBalance($balance + $journalItem->getCredit());
+            }
+
+        }
+        $cash->setCreated($journal->getCreated());
+        $cash->setUpdated($journal->getUpdated());
+        $em->persist($cash);
+        $em->flush();
     }
 
 

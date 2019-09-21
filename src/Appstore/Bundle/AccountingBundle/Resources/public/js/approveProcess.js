@@ -46,8 +46,7 @@ function AccountingApproveProcess(){}
                 }
             },
         })
-
-    })
+    });
 
     $(document).on("click", ".approve", function() {
 

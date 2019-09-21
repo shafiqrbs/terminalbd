@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
@@ -136,10 +137,12 @@ class TransactionRepository extends EntityRepository
             $totalProfit = $profit->getProfit();
             $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
             $transaction->setCredit($amount);
+            $transaction->setAmount("-{$amount}");
         }else{
             $totalProfit = $profit->getLoss();
             $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
             $transaction->setDebit($amount);
+            $transaction->setAmount($amount);
 
         }
         $transaction->setGlobalOption($profit->getGlobalOption());
@@ -151,7 +154,6 @@ class TransactionRepository extends EntityRepository
         /* Inventory Assets - Purchase Goods Received account */
         $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug"=>"profit-loss")));
         $transaction->setSubAccountHead($subAccount);
-        $transaction->setAmount($amount);
         $em->persist($transaction);
         $em->flush();
     }
@@ -220,6 +222,18 @@ class TransactionRepository extends EntityRepository
             $array[$row['subHead']] = $row;
         endforeach;
         return $array;
+    }
+
+    public function getStakeHolderProfitAccount($user){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.subAccountHead','subAccountHead');
+        $qb->join('e.accountHead','accountHead');
+        $qb->select('sum(e.amount) as amount');
+        $qb->where("subAccountHead.employee = :employee")->setParameter('employee', $user->getId());
+        $qb->andWhere("accountHead.slug = 'profit-loss'");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result['amount'];
     }
 
     public function getSubHeadAccount($globalOption,$parent)
@@ -374,6 +388,50 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function insertDoubleEntryTransaction(AccountJournal $journal)
+    {
+
+        $em = $this->_em;
+
+        /* @var $entity AccountJournalItem */
+
+        foreach ($journal->getAccountJournalItems() as $entity):
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($journal->getGlobalOption());
+            $transaction->setProcessHead('Journal');
+            $transaction->setProcess($entity->getAccountHead()->getParent()->getName());
+            $transaction->setAccountRefNo($journal->getAccountRefNo());
+            $transaction->setUpdated($journal->getUpdated());
+            if($entity->getDebit() > 0){
+                $transaction->setAccountHead($entity->getAccountHead());
+                if($entity->getAccountSubHead()){
+                    $transaction->setSubAccountHead($entity->getAccountSubHead());
+                }
+                $transaction->setAmount($entity->getDebit());
+                $transaction->setDebit($entity->getDebit());
+            }else{
+                $transaction->setAccountHead($entity->getAccountHead());
+                if($entity->getAccountSubHead()){
+                    $transaction->setSubAccountHead($entity->getAccountSubHead());
+                }
+                $transaction->setAmount("-{$entity->getCredit()}");
+                $transaction->setCredit($entity->getCredit());
+            }
+            $em->persist($transaction);
+            $em->flush();
+            if($entity->getAccountHead()->getSlug() == "cash-in-hand"){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'cash');
+            }elseif($entity->getAccountHead()->getSlug() == "bank-account" and $entity->getAccountSubHead()){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'bank');
+            }elseif($entity->getAccountHead()->getSlug() == "mobile-account" and $entity->getAccountSubHead()){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'mobile');
+            }
+
+        endforeach;
+
+    }
+
     public function insertAccountJournalTransaction(AccountJournal $journal)
     {
         $this->insertAccountJournalDebitTransaction($journal);
@@ -475,7 +533,8 @@ class TransactionRepository extends EntityRepository
 		$this->insertAccountBalanceCreditTransaction($journal);
 	}
 
-	public function insertAccountBalanceDebitTransaction(AccountBalanceTransfer $entity)
+
+    public function insertAccountBalanceDebitTransaction(AccountBalanceTransfer $entity)
 	{
 
 		$transaction = new Transaction();
