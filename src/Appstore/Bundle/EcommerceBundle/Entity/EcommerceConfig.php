@@ -284,6 +284,13 @@ class EcommerceConfig
      */
     private $printer;
 
+ /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=50,nullable = true)
+     */
+    private $address;
+
 
     /**
      * @var string
@@ -995,6 +1002,22 @@ class EcommerceConfig
 	public function getCategories() {
 		return $this->categories;
 	}
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
 
 
 }

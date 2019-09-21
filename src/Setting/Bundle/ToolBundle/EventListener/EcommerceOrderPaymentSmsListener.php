@@ -83,7 +83,7 @@ class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
 
         $post = $event->getPayment()->getOrder();
         $domainName = 'www.'.$post->getGlobalOption()->getDomain();
-        $customerMobile = "88".$post->getCreatedBy()->getProfile()->getMobile();
+        $customerMobile = "88".$post->getCustomerMobile();
 
         $invoice = $post->getInvoice();
         $amount = $post->getGrandTotalAmount();

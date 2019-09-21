@@ -48,7 +48,7 @@ class EcommerceOrderSmsListener extends BaseSmsAwareListener
             $globalOption = $post->getGlobalOption();
             $shopName = $globalOption->getName();
             $domainName = 'www.'.$globalOption->getDomain();
-            $customerMobile = "88".$post->getCreatedBy()->getProfile()->getMobile();
+            $customerMobile = "88".$post->getCustomerMobile();
             $administratorMobile = "+88".$globalOption->getNotificationConfig()->getMobile();
 
             $deliveryDate = $post->getDeliveryDate()->format('d-m-Y');

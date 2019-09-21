@@ -48,7 +48,8 @@ class OrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
+        $data = $_REQUEST;
+        $entities = $em->getRepository('EcommerceBundle:Order')->findWithSearch($globalOption->getId(),$data);
         $pagination = $this->paginate($entities);
         return $this->render('EcommerceBundle:Order:index.html.twig', array(
             'entities' => $pagination,
@@ -66,6 +67,7 @@ class OrderController extends Controller
         $entity->setCreatedBy($this->getUser());
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
         $entity->setCustomer($customer);
+        $entity->setCashOnDelivery(true);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('customer_order_edit', array('id' => $entity->getId())));
@@ -263,36 +265,51 @@ class OrderController extends Controller
         $entity->$setName($data['value']);
         $em->persist($entity);
         $em->flush();
+        if($entity->getShippingCharge() > 0 ){
+            $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
+        }
         exit;
 
     }
 
     public function paymentProcessAction(Request $request ,Order $order)
     {
-        $data = $request->request->all();
+        $payment = $request->request->all();
+        $data = $payment['ecommerce_payment'];
+
         $em = $this->getDoctrine()->getManager();
-        $entity = new OrderPayment();
-        $entity->setOrder($order);
-        if (!empty($data['customerMobile']) or !empty($data['mobile']) ) {
-            $this->updateOrderInformation($order, $data);
+        if($data['transactionType'] and $order->getGrandTotalAmount() > 0){
+            $entity = new OrderPayment();
+            $entity->setOrder($order);
+            if (!empty($data['customerMobile']) or !empty($data['mobile']) ) {
+                $this->updateOrderInformation($order, $data);
+            }
+            if($data['transactionType'] == 'Return'){
+                $entity->setTransactionType('Return');
+                $entity->setAmount('-'.$data['amount']);
+            }elseif($data['transactionType'] == 'Receive'){
+                $entity->setTransactionType('Receive');
+                $entity->setAmount($data['amount']);
+            }
+            if(!empty($data['accountMobileBank'])){
+                $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
+                $entity->setAccountMobileBank($accountMobileBank);
+            }
+            $entity->setMobileAccount($data['mobileAccount']);
+            $entity->setTransaction($data['transaction']);
+            $em->persist($entity);
+            $em->flush();
         }
-        if($data['transactionType'] == 'Return'){
-            $entity->setTransactionType('Return');
-            $entity->setAmount('-'.$data['amount']);
-        }else{
-            $entity->setTransactionType('Payment');
-            $entity->setAmount($data['amount']);
+        $cashDelivery = isset($payment['cashOnDelivery']) and $payment['cashOnDelivery'] == 1 ? $payment['cashOnDelivery'] : 0;
+        if($cashDelivery == 1 ) {
+            $order->setCashOnDelivery(true);
+        }else {
+            $order->setCashOnDelivery(false);
         }
-        if(!empty($data['accountMobileBank'])){
-            $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
-            $entity->setAccountMobileBank($accountMobileBank);
-        }
-        $entity->setMobileAccount($data['mobileAccount']);
-        $entity->setTransaction($data['transaction']);
-        $em->persist($entity);
+        $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-        return new Response('success');
+        return $this->redirect($this->generateUrl('customer_order_payment',array('id' => $order->getId())));
     }
 
     public function updateOrderInformation(Order $order,$data)
@@ -503,6 +520,20 @@ class OrderController extends Controller
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
         return new Response('success');
 
+    }
+
+    public function paymentDeleteAction(OrderPayment $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response('success');
     }
 
     public function confirmPaymentAction(OrderPayment $payment, $process)

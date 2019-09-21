@@ -197,9 +197,30 @@ function ApproveProcess(){
 
     });
 
-    $('#adminSubmitPayment').click( function( e ) {
+    $('#cashOnDelivery').click( function() {
 
-        var url = $('#ecommerce-payment').attr("action");
+        if($(this).prop("checked") === false){
+            $("#cashOn").show();
+            $("#adminSubmitPayment").removeClass("submitOrder").addClass("submitPayment");
+        }else{
+            $("#cashOn").hide();
+            $("#adminSubmitPayment").removeClass("submitPayment").addClass("submitOrder");
+        }
+
+    });
+
+    $(document).on("click", " .submitOrder", function() {
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+               $("#ecommerce-payment").submit();
+            }
+        });
+        e.preventDefault();
+    });
+
+    $(document).on("click", " .submitPayment", function(e) {
 
         var amount = $('#ecommerce_payment_amount').val();
         if( amount == "" ){
@@ -238,10 +259,7 @@ function ApproveProcess(){
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
-                    .done(function(data){
-                        location.reload();
-                    });
+                $("#ecommerce-payment").submit();
             }
         });
         e.preventDefault();

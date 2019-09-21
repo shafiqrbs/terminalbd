@@ -49,11 +49,14 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
                                     <th class="numeric" >Delivery</th>
+                                    <th class="numeric" >Slot</th>
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Item</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Shipping</th>
-                                    <th class="numeric" >Grand Total</th>
+                                    <th class="numeric" >Total</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -64,6 +67,9 @@
                                     <tr id="remove-tr-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.deliverySlot }}</td>
+                                        <td class="numeric" >{{ entity.customerName }}</td>
+                                        <td class="numeric" >{{ entity.customerMobile }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.item }}</td>
                                         <td class="numeric" >{{ entity.totalAmount }}</td>

@@ -19,6 +19,62 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class OrderRepository extends EntityRepository
 {
 
+    protected function handleSearchBetween($qb,$data)
+    {
+
+            $invoice = isset($data['invoice'])  ? $data['invoice'] : '';
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+            $name =    isset($data['name'])? $data['name'] :'';
+            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $processHead =    isset($data['processHead'])? $data['processHead'] :'';
+            if($name){
+                $qb->andWhere($qb->expr()->like("e.customerName", "'%$name%'" ));
+            }
+            if($mobile){
+                $qb->andWhere($qb->expr()->like("e.customerMobile", "'%$mobile%'" ));
+            }
+            if (!empty($startDate) and !empty($endDate) ) {
+                $compareTo = new \DateTime($startDate);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created >= :startDate")->setParameter('startDate', $startDate);
+            }
+            if (!empty($startDate) and !empty($endDate) ) {
+                $compareTo = new \DateTime($endDate);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.created <= :endDate")->setParameter('endDate', $endDate);
+            }
+            if (!empty($invoice)) {
+                $qb->andWhere("e.invoice = :invoice")->setParameter('invoice', $invoice);
+            }
+            if (!empty($processHead)) {
+                $qb->andWhere("e.processHead = :process")->setParameter('process', $processHead);
+            }
+
+    }
+
+    public function findWithSearch($option, $data)
+    {
+        if (!empty($data['sortBy'])) {
+
+            $sortBy = explode('=?=', $data['sortBy']);
+            $sort = $sortBy[0];
+            $order = $sortBy[1];
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.process != :head")->setParameter('head', "Delete");
+        if (empty($data['sortBy'])){
+            $qb->orderBy('e.updated', 'DESC');
+        }else{
+            $qb->orderBy($sort ,$order);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+
     public function insertOrder(GlobalOption $globalOption)
     {
         $em = $this->_em;

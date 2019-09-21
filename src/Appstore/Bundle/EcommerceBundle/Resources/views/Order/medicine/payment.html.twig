@@ -35,8 +35,9 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Order Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn purple" href="{{ path('order_print_invoice', { 'shop':globalOption.slug,'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a>
+                                <a class="btn purple" href="{{ path('customer_order_print_invoice', {'id': entity.id }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a>
                                 <a class="btn yellow" href="{{ path('customer_order') }}"><i class="icon-th-list"></i>&nbsp;Orders</a>
+                                <a class="btn red" href="{{ path('customer_order_new') }}"><i class="icon-th-list"></i>&nbsp;New Order</a>
 
                             </div>
                         </div>
@@ -54,7 +55,7 @@
                                             {% if entity.discountAmount > 0 %}
                                                 <li><strong>Discount</strong>:&nbsp;{{ entity.discountAmount }}</li>
                                             {% endif %}
-                                            <li><strong>Delivery Fee</strong>:&nbsp;{{ entity.shippingCharge }}</li>
+                                            <li><strong>Delivery Charge</strong>:&nbsp;{{ entity.shippingCharge }}</li>
                                             <li><strong>Paid</strong>:&nbsp;{{ entity.paidAmount }}</li>
                                             {% if entity.paidAmount <  entity.grandTotalAmount and entity.dueAmount > 0 %}
                                                 <li><strong>Due</strong>:&nbsp;{{ entity.dueAmount }}</li>
@@ -180,7 +181,7 @@
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
-                                    <td class="numeric">=&nbsp;{{ entity.shippingCharge }}</td>
+                                    <td class="numeric">=&nbsp;<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="ShippingCharge" href="javascript:"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.shippingCharge }}" data-original-title="Enter Delivery Charge">{{ entity.shippingCharge }}</a></td>
                                     <td></td>
                                 </tr>
 
@@ -266,7 +267,54 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Payment Process</div></div>
                         </div>
-                        <div class="clearfix"><br/> </div>
+                        <div class="clearfix"><br/></div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-green">
+                                <th class="numeric" >Date</th>
+                                <th class="numeric" >Transaction Type</th>
+                                <th class="numeric" >Payment Mobile</th>
+                                <th class="numeric" >Transaction ID</th>
+                                <th class="numeric" >Receive Mobile</th>
+                                <th class="numeric" >Receive Amount</th>
+                                <th class="numeric" >Return Amount</th>
+                                <th class="numeric" >Process</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for payment in entity.orderPayments %}
+                                <tr id="remove-{{ payment.id }}">
+                                    <td>{{ payment.updated|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ payment.transactionType }}</td>
+                                    <td class="numeric" >{{ payment.mobileAccount }}</td>
+                                    <td class="numeric" >{{ payment.transaction }}</td>
+                                    <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
+                                    <td class="numeric" >{% if payment.transactionType =='Receive' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                    <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|abs|number_format }}{% endif %}</td>
+                                    <td class="numeric" >
+                                        {% if payment.status == 1 %}
+                                            <span class="btn  mini green"><i class=" icon-thumbs-up"></i> Accept</span>
+                                        {% elseif  payment.status ==2 %}
+                                            <span class="btn  mini yellow"><i class=" icon-thumbs-down"></i> Reject</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="numeric" >
+                                        {% if payment.status == 0 %}
+                                        <a class="btn  mini green confirm" data-url="{{ path('customer_order_payment_confirm',{'id':payment.id,'process':1}) }}" ><i class=" icon-thumbs-up"></i> Accept</a>
+                                        <a class="btn  mini yellow confirm" data-url="{{ path('customer_order_payment_confirm',{'id':payment.id,'process':2}) }}" ><i class=" icon-thumbs-down"></i> Reject</a>
+                                        {% endif %}
+                                        {% set postCondition = {'wfc': 'wfc' ,'created':'created'} %}
+                                        {% if entity.process in  postCondition|keys %}
+                                            <a class="btn  mini red remove" data-url="{{ path('customer_order_payment_delete',{'id':payment.id}) }}"  data-id="{{ payment.id }}" ><i class=" icon-trash"></i> Delete</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <div class="clearfix"> </div>
                         <div class="clearfix"><br/> </div>
                         {{ form_start(paymentForm) }}
                         {{ form_row(paymentForm._token) }}
@@ -275,7 +323,17 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="row-fluid">
-                                            <div class="span4">
+                                            <div class="span2">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                             <label class="tooltips" data-original-title="If you went delivery cash on ,Pls click this." for="cashOnDelivery" data-trigger="hover" data-date-format=""> <input type="checkbox" id="cashOnDelivery" name="cashOnDelivery" {% if entity.cashOnDelivery == 1 %} checked="checked" {% endif %} > Cash on Delivery</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="cashOn" {% if entity.cashOnDelivery == 1 %} style="display: none" {% endif %}>
+                                            <div class="span2">
                                                 <div class="row-fluid">
                                                     <div class="span12">
                                                         <div class="control-group">
@@ -319,6 +377,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -338,7 +397,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                                <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green {% if entity.cashOnDelivery == 1 %}  submitOrder {% else %} submitPayment {% endif %}"><i class="icon-save"></i>&nbsp;Save</button>
                                             </div>
                                         </div>
                                     </div>
@@ -444,7 +503,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $(".editable").editable();
+    EditableInit();
     ApproveProcess();
     $('#fos_comment_comment_body').addClass('span12');
     $('.fos_comment_submit input[type="submit"]').addClass('btn blue');

@@ -53,7 +53,7 @@
                                             {% if entity.discountAmount > 0 %}
                                                 <li><strong>Discount</strong>:&nbsp;{{ entity.discountAmount }}</li>
                                             {% endif %}
-                                            <li><strong>Delivery Fee</strong>:&nbsp;{{ entity.shippingCharge }}</li>
+                                            <li><strong>Delivery Charge</strong>:&nbsp;{{ entity.shippingCharge }}</li>
                                             <li><strong>Paid</strong>:&nbsp;{{ entity.paidAmount }}</li>
                                             {% if entity.paidAmount <  entity.grandTotalAmount and entity.dueAmount > 0 %}
                                                 <li><strong>Due</strong>:&nbsp;{{ entity.dueAmount }}</li>
@@ -207,7 +207,7 @@
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
-                                    <td class="numeric">=&nbsp;{{ entity.shippingCharge }}</td>
+                                    <td class="numeric">=&nbsp;<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="Address" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.shippingCharge }}" data-original-title="Enter Delivery Charge">{{ entity.shippingCharge }}</a></td>
                                     <td></td>
                                 </tr>
 
@@ -218,13 +218,12 @@
                                         <td></td>
                                     </tr>
                                 {% endif %}
-                                {% if entity.discountAmount > 0 %}
-                                    <tr>
-                                        <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
-                                        <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
-                                        <td></td>
-                                    </tr>
-                                {% endif %}
+                                <tr>
+                                    <td class="numeric" colspan="6" ><span class="pull-right">Discount</span></td>
+                                    <td class="numeric">=&nbsp;<a  data-type="text" class="editable" id="{{ entity.id }}" data-name="Address" href="#"   data-url="{{ path('customer_order_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.discountAmount }}" data-original-title="Enter Discount Amount">{{ entity.discountAmount }}</a></td>
+                                    <td></td>
+                                </tr>
+
                                 {% if entity.coupon is not empty %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
@@ -274,7 +273,18 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="row-fluid">
-                                            <div class="span4">
+                                            <div class="span2">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                           <input type="checkbox" id="cashOnDelivery" name="cashOnDelivery" {% if entity.cashOnDelivery == 1 %} checked="checked" {% endif %} value="1"> Cash on Delivery
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="cashOnDelivery"  {% if entity.cashOnDelivery == 1 %} style="display: none"  {% endif %}>
+                                            <div class="span2">
                                                 <div class="row-fluid">
                                                     <div class="span12">
                                                         <div class="control-group">
@@ -318,6 +328,8 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -376,7 +388,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $(".editable").editable();
+    EditableInit();
     ApproveProcess();
     $('#fos_comment_comment_body').addClass('span12');
     $('.fos_comment_submit input[type="submit"]').addClass('btn blue');

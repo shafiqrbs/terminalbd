@@ -90,6 +90,11 @@ customer_order_inline_update:
     options:
             expose: true
 
+customer_order_payment_delete:
+    path:      /{id}/payment-delete
+    defaults: { _controller: "EcommerceBundle:Order:paymentDelete" }
+
+
 order_medicine_stock_search:
     path:     /order-medicine-search
     defaults: { _controller: "EcommerceBundle:Order:autoSearch" }

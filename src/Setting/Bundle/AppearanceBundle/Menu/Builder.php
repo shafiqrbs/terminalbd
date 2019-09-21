@@ -464,18 +464,18 @@ class Builder extends ContainerAware
 		    $menu['Accounting']->addChild('Bill & Expenditure', array('route' => ''))
 		                       ->setAttribute('icon', 'fa  icon-table')
 		                       ->setAttribute('dropdown', true);
-		    $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+		    $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'));
+            $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'));
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
-                $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'))->setAttribute('icon', 'icon-user');
+                $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'));
+                $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'));
 
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
                 $menu['Accounting']['Bill & Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Account Head', array('route' => 'report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Category', array('route' => 'report_expenditure_category'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Details', array('route' => 'report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Account Head', array('route' => 'report_expenditure_summary'));
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Category', array('route' => 'report_expenditure_category'));
+                $menu['Accounting']['Bill & Expenditure']['Reports']->addChild('Details', array('route' => 'report_expenditure_details'));
             }
 
         }
@@ -485,18 +485,18 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Cash', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
-            $menu['Accounting']['Cash']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'));
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_RECONCILIATION')) {
-                $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'));
             }
-            $menu['Accounting']['Cash']->addChild('All Cash Flow', array('route' => 'account_transaction_accountcash'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Cash']->addChild('Mobile Transaction', array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']->addChild('All Cash Flow', array('route' => 'account_transaction_accountcash'));
+            $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'));
+            $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'));
+            $menu['Accounting']['Cash']->addChild('Mobile Transaction', array('route' => 'account_transaction_mobilebank'));
             $menu['Accounting']['Cash']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-            $menu['Accounting']['Cash']['Reports']->addChild('Purchase & Expense',array('route' => 'account_transaction_purchase_expense'))->setAttribute('icon', 'icon-th-list');
-             $menu['Accounting']['Cash']['Reports']->addChild('Monthly Cash',array('route' => 'account_transaction_monthly'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Cash']['Reports']->addChild('Yearly Cash',array('route' => 'account_transaction_yearly'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Cash']['Reports']->addChild('Purchase & Expense',array('route' => 'account_transaction_purchase_expense'));
+             $menu['Accounting']['Cash']['Reports']->addChild('Monthly Cash',array('route' => 'account_transaction_monthly'));
+            $menu['Accounting']['Cash']['Reports']->addChild('Yearly Cash',array('route' => 'account_transaction_yearly'));
         }
 
         /*
@@ -581,10 +581,16 @@ class Builder extends ContainerAware
        */
 
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
+            $menu['Accounting']->addChild('Journal', array('route' => 'account_transaction'))
+                ->setAttribute('icon', 'fa fa-money')
+                ->setAttribute('dropdown', true);
+            $menu['Accounting']['Journal']->addChild('Double Entry', array('route' => 'account_double_entry'));
+            $menu['Accounting']['Journal']->addChild('Journal', array('route' => 'account_journal'));
+            $menu['Accounting']['Journal']->addChild('Contra Account', array('route' => 'account_balancetransfer'));
+            $menu['Accounting']['Journal']->addChild('Profit Withdrawal', array('route' => 'account_profit_withdrawal'));
+            $menu['Accounting']['Journal']->addChild('Profit Generate', array('route' => 'account_profit'));
 
-            $menu['Accounting']->addChild('Double Entry', array('route' => 'account_double_entry'))->setAttribute('icon', 'icon-retweet');
-             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');
-            $menu['Accounting']->addChild('Contra Account', array('route' => 'account_balancetransfer'))->setAttribute('icon', 'icon-retweet');
+
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
 
@@ -639,7 +645,6 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Master Data']->addChild('Account User', array('route' => 'account_user'));
-            $menu['Accounting']['Master Data']->addChild('Profit Generate', array('route' => 'account_profit'));
             $menu['Accounting']['Master Data']->addChild('Bank Account', array('route' => 'accountbank'));
             $menu['Accounting']['Master Data']->addChild('Mobile Account', array('route' => 'accountmobilebank'));
             $menu['Accounting']['Master Data']->addChild('Configuration', array('route' => 'account_config_manage'));
