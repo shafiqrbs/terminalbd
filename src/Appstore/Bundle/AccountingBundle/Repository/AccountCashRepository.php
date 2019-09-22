@@ -171,7 +171,7 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function transactionBankCashOverview(User $user, $data = '')
+    public function transactionBankCashOverview(User $user, $data = array())
     {
         $globalOption = $user->getGlobalOption();
         $qb = $this->_em->createQueryBuilder();
@@ -203,7 +203,7 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function transactionMobileBankCashOverview(User $user ,$data = '')
+    public function transactionMobileBankCashOverview(User $user ,$data = array())
     {
 
         $globalOption = $user->getGlobalOption();
