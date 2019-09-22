@@ -187,7 +187,7 @@ class AccountCashRepository extends EntityRepository
             $transactionBankCash[$row['accountId']]     = $this->transactionBankCash($globalOption->getId(),$data);
             $openingBalances[$row['accountId']]         = $this->openingBalance($user,array(2),$data);
         }
-        $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionBankCash' => $transactionBankCash];
+        $arrs = array('result' => $result,'openingBalance' => $openingBalances , 'transactionBankCash' => $transactionBankCash);
         return $arrs;
     }
 
@@ -220,7 +220,7 @@ class AccountCashRepository extends EntityRepository
             $transactionMobileCash[$row['accountId']]     = $this->transactionMobileCash( $globalOption->getId(),$data);
             $openingBalances[$row['accountId']] = $this->openingBalance($user,array(3),$data);
         }
-        $arrs = ['result' => $result,'openingBalance' => $openingBalances , 'transactionMobileCash' => $transactionMobileCash];
+        $arrs = array('result' => $result,'openingBalance' => $openingBalances , 'transactionMobileCash' => $transactionMobileCash);
         return $arrs;
     }
 
