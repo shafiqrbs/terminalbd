@@ -866,8 +866,10 @@ ul.social-networks li a.last{
 .tm-col-4 li{
   width: auto;
 }
-.org-title{
+.org-title {
   text-align: center;
+  height: 40px;
+  line-height: 15px;
 }
 .img-ceneter{
   position: absolute; top: 35%; left: 50%;transform: translate(-50%, -50%);
