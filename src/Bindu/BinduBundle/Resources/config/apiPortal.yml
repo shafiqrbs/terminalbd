@@ -6,7 +6,6 @@ api_portal_domain_list:
     path:     /domain-list
     defaults: { _controller: BinduBundle:ApiPortal:domainList }
 
-
 api_portal_app:
     path:     /apps
     defaults: { _controller: BinduBundle:ApiPortal:apps }
@@ -19,4 +18,9 @@ api_portal_app_customer:
     path:     /app-customer
     defaults: { _controller: BinduBundle:ApiPortal:appWiseCustomer }
 
-
+api_portal_app_user_register:
+    path:     /app-user-register
+    defaults: { _controller: BinduBundle:ApiPortal:userRegister }
+    methods:  POST
+    options:
+           expose: true

@@ -34,9 +34,9 @@ class Builder extends ContainerAware
         if ($securityContext->getRole() === 'ROLE_SUPER_ADMIN') {
 
 	        $menu = $this->manageDomainMenu($menu);
-	        $menu = $this->businessMenu($menu);
-	        $menu = $this->AccountingMenu($menu);
-	        $menu = $this->PayrollMenu($menu);
+	    //    $menu = $this->businessMenu($menu);
+	      //  $menu = $this->AccountingMenu($menu);
+	     //   $menu = $this->PayrollMenu($menu);
 	        $menu = $this->toolsMenu($menu);
 	        $menu = $this->manageFrontendMenu($menu);
 	        $menu = $this->manageApplicationSettingMenu($menu);

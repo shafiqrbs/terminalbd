@@ -35,6 +35,7 @@ class ConfigType extends AbstractType
 		        'choices' => array(
 			        '' => '-- Select business model --',
 			        'general' => 'General',
+			        'distribution' => 'Distribution',
 			        'sign' => 'Digital-Sign',
 			        'electrical' => 'Electrical',
 			        'stationary' => 'Stationary',
