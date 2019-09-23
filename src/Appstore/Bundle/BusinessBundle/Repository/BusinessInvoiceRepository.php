@@ -20,10 +20,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class BusinessInvoiceRepository extends EntityRepository
 {
 
-    public function getLastInvoice(BusinessConfig $config)
+    public function getLastInvoice(BusinessConfig $config,$customer)
     {
         $entity = $this->findOneBy(
-            array('businessConfig' => $config),
+            array('businessConfig' => $config,'customer' => $customer),
             array('id' => 'DESC')
         );
         return $entity;

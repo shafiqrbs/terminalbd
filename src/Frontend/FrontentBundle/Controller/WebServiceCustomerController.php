@@ -359,35 +359,7 @@ class WebServiceCustomerController extends Controller
 
     public function domainLoginAction($subdomain)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = new User();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'login'));
-        if ($this->has('security.csrf.token_manager')) {
-            $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
-        } else {
-            // BC for SF < 2.4
-            $csrfToken = $this->has('form.csrf_provider')
-                ? $this->get('form.csrf_provider')->generateCsrfToken('authenticate')
-                : null;
-        }
-        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-        $detect = new MobileDetect();
-        if( $detect->isMobile() &&  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName;
-        }else{
-            $theme = 'Template/Desktop/'.$themeName;
-        }
-        return $this->render('FrontendBundle:'.$theme.':login.html.twig',
-            array(
-                'globalOption'  => $globalOption,
-                'entity' => $entity,
-                'error' => '',
-                'menu' => $menu,
-                'page'          => 'Login',
-                'csrf_token' => $csrfToken,
-            )
-        );
+        return $this->redirect('/');
     }
 
     public function domainCustomerHomeAction($subdomain)

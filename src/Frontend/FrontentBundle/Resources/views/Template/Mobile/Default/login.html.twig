@@ -9,8 +9,8 @@
     </div>
 </div>
 <div id="content" class="content-margin">
-    <form class="register" id="commentform" action="{{ path("webservice_customer_login",{'subdomain':globalOption.subdomain}) }}" method="post" novalidate="novalidate">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+    <form class="register" id="commentform" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
         <div>
             <p><span class="fa-icon"><i class="fa  fa-mobile"></i></span>
                 <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no">
