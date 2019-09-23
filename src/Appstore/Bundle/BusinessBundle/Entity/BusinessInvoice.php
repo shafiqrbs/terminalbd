@@ -275,14 +275,14 @@ class BusinessInvoice
     private $eventType;
 
     /**
-     * @var string
-     * @ORM\Column(name="startDate", type="string", length=50, nullable=true)
+     * @var \DateTime
+     * @ORM\Column(name="startDate", type="date", nullable=true)
      */
     private $startDate;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="endDate", type="date", length=50, nullable=true)
+     * @ORM\Column(name="endDate", type="date",  nullable=true)
      */
     private $endDate;
 
@@ -893,7 +893,7 @@ class BusinessInvoice
     }
 
     /**
-     * @return string
+     * @param \DateTime
      */
     public function getStartDate()
     {
@@ -901,9 +901,9 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $startDate
+     * @param \DateTime $startDate
      */
-    public function setStartDate(string $startDate)
+    public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
     }

@@ -327,9 +327,11 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $data = $request->request->all();
+        $startDate = empty($data['startDate']) ? new \DateTime("now") : new \DateTime($data['startDate']);
+        $endDate = empty($data['endDate']) ? new \DateTime("now") : new \DateTime($data['endDate']);
         $invoice->setEventType($data['eventType']);
-        $invoice->setStartDate($data['startDate']);
-        $invoice->setEndDate($data['endDate']);
+        $invoice->setStartDate($startDate);
+        $invoice->setEndDate($endDate);
         $invoice->setVenue($data['venue']);
         if(!empty($data['customerName']) and !empty($data['customerMobile'])){
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);

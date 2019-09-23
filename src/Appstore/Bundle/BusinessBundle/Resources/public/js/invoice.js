@@ -14,7 +14,7 @@ var bindDatePicker = function(element) {
         showOn: "button",
         buttonImage: "/img/calendar_icon.png",
         buttonImageOnly: true,
-        dateFormat: 'mm/dd/yy',
+        dateFormat: 'mm-dd-yy',
         timeFormat: 'hh:mm tt',
         stepMinute: 1,
         onClose: datePickerClose
@@ -34,7 +34,7 @@ $("[id^=startPicker]").each(function() {
 $('#startDate, #endDate').datepicker({
     showOn: "both",
     beforeShow: customRange,
-    dateFormat: "dd M yy",
+    dateFormat: "dd-mm-yy",
 });
 function customRange(input) {
     if (input.id == 'endDate') {
