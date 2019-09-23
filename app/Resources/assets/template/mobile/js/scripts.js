@@ -467,6 +467,54 @@ $(document).ready(function(){
         }
     });
 
+    $("#loginForm").validate({
+
+        rules: {
+            "_username": {required: true},
+            "_password": {required: true},
+        },
+
+        messages: {
+
+            "_username":"Enter your mobile name",
+            "_password":"Enter valid OTP",
+
+        },
+
+        tooltip_options: {
+            "_username": {placement:'top',html:true},
+            "_password": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.has_error) {
+                        $('#loginMsg').addClass('alert-danger');
+                        $('.alert-danger').html('There was an error with your Mobile no/Password combination. Please try again.');
+                    }else {
+                        $('#loginMsg').removeClass('alert-danger');
+                        $('#loginMsg').addClass('alert-success');
+                        $('.alert-success').html('Yor are login success.');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000)
+
+                    }
+                }
+            });
+        }
+
+    });
+
+
 });
 
 

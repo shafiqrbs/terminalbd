@@ -175,6 +175,13 @@ class TemplateCustomize
      */
     private $showEmail = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sendSms", type="boolean", nullable=true)
+     */
+    private $sendSms = false;
+
 
     /**
      * @var boolean
@@ -3218,6 +3225,22 @@ class TemplateCustomize
     public function setPlaceholderColor($placeholderColor)
     {
         $this->placeholderColor = $placeholderColor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendSms()
+    {
+        return $this->sendSms;
+    }
+
+    /**
+     * @param bool $sendSms
+     */
+    public function setSendSms($sendSms)
+    {
+        $this->sendSms = $sendSms;
     }
 
 
