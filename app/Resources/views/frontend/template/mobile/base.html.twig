@@ -75,7 +75,7 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            {% if globalOption.templateCustomize.mobileLogin == 1 %}
+          {#  {% if globalOption.templateCustomize.mobileLogin == 1 %}
                 <div id="side-bar-panel" class="left-shadow-overlay" >
                     <div class="handle">
                         <span class="glyphicon glyphicon-chevron-right"></span>
@@ -83,7 +83,7 @@
                     <div class="menu-notify box-link">
                         <div class="text-center">{{ app.user }}</div>
                         <ul class="social-links">
-                          {#  <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>#}
+                          #}{#  <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>#}{#
                             {% if globalOption.templateCustomize.mobileLogin == 1 %}
                                 <li><a href="javascript:" class="member-register-btn"><i class="fa fa-sign-in"></i></a></li>
                             {% endif %}
@@ -136,7 +136,7 @@
                         {% endif %}
                     </div>
                 </div>
-            {% endif %}
+            {% endif %}#}
             <div class="w3agile">
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
                 {{ include('@Frontend/Template/Mobile/Widget/login.html.twig')}}

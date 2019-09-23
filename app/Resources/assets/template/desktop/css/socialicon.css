@@ -168,6 +168,10 @@ input[type="color"]:focus,
     font-size: 20px;
 }
 
+.modal-dialog{
+    top: 15%;
+}
+
 input::-webkit-input-placeholder , textarea::-webkit-input-placeholder{
     color:red!important;
 }
