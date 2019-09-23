@@ -118,7 +118,7 @@
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12" >
-                                                    <textarea class="m-wrap span12 eventProcess" rows="4" name="customerAddress" id="customerAddress" placeholder="Enter address">{{ entity.customer.address|raw }}</textarea>
+                                                    <textarea class="m-wrap span12 eventProcess" rows="4" name="customerAddress" id="customerAddress" placeholder="Enter address">{% if entity.customer.name != "Default" %}{{ entity.customer.address|raw }} {% endif %}</textarea>
                                                 </div>
                                             </div>
 
