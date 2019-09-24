@@ -67,6 +67,9 @@
                 {% elseif app.user is not empty %}
                     {% set name = app.user.profile.name|split(" ") %}
                     <a href="{{ path('homepage') }}"> {{ name[0] }}</a>
+                {% elseif globalOption.templateCustomize.registrationForm == 1 %}
+                    <a href="#registration-panel" class="hvr-radial-out sign-in popup-top-anim btn" data-title="">Join Now
+                    </a>
                 {% endif %}
                 </div>
                 <div class="clearfix"></div>

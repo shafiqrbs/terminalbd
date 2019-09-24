@@ -309,6 +309,14 @@ class Feature
         return $this->file;
     }
 
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
     public function getAbsolutePath()
     {
         return null === $this->path

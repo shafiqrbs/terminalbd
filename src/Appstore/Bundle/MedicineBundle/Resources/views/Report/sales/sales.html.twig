@@ -104,13 +104,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                               {# <tr>
                                     <td class="numeric" ><strong>{{ purchaseSalesItem.quantity }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.total|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ cashOverview.totalVat|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ purchaseSalesItem.purchasePrice|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesItem.purchasePrice))|number_format }}</strong></td>
-                                </tr>
+                                </tr>#}
                                 </tbody>
                             </table>
                         </div>

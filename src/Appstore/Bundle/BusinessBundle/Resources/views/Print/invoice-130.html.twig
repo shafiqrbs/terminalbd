@@ -54,8 +54,8 @@
                         <div class="col invoice-details" style="text-align: left">
                             <h4>Event Details:</h4>
                             <div><strong><i class="icon-th-list"></i>&nbsp;</strong> {{ entity.eventType }}</div>
-                            <div><strong><i class="icon-calendar"></i>&nbsp;Start </strong>{{ entity.startDate }}</div>
-                            <div><strong><i class="icon-calendar"></i>&nbsp;End </strong>{{ entity.endDate }}</div>
+                            <div><strong><i class="icon-calendar"></i>&nbsp;Start </strong>{{ entity.startDate|date('d-m-Y') }}</div>
+                            <div><strong><i class="icon-calendar"></i>&nbsp;End </strong>{{ entity.endDate|date('d-m-Y') }}</div>
 
                         </div>
                         <div class="col invoice-details">
