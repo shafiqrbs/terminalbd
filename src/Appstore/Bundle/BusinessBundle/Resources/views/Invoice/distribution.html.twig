@@ -53,74 +53,86 @@
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead>
                                     <tr>
-                                        <th class=""> Si/No</th>
-                                        <th class="span4">Particular</th>
-                                        <th class="span2">Remain</th>
-                                        <th class="span2">Unit</th>
-                                        <th class="span2">Price</th>
-                                        <th class="numeric" colspan="2" >
+                                        <th class="">S/N</th>
+                                        <th>Particular</th>
+                                        <th>Remain</th>
+                                        <th>Unit</th>
+                                        <th>Price</th>
+                                        <th colspan="3" >
                                             <div class="row-fluid" style="border-bottom: 2px solid #ffffff; text-align: center; font-weight: bold"><span class="span12">Sales</span></div>
                                             <div class="row-fluid">
-                                                <span class="span6 text-center">Qnt</span><span class="span6 text-center">Total</span></div>
+                                                <span class="span4">Qnt</span>
+                                                <span class="span4">Bonus</span>
+                                                <span class="span4">Total</span>
+                                            </div>
                                         </th>
-                                        <th class="numeric" colspan="2" >
-                                            <div class="row-fluid" style="border-bottom: 2px solid #ffffff; text-align: center; font-weight: bold"><span class="span12">Return</span></div>
+                                        <th colspan="2" >
+                                            <div class="row-fluid" style="border-bottom: 2px solid #ffffff; text-align: center; font-weight: bold">
+                                                <span class="span12">Return</span></div>
                                             <div class="row-fluid">
-                                                <span class="span6 text-center">Qnt</span><span class="span6 text-center">Total</span></div>
+                                                <span class="span6 ">Qnt</span>
+                                                <span class="span6">Total</span>
+                                            </div>
                                         </th>
-                                        <th class="numeric" colspan="2" >
-                                            <div class="row-fluid" style="border-bottom: 2px solid #ffffff; text-align: center; font-weight: bold"><span class="span12">Damage</span></div>
+                                        <th colspan="2" >
+                                            <div class="row-fluid" style="border-bottom: 2px solid #ffffff; text-align: center; font-weight: bold">
+                                                <span class="span12">Damage</span></div>
                                             <div class="row-fluid">
-                                                <span class="span6 text-center">Qnt</span><span class="span6 text-center">Total</span></div>
+                                                <span class="span6">Qnt</span>
+                                                <span class="span6">Total</span>
+                                            </div>
                                         </th>
-
-                                        <th class="span2"><i class="icon-trash"></i></th>
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceParticulars">
-                                    {% for item in particulars %}
+                                    {% for item in entity.businessInvoiceParticulars %}
                                         <tr id="remove-{{ item.id }}">
-                                            <td  class="">{{ loop.index }}.</td>
-                                            <td class="">{{ item.name }}</td>
-                                            <td class="">{{ item.remainingQuantity }}</td>
-                                            <td>{% if item.unit is not empty %}{{ item.unit.name }}{% endif %}</td>
-                                            <td class="">{{ item.salesPrice }}</td>
-                                            <td class="">
-                                                <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
-                                            </td>
-                                            <td class="" id="subTotal-{{ item.id }}">
-                                                <input type="text" class=" numeric td-inline-input-qnt subTotal" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="0" placeholder="total">
-                                            </td>
+                                            <td  class="">{{ loop.index }}.
+                                            <input type="hidden" id="salesPrice" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
 
+                                            </td>
+                                            <td class="">{{ item.particular }}</td>
+                                            <td class="">{{ item.businessParticular.remainingQuantity }}</td>
+                                            <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
+                                            <td class="">{{ item.businessParticular.salesPrice }}</td>
+                                            <td class="">
+                                                <input type="text" class=" numeric td-inline-input-qnt salesQuantity" data-id="{{ item.id }}" data-content="salesSubTotal" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="salesQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
+                                            </td>
                                              <td class="">
-                                                <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
+                                                <input type="text" class=" numeric td-inline-input-qnt bonusQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="bonusQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
                                             </td>
                                             <td class="" id="subTotal-{{ item.id }}">
-                                                <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="" placeholder="subTotal">
+                                                <input disabled="disabled" type="text" class="numeric td-inline-input-qnt subTotal salesSubTotal" data-id="{{ item.id }}" id="salesSubTotal-{{ item.id }}" name="salesSubTotal" value="0" placeholder="total">
                                             </td>
                                              <td class="">
-                                                <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
+                                                <input type="text" class=" numeric td-inline-input-qnt returnQuantity" data-id="{{ item.id }}" data-content="returnSubTotal" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="returnQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
                                             </td>
                                             <td class="" id="subTotal-{{ item.id }}">
-                                                <input type="text" class=" numeric td-inline-input-qnt quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="" placeholder="subTotal">
+                                                <input disabled="disabled" type="text" class=" numeric td-inline-input-qnt subTotal returnSubTotal" data-id="{{ item.id }}"  id="returnSubTotal-{{ item.id }}" name="returnSubTotal" value="" placeholder="Total">
                                             </td>
-                                            <td class="" id="subTotal-{{ item.id }}"></td>
+                                             <td class="">
+                                                <input type="text" class=" numeric td-inline-input-qnt damageQuantity" data-id="{{ item.id }}" data-content="damageSubTotal" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="damageQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
+                                            </td>
+                                            <td class="" id="subTotal-{{ item.id }}">
+                                                <input disabled="disabled" type="text" class=" numeric td-inline-input-qnt subTotal damageSubTotal" data-id="{{ item.id }}"  id="damageSubTotal-{{ item.id }}" name="damageSubTotal" value="" placeholder="Total">
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="12" class="span12" style="border: 1px double #000"></td>
+                                        <td colspan="12" class="" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        <td class="span1"></td>
-                                        <td class="span1"></td>
+                                        <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                        <td class=""><strong class="salesQnt">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="salesTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="bonusTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="returnQnt">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="returnTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="damageQnt">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class=""><strong class="damageTotal">{{ entity.subTotal|number_format }}</strong></td>
+
                                     </tr>
 
                                     </tfoot>
@@ -158,6 +170,15 @@
                                             <div class="controls">
                                                 {{ form_errors(form.received) }}
                                             </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Outstanding TK.</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" ></span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -243,7 +264,7 @@
                         </div>
 
                         <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box yellow">
+                        <div class="form-actions portlet box black">
                             <div class="pull-right">
                                 <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
                                 <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
@@ -258,9 +279,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="clearfix"></div>
-                        {{ form_end(form) }}
+               {{ form_end(form) }}
                     </div>
                 </div>
             </div>
@@ -288,6 +307,7 @@
         }
         .subTotal{
             border: 2px solid red!important;
+            width: 60px;
         }
 
     </style>

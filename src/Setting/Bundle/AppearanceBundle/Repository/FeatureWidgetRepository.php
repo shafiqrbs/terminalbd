@@ -123,7 +123,7 @@ class FeatureWidgetRepository extends EntityRepository
                 $data[$key]['name'] = $row->getFeature()->getName();
                 $data[$key]['url'] = $url;
                 if ( $row->getFeature()->getPath()) {
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/content/{$row->getFeature()->getPath()}");
+                    $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/content/{$row->getFeature()->getPath()}");
                     $data[$key]['imagePath'] = $path;
                 } else {
                     $data[$key]['imagePath'] = "";

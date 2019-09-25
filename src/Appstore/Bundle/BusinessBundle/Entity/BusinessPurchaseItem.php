@@ -98,6 +98,13 @@ class BusinessPurchaseItem
      */
     private $damageQuantity;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
+     */
+    private $bonusQuantity = 0;
+
 
     /**
      * @var integer
@@ -618,6 +625,22 @@ class BusinessPurchaseItem
 	public function setStatus( bool $status ) {
 		$this->status = $status;
 	}
+
+    /**
+     * @return int
+     */
+    public function getBonusQuantity()
+    {
+        return $this->bonusQuantity;
+    }
+
+    /**
+     * @param int $bonusQuantity
+     */
+    public function setBonusQuantity($bonusQuantity)
+    {
+        $this->bonusQuantity = $bonusQuantity;
+    }
 
 
 }

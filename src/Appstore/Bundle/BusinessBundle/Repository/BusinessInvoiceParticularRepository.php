@@ -596,5 +596,22 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertDistributionItem(BusinessInvoice $entity,$particulars)
+    {
+        /* @var $particular BusinessParticular */
+        $em = $this->_em;
+        if(empty($entity->getBusinessInvoiceParticulars())){
+            foreach ($particulars as $particular):
+                $item = new BusinessInvoiceParticular();
+                $item->setBusinessInvoice($entity);
+                $item->setBusinessParticular($particular);
+                $item->setParticular($particular->getName());
+                $em->persist($item);
+                $em->flush();
+            endforeach;
+        }
+
+    }
+
 
 }

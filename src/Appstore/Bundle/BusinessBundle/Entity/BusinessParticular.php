@@ -222,6 +222,14 @@ class BusinessParticular
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
+     */
+    private $bonusQuantity = 0;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
@@ -1054,6 +1062,22 @@ class BusinessParticular
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusQuantity()
+    {
+        return $this->bonusQuantity;
+    }
+
+    /**
+     * @param int $bonusQuantity
+     */
+    public function setBonusQuantity($bonusQuantity)
+    {
+        $this->bonusQuantity = $bonusQuantity;
     }
 
 }

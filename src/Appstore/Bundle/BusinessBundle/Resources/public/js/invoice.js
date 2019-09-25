@@ -450,3 +450,43 @@ $(document).on('change', '#vendor', function() {
     })
 
 });
+
+
+$(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity', function() {
+
+    var id = $(this).attr('data-id');
+    var total = $(this).attr('data-content');
+
+    var price = parseFloat($('#salesprice-'+id).val());
+    var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
+    var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
+    var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
+    var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
+    if(total === "salesSubTotal"){
+         subTotal  = (salesQuantity * price);
+        $("#salesSubTotal-"+id).html(subTotal);
+    }elseif(total === "returnSubTotal"){
+         subTotal  = (returnQuantity * price);
+        $("#returnSubTotal-"+id).html(subTotal);
+    }elseif(total === "damageSubTotal"){
+        subTotal  = (damageQuantity * price);
+        $("#damageSubTotal-"+id).html(subTotal);
+    }
+    $.ajax({
+        url: Routing.generate('business_invoice_item_update'),
+        type: 'POST',
+        data:'itemId='+ id +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
+
+        },
+    })
+});
+

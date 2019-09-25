@@ -75,6 +75,27 @@ class BusinessInvoiceParticular
     private $quantity = 0;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="returnQnt", type="smallint", length = 5, nullable=true)
+     */
+    private $returnQnt = 0;
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQnt", type="smallint", length = 5, nullable=true)
+     */
+    private $damageQnt = 0;
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusQnt", type="smallint", length = 5, nullable=true)
+     */
+    private $bonusQnt = 0;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="price", type="float", nullable=true)
@@ -414,6 +435,54 @@ class BusinessInvoiceParticular
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReturnQnt()
+    {
+        return $this->returnQnt;
+    }
+
+    /**
+     * @param int $returnQnt
+     */
+    public function setReturnQnt($returnQnt)
+    {
+        $this->returnQnt = $returnQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQnt()
+    {
+        return $this->damageQnt;
+    }
+
+    /**
+     * @param int $damageQnt
+     */
+    public function setDamageQnt($damageQnt)
+    {
+        $this->damageQnt = $damageQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusQnt()
+    {
+        return $this->bonusQnt;
+    }
+
+    /**
+     * @param int $bonusQnt
+     */
+    public function setBonusQnt($bonusQnt)
+    {
+        $this->bonusQnt = $bonusQnt;
     }
 }
 

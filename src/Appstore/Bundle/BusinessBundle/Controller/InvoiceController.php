@@ -73,6 +73,10 @@ class InvoiceController extends Controller
         $entity->setPaymentStatus('Pending');
         $em->persist($entity);
         $em->flush();
+        if($config->getBusinessModel() == "distribution"){
+            $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertDistributionItem($entity,$particulars);
+        }
         return $this->redirect($this->generateUrl('business_invoice_edit', array('id' => $entity->getId())));
 
     }
@@ -119,13 +123,11 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
 	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1],['companyName'=>"ASC"]);
 	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
