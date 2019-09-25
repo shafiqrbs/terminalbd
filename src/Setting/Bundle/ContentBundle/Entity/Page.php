@@ -1439,4 +1439,12 @@ class Page
         $this->galleryType = $galleryType;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
 }

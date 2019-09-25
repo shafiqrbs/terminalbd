@@ -22,6 +22,10 @@ api_ecommerce_item:
     path:     /product
     defaults: { _controller: BinduBundle:ApiEcommerce:product }
 
+api_ecommerce_item_global_search:
+    path:     /search
+    defaults: { _controller: BinduBundle:ApiEcommerce:product }
+
 api_ecommerce_item_search:
     path:     /product-search
     defaults: { _controller: BinduBundle:ApiEcommerce:product }
@@ -53,6 +57,10 @@ api_ecommerce_item_tag:
 api_ecommerce_item_discount:
     path:     /discount
     defaults: { _controller: BinduBundle:ApiEcommerce:discount }
+
+api_ecommerce_testimonial:
+    path:     /testimonial
+    defaults: { _controller: BinduBundle:ApiEcommerce:testimonial }
 
 api_ecommerce_login:
     path:     /user-login

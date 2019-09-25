@@ -11,6 +11,7 @@ use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -289,7 +290,6 @@ class ApiEcommerceController extends Controller
         }
 
     }
-
 
     public function categoryAction(Request $request)
     {
@@ -617,6 +617,47 @@ class ApiEcommerceController extends Controller
             return $response;
         }
 
+    }
+
+    public function testimonialAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $data = "";
+
+            $option = $this->checkApiValidation($request);
+            $testimonial = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($option,3);
+            $data = array();
+            /* @var $entity Page */
+            foreach ($testimonial as $key => $entity){
+
+                $data[$key]['id'] = $entity->getId();
+                $data[$key]['name'] = $entity->getName();
+                $data[$key]['designation'] = $entity->getDesignation();
+                $data[$key]['content'] = $entity->getContent();
+                $data[$key]['organization'] = $entity->getOrganization();
+                if($entity->getWebPath()){
+                    $path = $this->resizeFilter($entity->getWebPath());
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
     }
 
 

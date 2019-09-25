@@ -265,7 +265,7 @@ class ItemRepository extends EntityRepository
 
     public function handleSearchBetween($qb,$data){
 
-        $name           = isset($data['name'])? $data['name'] :'';
+        $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
         $promotion      = isset($data['promotion'])? $data['promotion'] :'';
@@ -290,7 +290,8 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('discount', $discount);
         }
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("item.name", "'% $name %'"  ));
+           $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+                $qb->setParameter('searchTerm', '%'.$name.'%');
         }
     }
 
@@ -534,6 +535,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.category','category');
         $qb->leftJoin('item.brand','brand');
         $qb->leftJoin('item.discount','discount');
+        $qb->leftJoin('item.promotion','promotion');
         $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
         $qb->addSelect('category.name as categoryName');
         $qb->addSelect('brand.name as brandName');
