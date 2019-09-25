@@ -9,6 +9,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
+use Gregwar\Image\Image;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -20,6 +21,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiEcommerceController extends Controller
 {
+
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            2  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+    public function resizeFilter($pathToImage, $width = 520, $height = 320)
+    {
+        $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
+        return $_SERVER['HTTP_HOST'].$path;
+    }
 
     public function checkApiValidation($request)
     {
@@ -113,6 +131,35 @@ class ApiEcommerceController extends Controller
 
     }
 
+    public function menuAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $data = array();
+            $entity = $this->checkApiValidation($request);
+            $data['discount'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiDiscount($entity);
+            $data['category'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllCategory($entity);
+            $data['brand'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllBrand($entity);
+            $data['promotion'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiPromotion($entity);
+            $data['tag'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiTag($entity);
+
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+    }
+
     public function homeFeatureSliderAction(Request $request)
     {
 
@@ -172,7 +219,6 @@ class ApiEcommerceController extends Controller
 
     }
 
-
     public function productAction(Request $request)
     {
         set_time_limit(0);
@@ -184,9 +230,31 @@ class ApiEcommerceController extends Controller
         }else{
 
             /* @var $entity GlobalOption */
-            $data = $_REQUEST;
+            $search = $_REQUEST;
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
+            $result = $this->paginate($entities);
+            $data = array();
+            if($result){
+                foreach($result as $key => $row) {
+                    $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['name']                     = $row['name'];
+                    $data[$key]['quantity']                 = $row['quantity'];
+                    $data[$key]['price']                    = $row['price'];
+                    $data[$key]['discountPrice']            = $row['discountPrice'];
+                    $data[$key]['category']                 = $row['categoryName'];
+                    $data[$key]['brand']                    = $row['brandName'];
+                    $data[$key]['discountName']             = $row['discountName'];
+                    $data[$key]['unitName']                 = $row['unitName'];
+                    $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    if($row['path']){
+                        $path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/item/{$row['path']}");
+                        $data[$key]['imagePath']            =  $path;
+                    }else{
+                        $data[$key]['imagePath']            = "";
+                    }
+                }
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));
@@ -259,7 +327,7 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllCategory($entity,10);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllCategory($entity);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));
@@ -282,7 +350,7 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getApiFeature($entity,10);
+            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getApiFeature($entity);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

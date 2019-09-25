@@ -542,29 +542,9 @@ class ItemRepository extends EntityRepository
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('item.webName','DESC');
-        $result = $qb->getQuery()->getArrayResult();
-        $data = array();
-        if($result){
-            foreach($result as $key => $row) {
-                $data[$key]['product_id']               = (int) $row['id'];
-                $data[$key]['name']                     = $row['name'];
-                $data[$key]['quantity']                 = $row['quantity'];
-                $data[$key]['price']                    = $row['price'];
-                $data[$key]['discountPrice']            = $row['discountPrice'];
-                $data[$key]['category']                 = $row['categoryName'];
-                $data[$key]['brand']                    = $row['brandName'];
-                $data[$key]['discountName']             = $row['discountName'];
-                $data[$key]['unitName']                 = $row['unitName'];
-                $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
-                if($row['path']){
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$row['path']}");
-                    $data[$key]['imagePath']            =  $path;
-                }else{
-                    $data[$key]['imagePath']            = "";
-                }
-            }
-        }
-        return $data;
+        $result = $qb->getQuery();
+
+        return $result;
     }
 
 
@@ -998,5 +978,9 @@ class ItemRepository extends EntityRepository
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
+
+
+
+
 
 }
