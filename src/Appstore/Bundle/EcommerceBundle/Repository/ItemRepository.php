@@ -784,12 +784,12 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function getFeatureWidgetProduct(FeatureWidget $feature)
+    public function getFeatureWidgetProduct(FeatureWidget $feature,$module = "category")
     {
         $data = array();
 
 
-        if($items = $feature->getCategory()){
+        if($module == "category" and $feature->getCategory()){
 
             /* @var $parent \Product\Bundle\ProductBundle\Entity\Category */
             $items = $feature->getCategory();
@@ -824,7 +824,7 @@ class ItemRepository extends EntityRepository
             }
         }
 
-        if( $items = $feature->getBrand()){
+        if( $module == "brand" and $feature->getBrand()){
 
             /* @var $parent ItemBrand */
 
@@ -861,7 +861,7 @@ class ItemRepository extends EntityRepository
             }
         }
 
-        if( $items = $feature->getPromotion()){
+        if( $module == "promotion" and $feature->getPromotion()){
 
             /* @var $parent Promotion */
 
@@ -899,7 +899,7 @@ class ItemRepository extends EntityRepository
             }
         }
 
-        if( $items = $feature->getTag()){
+        if( $module == "tag" and $feature->getTag()){
 
             /* @var $parent Promotion */
 
@@ -936,7 +936,7 @@ class ItemRepository extends EntityRepository
             }
         }
 
-        if( $items = $feature->getDiscount()){
+        if( $module == "discount" and $feature->getDiscount()){
 
             /* @var $parent Discount */
 
@@ -998,9 +998,5 @@ class ItemRepository extends EntityRepository
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
-
-
-
-
 
 }
