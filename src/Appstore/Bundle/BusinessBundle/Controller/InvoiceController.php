@@ -125,11 +125,13 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $this->getUser()->getGlobalOption(),'status'=>1),array('companyName'=>"ASC"));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
 
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
+            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
