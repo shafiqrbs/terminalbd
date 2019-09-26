@@ -251,21 +251,19 @@ class Builder extends ContainerAware
 	    if($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
 		    $menu['Business Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-		    $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'))
-		                                            ->setAttribute('icon', 'icon-th-list');
-		    $menu['Business Management']['Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'))
-		                                            ->setAttribute('icon', 'icon-th-list');
-		    $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'))->setAttribute('icon', 'icon-tag');
+		    $menu['Business Management']['Purchase']->addChild('Purchase', array('route' => 'business_purchase'));
+		    $menu['Business Management']['Purchase']->addChild('Purchase Return', array('route' => 'business_purchase_return'));
+		    $menu['Business Management']['Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'));
+		    $menu['Business Management']['Purchase']->addChild('Vendor', array('route' => 'business_vendor'));
 		    if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')) {
 			    $menu['Business Management']['Purchase']->addChild( 'Reports' )
-			                                            ->setAttribute( 'icon', 'icon icon-bar-chart' )
 			                                            ->setAttribute( 'dropdown', true );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Purchase Summary', array( 'route' => 'business_report_purchase_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Vendor Ledger', array( 'route' => 'business_report_purchase_ledger' ) )->setAttribute( 'icon', 'icon-th-list' );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Vendor Details', array( 'route' => 'business_report_purchase_vendor_details' ) )->setAttribute( 'icon', 'icon-th-list' );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Price', array( 'route' => 'business_report_purchase_stock_price' ) )->setAttribute( 'icon', 'icon-th-list' );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Item Price', array( 'route' => 'business_report_item_stock_price' ) )->setAttribute( 'icon', 'icon-th-list' );
-			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Item', array( 'route' => 'business_report_item_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Purchase Summary', array( 'route' => 'business_report_purchase_summary' ) );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Vendor Ledger', array( 'route' => 'business_report_purchase_ledger' ) );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Vendor Details', array( 'route' => 'business_report_purchase_vendor_details' ) );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Price', array( 'route' => 'business_report_purchase_stock_price' ) );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Item Price', array( 'route' => 'business_report_item_stock_price' ) );
+			    $menu['Business Management']['Purchase']['Reports']->addChild( 'Stock Item', array( 'route' => 'business_report_item_stock' ) );
 		    }
 	    }
 

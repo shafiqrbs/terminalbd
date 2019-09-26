@@ -63,6 +63,8 @@ class BusinessPurchaseItem
      */
     private $quantity;
 
+
+
     /**
      * @var integer
      *

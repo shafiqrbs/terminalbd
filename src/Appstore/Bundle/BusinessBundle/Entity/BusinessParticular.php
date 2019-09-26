@@ -230,6 +230,22 @@ class BusinessParticular
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusPurchaseQuantity", type="integer", nullable=true)
+     */
+    private $bonusPurchaseQuantity = 0;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusSalesQuantity", type="integer", nullable=true)
+     */
+    private $bonusSalesQuantity = 0;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
@@ -1078,6 +1094,38 @@ class BusinessParticular
     public function setBonusQuantity($bonusQuantity)
     {
         $this->bonusQuantity = $bonusQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusPurchaseQuantity()
+    {
+        return $this->bonusPurchaseQuantity;
+    }
+
+    /**
+     * @param int $bonusPurchaseQuantity
+     */
+    public function setBonusPurchaseQuantity($bonusPurchaseQuantity)
+    {
+        $this->bonusPurchaseQuantity = $bonusPurchaseQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusSalesQuantity()
+    {
+        return $this->bonusSalesQuantity;
+    }
+
+    /**
+     * @param int $bonusSalesQuantity
+     */
+    public function setBonusSalesQuantity($bonusSalesQuantity)
+    {
+        $this->bonusSalesQuantity = $bonusSalesQuantity;
     }
 
 }

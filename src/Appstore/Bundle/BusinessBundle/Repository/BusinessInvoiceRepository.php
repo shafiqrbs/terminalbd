@@ -403,10 +403,10 @@ class BusinessInvoiceRepository extends EntityRepository
     }
 
 
-    public function invoiceLists(User $user, $data)
+    public function invoiceLists($config, $data)
     {
 
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
+
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
@@ -471,6 +471,44 @@ class BusinessInvoiceRepository extends EntityRepository
         $em->persist($invoice);
         $em->flush();
         return $invoice;
+
+    }
+
+    public function updateInvoiceDistributionTotalPrice(BusinessInvoice $invoice)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('BusinessBundle:BusinessInvoiceParticular','si')
+            ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+            ->where('si.businessInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->getQuery()->getOneOrNullResult();
+
+        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        if($subTotal > 0){
+
+            if ($invoice->getBusinessConfig()->getVatEnable() == 1 && $invoice->getBusinessConfig()->getVatPercentage() > 0) {
+                $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCulculationVat($invoice,$totalAmount);
+                $invoice->setVat($vat);
+            }
+            $invoice->setSubTotal($subTotal);
+            $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
+            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
+
+        }else{
+
+            $invoice->setSubTotal(0);
+            $invoice->setTotal(0);
+            $invoice->setDue(0);
+            $invoice->setDiscount(0);
+            $invoice->setVat(0);
+        }
+
+        $em->persist($invoice);
+        $em->flush();
+        return $total;
 
     }
 

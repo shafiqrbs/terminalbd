@@ -344,12 +344,12 @@ var stockInvoice = $("#stockInvoice").validate({
 });
 
 
-$(document).on('keyup', '#businessInvoice_discountCalculation', function() {
+$(document).on('keyup', '#businessInvoice_discountCalculation , #businessInvoice_discountType', function() {
 
     var discountType = $('#businessInvoice_discountType').val();
     var discount = parseInt($('#businessInvoice_discountCalculation').val() !="" ? $('#businessInvoice_discountCalculation').val() : 0);
     var invoice = $('#invoiceId').val();
-    var total =  parseInt($('#dueAmount').val());
+    var total =  parseInt($('#paymentTotal').val());
     if( discount >= total ){
         $('#sales_discount').val(0);
         return false;
@@ -455,36 +455,34 @@ $(document).on('change', '#vendor', function() {
 $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity', function() {
 
     var id = $(this).attr('data-id');
-    var total = $(this).attr('data-content');
 
-    var price = parseFloat($('#salesprice-'+id).val());
+    var price = parseFloat($('#salesPrice-'+id).val());
     var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
     var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
     var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
     var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
-    if(total === "salesSubTotal"){
-         subTotal  = (salesQuantity * price);
-        $("#salesSubTotal-"+id).html(subTotal);
-    }elseif(total === "returnSubTotal"){
-         subTotal  = (returnQuantity * price);
-        $("#returnSubTotal-"+id).html(subTotal);
-    }elseif(total === "damageSubTotal"){
-        subTotal  = (damageQuantity * price);
-        $("#damageSubTotal-"+id).html(subTotal);
-    }
+    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity);
+    subTotal  = (totalQuantity * price);
+    $("#totalQuantity-"+id).html(totalQuantity);
+    $("#subTotal-"+id).html(subTotal);
     $.ajax({
-        url: Routing.generate('business_invoice_item_update'),
+        url: Routing.generate('business_invoice_distribution_item_update'),
         type: 'POST',
-        data:'itemId='+ id +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity,
+        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity +'&totalQuantity='+ totalQuantity,
         success: function(response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
-            $('#due').val(obj['due']);
-            $('.due').html(obj['due']);
-            $('.payment').html(obj['payment']);
-            $('.discount').html(obj['discount']);
+            $('.netTotal').html(obj['subTotal']);
+            $('#paymentTotal').val(obj['subTotal']);
+            $('#due').val(obj['subTotal']);
+            $('.due').html(obj['subTotal']);
+            $('.payment').html(obj['subTotal']);
+            $('.discount').html(0);
+            $('.salesQnt').html(obj['salesQnt']);
+            $('.returnQnt').html(obj['returnQnt']);
+            $('.damageQnt').html(obj['damageQnt']);
+            $('.totalQnt').html(obj['totalQnt']);
+            $('.bonusQnt').html(obj['bonusQnt']);
 
         },
     })

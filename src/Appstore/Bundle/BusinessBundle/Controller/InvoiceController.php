@@ -46,10 +46,11 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $user = $this->getUser();
-        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
         $pagination = $this->paginate($entities);
-        return $this->render('BusinessBundle:Invoice:index.html.twig', array(
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        return $this->render("BusinessBundle:Invoice/{$view}:index.html.twig", array(
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
@@ -123,9 +124,10 @@ class InvoiceController extends Controller
         if (in_array($entity->getProcess(), array('Done','Delivered','Canceled'))) {
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
-	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1],['companyName'=>"ASC"]);
-	    return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $this->getUser()->getGlobalOption(),'status'=>1),array('companyName'=>"ASC"));
+
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
             'form' => $editForm->createView(),
@@ -175,7 +177,6 @@ class InvoiceController extends Controller
 	        $em->flush();
             $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
-	            //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($invoiceItem,'sales');
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
@@ -183,6 +184,10 @@ class InvoiceController extends Controller
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
 
+            }elseif($entity->getProcess() == "In-progress") {
+                if($entity->getBusinessConfig()->getBusinessModel() == 'distribution'){
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
+                }
             }
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
@@ -194,10 +199,10 @@ class InvoiceController extends Controller
 
         $config = $entity->getBusinessConfig();
 	    $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual'));
-	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
+	   $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
 
-        return $this->render("BusinessBundle:Invoice:{$view}.html.twig", array(
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
             'particulars' => $particulars,
@@ -250,7 +255,6 @@ class InvoiceController extends Controller
 		$msg = 'Discount successfully';
 		$result = $this->returnResultData($entity,$msg);
 		return new Response(json_encode($result));
-		exit;
 	}
 
 
@@ -264,7 +268,10 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
-            return $this->render('BusinessBundle:Invoice:show.html.twig', array(
+
+            $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'default';
+
+            return $this->render("BusinessBundle:Invoice/{$view}:show.html.twig", array(
                 'entity' => $entity,
             ));
         } else {
@@ -368,7 +375,6 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
 
     }
 
@@ -387,7 +393,7 @@ class InvoiceController extends Controller
 	    $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
-        exit;
+
     }
 
     /**
@@ -408,6 +414,8 @@ class InvoiceController extends Controller
 		 * Transaction
 		 * Delete Journal & Account Purchase
 		 */
+
+
 		set_time_limit(0);
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
@@ -557,7 +565,7 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -592,6 +600,15 @@ class InvoiceController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
         exit;
+    }
+
+    public function invoiceDistributionItemUpdateAction(Request $request)
+    {
+
+        $data = $request->request->all();
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->updateInvoiceDistributionItems($data);
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        return new Response(json_encode($result));
     }
 
     public function getBarcode($value)

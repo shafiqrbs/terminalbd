@@ -143,6 +143,29 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     }
 
+    public function insertPurchaseDistributionItems($invoice, $data)
+    {
+
+        $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
+        $em = $this->_em;
+        $purchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        $entity = new BusinessPurchaseItem();
+        $entity->setBusinessPurchase($invoice);
+        $entity->setBusinessParticular($particular);
+        if(!empty($particular->getPrice())){
+            $entity->setSalesPrice($particular->getPrice());
+        }
+        $entity->setPurchasePrice($purchasePrice);
+        $entity->setActualPurchasePrice($purchasePrice);
+        $entity->setQuantity($data['quantity']);
+        $entity->setBonusQuantity($data['bonusQuantity']);
+        $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
+        $em->persist($entity);
+        $em->flush();
+        $this->getPurchaseAveragePrice($particular);
+
+    }
+
     public function insertSawmillPurchaseItems($invoice, $data)
     {
 	    $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
@@ -213,12 +236,18 @@ class BusinessPurchaseItemRepository extends EntityRepository
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getName()}</td>";
+            $data .= "<td>{$entity->getSalesPrice()}</td>";
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
             if ($sales->getBusinessConfig()->getBusinessModel() == 'sign'){
                 $data .= "<td>{$entity->getHeight()}x{$entity->getWidth()}</td>";
                 $data .= "<td>{$entity->getSubQuantity()}</td>";
             }
             $data .= "<td>{$entity->getQuantity()}</td>";
+            if ($sales->getBusinessConfig()->getBusinessModel() == 'distribution') {
+                $totalQnt = $entity->getQuantity() + $entity->getBonusQuantity();
+                $data .= "<td>{$entity->getBonusQuantity()}</td>";
+                $data .= "<td>{$totalQnt}</td>";
+            }
             $data .= "<td>{$unit}</td>";
             $data .= "<td>{$entity->getPurchaseSubTotal()}</td>";
             $data .= "<td><a id='{$entity->getId()}'  data-url='/business/purchase/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
@@ -233,6 +262,17 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.businessPurchase', 'mp');
         $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
+    public function bonusStockItemUpdate(BusinessParticular $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessPurchase', 'mp');
+        $qb->select('SUM(e.bonusQuantity) AS quantity');
         $qb->where('e.businessParticular = :particular')->setParameter('particular', $stockItem->getId());
         $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
         $qnt = $qb->getQuery()->getOneOrNullResult();

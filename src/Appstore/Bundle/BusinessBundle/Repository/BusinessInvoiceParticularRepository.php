@@ -289,6 +289,15 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function bonusStockItemUpdate(BusinessParticular $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.bonusQnt) AS quantity');
+        $qb->where('e.businessParticular = :stock')->setParameter('stock', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
     public function getSalesItems(BusinessInvoice $sales)
     {
         $entities = $sales->getBusinessInvoiceParticulars();
@@ -476,6 +485,30 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $em->persist($entity);
         $em->flush();
         return $invoiceParticular->getBusinessInvoice();
+
+    }
+
+    public function updateInvoiceDistributionItems($data)
+    {
+
+        $em = $this->_em;
+        $entity = $this->find($data['itemId']);
+        if(!empty($entity)) {
+
+            /* @var $entity BusinessInvoiceParticular */
+
+            $entity->setQuantity( $data['salesQuantity'] );
+            $entity->setReturnQnt( $data['returnQuantity'] );
+            $entity->setDamageQnt( $data['damageQuantity'] );
+            $entity->setBonusQnt( $data['bonusQuantity'] );
+            $entity->setPrice( $data['salesPrice'] );
+            $entity->setTotalQuantity( $data['totalQuantity']);
+            $entity->setSubTotal( $entity->getPrice() * $entity->getTotalQuantity() );
+
+        }
+        $em->persist($entity);
+        $em->flush();
+        return $entity->getBusinessInvoice();
 
     }
 

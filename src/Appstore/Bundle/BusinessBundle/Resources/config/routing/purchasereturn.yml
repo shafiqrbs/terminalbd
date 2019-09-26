@@ -1,0 +1,64 @@
+business_purchase_return:
+    path:     /
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:index" }
+
+business_purchase_return_show:
+    path:     /{id}/show
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:show" }
+
+business_purchase_return_new:
+    path:     /new
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:new" }
+
+business_purchase_return_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:edit" }
+
+business_purchase_return_update:
+    path:     /{id}/update
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:update" }
+    methods:  [POST, PUT]
+
+business_purchase_return_status:
+    path:     /{id}/status
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:edit" }
+
+business_purchase_return_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:delete" }
+
+business_purchase_return_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:particularSearch" }
+
+
+business_purchase_return_particular_add:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:addParticular" }
+    methods:  POST
+    options:
+            expose: true
+
+
+business_purchase_return_discount_update:
+    path:     /purchase/dicount-update
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+business_purchase_return_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:approved" }
+
+business_purchase_return_item_approve:
+    path:     /{id}/item-approve
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:itemApprove" }
+
+business_purchase_return_particular_delete:
+    path:     /{invoice}/{id}/particular-delete
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:invoiceParticularDelete" }
+
+business_purchase_return_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:print" }

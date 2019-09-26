@@ -278,6 +278,8 @@ class BusinessParticularRepository extends EntityRepository
         if($fieldName == 'sales'){
             $qnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemUpdate($stock);
             $stock->setSalesQuantity($qnt);
+            $bonusQnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->bonusStockItemUpdate($stock);
+            $stock->setBonusSalesQuantity($bonusQnt);
         }elseif($fieldName == 'sales-return'){
             $quantity = $this->_em->getRepository('BusinessBundle:BusinessInvoiceReturn')->salesReturnStockUpdate($stock);
             $stock->setSalesReturnQuantity($quantity);
@@ -290,6 +292,8 @@ class BusinessParticularRepository extends EntityRepository
         }else{
             $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseItem')->purchaseStockItemUpdate($stock);
             $stock->setPurchaseQuantity($qnt);
+            $bonusQnt = $em->getRepository('BusinessBundle:BusinessPurchaseItem')->bonusStockItemUpdate($stock);
+            $stock->setBonusPurchaseQuantity($bonusQnt);
         }
         $em->persist($stock);
         $em->flush();
@@ -328,6 +332,7 @@ class BusinessParticularRepository extends EntityRepository
         $em = $this->_em;
         $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity()+ $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
+        $stock->setBonusQuantity($stock->getBonusPurchaseQuantity() - $stock->getBonusSalesQuantity());
         $em->persist($stock);
         $em->flush();
     }
@@ -341,10 +346,14 @@ class BusinessParticularRepository extends EntityRepository
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
 				if(!empty($item->getBusinessParticular())) {
+
 					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'post-production') {
 						$this->productionExpense( $item );
 					}
 					$this->getSalesUpdateQnt( $item );
+					if($item->getBonusQnt() > 0){
+                        $this->getSalesUpdateBonusQnt( $item );
+                    }
 				}
             }
         }
@@ -421,6 +430,20 @@ class BusinessParticularRepository extends EntityRepository
 
 	}
 
+    public function getSumTotalInvoiceItemBonusQuantity($particular){
+
+		$qb = $this->_em->createQueryBuilder();
+		$qb->from('BusinessBundle:BusinessInvoiceParticular','e');
+        $qb->join('e.businessInvoice','i');
+		$qb->select('SUM(e.bonusQnt) AS quantity');
+		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
+		$qnt = $qb->getQuery()->getOneOrNullResult();
+		$invoiceQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+		return $invoiceQnt;
+
+	}
+
 
 	public function getSalesUpdateQnt(BusinessInvoiceParticular  $item){
 
@@ -433,6 +456,17 @@ class BusinessParticularRepository extends EntityRepository
         $em->persist($particular);
         $em->flush();
 	    $this->remainingQnt($particular);
+    }
+
+    public function getSalesUpdateBonusQnt(BusinessInvoiceParticular  $item){
+
+        $em = $this->_em;
+        $particular = $item->getBusinessParticular();
+        $invoiceQnt = $this->getSumTotalInvoiceItemBonusQuantity($particular);
+        $particular->setSalesQuantity($invoiceQnt);
+        $em->persist($particular);
+        $em->flush();
+        $this->remainingQnt($particular);
     }
 
 

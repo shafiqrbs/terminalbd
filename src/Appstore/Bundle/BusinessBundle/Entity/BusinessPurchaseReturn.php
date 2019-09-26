@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * BusinessPurchaseReturn
  *
  * @ORM\Table( name ="business_purchase_return")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Bundle\Repository\BusinessPurchaseReturnRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessPurchaseReturnRepository")
  */
 class BusinessPurchaseReturn
 {
@@ -62,6 +62,13 @@ class BusinessPurchaseReturn
      * @ORM\Column(name="invoice", type="string", length=255, nullable=true)
      */
     private $invoice;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesInvoice", type="integer", nullable=true)
+     */
+    private $salesInvoice;
 
     /**
      * @var integer
@@ -255,6 +262,22 @@ class BusinessPurchaseReturn
     public function setBusinessPurchaseReturnItems($businessPurchaseReturnItems)
     {
         $this->businessPurchaseReturnItems = $businessPurchaseReturnItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesInvoice()
+    {
+        return $this->salesInvoice;
+    }
+
+    /**
+     * @param int $salesInvoice
+     */
+    public function setSalesInvoice($salesInvoice)
+    {
+        $this->salesInvoice = $salesInvoice;
     }
 
 

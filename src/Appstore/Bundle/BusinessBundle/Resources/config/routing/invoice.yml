@@ -26,13 +26,11 @@ business_invoice_particular_search:
     options:
             expose: true
 
-
 business_item_unit_search:
     path:     /item-unit-search
     defaults: { _controller: "BusinessBundle:Invoice:autoUnitSearch" }
     options:
             expose: true
-
 
 business_invoice_event:
     path:     /{id}/event
@@ -117,6 +115,13 @@ business_invoice_commission_process:
 business_invoice_item_update:
     path:     /sales-item-update
     defaults: { _controller: "BusinessBundle:Invoice:invoiceItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+business_invoice_distribution_item_update:
+    path:     /sales-distribution-item-update
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceDistributionItemUpdate" }
     methods:  POST
     options:
             expose: true

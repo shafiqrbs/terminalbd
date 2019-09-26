@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Vendor controller.
  *
  */
-class PurchaseController extends Controller
+class PurchaseReturnController extends Controller
 {
 
     public function paginate($entities)
@@ -42,45 +42,13 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $data = $_REQUEST;
-	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->findWithSearch($this->getUser(),$data);
+	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->findAll();
         $pagination = $this->paginate($entities);
-        return $this->render('BusinessBundle:Purchase:index.html.twig', array(
+        return $this->render('BusinessBundle:PurchaseReturn:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
     }
-
-
-    /**
-     * Lists all Vendor entities.
-     *
-     */
-    public function purchaseItemAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-	    $data = $_REQUEST;
-	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->findWithSearch($this->getUser(),$data);
-        $pagination = $this->paginate($entities);
-	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'index';
-        if(empty($data['pdf'])){
-            return $this->render("BusinessBundle:Purchase/PurchaseItem:{$view}.html.twig", array(
-                'entities' => $pagination,
-                'searchForm' => $data,
-            ));
-
-        }else{
-            $html = $this->renderView(
-                'BusinessBundle:Purchase/PurchaseItem:signPdf.html.twig', array(
-                    'globalOption'          => $this->getUser()->getGlobalOption(),
-                    'entities' => $pagination,
-                    'searchForm' => $data,
-                )
-            );
-            $this->downloadPdf($html,'purchase-item.pdf');
-        }
-    }
-
 
 
     public function downloadPdf($html,$fileName = '')
@@ -92,17 +60,6 @@ class PurchaseController extends Controller
         header("Content-Disposition: attachment; filename={$fileName}");
         echo $pdf;
         return new Response('');
-    }
-
-
-
-    /**
-     * Creates a new Vendor entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-       
     }
 
 
@@ -209,48 +166,6 @@ class PurchaseController extends Controller
         exit;
     }
 
-    public function sawmillParticularAction(Request $request, BusinessPurchase $invoice)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $particularId = $request->request->get('particularId');
-        $width = $request->request->get('width');
-        $height = $request->request->get('height');
-        $length = $request->request->get('length');
-        $particularType = $request->request->get('particularType');
-        $price = $request->request->get('purchasePrice');
-        $invoiceItems = array('particularId' => $particularId ,'particularType' => $particularType, 'width' => $width,'height' => $height,'length' => $length,'price' => $price);
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertSawmillPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-
-    }
-
-    public function insertPurchaseDistributionItemsAction(Request $request, BusinessPurchase $invoice)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $particularId = $request->request->get('particularId');
-        $quantity = $request->request->get('quantity');
-        $bonusQuantity = $request->request->get('bonusQuantity');
-        $price = $request->request->get('purchasePrice');
-        $invoiceItems = array('particularId' => $particularId ,'quantity' => $quantity,'bonusQuantity' => $bonusQuantity,'price' => $price);
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseDistributionItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-    }
-
-    public function signParticularAction(Request $request, BusinessPurchase $invoice)
-    {
-        $em = $this->getDoctrine()->getManager();
-	    $invoiceItems = $request->request->all();
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertSignPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
-        $result = $this->returnResultData($invoice);
-        return new Response(json_encode($result));
-        exit;
-    }
-
     public function invoiceParticularDeleteAction(BusinessPurchase $invoice, BusinessPurchaseItem $particular){
 
         $em = $this->getDoctrine()->getManager();
@@ -262,7 +177,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     /**
@@ -305,7 +220,7 @@ class PurchaseController extends Controller
         $msg = 'Discount successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function updateAction(Request $request, BusinessPurchase $entity)
@@ -381,7 +296,6 @@ class PurchaseController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
     /**

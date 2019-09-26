@@ -91,6 +91,7 @@
                                    {# <th class="numeric" >Opening</th>#}
                                     <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
+                                    <th class="numeric" >Bonus Qnt</th>
                                     <th class="numeric" >Stock Qnt</th>
                                     <th class="numeric" >Min. Qnt</th>
                                     <th class="numeric" >Unit</th>
@@ -118,7 +119,8 @@
                                        </td>#}
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
-                                        <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                        <td class="numeric" >{{ entity.bonusQuantity|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.remainingQuantity + entity.bonusQuantity) }}</td>
                                         <td class="numeric">
                                           <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                         </td>

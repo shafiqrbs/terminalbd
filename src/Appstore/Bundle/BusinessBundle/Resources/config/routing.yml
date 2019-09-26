@@ -6,6 +6,10 @@ business_purchase:
     resource: "@BusinessBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+business_purchase_return:
+    resource: "@BusinessBundle/Resources/config/routing/purchasereturn.yml"
+    prefix:   /purchase-return
+
 business_vendor_stock:
     resource: "@BusinessBundle/Resources/config/routing/vendorstock.yml"
     prefix:   /vendor-stock

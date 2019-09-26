@@ -51,6 +51,13 @@ class BusinessPurchaseReturnItem
      */
     private $quantity;
 
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesInvoiceItem", type="integer",nullable=true)
+     */
+    private $salesInvoiceItem;
+
     /**
      * @var float
      *
@@ -186,6 +193,22 @@ class BusinessPurchaseReturnItem
     public function setBusinessPurchaseItem($businessPurchaseItem)
     {
         $this->businessPurchaseItem = $businessPurchaseItem;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesInvoiceItem()
+    {
+        return $this->salesInvoiceItem;
+    }
+
+    /**
+     * @param int $salesInvoiceItem
+     */
+    public function setSalesInvoiceItem($salesInvoiceItem)
+    {
+        $this->salesInvoiceItem = $salesInvoiceItem;
     }
 
 

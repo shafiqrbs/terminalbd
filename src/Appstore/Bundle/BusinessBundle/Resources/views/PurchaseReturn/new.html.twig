@@ -45,7 +45,7 @@
         <div class="portlet-body form">
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
-            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_distribution',{'invoice':entity.id}) }}">
+            <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_add',{'invoice':entity.id}) }}">
             <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
@@ -57,12 +57,11 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="span4">
+                        <div class="span3">
                             <div class="input-append">
                                 <div class="input-group">
-                                    <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
-                                    <input type="number" class="m-wrap span3 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
-                                    <input type="number" class="m-wrap span3 form-control input-number" id="bonusQuantity" name="bonusQuantity" value="" min="0" autocomplete="off">
+                                    <input type="text" class="m-wrap span8" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                    <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                     <button type="submit" class="btn blue" id="addParticular" ><i class="icon-save"></i> Add</button>
@@ -82,11 +81,9 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
                             <th class="span3">Name</th>
-                            <th class="span1">MRP</th>
-                            <th class="span1">P. Price</th>
+                            <th class="span1">Sales Price</th>
+                            <th class="span1">Receive Price</th>
                             <th class="span1">Qnt</th>
-                            <th class="span1">Bonus Qnt</th>
-                            <th class="span1">Total Qnt</th>
                             <th class="span1">Unit</th>
                             <th class="span1">Sub Total</th>
                             <th class="span1"><i class="icon-trash"></i></th>
@@ -99,11 +96,9 @@
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.businessParticular.particularCode }}</td>
                                     <td class="span3">{{ item.businessParticular.name }}</td>
-                                    <td class="span1">{{ item.businessParticular.salesPrice }}</td>
+                                    <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
-                                    <td class="span1">{{ item.bonusQuantity }}</td>
-                                    <td class="span1">{{ item.quantity + item.bonusQuantity }}</td>
                                     <td class="span1">{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                     <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('business_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
@@ -113,20 +108,20 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="11" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="9" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="9" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="9" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="netTotal">{{ entity.netTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>

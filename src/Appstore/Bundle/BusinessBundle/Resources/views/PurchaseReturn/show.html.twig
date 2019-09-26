@@ -95,8 +95,8 @@
                                             <th class="span1">Size</th>
                                             <th class="span1">Qnt</th>
                                             {% endif %}
+                                            <th class="span1">Total Qnt</th>
                                             <th class="span2">Price</th>
-                                            <th class="span1">Quantity</th>
                                             <th class="span1">Sub-Total</th>
                                         </tr>
                                         </thead>
@@ -110,8 +110,8 @@
                                                 <td>{{ item.height }} x {{ item.width }}</td>
                                                 <td>{{ item.subQuantity }}</td>
                                                 {% endif %}
-                                                <td class="span2">{{ item.purchasePrice|abs  }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
+                                                <td class="span2">{{ item.purchasePrice }}</td>
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>
                                         {% endfor %}
