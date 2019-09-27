@@ -62,6 +62,13 @@ class TicketFormBuilder
     private $builderItems;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TicketBundle\Entity\Ticket", mappedBy="builder" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $tickets;
+
+
     /**
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"name"})
