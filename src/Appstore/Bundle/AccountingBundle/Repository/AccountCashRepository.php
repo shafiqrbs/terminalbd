@@ -409,7 +409,8 @@ class AccountCashRepository extends EntityRepository
 
         $balance = $this->lastInsertCash($entity,$processHead);
         $em = $this->_em;
-        if(empty($entity->getAccountCash())){
+        $journals = $this->findBy(array( "accountJournal" => $entity));
+        if(empty($journals)){
             $cash = new AccountCash();
             $cash->setAccountBank($entity->getAccountBank());
             $cash->setAccountMobileBank($entity->getAccountMobileBank());
@@ -988,7 +989,7 @@ class AccountCashRepository extends EntityRepository
             }elseif($journalItem->getCredit()  > 0 ){
                 $cash->setAccountHead($journalItem->getAccountHead());
                 $cash->setAccountBank($journalItem->getAccountSubHead()->getAccountBank());
-                $cash->setDebit($journalItem->getCredit());
+                $cash->setCredit($journalItem->getCredit());
                 $cash->setBalance($balance + $journalItem->getCredit());
             }
 
@@ -1003,7 +1004,7 @@ class AccountCashRepository extends EntityRepository
             }elseif($journalItem->getCredit()  > 0 ){
                 $cash->setAccountHead($journalItem->getAccountHead());
                 $cash->setAccountMobileBank($journalItem->getAccountSubHead()->getAccountMobileBank());
-                $cash->setDebit($journalItem->getCredit());
+                $cash->setCredit($journalItem->getCredit());
                 $cash->setBalance($balance + $journalItem->getCredit());
             }
 

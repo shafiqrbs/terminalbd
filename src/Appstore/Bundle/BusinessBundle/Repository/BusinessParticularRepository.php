@@ -408,10 +408,10 @@ class BusinessParticularRepository extends EntityRepository
 
 	    $qb = $this->_em->createQueryBuilder();
 	    $qb->from('BusinessBundle:BusinessProductionExpense','e');
-	    $qb->select('SUM(e.quantity) AS quantity');
+	    $qb->select('COALESCE(SUM(e.quantity),0) AS quantity');
 	    $qb->where('e.productionElement = :particular')->setParameter('particular', $particular->getId());
 	    $qnt = $qb->getQuery()->getOneOrNullResult();
-	    $productionQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+	    $productionQnt = ($qnt['quantity'] == 0 ) ? 0 : $qnt['quantity'];
 	    return $productionQnt;
 
     }
@@ -421,11 +421,11 @@ class BusinessParticularRepository extends EntityRepository
 		$qb = $this->_em->createQueryBuilder();
 		$qb->from('BusinessBundle:BusinessInvoiceParticular','e');
         $qb->join('e.businessInvoice','i');
-		$qb->select('SUM(e.totalQuantity) AS quantity');
+		$qb->select('COALESCE(SUM(e.totalQuantity),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
 		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
-		$invoiceQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+		$invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
 
 	}
@@ -435,7 +435,7 @@ class BusinessParticularRepository extends EntityRepository
 		$qb = $this->_em->createQueryBuilder();
 		$qb->from('BusinessBundle:BusinessInvoiceParticular','e');
         $qb->join('e.businessInvoice','i');
-		$qb->select('SUM(e.bonusQnt) AS quantity');
+		$qb->select(' COALESCE(SUM(e.bonusQnt),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
 		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();

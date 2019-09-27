@@ -27,6 +27,7 @@ class AccountJournalItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountJournalItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $accountJournal;
 

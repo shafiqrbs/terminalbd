@@ -176,81 +176,6 @@ class AccountJournalController extends Controller
      *
      */
 
-	/**
-	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
-	 */
-
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:AccountJournal')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountJournal entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-    * Creates a form to edit a AccountJournal entity.
-    *
-    * @param AccountJournal $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(AccountJournal $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountJournalType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_journal_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'horizontal-form purchase',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
-    /**
-     * Edits an existing AccountJournal entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:AccountJournal')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountJournal entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('account_journal_edit', array('id' => $id)));
-        }
-
-        return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
 
     /**
      * Creates a form to delete a AccountJournal entity by id.
@@ -314,7 +239,7 @@ class AccountJournalController extends Controller
                 $entity->setUpdated($datetime);
             }
             $em->flush();
-            if(!empty($entity->getTransactionMethod())){
+            if($entity->getTransactionMethod()){
 	            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
             }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
@@ -422,5 +347,52 @@ class AccountJournalController extends Controller
 		$response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
 		return $response;
 	}
+
+    public function journalExcelAction()
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $array = array();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
+        $entities = $entities->getResult();
+        $array[] = 'Created,User Name,Method,Ref No,Account Head Debit,Account Head Credit,Debit,Credit';
+
+        /* @var $entity AccountJournal */
+
+        foreach ($entities as $key => $entity){
+
+            $method = !empty($entity['methodName']) ? $entity['methodName']:'';
+            $creditHead = !empty($entity['accountHeadDebitName']) ? $entity['accountHeadDebitName']:'';
+            $debitHead = !empty($entity['accountHeadCreditName']) ? $entity['accountHeadCreditName']:'';
+
+            $debit = $entity['transactionType'] == 'Debit' ? $entity['amount']:'';
+            $credit = $entity['transactionType'] == 'Credit' ? $entity['amount']:'';
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $rows = array(
+                $entity['updated']->format('d-m-Y'),
+                $entity['userName'],
+                $method,
+                $entity['accountRefNo'],
+                $debitHead,
+                $creditHead,
+                $debit,
+                $credit
+            );
+            $array[] = implode(',', $rows);
+        }
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $compareStart = new \DateTime($startDate);
+        $start =  $compareStart->format('d-m-Y');
+        $fileName = $start.'-account-journal.csv';
+        $content = implode("\n", $array);
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        return $response;
+    }
 
 }

@@ -485,7 +485,7 @@ class AccountJournal
     }
 
     /**
-     * @return mixed
+     * @return AccountCash
      */
     public function getAccountCash()
     {

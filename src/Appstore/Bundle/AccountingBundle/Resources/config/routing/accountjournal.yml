@@ -15,10 +15,6 @@ account_journal_create:
     defaults: { _controller: "AccountingBundle:AccountJournal:create" }
     methods:  POST
 
-account_journal_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "AccountingBundle:AccountJournal:edit" }
-
 account_journal_reverse:
     path:     /{id}/reverse
     defaults: { _controller: "AccountingBundle:AccountJournal:journalReverse" }
@@ -51,6 +47,6 @@ account_journal_pdf:
     defaults: { _controller: "AccountingBundle:AccountJournal:journalPdf" }
 
 account_journal_excel:
-    path:     /report-pdf
+    path:     /report-excel
     defaults: { _controller: "AccountingBundle:AccountJournal:journalExcel" }
 
