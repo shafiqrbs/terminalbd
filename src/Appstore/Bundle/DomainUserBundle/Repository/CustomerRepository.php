@@ -332,7 +332,7 @@ class CustomerRepository extends EntityRepository
         $qb->andWhere("customer.name != :name");
         $qb->setParameter('name', 'Default');
         $qb->andWhere("customer.mobile IS NOT NULL");
-        $this->handleSearchBetween($qb,$data);
+    //    $this->handleSearchBetween($qb,$data);
         $qb->orderBy('customer.created','DESC');
         $qb->getQuery();
         return  $qb;

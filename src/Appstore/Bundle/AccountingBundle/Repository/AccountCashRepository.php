@@ -973,7 +973,7 @@ class AccountCashRepository extends EntityRepository
                 $cash->setBalance($balance + $journalItem->getDebit());
             }elseif($journalItem->getCredit()  > 0 ){
                 $cash->setAccountHead($journalItem->getAccountHead());
-                $cash->setDebit($journalItem->getCredit());
+                $cash->setCredit($journalItem->getCredit());
                 $cash->setBalance($balance + $journalItem->getCredit());
             }
 

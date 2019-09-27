@@ -1,6 +1,10 @@
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
+ticket:
+    resource: "@TicketBundle/Resources/config/routing.yml"
+    prefix:   /ticket
+
 assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
     prefix:   /assets

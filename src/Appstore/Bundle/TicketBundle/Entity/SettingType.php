@@ -1,17 +1,17 @@
 <?php
 
-namespace Appstore\Bundle\OfficeBundle\Entity;
+namespace Appstore\Bundle\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * BusinessParticular
+ * Setting
  *
- * @ORM\Table( name = "ticket_open")
+ * @ORM\Table( name = "ticket_setting_type")
  * @ORM\Entity(repositoryClass="")
  */
-class Ticket
+class SettingType
 {
     /**
      * @var integer
@@ -24,34 +24,40 @@ class Ticket
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TicketBundle\Entity\TicketConfig", inversedBy="settingType" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $config;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TicketBundle\Entity\Setting", mappedBy="type" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $settings;
+
+
+     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="shortCode", type="string", length=50, nullable=true)
-     */
-    private $shortCode;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=100, nullable=true)
-     */
-    private $type;
-
-
 
     /**
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(length=255, unique=true)
+     * @ORM\Column(length=255, unique = true)
      */
     private $slug;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="timestamp", type="time")
+     */
+    private $timestamp;
+
 
     /**
      * @var boolean
@@ -122,53 +128,46 @@ class Ticket
         $this->slug = $slug;
     }
 
-
     /**
-     * @return string
+     * @return TicketConfig
      */
-    public function getType()
+    public function getConfig()
     {
-        return $this->type;
+        return $this->config;
     }
 
     /**
-     * @param string $type
+     * @param TicketConfig $config
      */
-    public function setType($type)
+    public function setConfig($config)
     {
-        $this->type = $type;
+        $this->config = $config;
     }
 
     /**
-     * @return Item
+     * @return \DateTime
      */
-    public function getItems()
+    public function getTimestamp()
     {
-        return $this->items;
+        return $this->timestamp;
     }
 
     /**
-     * @return string
+     * @param \DateTime $timestamp
      */
-    public function getShortCode()
+    public function setTimestamp($timestamp)
     {
-        return $this->shortCode;
+        $this->timestamp = $timestamp;
     }
 
-    /**
-     * @param string $shortCode
-     */
-    public function setShortCode($shortCode)
-    {
-        $this->shortCode = $shortCode;
-    }
+
 
     /**
-     * @return TaxTariffMatrixItem
+     * @return Setting
      */
-    public function getTaxTariffMatrixItems()
+    public function getSettings()
     {
-        return $this->taxTariffMatrixItems;
+        return $this->settings;
     }
 
 

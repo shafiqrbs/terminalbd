@@ -7,3 +7,18 @@ services:
         class: Appstore\Bundle\DomainUserBundle\EventListener\CustomerListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    appstore_gp_customer_import:
+        class: Appstore\Bundle\DomainUserBundle\Importer\GpCustomerExcel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    appstore.importer.customer_excel_data_reader:
+       class: Appstore\Bundle\DomainUserBundle\Importer\GpCustomerDataReader
+       arguments: [ @phpexcel ]
+
+    app.twig_extension:
+       class: Appstore\Bundle\DomainUserBundle\Twig\CulculationExtension
+       public: false
+       tags:
+          - { name: twig.extension }

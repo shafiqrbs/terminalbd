@@ -33,6 +33,7 @@ use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -104,10 +105,16 @@ class GlobalOption
     protected $payrollSetting;
 
 
-      /**
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", mappedBy="globalOption" )
      **/
     protected $procurementConfig;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TicketBundle\Entity\TicketConfig", mappedBy="globalOption" )
+     **/
+    protected $ticketConfig;
 
 
     /**
@@ -2123,6 +2130,14 @@ class GlobalOption
     public function getOfficeConfig()
     {
         return $this->officeConfig;
+    }
+
+    /**
+     * @return TicketConfig
+     */
+    public function getTicketConfig()
+    {
+        return $this->ticketConfig;
     }
 
 

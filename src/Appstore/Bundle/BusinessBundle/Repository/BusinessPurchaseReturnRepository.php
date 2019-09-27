@@ -31,7 +31,7 @@ class BusinessPurchaseReturnRepository extends EntityRepository
     public function insertInvoiceDamageItem(BusinessInvoice $invoice)
     {
         $em = $this->_em;
-        $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=>$invoice->getInvoice()));
+        $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=> $invoice->getInvoice()));
         if($exist){
             $this->insertUpdatePurchaseReturnItem($exist,$invoice);
         }else{

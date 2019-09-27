@@ -1,0 +1,25 @@
+ticket_setting:
+    path:     /
+    defaults: { _controller: "TicketBundle:Setting:index" }
+
+ticket_setting_create:
+    path:     /create
+    defaults: { _controller: "TicketBundle:Setting:create" }
+    methods:  POST
+
+ticket_setting_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TicketBundle:Setting:edit" }
+
+ticket_setting_update:
+    path:     /{id}/update
+    defaults: { _controller: "TicketBundle:Setting:update" }
+    methods:  [POST, PUT]
+
+ticket_setting_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TicketBundle:Setting:delete" }
+
+ticket_setting_status:
+    path:     /{id}/status
+    defaults: { _controller: "TicketBundle:Setting:status" }

@@ -1,0 +1,42 @@
+formbuilder:
+    path:     /
+    defaults: { _controller: "TicketBundle:FormBuilder:index" }
+
+formbuilder_show:
+    path:     /{id}/show
+    defaults: { _controller: "TicketBundle:FormBuilder:show" }
+
+formbuilder_new:
+    path:     /new
+    defaults: { _controller: "TicketBundle:FormBuilder:new" }
+
+formbuilder_create:
+    path:     /create
+    defaults: { _controller: "TicketBundle:FormBuilder:create" }
+    methods:  POST
+
+formbuilder_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TicketBundle:FormBuilder:edit" }
+
+formbuilder_update:
+    path:     /{id}/update
+    defaults: { _controller: "TicketBundle:FormBuilder:update" }
+    methods:  [POST, PUT]
+
+formbuilder_approve:
+    path:     /{id}/payment-approve
+    defaults: { _controller: "TicketBundle:FormBuilder:approve" }
+    options:
+           expose: true
+
+formbuilder_inline:
+    path:     /inline-update
+    defaults: { _controller: "TicketBundle:FormBuilder:inlineUpdate" }
+
+
+formbuilder_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TicketBundle:FormBuilder:delete" }
+    options:
+           expose: true

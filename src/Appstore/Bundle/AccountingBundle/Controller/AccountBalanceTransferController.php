@@ -29,12 +29,6 @@ class AccountBalanceTransferController extends Controller
         return $pagination;
     }
 
-
-    /**
-     * Lists all AccountBalanceTransfer entities.
-     *
-     */
-
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
 	 */

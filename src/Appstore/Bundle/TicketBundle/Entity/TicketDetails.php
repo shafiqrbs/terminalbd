@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\OfficeBundle\Entity;
+namespace Appstore\Bundle\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -8,10 +8,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * BusinessParticular
  *
- * @ORM\Table( name = "ticket_builder")
+ * @ORM\Table( name = "ticket_details")
  * @ORM\Entity(repositoryClass="")
  */
-class TicketBuilder
+class TicketDetails
 {
     /**
      * @var integer

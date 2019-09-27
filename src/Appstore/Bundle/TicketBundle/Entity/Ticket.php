@@ -1,17 +1,18 @@
 <?php
 
-namespace Appstore\Bundle\OfficeBundle\Entity;
+namespace Appstore\Bundle\TicketBundle\Entity;
 
+use Appstore\Bundle\TicketBundle\Entity\TicketFormBuilder;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * BusinessParticular
  *
- * @ORM\Table( name = "ticket_details")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Table( name = "ticket_open")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\TicketBundle\Repository\TicketRepository")
  */
-class TicketDetails
+class Ticket
 {
     /**
      * @var integer
@@ -22,6 +23,18 @@ class TicketDetails
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TicketBundle\Entity\TicketConfig", inversedBy="tickets" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $config;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\TicketBundle\Entity\TicketFormBuilder", inversedBy="tickets" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $formBuilder;
+
 
     /**
      * @var string
@@ -29,6 +42,8 @@ class TicketDetails
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
+
+
 
     /**
      * @var string
@@ -123,52 +138,37 @@ class TicketDetails
     }
 
 
+
     /**
-     * @return string
+     * @return mixed
      */
-    public function getType()
+    public function getConfig()
     {
-        return $this->type;
+        return $this->config;
     }
 
     /**
-     * @param string $type
+     * @param mixed $config
      */
-    public function setType($type)
+    public function setConfig($config)
     {
-        $this->type = $type;
+        $this->config = $config;
     }
 
     /**
-     * @return Item
+     * @return TicketFormBuilder
      */
-    public function getItems()
+    public function getFormBuilder()
     {
-        return $this->items;
+        return $this->formBuilder;
     }
 
     /**
-     * @return string
+     * @param mixed $formBuilder
      */
-    public function getShortCode()
+    public function setFormBuilder($formBuilder)
     {
-        return $this->shortCode;
-    }
-
-    /**
-     * @param string $shortCode
-     */
-    public function setShortCode($shortCode)
-    {
-        $this->shortCode = $shortCode;
-    }
-
-    /**
-     * @return TaxTariffMatrixItem
-     */
-    public function getTaxTariffMatrixItems()
-    {
-        return $this->taxTariffMatrixItems;
+        $this->formBuilder = $formBuilder;
     }
 
 

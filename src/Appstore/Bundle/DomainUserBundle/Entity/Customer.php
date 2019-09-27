@@ -290,7 +290,7 @@ class Customer
      *
      * @ORM\Column(name="religion", type="string", length=100, nullable =true)
      */
-    private $religion ="Muslim" ;
+    private $religion ="" ;
 
     /**
      * @var string
@@ -412,6 +412,20 @@ class Customer
      * @ORM\Column(name="weight", type="string",length=50, nullable = true)
      */
     private $weight;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="ssc", type="string",length=50, nullable = true)
+     */
+    private $ssc;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="hsc", type="string",length=50, nullable = true)
+     */
+    private $hsc;
 
 	/**
 	 * @var string
@@ -1661,6 +1675,38 @@ class Customer
     public function setCheckedBy($checkedBy)
     {
         $this->checkedBy = $checkedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSsc()
+    {
+        return $this->ssc;
+    }
+
+    /**
+     * @param string $ssc
+     */
+    public function setSsc($ssc)
+    {
+        $this->ssc = $ssc;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHsc()
+    {
+        return $this->hsc;
+    }
+
+    /**
+     * @param string $hsc
+     */
+    public function setHsc($hsc)
+    {
+        $this->hsc = $hsc;
     }
 
 

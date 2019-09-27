@@ -54,7 +54,13 @@
                                {% for key, entity in entities %}
                                    {% set totalDebit = totalDebit +  entity.debit %}
                                    {% set totalCredit = totalCredit +  entity.credit %}
-                                   <tr><td>{{ entity.name }}</td><td></td><td> {{ entity.debit }}</td><td> {{ entity.credit }}</td><td></td></tr>
+                                   <tr>
+                                       <td>{{ entity.name }}</td>
+                                       <td></td>
+                                       <td> {{ entity.debit|number_format }}</td>
+                                       <td> {{ entity.credit|number_format }}</td>
+                                       <td>{{ (entity.debit - entity.credit)|abs|number_format  }}</td>
+                                   </tr>
                                {% endfor %}
                                </tbody>
                             </table>

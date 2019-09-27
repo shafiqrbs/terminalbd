@@ -17,6 +17,7 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
@@ -389,6 +390,13 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
+         $ticketConfig = $this->_em->getRepository('TicketBundle:TicketConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($ticketConfig)){
+            $config = new TicketConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+
         $this->_em->flush();
 
     }
@@ -465,6 +473,10 @@ class GlobalOptionRepository extends EntityRepository
         $this->_em->persist($config);
 
         $config = new OfficeConfig();
+        $config->setGlobalOption($globalOption);
+        $this->_em->persist($config);
+
+        $config = new TicketConfig();
         $config->setGlobalOption($globalOption);
         $this->_em->persist($config);
 

@@ -152,6 +152,8 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if ($editForm->isValid()) {
+            $done = array('Done','Delivered');
+            $distribution = array('Done','Delivered','In-progress','Challan');
             if (!empty($data['customerMobile'])){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
@@ -162,7 +164,9 @@ class InvoiceController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-
+            if (in_array($entity->getProcess(), $done)) {
+                $entity->setApprovedBy($this->getUser());
+            }
             if($entity->getTotal() <= $entity->getReceived()){
                 $entity->setReceived(round($entity->getTotal()));
                 $entity->setDue(0);
@@ -177,7 +181,6 @@ class InvoiceController extends Controller
             }
 
 	        $em->flush();
-            $done = array('Done','Delivered');
             if (in_array($entity->getProcess(), $done)) {
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
@@ -186,8 +189,10 @@ class InvoiceController extends Controller
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
 
-            }elseif($entity->getProcess() == "In-progress") {
-                if($entity->getBusinessConfig()->getBusinessModel() == 'distribution'){
+
+            }elseif(in_array($entity->getProcess(), $distribution)) {
+                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
+                if($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0 ){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
                 }
             }
@@ -731,14 +736,23 @@ class InvoiceController extends Controller
     public function approveAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-        $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-        $em = $this->getDoctrine()->getManager();
-        $entity->setProcess("Done");
-        $entity->setApprovedBy($this->getUser());
-        $em->persist($entity);
-        $em->flush();
-        return new Response("Success");
+
+        if($entity and empty($entity->getApprovedBy())){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+            $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
+            if($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0 ){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
+            }
+            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess("Done");
+            $entity->setApprovedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            return new Response("Success");
+        }
+
     }
 
     public function invoiceGroupApprovedAction()

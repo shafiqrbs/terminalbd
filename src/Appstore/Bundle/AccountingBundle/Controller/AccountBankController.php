@@ -59,6 +59,7 @@ class AccountBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity);
             return $this->redirect($this->generateUrl('accountbank'));
         }
 
@@ -193,6 +194,7 @@ class AccountBankController extends Controller
             $name = $entity->getBank()->getName().','.$entity->getBranch();
             $entity->setName($name);
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity);
             return $this->redirect($this->generateUrl('accountbank'));
         }
 

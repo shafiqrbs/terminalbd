@@ -27,6 +27,10 @@ domain_store:
     resource: "@DomainUserBundle/Resources/config/routing/store.yml"
     prefix:   /hr/store
 
+domain_customer_import:
+    resource: "@DomainUserBundle/Resources/config/routing/gpcustomerimport.yml"
+    prefix:   /hr/customer-import
+
 domain_user_customer:
     resource: "@DomainUserBundle/Resources/config/routing/customer.yml"
     prefix:   /crm

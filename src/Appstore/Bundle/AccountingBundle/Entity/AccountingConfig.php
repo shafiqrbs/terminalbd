@@ -41,7 +41,7 @@ class AccountingConfig
      *
      * @ORM\Column(name="accountClose", type="boolean",  nullable=true)
      */
-    private $accountClose = true;
+    private $accountClose = false;
 
     /**
      * @var boolean

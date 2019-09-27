@@ -1,0 +1,221 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN formbuilder HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="formbuilder-title">
+                   Form Builder Manager
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('formbuilder') }}">Form Builder Manager</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Form Builder Manager</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END formbuilder HEADER-->
+        <!-- BEGIN formbuilder CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Form Builder Manager Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn black" href="{{ path('formbuilder') }}"><i class="icon-th-list"></i>&nbsp;Form Builder</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="portlet-body">
+
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <!-- BEGIN FORM-->
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+
+                            <div class="row-fluid">
+
+                                <div class="span6">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="Bank">Module Name</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.module) }}
+                                                    {{ form_errors(form.module) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Process</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.process) }}
+                                            {{ form_errors(form.process) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">User Type</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.userType) }}
+                                            {{ form_errors(form.userType) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
+                                    <a href="javascript:" class="btn red pull-right mini addmore"><i class="icon-plus"></i> Add Field</a>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span2"><strong>Field Type</strong></div>
+                                <div class="span3"><strong>Field Label name</strong></div>
+                                <div class="span3"><strong>Field Default Value</strong></div>
+                                <div class="span3"><strong>Help Text</strong></div>
+                            </div>
+                            {% set fieldTypes = {'text':'Text','number':'Number','select':'Dropdown','textarea':'Text Editor','checkbox':'Checkbox','date':'Date','radio':'Radio Button','file' : 'Attch File'} %}
+                            <div class="row-fluid clone-block" id="clone-block">
+                                <div class="clone">
+                                    <div class="row-fluid">
+                                        <div class="span2">
+                                            <div class="control-group">
+                                                <input type="hidden" name="metaId[]" value="" >
+                                                <select  name="fieldType[]" class="m-wrap span8">
+                                                    {% for field,key in  fieldTypes %}
+                                                    <option value="{{ field }}">{{ key }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input type="checkbox" name="fieldRequired[]" value="" class="m-wrap tooltips" data-original-title="This Field Required True/False"  data-trigger="hover" >
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <input type="text" name="labelName[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="Enter Label Name ie: Title, Name, Mobile no, Address. Email Etc"  data-trigger="hover"  placeholder="Enter Label Name" value="">
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <input type="text" name="defaultValue[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="This filed value use for - Dropdown,Checkbox,Radio button"  data-trigger="hover" placeholder="Using For Dropdown,Checkbox & Radio button" value="">
+                                                <p class="help">Text Format for Gender : Male|Female|Others etc. </p>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <input type="text" name="helpText[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="This field is input value for suggestion"  data-trigger="hover" placeholder="Enter suggestion value" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="span1">
+                                            <a href="javascript:"  class="btn red  remove hidden mini"><i class="icon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if  entity.builderItems is defined and entity.builderItems is not empty %}
+                                {% for meta in entity.builderItems %}
+                                    <div class="row-fluid trash" id="remove-{{ meta.id }}"  >
+                                        <div class="span2">
+                                            <div class="control-group">
+                                                <input type="hidden" name="metaId[]" value="{{ meta.id }}" >
+                                              <select  name="fieldType[]" class="m-wrap span8">
+                                                    {% for field,key in  fieldTypes %}
+                                                        <option {% if meta.fieldType == field %} selected="selected" {% endif %} value="{{ field }}">{{ key }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <input type="checkbox" name="fieldRequired[]" value="" class="m-wrap tooltips" data-original-title="This Field Required True/False"  data-trigger="hover" >
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+
+                                                <input type="text" name="labelName[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="Enter Label Name ie: Title, Name, Mobile no, Address. Email Etc"  data-trigger="hover"  placeholder="Enter Label Name" value="{{ meta.labelName }}">
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <input type="text" name="defaultValue[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="This filed value use for - Dropdown,Checkbox,Radio button"  data-trigger="hover" placeholder="Using For Dropdown,Checkbox & Radio button" value="{{ meta.defaultValue }}">
+                                                <p class="help">Text Format for Gender : Male|Female|Others etc. </p>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <input type="text" name="helpText[]" class="m-wrap span12 tooltips"
+                                                       data-original-title="This field is input value for suggestion"  data-trigger="hover" placeholder="Enter suggestion value" value="{{ meta.helpText }}">
+                                            </div>
+                                        </div>
+                                        <div class="span1">
+                                            <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('assetscategory_meta_delete',{'id':meta.id}) }}" class="btn red  remove mini"><i class="icon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/span-->
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn yellow"><i class="icon-refresh"></i>&nbsp;Reset</button>
+                                    <button type="submit" class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                    {% if(entity.id > 0 ) %}
+                                        <a href="{{ path('formbuilder_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@TicketBundle/Resources/public/js/approveProcess.js'
+    '@TicketBundle/Resources/public/js/editable.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    approveProcess();
+    EditableInit();
+{% endblock %}

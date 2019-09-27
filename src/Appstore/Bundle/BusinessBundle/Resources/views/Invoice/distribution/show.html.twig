@@ -123,7 +123,7 @@
                                             <td class="">{{ item.totalQuantity }}</td>
                                             <td class="">{{ item.unit }}</td>
                                             <td class="">{{ item.price }}</td>
-                                            <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
+                                            <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -133,7 +133,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="9" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
                                    </tr>
                                     <tr>
                                         <td colspan="9" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>

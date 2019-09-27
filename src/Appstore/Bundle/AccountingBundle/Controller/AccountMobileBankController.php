@@ -190,6 +190,7 @@ class AccountMobileBankController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity);
             return $this->redirect($this->generateUrl('accountmobilebank_edit', array('id' => $id)));
         }
 

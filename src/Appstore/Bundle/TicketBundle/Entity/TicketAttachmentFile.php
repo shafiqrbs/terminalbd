@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\OfficeBundle\Entity;
+namespace Appstore\Bundle\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -8,10 +8,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * BusinessParticular
  *
- * @ORM\Table( name = "ticket_setting")
+ * @ORM\Table( name = "ticket_attachment")
  * @ORM\Entity(repositoryClass="")
  */
-class Setting
+class TicketAttachmentFile
 {
     /**
      * @var integer
@@ -22,8 +22,7 @@ class Setting
      */
     private $id;
 
-
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
@@ -45,10 +44,11 @@ class Setting
     private $type;
 
 
+
     /**
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(length=255, unique = true)
+     * @ORM\Column(length=255, unique=true)
      */
     private $slug;
 

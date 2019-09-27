@@ -187,52 +187,52 @@ class BusinessInvoice
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="subTotal", type="decimal", nullable=true)
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="discount", type="decimal", nullable=true)
+     * @ORM\Column(name="discount", type="float", nullable=true)
      */
     private $discount;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="vat", type="decimal", nullable=true)
+     * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="total", type="decimal", nullable=true)
+     * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="payment", type="decimal", nullable=true)
+     * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="received", type="decimal", nullable=true)
+     * @ORM\Column(name="received", type="float", nullable=true)
      */
     private $received;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="commission", type="decimal", nullable=true)
+     * @ORM\Column(name="commission", type="float", nullable=true)
      */
     private $commission;
 
@@ -248,7 +248,7 @@ class BusinessInvoice
     /**
      * @var string
      *
-     * @ORM\Column(name="due", type="decimal", nullable=true)
+     * @ORM\Column(name="due", type="float", nullable=true)
      */
     private $due;
 
@@ -315,7 +315,7 @@ class BusinessInvoice
 
 
     /**
-     * @return string
+     * @return float
      */
     public function getSubTotal()
     {
@@ -323,7 +323,7 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $subTotal
+     * @param float $subTotal
      */
     public function setSubTotal($subTotal)
     {
@@ -331,7 +331,7 @@ class BusinessInvoice
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getDiscount()
     {
@@ -339,7 +339,7 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $discount
+     * @param float $discount
      */
     public function setDiscount($discount)
     {
@@ -347,7 +347,7 @@ class BusinessInvoice
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getVat()
     {
@@ -355,7 +355,7 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $vat
+     * @param float $vat
      */
     public function setVat($vat)
     {
@@ -363,7 +363,7 @@ class BusinessInvoice
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTotal()
     {
@@ -371,7 +371,7 @@ class BusinessInvoice
     }
 
     /**
-     * @param string $total
+     * @param float $total
      */
     public function setTotal($total)
     {

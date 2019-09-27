@@ -595,7 +595,7 @@ class TransactionRepository extends EntityRepository
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getFromAccountMobileBank());
             $transaction->setSubAccountHead($subAccount);
             $transaction->setProcess('Current Assets');
-        }elseif($entity->getToTransactionMethod()->getId() == 1 ){
+        }elseif($entity->getFromTransactionMethod()->getId() == 1 ){
             /* Cash - Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
             $transaction->setProcess('Cash');
