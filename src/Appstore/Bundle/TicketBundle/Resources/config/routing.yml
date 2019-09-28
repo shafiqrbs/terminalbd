@@ -1,0 +1,19 @@
+ticket_config:
+    resource: "@TicketBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
+ticket_open:
+    resource: "@TicketBundle/Resources/config/routing/openticket.yml"
+    prefix:   /open-ticket
+
+ticket_setting:
+    resource: "@TicketBundle/Resources/config/routing/setting.yml"
+    prefix:   /setting
+
+ticket_formbuilder:
+    resource: "@TicketBundle/Resources/config/routing/formbuilder.yml"
+    prefix:   /form-builder
+
+ticket_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: TicketBundle:Default:index }

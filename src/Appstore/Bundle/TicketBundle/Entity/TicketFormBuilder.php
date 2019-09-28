@@ -219,6 +219,14 @@ class TicketFormBuilder
         return $this->builderItems;
     }
 
+    /**
+     * @return Ticket
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
+    }
+
 
 }
 

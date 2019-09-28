@@ -192,6 +192,7 @@ class InvoiceController extends Controller
 
             }elseif(in_array($entity->getProcess(), $distribution)) {
                 $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 if($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0 ){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
                 }

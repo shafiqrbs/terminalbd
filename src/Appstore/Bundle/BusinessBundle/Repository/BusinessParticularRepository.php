@@ -423,9 +423,9 @@ class BusinessParticularRepository extends EntityRepository
         $qb->join('e.businessInvoice','i');
 		$qb->select('COALESCE(SUM(e.totalQuantity),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
-		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered','In-progress'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
-		$invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
+        $invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
 
 	}
@@ -437,9 +437,9 @@ class BusinessParticularRepository extends EntityRepository
         $qb->join('e.businessInvoice','i');
 		$qb->select(' COALESCE(SUM(e.bonusQnt),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
-		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered'));
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered','In-progress'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
-		$invoiceQnt = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+        $invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
 
 	}
@@ -451,7 +451,7 @@ class BusinessParticularRepository extends EntityRepository
         $particular = $item->getBusinessParticular();
 		$productionQnt = $this->getSumTotalProductionItemQuantity($particular);
 		$invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
-		$qnt = $productionQnt + $invoiceQnt;
+        $qnt = $productionQnt + $invoiceQnt;
 		$particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();
@@ -463,7 +463,7 @@ class BusinessParticularRepository extends EntityRepository
         $em = $this->_em;
         $particular = $item->getBusinessParticular();
         $invoiceQnt = $this->getSumTotalInvoiceItemBonusQuantity($particular);
-        $particular->setSalesQuantity($invoiceQnt);
+        $particular->setBonusSalesQuantity($invoiceQnt);
         $em->persist($particular);
         $em->flush();
         $this->remainingQnt($particular);

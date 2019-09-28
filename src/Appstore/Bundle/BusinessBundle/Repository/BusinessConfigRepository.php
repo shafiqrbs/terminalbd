@@ -60,6 +60,9 @@ class BusinessConfigRepository extends EntityRepository
 		    $item->setMinQuantity(0);
 		    $item->setRemainingQuantity(0);
 		    $item->setOpeningQuantity(0);
+		    $item->setBonusQuantity(0);
+		    $item->setBonusSalesQuantity(0);
+		    $item->setBonusPurchaseQuantity(0);
 		    $this->_em->flush($item);
 	    }
 

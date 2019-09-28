@@ -1,0 +1,30 @@
+ticketconfig:
+    path:     /
+    defaults: { _controller: "TicketBundle:TicketConfig:index" }
+
+ticketconfig_show:
+    path:     /{id}/show
+    defaults: { _controller: "TicketBundle:TicketConfig:show" }
+
+ticketconfig_new:
+    path:     /new
+    defaults: { _controller: "TicketBundle:TicketConfig:new" }
+
+ticketconfig_create:
+    path:     /create
+    defaults: { _controller: "TicketBundle:TicketConfig:create" }
+    methods:  POST
+
+ticketconfig_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "TicketBundle:TicketConfig:edit" }
+
+ticketconfig_update:
+    path:     /{id}/update
+    defaults: { _controller: "TicketBundle:TicketConfig:update" }
+    methods:  [POST, PUT]
+
+ticketconfig_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "TicketBundle:TicketConfig:delete" }
+    methods:  [POST, DELETE]
