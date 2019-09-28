@@ -779,27 +779,27 @@ class ItemRepository extends EntityRepository
 
             foreach ($items as $parent) {
                 $cat['category'] = $parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['category'] = $parent->getName();
+                $data['id'] = $parent->getId();
+                $data['category'] = $parent->getName();
                 $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$cat,$limit);
                 if($result){
                     foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['product_id']               = (int) $row['id'];
+                        $data[$key]['parent_id']                = (int) $parent->getId();
+                        $data[$key]['name']                     = $row['name'];
+                        $data[$key]['quantity']                 = $row['quantity'];
+                        $data[$key]['price']                    = $row['price'];
+                        $data[$key]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['category']                 = $row['categoryName'];
+                        $data[$key]['brand']                    = $row['brandName'];
+                        $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['unitName']                 = $row['unitName'];
+                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/item/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $data[$key]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['imagePath']            = "";
                         }
                     }
                 }
@@ -816,27 +816,27 @@ class ItemRepository extends EntityRepository
             foreach ($items as $parent) {
 
                 $brd['brand'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['brand'] = $parent->getName();
+                $data['id'] = $parent->getId();
+                $data['brand'] = $parent->getName();
                 $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$brd,$limit);
                 if($result){
                     foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['product_id']               = (int) $row['id'];
+                        $data[$key]['parent_id']                = (int) $parent->getId();
+                        $data[$key]['name']                     = $row['name'];
+                        $data[$key]['quantity']                 = $row['quantity'];
+                        $data[$key]['price']                    = $row['price'];
+                        $data[$key]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['category']                 = $row['categoryName'];
+                        $data[$key]['brand']                    = $row['brandName'];
+                        $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['unitName']                 = $row['unitName'];
+                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/item/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $data[$key]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['imagePath']            = "";
                         }
                     }
                 }
@@ -854,27 +854,27 @@ class ItemRepository extends EntityRepository
             foreach ($items as $parent) {
 
                 $prom['promotion'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['promotion'] = $parent->getName();
+                $data['id'] = $parent->getId();
+                $data['promotion'] = $parent->getName();
                 $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$prom,$limit);
                 if($result){
                     foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['product_id']               = (int) $row['id'];
+                        $data[$key]['parent_id']                = (int) $parent->getId();
+                        $data[$key]['name']                     = $row['name'];
+                        $data[$key]['quantity']                 = $row['quantity'];
+                        $data[$key]['price']                    = $row['price'];
+                        $data[$key]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['category']                 = $row['categoryName'];
+                        $data[$key]['brand']                    = $row['brandName'];
+                        $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['unitName']                 = $row['unitName'];
+                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/item/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $data[$key]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['imagePath']            = "";
                         }
                     }
                 }
@@ -891,27 +891,27 @@ class ItemRepository extends EntityRepository
             foreach ($items as $parent) {
 
                 $tag['tag'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['tag'] = $parent->getName();
+                $data['id'] = $parent->getId();
+                $data['tag'] = $parent->getName();
                 $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$tag,$limit);
                 if($result){
                     foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['product_id']               = (int) $row['id'];
+                        $data[$key]['parent_id']                = (int) $parent->getId();
+                        $data[$key]['name']                     = $row['name'];
+                        $data[$key]['quantity']                 = $row['quantity'];
+                        $data[$key]['price']                    = $row['price'];
+                        $data[$key]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['category']                 = $row['categoryName'];
+                        $data[$key]['brand']                    = $row['brandName'];
+                        $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['unitName']                 = $row['unitName'];
+                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/item/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $data[$key]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['imagePath']            = "";
                         }
                     }
                 }
@@ -928,27 +928,27 @@ class ItemRepository extends EntityRepository
             foreach ($items as $parent) {
 
                 $dis['discount'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['discount'] = $parent->getName();
+                $data['id'] = $parent->getId();
+                $data['discount'] = $parent->getName();
                 $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$dis,$limit);
                 if($result){
                     foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['product_id']               = (int) $row['id'];
+                        $data[$key]['parent_id']                = (int) $parent->getId();
+                        $data[$key]['name']                     = $row['name'];
+                        $data[$key]['quantity']                 = $row['quantity'];
+                        $data[$key]['price']                    = $row['price'];
+                        $data[$key]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['category']                 = $row['categoryName'];
+                        $data[$key]['brand']                    = $row['brandName'];
+                        $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['unitName']                 = $row['unitName'];
+                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/item/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $data[$key]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['imagePath']            = "";
                         }
                     }
                 }
