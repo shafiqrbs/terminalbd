@@ -384,7 +384,6 @@ class UserRepository extends EntityRepository
         $qb->where("e.globalOption =".$option->getId());
         $qb->andWhere('e.domainOwner = 2');
         $qb->andWhere('e.isDelete != 1');
-        $qb->andWhere('e.enabled = 1');
         $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
@@ -464,7 +463,7 @@ class UserRepository extends EntityRepository
         $a = mt_rand(1000,9999);
         $user->setPlainPassword($a);
         $this->get('fos_user.user_manager')->updateUser($user);
-        $data =array();
+        $data = array();
         return $data;
 
     }

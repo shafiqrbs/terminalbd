@@ -30,7 +30,8 @@ class DomainUserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $entities = $user->getGlobalOption()->getUsers();
+        $option = $user->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('UserBundle:User')->getEmployeeEntities($option);
         return $this->render('DomainUserBundle:DomainUser:index.html.twig', array(
             'entities' => $entities,
         ));
