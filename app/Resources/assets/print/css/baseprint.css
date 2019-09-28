@@ -50,7 +50,9 @@ ul , ul li{
 }
 
 .invoice .invoice-to {
-    text-align: left
+    text-align: left;
+    float: left;
+
 }
 
 .invoice .invoice-to .to {
@@ -118,6 +120,7 @@ ul , ul li{
 .text-right{
     text-align: right!important;
 }
+
 
 .invoice table .no {
     color: #fff;
