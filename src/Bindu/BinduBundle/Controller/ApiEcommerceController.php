@@ -243,9 +243,16 @@ class ApiEcommerceController extends Controller
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];
+                    $data[$key]['categoryId']               = $row['categoryId'];
                     $data[$key]['category']                 = $row['categoryName'];
+                    $data[$key]['brandId']                  = $row['brandId'];
                     $data[$key]['brand']                    = $row['brandName'];
-                    $data[$key]['discountName']             = $row['discountName'];
+                    $data[$key]['discountId']               = $row['discountId'];
+                    $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['promotionId']              = $row['promotionId'];
+                    $data[$key]['promotion']                = $row['promotionName'];
+                    $data[$key]['tagId']                    = $row['tagId'];
+                    $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                     if($row['path']){
@@ -278,8 +285,6 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $item = $_REQUEST['id'];
-
-
             $entity = $this->checkApiValidation($request);
             $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$item);
             $response = new Response();

@@ -101,19 +101,21 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         foreach ($data['itemId'] as $key => $value):
+
             $price = floatval ($data['salesPrice'][$key] ? $data['salesPrice'][$key] : 0 );
             if($price > 0){
-                $quantity = floatval ($data['quantity'][$key] ? $data['quantity'][$key] : 0 );
+
+                $quantity = floatval ($data['quantity'][$key] ? $data['quantity'][$key] : 1 );
                 if($quantity > 0 and $lastInvoice){
 
                     /* @var $lastInvoice BusinessInvoice */
+
                     $start = $lastInvoice->getEndDate();
                     $interval = new \DateInterval("P{$quantity}M");
                     $end = $start->add($interval);
                 }
 
-
-                $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(), 'slug' => $value));
+                $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(), 'name' => $value ));
                 $invoiceParticular = $this->findOneBy(array('businessInvoice' => $invoice, 'businessParticular' => $particular));
                 if ($invoiceParticular) {
                     $entity = $invoiceParticular;
@@ -128,13 +130,13 @@ class BusinessInvoiceParticularRepository extends EntityRepository
                 $entity->setSubQuantity($quantity);
                 $entity->setTotalQuantity($quantity);
                 $entity->setSubTotal($data['salesPrice'][$key] * $quantity);
-                if($lastInvoice and $quantity > 0){
-                    $entity->setStartDate($start);
+                if($lastInvoice and $quantity > 0 and $particular->getName() == "Monthly Fee"){
+                    $entity->setStartDate($lastInvoice->getEndDate());
                     $entity->setEndDate($end);
                 }
                 $em->persist($entity);
                 $em->flush();
-                if($lastInvoice and $quantity > 0){
+                if($lastInvoice and $quantity > 0  and $particular->getName() == "Monthly Fee"){
                     $invoice->setEndDate($end);
                     $this->_em->flush();
                 }

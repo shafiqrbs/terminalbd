@@ -114,6 +114,7 @@ $(".select2User").select2({
     minimumInputLength: 1
 });
 
+
 $(".select2Customer").select2({
 
     ajax: {
@@ -152,7 +153,7 @@ $(".select2Customer").select2({
         });
     },
     allowClear: true,
-    minimumInputLength: 2
+    minimumInputLength: 1
 });
 
 $(".select2CustomerName").select2({
@@ -195,6 +196,9 @@ $(".select2CustomerName").select2({
     allowClear: true,
     minimumInputLength: 2
 });
+
+
+
 
 $(".select2Location").select2({
 

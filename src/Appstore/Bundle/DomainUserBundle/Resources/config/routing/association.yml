@@ -104,8 +104,12 @@ domain_association_invoice_create:
        methods:  [POST]
 
 domain_association_invoice_show:
-    path:     /{customer}/{id}/show
+    path:     /{id}/invoice-show
     defaults: { _controller: "DomainUserBundle:Association:invoiceShow" }
+
+domain_association_invoice_print:
+    path:     /{id}/invoice-print
+    defaults: { _controller: "DomainUserBundle:Association:invoicePrint" }
 
 
 

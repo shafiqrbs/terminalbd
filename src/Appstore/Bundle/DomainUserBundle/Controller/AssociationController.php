@@ -449,7 +449,6 @@ class AssociationController extends Controller
             $entity->setMobile($customer->getMobile());
             $entity->setReceived($data['paymentTotal']);
             $entity->setDue(0);
-            $entity->setEndDate(new \DateTime("now"));
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -471,6 +470,7 @@ class AssociationController extends Controller
 
     public function invoiceAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -480,6 +480,55 @@ class AssociationController extends Controller
             'entities' => $pagination,
             'searchForm' => $data,
         ));
+    }
+
+    public function invoiceShowAction($id)
+    {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->findOneBy(array('businessConfig' => $config,'id' => $id));
+        return $this->render("DomainUserBundle:Association/Invoice:show.html.twig", array(
+            'entity' => $entity,
+        ));
+
+    }
+
+    public function invoicePrintAction($id)
+    {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->findOneBy(array('businessConfig' => $config,'id' => $id));
+
+        $em = $this->getDoctrine()->getManager();
+
+        /* @var $config BusinessConfig */
+
+        $print = (isset($_REQUEST['print']) and !empty($_REQUEST['print'])) ?  $_REQUEST['print'] : 'print';
+
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($config->getId() == $entity->getBusinessConfig()->getId()) {
+
+            if($config->isCustomInvoicePrint() == 1){
+                $template = 'invoice-'.$config->getGlobalOption()->getId();
+            }else{
+                $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
+            }
+            $amountInWords = '';
+            if($entity->getProcess() == "Quotation"){
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            }
+            $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
+            $balance = empty($result) ? 0 : $result;
+            return  $this->render("BusinessBundle:Print:{$template}.html.twig",
+                array(
+                    'config' => $config,
+                    'entity' => $entity,
+                    'balance' => $balance,
+                    'amountInWords' => $amountInWords,
+                    'print' => $print,
+                )
+            );
+        }
+
+
     }
 
 
