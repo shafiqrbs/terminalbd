@@ -40,7 +40,7 @@ class AccountHeadController extends Controller
         $em = $this->getDoctrine()->getManager();
 	    $data = $_REQUEST;
 	    $global = $this->getUser()->getGlobalOption();
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1,'status' => 1),array('name'=>'ASC'));
         $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount($global->getId());
         return $this->render('AccountingBundle:AccountHead:index.html.twig', array(
             'accountHead' => $accountHead,
