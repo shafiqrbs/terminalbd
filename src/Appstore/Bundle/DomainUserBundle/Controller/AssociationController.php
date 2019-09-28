@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Form\AssociationInvoiceType;
 use Appstore\Bundle\DomainUserBundle\Form\MemberEditProfileType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -373,5 +375,112 @@ class AssociationController extends Controller
         return new JsonResponse($items);
 
     }
+
+    public function invoiceNewAction($customer)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $option =  $this->getUser()->getGlobalOption();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array("globalOption" => $option,"customerId" => $customer));
+
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer);
+
+        $entity = new BusinessInvoice();
+        $editForm = $this->createInvoiceCreateForm($entity,$customer);
+        $outstanding = 0;
+
+        return $this->render("DomainUserBundle:Association/Invoice:new.html.twig", array(
+
+            'globalOption'      => $this->getUser()->getGlobalOption(),
+            'lastInvoice'       => $lastInvoice,
+            'entity'            => $entity,
+            'customer'          => $customer,
+            'outstanding'       => $outstanding,
+            'form'              => $editForm->createView(),
+
+        ));
+
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param BusinessInvoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createInvoiceCreateForm(BusinessInvoice $entity, Customer $customer)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new AssociationInvoiceType($globalOption), $entity, array(
+            'action' => $this->generateUrl('domain_association_invoice_create', array('customer' => $customer->getCustomerId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+                'enctype' => 'multipart/form-data',
+
+            )
+        ));
+        return $form;
+    }
+
+    public function invoiceCreateAction(Request $request, $customer)
+    {
+        $data = $request->request->all();
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+
+        $option =  $this->getUser()->getGlobalOption();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array("globalOption" => $option,"customerId" => $customer));
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer);
+        $entity = new BusinessInvoice();
+        $form = $this->createInvoiceCreateForm($entity,$customer);
+        $form->handleRequest($request);
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if (($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setBusinessConfig($config);
+            $entity->setCustomer($customer);
+            $entity->setMobile($customer->getMobile());
+            $entity->setReceived($data['paymentTotal']);
+            $entity->setDue(0);
+            $entity->setEndDate(new \DateTime("now"));
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success', "Data has been inserted successfully"
+            );
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStudentMonthlyParticular($entity,$lastInvoice, $data);
+            $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
+            return $this->redirect($this->generateUrl('domain_association_invoice'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'warning', "Payment information does not valid"
+        );
+        return $this->render("DomainUserBundle:Association/Invoice:new.html.twig", array(
+            'globalOption' => $user->getGlobalOption(),
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function invoiceAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
+        $pagination = $this->paginate($entities);
+        return $this->render("DomainUserBundle:Association/Invoice:index.html.twig", array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
 
 }

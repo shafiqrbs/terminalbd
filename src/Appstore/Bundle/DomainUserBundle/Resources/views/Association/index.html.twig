@@ -110,6 +110,10 @@
                                                 <a data-title="{{ entity.name }}" class="btn mini approve  yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Checked</a>        {% endif %}
                                             {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process == "Checked") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Checked") %}
                                                 <a data-title="{{ entity.name }}" class="btn mini approve yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Approved</a>        {% endif %}
+                                            {% if app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") or app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN")  or app.user.granted("ROLE_DOMAIN")  %}
+                                            <a data-title="{{ entity.name }}" class="btn mini yellow" href="{{ path('domain_association_invoice_new', { 'customer': entity.customerId }) }}"  >&nbsp;<i class="icon-money"></i> Payment</a>
+                                            {% endif %}
+
                                         </td>
                                     </tr>
                                 {% endfor %}

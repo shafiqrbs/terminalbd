@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\CustomerBundle\Controller;
+namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Form\CustomerInvoiceType;
 use Knp\Snappy\Pdf;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * BusinessInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+class InvoiceAssociationController extends Controller
 {
 
     public function paginate($entities)
@@ -49,8 +49,8 @@ class InvoiceController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $data['createdBy'] = $user->getId();
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $this->getUser()->getId()));
-        $pagination = $customer->getBusinessInvoices();
+        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $user,$data);
+        $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Invoice:index.html.twig', array(
             'globalOption' => $this->getUser()->getGlobalOption(),
             'entities' => $pagination,
@@ -67,7 +67,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$this->getUser()->getId()));
 
-        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer);
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer->getId());
 
         $entity = new BusinessInvoice();
         $editForm = $this->createCreateForm($entity);
@@ -118,7 +118,7 @@ class InvoiceController extends Controller
         $form->handleRequest($request);
 
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('user'=>$user->getId()));
-        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer);
+        $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer->getId());
 
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||

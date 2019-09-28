@@ -22,6 +22,10 @@ business_invoice:
     resource: "@BusinessBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+business_invoice_association:
+    resource: "@BusinessBundle/Resources/config/routing/invoiceAssociation.yml"
+    prefix:   /invoice-association
+
 business_stock:
     resource: "@BusinessBundle/Resources/config/routing/stock.yml"
     prefix:   /stock

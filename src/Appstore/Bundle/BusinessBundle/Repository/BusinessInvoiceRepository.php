@@ -652,19 +652,34 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
-    public function getLastInvoiceParticular($customer){
+    public function getLastInvoiceParticular(Customer $customer){
+
 
         $qb = $this->createQueryBuilder('e');
         $qb
             ->select('MAX(e.id)')
             ->where('e.customer = :customer')
-            ->setParameter('customer', $customer);
+            ->setParameter('customer', $customer->getId());
         $lastId = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastId)) {
-            return false;
+            return $this->insertAssociation($customer);
         }
         $lastCode =  $this->find($lastId);
         return $lastCode;
+
+    }
+
+    public function insertAssociation(Customer $customer)
+    {
+        $em = $this->_em;
+        $invoice = new BusinessInvoice();
+        $invoice->setBusinessConfig($customer->getGlobalOption()->getBusinessConfig());
+        $invoice->setCustomer($customer);
+        $invoice->setProcess("Done");
+        $invoice->setEndDate($customer->getCreated());
+        $em->persist($invoice);
+        $em->flush();
+        return $invoice;
 
     }
 

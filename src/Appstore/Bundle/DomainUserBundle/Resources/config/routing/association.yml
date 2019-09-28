@@ -90,10 +90,23 @@ domain_association_ledger:
     options:
            expose: true
 
-domain_association_sales_ledger:
-    path:     /Association-sales-ledger
-    defaults: { _controller: "AccountingBundle:AccountSales:getAssociationSalesLedger" }
-    options:
-           expose: true
+domain_association_invoice:
+       path:     /invoice
+       defaults: { _controller: "DomainUserBundle:Association:invoice" }
+
+domain_association_invoice_new:
+       path:     /{customer}/invoice-new
+       defaults: { _controller: "DomainUserBundle:Association:invoiceNew" }
+
+domain_association_invoice_create:
+       path:     /{customer}/invoice-create
+       defaults: { _controller: "DomainUserBundle:Association:invoiceCreate" }
+       methods:  [POST]
+
+domain_association_invoice_show:
+    path:     /{customer}/{id}/show
+    defaults: { _controller: "DomainUserBundle:Association:invoiceShow" }
+
+
 
 

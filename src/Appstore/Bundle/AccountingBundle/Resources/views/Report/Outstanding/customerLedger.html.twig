@@ -99,6 +99,7 @@
                                     {% endif %}
                                 </th>
                                 <th class="numeric" >Method</th>
+                                <th class="numeric" >Mode</th>
                                 <th class="numeric" >Total</th>
                                 <th class="numeric" >Received</th>
                                 <th class="numeric" >Due</th>
@@ -162,6 +163,7 @@
                                     <td class="numeric" >
                                         {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
                                     </td>
+                                    <td class="numeric" >{{ entity.processHead }}</td>
                                     <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                     <td class="numeric" >
                                         {% if entity.process == 'approved'  %}
