@@ -74,6 +74,7 @@ class ProfitWithdrawalType extends AbstractType
                         ->andWhere("e.globalOption =".$this->globalOption->getId());
                 },
             ))
+
             ->add('toUser', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
