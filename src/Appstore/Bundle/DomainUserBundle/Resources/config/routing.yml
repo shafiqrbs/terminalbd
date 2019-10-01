@@ -11,6 +11,10 @@ hms_customer:
     resource: "@DomainUserBundle/Resources/config/routing/hms_customer.yml"
     prefix:   /hms/patient
 
+domain_sms:
+    resource: "@DomainUserBundle/Resources/config/routing/sms.yml"
+    prefix:   /association/sms
+
 domain_notification:
     resource: "@DomainUserBundle/Resources/config/routing/notificationconfig.yml"
     prefix:   /sms/notification

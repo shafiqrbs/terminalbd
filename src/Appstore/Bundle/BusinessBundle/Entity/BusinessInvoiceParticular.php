@@ -432,7 +432,7 @@ class BusinessInvoiceParticular
     /**
      * @param \DateTime $endDate
      */
-    public function setEndDate($endDate)
+    public function setEndDate( $endDate)
     {
         $this->endDate = $endDate;
     }

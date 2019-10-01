@@ -97,23 +97,13 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     }
 
 
-    public function insertStudentMonthlyParticular(BusinessInvoice $invoice , $lastInvoice, $data)
+    public function insertStudentMonthlyParticular(BusinessInvoice $invoice, $lastInvoice , $data)
     {
         $em = $this->_em;
         foreach ($data['itemId'] as $key => $value):
 
             $price = floatval ($data['salesPrice'][$key] ? $data['salesPrice'][$key] : 0 );
             if($price > 0){
-
-                $quantity = floatval ($data['quantity'][$key] ? $data['quantity'][$key] : 1 );
-                if($quantity > 0 and $lastInvoice){
-
-                    /* @var $lastInvoice BusinessInvoice */
-
-                    $start = $lastInvoice->getEndDate();
-                    $interval = new \DateInterval("P{$quantity}M");
-                    $end = $start->add($interval);
-                }
 
                 $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(), 'name' => $value ));
                 $invoiceParticular = $this->findOneBy(array('businessInvoice' => $invoice, 'businessParticular' => $particular));
@@ -122,6 +112,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
                 } else {
                     $entity = new BusinessInvoiceParticular();
                 }
+                $quantity = (int) ($data['quantity'][$key] ? $data['quantity'][$key] : 1 );
+
                 $entity->setBusinessInvoice($invoice);
                 $entity->setBusinessParticular($particular);
                 $entity->setParticular($particular->getName());
@@ -130,22 +122,20 @@ class BusinessInvoiceParticularRepository extends EntityRepository
                 $entity->setSubQuantity($quantity);
                 $entity->setTotalQuantity($quantity);
                 $entity->setSubTotal($data['salesPrice'][$key] * $quantity);
-                if($lastInvoice and $quantity > 0 and $particular->getName() == "Monthly Fee"){
-                    $entity->setStartDate($lastInvoice->getEndDate());
-                    $entity->setEndDate($end);
+                if($value == "Monthly Fee"){
+                    $date = $invoice->getEndDate()->format("d-m-Y");
+                    $startDate = strtotime(date("Y-m-d", strtotime($date)) . " +1 month");
+                    $start = date('Y-m-d',$startDate);
+                    $entity->setStartDate(new \DateTime($start));
+                    $endDate = strtotime(date("Y-m-d", strtotime($date)) . " +{$quantity} months");
+                    $end = date('Y-m-d',$endDate);
+                    $entity->setEndDate(new \DateTime($end));
+                    $invoice->setEndDate(new \DateTime($end));
                 }
                 $em->persist($entity);
                 $em->flush();
-                if($lastInvoice and $quantity > 0  and $particular->getName() == "Monthly Fee"){
-                    $invoice->setEndDate($end);
-                    $this->_em->flush();
-                }
             }
-
         endforeach;
-
-
-
     }
 
     public function insertCustomerInvoiceParticular(BusinessInvoice $invoice, $data)

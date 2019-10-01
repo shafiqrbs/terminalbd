@@ -605,7 +605,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $sales = $this->updateCustomerBalance($accountSales);
@@ -647,7 +647,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $sales = $this->updateCustomerBalance($accountSales);
@@ -674,7 +674,7 @@ class AccountSalesRepository extends EntityRepository
 		$accountSales->setSales($sales);
 		$accountSales->setSourceInvoice( $entity->getInvoice() );
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
 
         //	$accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
 		$em->persist($accountSales);
@@ -763,7 +763,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -791,7 +791,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -822,7 +822,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -858,7 +858,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -891,7 +891,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -919,7 +919,7 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setSourceInvoice($entity->getMedicineSalesItem()->getMedicineSales()->getInvoice());
         $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
@@ -974,7 +974,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
         $em->flush();
 	    $this->updateCustomerBalance($accountSales);
@@ -1073,7 +1073,7 @@ class AccountSalesRepository extends EntityRepository
 		$accountSales->setProcessHead($entity->getHotelInvoice()->getInvoiceFor());
 		$accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
 
         $em->persist($accountSales);
 		$em->flush();
@@ -1100,7 +1100,7 @@ class AccountSalesRepository extends EntityRepository
 		$accountSales->setProcessType('Sales');
 		$accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
 		$em->flush();
 		$this->updateCustomerBalance($accountSales);

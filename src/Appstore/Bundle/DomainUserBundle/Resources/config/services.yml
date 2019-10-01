@@ -17,6 +17,20 @@ services:
        class: Appstore\Bundle\DomainUserBundle\Importer\GpCustomerDataReader
        arguments: [ @phpexcel ]
 
+    appstore.customer.listener.association_sms:
+        class: Appstore\Bundle\DomainUserBundle\EventListener\AssociationSmsListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+            - { name: kernel.event_listener, event: appstore.customer.post.member_sms, method: sendSms }
+
+    appstore_election.listener.election_bulk_sms:
+        class: Appstore\Bundle\DomainUserBundle\EventListener\AssociationSmsBulkListener
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
+        tags:
+            - { name: kernel.event_listener, event: appstore.customer.post.bulk_member_sms , method: sendSms }
+
+
+
     app.twig_extension:
        class: Appstore\Bundle\DomainUserBundle\Twig\CulculationExtension
        public: false

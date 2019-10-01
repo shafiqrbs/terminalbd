@@ -98,6 +98,11 @@ class GlobalOption
      **/
     protected $customerInbox;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerSms", mappedBy="globalOption" )
+     **/
+    protected $sms;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting", mappedBy="globalOption" )

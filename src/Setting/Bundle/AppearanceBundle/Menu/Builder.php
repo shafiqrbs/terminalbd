@@ -246,7 +246,7 @@ class Builder extends ContainerAware
         if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
             $menu[$business]->addChild('Manage Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
-            if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')){
+            if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
                 $menu[$business]->addChild( 'Association Reports' )
                     ->setAttribute( 'icon', 'icon icon-bar-chart' )
                     ->setAttribute( 'dropdown', true );

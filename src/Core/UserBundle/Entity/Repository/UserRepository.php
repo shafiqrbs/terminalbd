@@ -213,6 +213,7 @@ class UserRepository extends EntityRepository
                 'ROLE_BUSINESS_INVOICE_REVERSE'             => 'Business Invoice Reverse',
                 'ROLE_BUSINESS_PURCHASE_REVERSE'            => 'Business Purchase Reverse',
                 'ROLE_BUSINESS_REPORT'                      => 'Business Reports',
+                'ROLE_BUSINESS_ASSOCIATION_REPORT'          => 'Business Association Reports',
                 'ROLE_BUSINESS_MANAGER'                     => 'Business Manager',
                 'ROLE_BUSINESS_APPROVE'                     => 'Business Approve',
             );

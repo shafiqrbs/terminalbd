@@ -103,7 +103,7 @@
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_MEMBER_ASSOCIATION"))  %}
 
                                                 <a data-title="{{ entity.name }}" class="btn mini view blue" href="javascript:" data-url="{{ path('domain_association_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-eye-open"></i> </a>
-                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('election_member_sms', { 'id': entity.id }) }}" >SMS</a>
+                                                <a data-title="{{ entity.name }}" id="" class="btn mini sms purple" href="javascript:" data-url="{{ path('domainuser_member_sms', { 'id': entity.id }) }}" >SMS</a>
 
                                             {% endif %}
                                             {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") and entity.process == "Pending") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Pending") %}
@@ -111,7 +111,7 @@
                                             {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process == "Checked") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Checked") %}
                                                 <a data-title="{{ entity.name }}" class="btn mini approve yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Approved</a>        {% endif %}
                                             {% if app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") or app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN")  or app.user.granted("ROLE_DOMAIN")  %}
-                                            <a data-title="{{ entity.name }}" class="btn mini yellow" href="{{ path('domain_association_invoice_new', { 'customer': entity.customerId }) }}"  >&nbsp;<i class="icon-money"></i> Payment</a>
+                                            <a data-title="{{ entity.name }}" class="btn mini yellow" href="{{ path('domain_association_invoice_new', { 'customer': entity.customerId }) }}"  >&nbsp;<i class="icon-money"></i> Receive</a>
                                             {% endif %}
 
                                         </td>

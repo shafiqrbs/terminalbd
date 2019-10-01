@@ -1,5 +1,21 @@
 function AssociationProcess() {
 
+
+    $( ".sms" ).click(function() {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        var title = $(this).attr('data-title');
+        $.MessageBox({
+            input    : true,
+            message  : "Send SMS To "+title
+        }).done(function(data){
+            if ($.trim(data)) {
+                $.get(url,{sms : data});
+            }
+        });
+    });
+
+
     $(document).on('click', '.view', function () {
 
         var url = $(this).attr("data-url");

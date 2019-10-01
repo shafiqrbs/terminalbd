@@ -435,6 +435,7 @@ class AssociationController extends Controller
         $option =  $this->getUser()->getGlobalOption();
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array("globalOption" => $option,"customerId" => $customer));
         $lastInvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoiceParticular($customer);
+
         $entity = new BusinessInvoice();
         $form = $this->createInvoiceCreateForm($entity,$customer);
         $form->handleRequest($request);
@@ -449,6 +450,7 @@ class AssociationController extends Controller
             $entity->setMobile($customer->getMobile());
             $entity->setReceived($data['paymentTotal']);
             $entity->setDue(0);
+            $entity->setEndDate($lastInvoice->getEndDate());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -467,6 +469,10 @@ class AssociationController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_CRM_ASSOCIATION")
+     */
 
     public function invoiceAction()
     {
@@ -527,9 +533,8 @@ class AssociationController extends Controller
                 )
             );
         }
-
-
     }
+
 
 
 }

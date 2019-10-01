@@ -29,11 +29,6 @@
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/img/favicon/favicon-96x96.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('assets/img/favicon/manifest.json') }}">
-{#    {% if is_granted('ROLE_ADMIN') %}
-        <link rel="shortcut icon" href="{{ asset('assets/frontend/img/favico.ico') }}">
-    {% elseif app.user.globaloption is not empty and app.user.globaloption is defined and app.user.globalOption.templateCustomize.favicon is not empty %}
-        <link  rel="shortcut icon" href="/uploads/domain/{{ app.user.globalOption.id }}/customizeTemplate/{{ app.user.globalOption.templateCustomize.favicon }}">
-    {% endif %}#}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     {% stylesheets filter='cssrewrite'
