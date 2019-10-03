@@ -146,8 +146,6 @@ function CommonJs(){
 
         dabeitVal = $("#totalDebit").val();
         creditVal = $("#totalCredit").val();
-        console.log(dabeitVal);
-        console.log(creditVal);
         if(creditVal ===  dabeitVal){
             $("#submitBtn").attr("disabled", false);
         }else{
