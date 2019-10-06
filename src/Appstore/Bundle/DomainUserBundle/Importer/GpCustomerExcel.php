@@ -51,6 +51,7 @@ class GpCustomerExcel
                 $profile->setUser($entity->getId());
                 $profile->setGlobalOption($option);
                 $profile->setAddress($item['address']);
+                $profile->setAddress($item['address']);
                 $profile->setName($item['name']);
                 $profile->setProcess("pending");
                 $profile->setFatherName("fatherName");
@@ -61,15 +62,22 @@ class GpCustomerExcel
                 $profile->setBloodGroup($item['blood']);
                 $profile->setAdditionalPhone($item['altPhone']);
                 if($item['dob']){
-                   // $stetoTime = strtotime($item['dob']);
-                   // $dob = new DateTime($stetoTime);
-                  //  $profile->setDob($dob);
+                    $stetoTime = strtotime($item['dob']);
+                    $date = date('Y-m-d',$stetoTime);
+                    $dob = new DateTime($date);
+                    $profile->setDob($dob);
                 }
-               // $profile->setCreated($item['created_at']);
+                $at = strtotime($item['created_at']);
+                $created = date('Y-m-d',$at);
+                $created_at = new DateTime($created);
+                $profile->setCreated($created_at);
                 $profile->setProfession($item['occupation']);
-                $profile->setFatherDesignation($item['guardian_occupation']);
-               // $profile->setSpouseOccupation($item['guardian_occupation']);
-                $profile->setMobile('0'.$item['mobile']);
+                if($item['guardian_type'] == "Father"){
+                    $profile->setFatherDesignation($item['guardian_occupation']);
+                }else{
+                    $profile->setSpouseOccupation($item['guardian_occupation']);
+                }
+                $profile->setMobile($user);
                 $em->persist($profile);
                 $em->flush();
             }
