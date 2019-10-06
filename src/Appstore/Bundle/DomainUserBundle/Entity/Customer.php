@@ -428,6 +428,20 @@ class Customer
     private $hsc;
 
 	/**
+     * @var string
+     *
+     * @ORM\Column(name="fatherDesignation", type="string",length=150, nullable = true)
+     */
+    private $fatherDesignation;
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="motherDesignation", type="string",length=150, nullable = true)
+     */
+    private $motherDesignation;
+
+	/**
 	 * @var string
 	 *
 	 * @ORM\Column(name="bloodPressure", type="string",length=20, nullable = true)
@@ -1707,6 +1721,38 @@ class Customer
     public function setHsc($hsc)
     {
         $this->hsc = $hsc;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFatherDesignation()
+    {
+        return $this->fatherDesignation;
+    }
+
+    /**
+     * @param string $fatherDesignation
+     */
+    public function setFatherDesignation($fatherDesignation)
+    {
+        $this->fatherDesignation = $fatherDesignation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMotherDesignation()
+    {
+        return $this->motherDesignation;
+    }
+
+    /**
+     * @param string $motherDesignation
+     */
+    public function setMotherDesignation($motherDesignation)
+    {
+        $this->motherDesignation = $motherDesignation;
     }
 
 

@@ -67,7 +67,8 @@ class GpCustomerExcel
                 }
                // $profile->setCreated($item['created_at']);
                 $profile->setProfession($item['occupation']);
-                $profile->setSpouseOccupation($item['guardian_occupation']);
+                $profile->setFatherDesignation($item['guardian_occupation']);
+               // $profile->setSpouseOccupation($item['guardian_occupation']);
                 $profile->setMobile('0'.$item['mobile']);
                 $em->persist($profile);
                 $em->flush();

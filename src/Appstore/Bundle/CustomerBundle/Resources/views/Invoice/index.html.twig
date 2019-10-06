@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Customer Invoice
+                   Payment Invoice: {{ customer.name }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -32,7 +32,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Customer Invoice</div>
+                        <div class="caption"><i class="icon-reorder"></i>Payment Invoice</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('customerweb_invoice_new',{'shop':globalOption.slug}) }}"><i class="icon-plus-sign"></i> New Invoice</a>
@@ -44,7 +44,7 @@
 
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="row-fluid" >
+                            {#<div class="row-fluid" >
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
@@ -83,17 +83,17 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </form>
-                            </div>
+                            </div>#}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-green">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Method</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >End Date</th>
                                     <th class="numeric" >Action</th>
@@ -103,33 +103,69 @@
 
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
+                                        <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.received }}</td>
-                                        <td class="numeric" >{{ entity.total - entity.received }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" > {{ entity.endDate|date('d-m-Y') }}</td>
 
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processIntArr = ['Hold','Created','Revised','Quotation'] %}
-                                                {% set processDone = ['Done','Delivered','Chalan','Quotation'] %}
+                                                {% set processIntArr = ['Hold','Created','Revised','In-progress'] %}
                                                 {% if entity.process in  processIntArr %}
-                                                <a href="{{ path('customerweb_invoice_edit', {'shop':globalOption.slug, 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 <a  data-id="{{ entity.id }}" data-url="{{ path('customerweb_invoice_delete', { 'shop':globalOption.slug,'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
 
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="10">
+                                            <table class="table">
+                                                <tr><td class="span3">Remark</td><td>{{ entity.comment }}</td></tr>
+                                                {% if entity.accountBank is not empty %}
+                                                    <tr><td>Bank name</td><td>{{ entity.accountBank.name }}</td></tr>
+                                                    <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
+                                                    <tr><td>Card No.</td><td>{{ entity.cardNo }}</td></tr>
+                                                    <tr><td>Payment Card.</td><td>{{ entity.paymentCard }}</td></tr>
+                                                {% endif %}
+                                                {% if entity.accountMobileBank is not empty %}
+                                                    <tr><td>Receive Mobile</td><td>{{ entity.accountMobileBank.name }}</td></tr>
+                                                    <tr><td>Payment Mobile</td><td>{{ entity.paymentMobile }}</td></tr>
+                                                    <tr><td>PRX ID</td><td>{{ entity.transactionId }}</td></tr>
+                                                {% endif %}
+                                            </table>
+                                            <table class="table">
+                                                <thead class="flip-content ">
+                                                <tr class="head-yellow">
+                                                    <th class="span1"> S/N</th>
+                                                    <th class="span4">Particular</th>
+                                                    <th class="span1">Payment Month </th>
+                                                    <th class="span1">Unit Price</th>
+                                                    <th class="span1">Amount</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="invoiceParticulars">
+                                                {% for item in entity.businessInvoiceParticulars %}
+                                                    <tr id="remove-{{ item.id }}">
+                                                        <td  class="">{{ loop.index }}.</td>
+                                                        <td class="">{{ item.particular }}</td>
+                                                        <td class="numeric" > {% if item.startDate is not empty %} {{ item.startDate|date("F,y") }} To {{ entity.endDate|date("F,y") }}{% endif %}</td>
+                                                        <td class="">{{ item.price }}</td>
+                                                        <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination pull-center" >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
+
                         </div>
                     </div>
                 </div>

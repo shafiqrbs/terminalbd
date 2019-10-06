@@ -31,9 +31,21 @@
                     </ul>
                 </li>#}
             <li >
-                <a href="{{ path('customerweb_profile',{'shop':globalOption.slug}) }}">
+                <a href="{{ path('member_index',{'shop':globalOption.slug}) }}">
                     <i class="icon-user"></i>
-                    <span class="title">Manage Profile</span>
+                    <span class="title">Members</span>
+                </a>
+            </li>
+             <li >
+                <a href="{{ path('member_show_profile',{'shop':globalOption.slug}) }}">
+                    <i class="icon-user"></i>
+                    <span class="title">Profile View</span>
+                </a>
+            </li>
+            <li >
+                <a href="{{ path('member_edit_profile',{'shop':globalOption.slug}) }}">
+                    <i class="icon-user"></i>
+                    <span class="title">Update Profile</span>
                 </a>
             </li>
             <li>

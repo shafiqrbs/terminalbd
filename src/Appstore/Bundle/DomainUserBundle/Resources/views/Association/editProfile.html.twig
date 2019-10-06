@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Father Name<span class="required">*</span></label>
                                         <div class="controls">
@@ -62,6 +62,18 @@
                                                 <i class="icon-font"></i>
                                                 {{ form_widget(form.fatherName) }}
                                                 {{ form_errors(form.fatherName) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Father Occupation</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.fatherDesignation) }}
                                             </div>
 
                                         </div>
@@ -84,7 +96,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Mother Name<span class="required">*</span></label>
                                         <div class="controls">
@@ -97,12 +109,35 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Mother Occupation</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.motherDesignation) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--/span-->
                             </div>
                             <div class="row-fluid">
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Facebook ID</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-envelope"></i>
+                                                {{ form_widget(form.facebookId) }}
+                                                {{ form_errors(form.facebookId) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Email Address</label>
                                         <div class="controls">
@@ -114,7 +149,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Additional Phone</label>
                                         <div class="controls">
@@ -122,6 +157,18 @@
                                                 <i class="icon-phone"></i>
                                                 {{ form_widget(form.additionalPhone) }}
                                                 {{ form_errors(form.additionalPhone) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >NID/Passport</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.nid) }}
+                                                {{ form_errors(form.nid) }}
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +187,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Batch <span class="required">*</span></label>
                                         <div class="controls">
@@ -149,7 +196,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >SSC Passing Year</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.ssc) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span6">
                                     <div class="control-group">
                                         <label class="control-label" >Occupation <span class="required">*</span></label>
                                         <div class="controls">
@@ -164,12 +222,23 @@
                             </div>
                            <div class="row-fluid">
                                 <!--/span-->
-                               <div class="span6 ">
+                               <div class="span3">
                                    <div class="control-group">
                                        <label class="control-label" >Study Year <span class="required">*</span></label>
                                        <div class="controls">
                                            {{ form_widget(form.batchYear) }}
                                            {{ form_errors(form.batchYear) }}
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="span3">
+                                   <div class="control-group">
+                                       <label class="control-label" >HSC Passing Year</label>
+                                       <div class="controls">
+                                           <div class="input-icon left">
+                                               <i class="icon-font"></i>
+                                               {{ form_widget(form.hsc) }}
+                                           </div>
                                        </div>
                                    </div>
                                </div>
@@ -199,7 +268,7 @@
                             <div class="row-fluid">
                                 <div class="span6 ">
                                     <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
                                                 <label class="control-label" >Date of Birth</label>
                                                 <div class="controls">
@@ -208,54 +277,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
                                                 <label class="control-label" >Blood Group</label>
                                                 <div class="controls">
                                                     {{ form_widget(form.bloodGroup) }}
                                                     {{ form_errors(form.bloodGroup) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                     <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" >Religion</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.religion) }}
-                                                    {{ form_errors(form.religion) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" >NID/Passport</label>
-                                                <div class="controls">
-                                                    <div class="input-icon left">
-                                                        <i class="icon-font"></i>
-                                                        {{ form_widget(form.nid) }}
-                                                        {{ form_errors(form.nid) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span6 ">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" >Marital Status</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.maritalStatus) }}
-                                                    {{ form_errors(form.maritalStatus) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -274,8 +301,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="span6 ">
                                     <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label" >Marital Status</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.maritalStatus) }}
+                                                    {{ form_errors(form.maritalStatus) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label" >Religion</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.religion) }}
+                                                    {{ form_errors(form.religion) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+
+                                        <div class="span6">
                                             <div class="control-group">
                                                 <label class="control-label" >Spouse Occupation</label>
                                                 <div class="controls">
@@ -287,9 +337,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
                                                 <label class="control-label" >Spouse Designation</label>
                                                 <div class="controls">
@@ -362,8 +410,8 @@
                                 <div class="span3">
                                     <div data-provides="fileupload" class="fileupload fileupload-new">
                                         <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                            {% if entity.profile is defined and entity.profile.webPath is not empty %}
-                                                <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.profile.webPath }}">
+                                            {% if entity.webPath is not empty %}
+                                                <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
                                             {% else %}
                                                 <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
                                             {% endif %}
@@ -397,19 +445,9 @@
                 </div>
 
             </div>
-        </div>      </div>
+        </div>
     </div>
- <style>
-     #Core_userbundle_user_profile_branch , #Core_userbundle_user_profile_about{
-         resize: none;
-     }
- </style>
 {% endblock %}
-{% block documentready %}
 
-    {{ parent() }}
-    $("select.multi-select2").multiSelect();
-
-{% endblock %}
 
 

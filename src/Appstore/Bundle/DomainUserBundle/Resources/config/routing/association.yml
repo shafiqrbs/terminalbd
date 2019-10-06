@@ -107,6 +107,17 @@ domain_association_invoice_show:
     path:     /{id}/invoice-show
     defaults: { _controller: "DomainUserBundle:Association:invoiceShow" }
 
+domain_association_invoice_edit:
+    path:     /{id}/invoice-edit
+    defaults: { _controller: "DomainUserBundle:Association:invoiceEdit" }
+
+
+domain_association_invoice_update:
+       path:     /{id}/invoice-update
+       defaults: { _controller: "DomainUserBundle:Association:invoiceUpdate" }
+       methods:  [POST,PUT]
+
+
 domain_association_invoice_print:
     path:     /{id}/invoice-print
     defaults: { _controller: "DomainUserBundle:Association:invoicePrint" }

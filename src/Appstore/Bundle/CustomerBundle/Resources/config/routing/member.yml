@@ -1,13 +1,20 @@
-customer_self:
+member_index:
     path:     /
-    defaults: { _controller: "CustomerBundle:Student:index" }
+    defaults: { _controller: "CustomerBundle:Member:index" }
 
+member_show_profile:
+    path:     /show-profile
+    defaults: { _controller: "CustomerBundle:Member:show" }
 
-customer_edit_profile:
+member_profile:
+    path:     /{customer}/show-profile
+    defaults: { _controller: "CustomerBundle:Member:memberProfile" }
+
+member_edit_profile:
     path:     /edit-profile
-    defaults: { _controller: "CustomerBundle:Student:edit" }
+    defaults: { _controller: "CustomerBundle:Member:edit" }
 
-customer_edit_profile_update:
+member_profile_update:
     path:     /update-profile
-    defaults: { _controller: "CustomerBundle:Student:update" }
+    defaults: { _controller: "CustomerBundle:Member:update" }
     methods:  [POST, PUT]

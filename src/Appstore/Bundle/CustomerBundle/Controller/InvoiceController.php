@@ -54,6 +54,7 @@ class InvoiceController extends Controller
         return $this->render('CustomerBundle:Invoice:index.html.twig', array(
             'globalOption' => $this->getUser()->getGlobalOption(),
             'entities' => $pagination,
+            'customer' => $customer,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
             'searchForm' => $data,
@@ -131,6 +132,7 @@ class InvoiceController extends Controller
             $entity->setMobile($customer->getMobile());
             $entity->setReceived($data['paymentTotal']);
             $entity->setDue(0);
+            $entity->setProcess("In-progress");
             $entity->setEndDate(new \DateTime("now"));
             $em->persist($entity);
             $em->flush();

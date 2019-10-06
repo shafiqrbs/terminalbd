@@ -93,9 +93,7 @@ class UserRepository extends EntityRepository
             }
         }
 
-
         $array = array();
-
 
         $inventory = array('inventory');
         $result = array_intersect($arrSlugs, $inventory);

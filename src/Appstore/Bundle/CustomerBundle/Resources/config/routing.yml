@@ -38,9 +38,9 @@ member_invoice:
     resource: "@CustomerBundle/Resources/config/routing/customerinvoice.yml"
     prefix:   /{shop}/invoice
 
-student_profile:
-    resource: "@CustomerBundle/Resources/config/routing/student.yml"
-    prefix:   /{shop}/student
+member_profile:
+    resource: "@CustomerBundle/Resources/config/routing/member.yml"
+    prefix:   /{shop}/member
 
 domain_business_dashboard:
    resource: "@CustomerBundle/Resources/config/routing/business.yml"

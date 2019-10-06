@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class StudentController extends Controller
+class MemberController extends Controller
 {
 
 
@@ -37,7 +37,7 @@ class StudentController extends Controller
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
         $batches = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->studentBatchChoiceList();
-        return $this->render('CustomerBundle:Student:index.html.twig', array(
+        return $this->render('CustomerBundle:Member:index.html.twig', array(
             'globalOption' => $globalOption,
             'batches' => $batches,
             'entities' => $pagination,
@@ -55,12 +55,48 @@ class StudentController extends Controller
         $profile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(),'user' => $user->getId()));
         $editForm = $this->createEditForm($profile);
         $globalOption = $this->getUser()->getGlobalOption();
-        return $this->render('CustomerBundle:Student:new.html.twig', array(
+        return $this->render('CustomerBundle:Member:editProfile.html.twig', array(
             'globalOption' => $globalOption,
             'entity'      => $profile,
             'form'   => $editForm->createView(),
         ));
     }
+
+    /**
+     * Displays a form to edit an existing DomainUser entity.
+     *
+     */
+    public function showAction()
+    {
+        $user = $this->getUser();
+        $profile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(),'user' => $user->getId()));
+        $editForm = $this->createEditForm($profile);
+        $globalOption = $this->getUser()->getGlobalOption();
+        return $this->render('CustomerBundle:Member:show.html.twig', array(
+            'globalOption' => $globalOption,
+            'entity'      => $profile,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing DomainUser entity.
+     *
+     */
+    public function memberProfileAction($customer)
+    {
+        $user = $this->getUser();
+        $profile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(),'customerId' => $customer));
+        $editForm = $this->createEditForm($profile);
+        $globalOption = $this->getUser()->getGlobalOption();
+        return $this->render('CustomerBundle:Member:show.html.twig', array(
+            'globalOption' => $globalOption,
+            'entity'      => $profile,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+
 
     /**
      * Creates a form to edit a DomainUser entity.
@@ -72,12 +108,12 @@ class StudentController extends Controller
     private function createEditForm(Customer $profile)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new MemberEditProfileType($globalOption,$location), $profile, array(
-            'action' => $this->generateUrl('customerweb_profile_update', array('shop' => $globalOption->getSlug())),
+        $em = $this->getDoctrine()->getRepository('DomainUserBundle:Customer');
+        $form = $this->createForm(new MemberEditProfileType($em), $profile, array(
+            'action' => $this->generateUrl('member_profile_update', array('shop' => $globalOption->getSlug())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -101,7 +137,7 @@ class StudentController extends Controller
         if ($editForm->isValid()) {
             $profile->upload();
             $em->flush();
-            return $this->redirect($this->generateUrl('customerweb_profile', array('shop' => $user->getGlobalOption()->getSlug())));
+            return $this->redirect($this->generateUrl('member_profile', array('shop' => $user->getGlobalOption()->getSlug())));
         }
         return $this->render('CustomerBundle:Student:new.html.twig', array(
             'globalOption'      =>  $user->getGlobalOption(),

@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Student Lists
+                    {{ globalOption.name }} Members
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,6 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">View Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +27,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Student Lists</div>
+                        <div class="caption"><i class="icon-reorder"></i>{{ globalOption.name }} Lists</div>
                     </div>
                     <div class="portlet-body flip-scroll">
                         <form class="search-form" action="" method="get" name="itemSearch">
@@ -65,6 +64,7 @@
                                 <th class="numeric">Name</th>
                                 <th class="numeric">Mobile</th>
                                 <th class="numeric">Batch</th>
+                                <th class="numeric">View</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -78,6 +78,7 @@
                                     <td>{{ entity.name }}</td>
                                     <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                     <td>{{ entity.studentBatch }}</td>
+                                    <td><a class="btn blue" href="{{ path('member_profile',{'shop':entity.globalOption.slug,'customer':entity.customerId}) }}"><i class="icon-eye-open"></i> View</a></td>
 
                                 </tr>
                             {% endfor %}

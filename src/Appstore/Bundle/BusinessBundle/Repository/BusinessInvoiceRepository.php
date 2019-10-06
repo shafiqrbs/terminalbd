@@ -41,8 +41,8 @@ class BusinessInvoiceRepository extends EntityRepository
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $createdStart = isset($data['startDate'])? $data['startDate'] :'';
-        $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+        $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
+        $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
         $createdBy = isset($data['createdBy'])? $data['createdBy'] :'';
 
         if (!empty($invoice)) {
@@ -66,14 +66,12 @@ class BusinessInvoiceRepository extends EntityRepository
             $qb->andWhere("e.created >= :created");
             $qb->setParameter('created', $created);
         }
-
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
             $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
             $qb->andWhere("e.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
         }
-
         if(!empty($process)){
             $qb->andWhere("e.process = :process");
             $qb->setParameter('process', $process);

@@ -46,6 +46,7 @@ class ProfileController extends Controller
         $profile = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(),'user' => $user->getId()));
         $editForm = $this->createEditForm($profile);
         $globalOption = $this->getUser()->getGlobalOption();
+
         return $this->render('CustomerBundle:Student:editProfile.html.twig', array(
             'globalOption' => $globalOption,
             'entity'      => $profile,
@@ -68,7 +69,7 @@ class ProfileController extends Controller
             'action' => $this->generateUrl('customerweb_profile_update', array('shop' => $globalOption->getSlug())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));

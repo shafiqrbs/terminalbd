@@ -61,20 +61,25 @@ class MemberEditProfileType extends AbstractType
                     new NotBlank(array('message'=>'Please input father name')),
                 )
             ))
+            ->add('fatherDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter father occupation')))
             ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your mother name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input mother name')),
                 )
             ))
+            ->add('motherDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mother occupation')))
+            ->add('ssc','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter SSS passing year')))
+             ->add('hsc','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter HSC passing year')))
             ->add('spouseName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse name')))
             ->add('spouseOccupation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse occupation')))
-            ->add('spouseDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse designation')))
+            ->add('spouseDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your spouse occupation')))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your email address')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
+            ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter facebook ID')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no','autoComplete'=>false)))
 
-            ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
-            ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span6')))
+            ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your occupation')))
+            ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
             ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter member occupation'),
                 'constraints' =>array(
@@ -83,7 +88,7 @@ class MemberEditProfileType extends AbstractType
             ))
             ->add('religion', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose a relation---',
+                'empty_value' => '---Choose a Religion---',
                 'choices' => array(
                     'Muslim' => 'Muslim',
                     'Hinduism' => 'Hinduism',
@@ -93,12 +98,12 @@ class MemberEditProfileType extends AbstractType
                 ),
             ))
             ->add('batchYear', 'choice', array(
-                'attr'=>array('class'=>'span8 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose a study year---',
                 'choices' => $this->batchYearChoiceList(),
             ))
             ->add('studentBatch', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span8'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select student batch'))),
                 'empty_value' => '---Choose a Batch---',
@@ -106,13 +111,13 @@ class MemberEditProfileType extends AbstractType
             ))
 
             ->add('maritalStatus', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span6'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '---Choose a Marital Status---',
                 'choices' => array('Married' => 'Married','Single' => 'Single'),
 
             ))
             ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span6'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '---Choose a Blood Group---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
 
