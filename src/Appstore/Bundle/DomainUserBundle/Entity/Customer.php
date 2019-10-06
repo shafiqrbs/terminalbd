@@ -1755,6 +1755,14 @@ class Customer
         $this->motherDesignation = $motherDesignation;
     }
 
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
 
 }
 

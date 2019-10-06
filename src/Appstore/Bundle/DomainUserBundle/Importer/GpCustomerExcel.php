@@ -5,6 +5,7 @@ namespace Appstore\Bundle\DomainUserBundle\Importer;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
+use DoctrineExtensions\Query\Sqlite\Date;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -51,7 +52,6 @@ class GpCustomerExcel
                 $profile->setUser($entity->getId());
                 $profile->setGlobalOption($option);
                 $profile->setAddress($item['address']);
-                $profile->setAddress($item['address']);
                 $profile->setName($item['name']);
                 $profile->setProcess("pending");
                 $profile->setFatherName("fatherName");
@@ -61,21 +61,28 @@ class GpCustomerExcel
                 $profile->setGender("male");
                 $profile->setBloodGroup($item['blood']);
                 $profile->setAdditionalPhone($item['altPhone']);
+                if($item['photo']){
+                    $profile->setPath($item['photo']);
+                }
                 if($item['dob']){
                     $stetoTime = strtotime($item['dob']);
                     $date = date('Y-m-d',$stetoTime);
-                    $dob = new DateTime($date);
+                    $dob = new \DateTime($date);
                     $profile->setDob($dob);
                 }
                 $at = strtotime($item['created_at']);
                 $created = date('Y-m-d',$at);
-                $created_at = new DateTime($created);
+                $created_at = new \DateTime($created);
                 $profile->setCreated($created_at);
-                $profile->setProfession($item['occupation']);
-                if($item['guardian_type'] == "Father"){
-                    $profile->setFatherDesignation($item['guardian_occupation']);
+                $profile->setProfession($item['memberOccupation']);
+                $profile->setMemberDesignation($item['memberDesignation']);
+                if($item['guardianType'] == "Father"){
+                    $profile->setFatherDesignation($item['guardianOccupation']);
+                    $profile->setFatherName($item['guardianName']);
                 }else{
-                    $profile->setSpouseOccupation($item['guardian_occupation']);
+                    $profile->setSpouseOccupation($item['guardianOccupation']);
+                    $profile->setSpouseName($item['guardianName']);
+                    $profile->setSpouseDesignation($item['guardianDesignation']);
                 }
                 $profile->setMobile($user);
                 $em->persist($profile);
