@@ -45,7 +45,7 @@ class BusinessController extends Controller
             $editForm = $this->createCreateForm($entity);
             $Exinvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoice($globalOption->getBusinessConfig(),$customer);
             $invoiceCheck = empty($Exinvoice) ? 'false' : "true";
-            $template =  "Student";
+            $template =  "Member";
             return $this->render("CustomerBundle:{$template}:dashboard.html.twig", array(
                 'user'         => $user,
                 'globalOption' => $globalOption,

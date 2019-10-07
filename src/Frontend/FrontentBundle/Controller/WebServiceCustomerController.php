@@ -396,8 +396,8 @@ class WebServiceCustomerController extends Controller
             $a = mt_rand(1000,9999);
             $user->setPlainPassword($a);
             $this->get('fos_user.user_manager')->updateUser($user);
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+        //    $dispatcher = $this->container->get('event_dispatcher');
+          //  $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             $valid =  'Collect OTP form your login mobile no and input OTP field '.$a;
         }
         echo $valid;
