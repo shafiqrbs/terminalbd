@@ -54,7 +54,6 @@ class GpCustomerExcel
                 $profile->setAddress($item['address']);
                 $profile->setName($item['name']);
                 $profile->setProcess("pending");
-                $profile->setFatherName("fatherName");
                 $profile->setBatchYear($item['studyDuration']);
                 $profile->setHsc($item['hsc']);
                 $profile->setSsc($item['ssc']);

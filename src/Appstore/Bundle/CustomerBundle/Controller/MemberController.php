@@ -137,9 +137,9 @@ class MemberController extends Controller
         if ($editForm->isValid()) {
             $profile->upload();
             $em->flush();
-            return $this->redirect($this->generateUrl('member_profile', array('shop' => $user->getGlobalOption()->getSlug())));
+            return $this->redirect($this->generateUrl('member_edit_profile', array('shop' => $user->getGlobalOption()->getSlug())));
         }
-        return $this->render('CustomerBundle:Student:new.html.twig', array(
+        return $this->render('CustomerBundle:Member:editProfile.html.twig', array(
             'globalOption'      =>  $user->getGlobalOption(),
             'entity'            => $profile,
             'form'              => $editForm->createView(),
