@@ -26,6 +26,11 @@ class Country
      */
     protected $vendors;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="country")
+     */
+    protected $customer;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="country")

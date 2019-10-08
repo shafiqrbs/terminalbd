@@ -129,13 +129,41 @@
                                                 {% if entity.accountBank is not empty %}
                                                     <tr><td>Bank name</td><td>{{ entity.accountBank.name }}</td></tr>
                                                     <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
-                                                    <tr><td>Card No.</td><td>{{ entity.cardNo }}</td></tr>
-                                                    <tr><td>Payment Card.</td><td>{{ entity.paymentCard }}</td></tr>
+                                                    <tr><td>Card No.</td><td>
+                                                            {% if entity.process in  processIntArr %}
+                                                                <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="CardNo" href="#"   data-url="{{ path('customer_invoice_inline_update', { 'shop':globalOption.slug}) }}" data-pk="{{ entity.id }}" data-value="  {{ entity.cardNo }}" data-original-title="Enter Card No">  {{ entity.cardNo }}</a>
+                                                            {% else %}
+                                                                {{ entity.cardNo }}
+                                                            {% endif %}
+
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr><td>Payment Card.</td><td>
+                                                            {% if entity.process in  processIntArr %}
+                                                                <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="PaymentCard" href="#"   data-url="{{ path('customer_invoice_inline_update', { 'shop':globalOption.slug}) }}" data-pk="{{ entity.id }}" data-value="  {{ entity.paymentCard }}" data-original-title="Enter Card No">  {{ entity.paymentCard }}</a>
+                                                            {% else %}
+                                                                {{ entity.paymentCard }}
+                                                            {% endif %}
+                                                            </td>
+                                                    </tr>
                                                 {% endif %}
                                                 {% if entity.accountMobileBank is not empty %}
                                                     <tr><td>Receive Mobile</td><td>{{ entity.accountMobileBank.name }}</td></tr>
-                                                    <tr><td>Payment Mobile</td><td>{{ entity.paymentMobile }}</td></tr>
-                                                    <tr><td>PRX ID</td><td>{{ entity.transactionId }}</td></tr>
+                                                    <tr><td>Payment Mobile</td><td>
+                                                            {% if entity.process in  processIntArr %}
+                                                            <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="PaymentMobile" href="#"   data-url="{{ path('customer_invoice_inline_update', { 'shop':globalOption.slug}) }}" data-pk="{{ entity.id }}" data-value="  {{ entity.paymentMobile }}" data-original-title="Enter Payment Mobile">  {{ entity.paymentMobile }}</a>
+                                                            {% else %}
+                                                                {{ entity.paymentMobile }}
+                                                            {% endif %}
+                                                        </td></tr>
+                                                    <tr><td>PRX ID</td><td>
+                                                            {% if entity.process in  processIntArr %}
+                                                            <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="TransactionId" href="#"   data-url="{{ path('customer_invoice_inline_update', { 'shop':globalOption.slug}) }}" data-pk="{{ entity.id }}" data-value="{{ entity.transactionId }}" data-original-title="Enter Payment PRX ID">  {{ entity.transactionId }}</a>
+                                                            {% else %}
+                                                                {{ entity.transactionId }}
+                                                            {% endif %}
+                                                        </td></tr>
                                                 {% endif %}
                                             </table>
                                             <table class="table">
@@ -177,10 +205,12 @@
     {{ parent() }}
     {% javascripts
     '@BusinessBundle/Resources/public/js/approveProcess.js'
+    '@BusinessBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableInit();
 {% endblock %}

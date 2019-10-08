@@ -38,7 +38,7 @@ class InvoiceController extends Controller
     /**
      * Lists all BusinessCategory entities.
      *
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      *
      */
 
@@ -133,7 +133,7 @@ class InvoiceController extends Controller
             $entity->setReceived($data['paymentTotal']);
             $entity->setDue(0);
             $entity->setProcess("In-progress");
-            $entity->setEndDate(new \DateTime("now"));
+            $entity->setEndDate($customer->getCreated());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -179,7 +179,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function editAction($id)
@@ -200,7 +200,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function updateAction(Request $request, BusinessInvoice $entity)
@@ -229,8 +229,24 @@ class InvoiceController extends Controller
 
     }
 
+    public function inlineOrderUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BusinessBundle:BusinessInvoice')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $setName = 'set'.$data['name'];
+        $entity->$setName($data['value']);
+        $em->persist($entity);
+        $em->flush();
+        exit;
+
+    }
+
 	/**
-	 * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+	 * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
 	 */
 
 	public function invoiceDiscountUpdateAction(Request $request)
@@ -278,7 +294,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
 
@@ -297,7 +313,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function deleteAction(BusinessInvoice $entity)
@@ -343,7 +359,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function addEventAction(Request $request, BusinessInvoice $invoice)
@@ -371,7 +387,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
 
@@ -394,7 +410,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function invoiceParticularDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
@@ -412,7 +428,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
 	public function invoiceReverseAction(BusinessInvoice $sales)
@@ -455,7 +471,7 @@ class InvoiceController extends Controller
 	}
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
 
     public function deleteEmptyInvoiceAction()
@@ -561,7 +577,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEMBER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_CUSTOMER,ROLE_DOMAIN");
      */
     public function addParticularCommissionAction(Request $request, BusinessInvoice $invoice)
     {

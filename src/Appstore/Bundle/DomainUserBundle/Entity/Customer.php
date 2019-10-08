@@ -16,6 +16,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Doctrine\DQL\Date;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\LocationBundle\Entity\Country;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -64,6 +65,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $orders;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $country;
 
 
     /**
@@ -1761,6 +1768,22 @@ class Customer
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
     }
 
 
