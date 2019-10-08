@@ -133,7 +133,7 @@
                                 {% set processes =['Delivered','Done'] %}
 
                                 <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'print'}) }}"><i class="icon-print"></i> Print Invoice</a>
-                                {% if (entity.process == "In-progress" and app.user.granted("ROLE_DOMAIN")) or (  entity.process == "In-progress" and app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
+                                {% if (entity.process == "In-progress" and app.user.granted("ROLE_DOMAIN")) or (  entity.process == "In-progress" and app.user.granted("ROLE_BUSINESS_APPROVE"))  %}
                                 <a class="btn blue confirm"  data-url="{{ path('business_invoice_approved',{'id':entity.id}) }}"><i class="icon-refresh"></i> Approve</a>
                                 {% endif %}
                                 <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
