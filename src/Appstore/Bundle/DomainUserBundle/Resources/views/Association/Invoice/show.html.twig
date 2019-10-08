@@ -63,9 +63,9 @@
                                     <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
                                     <li><strong>Received BDT:</strong>&nbsp;{{ entity.received|number_format() }}</li>
                                     {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
-                                    {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
+                                    {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}{#
                                     <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
-                                </ul>
+                           #}     </ul>
                             </div>
                             <div class="span3">
                                 <h4>Payment Method:</h4>
