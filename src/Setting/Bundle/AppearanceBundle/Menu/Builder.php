@@ -243,7 +243,7 @@ class Builder extends ContainerAware
 	        }
 	    }
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
-        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
+        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_MEMBER_ASSOCIATION')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
             $menu[$business]->addChild('Manage Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
@@ -465,10 +465,11 @@ class Builder extends ContainerAware
 		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
             $menu['Accounting']['Manage Sales']['Reports']->addChild('Ledger', array('route' => 'report_customer_ledger'));
         }
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
 	    $menu['Accounting']->addChild('Manage Purchase', array('route' => ''))
 	                       ->setAttribute('icon', 'fa fa-truck')
 	                       ->setAttribute('dropdown', true);
-	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+
 		    $menu['Accounting']['Manage Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
 		    $menu['Accounting']['Manage Purchase']->addChild('Payment', array('route' => 'account_purchase_new'));
             $menu['Accounting']['Manage Purchase']->addChild('Commission', array('route' => 'account_purchasecommission'));

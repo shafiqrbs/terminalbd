@@ -102,7 +102,8 @@
                                 <tbody>
 
                                 {% for entity in entities %}
-                                    <tr id="delete-{{ entity.id }}">
+                                    {% if entity.total > 0 %}
+                                    <tr>
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
@@ -190,6 +191,7 @@
                                             </table>
                                         </td>
                                     </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

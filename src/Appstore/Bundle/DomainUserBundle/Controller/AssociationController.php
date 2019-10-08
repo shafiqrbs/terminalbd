@@ -37,7 +37,7 @@ class AssociationController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_CRM_ASSOCIATION")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
      */
 
     public function indexAction()
@@ -103,7 +103,7 @@ class AssociationController extends Controller
         return $form;
     }
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
      */
     public function newAction()
     {
@@ -177,7 +177,7 @@ class AssociationController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
      */
     public function editAction($id)
     {
@@ -247,7 +247,7 @@ class AssociationController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
      */
     public function deleteAction($id)
     {

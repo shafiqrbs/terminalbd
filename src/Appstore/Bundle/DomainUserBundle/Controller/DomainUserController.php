@@ -247,6 +247,7 @@ class DomainUserController extends Controller
      */
     public function editProfileAction()
     {
+
         $user = $this->getUser();
         $editForm = $this->createEditProfileForm($user);
         $globalOption = $user->getGlobalOption();
