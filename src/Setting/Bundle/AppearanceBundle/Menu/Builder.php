@@ -243,7 +243,7 @@ class Builder extends ContainerAware
 	        }
 	    }
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
-        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_MEMBER_ASSOCIATION')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
+        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
             $menu[$business]->addChild('Manage Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
@@ -451,11 +451,11 @@ class Builder extends ContainerAware
             ->addChild('Accounting')
             ->setAttribute('icon', 'fa fa-building-o')
             ->setAttribute('dropdown', true);
-
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
 	    $menu['Accounting']->addChild('Manage Sales', array('route' => ''))
 	                       ->setAttribute('icon', 'fa fa-shopping-cart')
 	                       ->setAttribute('dropdown', true);
-	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+
 		    $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES_ADJUSTMENT')) {
                 $menu['Accounting']['Manage Sales']->addChild('Sales Adjustment', array('route' => 'account_salesadjustment'));

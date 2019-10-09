@@ -225,6 +225,7 @@
         </div>
         {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
             <div class="portlet-body form">
+                {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
                 <div class="portlet box blue">
                     <div class="portlet-body">
                         <div class="row-fluid" >
@@ -234,7 +235,9 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 <div class="clearfix"></div>
+                {% if (app.user.granted("ROLE_BUSINESS_PURCHASE"))  %}
                 <div class="portlet box green">
                     <div class="portlet-body">
                         <div class="row-fluid" >
@@ -244,6 +247,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         {% endif %}
         <div class="clearfix"><br/></div>
