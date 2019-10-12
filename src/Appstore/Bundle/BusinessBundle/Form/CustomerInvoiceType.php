@@ -38,8 +38,8 @@ class CustomerInvoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add PRX ID','data-original-title'=>'Add PRX ID','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment information','data-original-title'=>'Add payment information','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add TRX ID','data-original-title'=>'Add TRX ID','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,

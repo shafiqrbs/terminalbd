@@ -276,14 +276,11 @@ class OrderController extends Controller
     {
         $payment = $request->request->all();
         $data = $payment['ecommerce_payment'];
-
+        $this->updateOrderInformation($order, $data);
         $em = $this->getDoctrine()->getManager();
-        if($data['transactionType'] and $order->getGrandTotalAmount() > 0){
+        if(isset($data['transactionType']) and $data['transactionType'] and $order->getGrandTotalAmount() > 0){
             $entity = new OrderPayment();
             $entity->setOrder($order);
-            if (!empty($data['customerMobile']) or !empty($data['mobile']) ) {
-                $this->updateOrderInformation($order, $data);
-            }
             if($data['transactionType'] == 'Return'){
                 $entity->setTransactionType('Return');
                 $entity->setAmount('-'.$data['amount']);
@@ -309,25 +306,48 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-        return $this->redirect($this->generateUrl('customer_order_payment',array('id' => $order->getId())));
+        return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
     }
 
     public function updateOrderInformation(Order $order,$data)
     {
+
         $em = $this->getDoctrine()->getManager();
         if (!empty($data['customerMobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($order->getGlobalOption(),$mobile,$data);
+            $order->setCustomer($customer);
+            $order->setCustomerName($customer->getName());
+            $order->setCustomerMobile($customer->getMobile());
+            $order->setAddress($customer->getAddress());
         } elseif(!empty($data['mobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $order->getGlobalOption(), 'mobile' => $mobile ));
+            $order->setCustomer($customer);
+            $order->setCustomerName($customer->getName());
+            $order->setCustomerMobile($customer->getMobile());
+            $order->setAddress($customer->getAddress());
         }
-        $order->setCustomer($customer);
-        $order->setCustomerName($customer->getName());
-        $order->setCustomerMobile($customer->getMobile());
-        $order->setAddress($customer->getAddress());
+
+        if (isset($data['deliveryDate']) and $data['deliveryDate']) {
+            $date = new \DateTime($data['deliveryDate']);
+            $order->setDeliveryDate($date);
+        }
+        if (isset($data['deliverySlot']) and $data['deliverySlot']) {
+            $order->setDeliverySlot($data['deliverySlot']);
+        }
+        if (isset($data['shippingCharge']) and $data['shippingCharge']) {
+            $order->setShippingCharge($data['shippingCharge']);
+        }
+        if (isset($data['discountAmount']) and $data['discountAmount']) {
+            $order->setDiscountAmount($data['discountAmount']);
+        }
+        if (isset($data['process']) and $data['process']) {
+            $order->setProcess($data['process']);
+        }
         $em->persist($order);
         $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
     }
 
 
@@ -395,6 +415,40 @@ class OrderController extends Controller
         $em->flush();
         $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
         exit;
+    }
+
+
+    public function itemUpdateAction(Order $order , OrderItem $item)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$item) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $data = $_REQUEST;
+        $item->setQuantity($data['quantity']);
+        $item->setSubTotal($item->getPrice() * $data['quantity']);
+        $em->persist($item);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',"Item has been updated successfully"
+        );
+        return new Response('success');
+
+    }
+
+    public function itemDeleteAction(Order $order , OrderItem $item)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($item);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response($msg);
     }
 
     public function confirmAction(Request $request ,Order $order)

@@ -452,7 +452,7 @@ $(document).on('change', '#vendor', function() {
 });
 
 
-$(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity', function() {
+$(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity', function() {
 
     var id = $(this).attr('data-id');
 
@@ -461,14 +461,15 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
     var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
     var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
     var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
-    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity);
+    var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
+    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity- spoilQuantity);
     subTotal  = (totalQuantity * price);
     $("#totalQuantity-"+id).html(totalQuantity);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
         url: Routing.generate('business_invoice_distribution_item_update'),
         type: 'POST',
-        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity +'&totalQuantity='+ totalQuantity,
+        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity,
         success: function(response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -481,9 +482,9 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
             $('.salesQnt').html(obj['salesQnt']);
             $('.returnQnt').html(obj['returnQnt']);
             $('.damageQnt').html(obj['damageQnt']);
+            $('.spoilQnt').html(obj['spoilQnt']);
             $('.totalQnt').html(obj['totalQnt']);
             $('.bonusQnt').html(obj['bonusQnt']);
-
         },
     })
 });

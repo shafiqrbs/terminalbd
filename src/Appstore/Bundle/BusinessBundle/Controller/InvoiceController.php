@@ -180,22 +180,27 @@ class InvoiceController extends Controller
             }
 
 	        $em->flush();
-            if (in_array($entity->getProcess(), $done)) {
+            if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
+                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+                if($result['damageQnt'] > 0 or $result['spoilQnt'] > 0) {
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity);
+                }
+                if(in_array($entity->getProcess(),$done)){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);     $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+
+                }
+            }elseif(in_array($entity->getProcess(), $done)) {
+
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-
-
-            }elseif(in_array($entity->getProcess(), $distribution)) {
-                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                if($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0 ){
-                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
-                }
             }
+            exit;
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
                 return $this->redirect($this->generateUrl('business_invoice_new'));
@@ -606,7 +611,7 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceDistributionItemUpdateAction(Request $request)
@@ -740,7 +745,7 @@ class InvoiceController extends Controller
         if($entity and empty($entity->getApprovedBy())){
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
-            if($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0 ){
+            if(($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0) or ($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['spoilQnt'] > 0) ){
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
             }
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);

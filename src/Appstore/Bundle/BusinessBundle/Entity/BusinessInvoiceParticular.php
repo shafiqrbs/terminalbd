@@ -91,6 +91,13 @@ class BusinessInvoiceParticular
      /**
      * @var integer
      *
+     * @ORM\Column(name="spoilQnt", type="smallint", length = 5, nullable=true)
+     */
+    private $spoilQnt= 0;
+
+     /**
+     * @var integer
+     *
      * @ORM\Column(name="bonusQnt", type="smallint", length = 5, nullable=true)
      */
     private $bonusQnt = 0;
@@ -158,8 +165,6 @@ class BusinessInvoiceParticular
      * @ORM\Column(name="endDate", type="datetime", nullable = true)
      */
     private $endDate;
-
-
 
 
     /**
@@ -483,6 +488,22 @@ class BusinessInvoiceParticular
     public function setBonusQnt($bonusQnt)
     {
         $this->bonusQnt = $bonusQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpoilQnt()
+    {
+        return $this->spoilQnt;
+    }
+
+    /**
+     * @param int $spoilQnt
+     */
+    public function setSpoilQnt($spoilQnt)
+    {
+        $this->spoilQnt = $spoilQnt;
     }
 }
 

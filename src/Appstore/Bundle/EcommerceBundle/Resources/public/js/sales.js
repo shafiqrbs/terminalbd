@@ -196,9 +196,6 @@ var InventorySales = function(sales) {
                 $('#dueAmount').addClass('payment-red');
             }
         }
-
-
-
         if(payment > 0 && total > 0  ){
             $("#paymentBtn").attr("disabled", false);
         }else{

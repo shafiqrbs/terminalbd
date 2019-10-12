@@ -44,9 +44,9 @@ class OrderType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Delivery Time---',
                 'choices' => array(
-                    'morning'       => 'Morning 10-12',
-                    'evening'       => 'Evening 03-06',
-                    'night'         => 'Night   06-10',
+                    'Morning 10-12'       => 'Morning 10-12',
+                    'Evening 03-06'       => 'Evening 03-06',
+                    'Night 06-10'         => 'Night 06-10',
                 )
             ))
             ->add('process', 'choice', array(

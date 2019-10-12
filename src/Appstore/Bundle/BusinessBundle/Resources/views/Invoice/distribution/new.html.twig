@@ -59,8 +59,9 @@
                                         <th>Unit</th>
                                         <th>Price</th>
                                         <th>Innit. Qnt</th>
-                                        <th>Ret. Qnt</th>
-                                        <th>Dmg. Qnt</th>
+                                        <th>Ret.Qnt</th>
+                                        <th>Dmg.Qnt</th>
+                                        <th>Spoil.Qnt</th>
                                         <th>Sales. Qnt</th>
                                         <th>Sub-total</th>
                                         <th>Bonus Qnt</th>
@@ -70,6 +71,7 @@
                                     {% set salesQnt = 0 %}
                                     {% set returnQnt = 0 %}
                                     {% set damageQnt = 0 %}
+                                    {% set spoilQnt = 0 %}
                                     {% set bonusQnt = 0 %}
                                     {% set totalQnt = 0 %}
 
@@ -78,6 +80,7 @@
                                         {% set salesQnt = salesQnt + item.quantity %}
                                         {% set returnQnt = returnQnt + item.returnQnt %}
                                         {% set damageQnt = damageQnt + item.damageQnt %}
+                                        {% set spoilQnt = spoilQnt + item.spoilQnt %}
                                         {% set bonusQnt = bonusQnt + item.bonusQnt %}
                                         {% set totalQnt = totalQnt + item.totalQuantity %}
 
@@ -100,6 +103,9 @@
                                                 <input type="number" class=" numeric td-inline-input-qnt damageQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="damageQuantity-{{ item.id }}" name="quantity[]" value="{{ item.damageQnt }}" placeholder="{{ item.damageQnt }}">
                                             </td>
                                             <td class="">
+                                                <input type="number" class=" numeric td-inline-input-qnt spoilQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="spoilQuantity-{{ item.id }}" name="quantity[]" value="{{ item.spoilQnt }}" placeholder="{{ item.spoilQnt }}">
+                                            </td>
+                                            <td class="">
                                               <strong id="totalQuantity-{{ item.id }}">{{ item.totalQuantity }}</strong>
                                             </td>
                                             <td class="">
@@ -120,6 +126,7 @@
                                         <td class=""><strong class="salesQnt">{{ salesQnt }}</strong></td>
                                         <td class=""><strong class="returnQnt">{{ returnQnt }}</strong></td>
                                         <td class=""><strong class="damageQnt">{{ damageQnt }}</strong></td>
+                                        <td class=""><strong class="spoilQnt">{{ spoilQnt }}</strong></td>
                                         <td class=""><strong class="totalQnt">{{ totalQnt }}</strong></td>
                                         <td class=""><strong class="subTotal">{{ entity.subTotal }}</strong></td>
                                         <td class=""><strong class="bonusQnt">{{ bonusQnt }}</strong></td>
@@ -286,7 +293,7 @@
             margin-bottom:0!important;
         }
         .sales-right{
-            width: 150px;
+            width: 120px;
         }
 
     </style>

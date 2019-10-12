@@ -296,7 +296,7 @@ class OrderRepository extends EntityRepository
         $order->setTotalAmount($totalAmount);
         $order->setItem($totalItem);
         $vat = $this->getCulculationVat($order->getGlobalOption(),$totalAmount);
-        $grandTotal = $totalAmount + $order->getShippingCharge() + $vat;
+        $grandTotal = $totalAmount + $order->getShippingCharge() + $vat - $order->getDiscountAmount();
         $order->setVat($vat);
         $order->setGrandTotalAmount($grandTotal);
         if (!empty($order->getCoupon())) {
@@ -306,13 +306,12 @@ class OrderRepository extends EntityRepository
         }else{
             $order->setGrandTotalAmount($grandTotal);
         }
-
         if($order->getPaidAmount() > $grandTotal ){
-            $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
+            $order->setReturnAmount($order->getPaidAmount()  - $grandTotal);
             $order->setDueAmount(0);
         }elseif($totalAmount < $grandTotal ){
             $order->setReturnAmount(0);
-            $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
+            $due = (int)$grandTotal - ((int) $order->getPaidAmount());
             $order->setDueAmount($due);
         }
         $em->flush();

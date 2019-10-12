@@ -492,9 +492,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setQuantity( $data['salesQuantity'] );
             $entity->setReturnQnt( $data['returnQuantity'] );
             $entity->setDamageQnt( $data['damageQuantity'] );
+            $entity->setSpoilQnt( $data['spoilQuantity'] );
             $entity->setBonusQnt( $data['bonusQuantity'] );
             $entity->setPrice( $data['salesPrice'] );
-            $entity->setTotalQuantity( $data['totalQuantity']);
+            $entity->setTotalQuantity((int)$data['totalQuantity']);
             $subTotal = round(($entity->getPrice() * $entity->getTotalQuantity()),2);
             $entity->setSubTotal($subTotal);
 

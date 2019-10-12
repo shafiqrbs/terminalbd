@@ -54,6 +54,21 @@ class BusinessPurchaseReturnItem
      /**
      * @var integer
      *
+     * @ORM\Column(name="spoilQnt", type="integer",nullable=true)
+     */
+    private $spoilQnt;
+
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQnt", type="integer",nullable=true)
+     */
+    private $damageQnt;
+
+     /**
+     * @var integer
+     *
      * @ORM\Column(name="salesInvoiceItem", type="integer",nullable=true)
      */
     private $salesInvoiceItem;
@@ -209,6 +224,38 @@ class BusinessPurchaseReturnItem
     public function setSalesInvoiceItem($salesInvoiceItem)
     {
         $this->salesInvoiceItem = $salesInvoiceItem;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpoilQnt()
+    {
+        return $this->spoilQnt;
+    }
+
+    /**
+     * @param int $spoilQnt
+     */
+    public function setSpoilQnt($spoilQnt)
+    {
+        $this->spoilQnt = $spoilQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQnt()
+    {
+        return $this->damageQnt;
+    }
+
+    /**
+     * @param int $damageQnt
+     */
+    public function setDamageQnt($damageQnt)
+    {
+        $this->damageQnt = $damageQnt;
     }
 
 

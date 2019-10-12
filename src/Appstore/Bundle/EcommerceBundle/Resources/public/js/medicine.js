@@ -89,3 +89,45 @@ var formTemporary = $("#orderItem").validate({
     }
 });
 
+$(document).on("change", ".transactionProcess", function() {
+
+    var formData = new FormData($('form#transactionUpdate')[0]); // Create an arbitrary FormData instance
+    var url = $('form#transactionUpdate').attr('action'); // Create an arbitrary FormData instance
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success: function(response){
+            location.reload();
+        }
+    });
+
+});
+
+$(document).on("click", "#cashOnDelivery", function() {
+    if($(this).prop("checked") === false){
+        $("#cashOn").show();
+        $("#adminSubmitPayment").removeClass("submitOrder").addClass("submitPayment");
+    }else{
+        $("#cashOn").hide();
+        $("#adminSubmitPayment").removeClass("submitPayment").addClass("submitOrder");
+    }
+});
+
+$(document).on("change", ".input-update", function() {
+
+    var formData = new FormData($('form#orderUpdate')[0]); // Create an arbitrary FormData instance
+    var url = $('form#orderUpdate').attr('action'); // Create an arbitrary FormData instance
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success: function(response){}
+    });
+
+});
+

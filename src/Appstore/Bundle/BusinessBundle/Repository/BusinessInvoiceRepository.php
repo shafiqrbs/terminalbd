@@ -477,7 +477,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('BusinessBundle:BusinessInvoiceParticular','si')
-            ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+            ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
             ->where('si.businessInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();

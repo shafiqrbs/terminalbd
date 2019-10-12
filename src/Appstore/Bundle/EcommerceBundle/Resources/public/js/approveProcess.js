@@ -7,7 +7,7 @@ function ApproveProcess(){
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
     // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+    $( ".datePicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
     $(document).on("click", "#submitProcess", function(e) {
 
@@ -19,6 +19,36 @@ function ApproveProcess(){
             }
         });
         e.preventDefault();
+    });
+
+    $(document).on('click', '.view', function () {
+
+        var url = $(this).attr("data-action");
+        var title = $(this).attr("data-title");
+        $('.dialogModal_header').html(title);
+        $('.dialog_content').dialogModal({
+            topOffset: 0,
+            top: 0,
+            type: '',
+            onOkBut: function (event, el, current) {
+            },
+            onCancelBut: function (event, el, current) {
+            },
+            onLoad: function (el, current) {
+                $.ajax({
+                    url: url,
+                    async: true,
+                    success: function (response) {
+                        el.find('.dialogModal_content').html(response);
+                    }
+                });
+            },
+            onClose: function (el, current) {
+            },
+            onChange: function (el, current) {
+            }
+        });
+
     });
 
     $(".addCustomer").click(function(){
@@ -197,17 +227,6 @@ function ApproveProcess(){
 
     });
 
-    $('#cashOnDelivery').click( function() {
-
-        if($(this).prop("checked") === false){
-            $("#cashOn").show();
-            $("#adminSubmitPayment").removeClass("submitOrder").addClass("submitPayment");
-        }else{
-            $("#cashOn").hide();
-            $("#adminSubmitPayment").removeClass("submitPayment").addClass("submitOrder");
-        }
-
-    });
 
     $(document).on("click", " .submitOrder", function() {
         $('#confirm-content').confirmModal({
