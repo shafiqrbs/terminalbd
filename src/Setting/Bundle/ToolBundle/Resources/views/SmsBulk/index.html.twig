@@ -36,17 +36,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li class="divider"></li>
-                                    <li><a href="{{ path('smsbulk_new') }}"><i class="icon-plus"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('smsbulk') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    <li class="divider"></li>
-
-                                </ul>
+                                <a class="btn red" href="{{ path('smsbulk_new') }}"><i class="icon-plus"></i>&nbsp; Create SMS</a>
                             </div>
                         </div>
                     </div>
@@ -72,14 +62,8 @@
                                         <td class="numeric" ><a href="{{ path('smsbulk_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{% if entity.sourceTo %}{% for source in entity.sourceTo %}{{ source }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</td>
                                         <td class="numeric" >
-                                            {% if( entity.status == 1) %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('smsbulk_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
-                                            {% else %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('smsbulk_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
-                                            {% endif %}
-
                                             <a class="btn mini btn green" href="{{ path('smsbulk_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i>&nbsp;Edit</a>
-                                            <a class="btn mini blue btn" href="{{ path('smsbulk_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i>&nbsp;View</a>
+                                            <a class="btn mini blue btn" href="{{ path('smsbulk_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i>&nbsp;View & Process</a>
                                             <a class="btn mini red btn delete" title="Are you sure went to delete ?" href="{{ path('smsbulk_delete', { 'id': entity.id }) }}" ><i class="icon-trash"></i>&nbsp;Delete</a>
                                         </td>
                                     </tr>

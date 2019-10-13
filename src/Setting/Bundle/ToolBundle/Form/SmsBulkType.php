@@ -49,45 +49,24 @@ class SmsBulkType extends AbstractType
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
+                'attr'=>array('class'=>'select2 m-wrap span12'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select Location'))
-                ),
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
 
             ->add('sourceTo', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'multiple' => 'multiple',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'empty_value' => '---Select Source---',
+                'required'    => false,
                 'choices' => array(
                     'Customer' => 'Customer',
-                    'File' => 'File',
-                    'Bulk Mobile' => 'Bulk Mobile'
+                    'Member' => 'Member',
                 ),
-            ))
+            ));
+            /*->add('file','file',array('attr'=>array('class'=>'default span12')))*/
 
-            ->add('ageGroup', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'multiple' => 'multiple',
-                'choices' => array(
-                    'Kids' => 'Kids',
-                    'Adult' => 'Adult'
-                ),
-            ))
-
-            ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'multiple' => 'multiple',
-                'choices' => array(
-                    'Male' => 'Male',
-                    'Female' => 'Female'
-                ),
-            ))
-            ->add('file','file',array('attr'=>array('class'=>'default span12')))
-            ->add('status');
     }
     
     /**

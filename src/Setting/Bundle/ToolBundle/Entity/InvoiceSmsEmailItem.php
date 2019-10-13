@@ -22,14 +22,16 @@ class InvoiceSmsEmailItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", inversedBy="invoiceSmsEmailItems")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", inversedBy="invoiceSmsEmailItems" , cascade={"detach","merge"})
+     * @ORM\JoinColumn(name="invoiceSmsEmail_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    protected $invoiceSmsEmail = null;
+    protected $invoiceSmsEmail;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsEmailPricing", inversedBy="invoiceSmsEmailItems")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsEmailPricing", inversedBy="invoiceSmsEmailItems",cascade={"detach","merge"})
+     * @ORM\JoinColumn(name="smsEmailPricing_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    protected $smsEmailPricing = null;
+    protected $smsEmailPricing = 0;
 
     /**
      * @var float

@@ -277,19 +277,23 @@ class SmsBulkController extends Controller
         return $this->redirect($this->generateUrl('smsbulk'));
     }
 
-    public function sendingAction(SmsBulk $entity){
+    public function sendingAction(SmsBulk $entity)
+    {
 
-
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
 
-        if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-          }
-        $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.bulk_sms', new \Setting\Bundle\ToolBundle\Event\SmsBulkEvent($entity));
-exit;
-        $entity->setProcess('Complete');
-        $em->flush();
-        exit;
+        if (!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+
+                if ($entity->getProcess() != "Complete") {
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.bulk_sms', new \Setting\Bundle\ToolBundle\Event\SmsBulkEvent($entity));
+                    $entity->setProcess('Complete');
+                    $em->flush();
+                }
+        }
+        return $this->redirect($this->generateUrl('smsbulk'));
     }
 
 }

@@ -36,14 +36,10 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn blue" href="{{ path('smsbulk_send_msg',{'id': entity.id }) }}"  data-close-others="true"><i class="icon-ok"></i>&nbsp;Send SMS</a>
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    Tools
-                                    <i class="icon-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('smsbulk_new') }}"><i class="icon-plus"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('smsbulk') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('smsbulk_new') }}"><i class="icon-plus"></i>&nbsp; Create SMS</a>
+                                <a class="btn" href="{{ path('smsbulk') }}"><i class="icon-th-list"></i>&nbsp;Bulk SMS</a>
+
+
                             </div>
                         </div>
 
@@ -61,15 +57,7 @@
                                 </tr>
                                 <tr>
                                     <th class="numeric" >Source To</th>
-                                    <td class="numeric" >{% if entity.sourceTo %}{% for source in entity.sourceTo %}{{ source }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Gender</th>
-                                    <td class="numeric" >{% if entity.gender %}{% for source in entity.gender %}{{ source }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Age Group</th>
-                                    <td class="numeric" >{% if entity.ageGroup %}{% for source in entity.ageGroup %}{{ source }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.sourceTo }}</td>
                                 </tr>
                                 <tr>
                                     <th class="numeric" >Name</th>
@@ -84,16 +72,8 @@
                                     <td class="numeric" >{% if entity.bulkMobile %}{{ entity.bulkMobile }}{% endif %}</td>
                                 </tr>
                                 <tr>
-                                    <th class="numeric" >Attach File</th>
-                                    <td class="numeric" ><a href="http://{% if entity.file %}{{ entity.file }}{% endif %}" target="_blank">Click here download</a></td>
-                                </tr>
-                                <tr>
                                     <th class="numeric" >Process Status</th>
                                     <td class="numeric" >{{ entity.process }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Status</th>
-                                    <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active{% endif %}</td>
                                 </tr>
                                 </tbody>
                             </table>

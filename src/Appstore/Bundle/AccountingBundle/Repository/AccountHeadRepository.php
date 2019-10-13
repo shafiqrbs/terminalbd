@@ -157,8 +157,6 @@ class AccountHeadRepository extends EntityRepository
 
         return $ret;
 
-        \Doctrine\Common\Util\Debug::dump($ret);
-        exit;
 
     }
 

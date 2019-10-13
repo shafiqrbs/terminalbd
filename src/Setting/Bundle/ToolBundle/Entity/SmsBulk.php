@@ -55,9 +55,9 @@ class SmsBulk
 
 
     /**
-     * @var array()
+     * @var string
      *
-     * @ORM\Column(name="sourceTo", type="array", nullable = true)
+     * @ORM\Column(name="sourceTo", type="string", nullable = true)
      */
     private $sourceTo;
 
@@ -351,21 +351,7 @@ class SmsBulk
         $this->name = $name;
     }
 
-    /**
-     * @return array
-     */
-    public function getSourceTo()
-    {
-        return $this->sourceTo;
-    }
 
-    /**
-     * @param array $sourceTo
-     */
-    public function setSourceTo($sourceTo)
-    {
-        $this->sourceTo = $sourceTo;
-    }
 
     /**
      * @return array
@@ -397,6 +383,22 @@ class SmsBulk
     public function setProcess($process)
     {
         $this->process = $process;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceTo()
+    {
+        return $this->sourceTo;
+    }
+
+    /**
+     * @param string $sourceTo
+     */
+    public function setSourceTo($sourceTo)
+    {
+        $this->sourceTo = $sourceTo;
     }
 
 

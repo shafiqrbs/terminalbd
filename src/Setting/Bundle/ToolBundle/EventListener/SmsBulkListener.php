@@ -7,6 +7,7 @@
  */
 
 namespace Setting\Bundle\ToolBundle\EventListener;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -46,19 +47,31 @@ class SmsBulkListener extends BaseSmsAwareListener
 
         $msg = $bulk->getSmsText();
 
-        //if(!empty($globalOption->getSmsSenderTotal()) and $globalOption->getSmsSenderTotal()->getRemaining() > 0 and $globalOption->getNotificationConfig()->getSmsActive() == 1){
 
-            foreach ($globalOption->getCustomers() as $customer) {
+            if($bulk->getBulkMobile()){
 
-                if (!empty($customer->getMobile())) {
-                    $mobile = "+88" . $customer->getMobile();
+                $bulks = explode(",",$bulk->getBulkMobile());
+                foreach ($bulks as $mobile){
+                    echo $mobile = "+88" . $mobile;
                     $status = $this->gateway->send($msg, $mobile);
                     $this->em->getRepository('SettingToolBundle:SmsSender')->insertSmsBulk($globalOption,$mobile, $status);
                 }
             }
 
+            if($bulk->getSourceTo()) {
 
-       // }
+                /* @var $customer Customer */
+
+                foreach ($globalOption->getCustomers() as $customer) {
+
+                    if ($customer->getMobile()) {
+                        $mobile = "+88" . $customer->getMobile();
+                        $status = $this->gateway->send($msg, $mobile);
+                        $this->em->getRepository('SettingToolBundle:SmsSender')->insertSmsBulk($globalOption, $mobile, $status);
+                    }
+                }
+            }
+
 
     }
 

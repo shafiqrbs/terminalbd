@@ -214,6 +214,9 @@ class UserController extends Controller
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->flush();
+            if($entity->getUserGroup() != 'other'){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity);
+            }
             return $this->redirect($this->generateUrl('account_user'));
         }
 
