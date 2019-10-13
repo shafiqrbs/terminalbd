@@ -316,9 +316,9 @@ class WebServiceCustomerController extends Controller
             $this->get('security.context')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
             $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);
-            /*$dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));*/
-            $redirect = $this->generateUrl('domain_customer_homepage',array('shop'=>$globalOption->getSlug()));
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
+            $redirect = $this->generateUrl('domain_customer_homepage',array('shop' => $globalOption->getSlug()));
             return new Response($redirect);
         }
         return new Response('failed');
@@ -385,23 +385,26 @@ class WebServiceCustomerController extends Controller
 
     public function customerLoginMobileValidationAction(Request $request)
     {
+        $valid = 'false';
         $intlMobile = $request->query->get('mobile',NULL,true);
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
+
         /* @var $user User */
-        if(empty($user)){
-            $valid = 'false';
-        }else{
-            $a = mt_rand(1000,9999);
-            $user->setPlainPassword($a);
-            $this->get('fos_user.user_manager')->updateUser($user);
-        //    $dispatcher = $this->container->get('event_dispatcher');
-          //  $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
-            $valid =  'Collect OTP form your login mobile no and input OTP field '.$a;
-        }
-        echo $valid;
-        exit;
+
+            if ($user) {
+                $global = $user -> getGlobalOption();
+                if (!empty($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1)) {
+                    $a = mt_rand(1000, 9999);
+                    $user->setPlainPassword($a);
+                    $this->get('fos_user.user_manager')->updateUser($user);
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user, $a));
+                    $valid = 'Collect OTP form your login mobile no and input OTP field';
+                }
+            }
+        return new Response($valid);
 
     }
 

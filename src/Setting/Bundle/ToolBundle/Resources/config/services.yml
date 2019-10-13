@@ -75,7 +75,7 @@ services:
 
   setting_tool.listener.changepassword:
       class: Setting\Bundle\ToolBundle\EventListener\PasswordChangeSmsListener
-      arguments: [@setting_tool.sms_gateWay]
+      arguments: [@doctrine , @setting_tool.sms_gateWay]
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.change_password, method: sendSms }
 
