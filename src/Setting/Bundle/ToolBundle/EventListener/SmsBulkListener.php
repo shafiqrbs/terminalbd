@@ -52,13 +52,13 @@ class SmsBulkListener extends BaseSmsAwareListener
 
                 $bulks = explode(",",$bulk->getBulkMobile());
                 foreach ($bulks as $mobile){
-                    echo $mobile = "+88" . $mobile;
+                    $mobile = "+88" . $mobile;
                     $status = $this->gateway->send($msg, $mobile);
                     $this->em->getRepository('SettingToolBundle:SmsSender')->insertSmsBulk($globalOption,$mobile, $status);
                 }
             }
 
-            if($bulk->getSourceTo()) {
+            if($bulk->getSourceTo() == "Customer" or $bulk->getSourceTo() == "Member") {
 
                 /* @var $customer Customer */
 
