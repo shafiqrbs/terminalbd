@@ -11,9 +11,11 @@ namespace Setting\Bundle\ToolBundle\Repository;
 
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\SmsSender;
@@ -244,24 +246,42 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
-    public function insertDmsInvoiceTreatmentNotificationSenderSms(DmsTreatmentPlan $treatmentPlan, $msg ,$status)
+
+
+    public function insertLoginSms(User $user, $msg ,$status)
     {
-        $globalOption = $treatmentPlan->getDmsInvoice()->getDmsConfig()->getGlobalOption();
         $entity = new SmsSender();
-        $entity->setMobile($treatmentPlan->getDmsInvoice()->getCustomer()->getMobile());
-        $entity->setGlobalOption($globalOption);
+        $entity->setMobile($user->getUsername());
+        $entity->setGlobalOption($user->getGlobalOption());
         $entity->setStatus($status);
         $entity->setProcess('Notification');
+        $entity->setReceiver('Customer');
+        $entity->setRemark('OTP');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($user->getGlobalOption());
+        }
+    }
+
+    public function insertInvoiceSms(Customer $customer, $msg ,$status)
+    {
+        $entity = new SmsSender();
+        $entity->setMobile($customer->getMobile());
+        $entity->setGlobalOption($customer->getGlobalOption());
+        $entity->setStatus($status);
+        $entity->setProcess('Payment Invoice');
         $entity->setReceiver('Customer');
         $entity->setRemark($msg);
         $this->_em->persist($entity);
         $this->_em->flush();
         if($status == 'success'){
-            $this->totalSendSms($globalOption);
+            $this->totalSendSms($customer->getGlobalOption());
         }
     }
 
-	public function insertHotelInvoiceSenderSms(HotelInvoice $invoice,$status)
+
+    public function insertHotelInvoiceSenderSms(HotelInvoice $invoice,$status)
 	{
 		$globalOption = $invoice->getHotelConfig()->getGlobalOption();
 
