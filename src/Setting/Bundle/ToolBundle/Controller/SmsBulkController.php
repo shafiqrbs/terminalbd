@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Controller;
 
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -283,7 +284,9 @@ class SmsBulkController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-        if (!empty($this->getUser()->getGlobalOption()->getSmsSenderTotal() and $this->getUser()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $this->getUser()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1)) {
+        /* @var $global GlobalOption */
+        $global = $this->getUser()->getGlobalOption();
+        if ($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
             if ($entity->getProcess() != "Complete") {
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.bulk_sms', new \Setting\Bundle\ToolBundle\Event\SmsBulkEvent($entity));

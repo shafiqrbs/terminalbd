@@ -6,6 +6,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Form\AssociationInvoiceType;
 use Appstore\Bundle\DomainUserBundle\Form\MemberEditProfileType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -461,6 +462,12 @@ class AssociationController extends Controller
             if($entity->getProcess() == "Done"){
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                /* @var $global GlobalOption */
+                $global = $this->getUser()->getGlobalOption();
+                if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.association_invoice', new \Setting\Bundle\ToolBundle\Event\AssociationInvoiceSmsEvent($entity));
+                }
             }
             return $this->redirect($this->generateUrl('domain_association_invoice'));
         }

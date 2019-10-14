@@ -10,6 +10,7 @@ use Appstore\Bundle\BusinessBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -200,7 +201,6 @@ class InvoiceController extends Controller
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
-            exit;
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
                 return $this->redirect($this->generateUrl('business_invoice_new'));
@@ -755,6 +755,12 @@ class InvoiceController extends Controller
             $entity->setApprovedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
+            /* @var $global GlobalOption */
+            $global = $this->getUser()->getGlobalOption();
+            if($entity->getBusinessConfig()->getBusinessModel() == 'association' and $global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.association_invoice', new \Setting\Bundle\ToolBundle\Event\AssociationInvoiceSmsEvent($entity));
+            }
             return new Response("Success");
         }
 
