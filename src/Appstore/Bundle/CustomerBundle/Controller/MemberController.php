@@ -34,6 +34,7 @@ class MemberController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $data['type'] = 'member';
+        $data['process'] = 'Approved';
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
         $batches = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->studentBatchChoiceList();
@@ -101,7 +102,7 @@ class MemberController extends Controller
     /**
      * Creates a form to edit a DomainUser entity.
      *
-     * @param User $entity The entity
+     * @param Customer $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

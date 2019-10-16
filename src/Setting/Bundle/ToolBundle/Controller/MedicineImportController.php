@@ -21,7 +21,22 @@ use Setting\Bundle\ToolBundle\Form\ColorType;
 class MedicineImportController extends Controller
 {
 
-	/**
+
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
+
+
+    /**
 	 * Lists all MedicineImport entities.
 	 *
 	 */
@@ -33,6 +48,9 @@ class MedicineImportController extends Controller
 			'entities' => $entities,
 		));
 	}
+
+
+
 	/**
 	 * Creates a new MedicineImport entity.
 	 *
@@ -143,6 +161,76 @@ class MedicineImportController extends Controller
 		}
 		return $this->redirect($this->generateUrl('medicine_import'));
 	}
+
+    public function medicineAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->findWithSearch($data);
+        $pagination = $this->paginate($entities);
+        return $this->render('SettingToolBundle:MedicineImport:medicine.html.twig', array(
+            'pagination' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * Creates a new Vendor entity.
+     *
+     */
+    public function uploadAction(Request $request) {
+
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        $em = $this->getDoctrine()->getManager();
+        if ( is_null( $data ) ) {
+            return $this->redirect( $this->generateUrl( 'medicine_stock_short_item' ) );
+        }
+        $medicines = array();
+
+        foreach ($data as $key => $value ){
+            $medicine = $em->getRepository('MedicineBundle:MedicineBrand')->find($value);
+            if($medicine){
+                $medicines[$value] = $medicine;
+            }
+        }
+        return $this->render('SettingToolBundle:MedicineImport:upload.html.twig', array(
+            'medicines' => $medicines,
+        ));
+    }
+
+    /**
+     * Creates a new Vendor entity.
+     *
+     */
+    public function uploadCreateAction(Request $request) {
+
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        $em = $this->getDoctrine()->getManager();
+        if ( is_null( $data ) ) {
+            return $this->redirect( $this->generateUrl( 'medicine_import_index'));
+        }
+        $file = $request->files->get('file');
+        if($file){
+            foreach ($data as $key => $value ){
+                $entity = $em->getRepository('MedicineBundle:MedicineBrand')->find($value);
+                if($entity){
+                    $entity->removeUpload();
+                    $img = $file;
+                    $fileName = $img->getClientOriginalName();
+                    $imgName = uniqid() . '.' . $fileName;
+                    $path = $entity->getUploadDir() . $imgName;
+                    if (!file_exists($entity->getUploadDir())) {
+                        mkdir($entity->getUploadDir(), 0777, true);
+                    }
+                    $this->get('helper.imageresizer')->resizeImage(512, $path, $img);
+                    $entity->setPath($imgName);
+                    $em->persist($entity);
+                    $em->flush();
+                }
+            }
+        }
+        return $this->redirect( $this->generateUrl( 'medicine_import_index'));
+    }
 
 
 

@@ -18,6 +18,33 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class MedicineBrandRepository extends EntityRepository
 {
 
+    public function findWithSearch($data)
+    {
+        $name = isset($data['name'])? $data['name'] :'';
+        $company = isset($data['company'])? $data['company'] :'';
+        $generic = isset($data['generic'])? $data['generic'] :'';
+        $sort = isset($data['sort'])? $data['sort'] :'e.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineGeneric','g');
+        $query->join('e.medicineCompany','c');
+        $query->select('e.id as id','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as name','g.name as genericName','c.name as medicineCompany','e.dar as dar','e.packSize as pack');
+        $query->where('e.name IS NOT NULL');
+        if($name){
+            $query->andWhere($query->expr()->like("e.name", "'$name%'"  ));
+        }
+        if($generic){
+            $query->andWhere($query->expr()->like("g.name", "'$generic%'"  ));
+        }
+        if($company){
+            $query->andWhere($query->expr()->like("c.name", "'$company%'"  ));
+        }
+        $query->orderBy("{$sort}",$direction);
+        $result = $query->getQuery();
+        return $result;
+    }
+
     public function getMedicineBrandSearch($data)
     {
 

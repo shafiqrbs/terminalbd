@@ -327,13 +327,12 @@ class CustomerRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('customer');
-        $qb->where("customer.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("customer.name != :name");
-        $qb->setParameter('name', 'Default');
+        $qb->where("customer.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere("customer.name != :name")->setParameter('name', 'Default');
         $qb->andWhere("customer.mobile IS NOT NULL");
-    //    $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('customer.created','DESC');
+        $qb->andWhere("customer.status =1");
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('customer.customerId','DESC');
         $qb->getQuery();
         return  $qb;
 
@@ -349,6 +348,8 @@ class CustomerRepository extends EntityRepository
             $customerId =    isset($data['customerId'])? $data['customerId'] :'';
             $customerType =    isset($data['type'])? $data['type'] :'';
             $studentBatch =    isset($data['studentBatch'])? $data['studentBatch'] :'';
+            $process =    isset($data['process'])? $data['process'] :'';
+            $bloodGroup =    isset($data['bloodGroup'])? $data['bloodGroup'] :'';
 
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile LIKE :mobile");
@@ -364,6 +365,10 @@ class CustomerRepository extends EntityRepository
                 $qb->andWhere("customer.name LIKE :name");
                 $qb->setParameter('name','%'. $customer.'%');
             }
+            if (!empty($bloodGroup)) {
+                $qb->andWhere("customer.bloodGroup LIKE :bloodGroup");
+                $qb->setParameter('bloodGroup','%'. $bloodGroup.'%');
+            }
             if (!empty($customerId)) {
                 $qb->andWhere("customer.customerId LIKE :customerId");
                 $qb->setParameter('customerId','%'. $customerId.'%');
@@ -371,6 +376,10 @@ class CustomerRepository extends EntityRepository
             if (!empty($customerType)) {
                 $qb->andWhere("customer.customerType = :type");
                 $qb->setParameter('type',$customerType);
+            }
+            if (!empty($process)) {
+                $qb->andWhere("customer.process = :process");
+                $qb->setParameter('process',$process);
             }
             if (!empty($studentBatch)) {
                 $qb->andWhere("customer.studentBatch = :studentBatch");

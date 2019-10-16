@@ -248,8 +248,9 @@ class AssociationController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION_ADMIN")
      */
+
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -258,9 +259,25 @@ class AssociationController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-        try {
+        $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($entity->getUser());
+        if($user){
+            $user->setEnabled(false);
+            $user->setIsDelete(true);
+        }
+        $entity->setStatus(false);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response('Success');
+        /*try {
 
-            $em->remove($entity);
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($entity->getUser());
+            if($user){
+                $user->setEnabled(false);
+                $user->setIsDelete(true);
+            }
+            $entity->setStatus(false);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'error',"Data has been deleted successfully"
@@ -270,8 +287,8 @@ class AssociationController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'notice',"Data has been relation another Table"
             );
-        }
-        return $this->redirect($this->generateUrl('customer'));
+        }*/
+       // return $this->redirect($this->generateUrl('customer'));
     }
 
     public function autoSearchAction(Request $request)
@@ -462,7 +479,9 @@ class AssociationController extends Controller
             if($entity->getProcess() == "Done"){
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+
                 /* @var $global GlobalOption */
+
                 $global = $this->getUser()->getGlobalOption();
                 if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
                     $dispatcher = $this->container->get('event_dispatcher');

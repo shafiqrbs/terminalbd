@@ -49,7 +49,7 @@
                             <div class="span3">
                                 <h4>About:</h4>
                                 <ul class="unstyled">
-                                    {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
+                                    {% if entity.customer is not empty %}<li><strong>Member #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                                     {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                                     {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
                                     {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
@@ -80,17 +80,6 @@
                                     <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                 </ul>
                             </div>
-                            {% if entity.businessConfig.businessModel == "event" %}
-                            <div class="span3 invoice-payment">
-                                <h4>Event Information:</h4>
-                                <ul class="unstyled">
-                                    <li><strong>Event Type:</strong>&nbsp;{{ entity.eventType }}</li>
-                                    <li><strong>Venue:</strong>&nbsp;{{ entity.venue }}</li>
-                                    <li><strong>Start Date:</strong>&nbsp;{{ entity.startDate|date('d-m-Y') }}</li>
-                                    <li><strong>End Date:</strong>&nbsp;{{ entity.endDate|date('d-m-Y') }}</li>
-                                </ul>
-                            </div>
-                            {% endif %}
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid box green">

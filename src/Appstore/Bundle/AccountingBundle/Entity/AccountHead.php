@@ -92,6 +92,7 @@ class AccountHead
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountHead" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $customer;
 

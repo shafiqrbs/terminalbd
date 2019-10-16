@@ -83,7 +83,7 @@
                             <!--/row-->
                             <!--/row-->
                             <div class="row-fluid">
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Mobile<span class="required">*</span></label>
                                         <div class="controls">
@@ -93,6 +93,15 @@
                                                 {{ form_errors(form.mobile) }}
                                             </div>
 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Present Country<span class="required">*</span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.country) }}
+                                            {{ form_errors(form.country) }}
                                         </div>
                                     </div>
                                 </div>

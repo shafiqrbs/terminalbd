@@ -53,7 +53,7 @@
                                     <div class="span4">
                                         <div class="controls">
                                             <div class="input-append span9">
-                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Enter customer name{% endif %} ">
+                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Enter member name{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -67,7 +67,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content" >
                                 <thead class="flip-content ">
                                 <tr class="head-green">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Customer ID</td>
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i> Member ID</td>
                                     <th class="numeric">Created</th>
                                     <th class="numeric">Image</th>
                                     <th class="numeric">Name</th>
@@ -94,9 +94,10 @@
                                         <td>{{ entity.bloodGroup }}</td>
                                         <td>{{ entity.process }}</td>
                                         <td class="numeric">
+                                            <div class="btn-group">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('domain_association_profile_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
-                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
+                                                <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_association_profile_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                              {% endif %}
 
 
@@ -111,8 +112,9 @@
                                             {% if (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process == "Checked") or (app.user.granted("ROLE_DOMAIN")  and entity.process == "Checked") %}
                                                 <a data-title="{{ entity.name }}" class="btn mini approve yellow" href="javascript:" data-url="{{ path('domain_association_process', { 'id': entity.id }) }}" >&nbsp;<i class="icon-refresh"></i> Approved</a>        {% endif %}
                                             {% if app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR") or app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN")  or app.user.granted("ROLE_DOMAIN")  %}
-                                            <a data-title="{{ entity.name }}" class="btn mini yellow" href="{{ path('domain_association_invoice_new', { 'customer': entity.customerId }) }}"  >&nbsp;<i class="icon-money"></i> Receive</a>
+                                            <a data-title="{{ entity.name }}" class="btn mini yellow" href="{{ path('domain_association_invoice_new', { 'customer': entity.customerId }) }}"  >&nbsp;<i class="icon-money"></i></a>
                                             {% endif %}
+                                            </div>
 
                                         </td>
                                     </tr>

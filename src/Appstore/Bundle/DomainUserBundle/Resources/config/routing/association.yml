@@ -36,7 +36,7 @@ domain_association_profile_update:
     defaults: { _controller: "DomainUserBundle:Association:update" }
     methods:  [POST, PUT]
 
-domain_association_delete:
+domain_association_profile_delete:
     path:     /{id}/delete
     defaults: { _controller: "DomainUserBundle:Association:delete" }
     options:

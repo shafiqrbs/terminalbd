@@ -89,6 +89,7 @@ class Order
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="orders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $customer;
 

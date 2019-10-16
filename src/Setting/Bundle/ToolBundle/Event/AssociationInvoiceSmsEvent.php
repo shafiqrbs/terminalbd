@@ -12,7 +12,6 @@ class AssociationInvoiceSmsEvent extends Event
     public function __construct(BusinessInvoice $invoice)
     {
         $this->invoice = $invoice;
-
     }
 
 

@@ -116,6 +116,17 @@ class MemberEditProfileType extends AbstractType
                 'choices' => array('Married' => 'Married','Single' => 'Single'),
 
             ))
+            ->add('country', 'entity', array(
+                'required'    => false,
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter present living country')),
+                ),
+                'property' => 'name',
+                'empty_value' => '---Select Present Country---',
+                'attr'=>array('class'=>'select2 span11 customer-input'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
+
+            ))
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '---Choose a Blood Group---',
