@@ -19,7 +19,7 @@ services:
 
     appstore.customer.listener.association_sms:
         class: Appstore\Bundle\DomainUserBundle\EventListener\AssociationSmsListener
-        arguments: [@setting_tool.sms_gateWay]
+        arguments: [@doctrine, @setting_tool.sms_gateWay]
         tags:
             - { name: kernel.event_listener, event: appstore.customer.post.member_sms, method: sendSms }
 

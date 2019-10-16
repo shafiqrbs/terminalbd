@@ -300,9 +300,20 @@ class SmsSenderRepository extends EntityRepository {
 		}
 	}
 
-    public function insertCustomerSenderSms()
+    public function insertCustomerSenderSms(Customer $customer , $message, $status)
     {
 
+        $entity = new SmsSender();
+        $entity->setMobile($customer->getMobile());
+        $entity->setGlobalOption($customer->getGlobalOption());
+        $entity->setStatus($status);
+        $entity->setReceiver('Customer');
+        $entity->setRemark($message);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($customer->getGlobalOption());
+        }
     }
 
 

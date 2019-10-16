@@ -11,6 +11,7 @@ use Appstore\Bundle\ElectionBundle\Form\SmsMemberType;
 use Appstore\Bundle\ElectionBundle\Form\SmsPoolingType;
 use Appstore\Bundle\ElectionBundle\Form\SmsType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -240,11 +241,15 @@ class CustomerSmsController extends Controller
         if(!$entity){
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-        //	if(!empty($entity->getHotelConfig()->isNotification() == 1) and  !empty($this->getUser()->getSmsSenderTotal())) {
-        $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity,$msg));
-        //	}
-        exit;
+        /* @var $global GlobalOption */
+        $global = $this->getUser()->getGlobalOption();
+        if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity,$msg));
+
+        }
+        return new Response('Success');
+
 
     }
 

@@ -86,7 +86,7 @@ domain_association_auto_name_search:
 
 domain_association_ledger:
     path:     /Association-ledger
-    defaults: { _controller: "AccountingBundle:AccountSales:getAssociationLedger" }
+    defaults: { _controller: "AccountingBundle:AccountSales:associationLedger" }
     options:
            expose: true
 

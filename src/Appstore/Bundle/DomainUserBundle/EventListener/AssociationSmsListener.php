@@ -11,29 +11,41 @@ use Setting\Bundle\ToolBundle\Service\SmsGateWay;
 class AssociationSmsListener extends BaseSmsAwareListener
 {
 
+    /**
+     * @var EntityManager
+     */
+    protected $em;
 
-	public function sendSms(AssociationSmsEvent $event)
-	{
+    protected $doctrine;
 
-		/**
-		 * @var ElectionSmsEvent $event
-		 */
+    protected $gateway;
 
-		$post = $event->getCustomer();
-		$msg = $event->getMemberMsg();
+    public function __construct(Registry $doctrine, SmsGateWay $gateway)
+    {
+        $this->doctrine = $doctrine;
+        $this->gateway = $gateway;
+        $this->em = $doctrine->getManager();
+    }
 
-		//$mobile = "88".$post->getMobile();
+    public function sendSms(AssociationSmsEvent $event)
+    {
 
-        $mobile = "8801828148148";
-		$status = $this->gateway->send($msg, $mobile);
-		$this->insertSms($status);
+        /**
+         * @var AssociationSmsEvent $event
+         */
 
+        $post = $event->getCustomer();
+        $msg = $event->getMemberMsg();
+        if($post->getCountry()->getName() == "Bangladesh"){
+            $mobile = "88".$post->getMobile();
+            $status = $this->gateway->send($msg, $mobile);
+            $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
+        }elseif($post->getCountry() and $post->getCountry()->getName() != "Bangladesh"){
+            $mobile = $post->getMobile();
+            $status = $this->gateway->send($msg, $mobile);
+            $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
+        }
 
+    }
 
-	}
-
-	public function insertSms($status)
-	{
-		$entity = new SmsSender();
-	}
 }
