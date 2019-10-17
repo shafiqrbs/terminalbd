@@ -29,7 +29,7 @@ class MedicineBrandRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineGeneric','g');
         $query->join('e.medicineCompany','c');
-        $query->select('e.id as id','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as name','g.name as genericName','c.name as medicineCompany','e.dar as dar','e.packSize as pack');
+        $query->select('e.id as id','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as name','g.name as genericName','c.name as medicineCompany','e.dar as dar','e.packSize as pack','e.path as path');
         $query->where('e.name IS NOT NULL');
         if($name){
             $query->andWhere($query->expr()->like("e.name", "'$name%'"  ));

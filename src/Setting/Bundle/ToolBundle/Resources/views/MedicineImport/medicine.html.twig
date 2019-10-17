@@ -33,7 +33,7 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Medicine</div>
                         <div class="actions">
-                            <a  href="{{ path('medicine_file_upload') }}" id="btn-create-barcode" class="btn yellow" > Upload Image <i class="icon-barcode"></i></a>
+                            <a target="_blank"  href="{{ path('medicine_file_upload') }}" id="btn-create-barcode" class="btn yellow" > Upload Image <i class="icon-barcode"></i></a>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -41,16 +41,13 @@
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span4">
+                                    <div class="span6">
                                         <input type="text" id="name" name="name"  class="span12 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
                                     </div>
-                                    <div class="span4">
-                                        <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap " value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
-                                    </div>
-                                    <div class="span4">
+                                    <div class="span6">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap " value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
+                                                <input type="text" id="company"  name="company"  class="span12 m-wrap " value="{% if searchForm.company is defined %}{{ searchForm.company }}{% endif %}"  autocomplete="off"  placeholder="Product company name">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -70,16 +67,14 @@
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
                                     <th class="numeric" ></th>
-                                    <th class="numeric" >Form</th>
-                                    <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th {% if pagination.isSorted('e.medicineForm') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Medicinne Form', 'e.medicineForm') }}{% if( direction == 'desc' and sort == 'e.medicineForm') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                     <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Strength</th>
                                     <th {% if pagination.isSorted('c.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Company', 'c.name') }}{% if( direction == 'desc' and sort == 'c.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                   {# <th {% if pagination.isSorted('g.name') %} class="sorte" {% endif %} >{{ knp_pagination_sortable(pagination, 'Generic', 'g.name') }}{% if( direction == 'desc' and sort == 'g.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>#}
                                     <th class="numeric" >DAR</th>
                                     <th class="numeric" >Pack</th>
-
-                                    <th class="numeric" >Action</th>
-                                </tr>
+                                    <th class="numeric" >Image</th>
+      </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
@@ -89,12 +84,9 @@
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.strength }}</td>
                                         <td class="numeric" >{{ entity.medicineCompany }}</td>
-                                        {#<td class="numeric span3" >{{ entity.genericName }}</td>#}
                                         <td>{{ entity.dar }}</td>
                                         <td class="numeric" >{{ entity.pack }}</td>
-                                        <td class="numeric" >
-                                                <a title="" href="{{ path('medicine_stock_web', { 'id': entity.id }) }}" class="btn green mini" ><i class=" icon-reweet"></i> Upload</a>
-                                        </td>
+                                        <td class="numeric" >{% if entity.path %} <a target="_blank" href="/uploads/medicine/{{ entity.path }}">Yes</a> {% endif %}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

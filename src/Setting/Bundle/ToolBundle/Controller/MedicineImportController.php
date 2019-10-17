@@ -214,15 +214,17 @@ class MedicineImportController extends Controller
             foreach ($data as $key => $value ){
                 $entity = $em->getRepository('MedicineBundle:MedicineBrand')->find($value);
                 if($entity){
-                    $entity->removeUpload();
+                    if($entity->getWebPath()){
+                        $entity->removeUpload();
+                    }
                     $img = $file;
                     $fileName = $img->getClientOriginalName();
                     $imgName = uniqid() . '.' . $fileName;
                     $path = $entity->getUploadDir() . $imgName;
                     if (!file_exists($entity->getUploadDir())) {
-                        mkdir($entity->getUploadDir(), 0777, true);
+                        mkdir($entity->getUploadDir());
                     }
-                    $this->get('helper.imageresizer')->resizeImage(512, $path, $img);
+                    $this->get('helper.imageresizer')->resizeImage(480, $path, $img);
                     $entity->setPath($imgName);
                     $em->persist($entity);
                     $em->flush();
