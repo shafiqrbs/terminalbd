@@ -222,7 +222,7 @@ class MedicineImportController extends Controller
                     $imgName = uniqid() . '.' . $fileName;
                     $path = $entity->getUploadDir() . $imgName;
                     if (!file_exists($entity->getUploadDir())) {
-                        mkdir($entity->getUploadDir());
+                        mkdir($entity->getUploadDir(), 0777, true);
                     }
                     $this->get('helper.imageresizer')->resizeImage(480, $path, $img);
                     $entity->setPath($imgName);

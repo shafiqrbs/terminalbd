@@ -9,6 +9,8 @@ class ImageResizer {
 
 
         $info = getimagesize($originalFile);
+       // var_dump($info);
+      //  exit;
         $mime = $info['mime'];
 
         switch ($mime) {
@@ -44,6 +46,6 @@ class ImageResizer {
         if (file_exists($targetFile)) {
             unlink($targetFile);
         }
-        $image_save_func($tmp, "$targetFile.$new_image_ext");
+        $image_save_func($tmp, "$targetFile");
     }
 }
