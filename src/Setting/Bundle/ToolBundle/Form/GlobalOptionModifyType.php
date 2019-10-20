@@ -60,6 +60,8 @@ class GlobalOptionModifyType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
+                ->add('mobileName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
+                ->add('organizationName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
                 ->add('mainApp', 'entity', array(
                     'required'    => true,
                     'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
