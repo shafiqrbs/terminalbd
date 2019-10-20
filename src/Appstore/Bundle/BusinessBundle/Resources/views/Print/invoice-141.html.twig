@@ -75,16 +75,18 @@
                         {% set totalQunt = 0 %}
                         {% set totalBonus = 0 %}
                         {% for index,item in entity.businessInvoiceParticulars %}
+                            {% if item.quantity > 0  %}
                             {% set totalQunt = totalQunt + item.quantity %}
                             {% set totalBonus = totalBonus + item.bonusQnt %}
                             <tr>
                                 <td class="no">0{{ loop.index }}</td>
                                 <td class="text-left"> {{ item.particular }}</td>
-                                <td class="unit">{{ item.price|number_format() }}</td>
+                                <td class="unit">{{ item.price|number_format(2) }}</td>
                                 <td class="qty">{{ item.totalQuantity }}</td>
                                 <td class="qty">{{ item.bonusQnt }}</td>
                                 <td class="total">{{ item.subTotal|number_format(2) }}</td>
                             </tr>
+                            {% endif %}
                         {% endfor %}
                         <tr>
                             <td colspan="3">TOTAL</td>

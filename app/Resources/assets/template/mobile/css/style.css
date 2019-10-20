@@ -200,14 +200,18 @@ position:relative;
 }
 .bar-mid {
     float: left;
-    width: 65%;
-    text-align: center;
+    text-align: left;
+    line-height: 31px;
+}
+.bar-mid h5{
+    line-height: 32px!important;
 }
 .bar-left {
     float: left;
     width: 15%;
     text-align: center;
     padding-left:0;
+    line-height: 31px;
 }
 
 h5.pro-link a{
@@ -223,8 +227,8 @@ h5.pro-link a:hover{
 }
 .bar-right {
     float: right;
-    width: 20%;
-    text-align: left;
+    width:40%;
+    text-align: right;
     margin-top: -2px;
 }
 .bar-right i{

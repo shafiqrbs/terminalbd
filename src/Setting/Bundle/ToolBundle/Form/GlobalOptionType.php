@@ -86,6 +86,9 @@ class GlobalOptionType extends AbstractType
                     )
                 ))
 
+                ->add('mobileName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
+                ->add('organizationName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
+
                 ->add('email','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
 

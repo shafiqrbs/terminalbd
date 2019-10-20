@@ -466,6 +466,14 @@ class GlobalOption
     /**
      * @var string
      *
+     * @ORM\Column(name="mobileName", type="string", length=50  , nullable=true )
+     */
+    private $mobileName;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="organizationName", type="string", length=255  , nullable=true )
      */
     private $organizationName;
@@ -2143,6 +2151,22 @@ class GlobalOption
     public function getTicketConfig()
     {
         return $this->ticketConfig;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileName()
+    {
+        return $this->mobileName;
+    }
+
+    /**
+     * @param string $mobileName
+     */
+    public function setMobileName($mobileName)
+    {
+        $this->mobileName = $mobileName;
     }
 
 

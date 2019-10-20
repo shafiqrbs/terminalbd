@@ -123,7 +123,7 @@ ul , ul li{
 
 
 .invoice table .no {
-    color: #fff;
+    color: #000000;
     font-size: 1.6em;
     background: #3989c6
 }
@@ -134,7 +134,7 @@ ul , ul li{
 
 .invoice table .total {
     background: #3989c6;
-    color: #fff
+    color: #000000;
 }
 
 .invoice table tbody tr:last-child td {

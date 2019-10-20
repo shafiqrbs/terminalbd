@@ -58,7 +58,7 @@
                     <a href="#mm-menu" class="main-menu"><i class="fa fa-navicon"></i></a>
                 </div>
                 <div class="bar-mid">
-                    <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
+                    <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.mobileName }}</a></h5>
                 </div>
                 <div class="bar-right">
                 {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
@@ -69,6 +69,8 @@
                     <a href="{{ path('homepage') }}"> {{ name[0] }}</a>
                 {% elseif globalOption.templateCustomize.registrationForm == 1 %}
                     <a href="#registration-panel" class="hvr-radial-out sign-in popup-top-anim btn" data-title="">Register
+                    </a>
+                    <a href="#registration-panel" class="hvr-radial-out sign-in popup-top-anim btn" data-title="">Login
                     </a>
                 {% endif %}
                 </div>
