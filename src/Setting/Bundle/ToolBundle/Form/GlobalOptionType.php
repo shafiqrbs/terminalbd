@@ -73,7 +73,6 @@ class GlobalOptionType extends AbstractType
                                 ->orderBy('s.name','ASC');
                         },
                 ))
-
                 ->add('domain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter domain name'),
                     'constraints' =>array(
 	                    new Length(array('max'=>200))
@@ -85,7 +84,6 @@ class GlobalOptionType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
-
                 ->add('mobileName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
                 ->add('organizationName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=> "Enter organization name")))
 
