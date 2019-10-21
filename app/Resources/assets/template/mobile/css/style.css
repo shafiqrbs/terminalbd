@@ -201,7 +201,7 @@ position:relative;
 .bar-mid {
     float: left;
     text-align: left;
-    line-height: 31px;
+    line-height: 30px;
 }
 .bar-mid h5{
     line-height: 32px!important;
