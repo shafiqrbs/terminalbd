@@ -1,11 +1,11 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <script type="text/javascript">
-        window.print();
+  /*      window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
-        }, 2000);
+        }, 2000);*/
     </script>
     <div id="invoice">
         <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
@@ -67,44 +67,45 @@
                             <th style="width: 65%" class="text-left">DESCRIPTION</th>
                             <th style="width: 8%" class="text-right">UNIT</th>
                             <th style="width: 8%" class="text-right">QNT</th>
-                            <th style="width: 8%" class="text-right">BONUS</th>
                             <th style="width: 8%" class="text-right">TOTAL</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% set totalQunt = 0 %}
                         {% set totalBonus = 0 %}
-                        {% for index,item in entity.businessInvoiceParticulars %}
+                        {% for item in entity.businessInvoiceParticulars %}
                             {% if item.quantity > 0  %}
                             {% set totalQunt = totalQunt + item.quantity %}
                             {% set totalBonus = totalBonus + item.bonusQnt %}
                             <tr>
-                                <td class="no">0{{ loop.index }}</td>
+                                <td class="">{{ loop.index }}</td>
                                 <td class="text-left"> {{ item.particular }}</td>
                                 <td class="unit">{{ item.price|number_format(2) }}</td>
                                 <td class="qty">{{ item.totalQuantity }}</td>
-                                <td class="qty">{{ item.bonusQnt }}</td>
-                                <td class="total">{{ item.subTotal|number_format(2) }}</td>
+                                <td class="text-right">{{ item.subTotal|number_format(2) }}</td>
                             </tr>
                             {% endif %}
                         {% endfor %}
                         <tr>
-                            <td colspan="3">TOTAL</td>
-                            <td class="qty">{{ totalQunt }}</td>
-                            <td class="qty">{{ totalBonus }}</td>
-                            <td class="total">{{ entity.subTotal|number_format(2) }}</td>
+                            <td colspan="4">TOTAL</td>
+                            <td class="text-right">{{ entity.subTotal|number_format(2) }}</td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
                             <td colspan="2" style="width:50%;">
-                                <table style="width: 100%;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                    <tr><td style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
+                                <table style="width: 100%;" class="tfoot-table">
+                                    <tr><td>Previous Due</td><td><strong  class="pull-right">{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</strong></td></tr>
+                                    <tr><td>Sales Amount</td><td><strong  class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
+                                    <tr><td>Current Due</td><td><strong  class="pull-right">{{ entity.due|number_format() }}</strong></td></tr>
+                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
+                                    <tr><td>Out Standing</td><td><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</strong></td></tr>
+                                    <tr><td colspan="2" style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
                                 </table>
                             </td>
                             <td colspan="4" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
                                 <table style="width: 100%;margin-bottom: -20px;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                  {#  <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>#}
+                                    <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>
                                     <tr><td >DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
                                     <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right" >{{ entity.total|number_format }}</strong></td></tr>
                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
@@ -150,9 +151,10 @@
             height: 45px;
         }
         .invoice table.main-table th{
-            background-color: #313131;
-            color: #FFFFff;
+            background-color:#ffffff;
+            color: #000000;
             padding: 5px!important;
+            font-weight: bold;
         }
         .invoice table.main-table td , .invoice table.main-table th {
             padding: 5px;

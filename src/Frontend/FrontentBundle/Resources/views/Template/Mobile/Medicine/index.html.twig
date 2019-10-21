@@ -1,10 +1,10 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
 <div class="container-section">
-  {#  <div class="container" id="product-section">
+    <div class="container" id="product-section">
         {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
         <div class="row" id="showCartItem"></div>
-    </div>#}
+    </div>
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section>

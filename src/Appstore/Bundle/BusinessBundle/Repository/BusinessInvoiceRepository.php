@@ -681,7 +681,4 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
-
-
-
 }

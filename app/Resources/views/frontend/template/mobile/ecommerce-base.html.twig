@@ -63,7 +63,8 @@
                     <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
                 </div>
                 <div class="bar-right">
-                    <a href="javascript:" class="showCartItem"><i class="fa fa-shopping-bag"></i></a>
+                    <a href="javascript:"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i></a>
+                    <a href="javascript:" class="bar-icon" id="filter"><i class="fa fa-camera"></i></a>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -172,6 +173,7 @@
 <style>
     .menu-notify{
         opacity: 0.8;
+        padding: 7px 0;
     }
     .fixed {
         position: fixed;
@@ -181,6 +183,11 @@
         z-index:9;
         top:0!important;
         opacity: 1!important;
+    }
+
+    .bar-icon{
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     html.mm-opened.mm-opening .mm-page, html.mm-opened.mm-opening #mm-blocker, html.mm-opened.mm-opening .mm-fixed-top, html.mm-opened.mm-opening .mm-fixed-bottom{
@@ -195,6 +202,17 @@
     }
     .panel-body{
         padding:0 !important;
+    }
+
+    .bar-right {
+        float: right;
+        width:30%;
+        text-align: left;
+        margin-top: 4px!important;
+    }
+
+    .form-control{
+        height: 34px!important;
     }
 
     .box-link{
@@ -259,6 +277,9 @@
     .cart-product-title{
         font-size: 15px;
         padding-bottom: 15px;
+    }
+    .form-control.btn-number-cart{
+        height: 30px!important;
     }
 
     #side-bar-panel{
@@ -367,6 +388,10 @@
     .panel-default>.panel-heading+.panel-collapse>.panel-body{
         padding:15px !important;
         text-align: justify;
+    }
+    #cart-item-list .dd-span-name{
+        align-items:center;
+        display:flex;
     }
 
 </style>

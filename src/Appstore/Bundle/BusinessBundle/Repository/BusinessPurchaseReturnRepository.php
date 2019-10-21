@@ -28,21 +28,37 @@ class BusinessPurchaseReturnRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function countReturnQuantity($invoice)
+    {
+        $em = $this->_em;
+        return $total = $em->createQueryBuilder()
+            ->from('BusinessBundle:BusinessInvoiceParticular','si')
+            ->select('sum(si.damageQnt) as qnt')
+            ->where('si.businessInvoice = :invoice')
+            ->setParameter('invoice', $invoice)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+
+
     public function insertInvoiceDamageItem(BusinessInvoice $invoice)
     {
         $em = $this->_em;
         $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=> $invoice->getInvoice()));
-        if($exist){
-            $this->insertUpdatePurchaseReturnItem($exist,$invoice);
-        }else{
-            $entity = new BusinessPurchaseReturn();
-            $entity->setBusinessConfig($invoice->getBusinessConfig());
-            $entity->setSalesInvoice($invoice->getInvoice());
-            $entity->setCreatedBy($invoice->getCreatedBy());
-            $em->persist($entity);
-            $em->flush();
-            $this->insertUpdatePurchaseReturnItem($entity,$invoice);
-        }
+        $returnItemCount = $this->countReturnQuantity($invoice->getId());
+            if($exist){
+                $this->insertUpdatePurchaseReturnItem($exist,$invoice);
+            }elseif($returnItemCount['qnt'] > 0){
+                $entity = new BusinessPurchaseReturn();
+                $entity->setBusinessConfig($invoice->getBusinessConfig());
+                $entity->setSalesInvoice($invoice->getInvoice());
+                $entity->setCreatedBy($invoice->getCreatedBy());
+                $em->persist($entity);
+                $em->flush();
+                $this->insertUpdatePurchaseReturnItem($entity,$invoice);
+            }
+
+
 
     }
 
