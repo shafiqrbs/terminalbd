@@ -85,7 +85,7 @@
                                 <td class="qty">{{ item.totalQuantity }}</td>
                                 <td class="text-right">{{ item.subTotal|number_format(2) }}</td>
                             </tr>
-                                {% set i = i + i %}
+                                {% set i = i + 1 %}
                             {% endif %}
                         {% endfor %}
                         <tr>
