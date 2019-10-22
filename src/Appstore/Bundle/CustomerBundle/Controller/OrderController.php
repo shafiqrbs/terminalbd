@@ -64,11 +64,13 @@ class OrderController extends Controller
     {
 
         $couponCode = isset($_REQUEST['couponCode']) and $_REQUEST['couponCode'] !='' ? $_REQUEST['couponCode']:'';
+        $comment = isset($_REQUEST['comment']) and $_REQUEST['comment'] !='' ? $_REQUEST['comment']:'';
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $user = $this->getUser();
+        $data = $request->request->all();
         $files = $request->files->all();
-        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$couponCode,$files);
+        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$data,$files);
         $cart->destroy();
         return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
 
@@ -331,6 +333,8 @@ class OrderController extends Controller
         return new Response('success');
     }
 
+
+
     public function itemUpdateAction(Order $order , OrderItem $item)
     {
 
@@ -341,28 +345,15 @@ class OrderController extends Controller
         $data = $_REQUEST;
         $item->setQuantity($data['quantity']);
         $item->setSubTotal($item->getPrice() * $data['quantity']);
-        if(!empty($data['size']) and $data['size'] !='undefined'){
-            $itemSize = $data['size'];
-            $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($itemSize);
-            $item->setGoodsItem($goodsItem);
-            $item->setSize($goodsItem ->getSize());
-            $item->setPrice($goodsItem ->getSalesPrice());
-            $qnt = (int)$data['quantity'];
-            $item->setSubTotal($goodsItem->getSalesPrice() * $qnt );
-        }
-        if(!empty($data['color']) and $data['color'] !='undefined'){
-            $color = $em->getRepository('InventoryBundle:ItemColor')->find($data['color']);
-            $item->setColor($color);
-        }
         $em->persist($item);
-        $em->flush($item);
+        $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
 
         $this->get('session')->getFlashBag()->add(
             'success',"Item has been updated successfully"
         );
         return new Response('success');
-        exit;
+
     }
 
     public function itemDeleteAction($order , OrderItem $item)
@@ -439,24 +430,13 @@ class OrderController extends Controller
         $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
         $barcode = $this->getBarcode($order->getInvoice());
-        $html =  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
+        return   $this->render('CustomerBundle:Order:invoice.html.twig', array(
             'globalOption' => $order->getGlobalOption(),
             'entity' => $order,
             'amountInWords' => $amountInWords,
             'barcode' => $barcode,
-            'print' => ''
+            'print' => 'print'
         ));
-
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="online-invoice-'.$invoice.'.pdf"');
-        echo $pdf;
-        return new Response('');
-
 
     }
 

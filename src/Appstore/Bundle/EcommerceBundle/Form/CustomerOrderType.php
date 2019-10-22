@@ -57,6 +57,17 @@ class CustomerOrderType extends AbstractType
                     'wfc'      => 'Waiting for Confirm'
                 ),
             ))
+            ->add('deliverySlot', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'empty_value' => '---Delivery Time---',
+                'choices' => array(
+                    'Morning 10-12'       => 'Morning 10-12',
+                    'Evening 03-06'       => 'Evening 03-06',
+                    'Night 06-10'         => 'Night 06-10',
+                )
+            ))
             ->add('mobileAccount','text', array('attr'=>array('class'=>'m-wrap span12 mobile tooltips','placeholder'=>'Payment mobile account no','data-original-title'=>'Payment mobile account no','autocomplete'=>'off')))
             ->add('transaction','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Payment transaction id','data-original-title'=>'Payment transaction id','autocomplete'=>'off')))
             ->add('accountMobileBank', 'entity', array(

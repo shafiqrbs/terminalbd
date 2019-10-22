@@ -61,7 +61,7 @@
                 <h4 class="modal-title">LOGIN</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('enable') }}"/>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="input-group">
@@ -116,7 +116,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="registration_mobile">Mobile No <span class="required">*</span></label>
-                                <input type="number" class="form-control" id="registration_mobile" name="registration_mobile" placeholder="Enter mobile no" />
+                                <input type="text" class="form-control mobile" id="registration_mobile" name="registration_mobile" placeholder="Enter mobile no" />
                                 <span style="font-size: 9px;
     color: #000;
     padding: 0!important;
@@ -136,34 +136,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="registration_facebookId">Facebook ID</label>
-                                <input type="text" class="form-control" id="registration_facebookId" name="registration_facebookId" placeholder="Enter only id ie. terminalbd,facebook"  />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label for="registration_address">Address</label>
-                                <textarea name="registration_address" id="registration_address"  class="form-control" rows="3" cols="25"  placeholder="Enter your mail address details"></textarea>
+                                <textarea name="registration_address" id="registration_address"  class="form-control" rows="3" cols="25" required="required"  placeholder="Enter your mail address details"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div id="captcha" style="float: left; width: 70%">
-                                <span id="question"></span><input id="ans" type="number">
+                                <span id="question"></span><input type="number" id="ans" />
                             </div>
                             <div style="float: right; width: 30%">
-                                <button type="submit" class="btn btn-primary pull-right" id="registrationSubmitForm" ><i class="fa fa-send"></i> SIGNIN</button>
+                                <input type="hidden" name="registration_facebookId" id="registration_facebookId">
+                                <button type="submit" class="btn btn-primary pull-right" id="registrationSubmitForm" ><i class="fa fa-send"></i> SIGN IN</button>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12" id="captcha-msg" >
                             <div id="verify">Please verify.</div>
-                            <div id="success">Validation complete :)</div>
-                            <div id="fail">Validation failed :(</div>
+                            <div id="success">Validation complete</div>
+                            <div id="fail">Validation failed</div>
                         </div>
                     </div>
                 </form>

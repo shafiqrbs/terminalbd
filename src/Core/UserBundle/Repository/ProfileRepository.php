@@ -64,13 +64,17 @@ class ProfileRepository extends EntityRepository {
     public function insertNewMember(User $entity, $data = '')
     {
         $em = $this->_em;
+        $name = isset($data['registration_name']) ? $data['registration_name'] :'';
+        $address = isset($data['registration_address']) ? $data['registration_address'] :'';
+        $registration_facebookId = isset($data['registration_facebookId']) ? $data['registration_facebookId'] :'';
+        $registration_email = isset($data['registration_email']) ? $data['registration_email'] :'';
         $profile = new Profile();
         $profile->setUser($entity);
         $profile->setMobile($entity->getUsername());
-        $profile->setName($data['registration_name']);
-        $profile->setAddress($data['registration_address']);
-        $profile->setFacebookId($data['registration_facebookId']);
-        $profile->setEmail($data['registration_email']);
+        $profile->setName($name);
+        $profile->setAddress($address);
+        $profile->setFacebookId($registration_facebookId);
+        $profile->setEmail($registration_email);
         $em->persist($profile);
         $em->flush();
     }

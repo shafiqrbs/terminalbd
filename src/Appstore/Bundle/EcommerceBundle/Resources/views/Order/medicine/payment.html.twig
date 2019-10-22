@@ -88,8 +88,8 @@
                                             {% endif %}
                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-                                            <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
-                                            <li><strong>Uploaded Prescription</strong>:&nbsp; {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~entity.globalOption.id~'/order/'~entity.path) }}" target="_blank"> <i class="icon-download"></i> <strong>Download</strong></a>{% endif %}</li>
+                                            <li><strong>Process</strong>:&nbsp;{{ entity.process|capitalize }}</li>
+                                            <li><strong>Prescription</strong>:&nbsp; {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~entity.globalOption.id~'/order/'~entity.path) }}" target="_blank"> <i class="icon-download"></i> <strong>Download</strong></a>{% endif %}</li>
 
 
                                         </ul>

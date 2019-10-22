@@ -1,5 +1,5 @@
-<form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}"  method="get" data-example-id="input-group-segmented-buttons">
 <div class="row  margin-bottom">
+<form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}"  method="get" data-example-id="input-group-segmented-buttons">
     <a class="btn btn-success text-center col-xs-12 col-md-12" href="tel:+8801753333652"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
     <div class="input-group">
         <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
@@ -36,43 +36,42 @@
             </option>
         </select>
     </div>
+</form>
     <div class="clearfix"></div>
     <div id="productFilter">
-        <div class=" panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
+        <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
+            <div class=" panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
             <div class="panel-heading"></div>
             <div class="row-fluid">
                 <div class="clearfix"></div>
                  <div id="stockCart">
-                     <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
                          <table class="table table-hover table-striped table-bordered table-list">
                              <tbody>
                              <tr>
                                  <td class="text-right">
                                      <input type="file" id="prescriptionFile" name="prescriptionFile" class="m-wrap span12 form-control" placeholder="">
-                                     <textarea rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+                                     <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
                                  </td>
                              </tr>
                              </tbody>
                          </table>
-                     </form>
                  </div>
                 <div class="clearfix"></div>
             </div>
             <div class="panel-heading">
                 <div class="sidebar-footer" >
                     {% if  app.user %}
-                    {% if cart.total > 0 %}
                     <button type="submit"  class="btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span> Take Order <span class="glyphicon glyphicon-play"></span></button>
-                        {% endif %}
                     {% else %}
                     <a href="#login-modal" class="popup-top-anim btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span>  Send Prescription <span class="glyphicon glyphicon-play"></span></a>
                     {% endif %}
                 </div>
             </div>
-        </div><!-- panel-group -->
+        </div>
+        </form>
     </div>
 </div>
-</form>
+
 <style>
     #accordion .panel-title a{
         font-weight: normal !important;

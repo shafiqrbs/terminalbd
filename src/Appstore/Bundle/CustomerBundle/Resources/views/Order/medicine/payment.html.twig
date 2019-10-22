@@ -44,28 +44,7 @@
 
                     <div class="portlet-body form">
                         <div class="row-fluid">
-                            <div class="span3">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <label><strong>Bill Overview</strong></label>
-                                        <ul class="unstyled" >
-                                            <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
-                                            <li><strong>Grand Total</strong>:&nbsp;{{ entity.grandTotalAmount }}</li>
-                                            {% if entity.discountAmount > 0 %}
-                                                <li><strong>Discount</strong>:&nbsp;{{ entity.discountAmount }}</li>
-                                            {% endif %}
-                                            <li><strong>Delivery Fee</strong>:&nbsp;{{ entity.shippingCharge }}</li>
-                                            <li><strong>Paid</strong>:&nbsp;{{ entity.paidAmount }}</li>
-                                            {% if entity.paidAmount <  entity.grandTotalAmount and entity.dueAmount > 0 %}
-                                                <li><strong>Due</strong>:&nbsp;{{ entity.dueAmount }}</li>
-                                            {% elseif entity.paidAmount >  entity.grandTotalAmount and entity.returnAmount > 0 %}
-                                                <li><strong>Return</strong>:&nbsp;{{ entity.returnAmount }}</li>
-                                            {% endif %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
@@ -78,25 +57,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <label><strong>Process Details</strong></label>
                                         <ul class="unstyled" >
+                                            <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
                                             {% if entity.cashOnDelivery == 1 %}
                                                 <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
                                             {% endif %}
                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-                                            <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
-                                            <li><strong>Uploaded Prescription</strong>:&nbsp; {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~entity.globalOption.id~'/order/'~entity.path) }}" target="_blank"> <i class="icon-download"></i> <strong>Download</strong></a>{% endif %}</li>
-
-
+                                            <li><strong>Process</strong>:&nbsp;{{ entity.process|capitalize }}</li>
+                                            <li><strong>Prescription</strong>:&nbsp; {% if entity.path is not empty %}<a href="{{ asset('uploads/domain/'~entity.globalOption.id~'/order/'~entity.path) }}" target="_blank"> <i class="icon-download"></i> <strong>Download</strong></a>{% endif %}</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <label><strong>Payment </strong></label>
@@ -142,16 +120,10 @@
                                             {% if entity.process == 'created' and orderItem.status == 0  %}
                                                 <div class="input-append">
                                                     <span class="input-group-btn">
-                                                        <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity" data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-text="{{ orderItem.id }}" data-title="{{ orderItem.price }}">
-                                                            <i class="icon-minus"></i>
-                                                        </button>
 
-                                                    <input type="text" readonly="readonly" name="quantity" id="quantity-{{ orderItem.id }}" class="form-control m-wrap  span4 input-number" value="{{ orderItem.quantity }}" min="1" max="100" >
-                                                          <button type="button" class="btn blue btn-number" data-type="plus" data-field="quantity" data-id="{{ orderItem.id }}"  data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-text="{{ orderItem.id }}" data-title="{{ orderItem.price }}">
-                                                             <i class="icon-plus"></i>
-                                                          </button>
-                                                    {% if orderItem.UnitName is not empty %}
-                                                              <button type="button" class="btn yellow">
+                                                    <input type="text"  name="quantity" id="quantity-{{ orderItem.id }}" class="form-control m-wrap-custom  span4 input-number" value="{{ orderItem.quantity }}" min="1" max="1000" >
+                                                        {% if orderItem.UnitName is not empty %}
+                                                        <button type="button" class="btn mini yellow">
                                                                  {{ orderItem.UnitName }}
                                                               </button>
                                                         </span>
@@ -170,8 +142,11 @@
                                                 <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
                                             {% endif %}
                                             {% if entity.process == 'created'  %}
-                                                <a title="Are you sure went to delete ?"  data-id="{{ orderItem.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn red item-remove" ><i class="icon-trash"></i></a>
+                                            <div class="btn-group">
+                                                <a data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn blue mini orderItemProcess" ><i class="icon-save"></i></a>
+                                                <a  data-id="{{ orderItem.id }}" data-url="{{ path('customer_medicine_item_delete',{'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn mini red item-remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -337,48 +312,40 @@
                                         </div>
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="span2">
+                                        <div class="span6">
                                             <div class="control-group">
-                                                <div class="controls">
-                                                    Delivery Date
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="span5">
-                                            <div class="control-group">
+                                                <label>  Delivery Date</label>
                                                 <div class="controls">
                                                     {{ form_widget(orderForm.deliveryDate) }}
                                                     {{ form_errors(orderForm.deliveryDate) }}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="span5">
+                                        <div class="span6">
                                             <div class="control-group">
+                                                <label>  Delivery Slot</label>
                                                 <div class="controls">
-                                                    <div class="input-append">
-                                                        {{ form_widget(orderForm.process) }}
-                                                        {{ form_errors(orderForm.process) }}
-                                                        <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
-                                                    </div>
-
+                                                    {{ form_widget(orderForm.deliverySlot) }}
+                                                    {{ form_errors(orderForm.deliverySlot) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                </div>
+                            </div>
+                            <div class="clearfix"><br/> </div>
+                            <div class="form-actions portlet box">
+                                <div class="input-append input-append-footer">
+                                    {{ form_widget(orderForm.process) }}
+                                    {{ form_errors(orderForm.process) }}
+                                    <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
                                 </div>
                             </div>
                             {{ form_end(orderForm) }}
 
                         {% endif %}
                         <div class="clearfix"><br/> </div>
-                       {# <div class="form-actions portlet box yellow">
-                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Comments Information</div></div>
-                        </div>
-                        <div class="clearfix"><br/> </div>
-                        {% set paymentID = entity.globalOption.id~'-ecommerce-payment-'~entity.id %}
-                        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
-                        <div class="clearfix"><br/> </div>
-#}
                     </div>
                 </div>
 
@@ -388,15 +355,27 @@
     <div id="payment-confirm" style="display:none; text-align: left!important;">Thank you for your payment. Your payment has been sent successfully to our customer service department.</div>
 <style>
     input[class*="span"].m-wrap,select[class*="span"],select{
-        border: 3px solid #0b84fe!important;
+        border: 1px solid #0b84fe!important;
         height: 34px!important;
     }
     .row-fluid textarea[class*="span"] {
-        border: 3px solid #0b84fe!important;
+        border: 1px solid #0b84fe!important;
     }
     .select2-container .select2-choice {
-        border: 3px solid #0b84fe!important;
+        border: 1px solid #0b84fe!important;
         height: 27px!important;
+    }
+    .input-append-footer{
+        margin-bottom: 0;
+        text-align: right;
+        float: right;
+        margin-right: 15px;
+    }
+    input[type="text"].input-number {
+        height: 21px!important;
+        min-height: 20px!important;
+        font-size: 12px;
+        text-align: center;
     }
 </style>
 {% endblock %}

@@ -395,7 +395,7 @@ class WebServiceCustomerController extends Controller
 
             if ($user) {
                 $global = $user -> getGlobalOption();
-                if (!empty($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1)) {
+                if ($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
                     $a = mt_rand(1000, 9999);
                     $user->setPlainPassword($a);
                     $this->get('fos_user.user_manager')->updateUser($user);

@@ -134,16 +134,21 @@ class OrderRepository extends EntityRepository
     }
 
 
-    public function insertNewCustomerOrder(User $user,$shop, $cart, $couponCode ='',$files = '')
+    public function insertNewCustomerOrder(User $user,$shop, $cart, $data ='',$files = '')
     {
 
         $em = $this->_em;
 
+        $couponCode = isset($data['couponCode']) and $data['couponCode'] !='' ? $data['couponCode']:'';
+        $comment = isset($data['comment']) and $data['comment'] !='' ? $data['comment']:'';
         $order = new Order();
         $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $shop));
         $order->setGlobalOption($globalOption);
         $customer = $this->getDomainCustomer($user, $globalOption);
         $order->setCustomer($customer);
+        $order->setCustomerName($user->getProfile()->getName());
+        $order->setCustomerMobile($user);
+        $order->setAddress($user->getProfile()->getAddress());
         if($user->getProfile()->getLocation()){
             $order->setLocation($user->getProfile()->getLocation());
         }
@@ -155,6 +160,7 @@ class OrderRepository extends EntityRepository
         $order->setDeliveryDate(new \DateTime("now"));
         $vat = $this->getCulculationVat($globalOption, $cart->total());
         $order->setVat($vat);
+        $order->setComment($comment);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());
         $order->setItem($cart->total_items());
