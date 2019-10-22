@@ -32,7 +32,7 @@ class DefaultController extends Controller
 	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
 	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
 	    $monthlySales = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->monthlySales($user,$data = array( 'startDate' =>$startMonthDate, 'endDate' =>$endMonthDate));
-	    $monthlyPurchase = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->monthlyPurchase($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    $monthlyPurchase = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->monthlyPurchase($user,$data = array('startDate' => $startMonthDate,'endDate' => $endMonthDate));
 
 	    $monthlySalesArr = array();
 	    foreach($monthlySales as $row) {

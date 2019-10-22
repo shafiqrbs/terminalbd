@@ -70,24 +70,37 @@ class BusinessPurchaseReturnRepository extends EntityRepository
         foreach ($invoice->getBusinessInvoiceParticulars() as $item):
 
                 $exist = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->findOneBy(array('businessPurchaseReturn' => $entity,'salesInvoiceItem'=>$item->getId()));
+
                 /* @var $purchaseItem BusinessPurchaseReturnItem */
+
                 if($exist){
                     $purchaseItem = $exist;
-                }elseif($item->getDamageQnt() > 0){
+                    $purchaseItem->setBusinessPurchaseReturn($entity);
+                    $purchaseItem->setSalesInvoiceItem($item->getId());
+                    $purchaseItem->setBusinessParticular($item->getBusinessParticular());
+                    $purchaseItem->setDamageQnt($item->getDamageQnt());
+                    $purchaseItem->setSpoilQnt($item->getSpoilQnt());
+                    $purchaseItem->setQuantity($item->getDamageQnt() + $item->getSpoilQnt());
+                    $purchaseItem->setPurchasePrice($item->getBusinessParticular()->getPurchasePrice());
+                    $purchaseItem->setSubTotal($item->getBusinessParticular()->getPurchasePrice() * $purchaseItem->getQuantity());
+                    $em->persist($purchaseItem);
+                    $em->flush();
+                    $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(),"purchase-return");
+                }elseif($item->getDamageQnt() > 0) {
+                    echo $item->getDamageQnt();
                     $purchaseItem = new BusinessPurchaseReturnItem();
+                    $purchaseItem->setBusinessPurchaseReturn($entity);
+                    $purchaseItem->setSalesInvoiceItem($item->getId());
+                    $purchaseItem->setBusinessParticular($item->getBusinessParticular());
+                    $purchaseItem->setDamageQnt($item->getDamageQnt());
+                    $purchaseItem->setSpoilQnt($item->getSpoilQnt());
+                    $purchaseItem->setQuantity($item->getDamageQnt() + $item->getSpoilQnt());
+                    $purchaseItem->setPurchasePrice($item->getBusinessParticular()->getPurchasePrice());
+                    $purchaseItem->setSubTotal($item->getBusinessParticular()->getPurchasePrice() * $purchaseItem->getQuantity());
+                    $em->persist($purchaseItem);
+                    $em->flush();
+                    $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(), "purchase-return");
                 }
-                $purchaseItem->setBusinessPurchaseReturn($entity);
-                $purchaseItem->setSalesInvoiceItem($item->getId());
-                $purchaseItem->setBusinessParticular($item->getBusinessParticular());
-                $purchaseItem->setDamageQnt($item->getDamageQnt());
-                $purchaseItem->setSpoilQnt($item->getSpoilQnt());
-                $purchaseItem->setQuantity($item->getDamageQnt() + $item->getSpoilQnt());
-                $purchaseItem->setPurchasePrice($item->getBusinessParticular()->getPurchasePrice());
-                $purchaseItem->setSubTotal($item->getBusinessParticular()->getPurchasePrice() * $purchaseItem->getQuantity());
-                $em->persist($purchaseItem);
-                $em->flush();
-                $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(),"purchase-return");
-
         endforeach;
     }
 

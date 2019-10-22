@@ -419,6 +419,7 @@ $(document).on( "click", ".btn-number", function(e){
 
     e.preventDefault();
 
+    dataId = $(this).attr('data-id');
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
     var input = $("input[name='"+fieldName+"']");
@@ -431,11 +432,14 @@ $(document).on( "click", ".btn-number", function(e){
             }
             if(parseInt(input.val()) == input.attr('min')) {
                 $(this).attr('disabled', true);
+                $('#btn-left-'+dataId).hide();
             }
         } else if(type == 'plus') {
 
             if(currentVal < input.attr('max')) {
                 input.val(currentVal + 1).change();
+                $('#btn-left-'+dataId).show();
+
             }
             if(parseInt(input.val()) == input.attr('max')) {
                 $(this).attr('disabled', true);
@@ -492,20 +496,22 @@ $(document).on( "click", ".btn-number", function(e){
 $(document).on( "click", ".btn-number-cart", function(e){
 
     e.preventDefault();
-    var url         = $(this).attr('data-url');
-    fieldName = $(this).attr('data-field');
-    type      = $(this).attr('data-type');
+
+    dataId      = $(this).attr('data-id');
+    url         = $(this).attr('data-url');
+    fieldName   = $(this).attr('data-field');
+    type        = $(this).attr('data-type');
     input = $("input[name='"+fieldName+"']");
-    currentVal = parseInt(input.val());
+    currentVal = parseInt(input.val()) ? parseInt(input.val()) : 0;
     if (!isNaN(currentVal)) {
-        if(type == 'minus') {
+        if(type === 'minus') {
             if(currentVal > input.attr('min')) {
-                var existVal = (currentVal - 1);
+                existVal = (currentVal - 1);
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function( data ) {
                         obj = JSON.parse(data);
-                        var subTotal = (existVal * parseInt(price));
+                        subTotal = (existVal * parseInt(price));
                         $('#btn-total-'+fieldId).html(subTotal);
                         $('#cart-item-list-box').html(obj['cartItem']);
                         $('.totalItem').html(obj['totalItem']);
@@ -513,22 +519,23 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         $('.vsidebar .txt').html(obj['cartResult']);
                     });
             }
-            if(parseInt(input.val()) == input.attr('min')) {
-                $('#'+input).attr('disabled', true);
+            if(parseInt(input.val()) === input.attr('min')) {
+                $(input).attr('disabled', true);
             }else {
-                $('#'+input).attr('disabled', false);
+                $(input).attr('disabled', false);
+                $('#btn-left-'+dataId).hide();
             }
 
-        } else if(type == 'plus') {
+        } else if(type === 'plus') {
 
             if(currentVal < input.attr('max')) {
-                var existVal = (currentVal + 1);
+                existVal = (currentVal + 1);
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function(data){
                         obj = JSON.parse(data);
-                        if(obj['process'] == 'success'){
-                            var subTotal = (existVal * parseInt(price));
+                        if(obj['process'] === 'success'){
+                             subTotal = (existVal * parseInt(price));
                             $('#btn-total-'+fieldId).html(subTotal);
                             $('#cart-item-list-box').html(obj['cartItem']);
                             $('.totalItem').html(obj['totalItem']);
@@ -540,10 +547,11 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         }
                     });
             }
-            if(parseInt(input.val()) == input.attr('max')) {
-                $('#'+input).attr('disabled', true);
+            if(parseInt(input.val()) === input.attr('max')) {
+                $(input).attr('disabled', true);
             }else {
-                $('#'+input).attr('disabled', false);
+                $(input).attr('disabled', false);
+                $('#btn-left-'+dataId).show();
             }
 
         }

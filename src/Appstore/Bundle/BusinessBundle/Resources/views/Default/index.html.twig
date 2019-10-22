@@ -173,7 +173,7 @@
                 {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
                   <div class="span6" style="margin-top:-10px">
                         <div class="portlet-body">
-                            {% if (app.user.granted("ROLE_CRM"))  %}
+                            {% if (app.user.granted("ROLE_BUSINESS_INVOICE") and app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
                             <a href="{{ path('report_customer_outstanding') }}" class="icon-btn">
                                 <i class="fa fa-group"></i>
                                 <div> Customer </div>
@@ -185,11 +185,13 @@
                                 <div> Sales </div>
                             </a>
                             {% endif %}
-                            {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
+                            {% if (app.user.granted("ROLE_BUSINESS_PURCHASE") and app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE"))  %}
                             <a href="{{ path('report_vendor_outstanding') }}" class="icon-btn">
                                 <i class="fa fa-user"></i>
                                 <div> Vendor </div>
                             </a>
+                            {% endif %}
+                            {% if (app.user.granted("ROLE_BUSINESS_REPORT"))  %}
                             <a href="{{ path('business_report_purchase_summary') }}" class="icon-btn">
                                 <i class="icon-truck"></i>
                                 <div> Purchase </div>

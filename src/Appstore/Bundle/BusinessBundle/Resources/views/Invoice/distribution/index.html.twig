@@ -113,9 +113,9 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.total }}</td>
-                                        <td class="numeric" >{{ entity.received }}</td>
-                                        <td class="numeric" >{{ entity.due }}</td>
+                                        <td class="numeric" >{{ entity.total|number_format(2) }}</td>
+                                        <td class="numeric" >{{ entity.received|number_format(2) }}</td>
+                                        <td class="numeric" >{{ entity.due|number_format(2) }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             {% if entity.isReversed == 1 %}

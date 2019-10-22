@@ -71,7 +71,7 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            {% if globalOption.templateCustomize.mobileLogin == 1 %}
+           {# {% if globalOption.templateCustomize.mobileLogin == 1 %}
             <div id="side-bar-panel" class="left-shadow-overlay" >
                 <div class="handle btn btn-default">
                     <span class="fa fa-ellipsis-v" aria-hidden="true"></span>
@@ -88,10 +88,10 @@
 
                 </div>
                 <div id="login-signip">
-                {#    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}#}
+                #}{#    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}#}{#
                 </div>
             </div>
-            {% endif %}
+            {% endif %}#}
             <div id="dialog_content" class="dialog_content" style="display:none">
                 <div class="dialogModal_header"></div>
                 <div class="dialogModal_content"></div>

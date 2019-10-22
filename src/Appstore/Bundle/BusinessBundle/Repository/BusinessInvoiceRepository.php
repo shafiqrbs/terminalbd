@@ -43,6 +43,8 @@ class BusinessInvoiceRepository extends EntityRepository
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
         $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $createdBy = isset($data['createdBy'])? $data['createdBy'] :'';
 
         if (!empty($invoice)) {
@@ -68,6 +70,18 @@ class BusinessInvoiceRepository extends EntityRepository
         }
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
+        if (!empty($startDate)) {
+            $compareTo = new \DateTime($startDate);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.created >= :created");
+            $qb->setParameter('created', $created);
+        }
+        if (!empty($endDate)) {
+            $compareTo = new \DateTime($endDate);
             $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
             $qb->andWhere("e.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
@@ -103,6 +117,7 @@ class BusinessInvoiceRepository extends EntityRepository
 
     public function reportSalesOverview(User $user ,$data)
     {
+
 
         $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
