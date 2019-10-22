@@ -80,68 +80,6 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-          {#  {% if globalOption.templateCustomize.mobileLogin == 1 %}
-                <div id="side-bar-panel" class="left-shadow-overlay" >
-                    <div class="handle">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </div>
-                    <div class="menu-notify box-link">
-                        <div class="text-center">{{ app.user }}</div>
-                        <ul class="social-links">
-                          #}{#  <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>#}{#
-                            {% if globalOption.templateCustomize.mobileLogin == 1 %}
-                                <li><a href="javascript:" class="member-register-btn"><i class="fa fa-sign-in"></i></a></li>
-                            {% endif %}
-                            {% if app.user %}
-                                <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out"></i></a></li>
-                            {% else %}
-                                <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    <div id="cart-details">
-                        <div class="item-list" style="background: #222">
-                            {% if  cart is defined and cart.contents is not empty %}
-                                <ul class="cart-list">
-                                    {% for item in cart.contents %}
-                                        <li id="item-remove-{{ item.rowid }}">
-                                            <div class="item">
-                                                <div class="col-md-12 cart-product-title">{{ item.name }}</div>
-                                                <div class="col-md-6">
-                                                    {% if item.productImg is not empty %}
-                                                        <img src="{{ item.productImg }}" height="100" width="160" alt=""/>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ item.price }}</span>
-                                                        <input type="text" class="form-control" width="80" id="{{ item.rowid }}" value="{{ item.quantity }}">
-                                                    </div><!-- /input-group -->
-                                                    <div class="btn-group text-right col-md-12" role="group" >
-                                                        <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_remove',{'cartid':item.rowid}) }}"
-                                                                class="btn  btn-danger pull-right hunger-remove-cart" data-id="{{ item.price }}" data-value="{{ item.quantity }}" ><span class="glyphicon glyphicon-trash"></span>
-                                                        </button>
-                                                        <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_update',{'cartid':item.rowid}) }}"
-                                                                class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
-                                                        </button>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                       </li>
-                                    {% endfor %}
-                                </ul>
-                                <div class="text-center col-md-12"><a class="btn btn-warning " href="javascript:">Grand Total<b class="totalAmount">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</b></a><a class="btn btn-info" href="{{ path('webservice_product_cart_details') }}">View Cart</a></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div id="login-signip">
-                        {% if globalOption.templateCustomize.mobileLogin == 1 %}
-                        {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}#}
             <div class="w3agile">
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
                 {{ include('@Frontend/Template/Mobile/Widget/login.html.twig')}}

@@ -71,27 +71,8 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-           {# {% if globalOption.templateCustomize.mobileLogin == 1 %}
-            <div id="side-bar-panel" class="left-shadow-overlay" >
-                <div class="handle btn btn-default">
-                    <span class="fa fa-ellipsis-v" aria-hidden="true"></span>
-                </div>
-                <div class="menu-notify box-link">
-                    <ul class="social-links">
-                        <li><button type="button" class="btn btn-sm btn-success register-btn"> Sign Up <span class="glyphicon glyphicon-user"></span></button></li>
-                        {% if app.user is not empty   %}
-                        <li><button onclick="window.location.href='/logout'" class="btn btn-sm btn-danger"> {{ app.user }} <span class="fa fa-sign-in"></span></button></li>
-                        {% else %}
-                        <li><button type="button" class="btn btn-sm btn-warning login-preview"> Login <span class="glyphicon glyphicon-lock"></span></button></li>
-                        {% endif %}
-                    </ul>
-
-                </div>
-                <div id="login-signip">
-                #}{#    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}#}{#
-                </div>
+            <div id="login-signip">
             </div>
-            {% endif %}#}
             <div id="dialog_content" class="dialog_content" style="display:none">
                 <div class="dialogModal_header"></div>
                 <div class="dialogModal_content"></div>
@@ -107,7 +88,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#sms-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
+                            <a href="#login-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
                                 <i class="fa fa-comment"></i>
                             </a>
                         </li>
@@ -212,7 +193,7 @@
     }
 
     .form-control{
-        height: 34px!important;
+
     }
 
     .box-link{

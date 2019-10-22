@@ -78,30 +78,6 @@ $(document).ready(function(){
             });
         });
 
-        var slider = $("#side-bar-panel").slideReveal({
-            // width: 100,
-            push: false,
-            position: "right",
-            // speed: 600,
-            trigger: $(".handle"),
-            // autoEscape: false,
-            shown: function (obj) {
-                obj.find(".handle").html('<span class="fa fa-ellipsis-v"></span>');
-                obj.find(".handle").addClass('handle-right');
-                obj.addClass("left-shadow-overlay");
-            },
-            hidden: function (obj) {
-                obj.find(".handle").html('<span class="fa fa-ellipsis-v"></span>');
-                obj.find(".handle").removeClass('handle-right');
-                obj.removeClass("left-shadow-overlay");
-
-                $('#registerModal').hide();
-                $('#forgetModal').hide();
-                $('#loginModal').hide();
-                $('#cart-details').hide();
-            }
-        });
-
         $('.social-tooltip').tooltip({
             selector: "[data-toggle=tooltip]",
             container: "body"
