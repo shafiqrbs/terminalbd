@@ -144,7 +144,7 @@ $('body').on( "click", ".showCartItem", function(e){
         $("#showCartItem").html(content).slideDown("slow");
         $('html, body').animate({
             'scrollTop' : $("#showCartItem").position().top
-        }, 1000).scrollIntoView(true);
+        }, 1000);
     });
 });
 
@@ -254,7 +254,7 @@ $(document).on( "click", ".hunger-remove-cart", function(e){
         type: 'GET',
         success: function(response){
             obj = JSON.parse(response);
-            $('#cart-item-list-box').html(obj['cartItem']);
+         //   $('#cart-item-list-box').html(obj['cartItem']);
             $('.totalItem').html(obj['totalItem']);
             $('.totalAmount').html(obj['cartTotal']);
             $('.vsidebar .txt').html(obj['cartResult']);
@@ -293,9 +293,9 @@ $(document).on( "click", ".btn-number-cart", function(e){
                     });
             }
             if(parseInt(input.val()) === input.attr('min')) {
-                $('#'+input).attr('disabled', true);
+                $('#quantity-'+fieldId).attr('disabled', true);
             }else {
-                $('#'+input).attr('disabled', false);
+                $('#quantity-'+fieldId).attr('disabled', false);
             }
 
         } else if(type === 'plus') {
@@ -319,10 +319,77 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         }
                     });
             }
-            if(parseInt(input.val()) == input.attr('max')) {
-                $('#'+input).attr('disabled', true);
+            if(parseInt(input.val()) === input.attr('max')) {
+                $('#quantity-'+fieldId).attr('disabled', true);
             }else {
-                $('#'+input).attr('disabled', false);
+                $('#quantity-'+fieldId).attr('disabled', false);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+
+$(document).on( "click", ".btn-cart-item", function(e){
+
+    e.preventDefault();
+
+    url = $(this).attr('data-url');
+    productId = $(this).attr('data-text');
+    price = $(this).attr('data-title');
+    fieldId = $(this).attr('data-id');
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    input = $('#quantity-'+$(this).attr('data-id'));
+    currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type === 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function( data ) {
+                        obj = JSON.parse(data);
+                        subTotal = (existVal * parseInt(price));
+                        $('#btn-total-'+fieldId).html(subTotal);
+                        $('#cart-item-list-box').html(obj['cartItem']);
+                        $('.totalItem').html(obj['totalItem']);
+                        $('.totalAmount').html(obj['cartTotal']);
+                        $('.vsidebar .txt').html(obj['cartResult']);
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('min')) {
+                $('#quantity-'+fieldId).attr('disabled', true);
+            }else {
+                $('#quantity-'+fieldId).attr('disabled', false);
+            }
+
+        } else if(type === 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function(data){
+                        obj = JSON.parse(data);
+                        if(obj['process'] === 'success'){
+                            var subTotal = (existVal * parseInt(price));
+                            $('#btn-total-'+fieldId).html(subTotal);
+                            $('#cart-item-list-box').html(obj['cartItem']);
+                            $('.totalItem').html(obj['totalItem']);
+                            $('.totalAmount').html(obj['cartTotal']);
+                            $('.vsidebar .txt').html(obj['cartResult']);
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('There is not enough product in stock at this moment')
+                        }
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('max')) {
+                $('#quantity-'+fieldId).attr('disabled', true);
+            }else {
+                $('#quantity-'+fieldId).attr('disabled', false);
             }
 
         }

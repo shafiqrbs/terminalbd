@@ -63,7 +63,9 @@
                     <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
                 </div>
                 <div class="bar-right">
-                    <a href="javascript:"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i></a>
+                    <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
+                    <span id="item-qnt" class="totalItem">{{ cart.total_items }}</span>
+                    </a>
                     <a href="javascript:" class="bar-icon" id="filter"><i class="fa fa-camera"></i></a>
                     {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
                         {% set name = app.user.profile.name|split(" ") %}
@@ -383,6 +385,20 @@
     #cart-item-list .dd-span-name{
         align-items:center;
         display:flex;
+    }
+    #item-qnt{
+        position: absolute;
+        top: 1px;
+        left: 9px;
+        font-size: 9px;
+        background: red;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        color: #fff;
+        font-weight: bold;
     }
 
 </style>

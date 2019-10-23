@@ -956,9 +956,7 @@ class WebServiceProductController extends Controller
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
         $cartItems = $this->getCartItem($globalOption ,$cart);
-        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'cartItem' => $cartItems)));
-
-
+        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'cartItem' => '')));
     }
 
     public function productCartAction($subdomain, Request $request)

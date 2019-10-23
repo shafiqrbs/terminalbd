@@ -827,7 +827,7 @@ div.treeview, .treeview ul {
 .btn-transparent{
     background: transparent!important;
 }
-.input-number, .btn-number-cart{
+.input-number, .btn-number-cart, .btn-cart-item{
     border: none!important;
     width: 100%;
 }
