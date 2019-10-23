@@ -68,9 +68,9 @@
                     {% set name = app.user.profile.name|split(" ") %}
                     <a href="{{ path('homepage') }}"> {{ name[0] }}</a>
                 {% elseif globalOption.templateCustomize.registrationForm == 1 %}
-                    <a href="#registration-panel" class="hvr-radial-out sign-in popup-top-anim btn" data-title="">Register
+                    <a href="#registration-panel" class="popup-top-anim btn" data-title="">Register
                     </a>
-                    <a href="#loginModal" class="hvr-radial-out sign-in popup-top-anim btn" data-title="">Login
+                    <a href="#loginModal" class="popup-top-anim btn" data-title="">Login
                     </a>
                 {% endif %}
                 </div>

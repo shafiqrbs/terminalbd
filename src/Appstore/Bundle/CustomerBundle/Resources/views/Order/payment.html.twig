@@ -195,8 +195,8 @@
                                                 <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
                                             {% endif %}
                                             {% if entity.process == 'created'  %}
-                                                <a title="Are you sure went to add ?"  data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn blue orderItemProcess" ><i class="icon-save"></i></a>
-                                                <a title="Are you sure went to delete ?"  data-id="{{ orderItem.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn red item-remove" ><i class="icon-trash"></i></a>
+                                                <a data-id="{{ orderItem.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn blue orderItemProcess" ><i class="icon-save"></i></a>
+                                                <a data-id="{{ orderItem.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':orderItem.id}) }}" data-value="{{ globalOption.slug }}" class="btn red item-remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>

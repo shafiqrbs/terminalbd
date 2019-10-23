@@ -265,16 +265,15 @@
         <div class="clearfix"></div>
         {% if widget.category is defined and widget.category is not empty %}
             {% for category in widget.category %}
-                <div class="wow fadeInDown feature-carousel" >
+                <div>
                     <div class="page-title-bar">
-                        <div class="col-md-12" >
-                            <div class="page-title">{{ category.name }}</div>
-                        </div>
+                        <div class="page-title">{{ category.name }}</div>
                     </div>
                     <div>
                         {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id,'widget':widget.id, 'category':category.id}) %}
                     </div>
                 </div>
+                <div class="clearfix"></div>
             {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
@@ -306,7 +305,7 @@
         <div class="clearfix"></div>
         {% if widget.brand is defined and widget.brand is not empty %}
         {% for brand in widget.brand %}
-            <div class="wow fadeInDown feature-carousel"  >
+            <div >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
                         <div class="page-title">{{ brand.name }}</div>
@@ -321,7 +320,7 @@
         <div class="clearfix"></div>
        {% if widget.promotion is defined and widget.promotion is not empty %}
            {% for promotion in widget.promotion %}
-                <div class="wow fadeInDown feature-carousel"  style="">
+                <div>
                     <div class="page-title-bar">
                         <div class="col-md-12" >
                             <div class="page-title">{{ promotion.name }}</div>

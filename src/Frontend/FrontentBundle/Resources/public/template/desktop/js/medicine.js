@@ -496,7 +496,6 @@ $(document).on( "click", ".btn-number", function(e){
 $(document).on( "click", ".btn-number-cart", function(e){
 
     e.preventDefault();
-
     dataId      = $(this).attr('data-id');
     url         = $(this).attr('data-url');
     fieldName   = $(this).attr('data-field');
@@ -521,9 +520,10 @@ $(document).on( "click", ".btn-number-cart", function(e){
             }
             if(parseInt(input.val()) === input.attr('min')) {
                 $(input).attr('disabled', true);
+                $('#btn-left-'+dataId).hide();
             }else {
                 $(input).attr('disabled', false);
-                $('#btn-left-'+dataId).hide();
+
             }
 
         } else if(type === 'plus') {

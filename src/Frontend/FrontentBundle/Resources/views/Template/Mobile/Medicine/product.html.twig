@@ -92,18 +92,18 @@
                                                 <span
                                                         class="currency">{{ globalOption.ecommerceConfig.currency }} {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
                                             </div>
-                                            <div class=" col-xs-8 col-md-8 text-right">
+                                            <div class="col-xs-8 col-md-8 text-right">
                                                 <div class="card-read-more">
                                                     <div class="input-group">
-              <span class="input-group-btn">
-                  <button type="button" class="btn btn-transparent danger-font btn-number-cart"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                    <span class="glyphicon glyphicon-minus"></span>
+              <span class="input-group-btn input-group-btn-custom">
+                  <button type="button" class="btn btn-transparent danger-font btn-number-cart input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
                   </button>
               </span>
-                                                        <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" readonly="readonly" value="1" min="1" max="100">
+                                                        <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                                                         <span class="input-group-btn">
-                  <button type="button" class="btn btn-transparent cyan-font btn-number-cart" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                      <span class="glyphicon glyphicon-plus"></span>
+                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-number-cart" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                      <span class="glyphicon glyphicon-chevron-right"></span>
                   </button>
 
               </span></div></div>
@@ -167,34 +167,7 @@
         </div><!-- end container -->
     </div>
     <style>
-      .input-group-btn-custom{
-        width: 42px;
-      }
-      .input-group-btn-left{
-         display: none;
-      }
-      .product-preview{
-          text-align: left!important;
-          display: inline-flex;
-      }
-      .btn{
-          color: #000000!important;
-      }
-      .btn:hover{
-          color: #000000!important;
-      }
-      .btn-transparent{
-        background: transparent!important;
-      }
-      .input-number, .btn-number-cart{
-          border: none!important;
-          width: 100%;
-      }
-      .card-price{
-          width: 80%;
-          text-align: center;
-          margin: 0 auto;
-      }
+
 
     </style>
 {% endblock %}

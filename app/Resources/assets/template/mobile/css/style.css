@@ -227,9 +227,9 @@ h5.pro-link a:hover{
 }
 .bar-right {
     float: right;
-    width:50%;
     text-align: right;
     margin-top: -2px;
+    margin-right: 10px;
 }
 .bar-right i{
     font-size: 20px;

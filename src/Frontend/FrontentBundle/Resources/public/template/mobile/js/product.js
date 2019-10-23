@@ -147,6 +147,8 @@ $('body').on( "click", ".showCartItem", function(e){
         }, 1000).scrollIntoView(true);
     });
 });
+
+
 $('body').on( "click", ".hideCartItem", function(e){
     $("#showCartItem").slideUp("slow");
 });
@@ -272,17 +274,17 @@ $(document).on( "click", ".btn-number-cart", function(e){
     fieldId = $(this).attr('data-id');
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
-    var input = $('#quantity-'+$(this).attr('data-id'));
-    var currentVal = parseInt(input.val());
+    input = $('#quantity-'+$(this).attr('data-id'));
+    currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
-        if(type == 'minus') {
+        if(type === 'minus') {
             if(currentVal > input.attr('min')) {
                 var existVal = (currentVal - 1);
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function( data ) {
                         obj = JSON.parse(data);
-                        var subTotal = (existVal * parseInt(price));
+                        subTotal = (existVal * parseInt(price));
                         $('#btn-total-'+fieldId).html(subTotal);
                         $('#cart-item-list-box').html(obj['cartItem']);
                         $('.totalItem').html(obj['totalItem']);
@@ -290,13 +292,13 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         $('.vsidebar .txt').html(obj['cartResult']);
                     });
             }
-            if(parseInt(input.val()) == input.attr('min')) {
+            if(parseInt(input.val()) === input.attr('min')) {
                 $('#'+input).attr('disabled', true);
             }else {
                 $('#'+input).attr('disabled', false);
             }
 
-        } else if(type == 'plus') {
+        } else if(type === 'plus') {
 
             if(currentVal < input.attr('max')) {
                 var existVal = (currentVal + 1);
@@ -304,7 +306,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function(data){
                         obj = JSON.parse(data);
-                        if(obj['process'] == 'success'){
+                        if(obj['process'] === 'success'){
                             var subTotal = (existVal * parseInt(price));
                             $('#btn-total-'+fieldId).html(subTotal);
                             $('#cart-item-list-box').html(obj['cartItem']);

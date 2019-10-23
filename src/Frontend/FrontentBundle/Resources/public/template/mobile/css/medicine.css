@@ -807,3 +807,32 @@ div.treeview, .treeview ul {
     text-transform: capitalize;
     margin-right:0;
 }
+
+.input-group-btn-custom{
+    width: 42px;
+}
+.input-group-btn-left{
+    display: none;
+}
+.product-preview{
+    text-align: left!important;
+    display: inline-flex;
+}
+.btn{
+    color: #000000!important;
+}
+.btn:hover{
+    color: #000000!important;
+}
+.btn-transparent{
+    background: transparent!important;
+}
+.input-number, .btn-number-cart{
+    border: none!important;
+    width: 100%;
+}
+.card-price{
+    width: 80%;
+    text-align: center;
+    margin: 0 auto;
+}
