@@ -528,7 +528,7 @@ $(document).on( "click", ".btn-number", function(e){
 $(document).on( "click", ".btn-number-cart", function(e){
 
     e.preventDefault();
-    dataId      = $(this).attr('data-id');
+    productId      = $(this).attr('data-id');
     url         = $(this).attr('data-url');
     fieldName   = $(this).attr('data-field');
     type        = $(this).attr('data-type');
@@ -539,11 +539,9 @@ $(document).on( "click", ".btn-number-cart", function(e){
             if(currentVal > input.attr('min')) {
                 existVal = (currentVal - 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                $.get( url,{ quantity:existVal})
                     .done(function( data ) {
                         obj = JSON.parse(data);
-                        subTotal = (existVal * parseInt(price));
-                        $('#btn-total-'+fieldId).html(subTotal);
                         $('#cart-item-list-box').html(obj['cartItem']);
                         $('.totalItem').html(obj['totalItem']);
                         $('.totalAmount').html(obj['cartTotal']);
@@ -552,7 +550,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
             }
             if(parseInt(input.val()) === input.attr('min')) {
                 $(input).attr('disabled', true);
-                $('#btn-left-'+dataId).hide();
+                $('#btn-left-'+productId).hide();
             }else {
                 $(input).attr('disabled', false);
 
@@ -563,12 +561,10 @@ $(document).on( "click", ".btn-number-cart", function(e){
             if(currentVal < input.attr('max')) {
                 existVal = (currentVal + 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                $.get( url,{ quantity:existVal})
                     .done(function(data){
                         obj = JSON.parse(data);
                         if(obj['process'] === 'success'){
-                             subTotal = (existVal * parseInt(price));
-                            $('#btn-total-'+fieldId).html(subTotal);
                             $('#cart-item-list-box').html(obj['cartItem']);
                             $('.totalItem').html(obj['totalItem']);
                             $('.totalAmount').html(obj['cartTotal']);
@@ -583,7 +579,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 $(input).attr('disabled', true);
             }else {
                 $(input).attr('disabled', false);
-                $('#btn-left-'+dataId).show();
+                $('#btn-left-'+productId).show();
             }
 
         }
