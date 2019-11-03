@@ -53,6 +53,7 @@ $(document).on('change', '#orderItem_itemName', function() {
 });
 
 $(document).on('click', '#addOrderItem', function() {
+
     if($("#orderItem").valid()){
         $.ajax({
             url         : $('form#orderItem').attr( 'action' ),

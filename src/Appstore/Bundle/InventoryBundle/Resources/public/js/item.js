@@ -1,7 +1,6 @@
 var InventoryItemListPage = function () {
 
     var items = $.cookie('itemBarcode') ? $.cookie('itemBarcode').split(',') : [];
-
     $('body').on('change', 'input.itemBarcode', function(el) {
         console.log(items);
         var val = $(this).val();
