@@ -175,8 +175,15 @@ class TransactionRepository extends EntityRepository
         return $res;
     }
 
-    public function getGroupByAccountHead($globalOption,$heads){
+    public function getGroupByAccountHead($globalOption,$heads,$data){
 
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['tillDate']) and !empty($data['tillDate'])){
+            $datetime = new \DateTime($data['tillDate']);
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
@@ -184,14 +191,22 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN (:parent)")->setParameter('parent',$heads);
         $qb->andWhere("accountHead.slug != 'profit-loss'");
+        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('e.accountHead');
-        $qb->orderBy('parent.name','ASC');
+        $qb->orderBy('parentName','ASC')->orderBy('name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
-    public function getProfitLossByAccountHead($globalOption,$heads){
+    public function getProfitLossByAccountHead($globalOption,$heads,$data){
 
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['tillDate']) and !empty($data['tillDate'])){
+            $datetime = new \DateTime($data['tillDate']);
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
@@ -199,14 +214,22 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
       //  $qb->andWhere("parent.slug IN (:parent)")->setParameter('parent',$heads);
         $qb->andWhere("accountHead.slug = 'profit-loss'");
+        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('e.accountHead');
         $qb->orderBy('parent.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
-    public function getSubHeadProfitAccount($globalOption){
+    public function getSubHeadProfitAccount($globalOption,$data){
 
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['tillDate']) and !empty($data['tillDate'])){
+            $datetime = new \DateTime($data['tillDate']);
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
@@ -214,6 +237,7 @@ class TransactionRepository extends EntityRepository
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("accountHead.slug = 'profit-loss'");
+        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('subAccountHead.id');
         $qb->orderBy('accountHead.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -236,8 +260,15 @@ class TransactionRepository extends EntityRepository
         return $result['amount'];
     }
 
-    public function getSubHeadAccount($globalOption,$parent)
+    public function getSubHeadAccountDebit($globalOption,$parent,$data)
     {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['tillDate']) and !empty($data['tillDate'])){
+            $datetime = new \DateTime($data['tillDate']);
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
@@ -245,8 +276,41 @@ class TransactionRepository extends EntityRepository
         $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
-        $qb->andWhere("parent.slug IN(:slugs)")->setParameter('slugs', $parent);
+        $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
+        $qb->andWhere("accountHead.slug NOT IN(:heads)")->setParameter('heads', array('account-receivable'));
+        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('subAccountHead.id');
+        $qb->having('amount > 0');
+        $qb->orderBy('accountHead.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row):
+            $array[$row['subHead']] = $row;
+        endforeach;
+        return $array;
+    }
+
+    public function getSubHeadAccountCredit($globalOption,$parent,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }elseif(!empty($data['tillDate']) and !empty($data['tillDate'])){
+            $datetime = new \DateTime($data['tillDate']);
+            $tillDate = $datetime->format('Y-m-d 23:59:59');
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.subAccountHead','subAccountHead');
+        $qb->join('e.accountHead','accountHead');
+        $qb->join('accountHead.parent','parent');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
+        $qb->andWhere("accountHead.slug NOT IN(:heads)")->setParameter('heads', array('account-payable'));
+        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
+        $qb->groupBy('subAccountHead.id');
+        $qb->having('amount < 0');
         $qb->orderBy('accountHead.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $array = array();
@@ -402,7 +466,8 @@ class TransactionRepository extends EntityRepository
             $transaction->setProcessHead('Journal');
             $transaction->setProcess($entity->getAccountHead()->getParent()->getName());
             $transaction->setAccountRefNo($journal->getAccountRefNo());
-            $transaction->setUpdated($journal->getUpdated());
+            $transaction->setCreated($journal->getCreated());
+            $transaction->setUpdated($journal->getCreated());
             if($entity->getDebit() > 0){
                 $transaction->setAccountHead($entity->getAccountHead());
                 if($entity->getAccountSubHead()){
