@@ -782,7 +782,7 @@ class TransactionRepository extends EntityRepository
         }else{
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertVendorAccount($entity->getAccountVendor());
         }
-        $transaction->setSubAccountHead($subAccount);
+     //   $transaction->setSubAccountHead($subAccount);
         $transaction->setAmount('-'.$entity->getPayment());
         $transaction->setCredit($entity->getPayment());
         $this->_em->persist($transaction);
