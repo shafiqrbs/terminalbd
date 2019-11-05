@@ -110,7 +110,7 @@ class ItemRepository extends EntityRepository
         $qb->join('e.masterItem','m');
         $qb->join('m.category','c');
         $qb->leftJoin('m.productUnit','u');
-        $qb->select('e.id as stockId','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice','e.path as path');
+        $qb->select('e.id as stockId','e.barcode as barcode','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice','e.path as path');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.inventoryConfig = :config');
@@ -126,10 +126,10 @@ class ItemRepository extends EntityRepository
             $data[$key]['category_id']          = $row['categoryId'];
             $data[$key]['categoryName']         = $row['categoryName'];
             if ($row['unitId']){
-                $data[$key]['unit_id']          = $row['unitId'];
+                $data[$key]['unit_id']          = $row['barcode'];
                 $data[$key]['unit']             = $row['unitName'];
             }else{
-                $data[$key]['unit_id']          = 0;
+                $data[$key]['unit_id']          = $row['barcode'];
                 $data[$key]['unit']             = '';
             }
             $data[$key]['name']                 = $row['name'];

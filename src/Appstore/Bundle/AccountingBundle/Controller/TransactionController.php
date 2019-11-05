@@ -462,12 +462,12 @@ class TransactionController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
 
-        $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'));
-        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities','current-liabilities'));
-        $profitLoss = $em->getRepository('AccountingBundle:Transaction')->getProfitLossByAccountHead($globalOption,array('long-term-liabilities'));
-        $receiveables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption,array('current-assets','fixed-assets'));
-        $payables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccount($globalOption,array('long-term-liabilities','current-liabilities'));
-        $subHeadProfits = $em->getRepository('AccountingBundle:Transaction')->getSubHeadProfitAccount($globalOption);
+        $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'),$data);
+        $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities','current-liabilities'),$data);
+        $receiveables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccountDebit($globalOption,array('current-assets','fixed-assets'),$data);
+        $payables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccountCredit($globalOption,array('long-term-liabilities'),$data);
+        $profitLoss = $em->getRepository('AccountingBundle:Transaction')->getProfitLossByAccountHead($globalOption,array('long-term-liabilities'),$data);
+        $subHeadProfits = $em->getRepository('AccountingBundle:Transaction')->getSubHeadProfitAccount($globalOption,$data);
 
         $debitStatement = [];
         $creditStatement = [];
@@ -486,6 +486,7 @@ class TransactionController extends Controller
             $headName = $item['parentName'];
             $profitStatement[$headName][$key] = $item;
         }
+
         return $this->render('AccountingBundle:Transaction:balancesheet.html.twig', array(
             'debitStatement' => $debitStatement,
             'creditStatement' => $creditStatement,
@@ -493,6 +494,7 @@ class TransactionController extends Controller
             'receiveables' => $receiveables,
             'payables' => $payables,
             'subHeadProfits' => $subHeadProfits,
+            'searchForm' => $data,
         ));
     }
 

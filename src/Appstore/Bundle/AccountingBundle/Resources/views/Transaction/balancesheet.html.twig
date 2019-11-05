@@ -28,12 +28,36 @@
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Assets</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                   {% set tillDate = searchForm.tillDate is defined ? searchForm.tillDate :'' %}
+                                  <a class="btn purple" target="_blank" href="{{ path('account_journal_pdf',{'tillDate':tillDate}) }}" >
+                                      <i class="icon-print"></i>&nbsp;Print
+                                  </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body form">
+                        <form class="search-form" action="" method="get" name="itemSearch">
+                            <div class="row-fluid">
+                                <div class="span8"></div>
+                                <div class="span4">
+                                    <div class="controls">
+                                        <div class="input-append span11">
+                                            <input type="text" id="tillDate" name="tillDate"  class="span8 m-wrap search-input  m-ctrl-medium dateCalendar" value="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Till date{% endif %} ">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            {% set totalDebit =  0   %}
+                            {% set totalCredit =  0   %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Parent Head</th>
@@ -45,9 +69,6 @@
                                 <tbody>
                                 {% for key, entity in debitStatement %}
                                   <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
-                                    {% set totalDebit = 'total'~key  %}
-                                    {% set totalDebit =  0   %}
-                                    {% set totalCredit =  0   %}
                                     {% for val in  debitStatement[key] %}
                                     {% if val.toIncrease == "Debit" %}
                                         {% set totalDebit = totalDebit + val.amount|abs %}
@@ -56,15 +77,16 @@
                                         {% if receiveables is defined and receiveables is not empty %}
                                             {% for sub in receiveables %}
                                                 {% if sub.parentId == val.accountHeadId %}
-                                                    <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|number_format }}</td></tr>
+                                                        {% if sub.amount > 0 %}
+                                                            <tr><td></td><td></td><td>{{ sub.headName }}</td><td>{{ sub.amount|number_format }}</td></tr>
+                                                        {% endif %}
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-
                                     {% endfor %}
-                                   <tr><th colspan="3">Total</th><th> {{ totalDebit }}</th></tr>
                                 {% endfor %}
                               </tbody>
+                                <tr><th colspan="3">Grand Total</th><th> {{ totalDebit }}</th></tr>
                             </table>
                             <div class="form-actions portlet box yellow">
                                 <div class="portlet-title">
@@ -84,10 +106,6 @@
                                 <tbody>
                                 {% for key, entity in creditStatement %}
                                     <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
-                                    {% set totalDebit = 'total'~key  %}
-                                    {% set totalCredit = 'total'~key  %}
-                                    {% set totalDebit =  0   %}
-                                    {% set totalCredit =  0   %}
                                     {% for val in  creditStatement[key] %}
                                     {% set totalCredit = totalCredit + val.amount|abs %}
                                         <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
@@ -98,11 +116,10 @@
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-
                                     {% endfor %}
-                                    <tr><th colspan="3">Total</th><th> {{ totalCredit }}</th></tr>
                                 {% endfor %}
                                 </tbody>
+                                <tr><th colspan="3">Grand Total</th><th> {{ totalCredit }}</th></tr>
                             </table>
                             <div class="clearfix"></div>
                             <div class="form-actions portlet box red">
@@ -154,7 +171,18 @@
         </div>
     </div>
 {% endblock %}
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    AccountingApproveProcess();
+{% endblock %}
 
 
 
