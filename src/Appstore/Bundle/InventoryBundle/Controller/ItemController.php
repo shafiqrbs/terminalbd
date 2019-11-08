@@ -510,7 +510,7 @@ class ItemController extends Controller
         $items = array();
         foreach ($entities as $entity):
             $item =$entity->getName();
-            $items[]=array('value' => $entity->getId(),'text'=> $item);
+            $items[] = array('value' => $entity->getId(),'text'=> $item);
         endforeach;
         return new JsonResponse($items);
 
