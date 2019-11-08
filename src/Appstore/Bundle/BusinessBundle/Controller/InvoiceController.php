@@ -173,13 +173,13 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Paid');
             }else{
                 $entity->setPaymentStatus('Due');
-                $entity->setDue($entity->getTotal() - $entity->getReceived());
+                $due = round($entity->getTotal() - $entity->getReceived());
+                $entity->setDue($due);
             }
             if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	            $entity->setPaymentInWord($amountInWords);
             }
-
 	        $em->flush();
             if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
                 $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
@@ -193,7 +193,6 @@ class InvoiceController extends Controller
 
                 }
             }elseif(in_array($entity->getProcess(), $done)) {
-
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
@@ -211,7 +210,7 @@ class InvoiceController extends Controller
 
         $config = $entity->getBusinessConfig();
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
-	   $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
+	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
 
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(

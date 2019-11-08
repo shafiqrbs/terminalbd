@@ -469,7 +469,8 @@ class BusinessInvoiceRepository extends EntityRepository
             }
             $invoice->setSubTotal($subTotal);
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($total);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
         }else{
