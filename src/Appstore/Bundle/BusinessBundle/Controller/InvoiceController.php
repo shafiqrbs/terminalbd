@@ -117,7 +117,6 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->findOneBy(array( 'businessConfig' => $config , 'id' => $id));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }

@@ -64,10 +64,15 @@
                         <thead>
                         <tr>
                             <th style="width: 1%">S/N</th>
-                            <th style="width: 65%" class="text-left">DESCRIPTION</th>
-                            <th style="width: 8%" class="text-right">UNIT</th>
-                            <th style="width: 8%" class="text-right">QNT</th>
-                            <th style="width: 8%" class="text-right">TOTAL</th>
+                            <th class="text-left">Particular</th>
+                            <th>Sales</th>
+                            <th>Return</th>
+                            <th>Damage</th>
+                            <th>Spoil</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Unit Price</th>
+                            <th style="width: 8%" class="text-right">Total</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -80,22 +85,27 @@
                             {% set totalBonus = totalBonus + item.bonusQnt %}
                             <tr>
                                 <td class="">{{ i }}</td>
-                                <td class="text-left"> {{ item.particular }}</td>
-                                <td class="unit">{{ item.price|number_format(2) }}</td>
-                                <td class="qty">{{ item.totalQuantity }}</td>
-                                <td class="text-right">{{ item.subTotal|number_format(2) }}</td>
+                                <td class="">{{ item.particular }}</td>
+                                <td class="">{{ item.quantity }}</td>
+                                <td class="">{{ item.returnQnt }}</td>
+                                <td class="">{{ item.damageQnt }}</td>
+                                <td class="">{{ item.spoilQnt }}</td>
+                                <td class="">{{ item.totalQuantity }}</td>
+                                <td class="text-right">{{ item.unit }}</td>
+                                <td class="text-right">{{ item.price|number_format(2) }}</td>
+                                <td class="text-right" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
                             </tr>
                                 {% set i = i + 1 %}
                             {% endif %}
                         {% endfor %}
                         <tr>
-                            <td colspan="4">TOTAL</td>
+                            <td colspan="9">TOTAL</td>
                             <td class="text-right">{{ entity.subTotal|number_format(2) }}</td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="2" style="width:50%;">
+                            <td colspan="4" style="width:50%;">
                                 <table style="width: 100%;" class="tfoot-table">
                                     <tr><td>Previous Due</td><td><strong  class="pull-right">{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</strong></td></tr>
                                     <tr><td>Sales Amount</td><td><strong  class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
@@ -105,7 +115,7 @@
                                     <tr><td colspan="2" style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
                                 </table>
                             </td>
-                            <td colspan="4" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
+                            <td colspan="6" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
                                 <table style="width: 100%;margin-bottom: -20px;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
                                     <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>
                                     <tr><td >DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>

@@ -464,6 +464,7 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
     var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
     totalQuantity  = (salesQuantity - returnQuantity - damageQuantity- spoilQuantity);
     subTotal  = (totalQuantity * price);
+  //  toPrecision = subTotal.toPrecision(2)''
     $("#totalQuantity-"+id).html(totalQuantity);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
