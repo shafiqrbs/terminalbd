@@ -154,7 +154,7 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">
                                 {% set processes =['Delivered','Done'] %}
-                                {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and  entity.process in processes and app.user.granted("ROLE_DOMAIN")) or ( ("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in processes and app.user.granted("ROLE_BUSINESS_REVERSE_SALES"))  %}
+                                {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and  entity.process in processes and app.user.granted("ROLE_DOMAIN")) or ( ("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in processes and app.user.granted("ROLE_BUSINESS_INVOICE_REVERSE"))  %}
                                     <a  href="{{ path('business_sales_reverse',{'id':entity.id}) }}"  data-url="" class="btn blue"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                 {% endif %}
                                 <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'print'}) }}"><i class="icon-print"></i> Print Invoice</a>
@@ -163,7 +163,6 @@
                                 <a class="btn blue confirm"  data-url="{{ path('business_invoice_approved',{'id':entity.id}) }}"><i class="icon-refresh"></i> Approve</a>
                                 {% endif %}
                                 <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
-
                             </div>
                         </div>
                     </div>
