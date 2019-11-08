@@ -491,14 +491,13 @@ class BusinessInvoiceRepository extends EntityRepository
     public function updateInvoiceDistributionTotalPrice(BusinessInvoice $invoice)
     {
         $em = $this->_em;
-        $total = $em->createQueryBuilder()
-            ->from('BusinessBundle:BusinessInvoiceParticular','si')
-            ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
-            ->where('si.businessInvoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->getQuery()->getOneOrNullResult();
-
-        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        $qb = $em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessInvoiceParticular','si')
+        ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+        ->where('si.businessInvoice = :invoice')
+        ->setParameter('invoice', $invoice ->getId());
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $subTotal = !empty($result) ? $result['subTotal'] :0;
         if($subTotal > 0){
 
             if ($invoice->getBusinessConfig()->getVatEnable() == 1 && $invoice->getBusinessConfig()->getVatPercentage() > 0) {
@@ -508,7 +507,8 @@ class BusinessInvoiceRepository extends EntityRepository
             }
             $invoice->setSubTotal(round($subTotal,2));
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($total);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
         }else{
@@ -522,7 +522,7 @@ class BusinessInvoiceRepository extends EntityRepository
 
         $em->persist($invoice);
         $em->flush();
-        return $total;
+        return $result;
 
     }
 

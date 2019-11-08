@@ -330,7 +330,7 @@ class BusinessParticularRepository extends EntityRepository
     public function remainingQnt(BusinessParticular $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity()+ $stock->getDamageQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $stock->setBonusQuantity($stock->getBonusPurchaseQuantity() - $stock->getBonusSalesQuantity());
         $em->persist($stock);
@@ -345,12 +345,11 @@ class BusinessParticularRepository extends EntityRepository
             /* @var  $item BusinessInvoiceParticular */
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
-				if(!empty($item->getBusinessParticular())) {
-
+				if(!empty($item->getBusinessParticular()) and $item->getTotalQuantity() > 0) {
 					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'post-production') {
 						$this->productionExpense( $item );
 					}
-					$this->getSalesUpdateQnt( $item );
+                    $this->getSalesUpdateQnt( $item );
 					if($item->getBonusQnt() > 0){
                         $this->getSalesUpdateBonusQnt( $item );
                     }
@@ -427,7 +426,6 @@ class BusinessParticularRepository extends EntityRepository
 		$qnt = $qb->getQuery()->getOneOrNullResult();
         $invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
-
 	}
 
     public function getSumTotalInvoiceItemBonusQuantity($particular){
@@ -451,7 +449,7 @@ class BusinessParticularRepository extends EntityRepository
         $particular = $item->getBusinessParticular();
 		$productionQnt = $this->getSumTotalProductionItemQuantity($particular);
 		$invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
-        $qnt = $productionQnt + $invoiceQnt;
+		$qnt = $productionQnt + $invoiceQnt;
 		$particular->setSalesQuantity($qnt);
         $em->persist($particular);
         $em->flush();

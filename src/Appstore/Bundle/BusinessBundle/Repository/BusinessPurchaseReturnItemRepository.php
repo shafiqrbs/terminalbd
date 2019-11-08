@@ -1,9 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Doctrine\ORM\EntityRepository;
-
 
 /**
  * MedicinePurchaseReturnItemRepository
@@ -13,8 +14,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class BusinessPurchaseReturnItemRepository extends EntityRepository
 {
-
-
     public function purchaseReturnStockUpdate(BusinessParticular $item)
     {
         $qb = $this->createQueryBuilder('e');
@@ -22,5 +21,30 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         $qb->where('e.businessParticular = :businessParticular')->setParameter('businessParticular', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
+    }
+
+    public function deletePurchaseReturnItem(BusinessInvoiceParticular $invoiceParticular)
+    {
+       $em = $this->_em;
+
+       $entity = $this->findOneBy(array('salesInvoiceItem' => $invoiceParticular->getId()));
+       if($entity){
+           $entity->remove();
+           $em->flush();
+       }
+       $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($invoiceParticular->getBusinessParticular(), "purchase-return");
+    }
+
+    public function removePuremovePurchaseReturn(BusinessInvoice $entity)
+    {
+        $em = $this->_em;
+        foreach ($entity->getBusinessInvoiceParticulars() as $particular){
+            $this->deletePurchaseReturnItem($particular);
+        }
+        $entity = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $entity->getBusinessConfig(),'salesInvoice' => $entity->getInvoice()));
+        if($entity){
+            $entity->remove();
+            $em->flush();
+        }
     }
 }

@@ -498,7 +498,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setTotalQuantity((int)$data['totalQuantity']);
             $subTotal = round(($entity->getPrice() * $entity->getTotalQuantity()),2);
             $entity->setSubTotal($subTotal);
-
         }
         $em->persist($entity);
         $em->flush();

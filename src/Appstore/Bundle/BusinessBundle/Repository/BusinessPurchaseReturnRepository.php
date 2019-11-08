@@ -33,7 +33,7 @@ class BusinessPurchaseReturnRepository extends EntityRepository
         $em = $this->_em;
         return $total = $em->createQueryBuilder()
             ->from('BusinessBundle:BusinessInvoiceParticular','si')
-            ->select('sum(si.damageQnt) as qnt')
+            ->select('sum(si.damageQnt) as damageQnt')
             ->where('si.businessInvoice = :invoice')
             ->setParameter('invoice', $invoice)
             ->getQuery()->getOneOrNullResult();
@@ -45,10 +45,11 @@ class BusinessPurchaseReturnRepository extends EntityRepository
     {
         $em = $this->_em;
         $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=> $invoice->getInvoice()));
-        $returnItemCount = $this->countReturnQuantity($invoice->getId());
+         $returnItemCount = $this->countReturnQuantity($invoice->getId());
+
             if($exist){
                 $this->insertUpdatePurchaseReturnItem($exist,$invoice);
-            }elseif($returnItemCount['qnt'] > 0){
+            }elseif($returnItemCount['damageQnt'] > 0){
                 $entity = new BusinessPurchaseReturn();
                 $entity->setBusinessConfig($invoice->getBusinessConfig());
                 $entity->setSalesInvoice($invoice->getInvoice());
@@ -57,10 +58,7 @@ class BusinessPurchaseReturnRepository extends EntityRepository
                 $em->flush();
                 $this->insertUpdatePurchaseReturnItem($entity,$invoice);
             }
-
-
-
-    }
+  }
 
     public function insertUpdatePurchaseReturnItem(BusinessPurchaseReturn $entity, BusinessInvoice $invoice)
     {
@@ -69,6 +67,7 @@ class BusinessPurchaseReturnRepository extends EntityRepository
 
         foreach ($invoice->getBusinessInvoiceParticulars() as $item):
 
+                $item->getId();
                 $exist = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->findOneBy(array('businessPurchaseReturn' => $entity,'salesInvoiceItem'=>$item->getId()));
 
                 /* @var $purchaseItem BusinessPurchaseReturnItem */
@@ -87,7 +86,6 @@ class BusinessPurchaseReturnRepository extends EntityRepository
                     $em->flush();
                     $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(),"purchase-return");
                 }elseif($item->getDamageQnt() > 0) {
-                    echo $item->getDamageQnt();
                     $purchaseItem = new BusinessPurchaseReturnItem();
                     $purchaseItem->setBusinessPurchaseReturn($entity);
                     $purchaseItem->setSalesInvoiceItem($item->getId());

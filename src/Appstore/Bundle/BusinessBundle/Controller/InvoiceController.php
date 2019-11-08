@@ -300,6 +300,7 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->removePurchaseReturn($entity);
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
@@ -369,11 +370,8 @@ class InvoiceController extends Controller
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
-
-
     public function addParticularAction(Request $request, BusinessInvoice $invoice)
     {
-
         $em = $this->getDoctrine()->getManager();
         $particular = $request->request->get('customParticular');
         $price = $request->request->get('price');
@@ -400,6 +398,7 @@ class InvoiceController extends Controller
         }
         $em->remove($particular);
         $em->flush();
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->deletePurchaseReturnItem($particular);
 	    $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
@@ -424,13 +423,12 @@ class InvoiceController extends Controller
 		 * Transaction
 		 * Delete Journal & Account Purchase
 		 */
-
-
 		set_time_limit(0);
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
-		$sales->setIsReversed(true);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePuremovePurchaseReturn($sales);
+        $sales->setIsReversed(true);
 		$sales->setProcess('Created');
 		$em->flush();
 		$template = $this->get('twig')->render('BusinessBundle:Invoice:reverse.html.twig', array(

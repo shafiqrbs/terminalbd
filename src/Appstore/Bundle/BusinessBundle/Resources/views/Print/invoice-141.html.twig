@@ -87,10 +87,10 @@
                                 <td class="">{{ i }}</td>
                                 <td class="">{{ item.particular }}</td>
                                 <td class="">{{ item.quantity }}</td>
-                                <td class="">{{ item.returnQnt }}</td>
-                                <td class="">{{ item.damageQnt }}</td>
-                                <td class="">{{ item.spoilQnt }}</td>
-                                <td class="">{{ item.totalQuantity }}</td>
+                                <td class="">{% if item.returnQnt > 0 %}{{ item.returnQnt }}{% endif %}</td>
+                                <td class="">{% if item.damageQnt > 0 %}{{ item.damageQnt }}{% endif %}</td>
+                                <td class="">{% if item.spoilQnt > 0 %}{{ item.spoilQnt }}{% endif %}</td>
+                                <td class="">{% if item.totalQuantity > 0 %}{{ item.totalQuantity }}{% endif %}</td>
                                 <td class="text-right">{{ item.unit }}</td>
                                 <td class="text-right">{{ item.price|number_format(2) }}</td>
                                 <td class="text-right" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
