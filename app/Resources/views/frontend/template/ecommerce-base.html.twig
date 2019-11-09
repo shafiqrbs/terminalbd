@@ -51,6 +51,7 @@
     'assets/template/plugin/textillate/assets/animate.css'
     'assets/template/plugin/wow/css/animate.css'
     'assets/template/plugin/select2/select2.css'
+    'assets/template/plugin/sidenav/css/sidebar-menu.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
     'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/desktop/css/css-loader.css'
@@ -69,6 +70,7 @@
 </head>
 <body data-spy="scroll" >
 {{ include('frontend/template/templateCustomize.html.twig')}}
+
 <!-- Navigation -->
 {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'menu':menu.id}) %}
 <div class="clearfix"></div>
@@ -118,10 +120,10 @@
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
 {% endif %}
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
 <!-- jQuery -->
 <!--Jquery Smooth Scrolling-->
 {% javascripts
+'assets/template/desktop/js/jquery-3.3.1.min.js'
 'assets/template/desktop/js/bootstrap.min.js'
 'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
 'assets/template/plugin/numeric/jquery.numeric.js'
@@ -136,6 +138,8 @@
 'assets/template/plugin/range-slider/bootstrap-slider.min.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/template/plugin/slimscroll/jquery.slimscroll.js'
+'assets/template/plugin/sidenav/js/sidebar-menu.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/plugin/jquery-zoom/zoom.js'
@@ -175,8 +179,20 @@
                 }
             });
         });
-        {% block documentready %}{% endblock %}
+        $.sidebarMenu($('.sidebar-menu'))
+        $.sidebarMenu($('.sidebar-menu-rtl'))
+        $('#showLeft').click(function () {
+            $('.animate-menu-left').toggleClass('animate-menu-open')
+        })
 
+        $('#remove-nav').click(function () {
+            $('.animate-menu-left').removeClass('animate-menu-open')
+        })
+
+        $('#sidebar-scroll').slimScroll({
+            height: $(window).height()
+        });
+        {% block documentready %}{% endblock %}
     });
 
 </script>

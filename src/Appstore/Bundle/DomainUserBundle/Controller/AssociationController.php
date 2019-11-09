@@ -394,6 +394,10 @@ class AssociationController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
+     */
+
     public function invoiceNewAction($customer)
     {
 
@@ -444,6 +448,10 @@ class AssociationController extends Controller
         return $form;
     }
 
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
+     */
+
     public function invoiceCreateAction(Request $request, $customer)
     {
         $data = $request->request->all();
@@ -478,10 +486,8 @@ class AssociationController extends Controller
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
             if($entity->getProcess() == "Done"){
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-
+                $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
                 /* @var $global GlobalOption */
-
                 $global = $this->getUser()->getGlobalOption();
                 if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
                     $dispatcher = $this->container->get('event_dispatcher');
@@ -505,7 +511,6 @@ class AssociationController extends Controller
     /**
      * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_CRM_ASSOCIATION")
      */
-
     public function invoiceAction()
     {
 
@@ -520,6 +525,10 @@ class AssociationController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
+     */
+
     public function invoiceShowAction($id)
     {
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -530,6 +539,9 @@ class AssociationController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_CRM,ROLE_DOMAIN,ROLE_MEMBER_ASSOCIATION")
+     */
      public function invoiceEditAction($id)
     {
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
@@ -587,7 +599,7 @@ class AssociationController extends Controller
             );
             if($entity->getProcess() == "Done"){
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
             }
             $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($entity);
             return $this->redirect($this->generateUrl('domain_association_invoice'));

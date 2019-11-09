@@ -1,5 +1,92 @@
 <nav class="navbar navbar-inverse ">
-    {% if globalOption.templateCustomize.topBar is not empty %}
+    <section class="animate-menu animate-menu-left">
+        <ul class="sidebar-menu" id="sidebar-scroll">
+            <li class="sidebar-header">{{ globalOption.name }}  <button id="remove-nav"><i class="fa fa-remove"></i> </button></li>
+            {% for  menu in globalOption.ecommerceMenus  %}
+                <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> <span>{{ menu.name }}</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="sidebar-submenu">
+                        {% if menu.childMenus is not empty %}
+                            {% for childMenu in  menu.childMenus %}
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                        {% if menu.features is not empty %}
+                            <li><a href="javascript:"><span>Feature's</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="sidebar-submenu">
+                                    {% for feature in  menu.features %}
+                                        {% if feature.targetTo == 'Category' and feature.category is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':feature.category.id}) %}
+                                        {% elseif feature.targetTo == 'Promotion' and feature.promotion is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
+                                        {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
+                                        {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':feature.discount.id}) %}
+                                        {% elseif feature.targetTo == 'Brand' and feature.brand is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':feature.brand.id}) %}
+                                        {% elseif feature.targetTo == 'Page' and feature.menu is not empty %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':feature.menu.slug}) %}
+                                        {% else %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
+                                        {% endif %}
+                                        <li><a href="{{ path }}">{{ feature.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if menu.promotions is not empty %}
+                            <li><a href="javascript:"><span>Promotion's</span> <i class="fa fa-angle-left pull-right"></i>
+                                <ul class="sidebar-submenu">
+                                    {% for promotion in  menu.promotions %}
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if menu.discounts is not empty %}
+                            <a href="javascript:"><span>Feature's</span> <i class="fa fa-angle-left pull-right"></i></a>
+                            <ul class="sidebar-submenu">
+                                {% for discount in  menu.discounts %}
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if menu.tags is not empty %}
+                            <li><a href="javascript:"><span>Popular Tags's</span> <i class="fa fa-angle-left pull-right"></i></a></li>
+                            <ul class="sidebar-submenu">
+                                {% for tag in  menu.tags %}
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if menu.categories is not empty %}
+                            {% render controller("FrontendBundle:EcommerceWidget:returnSimpleCategoryMenu",{categories: menu.categories}) %}
+                        {% endif %}
+                        {% if menu.brands is not empty %}
+                            {% for brand in menu.brands %}
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>>
+    </section>
+    <style>
+        .sidebar-menu .sidebar-submenu > li > a {
+            padding: 5px 5px 5px 15px!important;
+            font-size: 14px;
+            color: #8aa4af;
+        }
+        #remove-nav {
+            position: absolute;
+            right: 8px;
+            background: transparent;
+            border: none;
+        }
+    </style>
+{#    {% if globalOption.templateCustomize.topBar is not empty %}
         <section id="top-bar" class="header-position">
             <div class="container" >
                 <div class="row">
@@ -144,11 +231,12 @@
                 </div>
             </div>
         </section>
-    {% endif %}
+    {% endif %}#}
     <section id="header">
         <div class="container">
             <div class="navbar-header">
                 <div class="col-md-2" id="logo-area">
+                    <button id="showLeft" class="btn btn-primary"><i class="fa fa-bars"></i> </button>
                     <a class="img-logo"
                        href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
@@ -159,12 +247,6 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class='input-group search-box' style="width: 100%" >
-                            <div class='input-group-field ' style="width: 25%;">
-                                {{ form_widget(form.category) }}
-                            </div>
-                            <div class='input-group-field' style="width:25%">
-                                {{ form_widget(form.brand) }}
-                            </div>
                             <div class="input-group" style="width: 100%">
                                 {{ form_widget(form.webName) }}
                                 <span class="input-group-btn">
@@ -183,18 +265,14 @@
                         {{ form_end(form) }}
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </section>
     <div class="clearfix"></div>
-
-    <div class="clearfix"></div>
     <section id="menu-bar" class="sticky">
-        <div class="container">
-            {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
+        {#  <div class="container">
+        {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>#}
     </section>
-    <div class="clearfix"></div>
     <div class="clearfix"></div>
     <style>
         .action{

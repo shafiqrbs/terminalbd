@@ -74,7 +74,6 @@ class EcommerceMenuRepository extends EntityRepository
     public function getSimpleCategoryMenu($categories){
 
         $menues = array();
-
         foreach ($categories as $category) {
             $parent = $category->getParent();
             if(!isset($menues[$parent->getId()])) {
@@ -88,12 +87,12 @@ class EcommerceMenuRepository extends EntityRepository
         }
         $str = "";
         foreach ($menues as $item) {
-            $str .= '<li><a href="/product/category/'. $item['id'] .'">' . $item['name'] .'</a>';
-            $str .= '<ul>';
+            $str .= "<li><a href='javascript:'><span>{$item['name']}</span> <i class='fa fa-angle-left pull-right'></i></a>";
+            $str .= "<ul class='sidebar-submenu'>";
             foreach ($item['children'] as $child) {
-                $str .= '<li><a href="/product/category/'. $child->getId() .'">' . $child->getName() .'</a></li>';
+                $str .= "<li><a href='/product/category/{$child->getId() }'>{$child->getName() }</a></li>";
             }
-            $str .= '</ul></li>';
+            $str .= "</ul></li>";
         }
         return $str;
 

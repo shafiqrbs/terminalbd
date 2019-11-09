@@ -2275,8 +2275,6 @@ class TransactionRepository extends EntityRepository
         $transaction->setDebit($amount);
         $this->_em->persist($transaction);
         $this->_em->flush();
-
-
     }
 
     private function insertGlobalPurchaseCash(AccountPurchase $accountPurchase)
@@ -2587,8 +2585,6 @@ class TransactionRepository extends EntityRepository
 
 
 	/** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
-
-
 	public function hotelSalesTransaction(HotelInvoiceTransaction $entity,$accountSales)
 	{
 		$this->insertHotelCashDebit($entity,$accountSales);
@@ -2686,7 +2682,6 @@ class TransactionRepository extends EntityRepository
 		}
 
 	}
-
 
     public function itemDistributionTransaction($purchase,$accountPurchase,$source='')
     {
@@ -2846,8 +2841,73 @@ class TransactionRepository extends EntityRepository
             $em->persist($transaction);
             $em->flush();
         }
+    }
+    /** =========================== SERVICE MANAGEMENT SYSTEM    =========================== */
 
+    public function serviceTransaction($accountSales)
+    {
+        $this->insertServiceCashDebit($accountSales);
+        $this->insertServiceCashCredit($accountSales);
+    }
 
+    private function insertServiceCashDebit(AccountSales $accountSales)
+    {
+        $amount = $accountSales->getAmount();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Service');
+            $transaction->setUpdated($accountSales->getUpdated());
+
+            /* Cash - Cash various */
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                if($accountSales->getAccountBank()){
+                    $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($accountSales->getAccountBank());
+                    $transaction->setSubAccountHead($subAccount);
+                }
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                if($accountSales->getAccountMobileBank()){
+                    $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($accountSales->getAccountMobileBank());
+                    $transaction->setSubAccountHead($subAccount);
+                }
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Current Assets');
+            }
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+    public function insertServiceCashCredit(AccountSales $accountSales)
+    {
+
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
+        }
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setProcessHead('Service');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setUpdated($accountSales->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$accountSales->getAmount());
+        $transaction->setCredit($accountSales->getAmount());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
     }
 
 

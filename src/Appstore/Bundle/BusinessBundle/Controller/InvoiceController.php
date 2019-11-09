@@ -745,7 +745,12 @@ class InvoiceController extends Controller
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
             }
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $serviceModels = array('association','general');
+            if(in_array($entity->getBusinessConfig()->getBusinessModel(),$serviceModels)){
+                $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
+            }else{
+                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            }
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess("Done");
             $entity->setApprovedBy($this->getUser());

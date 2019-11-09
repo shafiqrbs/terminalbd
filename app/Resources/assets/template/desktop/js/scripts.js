@@ -28,7 +28,7 @@ $(document).ready(function(){
 
 
 
-    $('.select-category').select2({
+        $('.select-category').select2({
             placeholder: "Filter by category",
             allowClear: true,
             color: "black"

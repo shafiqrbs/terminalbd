@@ -36,8 +36,8 @@ class EcommerceProductEditType extends AbstractType
 	{
 		$builder
 
-			->add('webName','text', array('attr'=>array('class'=>'form-control serarch-keyword search-field col-md-12 col-lg-12','placeholder'=>'Product name')))
-			->add('category', 'entity', array(
+			->add('webName','text', array('attr'=>array('class'=>'form-control serarch-keyword search-field col-md-12 col-lg-12','placeholder'=>'Product name,category,brand etc')))
+			/*->add('category', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Choose a product category---',
 				'attr'=>array('class'=>'col-md-12 col-lg-12 search-select search-field form-control select-category'),
@@ -47,9 +47,9 @@ class EcommerceProductEditType extends AbstractType
 				'class' => 'ProductProductBundle:Category',
 				'property' => 'nestedLabel',
 				'choices'=> $this->categoryChoiceList()
-			))
+			))*/
 
-			->add('brand', 'entity', array(
+			/*->add('brand', 'entity', array(
 				'required'    => true,
 				'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
 				'property' => 'name',
@@ -61,7 +61,7 @@ class EcommerceProductEditType extends AbstractType
 					          ->andWhere("p.ecommerceConfig =".$this->config->getId())
 					          ->orderBy("p.name","ASC");
 				},
-			))
+			))*/
 
 			;
 	}
