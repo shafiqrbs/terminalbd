@@ -36,8 +36,13 @@ class AssociationInvoiceListener extends BaseSmsAwareListener
 
         $post = $event->getInvoice();
         $msg = "Dear Member, Your contribution payment has been posted, Invoice no -".$post->getInvoice();
-        $mobile = "88".$post->getCustomer()->getMobile();
-      //  $mobile = "8801828148148";
+        $mobile = $post->getCustomer()->getMobile();
+        $customer = $post->getCustomer();
+        if(($customer->getCountry() and $customer->getCountry()->getCountryCode() == "BD")){
+            $mobile = "+88".$mobile;
+        }else{
+            $mobile = $mobile;
+        }
         $status = $this->gateway->send($msg, $mobile);
         $this->em->getRepository('SettingToolBundle:SmsSender')->insertInvoiceSms($post->getCustomer(), $msg, $status);
 

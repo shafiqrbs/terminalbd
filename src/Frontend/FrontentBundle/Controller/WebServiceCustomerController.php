@@ -101,7 +101,6 @@ class WebServiceCustomerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=> $mobile));
-
         if( count($entity) > 0 ){
             $valid = 'false';
         }else{
@@ -390,9 +389,7 @@ class WebServiceCustomerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
-
         /* @var $user User */
-
             if ($user) {
                 $global = $user -> getGlobalOption();
                 if ($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {

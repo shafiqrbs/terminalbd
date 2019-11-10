@@ -35,8 +35,13 @@ class PasswordChangeSmsListener extends BaseSmsAwareListener
 
         $user = $event->getUser();
         $password = $event->getPassword();
-        $msg = "Requesting new OTP is: ".$password;
-        $mobile = "+88".$user;
+        $msg = "Your Requesting new OTP is: ".$password;
+        $customer = $this->em->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $user->getId()));
+        if( empty($customer) or empty($customer->getCountry()) or ($customer->getCountry() and $customer->getCountry()->getCountryCode() == "BD")){
+            $mobile = "+88".$user;
+        }else{
+            $mobile = $user;
+        }
         $status = $this->gateway->send($msg, $mobile);
         $this->em->getRepository('SettingToolBundle:SmsSender')->insertLoginSms($user, $mobile, $status);
 
