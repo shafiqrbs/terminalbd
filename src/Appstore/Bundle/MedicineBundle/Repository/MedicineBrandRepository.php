@@ -50,17 +50,15 @@ class MedicineBrandRepository extends EntityRepository
 
         //$name = $data['webName'];
         $name = $data['item']['webName'];
-        $brand = $data['item']['brand'];
+       // $brand = $data['item']['brand'];
         $query = $this->createQueryBuilder('e');
-        $query->join('e.medicineGeneric','g');
-        $query->join('e.medicineCompany','c');
+        $query->leftJoin('e.medicineGeneric','g');
+        $query->leftJoin('e.medicineCompany','c');
         $query->select('e.*');
         $query->select('e.id','e.price as salesPrice','e.medicineForm','e.strength', 'e.name as webName','g.name as genericName', 'c.name as brand');
         $query->where($query->expr()->like("e.name", "'$name%'"  ));
         $query->orWhere($query->expr()->like("g.name", "'$name%'"  ));
-        if($brand > 0){
-            $query->andWhere("c.id = {$brand}");
-        }
+        $query->orWhere($query->expr()->like("c.name", "'$name%'"  ));
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $result = $query->getQuery()->getArrayResult();

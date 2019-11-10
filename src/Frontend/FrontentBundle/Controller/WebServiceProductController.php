@@ -773,8 +773,9 @@ class WebServiceProductController extends Controller
             $cart->insert($data);
             $cartTotal = (string)$cart->total();
             $totalItems = (string)$cart->total_items();
+            $items = (string)count($cart->contents());
             $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
         echo $array;
         exit;
 

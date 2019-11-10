@@ -85,6 +85,7 @@
             background: transparent;
             border: none;
         }
+        <span id="item-qnt" class="totalItem">8</span>
     </style>
 {#    {% if globalOption.templateCustomize.topBar is not empty %}
         <section id="top-bar" class="header-position">
@@ -250,8 +251,9 @@
                             <div class="input-group" style="width: 100%">
                                 {{ form_widget(form.webName) }}
                                 <span class="input-group-btn">
+                                    <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-danger"> <span  class="fa fa-upload"></span> Prescription</a>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-warning"> <span  class="fa fa-upload"></span> Prescription</a>
                                     {% if app.user %}
                                         <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
                                         <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
@@ -306,7 +308,21 @@
             cursor: pointer;
             background-color: #187bb2;
         }
-
+        #item-qnt {
+            position: absolute;
+            top: -12px;
+            right: 40px;
+            font-size: 9px;
+            background: red;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+            line-height: 18px;
+            color: #fff;
+            font-weight: bold;
+            z-index: 99;
+        }
     </style>
 {#    <div class="container" >
         <div class="row-fluid">

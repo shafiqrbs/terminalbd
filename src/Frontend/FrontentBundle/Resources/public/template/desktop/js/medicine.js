@@ -142,8 +142,6 @@ $(document).on( "click", ".hideCartItem", function(e){
     $("#showCartItem").slideUp("slow");
 });
 
-
-
 $(document).on( "click", ".productToCart", function(e){
 
     var cartForm = $(this).closest("form");
@@ -543,7 +541,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
                     .done(function( data ) {
                         obj = JSON.parse(data);
                         $('#cart-item-list-box').html(obj['cartItem']);
-                        $('.totalItem').html(obj['totalItem']);
+                        $('.totalItem').html(obj['items']);
                         $('.totalAmount').html(obj['cartTotal']);
                         $('.vsidebar .txt').html(obj['cartResult']);
                     });
@@ -566,7 +564,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         obj = JSON.parse(data);
                         if(obj['process'] === 'success'){
                             $('#cart-item-list-box').html(obj['cartItem']);
-                            $('.totalItem').html(obj['totalItem']);
+                            $('.totalItem').html(obj['items']);
                             $('.totalAmount').html(obj['cartTotal']);
                             $('.vsidebar .txt').html(obj['cartResult']);
                         }else{

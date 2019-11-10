@@ -100,3 +100,26 @@ div.bhoechie-tab-container {
     float: right;
     padding-right: 15px;
 }
+
+.card-cart-box{
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.card-cart-box .btn{
+    color: #000101!important;
+}
+.btn-transparent {
+    background: #ffffff!important;
+    color: #000101!important;
+}
+.cart-input{
+    border: #ffffff!important;
+}
+.input-group-btn-left{
+    display: none;
+}
+.item.list-group-item:nth-of-type(odd) {
+    background: #fff!important;
+}
