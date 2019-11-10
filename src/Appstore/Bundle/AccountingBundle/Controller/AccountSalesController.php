@@ -478,9 +478,4 @@ class AccountSalesController extends Controller
 
     }
 
-
-
-
-
-
 }
