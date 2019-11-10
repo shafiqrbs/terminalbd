@@ -64,7 +64,7 @@
                 </div>
                 <div class="bar-right">
                     <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
-                    <span id="item-qnt" class="totalItem">{{ cart.total_items }}</span>
+                    <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
                     </a>
                     <a href="javascript:" class="bar-icon" id="filter"><i class="fa fa-camera"></i></a>
                     {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
@@ -388,8 +388,8 @@
     }
     #item-qnt{
         position: absolute;
-        top: 1px;
-        left: 9px;
+        top: -7px;
+        left: 22px;
         font-size: 9px;
         background: red;
         border-radius: 50%;
