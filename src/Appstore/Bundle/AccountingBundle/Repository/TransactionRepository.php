@@ -2848,6 +2848,7 @@ class TransactionRepository extends EntityRepository
     {
         $this->insertServiceCashDebit($accountSales);
         $this->insertServiceCashCredit($accountSales);
+        $this->insertGlobalSalesAccountReceivable($accountSales);
     }
 
     private function insertServiceCashDebit(AccountSales $accountSales)

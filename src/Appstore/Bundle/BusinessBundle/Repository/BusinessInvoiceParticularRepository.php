@@ -47,7 +47,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     public function insertInvoiceParticular(BusinessInvoice $invoice, $data)
     {
-	    $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 0;
+        $quantity = (isset($data['quantity']) and !empty($data['quantity'])) ? $data['quantity'] : 1;
         $em = $this->_em;
         $entity = new BusinessInvoiceParticular();
         $entity->setBusinessInvoice($invoice);

@@ -398,11 +398,9 @@ class InvoiceController extends Controller
         }
         $em->remove($particular);
         $em->flush();
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->deletePurchaseReturnItem($particular);
-	    $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
+        $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
-
     }
 
     /**
@@ -427,7 +425,7 @@ class InvoiceController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePuremovePurchaseReturn($sales);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($sales);
         $sales->setIsReversed(true);
 		$sales->setProcess('Created');
 		$em->flush();
@@ -745,7 +743,7 @@ class InvoiceController extends Controller
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
             }
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            $serviceModels = array('association','general');
+            $serviceModels = array('association','general','event');
             if(in_array($entity->getBusinessConfig()->getBusinessModel(),$serviceModels)){
                 $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
             }else{
