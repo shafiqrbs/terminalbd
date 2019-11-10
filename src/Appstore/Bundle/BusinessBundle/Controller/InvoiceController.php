@@ -396,11 +396,15 @@ class InvoiceController extends Controller
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
+        if($particular->getBusinessParticular()){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->deletePurchaseReturnItem($particular);
+        }
         $em->remove($particular);
         $em->flush();
-        $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
+	    $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg ='');
         return new Response(json_encode($result));
+
     }
 
     /**
