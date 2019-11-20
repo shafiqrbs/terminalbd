@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Controller;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Form\AssociationInvoiceType;
+use Appstore\Bundle\DomainUserBundle\Event\AssociationSmsEvent;
 use Appstore\Bundle\DomainUserBundle\Form\MemberEditProfileType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -143,9 +144,9 @@ class AssociationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config, 'id' => $id));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config, 'id' => $id ));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ElectionMember entity.');
+            throw $this->createNotFoundException('Unable to find Election Member entity.');
         }
         if ($entity->getProcess() == 'Pending'){
             $entity->setProcess('Checked');
@@ -153,6 +154,14 @@ class AssociationController extends Controller
         }elseif ($entity->getProcess() == 'Checked'){
             $entity->setProcess('Approved');
             $entity->setApprovedBy($this->getUser());
+            /* @var $global GlobalOption */
+            $global = $this->getUser()->getGlobalOption();
+            if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $msg = "Dear Member, Your registration successfully done!";
+                $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity,$msg));
+            }
+
         }
         $em->persist($entity);
         $em->flush();

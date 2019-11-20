@@ -467,6 +467,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $accountPurchase->setGrn($entity->getGrn());
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $accountPurchase->setProcess('approved');
+        $accountPurchase->setUpdated($entity->getCreated());
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
@@ -748,7 +749,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
     public function accountPurchaseReverse(Purchase $entity)
     {
         $em = $this->_em;
-        if(!empty($entity->getAccountPurchase())){
+        if($entity->getAccountPurchase()){
             /* @var AccountPurchase $purchase */
             foreach ($entity->getAccountPurchase() as $purchase ){
                 $globalOption = $purchase->getGlobalOption()->getId();
@@ -759,9 +760,9 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $accountCash->execute();
             }
         }
-        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.purchase = '.$entity->getId());
-        if(!empty($accountCash)){
-            $accountCash->execute();
+        $purchase = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.purchase = '.$entity->getId());
+        if(!empty($purchase)){
+            $purchase->execute();
         }
     }
 

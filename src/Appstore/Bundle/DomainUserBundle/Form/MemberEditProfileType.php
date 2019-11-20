@@ -49,7 +49,7 @@ class MemberEditProfileType extends AbstractType
                     new Length(array('max'=>200))
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 )

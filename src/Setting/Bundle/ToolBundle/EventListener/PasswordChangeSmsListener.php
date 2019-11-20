@@ -40,7 +40,7 @@ class PasswordChangeSmsListener extends BaseSmsAwareListener
         if( empty($customer) or empty($customer->getCountry()) or ($customer->getCountry() and $customer->getCountry()->getCountryCode() == "BD")){
             $mobile = "+88".$user;
         }else{
-            $mobile = $user;
+            $mobile = "+".$user;
         }
         $status = $this->gateway->send($msg, $mobile);
         $this->em->getRepository('SettingToolBundle:SmsSender')->insertLoginSms($user, $mobile, $status);
