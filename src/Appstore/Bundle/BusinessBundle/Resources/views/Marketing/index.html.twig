@@ -98,7 +98,7 @@
                             </div>
                             {{ form_end(form) }}
                             <!-- END FORM-->
-                            <div class="span12" id="particular-table">
+                            <div class="span12">
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
@@ -113,7 +113,6 @@
                                     </thead>
                                     <tbody id="invoiceParticulars">
                                     {% for entity in entities %}
-
                                         <tr id="remove-{{ entity.id }}">
                                             <td  class="">{{ loop.index }}.</td>
                                             <td class="">{{ entity.name }}</td>
@@ -132,7 +131,6 @@
                                         </tr>
                                     {% endfor %}
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
