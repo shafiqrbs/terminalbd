@@ -56,7 +56,7 @@ class AccountPurchaseRepository extends EntityRepository
     public function updateVendorBalance(AccountPurchase $accountPurchase){
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
+        $qb->select('COALESCE(SUM(e.purchaseAmount),0) AS purchaseAmount, COALESCE(SUM(e.payment),0) AS payment');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $accountPurchase->getGlobalOption()->getId());
         $qb->andWhere("e.process = 'approved'");
 	    $qb->andWhere("e.companyName = :company")->setParameter('company', $accountPurchase->getCompanyName());
@@ -73,7 +73,7 @@ class AccountPurchaseRepository extends EntityRepository
     {
         $globalOption = $user->getGlobalOption();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
+        $qb->select('COALESCE(SUM(e.purchaseAmount),0) AS purchaseAmount, COALESCE(SUM(e.payment),0) AS payment');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = :process");
@@ -88,7 +88,7 @@ class AccountPurchaseRepository extends EntityRepository
     public function vendorLedgerOutstanding(GlobalOption $globalOption)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(SUM(e.purchaseAmount) - SUM(e.payment)) as customerBalance ');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
         if ($globalOption->getMainApp()->getSlug() == 'inventory'){
             $qb->join('e.vendor','vendor');
         }else if ($globalOption->getMainApp()->getSlug() == 'miss') {
@@ -105,8 +105,6 @@ class AccountPurchaseRepository extends EntityRepository
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
-
-
 
     public function vendorInventoryOutstanding($globalOption,$head, $data = array())
     {
@@ -151,7 +149,7 @@ class AccountPurchaseRepository extends EntityRepository
     public function vendorMedicineOutstanding($globalOption)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(SUM(e.purchaseAmount) - SUM(e.payment)) as customerBalance ');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
         $qb->join('e.medicineVendor','vendor');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
@@ -237,7 +235,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 	{
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('SUM(e.purchaseAmount) - SUM(e.payment) As balance');
+		$qb->select('(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) As balance');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		$qb->andWhere("e.process = :process");
@@ -298,7 +296,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
     public function vendorOutstanding($globalOption,$head,$data)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
+        $qb->select('(COALESCE(SUM(e.purchaseAmount),0) AS purchaseAmount, COALESCE(SUM(e.payment),0) AS payment');
 	    $qb->addSelect('e.companyName as vendorName');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);

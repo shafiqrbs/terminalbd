@@ -81,7 +81,7 @@ class TransactionRepository extends EntityRepository
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.accountHead','a');
-		$qb->select('a.name as name , e.processHead as processHead , sum(e.debit) as debit , sum(e.credit) as credit');
+		$qb->select('a.name as name , e.processHead as processHead , COALESCE(sum(e.debit),0) as debit , COALESCE(sum(e.credit),0) as credit');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption',$globalOption->getId());
 		$qb->groupBy('e.accountHead');
@@ -112,7 +112,7 @@ class TransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','ach');
         $qb->join('e.accountHead','ac');
-        $qb->select('ach.id as subAccountId','COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
+        $qb->select('ach.id as subAccountId','COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS capital');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$option->getId());
         $qb->andWhere("ac.slug = :slug")->setParameter('slug','capital-investment');
@@ -162,7 +162,7 @@ class TransactionRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->addSelect('(COALESCE(SUM(e.debit),0) - COALESCE(SUM(e.credit),0)) AS balance');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption',$globalOption);
@@ -233,7 +233,7 @@ class TransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
-        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , COALESCE(sum(e.amount),0) as amount');
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("accountHead.slug = 'profit-loss'");
@@ -273,7 +273,7 @@ class TransactionRepository extends EntityRepository
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
-        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , COALESCE(sum(e.amount),0) as amount');
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
@@ -303,7 +303,7 @@ class TransactionRepository extends EntityRepository
         $qb->join('e.subAccountHead','subAccountHead');
         $qb->join('e.accountHead','accountHead');
         $qb->join('accountHead.parent','parent');
-        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , sum(e.amount) as amount');
+        $qb->select('subAccountHead.id as subHead , subAccountHead.name as headName , COALESCE(sum(e.amount),0) as amount');
         $qb->addSelect('accountHead.name as parentName',"accountHead.id as parentId");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
@@ -387,7 +387,7 @@ class TransactionRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHead','accountHead');
-        $qb->select('SUM(ex.amount) as amount');
+        $qb->select('COALESCE(SUM(ex.amount),0) as amount');
         $qb->where("accountHead.parent IN (:parent)");
         $qb->setParameter('parent', $accountHeads);
         $qb->andWhere('ex.globalOption = :globalOption');
@@ -403,7 +403,7 @@ class TransactionRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHead','accountHead');
-        $qb->select('sum(ex.amount) as amount, sum(ex.debit) as debit , sum(ex.credit) as credit, accountHead.name as name, accountHead.toIncrease as toIncrease');
+        $qb->select('COALESCE(sum(ex.amount),0) as amount, COALESCE(sum(ex.debit),0) as debit , COALESCE(sum(ex.credit),0) as credit, accountHead.name as name, accountHead.toIncrease as toIncrease');
         $qb->where("accountHead.parent IN (:parent)");
         $qb->setParameter('parent', $accountHeads);
         $qb->andWhere('ex.globalOption = :globalOption');

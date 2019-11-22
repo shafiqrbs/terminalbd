@@ -79,7 +79,7 @@ class AccountJournalRepository extends EntityRepository
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.accountHeadDebit','d');
 		$qb->join('e.accountHeadCredit','c');
-		$qb->select('d.name as debitName ,c.name as creditName,e.transactionType as type , SUM(e.amount) AS amount');
+		$qb->select('d.name as debitName ,c.name as creditName,e.transactionType as type , COALESCE(SUM(e.amount),0) AS amount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		$qb->andWhere("e.process = 'approved'");
@@ -97,7 +97,7 @@ class AccountJournalRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.amount) AS amount');
+        $qb->select('COALESCE(SUM(e.amount),0) AS amount');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
@@ -187,7 +187,7 @@ class AccountJournalRepository extends EntityRepository
         $accountHead = isset($data['accountHead'])? $data['accountHead'] :'';
 
         $qb->from('AccountingBundle:AccountJournal','s');
-        $qb->select('sum(s.amount) as amount');
+        $qb->select('COALESCE(sum(s.amount),0) as amount');
         $qb->where('s.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
 
@@ -219,7 +219,7 @@ class AccountJournalRepository extends EntityRepository
         $parent = array(23,37);
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHeadCredit','accountHead');
-        $qb->select('sum(ex.amount) as amount, accountHead.name as name');
+        $qb->select('COALESCE(sum(ex.amount),0) as amount, accountHead.name as name');
         $qb->where("ex.parent IN (:parent)");
         $qb->setParameter('parent', $parent);
         $qb->andWhere('ex.globalOption = :globalOption');

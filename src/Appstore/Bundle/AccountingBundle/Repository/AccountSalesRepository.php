@@ -408,7 +408,7 @@ class AccountSalesRepository extends EntityRepository
 
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('SUM(e.totalAmount) AS salesAmount');
+		$qb->select('COALESCE(SUM(e.totalAmount),0) AS salesAmount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		$this->handleSearchBetween($qb,$data);
@@ -437,7 +437,7 @@ class AccountSalesRepository extends EntityRepository
 		}
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('SUM(e.totalAmount) AS salesAmount');
+		$qb->select('COALESCE(SUM(e.totalAmount),0) AS salesAmount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
 		$this->handleSearchBetween($qb,$data);
