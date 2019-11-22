@@ -20,9 +20,6 @@
                         <button type="button" class="btn btn-default btn-cookie" id="faThLarge"
                                 data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}"> <i class="fa fa-th-large "></i>
                         </button>
-                        {#<button type="button" class="btn btn-default btn-cookie" id="faList"
-                                data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
-                            <i class="fa fa-list"></i></button>#}
                     </div>
                 </div>
             </div>
@@ -47,13 +44,13 @@
                                     <div class="card-price">
                                         <div class="input-group">
               <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-number-cart input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" class="btn btn-transparent danger-font btn-cart-mobile input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                   </button>
               </span>
                                             <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                                             <span class="input-group-btn">
-                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-number-cart" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-cart-mobile" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                       <span class="glyphicon glyphicon-chevron-right"></span>
                   </button>
 
@@ -96,13 +93,12 @@
                                                 <div class="card-read-more">
                                                     <div class="input-group">
               <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-number-cart input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" class="btn btn-transparent danger-font btn-cart-mobile input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                   </button>
-              </span>
-                                                        <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+              </span> <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                                                         <span class="input-group-btn">
-                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-number-cart" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-cart-mobile" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
                       <span class="glyphicon glyphicon-chevron-right"></span>
                   </button>
 
@@ -118,41 +114,6 @@
                                 </a>
                             {% endif %}
                         </div>
-                   {# {% elseif cookieVal == 'faList' %}
-                        <div  class="col-xs-12 col-md-12">
-                            <form id="add_buy_cart-{{ product.id }}" class="addCart">
-                                <div class="product-canvas">
-
-                                    {% if product.discount is not empty  %}<a class="btn btn-transparentdanger-font product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
-                                    <a class="img-card product-preview" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"  >
-                                        <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
-                                    </a>
-
-                                    <div class="card-content" data-match-height="item-product">
-                                        <a class="product-preview" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
-                                    </div>
-                                    <div class="card-read-more text-center" >
-                                        <span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} TK{% if product.productUnit is not empty %}<span class="unit text-center"> / {{ product.productUnit.name }}</span>{% endif %}</span></span>
-                                    </div>
-                                    <div class="card-read-more">
-                                        <div class="input-group">
-              <span class="input-group-btn">
-                  <button type="button" class="btn btn-transparentdanger-font btn-number-cart"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                    <span class="glyphicon glyphicon-minus"></span>
-                  </button>
-              </span>
-                                            <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-number" readonly="readonly" value="1" min="1" max="100">
-                                            <span class="input-group-btn">
-                  <button type="button" class="btn btn-transparent cyan-font btn-number-cart" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                      <span class="glyphicon glyphicon-plus"></span>
-                  </button>
-
-              </span></div></div>
-                                </div>
-                                <input type="hidden" name="productImg-{{ product.id }}" id="productImg-{{ product.id }}" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-
-                            </form>
-                        </div>#}
                     {% endif %}
                 {% endfor %}
             </div>

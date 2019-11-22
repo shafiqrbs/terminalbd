@@ -1,4 +1,7 @@
 /* ================= Header ============*/
+.sticky{
+    background: #605f5c;
+}
 .search-box {
    border: 0!important;
 }
@@ -122,4 +125,18 @@ div.bhoechie-tab-container {
 }
 .item.list-group-item:nth-of-type(odd) {
     background: #fff!important;
+}
+
+.closest-dropzone{
+    line-height: 70px;
+}
+.closest-dropzone > span{
+    color: #FF5400!important;
+}
+.modal-dialog{
+    top:0!important;
+}
+.btn:hover {
+    color: #464646 !important;
+    background: transparent!important;
 }

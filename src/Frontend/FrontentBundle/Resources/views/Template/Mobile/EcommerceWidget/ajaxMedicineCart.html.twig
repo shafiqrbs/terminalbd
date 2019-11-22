@@ -1,7 +1,7 @@
 <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
 <div id="cart-item-list">
     {% if  cart.contents is not empty %}
-        <div class="top">Recent Buy Item's <span class="pull-right" style="margin-right:10px; margin-top:-2px" ><span class="btn btn-warning "><strong class="totalItem">{{ cart.total_items }}</strong></span><span class="btn btn-danger hideCartItem"><i class="fa fa-close"></i></span></span></div>
+        <div class="top">Recent Buy Item's <span class="pull-right" style="margin-right:10px; margin-top:-2px" ><span class="btn btn-warning "><strong class="totalItem">{{ cart.contents|length }}</strong></span><span class="btn btn-danger hideCartItem"><i class="fa fa-close"></i></span></span></div>
         <div id="cart-item-list-box">
             {% for product in cart.contents %}
                 <dl class="entity-list" id="item-remove-{{ product.rowid }}">
@@ -17,7 +17,7 @@
                         <span class="dd-span-remove">
                              <button id="{{ product.rowid }}"
                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}"
-                                     class="btn btn-danger btn-sm hunger-remove-cart">
+                                     class="btn btn-transparent btn-sm hunger-remove-cart">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                         </span>

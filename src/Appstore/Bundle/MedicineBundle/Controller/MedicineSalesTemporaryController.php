@@ -92,7 +92,6 @@ class MedicineSalesTemporaryController extends Controller
 	                      'process' => 'save',
 	                      'success' => 'invalid');
 	        return new Response(json_encode($data));
-	        exit;
         }
         $entity = New MedicineSales();
         $user = $this->getUser();
@@ -172,7 +171,6 @@ class MedicineSalesTemporaryController extends Controller
             }
         }
         return new Response('success');
-        exit;
 
     }
 
@@ -202,7 +200,7 @@ class MedicineSalesTemporaryController extends Controller
             'success' => 'success'
         );
         return new Response(json_encode($data));
-        exit;
+
     }
 
     public function returnResultData(User $user,$msg=''){
@@ -234,7 +232,7 @@ class MedicineSalesTemporaryController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -246,7 +244,7 @@ class MedicineSalesTemporaryController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceParticularDeleteAction(MedicineSalesTemporary $particular){
@@ -260,7 +258,7 @@ class MedicineSalesTemporaryController extends Controller
         $msg = 'Particular deleted successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     private function posPrint(MedicineSales $entity,$invoiceParticulars = '')

@@ -53,6 +53,7 @@
     'assets/template/plugin/select2/select2.css'
     'assets/template/plugin/sidenav/css/sidebar-menu.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
+    'assets/template/plugin/file-image-uploader/inputFileZone.css'
     'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/desktop/css/css-loader.css'
     'assets/template/desktop/css/module.css'
@@ -99,7 +100,7 @@
 </div>
 <div id="product-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
     <div class="modal-dialog modal-lg" role="document">
-        <div class="product-modal-content modal-content"></div>
+        <div class="product-modal-content"></div>
     </div>
 </div>
 <div class="loader loader-curtain" data-colorful data-text="Processing in Basket" ></div>
@@ -143,6 +144,7 @@
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/plugin/jquery-zoom/zoom.js'
+'assets/template/plugin/file-image-uploader/inputFileZone.js'
 'assets/template/plugin/js/cookies.js'
 'assets/template/desktop/js/scripts.js'
 %}
@@ -192,6 +194,7 @@
         $('#sidebar-scroll').slimScroll({
             height: $(window).height()
         });
+
         {% block documentready %}{% endblock %}
     });
 

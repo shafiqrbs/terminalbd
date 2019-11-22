@@ -891,8 +891,9 @@ class WebServiceProductController extends Controller
             $cart->update($data);
             $cartTotal = (string)$cart->total();
             $totalItems = (string)$cart->total_items();
+            $items = (string)count($cart->contents());
             $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
 
         }else{
             $array =(json_encode(array('process'=>'invalid')));
@@ -906,13 +907,11 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $quantity = (int)$_REQUEST['quantity'];
-        $productId = (int)$_REQUEST['productId'];
-        $price = (float)$_REQUEST['price'];
         $data = array(
             'rowid' => $cartid,
-            'price' => $price,
             'quantity' => $quantity,
         );
+
         $cart->update($data);
         $cartTotal = (string)round($cart->total());
         $totalItems = (string)$cart->total_items();
