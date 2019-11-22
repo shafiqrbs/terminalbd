@@ -1,15 +1,15 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <script type="text/javascript">
-        window.print();
+        /*window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
-        }, 2000);
+        }, 2000);*/
     </script>
-    <div id="invoice">
-        <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">=
-            <div style="min-width: 600px">
+    <div id="invoice" style="margin-bottom: 0; padding-bottom: 0">
+        <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
+            <div>
                 <header>
                     {% if config.isPrintHeader == 1 %}
                         <div class="row">
@@ -36,10 +36,10 @@
                     </div>
                     <div style="clear: both; display: flex"></div>
                 </header>
-                <main>
+                <main style="margin-bottom: 0!important;">
                     <div class="row contacts">
-                        <div class="col invoice-to">
-                            <div class="text-gray-light">INVOICE TO:</div>
+                        <div class="col invoice-to" style="margin-right: 30px">
+                            <div class="text-gray-light">INVOICE TO</div>
                             {% if entity.customer %}
                                 {% if  entity.customer.name is not empty  %}
                                     <h4 class="to">{{ entity.customer.name }}</h4>
@@ -52,6 +52,11 @@
                                 {% endif %}
                             {% endif %}
                         </div>
+                        <div class="col invoice-to">
+                            <div class="text-gray-light">Marketing BY</div>
+                            <h4 class="to">S.R. {% if  entity.marketing is not empty %}{{ entity.marketing.name }}{% endif %}</h4>
+                            <div class="address">Area. {% if  entity.area is not empty %}{{ entity.area.name }},{{ entity.area.location.name }}{% endif %}</div>
+                        </div>
                         <div class="col invoice-details">
                             <h5 class="invoice-id">INVOICE {{ entity.invoice }}</h5>
                             <div class="date">Date of Invoice: {{ entity.created|date('d-m-Y') }}</div>
@@ -60,16 +65,16 @@
                             {% if entity.cardNo is not empty %}<div class="date">{{ entity.bank.name  }}/{{ entity.cardNo }}</div>{% endif %}
                         </div>
                     </div>
-                    <table class="main-table" border="0" cellspacing="0" cellpadding="0" style="border: 2px solid #999">
+                    <table class="main-table" border="0" cellspacing="0" cellpadding="0" style="border: 1px solid #999;">
                         <thead>
                         <tr>
                             <th style="width: 1%">S/N</th>
                             <th class="text-left">Particular</th>
-                            <th>Sales</th>
+                            <th>Quantity</th>
                             <th>Return</th>
                             <th>Damage</th>
                             <th>Spoil</th>
-                            <th>Quantity</th>
+                            <th>Sales</th>
                             <th>Unit</th>
                             <th>Unit Price</th>
                             <th style="width: 8%" class="text-right">Total</th>
@@ -134,13 +139,12 @@
                         <div class="notice">{{ entity.comment }}</div>
                     </div>
                 </main>
-                <footer>
-                    <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
-                    <span class="right">Developed by: {{ portal_design_development }}</span>
-                </footer>
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
-            <div></div>
+           {# <footer>
+                <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
+                <span class="right">Developed by: {{ portal_design_development }}</span>
+            </footer>#}
         </div>
     </div>
     <style>

@@ -124,6 +124,11 @@ class Location
      */
     protected $dpsParticulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessArea", mappedBy="location")
+     */
+    protected $area;
+
 
     /**
      * @var string
@@ -341,13 +346,6 @@ class Location
         return $this->particulars;
     }
 
-    /**
-     * @return BusinessParticular
-     */
-    public function getBusinessParticulars()
-    {
-        return $this->businessParticulars;
-    }
 
     /**
      * @return DpsParticular

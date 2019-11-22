@@ -11,6 +11,7 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -125,11 +126,15 @@ class InvoiceController extends Controller
             return $this->redirect($this->generateUrl('business_invoice_show', array('id' => $entity->getId())));
         }
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $this->getUser()->getGlobalOption(),'status'=>1),array('companyName'=>"ASC"));
+        $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
+            'areas' => $areas,
+            'marketings' => $marketings,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
@@ -162,6 +167,16 @@ class InvoiceController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
+            }
+            if(isset($data['area']) and !empty($data['area'])){
+             $area = $data['area'];
+             $areaExist =$this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($area);
+             if($areaExist){ $entity->setArea($areaExist);}
+            }
+            if(isset($data['marketing']) and !empty($data['marketing'])){
+             $marketing = $data['marketing'];
+             $marketingExist =$this->getDoctrine()->getRepository('BusinessBundle:Marketing')->find($marketing);
+             if($marketingExist){ $entity->setMarketing($marketingExist);}
             }
             if (in_array($entity->getProcess(), $done)) {
                 $entity->setApprovedBy($this->getUser());
@@ -210,18 +225,41 @@ class InvoiceController extends Controller
         $config = $entity->getBusinessConfig();
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
 	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
-
+        $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $error = $this->getErrorsFromForm($editForm);
+        var_dump($error);
+        exit;
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
+            'areas' => $areas,
+            'marketings' => $marketings,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
 
     }
 
-	/**
+    private function getErrorsFromForm(FormInterface $form)
+    {
+        $errors = array();
+        foreach ($form->getErrors() as $error) {
+            $errors[] = $error->getMessage();
+        }
+        foreach ($form->all() as $childForm) {
+            if ($childForm instanceof FormInterface) {
+                if ($childErrors = $this->getErrorsFromForm($childForm)) {
+                    $errors[$childForm->getName()] = $childErrors;
+                }
+            }
+        }
+        return $errors;
+    }
+
+
+    /**
 	 * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
 	 */
 

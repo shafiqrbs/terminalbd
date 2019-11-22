@@ -107,6 +107,15 @@ class BusinessInvoice
     private  $accountMobileBank;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Marketing", inversedBy="invoices" )
+     **/
+    private  $marketing;
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessArea", inversedBy="invoices" )
+     **/
+    private  $area;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
@@ -955,6 +964,38 @@ class BusinessInvoice
     public function setVenue($venue)
     {
         $this->venue = $venue;
+    }
+
+    /**
+     * @return BusinessArea
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * @param BusinessArea $area
+     */
+    public function setArea($area)
+    {
+        $this->area = $area;
+    }
+
+    /**
+     * @return Marketing
+     */
+    public function getMarketing()
+    {
+        return $this->marketing;
+    }
+
+    /**
+     * @param Marketing $marketing
+     */
+    public function setMarketing($marketing)
+    {
+        $this->marketing = $marketing;
     }
 
 }

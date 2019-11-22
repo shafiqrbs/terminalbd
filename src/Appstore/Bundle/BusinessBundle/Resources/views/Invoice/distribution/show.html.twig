@@ -81,6 +81,13 @@
                                     <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                 </ul>
                             </div>
+                            <div class="span3">
+                                <h4>Marketing By:</h4>
+                                <ul class="unstyled">
+                                    <li><strong>S.R By:</strong>&nbsp;{% if entity.marketing is defined and entity.marketing is not empty %}{{ entity.marketing.name }}{% endif %}</li>
+                                    <li><strong>Received By:</strong>&nbsp;{% if entity.area is defined and entity.area is not empty %}{{ entity.area.name }},{{ entity.area.location.name }}{% endif %}</li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid box green">
@@ -90,12 +97,12 @@
                                     <tr class="head-blue">
                                     <th class="span1"> S/N</th>
                                         <th class="span4">Particular</th>
-                                        <th class="span1">Sales Qnt</th>
+                                        <th class="span1">Quantity</th>
                                         <th class="span1">Return Qnt</th>
                                         <th class="span1">Damage Qnt</th>
                                         <th class="span1">Spoil Qnt</th>
                                         <th class="span1">Bonus Qnt</th>
-                                        <th class="span1">Quantity</th>
+                                        <th class="span1">Sales</th>
                                         <th class="span1">Unit</th>
                                         <th class="span1">Unit Price</th>
                                         <th class="span1">Amount</th>

@@ -58,10 +58,20 @@ class BusinessConfig
     private $categories;
 
 
-      /**
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", mappedBy="businessConfig")
      **/
     private $wearHouses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Marketing", mappedBy="businessConfig")
+     **/
+    private $marketing;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessArea", mappedBy="businessConfig")
+     **/
+    private $area;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="businessConfig")
