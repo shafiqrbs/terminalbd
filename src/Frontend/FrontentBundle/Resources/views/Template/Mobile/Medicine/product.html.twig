@@ -33,8 +33,12 @@
                             <div class="thumbnail">
                                 <div class="product-preview group list-group-image">
                                     <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                        <img class="img-responsive"
-                                             src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,160) }}{% endif %}"  alt=""></a>
+                                       {% if product.medicine is defined and product.medicine is not empty %}
+                                            <img class="img-responsive" src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                       {% endif %}
+                                        <img class="img-responsive" src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                       {% endif %}
+                                    </a>
                                 </div>
                                 <div class="caption">
                                     <div class="card-content" data-match-height="item-product">

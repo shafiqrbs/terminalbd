@@ -208,6 +208,9 @@ class ItemRepository extends EntityRepository
         if($copyEntity->getMedicineBrand() and in_array($copyEntity->getMedicineBrand()->getMedicineForm(),array('Tablet','Capsule','Syrup','Injection'))){
             $entity->setImageDefaultSource($copyEntity->getMedicineBrand()->getMedicineForm());
         }
+        if($copyEntity->getMedicineBrand()) {
+            $entity->setMedicine($copyEntity->getMedicineBrand());
+        }
         $em->persist($entity);
         $em->flush();
         if($copyEntity->getMedicineBrand()) {

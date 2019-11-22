@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -80,6 +81,11 @@ class Item
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="items")
      */
     protected $brand;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineBrand")
+     */
+    protected $medicine;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="items" )
@@ -1177,6 +1183,22 @@ class Item
     public function setQuantityApplicable($quantityApplicable)
     {
         $this->quantityApplicable = $quantityApplicable;
+    }
+
+    /**
+     * @return MedicineBrand
+     */
+    public function getMedicine()
+    {
+        return $this->medicine;
+    }
+
+    /**
+     * @param MedicineBrand $medicine
+     */
+    public function setMedicine($medicine)
+    {
+        $this->medicine = $medicine;
     }
 
 
