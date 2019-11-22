@@ -364,9 +364,13 @@ $(document).ready(function(){
                     data        : new FormData(form),
                     processData : false,
                     contentType : false,
-                    success: function(response){},
+                    success: function(response){
+                        if(response === 'success') {
+                            location.reload();
+                        }
+                    },
                     complete: function(response){
-                        if(response === 'valid'){
+                        if(response === 'success'){
                             location.reload();
                         }else if(response === 'invalid'){
                             $('#registerModal').modal('hide');

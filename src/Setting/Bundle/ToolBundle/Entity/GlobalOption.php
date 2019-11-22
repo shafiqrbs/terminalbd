@@ -2098,14 +2098,6 @@ class GlobalOption
 
 
     /**
-     * @return TallyConfig
-     */
-    public function getTallyConfig()
-    {
-        return $this->tallyConfig;
-    }
-
-    /**
      * @return string
      */
     public function getOrganizationName()

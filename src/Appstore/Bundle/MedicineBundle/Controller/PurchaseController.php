@@ -282,7 +282,7 @@ class PurchaseController extends Controller
         }else{
             return new Response(json_encode(array('success'=>'invalid')));
         }
-        exit;
+
     }
 
     public function purchaseItemUpdateAction(Request $request)
@@ -361,7 +361,7 @@ class PurchaseController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceParticularDeleteAction(MedicinePurchase $invoice, MedicinePurchaseItem $particular){
@@ -378,7 +378,6 @@ class PurchaseController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
@@ -413,7 +412,7 @@ class PurchaseController extends Controller
 
         $result = $this->returnResultData($entity);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function updateAction(Request $request, MedicinePurchase $entity)
@@ -515,7 +514,7 @@ class PurchaseController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
     public function reverseAction(MedicinePurchase $purchase)

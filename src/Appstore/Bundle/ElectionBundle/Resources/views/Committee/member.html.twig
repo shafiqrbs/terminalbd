@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Manage Election Committee
+                    Manage Party Committee
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Election Committee</a></li>
+                    <li><a href="#">Manage Party Committee</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,7 +29,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Election Committee Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Party Committee Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('election_committee') }}"><i class="icon-th-list"></i>&nbsp; Committee</a>
@@ -126,7 +126,7 @@
                                     <div class="input-append span12" style="margin-bottom:0!important">
                                         <div class="input-group">
                                             {{ form_widget(form.designation) }}
-                                            <button type="submit" class="btn blue" id="addRoom" ><i class="icon-save"></i> Add</button>
+                                            <button type="submit" class="btn blue committeeButton" id="addMember" ><i class="icon-save"></i> Add</button>
                                         </div>
                                     </div>
                                 </div>

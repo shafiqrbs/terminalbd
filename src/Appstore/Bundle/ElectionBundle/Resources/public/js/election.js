@@ -190,8 +190,11 @@ var committees = $("#memberCommittee").validate({
                 if(response === 'invalid'){
                     alert('Already this member is added.');
                 }else{
+                    $("#committee_member").select2().select2("val","").select2('open');
                     $('#memberCommittees').html(response);
                     $('form#memberCommittee')[0].reset();
+                    $('#addMember').html("<i class='icon-save'></i> Add");
+                    $('.committeeButton').attr("disabled", false);
                 }
             }
         });
