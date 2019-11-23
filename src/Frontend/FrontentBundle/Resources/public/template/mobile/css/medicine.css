@@ -358,11 +358,15 @@ div.treeview, .treeview ul {
     font-weight: normal;
 }
 
-.product-discount{
+.product-discount {
     position: absolute;
     top: 8px;
     right: 0;
     opacity: 0.8;
+    color: red!important;
+    background: #ccc;
+    border: 1px solid #ff6a00;
+    border-radius: 0;
 }
 
 .category-name{

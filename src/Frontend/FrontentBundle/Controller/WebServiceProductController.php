@@ -193,10 +193,11 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $rwaEntities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities =$rwaEntities->getResult();
             $medicineConfig = $globalOption->getMedicineConfig()->getId();
             $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
-           $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
+         //  $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
 
             /* Device Detection code desktop or mobile */
 
@@ -214,7 +215,7 @@ class WebServiceProductController extends Controller
                     'cart'              => $cart,
                     'products'          => $entities,
                     'vendorEntities'    => $vendorEntities,
-                    'globalEntities'    => $globalEntities,
+                  //  'globalEntities'    => $globalEntities,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
@@ -745,30 +746,46 @@ class WebServiceProductController extends Controller
     }
 
 
-    public function productAddMedicineCartAction(Request $request , $subdomain , Item $product)
+    public function productAddMedicineCartAction(Request $request , $subdomain , $product)
     {
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
-
+        $ecommerceItem = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($product);
+        $stockItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($product);
+        $productId = '';
+        $productName = '';
+        $productUnit = '';
+        $brand = '';
+        $category = '';
+        if($ecommerceItem){
+            $productId = $ecommerceItem->getId();
+            $productName = $ecommerceItem->getWebName();
+            $productUnit = (!empty($ecommerceItem->getProductUnit())) ? $ecommerceItem->getProductUnit()->getName() : '';
+            $brand = !empty($ecommerceItem->getBrand()) ? $ecommerceItem->getBrand()->getName() : '';
+            $category = !empty($ecommerceItem->getBrand()) ? $ecommerceItem->getBrand()->getName() : '';
+            $salesPrice = $ecommerceItem->getDiscountPrice() == null ?  $ecommerceItem->getSalesPrice() : $ecommerceItem->getDiscountPrice();
+        }elseif($stockItem){
+            $productId = $stockItem->getId();
+            $productName = $stockItem->getName();
+            $productUnit = (!empty($stockItem->getUnit())) ? $stockItem->getUnit()->getName() : '';
+            $brand = !empty($stockItem->getBrandName()) ? $stockItem->getBrandName() : '';
+            $salesPrice = $stockItem->getSalesPrice();
+        }
         $data = $_REQUEST;
         $quantity =  isset($data['quantity']) ? $data['quantity'] :'';
-        $productImg = isset($data['productImg']) ? $data['productImg'] :'';
-        $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
-        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
+
 
         /** @var GlobalOption $globalOption */
 
             $data = array(
-                'id' => $product->getId(),
-                'name' => $product->getWebName(),
-                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
-                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
+                'id' => $productId,
+                'name' => $productName,
+                'brand' => $brand,
+                'category' => $category,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
-                'productUnit' => $productUnit,
-                'productImg' => $productImg
+                'productUnit' => $productUnit
             );
             $cart->insert($data);
             $cartTotal = (string)$cart->total();

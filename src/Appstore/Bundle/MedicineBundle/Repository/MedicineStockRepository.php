@@ -39,7 +39,6 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
         if (!empty($webName)) {
-            $aKeyword = explode(" ", $webName);
             $qb->andWhere($qb->expr()->like("e.name", "'%$webName%'"  ));
         }
         if (!empty($sku)) {
@@ -145,8 +144,8 @@ class MedicineStockRepository extends EntityRepository
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
-        $qb->getQuery()->getArrayResult();
-        return  $qb;
+        $result = $qb->getQuery()->getResult();
+        return  $result;
     }
 
     public function reportCurrentStockPrice(User $user)

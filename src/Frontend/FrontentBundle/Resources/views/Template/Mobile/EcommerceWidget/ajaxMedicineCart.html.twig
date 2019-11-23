@@ -27,7 +27,7 @@
                         <div class="col-xs-6 col-md-6">
                             <div class="input-group">
               <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-sm btn-transparent btn-danger btn-cart-item"
+                  <button type="button" class="btn btn-sm btn-transparent btn-danger btn-number-cart"
                           data-type="minus" data-field="quantity" data-id="{{ product.rowid }}"
                           id="btn-left-{{ product.rowid }}"
                           data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"
@@ -39,7 +39,7 @@
                                        class="btn-number-cart" value="{{ product.quantity }}"
                                        min="1" max="100">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-transparent btn-sm btn-success btn-cart-item"
+                                    <button type="button" class="btn btn-transparent btn-sm btn-success btn-number-cart"
                                             data-type="plus" data-field="quantity"
                                             data-id="{{ product.rowid }}"
                                             data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart_update',{'cartid': product.rowid}) }}"

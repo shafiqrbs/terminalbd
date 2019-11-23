@@ -25,8 +25,10 @@ class ItemRepository extends EntityRepository
 {
 
 
-    public function findFrontendProductWithSearch($config, $data , $limit = 0)
+    public function findFrontendProductWithSearch($config, $post , $limit = 0)
     {
+
+        $data = $post['item'];
         if (!empty($data['sortBy'])) {
 
             $sortBy = explode('=?=', $data['sortBy']);
@@ -74,9 +76,9 @@ class ItemRepository extends EntityRepository
                 )
             );
         }
-        if (!empty($data['product'])) {
-             $search = strtolower($data['product']);
-             $qb->andWhere($qb->expr()->like("product.slug", "'%$search%'"  ));
+        if (!empty($data['webName'])) {
+            $search = strtolower($data['webName']);
+            $qb->andWhere($qb->expr()->like("product.slug", "'%$search%'"  ));
         }
 
         if (empty($data['sortBy'])){
