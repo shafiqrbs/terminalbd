@@ -227,9 +227,6 @@ class InvoiceController extends Controller
 	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
         $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
-        $error = $this->getErrorsFromForm($editForm);
-        var_dump($error);
-        exit;
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,

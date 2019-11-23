@@ -201,11 +201,31 @@ class BusinessAreaController extends Controller
         return $this->redirect($this->generateUrl('business_area'));
     }
 
-    public function sortedAction(Request $request)
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function statusAction(Request $request, $id)
     {
-        $data = $request ->request->get('item');
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->setBusinessAreaSorting($data);
-        exit;
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find District entity.');
+        }
+
+        $status = $entity->isStatus();
+        if($status == 1){
+            $entity->setStatus(false);
+        } else{
+            $entity->setStatus(true);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('business_area'));
     }
 
 
