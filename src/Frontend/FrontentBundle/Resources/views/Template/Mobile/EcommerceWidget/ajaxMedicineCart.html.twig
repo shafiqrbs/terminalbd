@@ -6,13 +6,13 @@
             {% for product in cart.contents %}
                 <dl class="entity-list" id="item-remove-{{ product.rowid }}">
                     <dt>
-                        {% if product.productImg is not empty %}
+                        {#{% if product.productImg is not empty %}
                             <img src="{{ image(product.productImg).scaleResize(80,80) }}" alt=""/>
                         {% else %}
                             <img style="height: 80px; width: 80px" src="{{ asset('assets/img/product-icon.png') }}">
-                        {% endif %}
+                        {% endif %}#}
                         <span class="dd-span-name">
-                                        {{ product.name }}
+                            {{ loop.index }}. {{ product.name }}
                             <br/>  ৳ {{ product.price }} {% if product.productUnit is not empty %}/ {{ product.productUnit }} {% endif %}</span>
                         <span class="dd-span-remove">
                              <button id="{{ product.rowid }}"
@@ -82,7 +82,7 @@
     #cart-item-list .dd-span-name {
         align-items: center;
         display: flex;
-        width:60%;
+        width:90%;
         height: 75px;
         font-size: 12px;
         padding-right: 7px;

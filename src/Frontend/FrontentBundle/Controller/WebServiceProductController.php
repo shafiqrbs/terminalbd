@@ -758,6 +758,7 @@ class WebServiceProductController extends Controller
         $productUnit = '';
         $brand = '';
         $category = '';
+        $salesPrice = 0;
         if($ecommerceItem){
             $productId = $ecommerceItem->getId();
             $productName = $ecommerceItem->getWebName();
@@ -785,7 +786,8 @@ class WebServiceProductController extends Controller
                 'category' => $category,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
-                'productUnit' => $productUnit
+                'productUnit' => $productUnit,
+                'productImg' => ''
             );
             $cart->insert($data);
             $cartTotal = (string)$cart->total();

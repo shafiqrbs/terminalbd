@@ -537,6 +537,7 @@ class EcommerceWidgetController extends Controller
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
         $featureCategory = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->findOneBy(array('globalOption' => $globalOption, 'category' => $category));
+
         $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
