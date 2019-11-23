@@ -34,7 +34,7 @@ class MedicineStockRepository extends EntityRepository
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
-        $webName = isset($data['item']['webName'])? $data['item']['webName'] :'';
+        $webName = isset($data['webName'])? $data['webName'] :'';
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }

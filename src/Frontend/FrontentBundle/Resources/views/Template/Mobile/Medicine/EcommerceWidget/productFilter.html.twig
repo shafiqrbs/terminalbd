@@ -3,7 +3,7 @@
     <a class="btn btn-success text-center col-xs-12 col-md-12" href="tel:+8801753333652"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
     <div class="input-group">
         <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
-        <input type="text" name="item[webName]" id="webName" class="form-control" value="{{ searchForm['search'] is defined ? searchForm['search'] :'' }}" placeholder="Find medicine">
+        <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
         <span class="input-group-btn"><button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button></span>
     </div>
     <div class="sidebar-footer" >

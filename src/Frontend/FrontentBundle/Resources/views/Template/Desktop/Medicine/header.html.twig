@@ -98,11 +98,10 @@
                 </div>
                 <div class="bs-example-form col-md-10 text-left" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
-                        {{ form_start(form) }}
-                        {{ form_row(form._token) }}
+                    <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                         <div class='input-group search-box' style="width: 100%" >
                             <div class="input-group" style="width: 100%">
-                                {{ form_widget(form.webName) }}
+                                <input type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Product name,category,brand etc">
                                 <span class="input-group-btn">
                                     <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
@@ -117,7 +116,7 @@
 
                             </div>
                         </div>
-                        {{ form_end(form) }}
+                    </form>
                     {% endif %}
                 </div>
             </div>

@@ -64,7 +64,7 @@
                                             <td class="col-sm-6 col-md-6">
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <h5 class="media-heading">{{ product.name }}</h5>
+                                                        <h5 class="media-heading">{{ loop.index }}. {{ product.name }}</h5>
                                                         {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
 
                                                     </div>

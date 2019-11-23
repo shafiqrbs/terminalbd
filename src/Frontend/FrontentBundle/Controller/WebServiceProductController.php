@@ -208,7 +208,7 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
             $item = !empty($_REQUEST) ? $_REQUEST :array();
-            $searchForm = $item['item'];
+            $searchForm =$item;
             return $this->render('FrontendBundle:'.$theme.':productSearch.html.twig',
                 array(
                     'globalOption'      => $globalOption,
