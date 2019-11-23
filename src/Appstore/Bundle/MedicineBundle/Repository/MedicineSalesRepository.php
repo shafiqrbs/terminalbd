@@ -872,6 +872,7 @@ class MedicineSalesRepository extends EntityRepository
         foreach ($entities as $entity){
 
             $entity->setProcess('Done');
+            $entity->setSalesBy($entity->getCreatedBy());
             $entity->setApprovedBy($entity->getCreatedBy());
             $entity->setUpdated($entity->getCreated());
             $entity->setDeviceApproved(true);

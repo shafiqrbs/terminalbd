@@ -1,13 +1,13 @@
 <div class="row  margin-bottom">
 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" data-example-id="input-group-segmented-buttons">
-    <a class="btn btn-success text-center col-xs-12 col-md-12" href="tel:+8801753333652"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
+    <a class="btn btn-warning text-center col-xs-12 col-md-12" href="tel:+8801753333652"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
     <div class="input-group">
         <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
         <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
         <span class="input-group-btn"><button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button></span>
     </div>
     <div class="sidebar-footer" >
-        <button type="button" id="filter"  class="btn btn-warning col-xs-12 col-md-12">  Upload Prescription</button>
+        <button type="button" id="filter"  class="btn btn-warning  col-xs-12 col-md-12"> <span class="fa fa-upload"></span> UPLOAD PRESCRIPTION</button>
     </div>
     <div id="showFilter" style="display:none;">
         {% set sortBy = app.request.get('sortBy') %}
@@ -49,7 +49,9 @@
                              <tbody>
                              <tr>
                                  <td class="text-right">
-                                     <input type="file" id="prescriptionFile" name="prescriptionFile" class="m-wrap span12 form-control" placeholder="">
+                                     <div style="height: 70px; margin-bottom: 15px">
+                                         <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone-mobile"/>
+                                     </div>
                                      <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
                                  </td>
                              </tr>
@@ -94,4 +96,9 @@
     .btn-warning{
         background: #ff6a00!important;
     }
+    .dropzone-upload{
+        border-radius: 0px;
+        background-color: #535b5c!important;
+    }
+
 </style>

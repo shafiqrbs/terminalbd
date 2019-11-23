@@ -205,6 +205,13 @@ $(document).on( "click", ".productToCart", function(e){
         })
     });
 
+$('.dropzone-mobile').inputFileZone({
+    message: 'UPLOAD YOUR PRESCRIPTION',
+    messageFile: 'Ready to upload',
+    zIndex: 9999999,
+    previewImages: true
+});
+
 
 function jqueryTemporaryLoad() {
 
