@@ -45,11 +45,11 @@ class BusinessPurchaseReturnRepository extends EntityRepository
     {
         $em = $this->_em;
         $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=> $invoice->getInvoice()));
-         $returnItemCount = $this->countReturnQuantity($invoice->getId());
+         $returnItemCount = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceDistributionTotalPrice($invoice);
 
             if($exist){
                 $this->insertUpdatePurchaseReturnItem($exist,$invoice);
-            }elseif($returnItemCount['damageQnt'] > 0){
+            }elseif($returnItemCount['damageQnt'] > 0 or $returnItemCount['spoilQnt'] > 0){
                 $entity = new BusinessPurchaseReturn();
                 $entity->setBusinessConfig($invoice->getBusinessConfig());
                 $entity->setSalesInvoice($invoice->getInvoice());
