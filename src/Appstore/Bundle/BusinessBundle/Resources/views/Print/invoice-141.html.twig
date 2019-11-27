@@ -116,7 +116,7 @@
                                     <tr><td>Sales Amount</td><td><strong  class="pull-right">{{ entity.total|number_format(0) }}</strong></td></tr>
                                     <tr><td>Current Due</td><td><strong  class="pull-right">{{ entity.due|number_format(0) }}</strong></td></tr>
                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td>Out Standing</td><td><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% endif %}</strong></td></tr>
+                                    <tr><td>Outstanding</td><td><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% endif %}</strong></td></tr>
                                 </table>
                             </td>
                             <td colspan="6" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
