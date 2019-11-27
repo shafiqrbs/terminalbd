@@ -5,6 +5,7 @@ namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -42,7 +43,7 @@ class PurchaseReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $data = $_REQUEST;
-	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->findAll();
+	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->findWithSearch($config->getId(),$data);
         $pagination = $this->paginate($entities);
         return $this->render('BusinessBundle:PurchaseReturn:index.html.twig', array(
             'entities' => $pagination,
@@ -67,18 +68,14 @@ class PurchaseReturnController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = new BusinessPurchase();
+        $entity = new BusinessPurchaseReturn();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity->setBusinessConfig($config);
         $entity->setCreatedBy($this->getUser());
-        $receiveDate = new \DateTime('now');
-        $entity->setReceiveDate($receiveDate);
         $entity->setProcess('Created');
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('business_purchase_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('business_purchase_return_edit', array('id' => $entity->getId())));
 
     }
 
@@ -250,7 +247,7 @@ class PurchaseReturnController extends Controller
 
 
     /**
-     * Finds and displays a Vendor entity.
+     * Finds and displays a BusinessPurchaseReturn entity.
      *
      */
     public function showAction($id)
@@ -258,13 +255,13 @@ class PurchaseReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 	    $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-	    $entity = $em->getRepository('BusinessBundle:BusinessPurchase')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+	    $entity = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
 
 
 	    if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        return $this->render('BusinessBundle:Purchase:show.html.twig', array(
+        return $this->render('BusinessBundle:PurchaseReturn:show.html.twig', array(
             'entity'      => $entity,
         ));
     }

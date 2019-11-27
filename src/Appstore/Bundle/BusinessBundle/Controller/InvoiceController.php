@@ -199,6 +199,7 @@ class InvoiceController extends Controller
                 $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 if($result['damageQnt'] > 0 or $result['spoilQnt'] > 0) {
+
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity);
                 }
                 if(in_array($entity->getProcess(),$done)){

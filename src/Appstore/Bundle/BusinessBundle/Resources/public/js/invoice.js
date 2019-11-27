@@ -21,6 +21,10 @@ var bindDatePicker = function(element) {
     });
 };
 
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
+
 function datePickerReload() {
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy"
@@ -466,19 +470,19 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
     subTotal  = (totalQuantity * price);
   //  toPrecision = subTotal.toPrecision(2)''
     $("#totalQuantity-"+id).html(totalQuantity);
-    $("#subTotal-"+id).html(subTotal);
+    $("#subTotal-"+id).html(financial(subTotal));
     $.ajax({
         url: Routing.generate('business_invoice_distribution_item_update'),
         type: 'POST',
         data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['subTotal']);
-            $('#paymentTotal').val(obj['subTotal']);
-            $('#due').val(obj['subTotal']);
-            $('.due').html(obj['subTotal']);
-            $('.payment').html(obj['subTotal']);
+            $('.subTotal').html(financial(obj['subTotal']));
+            $('.netTotal').html(financial(obj['subTotal']));
+            $('#paymentTotal').val(financial(obj['subTotal']));
+            $('#due').val(financial(obj['subTotal']));
+            $('.due').html(financial(obj['subTotal']));
+            $('.payment').html(financial(obj['subTotal']));
             $('.discount').html(0);
             $('.salesQnt').html(obj['salesQnt']);
             $('.returnQnt').html(obj['returnQnt']);

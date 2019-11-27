@@ -70,6 +70,13 @@ class BusinessPurchaseReturn
      */
     private $salesInvoice;
 
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseInvoice", type="integer", nullable=true)
+     */
+    private $purchaseInvoice;
+
     /**
      * @var integer
      *
@@ -278,6 +285,22 @@ class BusinessPurchaseReturn
     public function setSalesInvoice($salesInvoice)
     {
         $this->salesInvoice = $salesInvoice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseInvoice()
+    {
+        return $this->purchaseInvoice;
+    }
+
+    /**
+     * @param int $purchaseInvoice
+     */
+    public function setPurchaseInvoice($purchaseInvoice)
+    {
+        $this->purchaseInvoice = $purchaseInvoice;
     }
 
 
