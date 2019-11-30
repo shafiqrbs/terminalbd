@@ -47,13 +47,13 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <input type="text" id="item" name="item" class="span12 select2Product" value="" autocomplete="off" placeholder="Enter item name ">
+                                            <input type="text" id="name" name="name" class="span12 m-wrap select2Product" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}" autocomplete="off" placeholder="Enter item name ">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="brand" name="brand" class="span12 select2Brand" value="" autocomplete="off" placeholder="Enter brand name ">
+                                            <input type="text" id="brand" name="brand" class="span12 m-wrap select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="category" name="category" class="span12 select2Category" value="" autocomplete="off" placeholder="Enter product category name ">
+                                            <input type="text" id="category" name="category" class="span12 m-wrap select2Category" value="" autocomplete="off" placeholder="Enter product category name ">
                                         </div>
                                         <div class="span3">
                                             <div class="controls">

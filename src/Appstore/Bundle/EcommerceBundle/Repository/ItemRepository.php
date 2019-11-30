@@ -269,6 +269,7 @@ class ItemRepository extends EntityRepository
 
     public function handleSearchBetween($qb,$data){
 
+        $webName           = isset($data['name'])? $data['name'] :'';
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
@@ -276,6 +277,10 @@ class ItemRepository extends EntityRepository
         $discount       = isset($data['discount'])? $data['discount'] :'';
         $tag            = isset($data['tag'])? $data['tag'] :'';
 
+        $qb->leftJoin('item.category', 'category');
+        $qb->leftJoin('item.brand', 'brand');
+        $qb->leftJoin('item.promotion', 'promotion');
+        $qb->leftJoin('item.discount', 'discount');
 
         if (!empty($cat)) {
             $qb->andWhere("item.category = :category");
@@ -294,8 +299,12 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('discount', $discount);
         }
         if (!empty($name)) {
-           $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+           $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
                 $qb->setParameter('searchTerm', '%'.$name.'%');
+        }
+        if (!empty($webName)) {
+           $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+                $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
         }
     }
 
@@ -336,7 +345,7 @@ class ItemRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('item');
-        $qb->join('item.purchase', 'purchase');
+        $qb->leftJoin('item.purchase', 'purchase');
         $qb->where("item.source ='config' ");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
@@ -387,11 +396,11 @@ class ItemRepository extends EntityRepository
     public function findGoodsWithSearch($config,$data,$limit = 0)
     {
 
-        $qb = $this->createQueryBuilder('product');
-        $qb->where("product.ecommerceConfig = :config");
+        $qb = $this->createQueryBuilder('item');
+        $qb->where("item.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('product.updated', 'DESC');
+        $qb->orderBy('item.updated', 'DESC');
         $qb = $qb->getQuery();
         $result = $qb->getResult();
         return  $result;

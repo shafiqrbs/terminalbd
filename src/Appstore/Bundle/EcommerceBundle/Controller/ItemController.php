@@ -55,6 +55,7 @@ class ItemController extends Controller
 		return $this->render('EcommerceBundle:Item:index.html.twig', array(
 			'promotions' => $promotions,
 			'entities' => $pagination,
+            'searchForm' => $data,
 		));
 	}
 	/**

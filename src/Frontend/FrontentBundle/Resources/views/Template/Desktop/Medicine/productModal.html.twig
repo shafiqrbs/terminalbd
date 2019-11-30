@@ -8,7 +8,11 @@
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner" style="height:275px" role="listbox">
                     <div class="item active">
-                        <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(450,450) }}{% else %}{{ image(product.webPath) }}{% endif %}" alt="img">
+                        {% if product.medicine is not empty and product.webPath is empty %}
+                            <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.medicine.webPath).resize(450,450) }}{% else %}{{ image(product.medicine.webPath).resize(450,450) }}{% endif %}" alt="{{ product.webName }}">
+                        {% else %}
+                            <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(450,450) }}{% else %}{{ image(product.webPath).resize(450,450) }}{% endif %}" alt="{{ product.webName }}">
+                        {% endif %}
                     </div>
                     {% if(product.itemGalleries) %}
                         {% for photo in product.itemGalleries %}
