@@ -25,6 +25,7 @@ class ItemMetaAttribute
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", inversedBy="itemMetaAttributes" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
 

@@ -25,6 +25,7 @@ class ItemKeyValue
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", inversedBy="itemKeyValues" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
 
