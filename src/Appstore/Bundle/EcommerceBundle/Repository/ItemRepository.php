@@ -402,8 +402,7 @@ class ItemRepository extends EntityRepository
         $this->handleSearchBetween($qb,$data);
        // $qb->orderBy('item.updated', 'DESC');
         $qb->orderBy("{$sort}",$direction);
-        $qb = $qb->getQuery();
-        $result = $qb->getResult();
+        $result = $qb->getQuery();
         return  $result;
 
     }
