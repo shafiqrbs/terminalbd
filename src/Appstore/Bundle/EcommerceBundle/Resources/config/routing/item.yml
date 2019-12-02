@@ -67,6 +67,12 @@ ecommerce_item_inline_tag_search:
     options:
            expose: true
 
+ecommerce_item_inline_category_search:
+    path:     /inline-category-search
+    defaults: { _controller: "EcommerceBundle:Item:categorySelect" }
+    options:
+           expose: true
+
 ecommerce_item_inline_update:
     path:     /inline-Product-update
     defaults: { _controller: "EcommerceBundle:Item:inlineItemUpdate" }

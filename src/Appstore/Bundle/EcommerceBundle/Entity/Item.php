@@ -12,6 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\ProductColor;
 use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -736,17 +737,10 @@ class Item
 
     function deleteImageDirectory()
     {
-
-        $dir = $this->getUploadDir();
-        if (is_dir($dir) === true)
-        {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir);
-        }
-        return false;
+        $dir =$this->getUploadDir();
+        $a = new Filesystem();
+        $a->remove($dir);
+        $a->mkdir($dir);
 
     }
 

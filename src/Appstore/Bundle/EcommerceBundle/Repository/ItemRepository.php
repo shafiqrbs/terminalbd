@@ -357,8 +357,6 @@ class ItemRepository extends EntityRepository
 
     public function findFoodWithSearch($config,$data,$limit=0)
     {
-
-
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.source = 'food'");
         $qb->andWhere("item.ecommerceConfig = :config");
@@ -396,11 +394,14 @@ class ItemRepository extends EntityRepository
     public function findGoodsWithSearch($config,$data,$limit = 0)
     {
 
+        $sort = isset($data['sort'])? $data['sort'] :'item.webName';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('item.updated', 'DESC');
+       // $qb->orderBy('item.updated', 'DESC');
+        $qb->orderBy("{$sort}",$direction);
         $qb = $qb->getQuery();
         $result = $qb->getResult();
         return  $result;

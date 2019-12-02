@@ -60,7 +60,7 @@ function ApproveProcess(){
     });
 
 
-    $(document).on("click", " .approve, .confirm, .remove , .process , .remove-tr , .item-disable", function() {
+    $(document).on("click", ".approve,.confirm,.process,.item-disable", function() {
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
@@ -70,6 +70,23 @@ function ApproveProcess(){
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
                     location.reload();
+                });
+            }
+        });
+
+    });
+
+    $(document).on("click", ".remove ,.remove-tr , .item-disable", function(event) {
+
+        var id = $(this).attr("data-id");
+        var url = $(this).attr("data-url");
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    $(".remove-"+id).hide();
+                    $(event.target).closest('tr').hide();
                 });
             }
         });

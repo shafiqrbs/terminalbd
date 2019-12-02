@@ -54,7 +54,7 @@ class ItemController extends Controller
 		$promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=>1,'type'=>'Promotion'));
 		return $this->render('EcommerceBundle:Item:index.html.twig', array(
 			'promotions' => $promotions,
-			'entities' => $pagination,
+			'pagination' => $pagination,
             'searchForm' => $data,
 		));
 	}
@@ -390,6 +390,7 @@ class ItemController extends Controller
 		if (!$vendorItem) {
 			throw $this->createNotFoundException('Unable to find Product entity.');
 		}
+
 		try {
 			$em = $this->getDoctrine()->getManager();
 			$vendorItem->deleteImageDirectory();
@@ -586,6 +587,21 @@ class ItemController extends Controller
         return new JsonResponse($items);
 
     }
+
+    public function categorySelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getUseEcommerceItemCategory($config);
+/*        $items = array();
+        $items[]=array('value' => '','text'=> '---Add Promotion---');
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Promotion');*/
+        return new JsonResponse($categoryTree);
+
+    }
+
 
 
     public function inlineItemUpdateAction(Request $request)

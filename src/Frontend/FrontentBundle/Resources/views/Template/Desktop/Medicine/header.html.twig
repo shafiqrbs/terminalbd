@@ -96,12 +96,15 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form col-md-10 text-left" style="padding-right: 0!important;">
+                <div class="col-md-3" >
+                    <img style="margin-top: 15px; height: 40px" src="{{ asset('assets/logo/alshefa/alshefa-mobile.png') }}">
+                </div>
+                <div class="bs-example-form col-md-7 text-left" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                     <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                         <div class='input-group search-box' style="width: 100%" >
                             <div class="input-group" style="width: 100%">
-                                <input type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Product name,category,brand etc">
+                                <input style="float: right; width: 97%" type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Product name,category,brand etc">
                                 <span class="input-group-btn">
                                     <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
@@ -119,6 +122,7 @@
                     </form>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </section>
