@@ -57,8 +57,35 @@ class MedicineStockController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_MEDICINE_STOCK")
+     */
 
-	/**
+    public function stockSearchAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $pagination = "";
+        if(isset($data['name']) and $data['name']){
+            $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithGlobalSearch($data);
+            $pagination = $this->paginate($entities);
+        }
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+
+        return $this->render('MedicineBundle:MedicineStock:stockSearch.html.twig', array(
+            'pagination'    => $pagination,
+            'racks' => $racks,
+            'modeFor' => $modeFor,
+            'searchForm' => $data,
+        ));
+
+    }
+
+
+
+    /**
 	 * @Secure(roles="ROLE_MEDICINE_STOCK")
 	 */
 

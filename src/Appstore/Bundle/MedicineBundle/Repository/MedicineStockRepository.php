@@ -36,7 +36,7 @@ class MedicineStockRepository extends EntityRepository
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
         $webName = isset($data['webName'])? $data['webName'] :'';
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+            $qb->andWhere($qb->expr()->like("e.name", "'$name%'"  ));
         }
         if (!empty($webName)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$webName%'"  ));
@@ -142,6 +142,18 @@ class MedicineStockRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.rackNo','p');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy("{$sort}",$direction);
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
+    public function findWithGlobalSearch($data){
+
+        $sort = isset($data['sort'])? $data['sort'] :'e.sku';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.remainingQuantity > 0');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
         $result = $qb->getQuery()->getResult();

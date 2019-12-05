@@ -23,7 +23,10 @@
                             <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                             {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                             <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                {% if product.medicine is not empty and product.webPath is empty %}
+                                            <img src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                                      {% else %}
+                                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                            {% endif %}
                             </a>
                             <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
                                 <div class="card-content">
@@ -101,7 +104,10 @@
                                     <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                                     {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                     <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                        <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                        {% if product.medicine is not empty and product.webPath is empty %}
+                                            <img src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                                      {% else %}
+                                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                            {% endif %}
                                     </a>
                                     <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
                                         <div class="card-content">
@@ -200,7 +206,10 @@
                             <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                             {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                             <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                {% if product.medicine is not empty and product.webPath is empty %}
+                                            <img src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                                      {% else %}
+                                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                            {% endif %}
                             </a>
                             <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
                                 <div class="card-content">
@@ -263,7 +272,10 @@
                         <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                         {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                         <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                            {% if product.medicine is not empty and product.webPath is empty %}
+                                            <img src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                                      {% else %}
+                                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                            {% endif %}
                         </a>
                         <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
                             <div class="card-content">

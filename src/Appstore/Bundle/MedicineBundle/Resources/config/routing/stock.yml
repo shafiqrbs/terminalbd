@@ -2,6 +2,10 @@ medicine_stock:
     path:     /
     defaults: { _controller: "MedicineBundle:MedicineStock:index" }
 
+medicine_stock_global:
+    path:     /stock-global-search
+    defaults: { _controller: "MedicineBundle:MedicineStock:stockSearch" }
+
 medicine_stock_short_item:
     path:     /item-short-list
     defaults: { _controller: "MedicineBundle:MedicineStock:itemShortList" }
