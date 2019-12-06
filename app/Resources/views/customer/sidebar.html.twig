@@ -91,25 +91,25 @@
                     <span class="title">Pre-order</span>
                 </a>
             </li>
-            <li >
+           {# <li >
                 <a href="{{ path('wishlist',{'shop':globalOption.slug}) }}">
                     <i class="icon-th-list"></i>
                     <span class="title">Wishlist</span>
                 </a>
-            </li>
+            </li>#}
 
         </ul>
     </li>
     <li >
         <a href="{{ path('order_product', { 'shop': globalOption.slug}) }}">
             <i class="icon-shopping-cart"></i>
-            <span class="title">New Shopping</span>
+            <span class="title">Continue Shopping</span>
         </a>
     </li>
     <li >
         <a href="{{ path('preorder_new', { 'shop': globalOption.slug}) }}">
             <i class="icon-th-list"></i>
-            <span class="title">New Pre Order</span>
+            <span class="title">Pre-order</span>
         </a>
     </li>
     {% else %}
@@ -143,20 +143,4 @@
         </li>
 
     {% endif %}
-    <li >
-        <a href="javascript:">
-            <i class="icon-inbox"></i>
-            <span class="title">Inbox</span>
-            <span class="arrow "></span>
-        </a>
-        <ul class="sub-menu">
-            <li >
-                <a href="{{ path('inbox_sms',{'shop':globalOption.slug}) }}">SMS</a>
-            </li>
-            <li >
-                <a href="{{ path('inbox_email',{'shop':globalOption.slug}) }}">Email</a>
-            </li>
-
-        </ul>
-    </li>
 </ul>
