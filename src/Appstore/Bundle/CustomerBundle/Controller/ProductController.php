@@ -50,7 +50,7 @@ class ProductController extends Controller
         $data = $_REQUEST;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
         $config = $globalOption->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Item')->findAllProductWithSearch($config,$data);
+        $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
         $pagination = $this->paginate($entities);
 
         $domainType =  $globalOption->getDomainType();

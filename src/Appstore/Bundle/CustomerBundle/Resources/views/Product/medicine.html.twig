@@ -82,37 +82,24 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
+                                            <input type="text" id="brand" name="brand"  class="span12 m-wrap select2Brand" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
+                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category m-wrap" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
                                         </div>
-                                        <div class="span3">
-                                            <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row-fluid">
                                         <div class="span6">
-                                            <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
-                                        </div>
-                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span10">
-                                                    <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                    <input type="text" id="webName" name="webName"  class="leftMargin span12" value="{% if searchForm.webName is defined %}{{ searchForm.webName }}{% endif %}"  autocomplete="off" placeholder="Enter Medicine/Product name">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
+
                                 </form>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -237,37 +224,9 @@
             border: 1px solid #999;
             width: 100%;
         }
-
     </style>
 {% endblock %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@EcommerceBundle/Resources/public/js/editable.js'
-    '@EcommerceBundle/Resources/public/js/approveProcess.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
-    ApproveProcess();
-
-    $(document).on("click", ".addCart", function() {
-        var id = $(this).attr("id");
-        var url = $(this).attr("data-url");
-        var color = $("#color-"+id).val();
-        var quantity = $("#quantity-"+id).val();
-        $.ajax({
-        url: url,
-        type: 'POST',
-        data:'color='+color+'&quantity='+quantity,
-        success: function (response) {
-            $('.cart span').html(response);
-        },
-        })
-
-    });
 {% endblock %}
 

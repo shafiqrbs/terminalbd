@@ -269,7 +269,7 @@ class ItemRepository extends EntityRepository
 
     public function handleSearchBetween($qb,$data){
 
-        $webName           = isset($data['name'])? $data['name'] :'';
+        $webName        = isset($data['name'])? $data['name'] :'';
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
