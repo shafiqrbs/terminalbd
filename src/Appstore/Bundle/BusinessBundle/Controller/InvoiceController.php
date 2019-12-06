@@ -336,7 +336,7 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePuremovePurchaseReturn($entity);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($entity);
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
