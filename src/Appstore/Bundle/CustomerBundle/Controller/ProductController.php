@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,13 +47,24 @@ class ProductController extends Controller
     public function indexAction(Request $request, $shop)
     {
         $cart = new Cart($request->getSession());
+        $cartProducts = array();
+        if($cart->contents()){
+            foreach ($cart->contents() as $c){
+                $cartProducts[$c['id']]  = $c;
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
         $config = $globalOption->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+        $domainType =  $globalOption->getDomainType();
+        if($domainType == 'medicine'){
+            $entities = $em->getRepository('MedicineBundle:MedicineStock')->findEcommerceWithSearch($globalOption->getMedicineConfig(),$data);
+        }else{
+            $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
+        }
         $pagination = $this->paginate($entities);
-
         $domainType =  $globalOption->getDomainType();
         $domain = !empty($domainType) ? $domainType : "index";
         return $this->render("CustomerBundle:Product:{$domain}.html.twig", array(
@@ -60,6 +72,7 @@ class ProductController extends Controller
             'entities' => $pagination,
             'searchForm' => $data,
             'cart' => $cart,
+            'cartProducts' => $cartProducts,
         ));
 
     }
@@ -100,6 +113,77 @@ class ProductController extends Controller
         $cartResult = $cartTotal.'('.$totalItems.')';
         return new Response($cartTotal);
 
+    }
+
+    public function medicineAddCartAction(Request $request , MedicineStock $product)
+    {
+
+        $cart = new Cart($request->getSession());
+        $quantity = $request->request->get('quantity');
+        $unit = ($product->getUnit()) ? $product->getUnit()->getName() :'';
+        $data = array(
+
+            'id' => $product->getId(),
+            'name'=> $product->getName(),
+            'brand'=> $product->getBrandName(),
+            'productUnit'=> $unit,
+            'category'=>'',
+            'price'=> $product->getSalesPrice(),
+            'quantity' => $quantity,
+            'subtotal' => ($quantity * $product->getSalesPrice()),
+        );
+
+        $cart->insert($data);
+        $cartTotal = $cart->total();
+        $totalItems = $cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        return new Response($cartTotal);
+
+    }
+
+    public function productUpdateCartAction(Request $request , $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cart = new Cart($request->getSession());
+        $quantity = (int)$_REQUEST['quantity'];
+        if (!empty($id) and  $quantity){
+            $data = array(
+                'rowid' => $id,
+                'quantity' => $quantity,
+            );
+            $cart->update($data);
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $items = (string)count($cart->contents());
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
+
+        }else{
+            $cart->remove($id);
+            $array =(json_encode(array('process'=>'invalid')));
+        }
+        echo $array;
+        exit;
+    }
+
+    public function cartItemRemoveAction(Request $request , $id)
+    {
+        $cart = new Cart($request->getSession());
+        $cart->remove($id);
+        $cartTotal = (string)$cart->total();
+        $totalItems = (string)$cart->total_items();
+        $items = (string)count($cart->contents());
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
+        return new Response($array);
+    }
+
+
+    public function cartRemoveAction(Request $request)
+    {
+        $cart = new Cart($request->getSession());
+        $cart->destroy();
+        return new Response('success');
     }
 
     public function cartAction(Request $request)

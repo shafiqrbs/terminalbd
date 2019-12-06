@@ -14,9 +14,21 @@ order_cart_to_add:
     path:      /{id}/item-add-to-cart
     defaults: { _controller: "CustomerBundle:Product:productAddCart" }
 
+order_cart_to_update:
+    path:      /{id}/item-update-to-cart
+    defaults: { _controller: "CustomerBundle:Product:productUpdateCart" }
+
+order_cart_to_medicine:
+    path:      /{id}/medicine-add-to-cart
+    defaults: { _controller: "CustomerBundle:Product:medicineAddCart" }
+
+order_cart_to_remove_item:
+    path:      /{id}/cart-to-item-remove
+    defaults: { _controller: "CustomerBundle:Product:cartItemRemove" }
+
 order_cart_to_remove:
-    path:      /{id}/order-item-remove
-    defaults: { _controller: "CustomerBundle:Order:delete" }
+    path:      /cart-remove
+    defaults: { _controller: "CustomerBundle:Product:cartRemove" }
 
 order_delete:
     path:      /{id}/order-delete

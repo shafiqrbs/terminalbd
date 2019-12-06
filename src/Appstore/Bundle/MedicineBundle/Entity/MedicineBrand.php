@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -49,6 +50,11 @@ class MedicineBrand
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="medicineBrand")
      **/
     private $medicineStock;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicineBrand")
+     **/
+    private $items;
 
     /**
      * @var string
@@ -511,8 +517,13 @@ class MedicineBrand
         $this->path = $path;
     }
 
-
-
+    /**
+     * @return Item
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
 
 
 }

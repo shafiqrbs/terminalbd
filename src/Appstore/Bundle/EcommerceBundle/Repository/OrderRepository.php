@@ -239,6 +239,7 @@ class OrderRepository extends EntityRepository
             }
 
         }elseif($domainType == 'medicine'){
+
             foreach ($cart->contents() as $row){
                 $item = $em->getRepository('EcommerceBundle:Item')->find($row['id']);
                 $orderItem = new OrderItem();
@@ -252,7 +253,6 @@ class OrderRepository extends EntityRepository
                 $orderItem->setItemName($row['name']);
                 $orderItem->setBrandName($row['brand']);
                 $orderItem->setCategoryName($row['category']);
-                $orderItem->setUnitName($row['productUnit']);
                 $orderItem->setSubTotal($row['subtotal']);
                 $em->persist($orderItem);
                 $em->flush();

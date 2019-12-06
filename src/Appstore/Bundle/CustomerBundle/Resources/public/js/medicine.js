@@ -87,3 +87,60 @@ var formTemporary = $("#orderItem").validate({
     }
 });
 
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
+
+
+$(document).on( "click", ".cartSubmit", function(e){
+
+    url = $(this).attr("data-url");
+    id = $(this).attr("data-id");
+    price = $(this).attr("data-price");
+    quantity = $('#quantity-'+id).val();
+    input = $('#quantity-'+$(this).attr('data-id'));
+    quantity = parseInt(input.val()) ? parseInt(input.val()) : 0;
+    subTotal =  (price * quantity);
+    $('#subTotal-'+id).html(financial(subTotal));
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        data:'quantity='+quantity,
+        success: function(response){
+            obj = JSON.parse(response);
+            $('.totalItem').html(obj['items']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.dropdown-cart').html(obj['salesItem']);
+            $('.vsidebar .txt').html(obj['cartResult']);
+
+        }
+    });
+    e.preventDefault();
+
+});
+
+$(document).on('click', '.itemRemove', function(e) {
+
+    url = $(this).attr("data-url");
+    id = $(this).attr("data-id");
+    $.get(url, function( response ) {
+        $(e.target).closest('li').hide();
+        obj = JSON.parse(response);
+        $('.totalItem').html(obj['items']);
+        $('.totalAmount').html(obj['cartTotal']);
+        $('.dropdown-cart').html(obj['salesItem']);
+        $('.vsidebar .txt').html(obj['cartResult']);
+    });
+
+});
+
+$(document).on('click', '.cartRemove', function(e) {
+
+    url = $(this).attr("data-url");
+    $.get(url, function( data ) {
+       location.reload();
+    });
+
+});
+
+

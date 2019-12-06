@@ -84,7 +84,7 @@ class Item
     protected $brand;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineBrand")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineBrand", inversedBy="items")
      */
     protected $medicine;
 
