@@ -682,7 +682,6 @@ class WebServiceProductController extends Controller
 
     }
 
-
     public function productAddSingleCartAction(Request $request , $subdomain , Item $product)
     {
 
@@ -745,7 +744,6 @@ class WebServiceProductController extends Controller
 
     }
 
-
     public function productAddMedicineCartAction(Request $request , $subdomain , $product)
     {
 
@@ -776,7 +774,6 @@ class WebServiceProductController extends Controller
         $data = $_REQUEST;
         $quantity =  isset($data['quantity']) ? $data['quantity'] :'';
 
-
         /** @var GlobalOption $globalOption */
 
             $data = array(
@@ -789,14 +786,15 @@ class WebServiceProductController extends Controller
                 'productUnit' => $productUnit,
                 'productImg' => ''
             );
+
             $cart->insert($data);
+            //var_dump($cart->contents());
             $cartTotal = (string)$cart->total();
             $totalItems = (string)$cart->total_items();
             $items = (string)count($cart->contents());
             $cartResult = $cartTotal.'('.$totalItems.')';
             $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
-        echo $array;
-        exit;
+        return new Response($array);
 
     }
 

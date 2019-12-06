@@ -96,9 +96,6 @@ class Cart {
                 return FALSE;
             }else{
 
-                /*
-                 * Insert Item
-                 */
                 // prep the quantity
                 $item['quantity'] = (float) $item['quantity'];
                 if($item['quantity'] == 0){

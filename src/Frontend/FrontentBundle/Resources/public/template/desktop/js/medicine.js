@@ -514,12 +514,12 @@ $(document).on( "click", ".btn-number-cart", function(e){
                         obj = JSON.parse(data);
                         $('#cart-item-list-box').html(obj['cartItem']);
                         $('.totalItem').html(obj['items']);
+                        $('.cartTotal').html(obj['cartTotal']);
                         $('.totalAmount').html(obj['cartTotal']);
                         $('.vsidebar .txt').html(obj['cartResult']);
                     });
             }
             if(parseInt(input.val()) === input.attr('max')) {
-                alert(input);
                 $('#quantity-'+fieldId).attr('disabled', true);
             }else {
                 $('#quantity-'+fieldId).attr('disabled', false);
@@ -538,6 +538,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
                             $('#btn-total-'+fieldId).html(subTotal);
                             $('#cart-item-list-box').html(obj['cartItem']);
                             $('.totalItem').html(obj['items']);
+                            $('.cartTotal').html(obj['cartTotal']);
                             $('.totalAmount').html(obj['cartTotal']);
                             $('.vsidebar .txt').html(obj['cartResult']);
                         }else{
@@ -572,7 +573,7 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
             if(currentVal > input.attr('min')) {
                 existVal = (currentVal - 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal})
+                $.get( url,{ quantity:-1})
                     .done(function( data ) {
                         obj = JSON.parse(data);
                         $('#cart-item-list-box').html(obj['cartItem']);
@@ -594,7 +595,7 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
             if(currentVal < input.attr('max')) {
                 existVal = (currentVal + 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal})
+                $.get( url,{ quantity:1})
                     .done(function(data){
                         obj = JSON.parse(data);
                         if(obj['process'] === 'success'){
