@@ -312,6 +312,7 @@ class InvoiceController extends Controller
     public function showAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
+        /* @var $config BusinessConfig */
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 

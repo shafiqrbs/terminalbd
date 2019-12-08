@@ -34,7 +34,7 @@ class AccountSalesListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
+    public function getLastCode(LifecycleEventArgs $args, $datetime, AccountSales $entity)
     {
 	    $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
@@ -48,7 +48,7 @@ class AccountSalesListener
             ->where('s.globalOption = :globalOption')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('globalOption', $entity->getGlobalOption())
+            ->setParameter('globalOption', $entity->getGlobalOption()->getid())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();
