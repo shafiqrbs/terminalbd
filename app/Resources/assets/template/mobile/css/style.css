@@ -2432,7 +2432,7 @@ ul.social li{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-        background: #fff;
+        background: #000;
     background-size: cover;
     padding: 0 !important;
     overflow-y: scroll;

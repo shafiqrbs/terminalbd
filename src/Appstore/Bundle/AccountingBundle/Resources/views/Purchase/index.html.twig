@@ -91,6 +91,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Process</th>
+                                    <th class="numeric" >Attach</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                             </thead>
@@ -105,6 +106,9 @@
                                     <td class="numeric" >{{ entity.payment|number_format }}</td>
                                     <td class="numeric" >{{ (entity.totalAmount-entity.payment)|number_format }}</td>
                                     <td class="numeric" >{{ entity.process }}</td>
+                                    <td class="numeric" >
+                                        {% if entity.webPath is not empty %}<a href="{{ asset(entity.webPath) }}" target="_blank">Download</a>{% endif %}
+                                    </td>
                                     <td class="numeric" >
                                         {% if entity.process is empty %}
                                             <a href="{{ path('account_expense_purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-pencil"></i></a>

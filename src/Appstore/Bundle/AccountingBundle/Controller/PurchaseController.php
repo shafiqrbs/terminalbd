@@ -180,6 +180,7 @@ class PurchaseController extends Controller
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
             $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+            $entity->upload();
             $entity->setUpdated($entity->getCreated());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -264,6 +265,9 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+        if($entity->upload() && !empty($entity->getFile())){
+            $entity->removeUpload();
         }
         $em->remove($entity);
         $em->flush();

@@ -78,6 +78,7 @@
                                         {% if entity.accountMobileBank is not empty %}<li><strong>Payment Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
                                         {% if entity.accountBank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.accountBank.name  }}</li>{% endif %}
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
+                                        <li><strong>Attach File:</strong> {% if entity.webPath is not empty %}<a href="{{ asset(entity.webPath) }}" target="_blank">Download</a>{% endif %}</li>
                                     </ul>
                                 </div>
 

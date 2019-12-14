@@ -47,6 +47,9 @@ $(document).ready(function(){
                 preloader: true,
                 midClick: true,
                 removalDelay: 300,
+                closeOnBgClick:false,
+                enableEscapeKey:false,
+                closeOnContentClick:false,
                 mainClass: 'my-mfp-zoom-in'
             });
         });
@@ -60,7 +63,12 @@ $(document).ready(function(){
             preloader: true,
             midClick: true,
             removalDelay: 300,
-            mainClass: 'my-mfp-zoom-in'
+            mainClass: 'my-mfp-zoom-in',
+            callbacks: {
+                elementParse: function() {
+                    $("#productFilter").hide();
+                }
+            }
         });
 
         $('.scrollToTop').click(function(){

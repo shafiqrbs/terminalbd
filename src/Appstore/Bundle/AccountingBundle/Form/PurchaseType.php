@@ -109,6 +109,7 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
+            ->add('file')
             ->add('totalAmount','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter total amount')))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter narration')))
             ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')

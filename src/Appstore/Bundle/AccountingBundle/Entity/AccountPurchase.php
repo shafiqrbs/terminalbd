@@ -17,6 +17,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * AccountPurchase
@@ -299,6 +300,16 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          **/
         private  $approvedBy;
 
+        /**
+         * @ORM\Column(type="string", length=255, nullable=true)
+         */
+        protected $path;
+
+
+        /**
+         * @Assert\File(maxSize="8388608")
+         */
+        protected $file;
 
 
         /**
@@ -1045,6 +1056,96 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         {
             $this->assetsPurchase = $assetsPurchase;
         }
+
+        /**
+         * Sets file.
+         *
+         * @param Expenditure $file
+         */
+        public function setFile($file = null)
+        {
+            $this->file = $file;
+        }
+
+        /**
+         * Get file.
+         *
+         * @return Expenditure
+         */
+        public function getFile()
+        {
+            return $this->file;
+        }
+
+        public function getAbsolutePath()
+        {
+            return null === $this->path
+                ? null
+                : $this->getUploadRootDir().'/'.$this->path;
+        }
+
+        public function getWebPath()
+        {
+            return null === $this->path
+                ? null
+                : $this->getUploadDir().'/'.$this->path;
+        }
+
+        public function removeFileImage()
+        {
+            $path = null === $this->path
+                ? null
+                : $this->getUploadRootDir().'/'.$this->path;
+
+            if ($file = $path) {
+                unlink($file);
+            }
+        }
+
+        /**
+         * @ORM\PostRemove()
+         */
+        public function removeUpload()
+        {
+            if ($file = $this->getAbsolutePath()) {
+                unlink($file);
+            }
+        }
+
+        protected function getUploadRootDir()
+        {
+            return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+        }
+
+        public function getUploadDir()
+        {
+            return 'uploads/domain/'.$this->getGlobalOption()->getId().'/account/';
+        }
+
+        public function upload()
+        {
+            // the file property can be empty if the field is not required
+            if (null === $this->getFile()) {
+                return;
+            }
+
+            // use the original file name here but you should
+            // sanitize it at least to avoid any security issues
+
+            // move takes the target directory and then the
+            // target filename to move to
+            $filename = date('YmdHmi') . "-" . $this->getFile()->getClientOriginalName();
+            $this->getFile()->move(
+                $this->getUploadRootDir(),
+                $filename
+            );
+            // set the path property to the filename where you've saved the file
+            $this->path = $filename;
+
+            // clean up the file property as you won't need it anymore
+            $this->file = null;
+        }
+
 
     }
 

@@ -21,7 +21,7 @@
     {% if globalOption.templateCustomize.favicon is not empty %}
         <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
     {% endif %}
-    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+   {# <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>#}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
     <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -85,7 +85,7 @@
             <!--/footer-->
             <div id="login-signip">
             </div>
-            <div id="dialog_content" class="dialog_content" style="display:none">
+            <div id="dialog_content" class="dialog_content" style="display:none; background: #000">
                 <div class="dialogModal_header"></div>
                 <div class="dialogModal_content"></div>
             </div>
