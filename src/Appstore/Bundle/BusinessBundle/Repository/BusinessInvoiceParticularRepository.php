@@ -464,7 +464,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 	        $entity = $invoiceParticular;
 	        $entity->setQuantity( $data['quantity'] );
 	        $entity->setPrice( $data['salesPrice'] );
-	        if ($entity->getSubQuantity() > 0) {
+	        if ($entity->getSubQuantity() > 0 and $entity->getBusinessInvoice()->getBusinessConfig()->getBusinessModel() == "sign") {
 		        $entity->setTotalQuantity($data['quantity'] * $entity->getSubQuantity() );
 		        $entity->setSubTotal( $entity->getPrice() * $entity->getTotalQuantity() );
 	        }else{

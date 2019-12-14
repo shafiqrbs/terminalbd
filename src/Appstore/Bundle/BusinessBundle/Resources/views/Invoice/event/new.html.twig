@@ -204,7 +204,6 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                         {% endif %}
-
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
@@ -228,7 +227,7 @@
                                                 <td class="">{{ item.particular }}</td>
                                                 <td class="">
                                                     <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
-                                                    <input type="hidden" id="subQuantity-{{ item.id }}" name="subQuantity[]" value="{{ item.subQuantity }}" >
+                                                    <input type="hidden" id="subQuantity-{{ item.id }}" name="subQuantity[]" value="1" >
                                                     <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}" >
                                                 </td>
                                                 <td class="">
