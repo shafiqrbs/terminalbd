@@ -384,7 +384,9 @@ class WebServiceCustomerController extends Controller
 
     public function customerLoginMobileValidationAction(Request $request)
     {
-        $valid = 'false';
+        $valid = 'Your registered mobile number is not valid.';
+
+
         $intlMobile = $request->query->get('mobile',NULL,true);
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
@@ -398,7 +400,7 @@ class WebServiceCustomerController extends Controller
                     $this->get('fos_user.user_manager')->updateUser($user);
                     $dispatcher = $this->container->get('event_dispatcher');
                     $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user, $a));
-                    $valid = 'Collect OTP form your login mobile no and input OTP field';
+                    $valid = '4 digit OTP sent to your mobile number.';
                 }
             }
         return new Response($valid);
