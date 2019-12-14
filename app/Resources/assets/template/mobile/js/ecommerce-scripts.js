@@ -50,7 +50,12 @@ $(document).ready(function(){
                 closeOnBgClick:false,
                 enableEscapeKey:false,
                 closeOnContentClick:false,
-                mainClass: 'my-mfp-zoom-in'
+                mainClass: 'my-mfp-zoom-in',
+                callbacks: {
+                    elementParse: function() {
+                        $("#productFilter").hide();
+                    }
+                }
             });
         });
 
