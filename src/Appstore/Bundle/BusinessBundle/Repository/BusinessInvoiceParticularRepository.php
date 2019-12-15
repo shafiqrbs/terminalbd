@@ -54,7 +54,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setParticular($data['particular']);
         $entity->setPrice($data['price']);
         $entity->setQuantity($quantity);
-        $entity->setSubQuantity($quantity);
+        $entity->setSubQuantity(1);
         $entity->setTotalQuantity($quantity);
         if(!empty($data['quantity'])){
             $entity->setSubTotal($data['price'] * $quantity);
@@ -118,7 +118,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
                 $entity->setParticular($particular->getName());
                 $entity->setPrice($data['salesPrice'][$key]);
                 $entity->setQuantity($quantity);
-                $entity->setSubQuantity($quantity);
+                $entity->setSubQuantity(1);
                 $entity->setTotalQuantity($quantity);
                 $entity->setSubTotal($data['salesPrice'][$key] * $quantity);
                 if($value == "Monthly Fee" and $quantity > 0 ){
