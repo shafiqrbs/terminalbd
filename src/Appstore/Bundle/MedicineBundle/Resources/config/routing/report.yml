@@ -49,6 +49,10 @@ medicine_system_overview:
     path:     /system-overview
     defaults: { _controller: "MedicineBundle:Report:systemOverview" }
 
+medicine_system_overview_pdf:
+    path:     /system-overview-pdf
+    defaults: { _controller: "MedicineBundle:Report:systemOverviewPdf" }
+
 medicine_report_sales_summary:
     path:     /sales-overview
     defaults: { _controller: "MedicineBundle:Report:salesOverview" }
@@ -64,6 +68,10 @@ medicine_report_sales_stock:
 medicine_report_brand_stock:
     path:     /brand-stock
     defaults: { _controller: "MedicineBundle:Report:brandStock" }
+
+medicine_report_brand_stock_pdf:
+    path:     /brand-stock-pdf
+    defaults: { _controller: "MedicineBundle:Report:brandStockPdf" }
 
 medicine_report_sales_user:
     path:     /sales-user

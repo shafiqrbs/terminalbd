@@ -12,6 +12,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -186,6 +187,41 @@ class ReportController extends Controller
         ));
     }
 
+    public function systemOverviewPdfAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3);
+        $datetime = new \DateTime("now");
+        $dataIncome['startDate'] = $user->getGlobalOption()->getCreated()->format('Y-m-d');
+        $dataIncome['endDate'] = $datetime->format('Y-m-d');
+        $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineTotalIncome($this->getUser(),$dataIncome);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+        $currentStockPrice = $em->getRepository('MedicineBundle:MedicineStock')->reportCurrentStockPrice($user);
+        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user, $data);
+        $accountSales = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($user, $data);
+        $accountExpenditure = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user, $data);
+        $html = $this->renderView(
+            'MedicineBundle:Report:systemOverviewPdf.html.twig', array(
+            'option'                        => $user->getGlobalOption(),
+            'income'                        => $income,
+            'transactionCashOverviews'      => $transactionCashOverview,
+            'currentStockPrice'             => $currentStockPrice,
+            'accountPurchase'               => $accountPurchase,
+            'accountSales'                  => $accountSales,
+            'accountExpenditure'            => $accountExpenditure,
+            'searchForm'                    => $data,
+        ));
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="system-overview-pdf.pdf"');
+        echo $pdf;
+        return new Response('');
+    }
+
     public function purchaseVendorAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -343,7 +379,6 @@ class ReportController extends Controller
 
     public function brandStockAction()
     {
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -355,6 +390,28 @@ class ReportController extends Controller
         ));
     }
 
+    public function brandStockPdfAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicineStock')->brandStock($user, $data);
+        $html = $this->renderView(
+            'MedicineBundle:Report:brandStockPdf.html.twig', array(
+                'option' => $user->getGlobalOption(),
+                'entities' => $entities,
+                'searchForm' => $data,
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="brand-stock-pdf.pdf"');
+        echo $pdf;
+        return new Response('');
+
+    }
 
     public function purchaseBrandAction()
     {

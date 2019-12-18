@@ -30,19 +30,24 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Brand Stock Price Report</div>
-
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn purple" target="_blank" href="{{ path('medicine_report_brand_stock_pdf') }}" >
+                                    <i class=" icon-download"></i>&nbsp;Download PDF
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body flip-scroll">
-
                         <table class="table table-bordered table-striped table-condensed flip-content ">
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric" >Vendor Name</th>
-                                <th class="numeric" >Sales Price(avg)</th>
-                                <th class="numeric" >Purchase Price(avg)</th>
+                                <th class="numeric" >Brand Name</th>
+                                <th class="numeric" >Sales(avg)</th>
+                                <th class="numeric" >Purchase(avg)</th>
                                 <th class="numeric" >Profit(avg)</th>
-                                <th class="numeric" >Sales Price</th>
-                                <th class="numeric" >Purchase Price</th>
+                                <th class="numeric" >Sales</th>
+                                <th class="numeric" >Purchase</th>
                                 <th class="numeric" >Profit</th>
                             </tr>
                             </thead>
