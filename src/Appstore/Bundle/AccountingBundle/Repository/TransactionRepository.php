@@ -191,7 +191,7 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN (:parent)")->setParameter('parent',$heads);
         $qb->andWhere("accountHead.slug != 'profit-loss'");
-        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
+        $qb->andWhere("e.updated <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('e.accountHead');
         $qb->orderBy('parentName','ASC')->orderBy('name','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -278,7 +278,7 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
         $qb->andWhere("accountHead.slug NOT IN(:heads)")->setParameter('heads', array('account-receivable'));
-        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
+        $qb->andWhere("e.updated <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('subAccountHead.id');
         $qb->having('amount > 0');
         $qb->orderBy('accountHead.name','ASC');
@@ -308,7 +308,7 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
         $qb->andWhere("accountHead.slug NOT IN(:heads)")->setParameter('heads', array('account-payable'));
-        $qb->andWhere("e.created <= :tillDate")->setParameter('tillDate', $tillDate);
+        $qb->andWhere("e.updated <= :tillDate")->setParameter('tillDate', $tillDate);
         $qb->groupBy('subAccountHead.id');
         $qb->having('amount < 0');
         $qb->orderBy('accountHead.name','ASC');
@@ -672,7 +672,6 @@ class TransactionRepository extends EntityRepository
 		}
 		$this->_em->persist($transaction);
 		$this->_em->flush();
-
 		return $transaction;
 
 	}
