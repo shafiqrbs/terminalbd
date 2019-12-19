@@ -85,8 +85,9 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-    public function vendorLedgerOutstanding(GlobalOption $globalOption)
+    public function vendorLedgerOutstanding(GlobalOption $globalOption,$data = array())
     {
+        $amount = isset($data['amount']) ? $data['amount']:0;
         $qb = $this->createQueryBuilder('e');
         $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
         if ($globalOption->getMainApp()->getSlug() == 'inventory'){
@@ -99,9 +100,15 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('vendor.id');
-        $qb->having('customerBalance > :balance')->setParameter('balance', 0);
-        $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
-        $qb->orderBy('vendor.companyName','ASC');
+        if($amount){
+            $qb->having('customerBalance >= :balance')->setParameter('balance', $amount);
+            $qb->orderBy('customerBalance','ASC');
+        }else{
+            $qb->having('customerBalance > :balance')->setParameter('balance', 0);
+            $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
+            $qb->orderBy('vendor.companyName','ASC');
+        }
+
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

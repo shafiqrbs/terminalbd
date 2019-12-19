@@ -34,29 +34,19 @@
                         <div class="caption"><i class="icon-reorder"></i>Customer Outstanding</div>
                         <div class="actions">
                             <div class="btn-group">
+                                {% set amount = searchForm.amount is defined ? searchForm.amount :'' %}
                                 <a class="btn blue" href="{{ path('report_customer_ledger') }}"><i class="icon-plus-sign"></i>&nbsp; Customer Ledger</a>
                                 <a class="btn red" href="{{ path('account_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Receive</a>
-                                <a class="btn purple" target="_blank"  href="{{ path("report_customer_outstanding_pdf") }}" >
+                                <a class="btn purple" target="_blank"  href="{{ path("report_customer_outstanding_pdf",{'amount':amount}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body">
-                       {# <form class="search-form" action="" method="get" name="itemSearch">
+                        <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
-                                {% set modes = ['Receivable','Payable'] %}
-                                <div class="span3">
-                                    <select name="outstanding" id="outstanding" class="leftMargin span12 m-wrap">
-                                        <option value="" >--Outstanding Type--</option>
-                                        {% for mode in modes %}
-                                            <option {% if searchForm.outstanding is defined and searchForm.outstanding == mode %} selected="selected" {% endif %} value="{{ mode }}" >{{ mode }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="span6">
-                                    <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name /mobile no">
-                                </div>
+                                <div class="span9"></div>
                                 <div class="span3">
                                     <div class="controls">
                                         <div class="input-append span11">
@@ -68,7 +58,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>#}
+                        </form>
                         <div class="portlet-body flip-scroll" id="DivIdToPrint">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">

@@ -29,39 +29,20 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Vendor Outstanding</div>
                         <div class="actions">
+                            {% set amount = searchForm.amount is defined ? searchForm.amount :'' %}
                             <div class="btn-group">
                                 <a class="btn blue" href="{{ path('report_vendor_ledger') }}"><i class="icon-th-list"></i>&nbsp; Vendor Ledger</a>
                                 <a class="btn red" href="{{ path('account_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Payment</a>
-                                <a class="btn purple" target="_blank"  href="{{ path("report_vendor_outstanding_pdf") }}" >
+                                <a class="btn purple" target="_blank"  href="{{ path("report_vendor_outstanding_pdf",{'amount':amount}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="portlet-body">
-                       {# <form class="search-form" action="" method="get" name="itemSearch">
+                        <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
-                                {% set modes = ['Payable','Receivable'] %}
-                                <div class="span3">
-                                    <select name="outstanding" id="outstanding" class="leftMargin span12 m-wrap">
-                                        {% for mode in modes %}
-                                            <option {% if searchForm.outstanding is defined and searchForm.outstanding == mode %} selected="selected" {% endif %} value="{{ mode }}" >{{ mode }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                {% if option.mainApp.slug == 'invventory' %}
-                                <div class="span6">
-                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
-                                </div>
-                                {% elseif option.mainApp.slug == 'mss' %}
-                                <div class="span6">
-                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2MedicineVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
-                                </div>
-                                {% else %}
-                                <div class="span6">
-                                    <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2AccountVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
-                                </div>
-                                {% endif %}
+                                <div class="span9"></div>
                                 <div class="span3">
                                     <div class="controls">
                                         <div class="input-append span11">
@@ -73,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>#}
+                        </form>
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">

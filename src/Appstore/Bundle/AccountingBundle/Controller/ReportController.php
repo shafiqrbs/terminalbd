@@ -442,7 +442,7 @@ class ReportController extends Controller
                 )
             );
 
-            $this->downloadPdf($html,'customerLedgerPdf.pdf');
+            $this->downloadPdf($html,"{$customer->getName()}.pdf");
 
         }
 	}
@@ -495,7 +495,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         /* @var $globalOption GlobalOption */
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
             'option' => $globalOption,
@@ -512,7 +512,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         /* @var $globalOption GlobalOption */
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption,$data);
         $html = $this->renderView(
             'AccountingBundle:Report/Outstanding:vendorOutstandingPdf.html.twig', array(
             'globalOption'  => $globalOption,
@@ -567,7 +567,7 @@ class ReportController extends Controller
         header('Content-Type: application/pdf');
         header("Content-Disposition: attachment; filename={$fileName}");
         echo $pdf;
-        return new Response('');
+        exit;
     }
 
 
