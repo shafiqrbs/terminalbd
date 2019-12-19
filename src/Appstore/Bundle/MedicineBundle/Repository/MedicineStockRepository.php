@@ -544,7 +544,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->addSelect('(COALESCE(SUM(e.salesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0)) as profit');
         $qb->where('e.medicineConfig = :config');
         $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
+   //     $this->handleSearchBetween($qb,$data);
         $qb->groupBy("e.brandName");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
