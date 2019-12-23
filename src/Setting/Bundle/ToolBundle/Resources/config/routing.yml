@@ -137,3 +137,13 @@ SettingToolBundle_transaction_method:
 SettingToolBundle_medicine:
         resource: "@SettingToolBundle/Resources/config/routing/medicineimport.yml"
         prefix:   /admin/medicine-import
+
+SettingToolBundle_taxtarrif_upload:
+        resource: "@SettingToolBundle/Resources/config/routing/tarrif_upload.yml"
+        prefix:   /admin/tariff-upload
+
+SettingToolBundle_taxtarrif:
+        resource: "@SettingToolBundle/Resources/config/routing/tariff.yml"
+        prefix:   /admin/tax-tariff
+
+

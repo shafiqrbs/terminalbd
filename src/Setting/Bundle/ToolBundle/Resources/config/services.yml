@@ -15,6 +15,15 @@ services:
         class: Setting\Bundle\ToolBundle\Importer\ExcelDataReader
         arguments: [ @phpexcel ]
 
+  appstore_tax_importer_excel:
+        class: Setting\Bundle\ToolBundle\Importer\TariffExcel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+  appstore_tax.importer.excel_data_reader:
+        class: Setting\Bundle\ToolBundle\Importer\TariffDataReader
+        arguments: [ @phpexcel ]
+
   settong.toolManageRepo:
         class: Setting\Bundle\ToolBundle\Service\ToolManager
         arguments: [@doctrine]
