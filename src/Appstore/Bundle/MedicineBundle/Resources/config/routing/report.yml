@@ -61,6 +61,10 @@ medicine_report_sales_details:
     path:     /sales-details
     defaults: { _controller: "MedicineBundle:Report:salesDetails" }
 
+medicine_report_sales_daily:
+    path:     /sales-daile-wise
+    defaults: { _controller: "MedicineBundle:Report:salesDayBase" }
+
 medicine_report_sales_stock:
     path:     /sales-stock
     defaults: { _controller: "MedicineBundle:Report:salesStockItem" }

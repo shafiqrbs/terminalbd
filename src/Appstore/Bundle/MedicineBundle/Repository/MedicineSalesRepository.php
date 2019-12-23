@@ -396,7 +396,60 @@ class MedicineSalesRepository extends EntityRepository
         return $result = $res->getArrayResult();
     }
 
-	public function medicineSalesMonthly(User $user , $data =array())
+    public function dailySalesPrice(User $user , $data = [])
+    {
+        $option = $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(invoice.created,'%d-%m-%Y') as date ,COALESCE(SUM(invoice.netTotal),0) as salesPrice
+                FROM medicine_sales as invoice
+                WHERE invoice.medicineConfig_id = :option AND MONTHNAME(invoice.created) =:month AND YEAR(invoice.created) =:year AND invoice.process =:process 
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $option);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('process', 'Done');
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = [];
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
+    public function dailySalesPurchasePrice(User $user, $data = [])
+    {
+        $option = $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(invoice.created,'%d-%m-%Y') as date,COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as purchasePrice
+                FROM medicine_sales as invoice
+                JOIN medicine_sales_item as salesItem ON invoice.id = salesItem.medicineSales_id
+                WHERE invoice.medicineConfig_id = :option AND MONTHNAME(invoice.created) =:month AND YEAR(invoice.created) =:year AND invoice.process =:process 
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $option);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('process', 'Done');
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = [];
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
+	public function medicineSalesMonthly(User $user , $data = array())
 	{
 
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();

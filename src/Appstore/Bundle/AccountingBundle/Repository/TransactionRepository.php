@@ -1012,7 +1012,6 @@ class TransactionRepository extends EntityRepository
                 $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
                 $transaction->setProcess('Cash');
             }
-
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $this->_em->persist($transaction);
@@ -1136,7 +1135,6 @@ class TransactionRepository extends EntityRepository
             $transaction->setAccountRefNo($entity->getAccountRefNo());
             $transaction->setProcessHead('SalesAdjustment');
             $transaction->setUpdated($entity->getUpdated());
-
             /* Cash - Cash various */
             if($entity->getTransactionMethod()->getId() == 2 ){
                 /* Current Asset Bank Cash Debit */
