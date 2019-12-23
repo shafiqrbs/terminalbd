@@ -27,6 +27,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -2907,6 +2908,33 @@ class TransactionRepository extends EntityRepository
         $this->_em->persist($transaction);
         $this->_em->flush();
     }
+
+    public function dailyProcessHead(User $user , $head = '', $data = [])
+    {
+        $option = $user->getGlobalOption()->getId();
+        $compare = new \DateTime();
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $month = isset($data['month'])? $data['month'] :$month;
+        $year = isset($data['year'])? $data['year'] :$year;
+        $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date ,COALESCE(SUM(invoice.debit),0) as debit,COALESCE(SUM(invoice.credit),0) as credit
+                FROM Transaction as invoice
+                WHERE invoice.globalOption_id = :option AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year AND invoice.processHead =:process 
+                GROUP BY date";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('option', $option);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('process', $head);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $arrays = array();
+        foreach ($results as $result){
+            $arrays[$result['date']] = $result;
+        }
+        return $arrays;
+    }
+
 
 
 }

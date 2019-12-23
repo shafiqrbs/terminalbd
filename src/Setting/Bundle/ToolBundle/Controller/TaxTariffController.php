@@ -102,7 +102,7 @@ class TaxTariffController extends Controller
         $entity = new TaxTariff();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('TallyBundle:TaxTariff:new.html.twig', array(
+        return $this->render('SettingToolBundle:TaxTariff:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -122,7 +122,7 @@ class TaxTariffController extends Controller
             throw $this->createNotFoundException('Unable to find TaxTariff entity.');
         }
 
-       return $this->render('TallyBundle:TaxTariff:show.html.twig', array(
+       return $this->render('SettingToolBundle:TaxTariff:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
@@ -143,7 +143,7 @@ class TaxTariffController extends Controller
 
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('TallyBundle:TaxTariff:new.html.twig', array(
+        return $this->render('SettingToolBundle:TaxTariff:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -176,7 +176,7 @@ class TaxTariffController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TallyBundle:TaxTariff')->find($id);
+        $entity = $em->getRepository('SettingToolBundle:TaxTariff')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find TaxTariff entity.');
@@ -193,7 +193,7 @@ class TaxTariffController extends Controller
             return $this->redirect($this->generateUrl('TaxTariff_edit', array('id' => $id)));
         }
 
-        return $this->render('TallyBundle:TaxTariff:new.html.twig', array(
+        return $this->render('SettingToolBundle:TaxTariff:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -235,14 +235,14 @@ class TaxTariffController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('TallyBundle:TaxTariff')->find($data['pk']);
+        $entity = $em->getRepository('SettingToolBundle:TaxTariff')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         if(!empty($data['name']) and 0 < (float)$data['value']){
             $process = 'set'.$data['name'];
             $entity->$process((float)$data['value']);
-            $total = $this->getDoctrine()->getRepository('TallyBundle:TaxTariff')->totalTax($entity);
+            $total = $this->getDoctrine()->getRepository('SettingToolBundle:TaxTariff')->totalTax($entity);
             $entity->setTotalTaxIncidence($total);
             $em->flush();
         }
@@ -255,7 +255,7 @@ class TaxTariffController extends Controller
         $item = $_REQUEST['q'];
         if ($item) {
             $config = $this->getUser()->getGlobalOption();
-            $item = $this->getDoctrine()->getRepository('TallyBundle:TaxTariff')->searchAutoComplete($item,$config);
+            $item = $this->getDoctrine()->getRepository('SettingToolBundle:TaxTariff')->searchAutoComplete($item,$config);
         }
         return new JsonResponse($item);
     }

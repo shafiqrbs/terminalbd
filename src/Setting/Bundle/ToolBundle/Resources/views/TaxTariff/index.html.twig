@@ -109,28 +109,13 @@
                             <div class="pagination pull-center" >
                                 {{ knp_pagination_render(pagination) }}
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 {% endblock %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@TallyBundle/Resources/public/js/approveProcess.js'
-    '@TallyBundle/Resources/public/js/editable.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-{% block documentready %}
-    {{ parent() }}
-    ApproveProcess();
-    EditableInit();
-{% endblock %}
+
 
 

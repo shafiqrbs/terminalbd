@@ -523,4 +523,52 @@ class TransactionController extends Controller
         ));
     }
 
+    public function dailyTransactionSheet()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+
+        if(empty($data)){
+            $compare = new \DateTime();
+            $end =  $compare->format('j');
+            $data['monthYear'] = $compare->format('Y-m-d');
+            $data['month'] =  $compare->format('F');
+            $data['year'] = $compare->format('Y');
+        }else{
+            $month = $data['month'];
+            $year = $data['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $end =  $compare->format('t');
+            $data['monthYear'] = $compare->format('Y-m-d');
+        }
+        $salesPrice = $em->getRepository('MedicineBundle:MedicineSales')->dailySalesPrice($user, $data);
+        $salesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->dailySalesPurchasePrice($user, $data);
+        $dailyPurchase = $em->getRepository('MedicineBundle:MedicinePurchase')->dailySalesPurchasePrice($user, $data);
+        $dailyPurchaseTransaction = $em->getRepository('AccountingBundle:Transaction')->dailyProcessHead($user, $data);
+        $dailySalesTransaction = $em->getRepository('AccountingBundle:Transaction')->dailyProcessHead($user, $data);
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->dailySalesPurchasePrice($user, $data);
+        if(empty($data['pdf'])){
+
+            return $this->render('MedicineBundle:Report:sales/dailySales.html.twig', array(
+                'option' => $user->getGlobalOption(),
+                'salesTrans' => $salesPrice,
+                'purchaseTrans' => $purchasePrice,
+                'searchForm' => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'MedicineBundle:Report:sales/sales.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'salesPrice' => $salesPrice,
+                    'purchasePrice' => $purchasePrice,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'income.pdf');
+        }
+    }
+
 }
