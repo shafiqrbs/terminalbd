@@ -56,6 +56,47 @@ class ReportController extends Controller
 
     }
 
+    public function salesDayBaseAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+
+        if(empty($data)){
+            $compare = new \DateTime();
+            $end =  $compare->format('j');
+            $data['monthYear'] = $compare->format('Y-m-d');
+            $data['month'] =  $compare->format('F');
+            $data['year'] = $compare->format('Y');
+        }else{
+            $month = $data['month'];
+            $year = $data['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $end =  $compare->format('t');
+            $data['monthYear'] = $compare->format('Y-m-d');
+        }
+        $salesPrice = $em->getRepository('MedicineBundle:MedicineSales')->dailySalesPrice($user, $data);
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->dailySalesPurchasePrice($user, $data);
+        if(empty($data['pdf'])){
+            return $this->render('MedicineBundle:Report:sales/dailySales.html.twig', array(
+                'option' => $user->getGlobalOption(),
+                'salesTrans' => $salesPrice,
+                'purchaseTrans' => $purchasePrice,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'MedicineBundle:Report:sales/sales.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'salesPrice' => $salesPrice,
+                    'purchasePrice' => $purchasePrice,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'income.pdf');
+        }
+    }
+
     public function salesDetailsAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -444,4 +485,17 @@ class ReportController extends Controller
             'searchForm' => $data,
         ));
     }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename='{$fileName}'");
+        echo $pdf;
+        return new Response('');
+    }
+
 }

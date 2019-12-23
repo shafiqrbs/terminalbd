@@ -1450,6 +1450,8 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Sales']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
                     ->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']['Sales']->addChild('Sales Daily', array('route' => 'medicine_report_sales_daily'))
+                    ->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Sales']->addChild('Vendor base Sales', array('route' => 'medicine_report_sales_vendor_customer'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Sales']->addChild('Product Wise Sales', array('route' => 'medicine_report_sales_stock'))
                     ->setAttribute('icon', 'icon-th-list');
