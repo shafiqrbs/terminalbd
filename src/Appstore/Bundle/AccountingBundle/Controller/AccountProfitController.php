@@ -49,7 +49,21 @@ class AccountProfitController extends Controller
 
     public function newAction()
     {
+        $search = $_REQUEST;
+        $datetime = new \DateTime("now");
+        $today = $datetime->format('d-m-Y');
+        if(empty($search)){
+            $startDate = date('Y-m-01 00:00:00', strtotime("-1 month -1 day", strtotime($today)));
+            $endDate = date('Y-m-t 23:59:59', strtotime("-1 month -1 day", strtotime($today)));
+            $data['startDate'] = $startDate;
+            $data['endDate'] = $endDate;
+        }else{
+            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($search['startDate']));
+            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($search['endDate']));
+        }
 
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($this->getUser(),$data);
+        exit;
         $option = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
         $search = $_REQUEST;
@@ -70,7 +84,7 @@ class AccountProfitController extends Controller
         $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month,'year' => $year));
        // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
         if(!$entity){
-            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyProfitLoss($this->getUser(),$data);
+            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($this->getUser(),$data);
             $sales = round($overview['sales'] + $overview['salesAdjustment']['sales']);
             $purchase = round($overview['purchase'] + $overview['salesAdjustment']['purchase']);
             $expenditure = round ($overview['expenditure']);

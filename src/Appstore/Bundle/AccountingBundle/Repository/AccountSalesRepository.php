@@ -484,18 +484,6 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-    public function reportMonthlyProfitLoss(User $user,$data = array())
-    {
-        $globalOption = $user->getGlobalOption();
-        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
-        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
-        $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
-        return $data;
-
-    }
 
 
     public function reportMedicineIncome(User $user,$data)

@@ -41,4 +41,35 @@ class AccountProfitRepository extends EntityRepository
         return $result;
 
     }
+
+    public function reportMonthlyProfitLoss(User $user,$data = array())
+    {
+        $em = $this->_em;
+        $globalOption = $user->getGlobalOption();
+        $data = "2019-08-01";
+        $journalMediicnePurchase = $this->_em->getRepository('MedicineBundle:MedicinePurchase')->monthlyPurchaseJournal($user, $data);
+        $journalAccountPurchase = $this->_em->getRepository('AccountingBundle:AccountPurchase')->monthlyPurchaseJournal($user, $data);
+
+        if(in_array($entity->getProcessType(),array('Outstanding','Opening'))){
+           $em->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
+        }elseif($entity->getProcessType() == 'Discount'){
+           $em->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
+        }elseif($entity->getPayment() > 0 ){
+           $em->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
+        }
+        var_dump($journalMediicnePurchase);
+        echo "<br/>";
+        var_dump($journalAccountPurchase);
+        exit;
+
+        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
+        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
+        $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
+        return $data;
+
+    }
+
 }

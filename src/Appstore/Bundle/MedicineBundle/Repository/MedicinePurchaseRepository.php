@@ -122,6 +122,25 @@ class MedicinePurchaseRepository extends EntityRepository
         $em->flush();
     }
 
+    public function monthlyPurchaseJournal(User $user,$data)
+    {
+        $config = $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT transactionMethod_id,sum(netTotal),sum(payment)
+                FROM medicine_purchase as purchase
+                WHERE purchase.medicineConfig_id = :config AND purchase.process = :process AND  MONTHNAME(purchase.created) =:month AND YEAR(purchase.created) =:year GROUP BY transactionMethod_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
     public function checkInstantPurchaseToday(MedicineVendor $vendor)
     {
 

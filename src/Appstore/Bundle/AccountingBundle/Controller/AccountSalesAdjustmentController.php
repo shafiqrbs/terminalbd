@@ -106,12 +106,6 @@ class AccountSalesAdjustmentController extends Controller
       return $form;
     }
 
-    /**
-     * Displays a form to create a new AccountSalesAdjustment entity.
-     *
-     */
-
-
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
 	 */

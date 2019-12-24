@@ -48,6 +48,11 @@ class Transaction
      private $accountProfit;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal")
+     **/
+     private $accountJournal;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="subTransactions" )
      **/
      private $subAccountHead;
@@ -445,6 +450,22 @@ class Transaction
     public function setAccountProfit($accountProfit)
     {
         $this->accountProfit = $accountProfit;
+    }
+
+    /**
+     * @return AccountJournal
+     */
+    public function getAccountJournal()
+    {
+        return $this->accountJournal;
+    }
+
+    /**
+     * @param AccountJournal $accountJournal
+     */
+    public function setAccountJournal($accountJournal)
+    {
+        $this->accountJournal = $accountJournal;
     }
 
 }
