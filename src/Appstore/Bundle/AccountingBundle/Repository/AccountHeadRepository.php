@@ -375,5 +375,56 @@ class AccountHeadRepository extends EntityRepository
         }
     }
 
+    public function insertBankSubHead($bank)
+    {
+
+        /* @var $exist AccountHead */
+        $entity = $this->_em->getRepository('AccountingBundle:AccountBank')->find($bank);
+        $exist = $this->findOneBy(array('accountBank' => $entity));
+        if ($exist) {
+            $exist->setName($entity->getName());
+            $this->_em->flush();
+            return $exist;
+        } else {
+            $head = new AccountHead();
+            $parent = $this->findOneBy(array('slug' => 'bank-account'));
+            $head->setGlobalOption($entity->getGlobalOption());
+            $head->setName($entity->getName());
+            $head->setSource('bank');
+            $head->setParent($parent);
+            $head->setAccountBank($entity);
+            $this->_em->persist($head);
+            $this->_em->flush();
+            return $head;
+        }
+
+    }
+
+    public function insertMobileSubHead($mobile)
+    {
+
+        $entity = $this->_em->getRepository('AccountingBundle:AccountMobileBank')->find($mobile);
+        /* @var $exist AccountHead */
+        $exist = $this->findOneBy(array('accountMobileBank' => $entity));
+        if ($exist) {
+            $exist->setName($entity->getName());
+            $this->_em->flush();
+            return $exist;
+        } else {
+            $head = new AccountHead();
+            $parent = $this->findOneBy(array('slug' => 'mobile-account'));
+            $head->setGlobalOption($entity->getGlobalOption());
+            $head->setName($entity->getName());
+            $head->setSource('mobile');
+            $head->setParent($parent);
+            $head->setAccountMobileBank($entity);
+            $this->_em->persist($head);
+            $this->_em->flush();
+            return $head;
+        }
+
+    }
+
+
 
 }

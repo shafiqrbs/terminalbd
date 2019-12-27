@@ -61,6 +61,7 @@ class PurchaseController extends Controller
         $entity->setGlobalOption($config);
         $entity->setCreatedBy($this->getUser());
         $entity->setProcessHead('Expense');
+        $entity->setProcessType('Expense');
         $entity->setUpdated($entity->getCreated());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
@@ -138,8 +139,6 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
-
     }
 
 
@@ -154,7 +153,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('AccountingBundle:ExpenditureItem')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     /**

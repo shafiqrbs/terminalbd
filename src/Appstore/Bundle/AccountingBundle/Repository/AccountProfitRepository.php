@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
+use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
@@ -42,34 +43,218 @@ class AccountProfitRepository extends EntityRepository
 
     }
 
-    public function reportMonthlyProfitLoss(User $user,$data = array())
+    public function reportMonthlyProfitLoss(AccountProfit $profit,$data = array())
     {
         $em = $this->_em;
-        $globalOption = $user->getGlobalOption();
-        $data = "2019-08-01";
-        $journalMediicnePurchase = $this->_em->getRepository('MedicineBundle:MedicinePurchase')->monthlyPurchaseJournal($user, $data);
-        $journalAccountPurchase = $this->_em->getRepository('AccountingBundle:AccountPurchase')->monthlyPurchaseJournal($user, $data);
+        $globalOption = $profit->getGlobalOption();
+        $data = "2019-07-01";
+        $this->removeExistingTransaction($profit);
+        $journalAccountPurchase = $this->monthlyPurchaseJournal($profit, $data);
+        $journalAccountSales = $this->monthlySalesJournal($profit, $data);
+        $journalAccountSalesAdjustment = $this->monthlySalesAdjustmentJournal($profit, $data);
+        $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+        $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
+        $journalContra = $this->monthlyContraJournal($profit, $data);
+        var_dump($journalExpenditure);
+        exit;
 
-        if(in_array($entity->getProcessType(),array('Outstanding','Opening'))){
-           $em->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
-        }elseif($entity->getProcessType() == 'Discount'){
-           $em->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
-        }elseif($entity->getPayment() > 0 ){
-           $em->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
+        if($journalAccountPurchase) {
+            foreach ($journalAccountPurchase as $row):
+
+                if (in_array($row['processType'], array('Outstanding', 'Opening'))) {
+                    $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyOpeningTransaction($profit, $row);
+                } elseif ($row['amount'] > 0 and $row['processType'] == 'Discount') {
+                    $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyDiscountTransaction($profit, $row);
+                } elseif ($row['amount'] > 0 and $row['processType'] == 'Due') {
+                    $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyDueTransaction($profit, $row);
+                } elseif ($row['total'] > 0 and $row['processType'] == 'Purchase') {
+                    $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyTransaction($profit, $row);
+                }
+
+            endforeach;
         }
-        var_dump($journalMediicnePurchase);
-        echo "<br/>";
-        var_dump($journalAccountPurchase);
+        if($journalAccountSales){
+            foreach ($journalAccountSales as $row):
+
+                if(in_array($row['processHead'],array('Outstanding','Opening'))){
+                    $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyOpeningTransaction($profit,$row);
+                }elseif($row['amount'] > 0 and $row['processHead'] == 'Discount' ){
+                    $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
+                }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
+                    $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);
+                }elseif($row['total'] > 0 and $row['processHead'] == 'medicine' ){
+                    $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
+                }
+
+            endforeach;
+        }
+
+        if($journalAccountSalesAdjustment) {
+            $em->getRepository('AccountingBundle:Transaction')->insertSalesAdjustmentMonthlyTransaction($profit, $journalAccountSalesAdjustment);
+        }
+        if($salesPurchasePrice['total'] > 0) {
+            $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyPurchaseTransaction($profit, round($salesPurchasePrice['total']));
+        }
+        if($journalExpenditure){
+            foreach ($journalExpenditure as $row):
+                $em->getRepository('AccountingBundle:Transaction')->insertExpenseMonthlyTransaction($profit,$row);
+            endforeach;
+        }
+        if($journalContra){
+            foreach ($journalContra as $row):
+                $em->getRepository('AccountingBundle:Transaction')->insertContraMonthlyTransaction($profit,$row);
+            endforeach;
+        }
+
+        $profitReconcialtion = $this->monthlyProfitReconcialtion($profit, $data);
+        var_dump($profitReconcialtion);
         exit;
 
         $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
         $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
         $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
         $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;
 
+    }
+
+    private function monthlyPurchaseJournal(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT processType,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE(SUM(purchase.purchaseAmount),0) as total, COALESCE(SUM(purchase.payment),0) as amount
+                FROM account_purchase as purchase
+                WHERE purchase.globalOption_id = :config AND purchase.process = :process AND  MONTHNAME(purchase.created) =:month AND YEAR(purchase.created) =:year GROUP BY transactionMethod_id,processType,accountBank_id,accountMobileBank_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    private function monthlySalesJournal(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE(SUM(sales.totalAmount),0) as total, COALESCE(SUM(sales.amount),0) as amount
+                FROM account_sales as sales
+                WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year GROUP BY transactionMethod_id,processHead,accountBank_id,accountMobileBank_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+     private function monthlySalesAdjustmentJournal(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT COALESCE(SUM(sales.sales),0) as sales, COALESCE(SUM(sales.purchase),0) as purchase
+                FROM account_sales_adjustment as sales
+                WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result;
+    }
+
+    public  function reportSalesItemPurchaseSalesOverview(AccountProfit $profit, $data){
+
+        $config =  $profit->getGlobalOption()->getMedicineConfig()->getId();
+
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total
+                FROM medicine_sales_item as salesItem
+                JOIN medicine_sales as sales ON salesItem.medicineSales_id = sales.id
+                WHERE sales.medicineConfig_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result;
+
+    }
+
+    private function monthlyExpenditureJournal(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT ec.accountHead_id as head,expense.transactionMethod_id as method,expense.accountBank_id as bank,expense.accountMobileBank_id as mobile,COALESCE(SUM(expense.amount),0) as amount
+                FROM Expenditure as expense
+                JOIN expenseCategory as ec ON expense.expenseCategory_id = ec.id  
+                WHERE expense.globalOption_id = :config AND expense.process = :process AND  MONTHNAME(expense.created) =:month AND YEAR(expense.created) =:year GROUP BY transactionMethod_id,ec.accountHead_id,accountBank_id,accountMobileBank_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    private function monthlyContraJournal(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT contra.fromTransactionMethod_id as fromMethod ,contra.fromAccountBank_id as fromBank,contra.fromAccountMobileBank_id as fromMobileBank,contra.toTransactionMethod_id as toMethod,contra.toAccountBank_id as toBank,contra.toAccountMobileBank_id as toMobileBank,COALESCE(SUM(contra.amount),0) as amount
+                FROM account_balance_transfer as contra
+                WHERE contra.globalOption_id = :config AND contra.process = :process AND  MONTHNAME(contra.created) =:month AND YEAR(contra.created) =:year GROUP BY contra.fromTransactionMethod_id,contra.fromAccountBank_id,contra.fromAccountMobileBank_id,contra.toTransactionMethod_id,contra.toAccountBank_id,contra.toAccountMobileBank_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    private function monthlyProfitReconcialtion(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $sql = "SELECT trans.process as process,COALESCE(SUM(trans.debit),0) as debit, COALESCE(SUM(trans.credit),0) as credit
+                FROM Transaction as trans
+                WHERE trans.globalOption_id = :config AND trans.accountProfit_id = :profit GROUP BY trans.process";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('profit', $profit->getId());
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    public function removeExistingTransaction(AccountProfit $profit){
+        $em = $this->_em;
+        $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.accountProfit = {$profit->getId()}");
+        $transaction->execute();
     }
 
 }

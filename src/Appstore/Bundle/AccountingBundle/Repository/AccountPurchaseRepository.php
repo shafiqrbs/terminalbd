@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
@@ -39,24 +40,6 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
-    public function monthlyPurchaseJournal(User $user,$data)
-    {
-        $config = $user->getGlobalOption()->getId();
-        $compare = new \DateTime($data);
-        $month =  $compare->format('F');
-        $year =  $compare->format('Y');
-        $sql = "SELECT processHead,sum(purchaseAmount),sum(payment)
-                FROM account_purchase as purchase
-                WHERE purchase.globalOption_id = :config AND purchase.process = :process AND  MONTHNAME(purchase.created) =:month AND YEAR(purchase.created) =:year GROUP BY processHead";
-        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'approved');
-        $stmt->bindValue('month', $month);
-        $stmt->bindValue('year', $year);
-        $stmt->execute();
-        $result =  $stmt->fetchAll();
-        return $result;
-    }
 
 
     public function searchAutoComplete($q, GlobalOption $global)

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
@@ -128,6 +129,7 @@ class AccountSalesRepository extends EntityRepository
 		return $result;
 
 	}
+
 
 	public function salesOverview(User $user,$data, $process = [])
     {

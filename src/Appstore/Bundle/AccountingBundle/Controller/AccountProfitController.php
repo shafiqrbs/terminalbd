@@ -50,6 +50,7 @@ class AccountProfitController extends Controller
     public function newAction()
     {
         $search = $_REQUEST;
+        $option = $this->getUser()->getGlobalOption();
         $datetime = new \DateTime("now");
         $today = $datetime->format('d-m-Y');
         if(empty($search)){
@@ -61,10 +62,10 @@ class AccountProfitController extends Controller
             $data['startDate'] = date('Y-m-d 00:00:00',strtotime($search['startDate']));
             $data['endDate'] = date('Y-m-t 23:59:59',strtotime($search['endDate']));
         }
-
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($this->getUser(),$data);
+        $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => 12,'year' => 2019));
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
         exit;
-        $option = $this->getUser()->getGlobalOption();
+
         $em = $this->getDoctrine()->getManager();
         $search = $_REQUEST;
         $datetime = new \DateTime("now");

@@ -128,9 +128,9 @@ class MedicinePurchaseRepository extends EntityRepository
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
-        $sql = "SELECT transactionMethod_id,sum(netTotal),sum(payment)
+        $sql = "SELECT transactionMethod_id,accountBank_id,accountMobileBank_id,sum(netTotal),sum(payment)
                 FROM medicine_purchase as purchase
-                WHERE purchase.medicineConfig_id = :config AND purchase.process = :process AND  MONTHNAME(purchase.created) =:month AND YEAR(purchase.created) =:year GROUP BY transactionMethod_id";
+                WHERE purchase.medicineConfig_id = :config AND purchase.process = :process AND  MONTHNAME(purchase.created) =:month AND YEAR(purchase.created) =:year GROUP BY transactionMethod_id,accountBank_id,accountMobileBank_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
         $stmt->bindValue('process', 'approved');

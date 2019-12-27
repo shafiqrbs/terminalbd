@@ -68,7 +68,6 @@ class AccountSalesType extends AbstractType
 		        'multiple'      =>false,
 		        'choices' => array(
 			        'Due' => 'Due',
-			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
 			        'Outstanding' => 'Outstanding',
 		        ),
