@@ -495,8 +495,6 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-
-
     public function reportMedicineIncome(User $user,$data)
 	{
 		$globalOption = $user->getGlobalOption()->getId();
