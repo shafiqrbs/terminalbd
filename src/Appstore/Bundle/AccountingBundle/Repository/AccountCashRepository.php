@@ -423,7 +423,6 @@ class AccountCashRepository extends EntityRepository
             if(!empty($entity->getBranches())){
                 $cash->setBranches($entity->getBranches());
             }
-            $cash->setUpdated($entity->getUpdated());
             if($entity->getTransactionType()  == 'Debit' ){
                 $cash->setAccountHead($entity->getAccountHeadDebit());
                 $cash->setDebit($entity->getAmount());
@@ -434,7 +433,7 @@ class AccountCashRepository extends EntityRepository
                 $cash->setCredit($entity->getAmount());
             }
             $cash->setCreated($entity->getCreated());
-            $cash->setUpdated($entity->getUpdated());
+            $cash->setUpdated($entity->getCreated());
             $em->persist($cash);
             $em->flush();
         }
@@ -1010,7 +1009,7 @@ class AccountCashRepository extends EntityRepository
 
         }
         $cash->setCreated($journal->getCreated());
-        $cash->setUpdated($journal->getUpdated());
+        $cash->setUpdated($journal->getCreated());
         $em->persist($cash);
         $em->flush();
     }
