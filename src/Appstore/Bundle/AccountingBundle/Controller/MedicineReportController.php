@@ -52,7 +52,22 @@ class MedicineReportController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        if(!empty($data['startMonth']) and !empty($data['endMonth'])){
+            $sm = "01-{$data['startMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($sm);
+            $startMonth =  $compareTo->format('F');
+            $endm = "01-{$data['endMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($endm);
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange = $startMonth .' To '.$endMonth;
+        }else{
+            $compareTo = new \DateTime("now");
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange =  $compareTo->format('F,Y');
+        }
+
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineMonthlyIncome($this->getUser(),$data);
+
         if(!empty($data['startMonth']) and !empty($data['endMonth'])){
             $sm = "01-{$data['startMonth']}-{$data['year']}";
             $compareTo = new \DateTime($sm);

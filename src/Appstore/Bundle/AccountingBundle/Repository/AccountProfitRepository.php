@@ -23,6 +23,7 @@ use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\UserBundle;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * AccountCashRepository
@@ -43,11 +44,25 @@ class AccountProfitRepository extends EntityRepository
 
     }
 
-    public function reportMonthlyProfitLoss(AccountProfit $profit,$data = array())
+    public function insertAccountProfit(GlobalOption $option,$month,$year,$data)
     {
         $em = $this->_em;
-        $globalOption = $profit->getGlobalOption();
-        $data = "2019-07-01";
+        $entity = new AccountProfit();
+        $entity->setGlobalOption($option);
+        $entity->setMonth($month);
+        $entity->setYear($year);
+        $entity->setGenerateMonth($data);
+        $entity->setCreated($data);
+        $entity->setUpdated($data);
+        $em->persist($entity);
+        $em->flush();
+        return $entity;
+    }
+
+
+    public function reportMonthlyProfitLoss(AccountProfit $profit,$data)
+    {
+        $em = $this->_em;
         $this->removeExistingTransaction($profit);
         $journalAccountPurchase = $this->monthlyPurchaseJournal($profit, $data);
         $journalAccountSales = $this->monthlySalesJournal($profit, $data);
@@ -55,8 +70,6 @@ class AccountProfitRepository extends EntityRepository
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
-        var_dump($journalExpenditure);
-        exit;
 
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
@@ -74,6 +87,7 @@ class AccountProfitRepository extends EntityRepository
             endforeach;
         }
         if($journalAccountSales){
+
             foreach ($journalAccountSales as $row):
 
                 if(in_array($row['processHead'],array('Outstanding','Opening'))){
@@ -106,18 +120,17 @@ class AccountProfitRepository extends EntityRepository
             endforeach;
         }
 
-        $profitReconcialtion = $this->monthlyProfitReconcialtion($profit, $data);
-        var_dump($profitReconcialtion);
-        exit;
+        $salesReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales');
+        $salesAdjustmentReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-adjustment');
+        $salesPurchaserReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-purchase');
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionProfitIncomeLoss($profit, $accountHeads = array(37,23));
+        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionProfitIncomeLoss($profit, $accountHeads = array(20));
 
-        $sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(37,23), $data);
-        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($globalOption, $accountHeads = array(20), $data);
-        $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
+        $data =  array('sales' => $salesReconcialtion['debit'] ,'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;
 
     }
+
 
     private function monthlyPurchaseJournal(AccountProfit $profit,$data)
     {
@@ -157,7 +170,7 @@ class AccountProfitRepository extends EntityRepository
         return $result;
     }
 
-     private function monthlySalesAdjustmentJournal(AccountProfit $profit,$data)
+    private function monthlySalesAdjustmentJournal(AccountProfit $profit,$data)
     {
         $config = $profit->getGlobalOption()->getId();
         $compare = new \DateTime($data);
@@ -248,6 +261,21 @@ class AccountProfitRepository extends EntityRepository
         $stmt->bindValue('profit', $profit->getId());
         $stmt->execute();
         $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    private function monthlyProfitReconcialtionProcess(AccountProfit $profit,$process)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $sql = "SELECT trans.process as process,COALESCE(SUM(trans.debit),0) as debit, COALESCE(SUM(trans.credit),0) as credit
+                FROM Transaction as trans
+                WHERE trans.globalOption_id = :config AND trans.accountProfit_id = :profit AND trans.process = :process";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('profit', $profit->getId());
+        $stmt->bindValue('process', $process);
+        $stmt->execute();
+        $result =  $stmt->fetch();
         return $result;
     }
 

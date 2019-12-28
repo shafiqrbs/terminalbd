@@ -154,11 +154,8 @@ class ProfitWithdrawalController extends Controller
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('AccountingBundle:AccountJournal:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -177,8 +174,6 @@ class ProfitWithdrawalController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -218,8 +213,6 @@ class ProfitWithdrawalController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -236,23 +229,6 @@ class ProfitWithdrawalController extends Controller
         ));
     }
 
-
-    /**
-     * Creates a form to delete a AccountJournal entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('account_journal_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
 
     public function paymentAction(Request $request)
     {
@@ -338,7 +314,7 @@ class ProfitWithdrawalController extends Controller
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
         $amount = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getStakeHolderProfitAccount($entity);
-        return new Response($amount);
+        return new Response(abs($amount));
     }
 
 

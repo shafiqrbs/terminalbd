@@ -105,7 +105,7 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.createdBy is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{{ entity.amount }}</td>

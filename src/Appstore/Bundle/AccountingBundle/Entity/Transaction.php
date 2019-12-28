@@ -44,6 +44,7 @@ class Transaction
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountProfit", inversedBy="transactions" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
      private $accountProfit;
 

@@ -37,7 +37,7 @@ class AccountJournalController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
+        $data['mode'] = "journal";
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));

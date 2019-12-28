@@ -459,13 +459,24 @@ class TransactionController extends Controller
     public function balanceSheetAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
+        $search = $_REQUEST;
+        $data = array();
+        if(!empty($search)){
+            $month = $search['month'];
+            $year =  $search['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $data['tillDate'] =  $compare->format("Y-m-t");
+        }
+
         $globalOption = $this->getUser()->getGlobalOption();
 
         $entitiesDebit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('current-assets','fixed-assets'),$data);
         $entitiesCredit = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption,array('long-term-liabilities','current-liabilities'),$data);
         $receiveables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccountDebit($globalOption,array('current-assets','fixed-assets'),$data);
         $payables = $em->getRepository('AccountingBundle:Transaction')->getSubHeadAccountCredit($globalOption,array('long-term-liabilities'),$data);
+
+
+
         $profitLoss = $em->getRepository('AccountingBundle:Transaction')->getProfitLossByAccountHead($globalOption,array('long-term-liabilities'),$data);
         $subHeadProfits = $em->getRepository('AccountingBundle:Transaction')->getSubHeadProfitAccount($globalOption,$data);
 
@@ -494,7 +505,7 @@ class TransactionController extends Controller
             'receiveables' => $receiveables,
             'payables' => $payables,
             'subHeadProfits' => $subHeadProfits,
-            'searchForm' => $data,
+            'searchForm' => $search,
         ));
     }
 

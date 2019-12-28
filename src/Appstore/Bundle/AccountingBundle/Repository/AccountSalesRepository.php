@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
@@ -464,24 +463,34 @@ class AccountSalesRepository extends EntityRepository
 
 	public function reportMedicineMonthlyIncome(User $user,$data = array())
 	{
-		$globalOption = $user->getGlobalOption();
+        $em = $this->_em;
+	    $globalOption = $user->getGlobalOption();
 		if(empty($data)){
 
 			$datetime = new \DateTime("now");
 			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
 			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+			$monthYear = $datetime->format('Y-m-t 23:59:59');
 
 		}else{
 			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
 			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+            $monthYear = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
 		}
 
-		$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-        $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
+	//	$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+    //    $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+      //  $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+
+        $sales = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales',$monthYear);
+
+        $purchase = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales-purchase',$monthYear);
+
+        $salesAdjustment = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales-adjustment',$monthYear);
+
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
 		$operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
-		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['totalPurchase'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures);
+		$data =  array('sales' => $sales['debit'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['credit'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures);
 		return $data;
 
 	}

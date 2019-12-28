@@ -148,7 +148,8 @@ class TransactionRepository extends EntityRepository
         }
         $transaction->setGlobalOption($profit->getGlobalOption());
         $transaction->setAccountProfit($profit);
-        $transaction->setProcessHead('Profit/Loss');
+        $transaction->setCreated($profit->getCreated());
+        $transaction->setUpdated($profit->getCreated());
         $transaction->setProcess('Current Liabilities');
         $transaction->setAccountRefNo($profit->getId());
         $transaction->setUpdated($profit->getUpdated());
@@ -310,6 +311,7 @@ class TransactionRepository extends EntityRepository
         $qb->andWhere("parent.slug IN(:parents)")->setParameter('parents', $parent);
         $qb->andWhere("accountHead.slug NOT IN(:heads)")->setParameter('heads', array('account-payable'));
         $qb->andWhere("e.updated <= :tillDate")->setParameter('tillDate', $tillDate);
+        $qb->andWhere("accountHead.slug != 'profit-loss'");
         $qb->groupBy('subAccountHead.id');
         $qb->having('amount < 0');
         $qb->orderBy('accountHead.name','ASC');
@@ -399,6 +401,22 @@ class TransactionRepository extends EntityRepository
         return $result;
 
     }
+
+    public function reportTransactionProfitIncomeLoss(AccountProfit $profit,$accountHeads){
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHead','accountHead');
+        $qb->select('COALESCE(SUM(ex.amount),0) as amount');
+        $qb->where("accountHead.parent IN (:parent)");
+        $qb->setParameter('parent', $accountHeads);
+        $qb->andWhere('ex.accountProfit = :profit');
+        $qb->setParameter('profit', $profit->getId());
+        $res =  $qb->getQuery();
+        $result = $res->getOneOrNullResult();
+        return $result;
+
+    }
+
 
     public function reportTransactionIncome($globalOption,$accountHeads,$data){
 
@@ -574,14 +592,11 @@ class TransactionRepository extends EntityRepository
             $transaction->setSubAccountHead($subAccount);
         }
         if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Credit' ){
-
             /* Current Asset Bank Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
             $transaction->setSubAccountHead($subAccount);
-
         }elseif($entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Credit' ){
-
             /* Current Asset Mobile Account Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
@@ -3471,6 +3486,25 @@ class TransactionRepository extends EntityRepository
         $transaction->setDebit($amount);
         $em->persist($transaction);
         $em->flush();
+    }
+
+    public function monthlyProfitReconcialtionProcess(GlobalOption $option,$process,$data)
+    {
+        $config = $option->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT trans.process as process,COALESCE(SUM(trans.debit),0) as debit, COALESCE(SUM(trans.credit),0) as credit
+                FROM Transaction as trans
+                WHERE trans.globalOption_id = :config AND trans.process = :process AND  MONTHNAME(trans.created) =:month AND YEAR(trans.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', $process);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result;
     }
 
 }

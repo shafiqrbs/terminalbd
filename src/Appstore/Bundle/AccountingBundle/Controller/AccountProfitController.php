@@ -50,55 +50,36 @@ class AccountProfitController extends Controller
     public function newAction()
     {
         $search = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
         $datetime = new \DateTime("now");
         $today = $datetime->format('d-m-Y');
         if(empty($search)){
-            $startDate = date('Y-m-01 00:00:00', strtotime("-1 month -1 day", strtotime($today)));
-            $endDate = date('Y-m-t 23:59:59', strtotime("-1 month -1 day", strtotime($today)));
-            $data['startDate'] = $startDate;
-            $data['endDate'] = $endDate;
+            $date = date('Y-m-01', strtotime("-1 month -1 day", strtotime($today)));
+            $month = date("m",strtotime($date));
+            $year = date("Y",strtotime($date));
+            $compare = new \DateTime($date);
+            $data =  $compare->format("Y-m-01");
         }else{
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($search['startDate']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($search['endDate']));
-        }
-        $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => 12,'year' => 2019));
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
-        exit;
-
-        $em = $this->getDoctrine()->getManager();
-        $search = $_REQUEST;
-        $datetime = new \DateTime("now");
-        $today = $datetime->format('d-m-Y');
-        if(empty($search)){
-            $startDate = date('Y-m-01 00:00:00', strtotime("-1 month -1 day", strtotime($today)));
-            $endDate = date('Y-m-t 23:59:59', strtotime("-1 month -1 day", strtotime($today)));
-            $data['startDate'] = $startDate;
-            $data['endDate'] = $endDate;
-        }else{
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($search['startDate']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($search['endDate']));
+            $month = $search['month'];
+            $year =  $search['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $data =  $compare->format("Y-m-01");
         }
 
-        $month = date('m', strtotime( $data['endDate']));
-        $year = date('Y', strtotime($data['endDate']));
-        $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month,'year' => $year));
-       // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
-        if(!$entity){
-            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($this->getUser(),$data);
-            $sales = round($overview['sales'] + $overview['salesAdjustment']['sales']);
-            $purchase = round($overview['purchase'] + $overview['salesAdjustment']['purchase']);
+        $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month ,'year' => $year));
+        if(empty($entity)){
+            $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->insertAccountProfit($option,$month,$year,$compare);
+            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
+            $sales = round($overview['sales'] + $overview['salesAdjustment']);
+            $purchase = round($overview['purchase'] + $overview['purchaseAdjustment']);
             $expenditure = round ($overview['expenditure']);
             $revenue = round ($overview['operatingRevenue']);
             $profit = ($sales + $revenue) - ($purchase + $expenditure);
-            $entity = new AccountProfit();
-            $entity->setGlobalOption($option);
             $entity->setSales($sales);
             $entity->setPurchase($purchase);
             $entity->setExpenditure($expenditure);
             $entity->setRevenue($revenue);
-            $generate = new \DateTime($data['endDate']);
-            $entity->setGenerateMonth($generate);
             $entity->setMonth($month);
             $entity->setYear($year);
             if($profit > 0 ){

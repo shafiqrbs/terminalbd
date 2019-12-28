@@ -55,7 +55,7 @@ class AccountJournalRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
     }
@@ -67,7 +67,7 @@ class AccountJournalRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
     }

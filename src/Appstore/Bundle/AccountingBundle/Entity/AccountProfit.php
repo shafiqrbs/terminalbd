@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -36,6 +37,12 @@ class AccountProfit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="accountProfit" )
      */
     protected $transactions;
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $createdBy;
 
 
     /**
@@ -332,6 +339,22 @@ class AccountProfit
     public function setGenerateMonth($generateMonth)
     {
         $this->generateMonth = $generateMonth;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
     }
 
 }
