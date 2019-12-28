@@ -130,7 +130,6 @@ class Transaction
 
     /**
      * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;

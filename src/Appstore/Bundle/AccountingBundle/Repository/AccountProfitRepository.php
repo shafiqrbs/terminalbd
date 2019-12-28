@@ -123,8 +123,12 @@ class AccountProfitRepository extends EntityRepository
         $salesReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales');
         $salesAdjustmentReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-adjustment');
         $salesPurchaserReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-purchase');
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionProfitIncomeLoss($profit, $accountHeads = array(37,23));
-        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionProfitIncomeLoss($profit, $accountHeads = array(20));
+
+        $end = $profit->getGenerateMonth();
+        $date['startDate'] = $end->format('Y-m-01 00:00:00');
+        $date['endDate'] = $end->format('Y-m-t 23:59:59');
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(37,23),$date);
+        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(20),$date);
 
         $data =  array('sales' => $salesReconcialtion['debit'] ,'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;

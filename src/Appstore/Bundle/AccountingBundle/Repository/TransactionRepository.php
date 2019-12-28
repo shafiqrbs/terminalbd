@@ -62,11 +62,11 @@ class TransactionRepository extends EntityRepository
             $endDate = $end->format('Y-m-d 23:59:59');
         }
         if (!empty($startDate) ) {
-            $qb->andWhere("ex.updated >= :startDate");
+            $qb->andWhere("ex.created >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
         if (!empty($endDate)) {
-            $qb->andWhere("ex.updated <= :endDate");
+            $qb->andWhere("ex.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
     }
@@ -92,15 +92,17 @@ class TransactionRepository extends EntityRepository
 		return $res;
 	}
 
-    public function stakeHolderWiseCapital($globalOption)
+    public function stakeHolderWiseCapital($globalOption,AccountProfit $profit)
     {
-
+        $end = $profit->getGenerateMonth();
+        $endDate = $end->format('Y-m-t 23:59:59');
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.accountHead','a');
         $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS balance');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$globalOption);
         $qb->andWhere("a.slug = :slug")->setParameter('slug','capital-investment');
         $qb->andWhere("e.subAccountHead IS NOT NULL");
+        $qb->andWhere("e.created <= :created")->setParameter('created', $endDate);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
     }
@@ -108,8 +110,10 @@ class TransactionRepository extends EntityRepository
     public function getCapitalInvestment(GlobalOption $option , AccountProfit $profit)
     {
 
-        $summary = $this->stakeHolderWiseCapital($option);
+        $summary = $this->stakeHolderWiseCapital($option,$profit);
         $totalCapital = abs($summary['balance']);
+        $end = $profit->getGenerateMonth();
+        $endDate = $end->format('Y-m-t 23:59:59');
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.subAccountHead','ach');
         $qb->join('e.accountHead','ac');
@@ -118,6 +122,7 @@ class TransactionRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$option->getId());
         $qb->andWhere("ac.slug = :slug")->setParameter('slug','capital-investment');
         $qb->andWhere("ach.source = :source")->setParameter('source','user');
+        $qb->andWhere("e.created <= :created")->setParameter('created', $endDate);
         $qb->groupBy('subAccountId');
         $qb->orderBy('e.subAccountHead','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -132,16 +137,15 @@ class TransactionRepository extends EntityRepository
 
         $em = $this->_em;
         $subAccount = $em->getRepository('AccountingBundle:AccountHead')->find($row['subAccountId']);
-
         $transaction = new Transaction();
         if($profit->getProfit() > 0){
             $totalProfit = $profit->getProfit();
-            $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
+            $amount = floor(($row['capital'] * $totalProfit) / $totalCapital);
             $transaction->setCredit($amount);
             $transaction->setAmount("-{$amount}");
         }else{
             $totalProfit = $profit->getLoss();
-            $amount = round(($row['capital'] * $totalProfit) / $totalCapital);
+            $amount = floor(($row['capital'] * $totalProfit) / $totalCapital);
             $transaction->setDebit($amount);
             $transaction->setAmount($amount);
 
@@ -154,7 +158,7 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountRefNo($profit->getId());
         $transaction->setUpdated($profit->getUpdated());
         /* Inventory Assets - Purchase Goods Received account */
-        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug"=>"profit-loss")));
+        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array("slug" => "profit-loss")));
         $transaction->setSubAccountHead($subAccount);
         $em->persist($transaction);
         $em->flush();
