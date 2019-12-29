@@ -375,12 +375,12 @@ class AccountSalesController extends Controller
 		    $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
 
 		    if($entity->getProcessHead() == 'Outstanding'){
-			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
+			  //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
 		    }elseif($entity->getProcessHead() == 'Discount'){
-			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
+			  //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
 		    }elseif($entity->getAmount() > 0 ){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+              //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
 		    }
 		    return new Response('success');
 

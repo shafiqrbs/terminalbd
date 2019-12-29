@@ -401,12 +401,12 @@ class AccountPurchaseController extends Controller
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
 	        if(in_array($entity->getProcessType(),array('Outstanding','Opening'))){
-		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
+		       // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertVendorOpeningTransaction($entity);
 	        }elseif($entity->getProcessType() == 'Discount'){
-		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
+		      //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorDiscountTransaction($entity);
 	        }elseif($entity->getPayment() > 0 ){
 		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
-		        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
+		      //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($accountPurchase);
 	        }
             return new Response('success');
         }else{

@@ -399,7 +399,7 @@ class SalesController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+           // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -562,7 +562,7 @@ class SalesController extends Controller
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+              //  $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
         endforeach;
         exit;
@@ -592,7 +592,7 @@ class SalesController extends Controller
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            //    $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
                 $msg = "valid";
             }
         }
