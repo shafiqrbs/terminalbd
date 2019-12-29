@@ -47,13 +47,14 @@ class AccountProfitRepository extends EntityRepository
     public function insertAccountProfit(GlobalOption $option,$month,$year,$data)
     {
         $em = $this->_em;
+        $date = new \DateTime($data);
         $entity = new AccountProfit();
         $entity->setGlobalOption($option);
         $entity->setMonth($month);
         $entity->setYear($year);
-        $entity->setGenerateMonth($data);
-        $entity->setCreated($data);
-        $entity->setUpdated($data);
+        $entity->setGenerateMonth($date);
+        $entity->setCreated($date);
+        $entity->setUpdated($date);
         $em->persist($entity);
         $em->flush();
         return $entity;
@@ -70,7 +71,6 @@ class AccountProfitRepository extends EntityRepository
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
-
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
 
@@ -99,7 +99,6 @@ class AccountProfitRepository extends EntityRepository
                 }elseif($row['total'] > 0 and $row['processHead'] == 'medicine' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
                 }
-
             endforeach;
         }
 

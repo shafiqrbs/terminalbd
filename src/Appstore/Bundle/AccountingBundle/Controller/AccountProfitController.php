@@ -59,18 +59,18 @@ class AccountProfitController extends Controller
             $month = date("m",strtotime($date));
             $year = date("Y",strtotime($date));
             $compare = new \DateTime($date);
-            $data =  $compare->format("Y-m-01");
+            $data =  $compare->format("Y-m-t 22:59:59");
         }else{
             $month = $search['month'];
             $year =  $search['year'];
             $compare = new \DateTime("{$year}-{$month}-01");
-            $data =  $compare->format("Y-m-01");
+            $data =  $compare->format("Y-m-t 22:59:59");
         }
 
         $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month ,'year' => $year));
        // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
         if(empty($entity)){
-            $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->insertAccountProfit($option,$month,$year,$compare);
+            $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->insertAccountProfit($option,$month,$year,$data);
             $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
             $sales = round($overview['sales'] + $overview['salesAdjustment']);
             $purchase = round($overview['purchase'] + $overview['purchaseAdjustment']);
