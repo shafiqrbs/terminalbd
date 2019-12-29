@@ -225,7 +225,6 @@ class ProfitWithdrawalController extends Controller
         return $this->render('AccountingBundle:AccountJournal:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -329,7 +328,6 @@ class ProfitWithdrawalController extends Controller
             throw $this->createNotFoundException('Unable to find AccountJournal entity.');
         }
         $em->remove($entity);
-        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->approvedDeleteRecord($entity,'Journal');
         $em->flush();
         return new Response('success');
     }
@@ -347,7 +345,7 @@ class ProfitWithdrawalController extends Controller
 		$entity->setApprovedBy(null);
 		$entity->setAmount(0);
 		$em->flush();
-		return $this->redirect($this->generateUrl('account_journal'));
+		return $this->redirect($this->generateUrl('account_profit_withdrawal'));
 
 	}
 

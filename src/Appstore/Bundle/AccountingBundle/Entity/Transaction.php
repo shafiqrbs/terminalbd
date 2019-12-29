@@ -49,7 +49,8 @@ class Transaction
      private $accountProfit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="transactions")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
      private $accountJournal;
 

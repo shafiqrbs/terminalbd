@@ -6,3 +6,7 @@ account_profit_new:
     path:     /new
     defaults: { _controller: "AccountingBundle:AccountProfit:new" }
 
+account_profit_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:AccountProfit:delete" }
+

@@ -104,4 +104,20 @@ class AccountProfitController extends Controller
         return $this->redirect($this->generateUrl('account_profit'));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+     */
+
+    public function deleteAction(AccountProfit $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountJournal entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new Response('success');
+    }
+
+
 }

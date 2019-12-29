@@ -42,6 +42,11 @@ class AccountJournal
     private  $transactionMethod;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="accountJournal" , cascade={"detach","merge"} )
+     **/
+    private  $transactions;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountJournal" , cascade={"detach","merge"} )
      **/
     private  $accountCash;
@@ -565,7 +570,13 @@ class AccountJournal
         return $this->accountJournalItems;
     }
 
-
+    /**
+     * @return Transaction
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
 
 
 }

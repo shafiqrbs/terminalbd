@@ -86,11 +86,12 @@
                                     <th class="numeric" >Revenue</th>
                                     <th class="numeric" >Profit</th>
                                     <th class="numeric" >Loss</th>
+                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
-                                    <tr>
+                                    <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.generateMonth|date('F') }}</td>
                                         <td class="numeric" >{{ entity.generateMonth|date('Y') }}</td>
@@ -100,6 +101,9 @@
                                         <td class="numeric" >{{ entity.revenue|number_format }}</td>
                                         <th class="numeric" >{{ entity.profit|number_format }}</th>
                                         <th class="numeric" >{{ entity.loss|number_format }}</th>
+                                        <td class="numeric" >
+                                            <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_profit_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -115,5 +119,16 @@
         </div>
     </div>
 {% endblock %}
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    AccountingApproveProcess();
+{% endblock %}
 
