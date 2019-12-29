@@ -40,6 +40,10 @@ business_stock_production:
     path:     /{id}/production
     defaults: { _controller: "BusinessBundle:Stock:production" }
 
+business_stock_excel:
+    path:     /excel
+    defaults: { _controller: "BusinessBundle:Stock:stockExcel" }
+
 
 business_stock_search:
     path:     /search

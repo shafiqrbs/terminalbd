@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * StockController controller.
@@ -349,6 +350,49 @@ class StockController extends Controller
 		}
 		return $this->redirect($this->generateUrl('medicine_stock'));
 	}
+
+    public function stockExcelAction()
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $array = array();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
+        $entities = $entities->getQuery()->getResult();
+        $array[] = 'SKU,Name,Quantity,Purchase Price,Total Purchase ,Sales Price,Total Sales';
+
+        /* @var $entity BusinessParticular */
+
+        foreach ($entities as $key => $entity){
+
+            $category = empty($entity->getCategory()) ? '': $entity->getCategory()->getName();
+            $totalPurchase = ( $entity->getPurchasePrice() * $entity->getRemainingQuantity());
+            $totalSales = ( $entity->getSalesPrice() * $entity->getRemainingQuantity());
+            $rows = array(
+                $entity->getParticularCode(),
+                $entity->getName(),
+                $entity->getRemainingQuantity(),
+                $entity->getPurchasePrice(),
+                $totalPurchase,
+                $entity->getSalesPrice(),
+                $totalSales
+
+            );
+            $array[] = implode(',', $rows);
+        }
+        $compareStart = new \DateTime("now");
+        $start =  $compareStart->format('d-m-Y');
+        $fileName = $start.'stock.csv';
+        $content = implode("\n", $array);
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        return $response;
+    }
 
 
 }
