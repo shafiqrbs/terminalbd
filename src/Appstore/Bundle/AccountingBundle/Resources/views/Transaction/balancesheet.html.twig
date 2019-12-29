@@ -29,13 +29,13 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Assets</div>
                         <div class="actions">
-                            <div class="btn-group">
+                            {#<div class="btn-group">
                                    {% set month = searchForm.month is defined ? searchForm.month :'' %}
                                    {% set year = searchForm.year is defined ? searchForm.year :'' %}
-                                  <a class="btn purple" target="_blank" href="{{ path('account_journal_pdf',{'month':month,'year':year}) }}" >
+                                  <a class="btn purple" target="_blank" href="{{ path('account_balance_sheet',{'month':month,'year':year}) }}" >
                                       <i class="icon-print"></i>&nbsp;Download
                                   </a>
-                            </div>
+                            </div>#}
                         </div>
                     </div>
                     <div class="portlet-body form">

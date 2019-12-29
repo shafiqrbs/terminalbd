@@ -3204,7 +3204,7 @@ class TransactionRepository extends EntityRepository
             $transaction->setAccountProfit($entity);
             $transaction->setCreated($entity->getCreated());
             $transaction->setUpdated($entity->getCreated());
-            $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'account-receivable'));
+            $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'cash-in-hand'));
             $transaction->setAccountHead($head);
             $transaction->setAmount($sales);
             $transaction->setDebit($sales);
