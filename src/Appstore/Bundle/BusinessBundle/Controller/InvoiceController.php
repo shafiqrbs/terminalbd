@@ -204,7 +204,8 @@ class InvoiceController extends Controller
                 }
                 if(in_array($entity->getProcess(),$done)){
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);     $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+                //$em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
 
                 }
             }elseif(in_array($entity->getProcess(), $done)) {
@@ -213,7 +214,7 @@ class InvoiceController extends Controller
                 }
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
@@ -786,9 +787,9 @@ class InvoiceController extends Controller
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $serviceModels = array('association','general','event');
             if(in_array($entity->getBusinessConfig()->getBusinessModel(),$serviceModels)){
-                $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
+              //  $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
             }else{
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess("Done");
@@ -818,7 +819,7 @@ class InvoiceController extends Controller
         /* @var $entity BusinessInvoice */
         foreach ($pagination as $entity):
             $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+           // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         endforeach;
         exit;
     }

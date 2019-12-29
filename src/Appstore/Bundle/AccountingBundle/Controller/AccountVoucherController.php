@@ -248,7 +248,7 @@ class AccountVoucherController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
+         //   $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:ProductGroup')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
         } else {

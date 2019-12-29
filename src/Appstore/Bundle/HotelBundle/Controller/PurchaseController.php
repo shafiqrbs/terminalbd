@@ -267,7 +267,7 @@ class PurchaseController extends Controller
 		    if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
 			    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountHotelPurchaseJournal($purchase);
 			    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-			    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
+			  //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
 		    }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertHotelAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);

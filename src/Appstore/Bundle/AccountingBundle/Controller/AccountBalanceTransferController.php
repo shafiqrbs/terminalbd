@@ -156,7 +156,7 @@ class AccountBalanceTransferController extends Controller
             }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->balanceTransferAccountCash($entity,'BalanceTransfer');
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountBalanceTransferTransaction($entity);
+          //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountBalanceTransferTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');

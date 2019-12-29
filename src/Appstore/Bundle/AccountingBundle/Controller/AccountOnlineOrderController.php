@@ -254,7 +254,7 @@ class AccountOnlineOrderController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountOnlineOrderTransaction($entity);
+            // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountOnlineOrderTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');

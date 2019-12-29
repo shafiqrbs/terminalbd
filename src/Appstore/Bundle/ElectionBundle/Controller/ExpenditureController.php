@@ -151,7 +151,7 @@ class ExpenditureController extends Controller
             $expenditure->setApprovedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($expenditure);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($expenditure);
+           // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($expenditure);
             return new Response('success');
         } else {
             return new Response('failed');

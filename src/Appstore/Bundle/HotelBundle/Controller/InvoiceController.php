@@ -425,7 +425,7 @@ class InvoiceController extends Controller
 			if($entity->getReceived() > 0 ){
 				$this->getDoctrine()->getRepository('HotelBundle:HotelInvoiceTransactionSummary')->updateTransactionSummary($entity->getHotelInvoice());
 				$accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHotelAccountInvoice($entity);
-				$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
+			//	$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->hotelSalesTransaction($entity, $accountInvoice);
 			}
 			return new Response('success');
 		}else{

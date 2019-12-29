@@ -336,7 +336,7 @@ class AccountMedicineController extends Controller
             if($entity->getMedicineSales()){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateSalesPaymentReceive($entity);
             }
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
+            // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');

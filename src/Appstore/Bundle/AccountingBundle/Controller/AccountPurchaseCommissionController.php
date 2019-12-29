@@ -167,7 +167,7 @@ class AccountPurchaseCommissionController extends Controller
             }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCommission($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchaseCommissionTransaction($this->getUser()->getGlobalOption(),$entity);
+           // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->purchaseCommissionTransaction($this->getUser()->getGlobalOption(),$entity);
             return new Response('success');
         } else {
             return new Response('failed');
