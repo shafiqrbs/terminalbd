@@ -213,6 +213,21 @@ class ExpenditureRepository extends EntityRepository
         return $result;
     }
 
+    public function reportExpenditureAccountHead($option,$heads,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.expenseCategory','ec');
+        $qb->join('ec.accountHead','ah');
+        $qb->select("ah.name as name",'SUM(e.amount) as amount');
+        $qb->where('e.globalOption =:option')->setParameter('option', $option);
+        $qb->andWhere('e.process =:process')->setParameter('process', 'approved');
+        $qb->andWhere('ah.id IN (:ids)')->setParameter('ids', $heads);
+        $qb->groupBy("ah.name");
+        $this->handleDateRangeFind($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function monthlyExpenditure(User $user , $data =array())
     {
         $config = $user->getGlobalOption()->getId();
