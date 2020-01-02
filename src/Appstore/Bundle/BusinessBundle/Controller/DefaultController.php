@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,6 +79,39 @@ class DefaultController extends Controller
         header('Content-Disposition: attachment; filename="'.$fileName.'"');
         echo $pdf;
         return new Response('');
+    }
+
+    public function copyToBusinessParticularAction(GlobalOption $option)
+    {
+        $em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $config = $option->getMedicineConfig();
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        $existConfig = $globalOption->getBusinessConfig();
+
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findBy(array('businessConfig'=> $config));
+
+        /* @var $entity BusinessParticular */
+
+        foreach ($entities as $entity){
+
+            $newEntity = new BusinessParticular();
+            $newEntity->setBusinessConfig($existConfig);
+            $newEntity->setName($entity->getName());
+            $newEntity->setStatus(1);
+            $newEntity->setBusinessParticularType($entity->getBusinessParticularType());
+            $newEntity->setCategory($entity->getCategory());
+            $newEntity->setSlug($entity->getSlug());
+            $newEntity->setUnit($entity->getUnit());
+            $em->persist($newEntity);
+            $em->flush();
+
+        }
+
+        return $this->redirect($this->generateUrl('homepage'));
+
     }
 
 

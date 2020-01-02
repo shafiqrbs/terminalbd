@@ -91,14 +91,13 @@ class GpCustomerImportController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-        $importer = $this->get('appstore_gp_customer_import');
-        $importer->setGpCustomerImport($GpCustomerImport);
+        $importer = $this->get('appstore_customer_import');
+        $importer->setGlobalOption($GpCustomerImport->getGlobalOption());
         $reader = $this->get('appstore.importer.customer_excel_data_reader');
         $file =  realpath($GpCustomerImport->getAbsolutePath());
         $importer->import($reader->getData($file));
         $GpCustomerImport->setProgress('migrated');
         $em->flush();
-
         $this->get('session')->getFlashBag()->add(
             'success',"Data has been migration successfully"
         );

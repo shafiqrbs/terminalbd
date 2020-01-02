@@ -85,3 +85,7 @@ business_group_approved:
 business_group_revised:
     path:     /group/invoice/revised
     defaults: { _controller: "BusinessBundle:Invoice:invoiceGroupReverse" }
+
+business_stock_migration:
+    path:     /{id}/copy-stock-migration
+    defaults: { _controller: BusinessBundle:Default:copyToBusinessParticular }

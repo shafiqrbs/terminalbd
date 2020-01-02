@@ -13,7 +13,7 @@ services:
         calls:
             - [ setContainer, [ @service_container ] ]
 
-    appstore.importer.customer_excel_data_reader:
+    appstore.importer.customer_excel_reader:
        class: Appstore\Bundle\DomainUserBundle\Importer\GpCustomerDataReader
        arguments: [ @phpexcel ]
 
@@ -35,3 +35,13 @@ services:
        public: false
        tags:
           - { name: twig.extension }
+
+    appstore_customer_import:
+            class: Appstore\Bundle\DomainUserBundle\Importer\CustomerExcel
+            calls:
+                - [ setContainer, [ @service_container ] ]
+
+    appstore.importer.customer_excel_data_reader:
+       class: Appstore\Bundle\DomainUserBundle\Importer\CustomerDataReader
+       arguments: [ @phpexcel ]
+
