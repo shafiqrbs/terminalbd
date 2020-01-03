@@ -130,7 +130,7 @@
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_PURCHASE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
-                                        <a  href="javascript:" data-id="{{ path('business_purchase_edit',{'id':entity.id}) }}"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>
+                                        <a  href="javascript:" data-id=""  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <a target="_blank" href="{{ path('business_purchase_print_invoice',{'id':entity.id}) }}"  class="btn purple"><i class=" icon-print"></i>&nbsp;Print</a>
                                     <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>

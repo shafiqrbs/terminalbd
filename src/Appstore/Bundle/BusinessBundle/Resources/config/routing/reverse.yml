@@ -3,11 +3,11 @@ business_reverse:
     defaults: { _controller: "BusinessBundle:BusinessReverse:index" }
 
 business_purchase_reverse:
-    path:     /{id}/reverse
+    path:     /{id}/purchase
     defaults: { _controller: "BusinessBundle:Purchase:reverse" }
 
 business_sales_reverse:
-    path:     /{id}/
+    path:     /{id}/sales
     defaults: { _controller: "BusinessBundle:Invoice:invoiceReverse" }
 
 business_reverse_show:

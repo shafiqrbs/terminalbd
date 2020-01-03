@@ -807,11 +807,15 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 				$globalOption = $purchase->getGlobalOption()->getId();
 				$accountRefNo = $purchase->getAccountRefNo();
 				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
-				$transaction->execute();
-				$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
-				$accountCash->execute();
-			}
-		}
+				if($transaction){
+                    $transaction->execute();
+                }
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
+                if($accountCash){
+                    $accountCash->execute();
+                }
+            }
+        }
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.businessPurchase = '.$entity->getId());
 		if(!empty($accountCash)){
 			$accountCash->execute();
