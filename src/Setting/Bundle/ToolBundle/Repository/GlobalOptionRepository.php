@@ -45,10 +45,11 @@ class GlobalOptionRepository extends EntityRepository
 
     function getList($data) {
 
-	    $sort = isset($data['sort'])? $data['sort'] :'e.updated';
+        $sort = isset($data['sort'])? $data['sort'] :'e.updated';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
 	    $qb =  $this->createQueryBuilder('e');
 	    $qb->select('e');
+        $qb->leftJoin('e.mainApp','m');
 	    $qb->where('e.location is not null');
 	    $this->searchHandle($qb,$data);
 	    $qb->orderBy("{$sort}",$direction);
@@ -77,6 +78,11 @@ class GlobalOptionRepository extends EntityRepository
         if(!empty($data['syndicate'])){
             $qb->andWhere("e.syndicate = :syndicate");
             $qb->setParameter('syndicate', $data['syndicate']);
+        }
+
+         if(!empty($data['mainApp'])){
+            $qb->andWhere("e.mainApp = :mainApp");
+            $qb->setParameter('mainApp', $data['mainApp']);
         }
 
         if(!empty($data['name'])){

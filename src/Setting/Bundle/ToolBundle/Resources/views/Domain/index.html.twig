@@ -85,6 +85,7 @@
                                     <th class="numeric" >Location</th>
                                     <th {% if entities.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Organization', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Mobile</th>
+                                    <th {% if entities.isSorted('m.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Main Application', 'm.name') }}{% if( direction == 'desc' and sort == 'm.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if entities.isSorted('e.doamin') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Domain', 'e.domain') }}{% if( direction == 'desc' and sort == 'e.domain') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Monthly</th>
                                     <th {% if entities.isSorted('e.status') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'status', 'e.status') }}{% if( direction == 'desc' and sort == 'e.status') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -98,6 +99,7 @@
                                         <td class="numeric" >{{ entity.location.name }},{{ entity.location.parent.name }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
+                                        <td class="numeric" >{% if entity.mainApp is not empty %}{{ entity.mainApp.name }}{% endif %}</td>
                                         <td class="numeric" ><a target="_blank" href="http://{{ entity.domain }}">{{ entity.domain }}</a></td>
                                         <td class="numeric" ><a href="#" class="editable" data-name="MonthlyAmount" id="group" data-type="text" data-pk="{{ entity.id }}" data-value="{{ entity.monthlyAmount }}"  data-url="{{ path('tools_option_status_update') }}" data-original-title="Enter monthly amount">{{ entity.monthlyAmount }}</a></td>
                                         <td class="numeric" ><a href="#" class="editable" data-name="Status" id="group" data-type="select" data-pk="{{ entity.id }}" data-value="{{ entity.status }}" data-source="{{ path('tools_option_status') }}" data-url="{{ path('tools_option_status_update') }}" data-original-title="Select domain status">{{ entity.currentStatus }}</a></td>
