@@ -355,7 +355,7 @@ class SalesController extends Controller
             $em->flush();
             if($entity->getProcess() == 'Done'){
                 $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
             }
             if($data['process'] == 'save' or $data['process'] == 'hold' ){
                 return $this->redirect($this->generateUrl('medicine_sales'));
