@@ -1012,7 +1012,7 @@ class Builder extends ContainerAware
 
 	    }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING')) {
             $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
             $menu['E-commerce']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-shopping-cart')
