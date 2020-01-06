@@ -60,3 +60,7 @@ account_double_entry_excel:
     path:     /report-pdf
     defaults: { _controller: "AccountingBundle:DoubleEntry:journalExcel" }
 
+account_double_entry_approve_reset:
+    path:     /approve-journal-reset
+    defaults: { _controller: "AccountingBundle:DoubleEntry:approveJournalReset" }
+

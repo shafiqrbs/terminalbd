@@ -33,20 +33,28 @@ function AccountingApproveProcess(){}
         location.reload();
     }
 
-    $(document).on("click", ".delete", function() {
 
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' === response ) {
-                    $('#remove-' + id).remove();
-                }
-            },
-        })
+$(document).on("click", ".delete", function(e) {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    if ('success' === response ) {
+                        location.reload();
+                    }
+                },
+            })
+        }
     });
+
+});
 
     $(document).on("click", ".approve", function() {
 

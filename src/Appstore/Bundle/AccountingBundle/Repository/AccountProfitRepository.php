@@ -68,9 +68,22 @@ class AccountProfitRepository extends EntityRepository
         $journalAccountPurchase = $this->monthlyPurchaseJournal($profit, $data);
         $journalAccountSales = $this->monthlySalesJournal($profit, $data);
         $journalAccountSalesAdjustment = $this->monthlySalesAdjustmentJournal($profit, $data);
-        $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
+        if($profit->getGlobalOption()->getMainApp()->getSlug() == "miss"){
+            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "business"){
+            $salesPurchasePrice = $this->reportBusinessSalesItemPurchaseSalesOverview($profit, $data);
+            var_dump($salesPurchasePrice);
+            exit;
+        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "hms"){
+            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "inventory"){
+            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "restaurant"){
+            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+        }
+
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
 
@@ -212,6 +225,27 @@ class AccountProfitRepository extends EntityRepository
         $result =  $stmt->fetch();
         return $result;
 
+    }
+
+    public  function reportBusinessSalesItemPurchaseSalesOverview(AccountProfit $profit, $data){
+
+        $config =  $profit->getGlobalOption()->getMedicineConfig()->getId();
+
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT COALESCE(SUM(salesItem.totalQuantity * salesItem.purchasePrice),0) as total
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result;
     }
 
     private function monthlyExpenditureJournal(AccountProfit $profit,$data)
