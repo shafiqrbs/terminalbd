@@ -102,7 +102,9 @@
                                         <th class="numeric" >{{ entity.profit|number_format }}</th>
                                         <th class="numeric" >{{ entity.loss|number_format }}</th>
                                         <td class="numeric" >
+                                            {% app.user.granted("ROLE_DOMAIN") %}
                                             <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_profit_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
