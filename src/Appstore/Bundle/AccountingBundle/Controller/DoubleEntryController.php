@@ -340,7 +340,7 @@ class DoubleEntryController extends Controller
 		$entity->setApprovedBy(null);
 		$entity->setAmount(0);
 		$em->flush();
-		return $this->redirect($this->generateUrl('account_journal'));
+		return $this->redirect($this->generateUrl('account_double_entry'));
 
 	}
 
@@ -390,5 +390,26 @@ class DoubleEntryController extends Controller
 		$response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
 		return $response;
 	}
+
+
+    public function approveJournalResetAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data['mode'] = "double-entry";
+        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findDoubleEntrySearch( $this->getUser(),$data);
+        $pagination = $entities->getResult();
+        /* @var $entity AccountJournal */
+        foreach ( $pagination as $entity ){
+            if (!empty($entity) and $entity->getProcess() == 'approved') {
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDoubleEntryTransaction($entity);
+            } else {
+                return new Response('failed');
+            }
+        }
+        return $this->redirect($this->generateUrl('account_double_entry'));
+
+    }
 
 }

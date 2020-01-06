@@ -5,6 +5,7 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
