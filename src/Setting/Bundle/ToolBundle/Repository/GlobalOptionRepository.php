@@ -45,7 +45,7 @@ class GlobalOptionRepository extends EntityRepository
 
     function getList($data) {
 
-        $sort = isset($data['sort'])? $data['sort'] :'e.updated';
+        $sort = isset($data['sort'])? $data['sort'] :'e.created';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
 	    $qb =  $this->createQueryBuilder('e');
 	    $qb->select('e');

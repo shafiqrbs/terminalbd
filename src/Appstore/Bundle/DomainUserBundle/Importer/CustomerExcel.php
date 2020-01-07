@@ -24,7 +24,6 @@ class CustomerExcel
             throw new \Exception("You must set config first");
         }
         return true;
-
     }
 
 

@@ -50,9 +50,7 @@ class CustomerDataReader
             $dataRow = $objWorksheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, TRUE, TRUE);
 
             if ((isset($dataRow[$row]['A'])) && ($dataRow[$row]['A'] > '')) {
-
                 $dataArray = array();
-
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }

@@ -58,7 +58,7 @@
                                         <div class="input-append span11">
                                             <select class="span11 m-wrap" name="year" id='year'>
                                                 {% for year in years %}
-                                                    <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) or (year == currentYear) %} selected="selected" {% endif %} >{{ year }}</option>
+                                                    <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) %} selected="selected" {% endif %} >{{ year }}</option>
                                                 {% endfor %}
                                             </select>
                                             <div class="btn-group">
@@ -167,7 +167,8 @@
                                             {% for sub in subHeadProfits %}
                                                 {% if sub.parentId == val.accountHeadId %}
                                                     <tr><td></td><td></td><td>{{ sub.headName }}</td>
-                                                        <td>{{ sub.amount|abs|number_format }}</td>
+                                                        <td>{% if sub.amount > 0  %}({{ sub.amount|number_format }}) {% else %} {{ sub.amount|abs|number_format }} {% endif %}</td>
+
                                                     </tr>
                                                 {% endif %}
                                             {% endfor %}

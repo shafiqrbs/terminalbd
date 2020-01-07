@@ -210,23 +210,18 @@ class CustomerController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('UserBundle:Profile')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->flush();
             return $this->redirect($this->generateUrl('account_customer'));
         }
-
         return $this->render('AccountingBundle:Customer:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
