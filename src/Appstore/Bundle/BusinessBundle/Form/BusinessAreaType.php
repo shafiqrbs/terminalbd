@@ -29,7 +29,7 @@ class BusinessAreaType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter wear house name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter business area name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter wear house name'))
                 ))

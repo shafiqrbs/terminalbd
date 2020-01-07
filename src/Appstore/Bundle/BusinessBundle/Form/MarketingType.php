@@ -18,22 +18,22 @@ class MarketingType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter wear house name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter executive name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter name'))
                 ))
             )
-            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter wear house name'),
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter designation'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter designation'))
                     ))
             )
-            ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter wear house name'),
+            ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter company name'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter company name'))
                     ))
             )
-            ->add('mobileNo','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter wear house name'),
+            ->add('mobileNo','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter mobile no'))
                     ))
