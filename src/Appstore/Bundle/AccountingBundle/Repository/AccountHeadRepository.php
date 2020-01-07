@@ -328,6 +328,14 @@ class AccountHeadRepository extends EntityRepository
         $exist = $this->findOneBy(array('employee' => $entity));
         if ($exist) {
             $exist->setName($profile->getName());
+            $exist->setSource('user');
+            if($profile->getUserGroup() ==  "employee"){
+                $parent = $this->findOneBy(array('slug' => 'salaries-expense'));
+                $exist->setParent($parent);
+            }elseif($profile->getUserGroup() ==  "stakeholder"){
+                $parent = $this->findOneBy(array('slug' => 'capital-investment'));
+                $exist->setParent($parent);
+            }
             $this->_em->flush();
             return $exist;
         }else{

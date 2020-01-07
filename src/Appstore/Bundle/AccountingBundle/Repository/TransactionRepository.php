@@ -121,7 +121,7 @@ class TransactionRepository extends EntityRepository
         $qb->addSelect('(COALESCE(SUM(e.credit),0) - COALESCE(SUM(e.debit),0)) AS capital');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption',$option->getId());
         $qb->andWhere("ac.slug = :slug")->setParameter('slug','capital-investment');
-        $qb->andWhere("ach.source = :source")->setParameter('source','user');
+       // $qb->andWhere("ach.source = :source")->setParameter('source','user');
         $qb->andWhere("e.created <= :created")->setParameter('created', $endDate);
         $qb->groupBy('subAccountId');
         $qb->orderBy('e.subAccountHead','ASC');

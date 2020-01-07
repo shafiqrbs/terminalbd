@@ -466,6 +466,10 @@ class TransactionController extends Controller
             $year =  $search['year'];
             $compare = new \DateTime("{$year}-{$month}-01");
             $data['tillDate'] =  $compare->format("Y-m-t");
+        }else{
+                $compare = new \DateTime("now");
+                $search['month'] =  $compare->format('m');
+                $search['year'] = $compare->format('Y');
         }
 
         $globalOption = $this->getUser()->getGlobalOption();

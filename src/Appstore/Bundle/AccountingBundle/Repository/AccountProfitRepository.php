@@ -74,8 +74,6 @@ class AccountProfitRepository extends EntityRepository
             $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "business"){
             $salesPurchasePrice = $this->reportBusinessSalesItemPurchaseSalesOverview($profit, $data);
-            var_dump($salesPurchasePrice);
-            exit;
         }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "hms"){
             $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "inventory"){
@@ -109,7 +107,7 @@ class AccountProfitRepository extends EntityRepository
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);
-                }elseif($row['total'] > 0 and $row['processHead'] == 'medicine' ){
+                }elseif($row['total'] > 0 and in_array($row['processHead'],array('medicine','business','inventory'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
                 }
             endforeach;
@@ -229,7 +227,7 @@ class AccountProfitRepository extends EntityRepository
 
     public  function reportBusinessSalesItemPurchaseSalesOverview(AccountProfit $profit, $data){
 
-        $config =  $profit->getGlobalOption()->getMedicineConfig()->getId();
+        $config =  $profit->getGlobalOption()->getBusinessConfig()->getId();
 
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
