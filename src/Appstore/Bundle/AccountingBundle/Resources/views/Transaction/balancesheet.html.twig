@@ -162,7 +162,7 @@
                                     {% set totalCredit =  0   %}
                                     {% for val in  profitStatement[key] %}
                                         {% set total = totalCredit + val.amount|abs %}
-                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
+                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{% if val.amount > 0  %}({{ val.amount|number_format }}) {% else %} {{ val.amount|abs|number_format }} {% endif %}</th></tr>
                                         {% if subHeadProfits is defined and subHeadProfits is not empty %}
                                             {% for sub in subHeadProfits %}
                                                 {% if sub.parentId == val.accountHeadId %}
