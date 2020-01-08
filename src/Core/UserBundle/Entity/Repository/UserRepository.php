@@ -318,6 +318,7 @@ class UserRepository extends EntityRepository
 			    'ROLE_DOMAIN_WEBSITE_MANAGER'   => 'Website Manager',
 			    'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
 			    'ROLE_DOMAIN_WEBSITE'           => 'Website Admin',
+			    'ROLE_DOMAIN_ECOMMERCE_MENU'    => 'E-commerce Menu',
 		    );
 	    }
 	    $array['SMS'] = array(

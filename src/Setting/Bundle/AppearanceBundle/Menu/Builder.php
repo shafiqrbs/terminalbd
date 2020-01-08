@@ -415,7 +415,7 @@ class Builder extends ContainerAware
 
             }
             $menu['Manage Appearance']->addChild('Menu')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-            if (!empty($result) and $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
+            if (!empty($result) and $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_MENU') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
                 $menu['Manage Appearance']['Menu']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'))->setAttribute('icon', 'icon-th-list');
             }
             $menu['Manage Appearance']['Menu']->addChild('Website Menu', array('route' => 'menu_manage'))->setAttribute('icon', 'icon-th-list');
