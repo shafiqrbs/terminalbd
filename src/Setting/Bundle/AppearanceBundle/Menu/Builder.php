@@ -402,7 +402,7 @@ class Builder extends ContainerAware
 		        ));
 	        }
             if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
+                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_ECOMMERCE')){
                     $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
                     $menu['Manage Appearance']['E-commerce']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'))->setAttribute('icon', 'icon-th-list');
                     $menu['Manage Appearance']['E-commerce']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
