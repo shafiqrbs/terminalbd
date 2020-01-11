@@ -521,6 +521,52 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function resetDoubleEntryTransaction(AccountJournal $journal)
+    {
+
+        $em = $this->_em;
+
+        /* @var $entity AccountJournalItem */
+
+        foreach ($journal->getAccountJournalItems() as $entity):
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($journal->getGlobalOption());
+            $transaction->setAccountJournal($journal);
+            $transaction->setProcessHead('Journal');
+            $transaction->setProcess($entity->getAccountHead()->getParent()->getName());
+            $transaction->setAccountRefNo($journal->getAccountRefNo());
+            $transaction->setCreated($journal->getCreated());
+            $transaction->setUpdated($journal->getCreated());
+            if($entity->getDebit() > 0){
+                $transaction->setAccountHead($entity->getAccountHead());
+                if($entity->getAccountSubHead()){
+                    $transaction->setSubAccountHead($entity->getAccountSubHead());
+                }
+                $transaction->setAmount($entity->getDebit());
+                $transaction->setDebit($entity->getDebit());
+            }else{
+                $transaction->setAccountHead($entity->getAccountHead());
+                if($entity->getAccountSubHead()){
+                    $transaction->setSubAccountHead($entity->getAccountSubHead());
+                }
+                $transaction->setAmount("-{$entity->getCredit()}");
+                $transaction->setCredit($entity->getCredit());
+            }
+            $em->persist($transaction);
+            $em->flush();
+            if($entity->getAccountHead()->getSlug() == "cash-in-hand"){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'cash');
+            }elseif($entity->getAccountHead()->getSlug() == "bank-account" and $entity->getAccountSubHead()){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'bank');
+            }elseif($entity->getAccountHead()->getSlug() == "mobile-account" and $entity->getAccountSubHead()){
+                $em->getRepository('AccountingBundle:AccountCash')->insertDoubleEntry($journal,$entity,'mobile');
+            }
+
+        endforeach;
+
+    }
+
     public function insertAccountJournalTransaction(AccountJournal $journal)
     {
         $this->insertAccountJournalDebitTransaction($journal);

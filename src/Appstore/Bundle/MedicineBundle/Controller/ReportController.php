@@ -122,21 +122,37 @@ class ReportController extends Controller
 
     public function salesStockItemAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
         $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
         $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->reportSalesStockItem($user, $data);
-        $pagination = $this->paginate($entities);
-        return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
-            'option' => $user->getGlobalOption(),
-            'entities' => $pagination,
-            'cashOverview' => $cashOverview,
-            'purchaseSalesItem' => $purchaseSalesPrice,
-            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
-            'searchForm' => $data,
-        ));
+        if(empty($data['pdf'])){
+            $pagination = $this->paginate($entities);
+            return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
+                'option' => $user->getGlobalOption(),
+                'entities' => $pagination,
+                'cashOverview' => $cashOverview,
+                'purchaseSalesItem' => $purchaseSalesPrice,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'MedicineBundle:Report:sales/salesStockPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'entities' => $entities->getArrayResult(),
+                    'cashOverview' => $cashOverview,
+                    'purchaseSalesItem' => $purchaseSalesPrice,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'medicine-sales-pdf.pdf');
+        }
+
+
     }
 
     public function salesUserAction()
@@ -493,7 +509,7 @@ class ReportController extends Controller
         $pdf             = $snappy->getOutputFromHtml($html);
 
         header('Content-Type: application/pdf');
-        header("Content-Disposition: attachment; filename='{$fileName}'");
+        header("Content-Disposition: attachment; filename={$fileName}");
         echo $pdf;
         return new Response('');
     }

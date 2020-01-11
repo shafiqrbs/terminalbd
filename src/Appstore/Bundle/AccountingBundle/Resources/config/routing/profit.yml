@@ -10,3 +10,7 @@ account_profit_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:AccountProfit:delete" }
 
+account_profit_download_profit:
+    path:     /profit-pdf
+    defaults: { _controller: "AccountingBundle:AccountProfit:downloadProfit" }
+

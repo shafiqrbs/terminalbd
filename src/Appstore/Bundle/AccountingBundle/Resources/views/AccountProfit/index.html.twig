@@ -31,7 +31,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Account Profit/Loss</div>
                         <div class="actions">
                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_profit_new') }}"><i class="icon-plus-sign"></i>&nbsp;Generate</a>
+                               <a class="btn purple" target="_blank" href="{{ path('account_profit_download_profit') }}"><i class="icon-download"></i>&nbsp;Download PDF</a>
                             </div>
                         </div>
                     </div>
@@ -44,8 +44,8 @@
                             <div class="portlet search-portlet">
                                 <form class="search-form" action="{{ path('account_profit_new') }}" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span6"></div>
-                                        <div class="span3">
+                                        <div class="span7"></div>
+                                        <div class="span2">
                                             {% set currentMonth = "now"|date("m") %}
                                             {% set currentYear = "now"|date("Y") %}
                                             {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
@@ -59,13 +59,13 @@
                                             <div class="controls">
                                                 {% set years = [2018,2019,2020,2021,2022,2023,2024,2025] %}
                                                 <div class="input-append span11">
-                                                    <select class="span11 m-wrap" name="year" id='year'>
+                                                    <select class="span6 m-wrap" name="year" id='year'>
                                                         {% for year in years %}
                                                             <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) or (year == currentYear) %} selected="selected" {% endif %} >{{ year }}</option>
                                                         {% endfor %}
                                                     </select>
                                                     <div class="btn-group">
-                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                        <button class="btn blue" type="submit"><i class="icon-refresh"></i> Generate Profit</button>
                                                     </div>
                                                 </div>
                                             </div>

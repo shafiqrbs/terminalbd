@@ -403,7 +403,8 @@ class DoubleEntryController extends Controller
         /* @var $entity AccountJournal */
         foreach ( $pagination as $entity ){
             if (!empty($entity) and $entity->getProcess() == 'approved') {
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDoubleEntryTransaction($entity);
+                $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountJournal ={$entity->getId()} AND e.processHead = 'Journal'")->execute();
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->resetDoubleEntryTransaction($entity);
             } else {
                 return new Response('failed');
             }

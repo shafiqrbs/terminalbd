@@ -259,23 +259,6 @@ class MedicineSalesItemRepository extends EntityRepository
     public function medicineInvoiceParticularReverse(Invoice $invoice)
     {
 
-        $em = $this->_em;
-
-        /** @var InvoiceMedicineParticular $item */
-
-        foreach($invoice->getMedicineSalesItems() as $item ){
-
-            /** @var MedicineParticular  $particular */
-
-            $particular = $item->getMedicineParticular();
-            if( $particular->getService()->getId() == 4 ){
-                $qnt = ($particular->getSalesQuantity() - $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
-            }
-        }
-
     }
 
     public function getLastCode($entity,$datetime)
@@ -365,13 +348,12 @@ class MedicineSalesItemRepository extends EntityRepository
 
 		$userBranch = $user->getProfile()->getBranches();
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
-		$group = isset($data['group']) ? $data['group'] :'medicineStock';
-
+        $group = isset($data['group']) ? $data['group'] :'medicineStock';
 		$qb = $this->createQueryBuilder('si');
 		$qb->join('si.medicineSales','s');
 		$qb->join('si.medicineStock','mds');
 		$qb->select('SUM(si.quantity) AS quantity');
-		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
+		$qb->addSelect('SUM(si.quantity * si.salesPrice ) AS salesPrice');
 		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
 		$qb->addSelect('mds.name AS name');
 		$qb->addSelect('mds.sku AS sku');
@@ -389,7 +371,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		}
 		$qb->groupBy('si.'.$group);
 		$qb->orderBy('mds.name','ASC');
-		return $qb->getQuery()->getArrayResult();
+		return $qb->getQuery();
 	}
 
 	protected function handleSearchStockBetween($qb,$data)

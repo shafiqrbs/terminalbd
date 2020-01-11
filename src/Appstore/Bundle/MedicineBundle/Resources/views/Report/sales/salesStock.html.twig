@@ -32,6 +32,12 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('medicine_report_sales_summary') }}"><i class="icon-bar-chart"></i>&nbsp;Sales Overview</a>
+                                {% set name = searchForm.name is defined ? searchForm.name : '' %}
+                                {% set sku = searchForm.sku is defined ? searchForm.sku : '' %}
+                                {% set brandName = searchForm.brandName is defined ? searchForm.brandName : '' %}
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date('d-m-y') %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date('d-m-y') %}
+                                <a class="btn purple" target="_blank" href="{{ path('medicine_report_sales_stock',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'name':name,'sku':sku,'brandName':brandName}) }}"><i class="icon-download"></i>&nbsp;Download PDF</a>
                             </div>
                         </div>
                     </div>

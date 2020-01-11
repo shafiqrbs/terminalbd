@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
@@ -120,6 +121,34 @@ class AccountProfitController extends Controller
         $em->flush();
         return new Response('success');
     }
+
+    public function downloadProfitAction()
+    {
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('AccountingBundle:AccountProfit')->findWithSearch( $this->getUser()->getGlobalOption(),$data);
+        $html = $this->renderView(
+            'AccountingBundle:AccountProfit:profitPdf.html.twig', array(
+                'option' => $this->getUser()->getGlobalOption(),
+                'entities' => $entities,
+                'searchForm' => $data,
+            )
+        );
+        $this->downloadPdf($html,'account-profit.pdf');
+    }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
+
 
 
 }
