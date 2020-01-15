@@ -12,7 +12,7 @@
                     <ul class="sidebar-submenu">
                         {% if menu.childMenus is not empty %}
                             {% for childMenu in  menu.childMenus %}
-                                <li><a href="/{{ childMenu.slug }}">{{ childMenu.menu }}</a></li>
+                                <li><a href="{{ childMenu.slug }}">{{ childMenu.menu }}</a></li>
                             {% endfor %}
                         {% endif %}
                         {% if menu.features is not empty %}
