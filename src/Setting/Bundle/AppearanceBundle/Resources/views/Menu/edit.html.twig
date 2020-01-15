@@ -37,6 +37,8 @@
                                 </a>
                                 <ul class="dropdown-menu pull-right">
                                     <li class="active"><a  href="javascript:"><i class="icon-th-list"></i>&nbsp;Manage menu</a></li>
+                                    <li class=""><a  href="{{ path('menu_new') }}"><i class="icon-plus"></i>&nbsp;Add Custom Menu</a></li>
+
                                     <li class=""><a  href="{{ path('menugrouping') }}"><i class="icon-plus"></i>&nbsp;Add menu grouping</a></li>
                                     <li class=""><a  href="{{ path('menu_reset') }}"><i class="icon-refresh"></i>&nbsp;Reset Default Menu</a></li>
                                 </ul>
@@ -68,6 +70,7 @@
                                         {% if(entity.defaultMenu == 1 ) %}
                                             <tr>
                                                 <td class="">
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
@@ -89,6 +92,7 @@
                                         {% if(entity.syndicate) %}
                                             <tr>
                                                 <td >
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
@@ -103,10 +107,10 @@
 
                                             </tr>
                                         {% endif %}
-
                                         {% if(entity.module) %}
                                             <tr>
                                                 <td >
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
@@ -120,10 +124,10 @@
                                                 </td>
                                             </tr>
                                         {% endif %}
-
                                         {% if(entity.category) %}
                                             <tr>
                                                 <td >
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
@@ -138,11 +142,10 @@
 
                                             </tr>
                                         {% endif %}
-
-
                                         {% if(entity.page) %}
                                             <tr>
                                                 <td >
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
@@ -160,6 +163,7 @@
                                             <tr>
                                                 <td >
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
+                                                    <input type="hidden" name="slug[]" value="">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
                                                 <td class="numeric">---</td>
@@ -173,7 +177,24 @@
 
                                             </tr>
                                         {% endif %}
+                                        {% if entity.mode == "custom" %}
+                                        <tr>
+                                            <td >
+                                                <input type="hidden" name="id[]" value="{{ entity.id }}">
+                                                <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
+                                            <td class="">
+                                                <input type="text" class="m-wrap span12" name="slug[]" value="{{ entity.slug }}"></td>
+                                            <td class="numeric">---</td>
+                                            <td class="numeric">
+                                                {% if( entity.status == 1) %}
+                                                    <a class="" href="{{ path('menu_status', { 'globalOption':  entity.globalOption.id,'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
+                                                {% else %}
+                                                    <a class="" href="{{ path('menu_status', { 'globalOption':  entity.globalOption.id,'id': entity.id}) }}"><span class="badge badge-important">a</span></a>
+                                                {% endif %}
+                                            </td>
 
+                                        </tr>
+                                        {% endif %}
                                     {% endfor %}
 
                                     </tbody>

@@ -3,11 +3,16 @@
         <ul class="sidebar-menu" id="sidebar-scroll">
             <li class="sidebar-header">{{ globalOption.name }}  <button id="remove-nav"><i class="fa fa-remove"></i> </button></li>
             {% for  menu in globalOption.ecommerceMenus  %}
-                <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> <span>{{ menu.name }}</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> <span>{{ menu.name }}</span>
+                        {% if menu.childMenus is not empty or  menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty or menu.categories is not empty or menu.brands is not empty  %}
+                        <i class="fa fa-angle-left pull-right"></i>
+                        {% endif %}
+
+                    </a>
                     <ul class="sidebar-submenu">
                         {% if menu.childMenus is not empty %}
                             {% for childMenu in  menu.childMenus %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
+                                <li><a href="{{ childMenu.slug }}">{{ childMenu.menu }}</a></li>
                             {% endfor %}
                         {% endif %}
                         {% if menu.features is not empty %}
@@ -35,7 +40,7 @@
                             </li>
                         {% endif %}
                         {% if menu.promotions is not empty %}
-                            <li><a href="javascript:"><span>Promotion's</span> <i class="fa fa-angle-left pull-right"></i>
+                            <li><a href="javascript:"><span>Promotion's</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="sidebar-submenu">
                                     {% for promotion in  menu.promotions %}
                                         <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>

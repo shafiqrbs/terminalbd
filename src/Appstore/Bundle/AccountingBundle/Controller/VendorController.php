@@ -188,6 +188,7 @@ class VendorController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->updateVendorCompanyName($entity);
             return $this->redirect($this->generateUrl('account_vendor'));
         }
 

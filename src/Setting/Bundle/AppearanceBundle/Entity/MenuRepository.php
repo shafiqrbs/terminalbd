@@ -36,9 +36,13 @@ class MenuRepository extends EntityRepository
         $em = $this->getEntityManager();
         foreach ($data['id'] as $index => $id ){
             $menu = ($data['menu'][$index]) ? $data['menu'][$index] : null ;
+            $slug = ($data['slug'][$index]) ? $data['slug'][$index] : '' ;
             $entity = $this->findOneBy(array('id'=>$id));
             if (!empty($entity)) {
                 $entity->setMenu($menu);
+                if($slug){
+                    $entity->setSlug($slug);
+                }
                 $em->persist($entity);
             }
         }

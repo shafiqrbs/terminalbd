@@ -148,6 +148,7 @@ class VendorController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->updateVendorCompanyName($entity);
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );

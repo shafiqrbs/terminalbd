@@ -3,6 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
+use Setting\Bundle\AppearanceBundle\Form\MenuEditType;
 use Setting\Bundle\AppearanceBundle\Form\MenuType;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -49,6 +50,67 @@ class MenuController extends Controller
     }
 
     /**
+     * Creates a new MenuGroup entity.
+     *
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new Menu();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $option = $this->getUser()->getGlobalOption();
+            $entity->setGlobalOption($option);
+            $entity->setMode("custom");
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('menu_manage'));
+        }
+
+        return $this->render('SettingAppearanceBundle:Menu:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to create a MenuGroup entity.
+     *
+     * @param Menu $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Menu $entity)
+    {
+        $form = $this->createForm(new MenuType(), $entity, array(
+            'action' => $this->generateUrl('menu_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new Menu entity.
+     *
+     */
+    public function newAction()
+    {
+        $entity = new Menu();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('SettingAppearanceBundle:Menu:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+    /**
      * Lists all menu modify entities.
      *
      */
@@ -74,7 +136,7 @@ class MenuController extends Controller
      */
     private function createEditForm($id)
     {
-        $form = $this->createForm(new MenuType(), null, array(
+        $form = $this->createForm(new MenuEditType(), null, array(
             'action' => $this->generateUrl('menu_update', array('id' => $id)),
             'method' => 'PUT',
             'attr' => array(
@@ -108,8 +170,7 @@ class MenuController extends Controller
      */
     public function stopMenuAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SettingToolBundle:GlobalOption')->find($id);

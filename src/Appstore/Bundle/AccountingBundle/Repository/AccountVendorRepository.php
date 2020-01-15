@@ -142,5 +142,21 @@ class AccountVendorRepository extends EntityRepository
         return false;
     }
 
+    public function updateVendorCompanyName(AccountVendor $vendor)
+    {
+        $com = $vendor->getCompanyName();
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->update('AccountingBundle:AccountPurchase', 'mg')
+            ->set('mg.companyName', ':companyName')
+            ->where('mg.accountVendor = :id')
+            ->setParameter('companyName',$com)
+            ->setParameter('id', $vendor->getId())
+            ->getQuery()
+            ->execute();
+
+    }
+
+
 
 }

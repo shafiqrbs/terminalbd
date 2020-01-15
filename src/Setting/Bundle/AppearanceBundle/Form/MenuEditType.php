@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class MenuType extends AbstractType
+class MenuEditType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,18 +15,7 @@ class MenuType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('menu','text', array('attr'=>array('class'=>'form-control span12 m-wrap','placeholder'=>'Enter menu name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                )
-            ))
-            ->add('slug','text', array('attr'=>array('class'=>'form-control span12 m-wrap','placeholder'=>'Enter menu slug name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                )
-            ))
-            ->add('status');
+
 
     }
     

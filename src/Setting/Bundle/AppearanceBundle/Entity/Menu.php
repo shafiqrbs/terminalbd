@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
+use Setting\Bundle\LocationBundle\Entity\GpLocation;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * Menu
@@ -130,6 +132,14 @@ class Menu
      */
 
     private $defaultMenu = false ;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=255)
+     */
+    private $mode;
 
 
     /**
@@ -336,7 +346,7 @@ class Menu
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -344,7 +354,7 @@ class Menu
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -466,6 +476,24 @@ class Menu
     {
         $this->category = $category;
     }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+
 
 
 }

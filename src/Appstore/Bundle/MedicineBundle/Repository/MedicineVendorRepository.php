@@ -111,4 +111,19 @@ class MedicineVendorRepository extends EntityRepository
 	    return $result;
     }
 
+    public function updateVendorCompanyName(MedicineVendor $vendor)
+    {
+        $com = $vendor->getCompanyName();
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->update('AccountingBundle:AccountPurchase', 'mg')
+            ->set('mg.companyName', ':companyName')
+            ->where('mg.medicineVendor = :id')
+            ->setParameter('companyName',$com)
+            ->setParameter('id', $vendor->getId())
+            ->getQuery()
+            ->execute();
+
+    }
+
 }

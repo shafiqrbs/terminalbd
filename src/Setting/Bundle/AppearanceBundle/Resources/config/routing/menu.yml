@@ -1,11 +1,20 @@
 menu:
     path:     /
-    defaults: { _controller: "SettingAppearanceBundle:Menu:index" }
+    defaults: { _controller: "SettingAppearanceBundle:Menu:menuManage" }
 
 menu_update:
     path:     /{id}/update
     defaults: { _controller: "SettingAppearanceBundle:Menu:update" }
     requirements: { _method: post|put }
+
+menu_new:
+    path:     /new
+    defaults: { _controller: "SettingAppearanceBundle:Menu:new" }
+
+menu_create:
+    path:     /create
+    defaults: { _controller: "SettingAppearanceBundle:Menu:create" }
+    methods:  POST
 
 menu_manage:
     path:     /manage

@@ -176,6 +176,7 @@ class VendorController extends Controller
                 $entity->setCustomer($customer);
             }
             $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->updateVendorCompanyName($entity);
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
