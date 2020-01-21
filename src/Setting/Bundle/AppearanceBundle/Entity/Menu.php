@@ -137,7 +137,7 @@ class Menu
     /**
      * @var string
      *
-     * @ORM\Column(name="mode", type="string", length=255)
+     * @ORM\Column(name="mode", type="string", length=255, nullable=true)
      */
     private $mode;
 

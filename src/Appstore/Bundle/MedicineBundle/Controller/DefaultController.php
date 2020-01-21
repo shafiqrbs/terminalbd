@@ -161,7 +161,7 @@ class DefaultController extends Controller
 
 		/* @var $entity MedicineStock */
 
-		foreach ($entity->getQuery()->getResult() as $entity){
+		foreach ($entity->getResult() as $entity){
 			$newEntity = new MedicineStock();
 			$newEntity->setMedicineConfig($existConfig);
 			$newEntity->setName($entity->getName());

@@ -160,7 +160,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
-        $result = $qb->getQuery()->getResult();
+        $result = $qb->getQuery();
         return  $result;
     }
 
