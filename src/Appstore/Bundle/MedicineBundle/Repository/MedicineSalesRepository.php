@@ -43,7 +43,8 @@ class MedicineSalesRepository extends EntityRepository
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
         $paymentStatus = isset($data['paymentStatus'])? $data['paymentStatus'] :'';
-        $process = isset($data['process'])? $data['process'] :'';
+        $bank = isset($data['bank'])? $data['bank'] :'';
+        $mobile = isset($data['mobile'])? $data['mobile'] :'';
         $device = isset($data['device'])? $data['device'] :'';
         $customer = isset($data['customer'])? $data['customer'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
@@ -98,6 +99,16 @@ class MedicineSalesRepository extends EntityRepository
         if(!empty($transactionMethod)){
             $qb->andWhere("s.transactionMethod = :method");
             $qb->setParameter('method', $transactionMethod);
+        }
+        if(!empty($bank)){
+            $qb->join("s.accountBank","bank");
+            $qb->andWhere("bank.id = :bankId");
+            $qb->setParameter('bankId', $bank);
+        }
+        if(!empty($mobile)){
+            $qb->join("s.accountMobileBank","mobile");
+            $qb->andWhere("mobile.id = :mobileId");
+            $qb->setParameter('mobileId', $mobile);
         }
         if(!empty($device)){
             $qb->andWhere("s.androidProcess = :device");

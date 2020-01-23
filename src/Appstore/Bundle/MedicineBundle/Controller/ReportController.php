@@ -107,10 +107,15 @@ class ReportController extends Controller
         $salesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesPurchasePriceReport($user, $data, $pagination);
         $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        $banks = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption' => $user->getGlobalOption(),'status' => 1), array('name' => 'ASC'));
+        $mobiles =  $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption' => $user->getGlobalOption() , 'status' => 1), array('name' => 'ASC'));
+
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
         return $this->render('MedicineBundle:Report:sales/sales.html.twig', array(
             'option' => $user->getGlobalOption(),
             'entities' => $pagination,
+            'banks' => $banks,
+            'mobiles' => $mobiles,
             'purchasePrice' => $salesPurchasePrice,
             'cashOverview' => $cashOverview,
             'purchaseSalesPrice' => $purchaseSalesPrice,
