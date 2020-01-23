@@ -291,7 +291,6 @@ class DoubleEntryController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 

@@ -83,6 +83,7 @@ class AccountProfitRepository extends EntityRepository
         }
 
         if($journalAccountPurchase) {
+
             foreach ($journalAccountPurchase as $row):
 
                 if (in_array($row['processType'], array('Outstanding', 'Opening'))) {
@@ -97,6 +98,7 @@ class AccountProfitRepository extends EntityRepository
 
             endforeach;
         }
+
         if($journalAccountSales){
 
             foreach ($journalAccountSales as $row):

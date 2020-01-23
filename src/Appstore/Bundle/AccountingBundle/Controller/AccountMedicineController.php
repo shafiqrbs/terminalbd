@@ -341,7 +341,7 @@ class AccountMedicineController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
 
     }
 
