@@ -139,7 +139,7 @@ class ReportController extends Controller
             $pagination = $this->paginate($entities);
             return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
                 'option' => $user->getGlobalOption(),
-                'entities' => $pagination,
+                'pagination' => $pagination,
                 'cashOverview' => $cashOverview,
                 'purchaseSalesItem' => $purchaseSalesPrice,
                 'searchForm' => $data,

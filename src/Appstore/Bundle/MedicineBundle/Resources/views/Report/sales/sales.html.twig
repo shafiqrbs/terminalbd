@@ -60,10 +60,10 @@
                                         </select>
                                     </div>
                                     <div class="span3">
-                                        <select name="mobile" id="mobile" class="span12 m-wrap">
+                                        <select name="mobileBank" id="mobileBank" class="span12 m-wrap">
                                             <option value="">Mobile Account</option>
                                             {% for mobile in mobiles %}
-                                                <option {% if searchForm.mobile is defined and searchForm.mobile == mobile.id %} selected="selected" {% endif %} value="{{ mobile.id }}" >{{ mobile.name }}</option>
+                                                <option {% if searchForm.mobileBank is defined and searchForm.mobileBank == mobile.id %} selected="selected" {% endif %} value="{{ mobile.id }}" >{{ mobile.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -84,12 +84,12 @@
                                     </div>
 
                                     <div class="span3">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and  searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined and  searchForm.endDate is not empty %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

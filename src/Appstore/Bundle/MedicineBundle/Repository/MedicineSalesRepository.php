@@ -44,7 +44,7 @@ class MedicineSalesRepository extends EntityRepository
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
         $paymentStatus = isset($data['paymentStatus'])? $data['paymentStatus'] :'';
         $bank = isset($data['bank'])? $data['bank'] :'';
-        $mobile = isset($data['mobile'])? $data['mobile'] :'';
+        $mobileBank = isset($data['mobileBank'])? $data['mobileBank'] :'';
         $device = isset($data['device'])? $data['device'] :'';
         $customer = isset($data['customer'])? $data['customer'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
@@ -105,10 +105,10 @@ class MedicineSalesRepository extends EntityRepository
             $qb->andWhere("bank.id = :bankId");
             $qb->setParameter('bankId', $bank);
         }
-        if(!empty($mobile)){
+        if(!empty($mobileBank)){
             $qb->join("s.accountMobileBank","mobile");
             $qb->andWhere("mobile.id = :mobileId");
-            $qb->setParameter('mobileId', $mobile);
+            $qb->setParameter('mobileId', $mobileBank);
         }
         if(!empty($device)){
             $qb->andWhere("s.androidProcess = :device");

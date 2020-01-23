@@ -346,6 +346,8 @@ class MedicineSalesItemRepository extends EntityRepository
 
 	public  function reportSalesStockItem(User $user, $data=''){
 
+        $sort = isset($data['sort'])? $data['sort'] :'mds.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
 		$userBranch = $user->getProfile()->getBranches();
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $group = isset($data['group']) ? $data['group'] :'medicineStock';
@@ -355,7 +357,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$qb->select('SUM(si.quantity) AS quantity');
 		$qb->addSelect('SUM(si.quantity * si.salesPrice ) AS salesPrice');
 		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
-		$qb->addSelect('mds.name AS name');
+		$qb->addSelect('mds.name AS name','mds.remainingQuantity AS remainingQuantity','mds.brandName AS brandName');
 		$qb->addSelect('mds.sku AS sku');
 		$qb->where('s.medicineConfig = :config');
 		$qb->setParameter('config', $config);
@@ -370,7 +372,7 @@ class MedicineSalesItemRepository extends EntityRepository
 			$qb->setParameter('branch', $userBranch);
 		}
 		$qb->groupBy('si.'.$group);
-		$qb->orderBy('mds.name','ASC');
+        $qb->orderBy("{$sort}",$direction);
 		return $qb->getQuery();
 	}
 

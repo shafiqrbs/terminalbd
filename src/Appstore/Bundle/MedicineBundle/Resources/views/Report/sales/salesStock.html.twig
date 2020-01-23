@@ -52,13 +52,12 @@
                                         <input type="text" id="sku"  name="sku"  class="span12 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Enter medicine/accessories sku">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and  searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
                                     <div class="span3">
                                         <div class="controls">
-                                            <div class="input-append span12">
-                                                <input type="text" id="startDate" name="startDate" autocomplete="off"  class="span5 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  placeholder="">
-                                                <input type="text" id="endDate" name="endDate" autocomplete="off" class="span5 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}" placeholder="">
+                                            <div class="input-append span10">
+                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined and  searchForm.endDate is not empty %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -104,11 +103,14 @@
                         </div>
 
                         <table class="table table-bordered table-striped table-condensed flip-content ">
-
+                            {%  set sort = app.request.query.get('sort') %}
+                            {%  set direction = app.request.query.get('direction') %}
                             <thead class="flip-content ">
                             <tr class="head-blue">
                                 <th class="numeric" ><i class="icon-reorder"></i> SKU</th>
                                 <th class="numeric" >Name</th>
+                                <th {% if pagination.isSorted('mds.brandName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Brand Name', 'mds.brandName') }}{% if( direction == 'desc' and sort == 'mds.brandName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                <th {% if pagination.isSorted('s.remainingQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Remaining Qnt', 's.remainingQuantity') }}{% if( direction == 'desc' and sort == 's.remainingQuantity') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                 <th class="numeric" >Quantity</th>
                                 <th class="numeric" >Sales Price</th>
                                 <th class="numeric" >Purchase Price</th>
@@ -117,10 +119,12 @@
                             </thead>
                             <tbody>
                             {%  set totalSales = 0 %}
-                            {% for entity in entities %}
+                            {% for entity in pagination %}
                                 <tr>
                                     <td class="numeric" >{{ entity.sku }}</td>
                                     <td class="numeric" >{{ entity.name }}</td>
+                                    <td class="numeric" >{{ entity.brandName }}</td>
+                                    <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
                                     <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
@@ -131,7 +135,7 @@
                             </tbody>
                         </table>
                         <div class="pagination pull-center"  >
-                            {{ knp_pagination_render(entities) }}
+                            {{ knp_pagination_render(pagination) }}
                         </div>
                     </div>
                 </div>
