@@ -261,9 +261,6 @@ class ItemController extends Controller
     }
 
 
-
-
-
     /**
 	 * Creates a form to edit a Item entity.
 	 *
@@ -579,9 +576,9 @@ class ItemController extends Controller
         $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Promotion');
         $items = array();
-        $items[]=array('value' => '','text'=> '---Add Promotion---');
+        $items[] = array('value' => '','text'=> '---Add Promotion---');
         foreach ($entities as $entity):
-            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+            $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
         endforeach;
         $items[]=array('value' => '0','text'=> 'Empty Promotion');
         return new JsonResponse($items);
@@ -591,17 +588,16 @@ class ItemController extends Controller
     public function categorySelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getUseEcommerceItemCategory($config);
-/*        $items = array();
-        $items[]=array('value' => '','text'=> '---Add Promotion---');
-        foreach ($entities as $entity):
-            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFlatEcommerceCategoryTree($config);
+        $items = array();
+        $items[]=array('value' => '','text'=> '-- Add Category --');
+        foreach ($categoryTree as $entity):
+            $items[]=array('value' => $entity['id'],'text'=> $entity['name']);
         endforeach;
-        $items[]=array('value' => '0','text'=> 'Empty Promotion');*/
-        return new JsonResponse($categoryTree);
+        $items[]=array('value' => '0','text'=> 'Empty Category');
+        return new JsonResponse($items);
 
     }
-
 
 
     public function inlineItemUpdateAction(Request $request)
@@ -634,6 +630,13 @@ class ItemController extends Controller
                 $entity->setPromotion($setValue);
             }else {
                 $entity->setPromotion(NULL);
+            }
+		}elseif($data['name'] == 'Category'){
+			$setValue = $em->getRepository('ProductProductBundle:Category')->find($data['value']);
+			if($setValue){
+                $entity->setCategory($setValue);
+            }else {
+                $entity->setCategory(NULL);
             }
 		}
 		$em->persist($entity);

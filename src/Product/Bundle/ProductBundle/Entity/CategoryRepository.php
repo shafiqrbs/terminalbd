@@ -760,7 +760,6 @@ class CategoryRepository extends MaterializedPathRepository
         $arr =array();
         $array =array();
         if(!empty($config->getCategoryGrouping())){
-
             $categories = $config->getCategoryGrouping()->getCategories();
             foreach($categories as $category){
                 $arr[] = array(
@@ -775,6 +774,37 @@ class CategoryRepository extends MaterializedPathRepository
         return $array == null ? array() : $array;
 
     }
+
+    public function getFlatEcommerceCategoryTree(EcommerceConfig $config)
+    {
+
+        $qb = $this->createQueryBuilder("node");
+            $qb->select('node.id as id','node.name as name');
+            $qb->where('node.ecommerceConfig = :option');
+            $qb->setParameter('option', $config);
+            $qb->orderBy('node.level','ASC');
+        $categories = $qb->getQuery()->getArrayResult();
+        return $categories;
+
+        $arr =array();
+        $array =array();
+        if(!empty($categories)){
+
+            /* @var $category Category */
+
+            foreach($categories as $category){
+                $arr[] = array(
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'level' => $category->getLevel(),
+                    '__children' => $this->childrenHierarchy($category)
+                );
+            }
+            $this->buildFlatCategoryTree($arr , $array);
+        }
+        return $array == null ? array() : $array;
+    }
+
 
     public function searchAutoComplete($inventory,$q)
     {

@@ -88,7 +88,8 @@
                                 {% for entity in pagination %}
                                     <tr class="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.webName }}</td>
-                                        <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}
+                                        <td class="numeric" >
+                                            <a  data-type="select" class="editable" id="Category" data-name="Category" href="#" data-source="{{ path('ecommerce_item_inline_category_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.category is defined and entity.tag is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter category name">{% if entity.category is defined and entity.category is not empty %}{{ entity.category.name }}{% endif %}</a>
                                         </td>
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
