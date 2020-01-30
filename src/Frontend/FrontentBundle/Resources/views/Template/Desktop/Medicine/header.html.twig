@@ -3,12 +3,13 @@
         <ul class="sidebar-menu" id="sidebar-scroll">
             <li class="sidebar-header">{{ globalOption.name }}  <button id="remove-nav"><i class="fa fa-remove"></i> </button></li>
             {% for  menu in globalOption.ecommerceMenus  %}
-                <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> <span>{{ menu.name }}</span>
+                <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% else %}javascript:{% endif %}"> <span>{{ menu.name }}</span>
                         {% if menu.childMenus is not empty or  menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty or menu.categories is not empty or menu.brands is not empty  %}
                         <i class="fa fa-angle-left pull-right"></i>
                         {% endif %}
 
                     </a>
+                    {% if menu.childMenus is not empty or  menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty or menu.categories is not empty or menu.brands is not empty  %}
                     <ul class="sidebar-submenu">
                         {% if menu.childMenus is not empty %}
                             {% for childMenu in  menu.childMenus %}
@@ -74,6 +75,7 @@
                         {% endif %}
 
                     </ul>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

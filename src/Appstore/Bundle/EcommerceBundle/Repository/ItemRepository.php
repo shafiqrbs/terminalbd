@@ -63,10 +63,9 @@ class ItemRepository extends EntityRepository
         }
 
         if (!empty($data['categoryId'])) {
-            $qb->andWhere("category.id >= :catId");
+            $qb->andWhere("category.id = :catId");
             $qb->setParameter('catId', $data['categoryId']);
         }
-
         if (!empty($data['category'])) {
             $qb->andWhere(
                 $qb->expr()->orX(
