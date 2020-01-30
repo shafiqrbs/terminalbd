@@ -52,24 +52,26 @@
                                             <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
                                         </div>
                                         <div class="span3">
-                                            <select name="paymentStatus" id="paymentStatus" class="span12 m-wrap">
-                                                <option  value="">Payment Status</option>
-                                                <option {% if searchForm.paymentStatus is defined and searchForm.paymentStatus == 'Paid' %} selected="selected" {% endif %} value="Paid">Paid</option>
-                                                <option {% if searchForm.paymentStatus is defined and searchForm.paymentStatus == 'Due' %} selected="selected" {% endif %} value="Due">Due</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <select name="process" id="process" class="span12 m-wrap">
-                                                <option  value="">Select Process</option>
-                                                <option {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
-                                                <option {% if searchForm.process is defined and searchForm.process == 'Hold' %} selected="selected" {% endif %} value="In-progress">Hold</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
                                             <select name="transactionMethod" id="transactionMethod" class="span12 m-wrap">
                                                 <option value="">Transaction Method</option>
                                                 {% for method in transactionMethods %}
                                                     <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <select name="bank" id="bank" class="span12 m-wrap">
+                                                <option value="">Bank Account</option>
+                                                {% for bank in banks %}
+                                                    <option {% if searchForm.bank is defined and searchForm.bank == bank.id %} selected="selected" {% endif %} value="{{ bank.id }}" >{{ bank.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <select name="mobileBank" id="mobileBank" class="span12 m-wrap">
+                                                <option value="">Mobile Account</option>
+                                                {% for mobile in mobiles %}
+                                                    <option {% if searchForm.mobileBank is defined and searchForm.mobileBank == mobile.id %} selected="selected" {% endif %} value="{{ mobile.id }}" >{{ mobile.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
