@@ -665,7 +665,7 @@ class InvoiceController extends Controller
         $barcode->setText($value);
         $barcode->setType(BarcodeGenerator::Code39Extended);
         $barcode->setScale(1);
-        $barcode->setThickness(25);
+        $barcode->setThickness(50);
         $barcode->setFontSize(8);
         $code = $barcode->generate();
         $data = '';
@@ -694,6 +694,7 @@ class InvoiceController extends Controller
             if($entity->getProcess() == "Quotation"){
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             }
+            $customerBarcode = $this->getBarcode($entity->getCustomer()->getMobile());
             $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
             $balance = empty($result) ? 0 : $result;
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
@@ -701,6 +702,7 @@ class InvoiceController extends Controller
                     'config' => $config,
                     'entity' => $entity,
                     'balance' => $balance,
+                    'customerBarcode' => $customerBarcode,
                     'amountInWords' => $amountInWords,
                     'print' => $print,
                 )

@@ -170,6 +170,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    $('.select2Customer').select2('open');
     CommonJs();
     AccountingApproveProcess();
 {% endblock %}

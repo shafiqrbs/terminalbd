@@ -46,9 +46,9 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span12 select2Customer leftMargin','placeholder'=>'Select customer name'),
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span12 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Add payment amount'))
+                    new NotBlank(array('message'=>'Search the customer name/mobile'))
             )))
             ->add('accountBank', 'entity', array(
                'required'    => true,

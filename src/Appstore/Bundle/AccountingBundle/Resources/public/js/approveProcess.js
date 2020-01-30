@@ -33,7 +33,6 @@ function AccountingApproveProcess(){}
         location.reload();
     }
 
-
 $(document).on("click", ".delete", function(e) {
 
     var id = $(this).attr("data-id");
