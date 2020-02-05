@@ -320,9 +320,12 @@ class SmsSenderRepository extends EntityRepository {
     public function totalSendSms($globalOption){
 
         $totalSms = $this->_em->getRepository('SettingToolBundle:SmsSenderTotal')->findOneBy(array('globalOption' => $globalOption));
-        $totalSms->setRemaining($totalSms->getRemaining()-1);
-        $totalSms->setSending($totalSms->getSending()+1);
-        $this->_em->persist($totalSms);
-        $this->_em->flush();
+        if($totalSms->getRemaining()){
+            $totalSms->setRemaining($totalSms->getRemaining()-1);
+            $totalSms->setSending($totalSms->getSending()+1);
+            $this->_em->persist($totalSms);
+            $this->_em->flush();
+        }
+
     }
 } 
