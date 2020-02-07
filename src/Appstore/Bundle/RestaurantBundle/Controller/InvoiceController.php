@@ -700,41 +700,38 @@ class InvoiceController extends Controller
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer->setFont(Printer::FONT_B);
         $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
+        $printer -> text("----------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
             $productName = "{$i}. {$row->getParticular()->getName()}";
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
         $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
-        $printer -> text ( "\n" );
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("----------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-
         if($vat){
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
         if($discount){
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($discount);
             $printer -> setEmphasis(false);
             $printer -> text ( "\n" );
         }
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("----------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
@@ -742,24 +739,12 @@ class InvoiceController extends Controller
         $printer -> feed();
         $printer->text($transaction);
         $printer->selectPrintMode();
-        /* Barcode Print */
-        $printer->text ( "\n" );
-        $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (30);
-        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
-        $printer -> feed();
-        foreach ( $hri as $position => $caption){
-            $printer->selectPrintMode ();
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text ($caption);
-            $printer->feed ();
-        }
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
         if($website){
-            $printer -> text("Please visit www.".$website."\n");
+            $printer -> text("** Visit www.".$website."**\n");
         }
         $printer -> text($date . "\n");
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");

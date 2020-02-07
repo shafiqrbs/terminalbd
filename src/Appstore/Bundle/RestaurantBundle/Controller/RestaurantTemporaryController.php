@@ -312,13 +312,12 @@ class RestaurantTemporaryController extends Controller
         $printer -> setEmphasis(true);
         $printer -> text("Table No. ".$table.".\n\n");
         $printer -> setEmphasis(false);
-
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> text("----------------------------------------\n");
         $printer -> setEmphasis(false);
         $printer -> feed();
         $i=1;
@@ -333,7 +332,7 @@ class RestaurantTemporaryController extends Controller
         }
         $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> setEmphasis(true);
+        $printer -> text("----------------------------------------\n");
         $printer -> text ( "\n" );
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
@@ -352,6 +351,7 @@ class RestaurantTemporaryController extends Controller
         }
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("----------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer->text("\n");
