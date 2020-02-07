@@ -678,13 +678,14 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if(!empty($vatRegNo)){
-            $printer -> text("BIN No - ".$vatRegNo."\n");
+            $printer -> text("BIN No - ".$vatRegNo."\n\n");
         }
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> text("Invoice no. {$entity->getInvoice()}        {$table}\n");
+        $printer -> setEmphasis(false);
+        $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
         $printer -> text("Date: {$date}          {$transaction}\n\n");
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
@@ -709,7 +710,6 @@ class InvoiceController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer->text($transaction);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
