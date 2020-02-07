@@ -707,12 +707,11 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> feed();
         $i=1;
+        /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
-
-            $printer -> setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
+            $productName = "{$i}. {$row->getParticular()->getName()}";
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer -> text(new PosItemManager($row->getParticular()->getParticularCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
         $printer -> feed();
