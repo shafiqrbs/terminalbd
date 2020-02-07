@@ -622,11 +622,7 @@ class InvoiceController extends Controller
         if(!empty($entity)){
            $this->cashPayment($entity);
         }
-        $address1       = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-        $address = $address1.$thana.$district;
-
+        $address      = $config->getAddress();
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
         $mobile         = $option->getMobile();
@@ -657,22 +653,21 @@ class InvoiceController extends Controller
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text($companyName."\n");
+        $printer->setFont(Printer::FONT_B);
         $printer -> selectPrintMode();
         $printer -> text($address."\n");
-        /* $printer -> text($mobile."\n");*/
         $printer -> feed();
 
         /* Title of receipt */
-        /*$printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
         if(!empty($vatRegNo)){
-            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> text("BIN No".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
-        */
         $printer -> feed();
-        $slipNo ='xxx';
-        $tableNo ='00';
+        $slipNo ='';
+        $tableNo ='';
         if($entity->getTokenNo()){
             $tableNo = $entity->getTokenNo()->getName();
         }
@@ -695,9 +690,10 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$table.".\n\n");
+        if($tableNo){
+            $printer -> text("Table No. ".$table.".\n\n");
+        }
         $printer -> setEmphasis(false);
-
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
@@ -707,7 +703,7 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
-        $printer -> text("----------------------------------------\n");
+        $printer -> text("----------------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
@@ -717,8 +713,7 @@ class InvoiceController extends Controller
         }
         $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> setEmphasis(true);
-        $printer -> text("----------------------------------------\n");
+        $printer -> text("----------------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         if($vat){
@@ -730,8 +725,7 @@ class InvoiceController extends Controller
             $printer -> setEmphasis(false);
             $printer -> text ( "\n" );
         }
-        $printer -> setEmphasis(true);
-        $printer -> text("----------------------------------------\n");
+        $printer -> text("----------------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
@@ -740,6 +734,7 @@ class InvoiceController extends Controller
         $printer->text($transaction);
         $printer->selectPrintMode();
         $printer -> feed();
+        $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
@@ -748,30 +743,13 @@ class InvoiceController extends Controller
         }
         $printer -> text($date . "\n");
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
-        /* Double-strike (looks basically the same as emphasis) */
-        for ($i = 0; $i < 2; $i++) {
-            $printer->setDoubleStrike($i == 1);
-            $printer->text("The quick brown fox jumps over the lazy dog\n");
-        }
-        $printer->setDoubleStrike(false);
-        $printer->cut();
         /* Fonts (many printers do not have a 'Font C') */
         $fonts = array(Printer::FONT_A, Printer::FONT_B, Printer::FONT_C);
         for ($i = 0; $i < count($fonts); $i++) {
             $printer->setFont($fonts[$i]);
             $printer->text("The quick brown fox jumps over the lazy dog\n");
         }
-        $printer->setFont();
-// Reset
         $printer->cut();
-        /* Justification */
-        $justification = array(Printer::JUSTIFY_LEFT, Printer::JUSTIFY_CENTER, Printer::JUSTIFY_RIGHT);
-        for ($i = 0; $i < count($justification); $i++) {
-            $printer->setJustification($justification[$i]);
-            $printer->text("A man a plan a canal panama\n");
-        }
-        $printer->setJustification();
-// Reset
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);

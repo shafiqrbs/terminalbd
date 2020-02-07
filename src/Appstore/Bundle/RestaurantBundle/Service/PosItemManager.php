@@ -26,7 +26,7 @@ class PosItemManager {
 
     public function __toString() {
         $rightCols = 10;
-        $leftCols = 35;
+        $leftCols = 55;
         if($this -> dollarSign) {
             $leftCols = $leftCols / 2 - $rightCols / 2;
         }
