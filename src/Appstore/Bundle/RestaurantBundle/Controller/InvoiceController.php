@@ -686,8 +686,8 @@ class InvoiceController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(false);
         $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
-        $printer -> text("Date: {$date}          {$transaction}\n\n");
-        $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setEmphasis(false);
+        $printer -> text("Date: {$date}          {$transaction}\n");
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
