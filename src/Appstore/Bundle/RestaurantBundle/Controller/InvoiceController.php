@@ -697,7 +697,7 @@ class InvoiceController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
         $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
-        $printer -> text("--------------------------------------------------------------\n");
+        $printer -> text("------------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
@@ -705,7 +705,7 @@ class InvoiceController extends Controller
             $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
-        $printer -> text("--------------------------------------------------------------\n");
+        $printer -> text("------------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         if($vat){
@@ -716,15 +716,10 @@ class InvoiceController extends Controller
             $printer->text($discount);
             $printer -> setEmphasis(false);
         }
-        $printer -> text("--------------------------------------------------------------\n");
+        $printer -> text("------------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer->text("\n");
-        $printer -> feed();
         $printer->text($transaction);
-        $printer->selectPrintMode();
-        $printer -> feed();
-        $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
