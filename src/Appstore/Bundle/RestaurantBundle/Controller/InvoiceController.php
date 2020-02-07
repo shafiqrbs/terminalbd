@@ -681,23 +681,11 @@ class InvoiceController extends Controller
             $printer -> text("BIN No - ".$vatRegNo."\n");
         }
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer->setFont(Printer::FONT_B);
-        if(empty($tableNo)){
-            $printer -> setEmphasis(true);
-        }
-        $printer -> text("Invoice no. ".$entity->getInvoice().".\n\n");
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> text("Date {$date}          {$transaction}\n");
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> feed();
-        if($tableNo){
-            $printer -> setEmphasis(true);
-            $printer -> text("Table No. ".$table."\n");
-        }
-        $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> text("Invoice no. {$entity->getInvoice()}        {$table}\n");
+        $printer -> text("Date: {$date}          {$transaction}\n\n");
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
