@@ -686,11 +686,11 @@ class InvoiceController extends Controller
         if(empty($tableNo)){
             $printer -> setEmphasis(true);
         }
-        $printer -> text("Invoice no. ".$entity->getInvoice().".\n");
+        $printer -> text("Invoice no. ".$entity->getInvoice().".\n\n");
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> text("Date {$date}          {$transaction}\n");
-        $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> feed();
         if($tableNo){
             $printer -> setEmphasis(true);
             $printer -> text("Table No. ".$table."\n");
