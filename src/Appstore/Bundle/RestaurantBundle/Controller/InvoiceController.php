@@ -685,7 +685,8 @@ class InvoiceController extends Controller
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
+        $printer -> setEmphasis(false);
+        $printer->setFont(Printer::FONT_B);
         $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -703,7 +704,7 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
-        $printer -> text("----------------------------------------------------------------------\n");
+        $printer -> text("--------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
@@ -713,7 +714,7 @@ class InvoiceController extends Controller
         }
         $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> text("----------------------------------------------------------------------\n");
+        $printer -> text("--------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         if($vat){
@@ -725,7 +726,7 @@ class InvoiceController extends Controller
             $printer -> setEmphasis(false);
             $printer -> text ( "\n" );
         }
-        $printer -> text("----------------------------------------------------------------------\n");
+        $printer -> text("--------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
