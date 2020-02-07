@@ -650,7 +650,7 @@ class InvoiceController extends Controller
 
 
         /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
+        $date = date('d-m-Y h:i:s A');
 
         /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
@@ -763,6 +763,31 @@ class InvoiceController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }
         $printer -> text($date . "\n");
+        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
+        /* Double-strike (looks basically the same as emphasis) */
+        for ($i = 0; $i < 2; $i++) {
+            $printer->setDoubleStrike($i == 1);
+            $printer->text("The quick brown fox jumps over the lazy dog\n");
+        }
+        $printer->setDoubleStrike(false);
+        $printer->cut();
+        /* Fonts (many printers do not have a 'Font C') */
+        $fonts = array(Printer::FONT_A, Printer::FONT_B, Printer::FONT_C);
+        for ($i = 0; $i < count($fonts); $i++) {
+            $printer->setFont($fonts[$i]);
+            $printer->text("The quick brown fox jumps over the lazy dog\n");
+        }
+        $printer->setFont();
+// Reset
+        $printer->cut();
+        /* Justification */
+        $justification = array(Printer::JUSTIFY_LEFT, Printer::JUSTIFY_CENTER, Printer::JUSTIFY_RIGHT);
+        for ($i = 0; $i < count($justification); $i++) {
+            $printer->setJustification($justification[$i]);
+            $printer->text("A man a plan a canal panama\n");
+        }
+        $printer->setJustification();
+// Reset
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
@@ -801,7 +826,7 @@ class InvoiceController extends Controller
         /** ===================Invoice Sales Item Information========================= */
 
         /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
+        $date = date('d-m-Y h:i:s A');
 
         /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
