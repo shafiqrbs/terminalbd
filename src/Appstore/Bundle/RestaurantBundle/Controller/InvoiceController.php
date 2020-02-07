@@ -741,13 +741,6 @@ class InvoiceController extends Controller
         }
         $printer -> text($date . "\n");
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
-        /* Fonts (many printers do not have a 'Font C') */
-        $fonts = array(Printer::FONT_A, Printer::FONT_B, Printer::FONT_C);
-        for ($i = 0; $i < count($fonts); $i++) {
-            $printer->setFont($fonts[$i]);
-            $printer->text("The quick brown fox jumps over the lazy dog\n");
-        }
-        $printer->cut();
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
