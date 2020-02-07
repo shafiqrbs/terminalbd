@@ -678,7 +678,7 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if(!empty($vatRegNo)){
-            $printer -> text("BIN No".$vatRegNo.".\n");
+            $printer -> text("BIN No - ".$vatRegNo."\n");
         }
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -686,17 +686,17 @@ class InvoiceController extends Controller
         if(empty($tableNo)){
             $printer -> setEmphasis(true);
         }
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice()."\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if($tableNo){
             $printer -> setEmphasis(true);
-            $printer -> text("Table No. ".$table.".\n\n");
+            $printer -> text("Table No. ".$table."\n");
         }
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
@@ -813,7 +813,7 @@ class InvoiceController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }
         $printer -> text($date . "\n");
-        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
+        $printer -> text("Powered by - www.terminalbd.com - 01737300829 \n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
