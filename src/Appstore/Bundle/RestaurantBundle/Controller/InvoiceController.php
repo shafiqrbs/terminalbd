@@ -649,7 +649,7 @@ class InvoiceController extends Controller
         if($entity->getSlipNo()){
             $slipNo = $entity->getSlipNo();
         }
-        $table = $slipNo.'/'.$tableNo;
+        $table = "Table no. {$slipNo} / $tableNo";
 
         $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
@@ -687,6 +687,7 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
         $printer -> text("Date: {$date}          {$transaction}\n\n");
+        $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
