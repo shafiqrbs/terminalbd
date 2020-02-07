@@ -651,7 +651,7 @@ class InvoiceController extends Controller
         }
         $table = $slipNo.'/'.$tableNo;
 
-        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
@@ -686,7 +686,9 @@ class InvoiceController extends Controller
         if(empty($tableNo)){
             $printer -> setEmphasis(true);
         }
-        $printer -> text("INVOICE NO. ".$entity->getInvoice()."\n");
+        $printer -> text("Invoice no. ".$entity->getInvoice().".\n");
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> text("Date {$date}          {$transaction}\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if($tableNo){
@@ -813,7 +815,7 @@ class InvoiceController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }
         $printer -> text($date . "\n");
-        $printer -> text("Powered by - www.terminalbd.com - 01737300829 \n");
+        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
