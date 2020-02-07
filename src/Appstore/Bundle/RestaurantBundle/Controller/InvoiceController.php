@@ -641,6 +641,14 @@ class InvoiceController extends Controller
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy();
 
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+
 
         /** ===================Invoice Sales Item Information========================= */
 
@@ -653,14 +661,12 @@ class InvoiceController extends Controller
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text($companyName."\n");
-        $printer->setFont(Printer::FONT_B);
         $printer -> selectPrintMode();
+        $printer -> setFont(Printer::FONT_B);
         $printer -> text($address."\n");
         $printer -> feed();
-
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
         if(!empty($vatRegNo)){
             $printer -> text("BIN No".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
@@ -675,13 +681,6 @@ class InvoiceController extends Controller
             $slipNo = $entity->getSlipNo();
         }
         $table = $slipNo.'/'.$tableNo;
-        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
-        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
-        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -690,13 +689,12 @@ class InvoiceController extends Controller
         $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
         if($tableNo){
             $printer -> text("Table No. ".$table.".\n\n");
         }
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(true);
+        //$printer -> setEmphasis(true);
         //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->setFont(Printer::FONT_B);
         $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
@@ -729,7 +727,6 @@ class InvoiceController extends Controller
         $printer -> text("--------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
         $printer->text("\n");
         $printer -> feed();
         $printer->text($transaction);
