@@ -459,7 +459,7 @@ class InvoiceController extends Controller
 
 
         /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
+        $date = date('d-m-Y h:i:s A');
 
         /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
@@ -848,6 +848,7 @@ class InvoiceController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }
         $printer -> text($date . "\n");
+        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
