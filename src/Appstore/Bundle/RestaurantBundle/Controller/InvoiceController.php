@@ -641,6 +641,16 @@ class InvoiceController extends Controller
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy();
 
+        $slipNo ='';
+        $tableNo ='';
+        if($entity->getTokenNo()){
+            $tableNo = $entity->getTokenNo()->getName();
+        }
+        if($entity->getSlipNo()){
+            $slipNo = $entity->getSlipNo();
+        }
+        $table = $slipNo.'/'.$tableNo;
+
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
@@ -669,39 +679,24 @@ class InvoiceController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if(!empty($vatRegNo)){
             $printer -> text("BIN No".$vatRegNo.".\n");
-            $printer -> setEmphasis(false);
         }
-        $printer -> feed();
-        $slipNo ='';
-        $tableNo ='';
-        if($entity->getTokenNo()){
-            $tableNo = $entity->getTokenNo()->getName();
-        }
-        if($entity->getSlipNo()){
-            $slipNo = $entity->getSlipNo();
-        }
-        $table = $slipNo.'/'.$tableNo;
-
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(false);
         $printer->setFont(Printer::FONT_B);
+        if(empty($tableNo)){
+            $printer -> setEmphasis(true);
+        }
         $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if($tableNo){
+            $printer -> setEmphasis(true);
             $printer -> text("Table No. ".$table.".\n\n");
         }
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        //$printer -> setEmphasis(true);
-        //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->setFont(Printer::FONT_B);
         $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
-        $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
-        $printer -> setEmphasis(false);
-        $printer -> feed();
         $printer -> text("--------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
@@ -710,8 +705,6 @@ class InvoiceController extends Controller
             $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
-        $printer -> feed();
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text("--------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
@@ -722,7 +715,6 @@ class InvoiceController extends Controller
         if($discount){
             $printer->text($discount);
             $printer -> setEmphasis(false);
-            $printer -> text ( "\n" );
         }
         $printer -> text("--------------------------------------------------------------\n");
         $printer -> text($grandTotal);
