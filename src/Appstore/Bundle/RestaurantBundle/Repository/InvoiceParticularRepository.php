@@ -74,6 +74,7 @@ class InvoiceParticularRepository extends EntityRepository
             $em->flush();
             $this->insertSalesAccessories($entity);
         }
+        return $invoice;
 
     }
 

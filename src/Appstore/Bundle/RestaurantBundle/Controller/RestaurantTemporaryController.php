@@ -112,13 +112,13 @@ class RestaurantTemporaryController extends Controller
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
+        $returnEntity = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
         $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
         $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
         if($btn == "posBtn"){
-            $pos = $this->posPrint($entity);
+            $pos = $this->posPrint($returnEntity->getId());
             return new Response($pos);
         }
         exit;
@@ -228,10 +228,12 @@ class RestaurantTemporaryController extends Controller
         exit;
     }
 
-    private function posPrint(Invoice $entity)
+    private function posPrint($id)
     {
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->find($id);
         $response = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->posPrint($entity);
-        return new Response($response);
+        return $response;
+        //return new Response($response);
     }
 
 }
