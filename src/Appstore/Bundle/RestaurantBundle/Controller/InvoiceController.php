@@ -609,16 +609,21 @@ class InvoiceController extends Controller
 
     public function PaymentPrintAction($id)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig' => $config,'id' => $id));
+        $response = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->posPrint($entity);
+        return new Response($response);
+        exit;
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
 
-        $em = $this->getDoctrine()->getManager();
+
         $option = $this->getUser()->getGlobalOption();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
 
-        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig' => $config,'id' => $id));
+
         if(!empty($entity)){
            $this->cashPayment($entity);
         }
@@ -717,7 +722,6 @@ class InvoiceController extends Controller
         if($website){
             $printer -> text("** Visit www.".$website."**\n");
         }
-        $printer -> text($date . "\n");
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
