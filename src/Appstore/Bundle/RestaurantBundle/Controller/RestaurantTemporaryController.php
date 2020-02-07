@@ -112,13 +112,14 @@ class RestaurantTemporaryController extends Controller
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
         $em->flush();
-        $returnEntity = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
+        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
         $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
         $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
         if($btn == "posBtn"){
-            $pos = $this->posPrint($returnEntity->getId());
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
+            $pos = $this->posPrint($entity,$invoiceParticulars);
             return new Response($pos);
         }
         exit;
@@ -228,12 +229,114 @@ class RestaurantTemporaryController extends Controller
         exit;
     }
 
-    private function posPrint($id)
+    private function posPrint(Invoice $entity,$invoiceParticulars)
     {
-        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->find($id);
-        $response = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->posPrint($entity);
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $config = $entity->getRestaurantConfig();
+
+        $address        = $config->getAddress();
+        $vatRegNo       = $config->getVatRegNo();
+        $companyName    = $option->getName();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getPayment();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getSalesBy();
+
+        $slipNo ='';
+        $tableNo ='';
+        if($entity->getTokenNo()){
+            $tableNo = $entity->getTokenNo()->getName();
+        }
+        if($entity->getSlipNo()){
+            $slipNo = $entity->getSlipNo();
+        }
+        $table = "Table no. {$slipNo} / $tableNo";
+
+        $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+
+
+        /** ===================Invoice Sales Item Information========================= */
+
+
+        /* Date is kept the same for testing */
+        $date = date('d-m-Y h:i:s A');
+
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> setFont(Printer::FONT_B);
+        $printer -> text($address."\n");
+        $printer -> feed();
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        if(!empty($vatRegNo)){
+            $printer -> text("BIN No - ".$vatRegNo."\n\n");
+        }
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer->setFont(Printer::FONT_B);
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(false);
+        $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
+        $printer -> setEmphasis(false);
+        $printer -> text("Date: {$date}          {$transaction}\n");
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> text("---------------------------------------------------------------\n");
+        $i=1;
+        /* @var $row InvoiceParticular */
+        foreach ( $invoiceParticulars as $row){
+            $productName = "{$i}. {$row->getParticular()->getName()}";
+            $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
+        }
+        $printer -> text("---------------------------------------------------------------\n");
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+        if($vat){
+            $printer->text($vat);
+            $printer->setEmphasis(false);
+        }
+        if($discount){
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+        }
+        $printer -> text("---------------------------------------------------------------\n");
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Served By: ".$salesBy."\n");
+        $printer -> text("Thanks for being here\n");
+        if($website){
+            $printer -> text("** Visit www.".$website."**\n");
+        }
+        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
         return $response;
-        //return new Response($response);
     }
 
 }
