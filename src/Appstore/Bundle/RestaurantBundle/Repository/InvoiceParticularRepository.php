@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\RestaurantBundle\Controller\InvoiceController;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
@@ -171,9 +172,24 @@ class InvoiceParticularRepository extends EntityRepository
         return $data;*/
     }
 
-    public function invoiceParticularLists($user){
+    public function invoiceParticularLists(Invoice $sales){
 
+        /* @var $entity InvoiceParticular */
 
+        $entities = $sales->getInvoiceParticulars();
+        $data = '';
+        $i = 1;
+        foreach ($entities as $entity) {
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}. {$entity->getParticular()->getName()}</td>";
+            $data .= "<td>{$entity->getSalesPrice()}</td>";
+            $data .= "<td><input type='number' name='quantity' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' id='quantity-{$entity->getId()}' class='form-control inline-m-wrap updateProduct' value='{$entity->getQuantity()}'></td>";
+            $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+            $data .= "<td><a id='{$entity->getId()}' data-id='{$entity->getId()}'  data-url='/restaurant/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete'><i class='icon-trash'></i></a></td>";
+            $data .= "</tr>";
+            $i++;
+        }
+        return $data;
     }
 
     public function invoiceParticularReverse(Invoice $invoice)

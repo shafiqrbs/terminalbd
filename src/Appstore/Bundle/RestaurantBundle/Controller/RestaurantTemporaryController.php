@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Controller;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
+use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
@@ -239,11 +240,7 @@ class RestaurantTemporaryController extends Controller
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
 
         $currentPayment = !empty($entity->getPayment()) ? $entity->getPayment() :0;
-
-        $address1       = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-        $address        = $address1.$thana.$district;
+        $address        = $config->getAddress();
 
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
@@ -319,18 +316,18 @@ class RestaurantTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
         $i=1;
         if(!empty($invoiceParticulars)){
+            /* @var $row InvoiceParticular */
             foreach ($invoiceParticulars as $row){
-                $printer -> setUnderline(Printer::UNDERLINE_NONE);
-                $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
+                $productName = "{$i}. {$row->getParticular()->getName()}";
                 $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-                $printer -> text(new PosItemManager($row->getParticular()->getParticularCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+                $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
                 $i++;
             }
         }

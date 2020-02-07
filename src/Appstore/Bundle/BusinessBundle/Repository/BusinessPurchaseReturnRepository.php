@@ -100,6 +100,37 @@ class BusinessPurchaseReturnRepository extends EntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
+    public function updatePurchaseTotalPrice(BusinessPurchaseReturn $entity)
+    {
+        $em = $this->_em;
+        $result = $em->createQueryBuilder()
+            ->from('BusinessBundle:BusinessPurchaseReturnItem','si')
+            ->select('sum(si.subTotal) as total','sum(si.damageQnt) as damageQuantity','sum(si.spoilQnt) as spoilQuantity','sum(si.quantity) as quantity')
+            ->where('si.businessPurchaseReturn = :entity')
+            ->setParameter('entity', $entity ->getId())
+            ->getQuery()->getSingleResult();
+
+        if($result['total'] > 0){
+            $subTotal = $result['total'];
+            $entity->setSubTotal($subTotal);
+            $entity->setQuantity( $result['quantity']);
+            $entity->setDamageQuantity( $result['damageQuantity']);
+            $entity->setSpoilQuantity( $result['spoilQuantity']);
+
+        }else{
+
+            $entity->setSubTotal(0);
+            $entity->setSpoilQuantity(0);
+            $entity->setDamageQuantity(0);
+            $entity->setQuantity(0);
+        }
+
+        $em->persist($entity);
+        $em->flush();
+
+        return $entity;
+
+    }
 
 
     public function insertInvoiceDamageItem(BusinessInvoice $invoice)
@@ -110,7 +141,6 @@ class BusinessPurchaseReturnRepository extends EntityRepository
             if($exist){
                 $this->insertUpdatePurchaseReturnItem($exist,$invoice);
             }elseif($returnItemCount['damageQnt'] > 0 or $returnItemCount['spoilQnt'] > 0){
-                var_dump($returnItemCount);
                 $entity = new BusinessPurchaseReturn();
                 $entity->setBusinessConfig($invoice->getBusinessConfig());
                 $entity->setSalesInvoice($invoice->getInvoice());

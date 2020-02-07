@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
@@ -75,6 +77,22 @@ class BusinessPurchaseItemRepository extends EntityRepository
 		$qb->orderBy('e.receiveDate','DESC');
 		$qb->getQuery();
 		return  $qb;
+	}
+
+	public function getVendorItem(BusinessConfig $config, AccountVendor $vendor)
+	{
+		$configId = $config->getId();
+		$vendorId = $vendor->getId();
+		$qb = $this->createQueryBuilder('pi');
+		$qb->select('p.name as itemName','p.id as itemId','p.purchasePrice as purchasePrice');
+		$qb->join('pi.businessPurchase','e');
+		$qb->join('pi.businessParticular','p');
+		$qb->where('p.businessConfig = :config')->setParameter('config', $configId) ;
+		$qb->andWhere('e.vendor = :vendorId')->setParameter('vendorId', $vendorId) ;
+		$qb->groupBy('p.name');
+		$qb->orderBy('p.name','ASC');
+		$result = $qb->getQuery()->getArrayResult();
+		return  $result;
 	}
 
 	public function getPurchaseStockItem($pagination,$data = array())

@@ -42,6 +42,13 @@ class BusinessPurchaseReturn
     private  $businessPurchaseReturnItems;
 
     /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $createdBy;
+
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -90,6 +97,27 @@ class BusinessPurchaseReturn
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="spoilQuantity", type="float", nullable=true)
+     */
+    private $spoilQuantity;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="damageQuantity", type="float", nullable=true)
+     */
+    private $damageQuantity;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="quantity", type="float", nullable=true)
+     */
+    private $quantity;
 
     /**
      * @var string
@@ -301,6 +329,54 @@ class BusinessPurchaseReturn
     public function setPurchaseInvoice($purchaseInvoice)
     {
         $this->purchaseInvoice = $purchaseInvoice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param float $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param float $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpoilQuantity()
+    {
+        return $this->spoilQuantity;
+    }
+
+    /**
+     * @param float $spoilQuantity
+     */
+    public function setSpoilQuantity($spoilQuantity)
+    {
+        $this->spoilQuantity = $spoilQuantity;
     }
 
 

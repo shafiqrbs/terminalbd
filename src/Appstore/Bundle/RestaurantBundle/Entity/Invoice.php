@@ -131,6 +131,14 @@ class Invoice
      **/
     private  $paymentCard;
 
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="tableNos", type="array", nullable=true)
+     */
+    private $tableNos;
+
     /**
      * @var string
      *
@@ -1000,6 +1008,22 @@ class Invoice
     public function setAndroidProcess($androidProcess)
     {
         $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTableNos()
+    {
+        return $this->tableNos;
+    }
+
+    /**
+     * @param array $tableNos
+     */
+    public function setTableNos($tableNos)
+    {
+        $this->tableNos = $tableNos;
     }
 
 

@@ -9,6 +9,23 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+$('#search').keyup(function(){
+
+    // Search text
+    var text = $(this).val();
+
+    // Hide all content class element
+    $('.product-content').hide();
+
+    // Search
+    $('.product-content .title').each(function(){
+
+        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+            $(this).closest('.product-content').show();
+        }
+    });
+
+});
 
 $( "#name" ).autocomplete({
 
@@ -81,6 +98,52 @@ $(document).on('change', '.particular', function() {
             $('#addParticular').attr("disabled", false);
         }
     })
+});
+
+$(document).on('click', '.addProduct', function() {
+    var url = $(this).attr('data-action');
+    $.ajax({
+        url: url,
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#netTotal').val(obj['netTotal']);
+            $('.paymentAmount').html(obj['payment']);
+            $('.vat').val(obj['vat']);
+            $('.due').html(obj['due']);
+            $('#due').val(obj['due']);
+            $('.discountAmount').html(obj['discount']);
+            $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
+        }
+    })
+});
+
+$(document).on('change', '.updateProduct', function() {
+    var url = $(this).attr('data-action');
+    var quantity = $(this).val();
+    if(quantity > 0 ){
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: 'quantity='+quantity,
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('#netTotal').val(obj['netTotal']);
+                $('.paymentAmount').html(obj['payment']);
+                $('.vat').val(obj['vat']);
+                $('.due').html(obj['due']);
+                $('#due').val(obj['due']);
+                $('.discountAmount').html(obj['discount']);
+                $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
+            }
+        })
+    }
+
 });
 
 $('form#particularForm').on('keypress', 'input,select,textarea', function (e) {

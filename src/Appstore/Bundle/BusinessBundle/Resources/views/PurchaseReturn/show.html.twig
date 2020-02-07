@@ -89,6 +89,7 @@
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot><tr><th colspan="7">SubTotal</th><td>{{ entity.subTotal|number_format(2) }}</td></tr></tfoot>
                                     </table>
                                 {% endif %}
                             </div>
@@ -96,7 +97,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done' and entity.subTotal > 0) %}
-                                        <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                        <a  href="javascript:"  data-url="{{ path('business_purchase_return_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_PURCHASE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
                                         <a  href="javascript:" data-id="{{ path('business_purchase_edit',{'id':entity.id}) }}"  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>

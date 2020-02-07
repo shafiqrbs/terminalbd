@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
@@ -696,6 +697,26 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 		if($accountPurchase->getPayment() > 0 ){
 			$this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
 		}
+		return $accountPurchase;
+
+	}
+
+	public function insertBusinessAccountPurchaseReturn(BusinessPurchaseReturn $entity) {
+
+		$global          = $entity->getBusinessConfig()->getGlobalOption();
+		$em              = $this->_em;
+		$accountPurchase = new AccountPurchase();
+		$accountPurchase->setGlobalOption( $global );
+		$accountPurchase->setPayment($entity->getSubTotal());
+		$accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
+		$accountPurchase->setAccountVendor($entity->getVendor());
+		$accountPurchase->setProcessType('Purchase-Return');
+		$accountPurchase->setUpdated($entity->getUpdated());
+		$accountPurchase->setProcess('approved');
+		$accountPurchase->setApprovedBy($entity->getCreatedBy());
+		$em->persist($accountPurchase);
+		$em->flush();
+		$this->updateVendorBalance($accountPurchase);
 		return $accountPurchase;
 
 	}

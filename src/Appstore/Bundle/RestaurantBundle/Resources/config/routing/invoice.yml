@@ -26,6 +26,20 @@ restaurant_invoice_particular_add:
     options:
             expose: true
 
+restaurant_invoice_product_add:
+    path:     /{invoice}/{product}/product-add
+    defaults: { _controller: "RestaurantBundle:Invoice:addProduct" }
+
+
+restaurant_invoice_product_update:
+    path:     /{invoice}/{product}/product-update
+    defaults: { _controller: "RestaurantBundle:Invoice:updateProduct" }
+
+
+restaurant_invoice_particular_delete:
+    path:     /{invoice}/{id}/particular-delete
+    defaults: { _controller: "RestaurantBundle:Invoice:invoiceParticularDelete" }
+
 restaurant_invoice_particular_create:
     path:     /{id}/particular-create
     defaults: { _controller: "RestaurantBundle:Invoice:update" }
@@ -62,9 +76,7 @@ restaurant_invoice_reverse:
     path:     /{invoice}/sales-reverse
     defaults: { _controller: "RestaurantBundle:Invoice:reverse" }
 
-restaurant_invoice_particular_delete:
-    path:     /{invoice}/{id}/particular-delete
-    defaults: { _controller: "RestaurantBundle:Invoice:invoiceParticularDelete" }
+
 
 restaurant_invoice_empty_delete:
     path:     /delete/empty-invoice

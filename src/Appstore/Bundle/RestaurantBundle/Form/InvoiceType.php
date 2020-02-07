@@ -44,8 +44,6 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
-            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Enter narration','data-original-title'=>'Enter discount narration','autocomplete'=>'off')))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
@@ -57,22 +55,6 @@ class InvoiceType extends AbstractType
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'choices'   => array('Created' => 'Created','Hold' => 'Hold','Kitchen' => 'Kitchen','Paid' => 'Paid','Delivered' => 'Delivered','Done' => 'Done','Canceled' => 'Canceled'),
                 'required'  => true,
-            ))
-            ->add('tokenNo', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
-                'property' => 'name',
-                'empty_value' => '--- Table no ---',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.service",'s')
-                        ->where("e.status = 1")
-                        ->andWhere('s.slug IN (:slugs)')
-                        ->setParameter('slugs',array('token'))
-                        ->andWhere("e.restaurantConfig ={$this->config}")
-                        ->orderBy("e.name","ASC");
-                }
             ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,

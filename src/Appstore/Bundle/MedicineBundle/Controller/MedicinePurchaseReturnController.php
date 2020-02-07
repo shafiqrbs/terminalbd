@@ -93,7 +93,7 @@ class MedicinePurchaseReturnController extends Controller
     /**
      * Creates a form to create a PurchaseReturn entity.
      *
-     * @param PurchaseReturn $entity The entity
+     * @param MedicinePurchaseReturn $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

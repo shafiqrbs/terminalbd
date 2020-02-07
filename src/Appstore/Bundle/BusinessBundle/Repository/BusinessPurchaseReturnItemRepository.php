@@ -4,6 +4,8 @@ namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -21,6 +23,32 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         $qb->where('e.businessParticular = :businessParticular')->setParameter('businessParticular', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
+    }
+
+    public function insertPurchaseReturnItem(BusinessPurchaseReturn $entity, $data)
+    {
+        $em = $this->_em;
+
+        $itemIds = $data['itemId'];
+        $quantity= $data['quantity'];
+        $price = $data['price'];
+        foreach ($itemIds as $key  => $itemId):
+
+            if($quantity[$key] > 0 ){
+
+                $product = $em->getRepository('BusinessBundle:BusinessParticular')->find($itemId);
+                $item = new BusinessPurchaseReturnItem();
+                $item->setBusinessPurchaseReturn($entity);
+                $item->setBusinessParticular($product);
+                $item->setQuantity($quantity[$key]);
+                $item->setPurchasePrice($price[$key]);
+                $item->setSubTotal($price[$key] * $quantity[$key]);
+                $em->persist($item);
+                $em->flush();
+
+            }
+
+        endforeach;
     }
 
     public function deletePurchaseReturnItem(BusinessInvoiceParticular $invoiceParticular)

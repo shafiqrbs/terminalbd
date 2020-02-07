@@ -48,6 +48,7 @@ $(document).on('keyup', ".amount", function() {
     });
     $("#total").html(sum);
 });
+
 $(document).on('keyup', ".bankAmount", function() {
     var sum = 0;
     $(".bankAmount").each(function(){
@@ -86,6 +87,7 @@ $(document).on("change", ".updateNoteAmount", function() {
     });
 
 });
+
 function pageReload() {
     var sum = 0;
     $(".amount").each(function(){

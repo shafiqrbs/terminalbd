@@ -85,6 +85,9 @@ class InvoiceController extends Controller
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig' => $config , 'id' => $id));
 
+        $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
+        $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -95,6 +98,8 @@ class InvoiceController extends Controller
         }
         return $this->render('RestaurantBundle:Invoice:editPos.html.twig', array(
             'entity'        => $entity,
+            'categories'    => $categories,
+            'tables'    => $tables,
             'user'          => $this->getUser(),
             'form'          => $editForm->createView(),
             'itemForm'      => $invoiceParticularForm->createView(),
@@ -109,7 +114,7 @@ class InvoiceController extends Controller
 
     public function returnResultData(Invoice $entity,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->getSalesItems($entity);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->invoiceParticularLists($entity);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -145,7 +150,35 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
+
+    }
+
+    public function addProductAction(Request $request, Invoice $invoice, $product)
+    {
+        $em = $this->getDoctrine()->getManager();
+        // $particularId = $request->request->get('particularId');
+        $invoiceItems = array('particularId' => $product , 'quantity' => 1,'process'=>'create');
+        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
+
+
+    }
+
+    public function updateProductAction(Request $request, Invoice $invoice, $product)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $quantity = $_REQUEST['quantity'];
+        $invoiceItems = array('particularId' => $product , 'quantity' => $quantity,'process'=>'update');
+        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
+
 
     }
 
@@ -163,7 +196,6 @@ class InvoiceController extends Controller
         $msg = 'Product deleted successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
-        exit;
     }
 
     public function updateAction(Request $request, Invoice $entity)
@@ -404,14 +436,9 @@ class InvoiceController extends Controller
         }
         $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
 
-        $address1       = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-        $address        = $address1.$thana.$district;
-
+        $address       = $config->getAddress();
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
         $website        = $option->getDomain();
 
 
@@ -448,7 +475,7 @@ class InvoiceController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
         if(!empty($vatRegNo)){
-            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> text("BIN No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
 
@@ -484,18 +511,17 @@ class InvoiceController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
         $printer -> feed();
         $i=1;
+        /* @var $row InvoiceParticular */
         foreach ( $entity->getInvoiceParticulars() as $row){
-
-            $printer -> setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
+            $productName = "{$i}. {$row->getParticular()->getName()}";
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer -> text(new PosItemManager($row->getParticular()->getParticularCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
         $printer -> feed();
@@ -505,7 +531,6 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-
         if($vat){
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer->text($vat);

@@ -12,6 +12,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
@@ -258,6 +259,18 @@ class BusinessParticularRepository extends EntityRepository
             foreach ($purchase->getBusinessPurchaseItems() as $purchaseItem) {
                 $stockItem = $purchaseItem->getBusinessParticular();
                 $this->updateRemoveStockQuantity($stockItem);
+            }
+        }
+    }
+
+    public function getPurchaseUpdateReturnQnt(BusinessPurchaseReturn $purchase){
+
+        /** @var  $purchaseItem BusinessPurchaseItem */
+
+        if(!empty($purchase->getBusinessPurchaseReturnItems())) {
+            foreach ($purchase->getBusinessPurchaseReturnItems() as $purchaseItem) {
+                $stockItem = $purchaseItem->getBusinessParticular();
+                $this->updateRemoveStockQuantity($stockItem,'purchase-return');
             }
         }
     }
