@@ -337,6 +337,7 @@ class RestaurantTemporaryController extends Controller
 
         if($config->isKitchenPrint() == 1 ){
             $printer->cut();
+            $printer->setFont(Printer::FONT_A);
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
             $printer -> text("KITCHEN PRINT");
             $printer -> text("\n");
