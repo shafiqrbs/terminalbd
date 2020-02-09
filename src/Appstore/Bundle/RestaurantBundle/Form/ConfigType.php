@@ -30,6 +30,7 @@ class ConfigType extends AbstractType
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printInstruction')
+            ->add('kitchenPrint')
             ->add('discountType', 'choice', array(
                 'required'    => false,
                 'attr'=>array('class'=>'m-wrap span12'),

@@ -159,7 +159,7 @@ class AccountSalesRepository extends EntityRepository
         $globalOption = $user->getGlobalOption()->getId();
         $branch = $user->getProfile()->getBranches();
 
-	    $sort = isset($data['sort'])? $data['sort'] :'e.id';
+	    $sort = isset($data['sort'])? $data['sort'] :'e.created';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
 
         $qb = $this->createQueryBuilder('e');

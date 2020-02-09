@@ -351,6 +351,13 @@ class RestaurantConfig
      */
     private $printInstruction = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="kitchenPrint", type="boolean",  nullable=true)
+     */
+    private $kitchenPrint = false;
+
 
     /**
      * Get id
@@ -1064,6 +1071,22 @@ class RestaurantConfig
     public function getAndroidProcesses()
     {
         return $this->androidProcesses;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isKitchenPrint()
+    {
+        return $this->kitchenPrint;
+    }
+
+    /**
+     * @param bool $kitchenPrint
+     */
+    public function setKitchenPrint($kitchenPrint)
+    {
+        $this->kitchenPrint = $kitchenPrint;
     }
 
 
