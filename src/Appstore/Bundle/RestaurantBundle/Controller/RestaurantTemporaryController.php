@@ -347,13 +347,13 @@ class RestaurantTemporaryController extends Controller
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
             $printer->setFont(Printer::FONT_B);
             $printer -> setEmphasis(true);
-            $printer -> text("---------------------------------------------------------\n");
+            $printer -> text("--------------------------------------------------------------\n");
             $i=1;
             /* @var $row InvoiceParticular */
             foreach ( $invoiceParticulars as $row){
                 $printer -> text("{$row->getQuantity()} x {$row->getParticular()->getName()}\n");
             }
-            $printer -> text("---------------------------------------------------------\n");
+            $printer -> text("--------------------------------------------------------------\n");
         }
         $response =  base64_encode($connector->getData());
         $printer -> close();
