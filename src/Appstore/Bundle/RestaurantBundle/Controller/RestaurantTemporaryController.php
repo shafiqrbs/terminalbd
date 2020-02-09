@@ -334,20 +334,27 @@ class RestaurantTemporaryController extends Controller
             $printer -> text("** Visit www.".$website."**\n");
         }
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
-        $printer->cut();
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("KITCHEN PRINT");
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
-        $printer -> setEmphasis(false);
-        $printer -> text("Date: {$date}          {$transaction}\n");
-        $printer -> text("---------------------------------------------------------------\n");
-        $i=1;
-        /* @var $row InvoiceParticular */
-        foreach ( $invoiceParticulars as $row){
-            $printer -> text("{$row->getQuantity()} x {$row->getParticular()->getName()}");
+
+        if($config->isKitchenPrint() == 1 ){
+            $printer->cut();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer -> text("KITCHEN PRINT");
+            $printer -> text($address."\n");
+            $printer -> text("Invoice no. {$entity->getInvoice()}\n");
+            $printer -> setEmphasis(true);
+            $printer -> text("{$table}\n");
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> setEmphasis(false);
+            $printer -> text("---------------------------------------------------------------\n");
+            $i=1;
+            /* @var $row InvoiceParticular */
+            foreach ( $invoiceParticulars as $row){
+                $printer -> text("{$row->getQuantity()} x {$row->getParticular()->getName()}\n");
+            }
+            $printer -> text($address."\n");
+            $printer -> text("---------------------------------------------------------------\n");
         }
-        $printer -> text("---------------------------------------------------------------\n");
+
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return $response;
