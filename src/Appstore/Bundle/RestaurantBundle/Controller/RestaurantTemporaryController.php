@@ -339,7 +339,7 @@ class RestaurantTemporaryController extends Controller
             $printer->cut();
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
             $printer -> text("KITCHEN PRINT");
-            $printer -> text($address."\n");
+            $printer -> text("\n");
             $printer -> text("Invoice no. {$entity->getInvoice()}\n");
             $printer -> setEmphasis(true);
             $printer -> text("{$table}\n");
@@ -351,7 +351,7 @@ class RestaurantTemporaryController extends Controller
             foreach ( $invoiceParticulars as $row){
                 $printer -> text("{$row->getQuantity()} x {$row->getParticular()->getName()}\n");
             }
-            $printer -> text($address."\n");
+            $printer -> text("\n");
             $printer -> text("---------------------------------------------------------------\n");
         }
 
