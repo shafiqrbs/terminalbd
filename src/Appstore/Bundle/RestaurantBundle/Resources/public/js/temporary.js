@@ -311,9 +311,8 @@ function formSubmit() {
     });
 
     function jsonResult(response) {
-
         obj = JSON.parse(response);
-        $('#invoiceParticulars').html(obj['invoiceParticulars']).show();
+        $('#invoiceParticulars').show().html(obj['invoiceParticulars']);
         $('#subTotal').html(obj['subTotal']);
         $('.initialGrandTotal').html(obj['initialGrandTotal']);
         $('#initialDue').val(obj['initialGrandTotal']);
