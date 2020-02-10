@@ -408,7 +408,7 @@ class RestaurantTemporaryController extends Controller
             $printer -> setEmphasis(true);
             $printer -> text("{$table}\n");
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer->setFont(Printer::FONT_A);
+            $printer->setFont(Printer::FONT_B);
             $printer -> setEmphasis(true);
             $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
             $printer -> text("----------------------------------------------------\n");
