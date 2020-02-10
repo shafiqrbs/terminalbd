@@ -42,20 +42,15 @@ class InvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function invoicePathologicalReportLists(User $user, $mode, $data)
+    public function salesStockItemUpdate(Particular $stockItem)
     {
-        $hospital = $user->getGlobalOption()->getRestaurantConfig()->getId();
-        $qb = $this->createQueryBuilder('ip');
-        $qb->join('ip.invoice', 'e');
-        $qb->join('ip.particular', 'p');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
-        $qb->andWhere('p.service = :service')->setParameter('service', 1);
-        // $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done', 'Paid', 'In-progress', 'Diagnostic', 'Admitted'));
-        $qb->orderBy('e.created', 'DESC');
-        $qb->getQuery();
-        return $qb;
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.invoice', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.particular = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->andWhere('mp.process IN (:process)')->setParameter('process', array('Done','Delivered'));
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
     }
 
     public function initialInvoiceItems(User $user, Invoice $invoice)
@@ -75,7 +70,6 @@ class InvoiceParticularRepository extends EntityRepository
             $this->insertSalesAccessories($entity);
         }
         return $invoice;
-
     }
 
     public function insertSalesAccessories(InvoiceParticular $item)

@@ -48,6 +48,17 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
+    public function purchaseStockItemUpdate(Particular $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchase', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.particular = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
     public function getPurchaseItems(Purchase $sales)
     {
         $entities = $sales->getPurchaseItems();

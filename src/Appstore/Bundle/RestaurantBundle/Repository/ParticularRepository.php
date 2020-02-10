@@ -274,6 +274,35 @@ class ParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function updateRemoveStockQuantity(Particular $stock,$fieldName=''){
+
+        $em = $this->_em;
+        if($fieldName == 'sales'){
+            $qnt = $em->getRepository('RestaurantBundle:InvoiceParticular')->salesStockItemUpdate($stock);
+            $stock->setSalesQuantity($qnt);
+        }elseif($fieldName == 'purchase-return'){
+           // $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->purchaseReturnStockUpdate($stock);
+          //  $stock->setPurchaseReturnQuantity($qnt);
+        }elseif($fieldName == 'damage'){
+            //$quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
+          //  $stock->setDamageQuantity($quantity);
+        }else{
+            $qnt = $em->getRepository('RestaurantBundle:PurchaseItem')->purchaseStockItemUpdate($stock);
+            $stock->setPurchaseQuantity($qnt);
+        }
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
+    public function remainingQnt(Particular $stock)
+    {
+        $em = $this->_em;
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity()) - ($stock->getSalesQuantity() + $stock->getDamageQuantity() + $stock->getPurchaseReturnQuantity());
+        $stock->setRemainingQuantity($qnt);
+        $em->persist($stock);
+        $em->flush();
+    }
 
     public function getPurchaseUpdateQnt(Purchase $purchase){
 
@@ -284,14 +313,8 @@ class ParticularRepository extends EntityRepository
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             /** @var Particular  $particular */
-
             $particular = $purchaseItem->getParticular();
-            
-            $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
-            $particular->setPurchaseQuantity($qnt);
-            $em->persist($particular);
-            $em->flush();
-
+            $this->updateRemoveStockQuantity($particular);
         }
     }
 
@@ -300,15 +323,12 @@ class ParticularRepository extends EntityRepository
         $em = $this->_em;
         /** @var InvoiceParticular $item */
 
-        if(!empty($invoice->getInvoiceParticulars())){
+        if($invoice->getInvoiceParticulars()){
             foreach($invoice->getInvoiceParticulars() as $item ){
                 /** @var Particular  $particular */
                 $particular = $item->getParticular();
                 if( $particular->getService()->getSlug() == 'stockable' ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
+                    $this->updateRemoveStockQuantity($particular,'sales');
                 }
             }
         }

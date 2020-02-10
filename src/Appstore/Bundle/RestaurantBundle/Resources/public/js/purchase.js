@@ -45,6 +45,7 @@ $(document).on('change', '.transactionMethod', function() {
 $(document).on('change', '#particular', function() {
 
     var url = $('#particular').val();
+    alert(url);
     $.ajax({
         url: url,
         type: 'GET',

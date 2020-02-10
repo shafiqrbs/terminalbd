@@ -374,15 +374,12 @@ class PurchaseController extends Controller
 			    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountBusinessPurchaseJournal($purchase);
 			    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
                 $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
-			   // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
 		    }
-
-           // $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
-            return new Response('success');
+              return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
     /**

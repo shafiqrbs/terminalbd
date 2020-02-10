@@ -93,7 +93,7 @@ class PurchaseController extends Controller
     /**
      * Creates a form to edit a Invoice entity.wq
      *
-     * @param Invoice $entity The entity
+     * @param Purchase $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -247,13 +247,11 @@ class PurchaseController extends Controller
             $purchase->setApprovedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getPurchaseUpdateQnt($purchase);
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertRestaurantAccountPurchase($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertRestaurantAccountPurchase($purchase);
             return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
 

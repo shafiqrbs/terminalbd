@@ -102,10 +102,10 @@
                                 <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                 <th class="span1">Code</th>
                                 <th class="span4">Name</th>
-                                <th class="span1">Unit Price</th>
+                                <th class="span1">PP</th>
                                 <th class="span1">Qnt</th>
                                 <th class="span1">Unit</th>
-                                <th class="span1">Sub Total</th>
+                                <th class="span1">SubTotal</th>
                                 <th class="span1"></th>
                             </tr>
                             </thead>
@@ -157,6 +157,15 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
+                                <label class="control-label" for="firstName"><span id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
                                 <label class="control-label" for="firstName"><span>Payment TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}
                                         </span>
                                 </label>
@@ -168,15 +177,7 @@
                         <!--/span-->
                     </div>
                     <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <label class="control-label" for="firstName"><span id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="clearfix"></div>
+
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
