@@ -379,10 +379,10 @@ class RestaurantTemporaryController extends Controller
         $printer -> text($grandTotal);
         $printer -> text($payment);
         $printer -> text("---------------------------------------------------------------\n");
-        if($due > 0){
+        if($dueBdt > 0){
             $printer -> text($due);
         }
-        if($returnTk > 0){
+        if($returnBdt > 0){
             $printer -> text($returnTk);
         }
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
@@ -411,7 +411,7 @@ class RestaurantTemporaryController extends Controller
             $printer->setFont(Printer::FONT_B);
             $printer -> setEmphasis(true);
             $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
-            $printer -> text("----------------------------------------------------\n");
+            $printer -> text("------------------------------------------------------------\n");
             $i=1;
             /* @var $row InvoiceParticular */
             foreach ( $invoiceParticulars as $row){
@@ -419,7 +419,7 @@ class RestaurantTemporaryController extends Controller
                 $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
                 $i++;
             }
-            $printer -> text("----------------------------------------------------\n");
+            $printer -> text("------------------------------------------------------------\n");
         }
         $response =  base64_encode($connector->getData());
         $printer -> close();
