@@ -99,7 +99,7 @@ class InvoiceController extends Controller
         return $this->render('RestaurantBundle:Invoice:editPos.html.twig', array(
             'entity'        => $entity,
             'categories'    => $categories,
-            'tables'    => $tables,
+            'tables'        => $tables,
             'user'          => $this->getUser(),
             'form'          => $editForm->createView(),
             'itemForm'      => $invoiceParticularForm->createView(),
@@ -161,11 +161,8 @@ class InvoiceController extends Controller
         $invoiceItems = array('particularId' => $product , 'quantity' => 1,'process'=>'create');
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $msg = 'Particular added successfully';
-        $result = $this->returnResultData($invoice,$msg);
+        $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-
-
     }
 
     public function updateProductAction(Request $request, Invoice $invoice, $product)

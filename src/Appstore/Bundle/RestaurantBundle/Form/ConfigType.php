@@ -24,6 +24,7 @@ class ConfigType extends AbstractType
             ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Enter vat registration no')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span11','rows'=>5,'placeholder'=> "Enter office/store address")))
+             ->add('invoiceNote','textarea',array('attr'=>array('class'=>'m-wrap span11','rows' => 3,'placeholder'=> "Enter invoice notes")))
             ->add('vatEnable')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
@@ -38,6 +39,16 @@ class ConfigType extends AbstractType
                 'choices' => array(
                     'percentage' => 'Percentage',
                     'flat' => 'Flat',
+                ),
+            ))
+             ->add('salesMode', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '---Sales Mode---',
+                'choices' => array(
+                    'grid' => 'Grid',
+                    'search' => 'Search',
+                    'list' => 'List',
                 ),
             ))
             ->add('payFor', 'choice', array(

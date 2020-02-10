@@ -26,6 +26,7 @@ class RestaurantTemporaryController extends Controller
 
     public function newAction()
     {
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
         $entity = new Invoice();
@@ -33,14 +34,20 @@ class RestaurantTemporaryController extends Controller
         $itemForm = $this->createInvoiceParticularForm(New RestaurantTemporary());
         $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
-        $html = $this->renderView('RestaurantBundle:Invoice:pos.html.twig', array(
-            'temporarySubTotal'   => $subTotal,
-            'initialVat'          => $vat,
-            'initialDiscount'     => 0,
-            'user'      => $user,
-            'entity'    => $entity,
-            'form'      => $form->createView(),
-            'itemForm'  => $itemForm->createView(),
+        $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
+        $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
+        $initialTotal = ($subTotal + $vat);
+        $html = $this->renderView('RestaurantBundle:Invoice:gridPos.html.twig', array(
+            'temporarySubTotal'     => $subTotal,
+            'initialVat'            => $vat,
+            'initialTotal'            => $initialTotal,
+            'initialDiscount'       => 0,
+            'user'                  => $user,
+            'categories'            => $categories,
+            'tables'                => $tables,
+            'entity'                => $entity,
+            'form'                  => $form->createView(),
+            'itemForm'              => $itemForm->createView(),
         ));
         return New Response($html);
     }
@@ -85,13 +92,15 @@ class RestaurantTemporaryController extends Controller
         $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $data = $request->request->all()['restaurant_invoice'];
         $btn = $request->request->get('buttonType');
+        $tableNos = $request->request->get('tableNos');
         $form = $this->createTemporaryForm($entity);
         $form->handleRequest($request);
         $entity->setRestaurantConfig($config);
+        $entity->setTableNos($tableNos);
         $entity->setPaymentStatus('Pending');
         $entity->setSubTotal($subTotal);
-        $entity->setVat($data['vat']);
-        $entity->setPayment($data['payment']);
+        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
+        $entity->setVat($vat);
         $total = round($subTotal - $entity->getDiscount() + $entity->getVat());
         $entity->setTotal($total);
         if ($entity->getTotal() > 0) {
@@ -103,10 +112,21 @@ class RestaurantTemporaryController extends Controller
         $entity->setDeliveryDateTime($datetime);
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
         $entity->setCustomer($customer);
-        if($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() ){
+        if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal()) or ($entity->getTotal() > 0 and empty($data['payment']))){
             $entity->setPayment($entity->getTotal());
             $entity->setPaymentStatus("Paid");
             $entity->setDue(0);
+            if($data['payment'] > $entity->getTotal()){
+                $amount = $data['payment'] - $entity->getTotal();
+                $entity->setReturnAmount($amount);
+            }
+
+        }else{
+
+            $entity->setPayment($data['payment']);
+            $entity->setPaymentStatus("Due");
+            $amount = $entity->getTotal() -  $entity->getPayment();
+            $entity->setDue($amount);
         }
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords(round($entity->getTotal()));
         $entity->setPaymentInWord($amountInWords);
@@ -122,7 +142,7 @@ class RestaurantTemporaryController extends Controller
             $pos = $this->posPrint($entity,$invoiceParticulars);
             return new Response($pos);
         }
-        exit;
+        return new Response("success");
 
     }
 
@@ -138,7 +158,7 @@ class RestaurantTemporaryController extends Controller
             $discount = ($subTotal * $discount)/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
-        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$initialGrandTotal);
+        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $data = array(
             'subTotal' => $subTotal,
             'initialGrandTotal' => round($initialGrandTotal + $vat),
@@ -147,8 +167,6 @@ class RestaurantTemporaryController extends Controller
             'success' => 'success'
         );
         return new Response(json_encode($data));
-        exit;
-
     }
 
     public function invoiceDiscountCouponAction(Request $request)
@@ -164,7 +182,7 @@ class RestaurantTemporaryController extends Controller
             $discount = ($subTotal * $config->getDiscountPercentage())/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
-        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$initialGrandTotal);
+        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $data = array(
             'subTotal' => $subTotal,
             'initialGrandTotal' => round($initialGrandTotal + $vat),
@@ -173,7 +191,6 @@ class RestaurantTemporaryController extends Controller
             'success' => 'success'
         );
         return new Response(json_encode($data));
-        exit;
 
     }
 
@@ -184,7 +201,15 @@ class RestaurantTemporaryController extends Controller
 
     public function returnResultData(User $user,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesItems($user);
+        $config = $user->getGlobalOption()->getRestaurantConfig();
+        if($config->getSalesMode() == "grid" ){
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesGridItems($user);
+        }elseif($config->getSalesMode() == "search" ){
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesSearchItems($user);
+        }elseif($config->getSalesMode() == "list" ){
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesListItems($user);
+        }
+
         $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $data = array(
@@ -210,9 +235,34 @@ class RestaurantTemporaryController extends Controller
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->insertInvoiceItems($user, $invoiceItems);
         $result = $this->returnResultData($user);
         return new Response(json_encode($result));
-        exit;
 
     }
+
+
+    public function addProductAction($product)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        // $particularId = $request->request->get('particularId');
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->find($product);
+        $invoiceItems = array('particularId' => $product , 'quantity' => 1,'price' => $entity->getPrice(),'process'=>'create');
+        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->insertInvoiceItems($user, $invoiceItems);
+        $result = $this->returnResultData($user);
+        return new Response(json_encode($result));
+    }
+
+    public function updateProductAction(Request $request , $product)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $quantity = $_REQUEST['quantity'];
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->find($product);
+        $invoiceItems = array('particularId' => $product , 'quantity' => $quantity,'price' => $entity->getPrice(),'process' => 'update');
+        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->insertInvoiceItems($user, $invoiceItems);
+        $result = $this->returnResultData($user);
+        return new Response(json_encode($result));
+    }
+
 
     public function invoiceParticularDeleteAction(RestaurantTemporary $particular){
 
@@ -226,7 +276,7 @@ class RestaurantTemporaryController extends Controller
         $em->flush();
         $result = $this->returnResultData($user);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     private function posPrint(Invoice $entity,$invoiceParticulars)
@@ -252,20 +302,21 @@ class RestaurantTemporaryController extends Controller
         $total              = $entity->getTotal();
         $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
-        $due                = $entity->getDue();
+        $dueBdt             = $entity->getDue();
         $payment            = $entity->getPayment();
+        $returnBdt          = $entity->getReturnAmount();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy();
 
         $slipNo ='';
         $tableNo ='';
-        if($entity->getTokenNo()){
-            $tableNo = $entity->getTokenNo()->getName();
-        }
         if($entity->getSlipNo()){
-            $slipNo = $entity->getSlipNo();
+            $slipNo = "{$entity->getSlipNo()} / ";
         }
-        $table = "Table no. {$slipNo} / $tableNo";
+        if($entity->getTableNos()){
+            $tableNo = implode(",",$entity->getTableNos());
+        }
+        $table = "Table no. {$slipNo}{$tableNo}";
 
         $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
@@ -273,7 +324,8 @@ class RestaurantTemporaryController extends Controller
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($dueBdt));
+        $returnTk       = new PosItemManager('Return: ','Tk.',number_format($returnBdt));
 
 
         /** ===================Invoice Sales Item Information========================= */
@@ -326,7 +378,19 @@ class RestaurantTemporaryController extends Controller
         }
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($grandTotal);
+        $printer -> text($payment);
+        $printer -> text("---------------------------------------------------------------\n");
+        if($due > 0){
+            $printer -> text($due);
+        }
+        if($returnTk > 0){
+            $printer -> text($returnTk);
+        }
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        if($config->getInvoiceNote()){
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> text($config->getInvoiceNote()."\n");
+        }
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $printer -> text("Thanks for being here\n");
@@ -345,15 +409,18 @@ class RestaurantTemporaryController extends Controller
             $printer -> setEmphasis(true);
             $printer -> text("{$table}\n");
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer->setFont(Printer::FONT_B);
+            $printer->setFont(Printer::FONT_A);
             $printer -> setEmphasis(true);
-            $printer -> text("--------------------------------------------------------------\n");
+            $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+            $printer -> text("----------------------------------------------------\n");
             $i=1;
             /* @var $row InvoiceParticular */
             foreach ( $invoiceParticulars as $row){
-                $printer -> text("{$row->getQuantity()} x {$row->getParticular()->getName()}\n");
+                $productName = "{$i}. {$row->getParticular()->getName()}";
+                $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
+                $i++;
             }
-            $printer -> text("--------------------------------------------------------------\n");
+            $printer -> text("----------------------------------------------------\n");
         }
         $response =  base64_encode($connector->getData());
         $printer -> close();

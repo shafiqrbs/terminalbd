@@ -74,6 +74,13 @@ class RestaurantConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="salesMode", type="string", length=50,nullable = true)
+     */
+    private $salesMode = "grid";
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="printer", type="string", length=50,nullable = true)
      */
     private $printer;
@@ -336,6 +343,13 @@ class RestaurantConfig
      * @ORM\Column(name="address", type="text", nullable = true)
      */
     private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceNote", type="text", nullable = true)
+     */
+    private $invoiceNote;
 
     /**
      * @var boolean
@@ -1087,6 +1101,38 @@ class RestaurantConfig
     public function setKitchenPrint($kitchenPrint)
     {
         $this->kitchenPrint = $kitchenPrint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceNote()
+    {
+        return $this->invoiceNote;
+    }
+
+    /**
+     * @param string $invoiceNote
+     */
+    public function setInvoiceNote($invoiceNote)
+    {
+        $this->invoiceNote = $invoiceNote;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesMode()
+    {
+        return $this->salesMode;
+    }
+
+    /**
+     * @param string $salesMode
+     */
+    public function setSalesMode($salesMode)
+    {
+        $this->salesMode = $salesMode;
     }
 
 

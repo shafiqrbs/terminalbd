@@ -1,38 +1,33 @@
-{% extends '::base.html.twig' %}
-{% block body %}
-    <div class="container-fluid">
+<div class="portlet box">
+    <div class="portlet-body" style="min-height: 460px">
+        <div class="clearfix">&nbsp;</div>
         <div class="row-fluid">
             <div class="span8">
                 <!--BEGIN TABS-->
-                <div class="tabbable tabbable-custom tabs-left">
+                <div class="tabbable tabbable-custom">
                     <!-- Only required for left/right tabs -->
-                    <ul data-match-height="tab-content" class="nav nav-tabs tabs-left">
+                    <ul  class="nav nav-tabs tabs-left">
                         <li class="active"><a href="#all-product" data-toggle="tab" class="saveButton" aria-expanded="false">All Products</a></li>
                         {% for category in categories %}
-                        <li class=""><a href="#{{ category.slug }}" data-toggle="tab" class="saveButton" aria-expanded="false">{{ category.name }}</a></li>
+                            <li class=""><a href="#{{ category.slug }}" data-toggle="tab" class="saveButton" aria-expanded="false">{{ category.name }}</a></li>
                         {% endfor %}
                     </ul>
-                    <div data-match-height="tab-content"  class="tab-content">
+                    <div class="tab-content">
                         <div class="tab-pane tab-height active" id="all-product">
-                            <div class="form-actions portlet box blue">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-th-list"></i>ALL PRODUCTS</div>
-                                </div>
-                            </div>
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="form-control">
-                                       <input type="text" id="search" name="search" class="span12 m-wrap m-wrap-bg" value="" autocomplete="off" placeholder="Search product">
+                                        <input type="text" id="search" name="search" class="span12 m-wrap m-wrap-bg" value="" autocomplete="off" placeholder="Search product">
                                     </div>
                                 </div>
                             </div>
                             <div class="row-fluid">
-                                <div class="span12" style="overflow-y: scroll; height: 500px ">
+                                <div class="span12">
                                     <ul class="unstyled">
                                         {% if categories is not empty %}
                                             {% for category in categories %}
                                                 {% for product in category.particulars %}
-                                                    <li class="product-content addProduct" data-action="{{ path('restaurant_invoice_product_add',{'invoice':entity.id,'product':product.id}) }}">
+                                                    <li class="product-content addProduct" data-action="{{ path('restaurant_temporary_product_add',{'product':product.id}) }}">
                                                         <div class="blue title">
                                                             <p class="label">{{ product.name }}</p>
                                                             <span class="inline-price">BDT- {{ product.price }} TK</span>
@@ -48,31 +43,31 @@
                             <div class="clearfix">&nbsp;</div>
                         </div>
                         {% for category in categories %}
-                        <div class="tab-pane tab-height" id="{{ category.slug }}">
-                            <div class="form-actions portlet box blue">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-th-list"></i>{{ category.name }}</div>
+                            <div class="tab-pane tab-height" id="{{ category.slug }}">
+                                <div class="form-actions portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption" style="text-align: center; width: 100%;">{{ category.name|upper }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <ul class="unstyled">
-                                        {% if category.particulars is not empty %}
-                                            {% for product in category.particulars %}
-                                                <li class="product-content addProduct" data-action="{{ path('restaurant_invoice_product_add',{'invoice':entity.id,'product':product.id}) }}">
-                                                    <div class="blue title">
-                                                        <p class="label">{{ product.name }}</p>
-                                                        <span class="inline-price">BDT- {{ product.price }} TK</span>
-                                                    </div>
-                                                </li>
-                                            {% endfor %}
-                                        {% endif %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <ul class="unstyled">
+                                            {% if category.particulars is not empty %}
+                                                {% for product in category.particulars %}
+                                                    <li class="product-content addProduct" data-action="{{ path('restaurant_temporary_product_add',{'product':product.id}) }}">
+                                                        <div class="blue title">
+                                                            <p class="label">{{ product.name }}</p>
+                                                            <span class="inline-price">BDT- {{ product.price }} TK</span>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
 
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <div class="clearfix">&nbsp;</div>
                             </div>
-                            <div class="clearfix">&nbsp;</div>
-                        </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -82,7 +77,7 @@
             <div class="span4">
                 <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>MANAGE CART</div>
+                        <div class="caption"><i class="icon-reorder"></i>MANAGE ORDER</div>
                     </div>
 
                     <div class="portlet-body">
@@ -90,34 +85,46 @@
 
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric">Product</th>
+                                <th class="numeric span8">Product</th>
                                 <th class="numeric">Price</th>
-                                <th class="numeric">Qnt</th>
+                                <th class="numeric span2">Qnt</th>
                                 <th class="numeric">Total</th>
                                 <th class="numeric"></th>
                             </tr>
                             </thead>
                             <tbody id="invoiceParticulars">
-                            {% if entity.invoiceParticulars is not empty  %}
-                                {% for item in entity.invoiceParticulars %}
+                            {% if user.restaurantTemps is not empty  %}
+                                {% for item in user.restaurantTemps %}
                                     <tr id="remove-{{ item.id }}">
-                                    <td class="numeric">{{ loop.index }}. {{ item.particular.name }}</td>
-                                    <td class="numeric">{{ item.salesprice }}</td>
-                                    <td class="">
-                                        <input type="number" class="form-control inline-m-wrap updateProduct" id="quantity" name="quantity" value="{{ item.quantity }}" data-action="{{ path('restaurant_invoice_product_update',{'invoice':entity.id,'product':item.particular.id}) }}" min="1" max="100">
-                                    </td>
-                                    <td class="numeric">{{ item.subTotal }}</td>
-                                    <td class="numeric">
-                                        <a id="11" data-id="{{ item.id }}" data-url="{{ path('restaurant_invoice_particular_delete',{'invoice':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
-                                    </td>
-                                </tr>
+                                        <td class="numeric">{{ loop.index }}. {{ item.particular.name }}</td>
+                                        <td class="numeric">{{ item.salesPrice }}</td>
+                                        <td class="">
+                                            <div class="input-append" style="margin-bottom: 0!important;">
+                                                    <span class="input-group-btn">
+  <a href="javascript:" data-action="{{ path('restaurant_temporary_product_update',{'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity">
+                                                            <span class="fa fa-minus"></span>
+                                                   </a>
+                                                                     <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" disabled="disabled" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_temporary_product_update',{'product':item.id}) }}" min="1" max="100">
+                                                      <a href="javascript:" data-action="{{ path('restaurant_temporary_product_update',{'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity">
+                                                          <span class="fa fa-plus"></span>
+                                                  </a>
+                                                        </span>
+
+                                            </div>
+
+                                        </td>
+                                        <td class="numeric"><strong id="subTotal-{{ item.id }}">{{ item.subTotal }}</strong></td>
+                                        <td class="numeric">
+                                            <a id="{{ item.id }}" data-id="{{ item.id }}" data-url="{{ path('restaurant_temporary_particular_delete',{'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                             {% endif %}
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th colspan="3">Total</th>
-                                <th>{{ subTotal|number_format(2) }}</th>
+                                <th id="subTotal">{{ temporarySubTotal|number_format(2) }}</th>
                                 <td></td>
                             </tr>
                             </tfoot>
@@ -127,23 +134,42 @@
                         {{ form_row(form._token) }}
                         <div class="payment-info">
                             <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label" style="text-align: center"  for="firstName">Select Table No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
                                 <div class="span12" style="padding: 7px">
                                     <ul class="unstyled">
                                         {% for table in tables  %}
-                                        <li style="width: 33%; float: left">
-                                            <input type="checkbox" value="{{ table.name }}" name="tableNos[]"> {{ table.name }}
-                                        </li>
+                                            <li style="width: 33%; float: left">
+                                                 <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.name }}" name="tableNos[]" > {{ table.name }}</label>
+                                            </li>
                                         {% endfor %}
 
                                     </ul>
                                 </div>
                             </div>
-
                             <div class="clearfix"></div>
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
                                         {{ form_widget(form.salesBy) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">
+                                            <span class="label-custom" >Slip No</span>
+                                            <span class="pull-right sales-right">
+                                {{ form_widget(form.slipNo) }}
+                            </span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +207,7 @@
                                 <div class="span12">
                                     <div class="control-group">
                                         <label class="control-label"  for="firstName"><span class="label-custom" >Vat TK.</span>
-                                            <span class="pull-right sales-right"><input type="text" id="vat" name="vat" readonly="readonly"  class="m-wrap span12 vat" value="{{ entity.vat }}" ></span>
+                                            <span class="pull-right sales-right initialVat">{{ initialVat }}</span>
                                         </label>
                                     </div>
                                 </div>
@@ -190,7 +216,7 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName"><span class="label-custom" id="balance">Due TK.</span> <span class="pull-right sales-right due" style="text-align: left; width: 110px"  id="dueable" >{{ entity.due }}</span></label>
+                                        <label class="control-label" for="firstName"><span class="label-custom" id="balance">Due TK.</span> <span class="pull-right sales-right due" style="text-align: right; width: 110px"  id="dueable" >{{ initialTotal }}</span></label>
                                     </div>
                                 </div>
                                 <!--/span-->
@@ -294,13 +320,17 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="row-fluid">
-                        <div class="form-actions portlet box grey">
-                            <div class="pull-center">
-                                <button type="submit" class="btn yellow"><i class="icon-print"></i> POS PRINT</button>
-                                <button type="submit" class="btn green"><i class="icon-save"></i> SAVE</button>
+                            <div class="form-actions portlet box">
+                                <div class="pull-center">
+                                    {{ form_widget(form.discount) }}
+                                    <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="{{ initialTotal }}" >
+                                    <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
+                                    <input type="hidden" name="buttonType" id="buttonType" value="">
+                                    <button type="button" class="btn blue big  receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
+                                    <button type="button" class="btn yellow big receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
 
+                                </div>
                             </div>
-                        </div>
                         </div>
                         {{ form_end(form) }}
                     </div>
@@ -309,130 +339,117 @@
             </div>
         </div>
     </div>
-    <style>
-        input[type="number"].inline-m-wrap{
-            height: 15px;
-            width: 50px;
-            font-size: 12px;
-            border: 1px solid green;
-            padding: 3px;
-            margin-bottom: 0;
-        }
+    <div class="clearfix">&nbsp;</div>
+</div>
+<style>
+    .tab-content{
 
-        input[class*="span"].m-wrap-bg{
-            height: 50px!important;
-            background: #ffffff;
-            font-size: 30px;
-        }
+    }
+    input[type="text"].inline-m-wrap{
+        width: 36px;
+        font-size: 12px;
+        border: 1px solid #c49f47;
+        margin-bottom: 0;
+        text-align: center;
+        font-weight: bold;
+    }
 
-        input.m-wrap , select.m-wrap , textarea.m-wrap{
-            border: 2px solid #1e7b85!important;
-        }
+    input[class*="span"].m-wrap-bg{
+        height: 50px!important;
+        background: #ffffff;
+        font-size: 30px;
+    }
 
-        .inline-price{
-            width: 100px;
-            border-top: 2px #ddddff solid;
-            display: inline-block;
-            padding-top:5px;
-            margin-top:7px;
-            font-size: 12px
-        }
-        table.table {
-            clear: both;
-            margin-bottom: 0px !important;
-            max-width: none !important;
-            font-size: 11px;
-        }
+    input.m-wrap , select.m-wrap , textarea.m-wrap{
+        border: 2px solid #1e7b85!important;
+    }
 
-        .table th, .table td{
-            padding: 0;
-            margin: 0;
-            padding-left: 5px;
-        }
-        select.m-wrap{
-            height: 30px!important;
-        }
-        .product-content{
-            width: 33%;
-            margin-bottom: 15px;
-            text-align: center;
-            float: left;
-            font-size: 12px!important;
-            cursor: pointer;
-        }
+    .inline-price{
+        width: 100px;
+        border-top: 1px #00423d solid;
+        display: inline-block;
+        padding-top:0;
+        margin-top:0;
+        font-size: 12px
+    }
+    table.table {
+        clear: both;
+        margin-bottom: 0 !important;
+        max-width: none !important;
+        font-size: 11px;
+    }
 
-        .product-content .title {
-            width: 100%!important;
-            background: #0b84fe;
-            border: 2px solid #1a54fe;
-        }
-        .product-content .title .label {
-            padding: 0!important;
-            background: transparent;
-            width: 100%;
-            margin: 0;
-            font-weight: bold;
-        }
-        .label-custom{
-            background: transparent;
-            padding: 0;
-            width: 180px;
-            display: inline-block;
-            text-align: right;
-            padding-right: 15px;
-            color: #1e7b85;
-        }
-        .sales-right input[class*="span"].payment, .sales-right input[class*="span"].discount, .sales-right input[class*="span"].discountCoupon{
-            border: 1px solid #1e7b85!important;
-            font-size: 15px;
-        }
-        .sales-right input[class*="span"].payment{
-            border: 2px solid #1e7b85!important;
-            font-size: 20px;
-            height: 42px!important;
-        }
+    .table th, .table td{
+        padding: 0;
+        margin: 0;
+        padding-left: 5px;
+    }
 
-        .sales-right input[class*="span"].discountCoupon{
-            font-size: 15px;
-        }
-        .bankHide , .mobileBankHide , .customer{
-            display: none;
-        }
-        .dialogModal{
-            z-index: 9999!important;
-        }
-        #calBorder, .select2-drop , .select2-drop-mask{
-            z-index: 99999!important;
-        }
-        input[class*="span"].m-wrap:focus,select[class*="span"].m-wrap:focus, textarea[class*="span"].m-wrap:focus {
-            border: 2px solid rgb(234, 2, 3)!important;
-            color: red;
-        }
-        .product-content:hover, .product-content:focus, .product-content:active {
-            background-color: #26bd9e !important;
-            color: #fff !important;
-            font-size: 12px;
-        }
-    </style>
-{% endblock %}
+    select.m-wrap{
+        height: 30px!important;
+    }
 
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@RestaurantBundle/Resources/public/css/invoice.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@RestaurantBundle/Resources/public/js/invoice.js'
-    '@RestaurantBundle/Resources/public/js/approveProcess.js'
-    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
-{% block documentready %}
-    {{ parent() }}
-{% endblock %}
+    .product-content{
+        width: 33%;
+        margin-bottom: 13px;
+        text-align: center;
+        float: left;
+        font-size: 12px!important;
+        cursor: pointer;
+    }
+
+    .product-content .title {
+        width: 99%!important;
+        background: #007a6e;
+    }
+
+    .product-content .title .label {
+        padding: 0!important;
+        background: transparent;
+        width: 100%;
+        margin: 0;
+        font-weight: bold;
+        padding-top: 7px!important;
+    }
+
+    .label-custom{
+        background: transparent;
+        padding: 0;
+        width: 180px;
+        display: inline-block;
+        text-align: right;
+        padding-right: 15px;
+        color: #1e7b85;
+    }
+    .sales-right input[class*="span"].payment, .sales-right input[class*="span"].discount, .sales-right input[class*="span"].discountCoupon{
+        border: 1px solid #1e7b85!important;
+        font-size: 15px;
+    }
+    .sales-right input[class*="span"].payment{
+        border: 2px solid #ff2515 !important;
+        font-size: 20px;
+        height: 42px!important;
+    }
+
+    .sales-right input[class*="span"].discountCoupon{
+        font-size: 15px;
+    }
+    .bankHide , .mobileBankHide , .customer{
+        display: none;
+    }
+    .dialogModal{
+        z-index: 9999!important;
+    }
+    #calBorder, .select2-drop , .select2-drop-mask{
+        z-index: 99999!important;
+    }
+    input[class*="span"].m-wrap:focus,select[class*="span"].m-wrap:focus, textarea[class*="span"].m-wrap:focus {
+        border: 2px solid rgb(234, 2, 3)!important;
+        color: red;
+    }
+    .product-content:hover, .product-content:focus, .product-content:active {
+        background-color:red !important;
+        color: #fff !important;
+        font-size: 12px;
+    }
+</style>

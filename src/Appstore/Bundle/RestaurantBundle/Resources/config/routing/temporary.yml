@@ -27,6 +27,15 @@ restaurant_temporary_particular_add:
     options:
             expose: true
 
+restaurant_temporary_product_add:
+    path:     /{product}/product-add
+    defaults: { _controller: "RestaurantBundle:RestaurantTemporary:addProduct" }
+
+
+restaurant_temporary_product_update:
+    path:     /{product}/product-update
+    defaults: { _controller: "RestaurantBundle:RestaurantTemporary:updateProduct" }
+
 
 restaurant_temporary_discount_update:
     path:     /dicount-update

@@ -298,6 +298,13 @@ class Invoice
     private $due;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="returnAmount", type="decimal", nullable=true)
+     */
+    private $returnAmount;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="revised", type="boolean" )
@@ -1024,6 +1031,22 @@ class Invoice
     public function setTableNos($tableNos)
     {
         $this->tableNos = $tableNos;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnAmount()
+    {
+        return $this->returnAmount;
+    }
+
+    /**
+     * @param string $returnAmount
+     */
+    public function setReturnAmount($returnAmount)
+    {
+        $this->returnAmount = $returnAmount;
     }
 
 
