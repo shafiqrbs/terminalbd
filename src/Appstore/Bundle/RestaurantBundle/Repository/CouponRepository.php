@@ -15,10 +15,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class CouponRepository extends EntityRepository
 {
 
-    public function getValidCouponCode($globalOption , $code)
+    public function getValidCouponCode(GlobalOption $globalOption , $code)
     {
 
-        $ecommerceConfig = $globalOption->getReConfig()->getId();
+        $config = $globalOption->getRestaurantConfig()->getId();
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
@@ -26,7 +26,7 @@ class CouponRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('coupon');
         $qb->where("coupon.status = 1");
-        $qb->andWhere("coupon.ecommerceConfig =".$ecommerceConfig );
+        $qb->andWhere("coupon.restaurantConfig =".$config );
         $qb->andWhere("coupon.couponCode = :couponCode");
         $qb->setParameter('couponCode', $code);
         $qb->andWhere('coupon.startDate <= :startDate');

@@ -357,12 +357,13 @@ class InvoiceRepository extends EntityRepository
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
             if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
-                $totalAmount = ($subTotal- $invoice->getDiscount());
-                $vat = $this->getCulculationVat($invoice,$totalAmount);
+              //  $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCulculationVat($invoice,$subTotal);
                 $invoice->setVat($vat);
             }
             $invoice->setSubTotal($subTotal);
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $total =($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($total);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{

@@ -1049,6 +1049,22 @@ class Invoice
         $this->returnAmount = $returnAmount;
     }
 
+    /**
+     * @return bool
+     */
+    public function isRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param bool $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
+    }
+
 
 }
 

@@ -93,14 +93,14 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function insertInvoiceItems($invoice, $data)
     {
+        $em = $this->_em;
         $particularId = (int)$data['particularId'];
         $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($particularId);
-        $em = $this->_em;
         $entity = new InvoiceParticular();
         $invoiceParticular = $this->findOneBy(array('invoice' => $invoice ,'particular' => $particular));
         if(!empty($invoiceParticular) and $data['process'] == 'create') {
             $entity = $invoiceParticular;
-            $entity->setQuantity($invoiceParticular->getQuantity() + (int)$data['quantity']);
+            $entity->setQuantity($invoiceParticular->getQuantity() + 1);
             $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
         }elseif(!empty($invoiceParticular) and $data['process'] == 'update') {
             $entity = $invoiceParticular;
@@ -109,7 +109,7 @@ class InvoiceParticularRepository extends EntityRepository
         }else{
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($particular->getPrice());
-            $entity->setSubTotal($particular->getPrice() * (int)$data['quantity']);
+            $entity->setSubTotal($particular->getPrice() * 1);
         }
         $entity->setInvoice($invoice);
         $entity->setParticular($particular);
@@ -150,27 +150,6 @@ class InvoiceParticularRepository extends EntityRepository
         }
         return $data;
 
-
-        /*$entities = $sales->getInvoiceParticulars();
-        $data = '';
-        $i = 1;
-        foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
-            $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getParticular()->getCategory()->getName() . '</td>';
-            $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
-            $i++;
-        }
-        return $data;*/
     }
 
     public function invoiceParticularLists(Invoice $sales){
@@ -184,7 +163,18 @@ class InvoiceParticularRepository extends EntityRepository
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}. {$entity->getParticular()->getName()}</td>";
             $data .= "<td>{$entity->getSalesPrice()}</td>";
-            $data .= "<td><input type='number' name='quantity' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' id='quantity-{$entity->getId()}' class='form-control inline-m-wrap updateProduct' value='{$entity->getQuantity()}'></td>";
+            $data .= "<td><div class='input-append' style='margin-bottom: 0!important;'>
+                                                    <span class='input-group-btn'>
+  <a href='javascript:' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' class='btn yellow btn-number mini' data-type='minus' data-id='{$entity->getId()}'  data-text='{$entity->getId()}' data-title='{{ item.salesPrice }}'  data-field='quantity'>
+                                                            <span class='fa fa-minus'></span>
+                                                   </a>
+                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' disabled='disabled' id='quantity-{$entity->getId()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}' data-action='' min='1' max='1000'>
+                                                      <a href='javascript:' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' class='btn green btn-number mini'  data-type='plus' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-text='{$entity->getId()}' data-field='quantity'>
+                                                          <span class='fa fa-plus'></span>
+                                                  </a>
+                                                        </span>
+
+                                            </div></td>";
             $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
             $data .= "<td><a id='{$entity->getId()}' data-id='{$entity->getId()}'  data-url='/restaurant/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete'><i class='icon-trash'></i></a></td>";
             $data .= "</tr>";

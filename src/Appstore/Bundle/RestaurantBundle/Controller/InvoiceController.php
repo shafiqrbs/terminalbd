@@ -5,6 +5,7 @@ namespace Appstore\Bundle\RestaurantBundle\Controller;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantParticularType;
 use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
@@ -176,7 +177,6 @@ class InvoiceController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
 
-
     }
 
     public function invoiceParticularDeleteAction( $invoice, InvoiceParticular $particular){
@@ -223,7 +223,6 @@ class InvoiceController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
                 $entity->setCustomer($customer);
             }
-
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $due = $entity->getTotal() - $entity->getPayment();
@@ -231,8 +230,7 @@ class InvoiceController extends Controller
             $em->flush();
             if(!empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Delivered','Done'))) {
                 $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
-                $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
+                $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
             }
             return $this->redirect($this->generateUrl('restaurant_invoice'));
         }
@@ -274,7 +272,44 @@ class InvoiceController extends Controller
         $returnEntity =  $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($entity);
         $result = $this->returnResultData($returnEntity,$msg);
         return new Response(json_encode($result));
-        exit;
+
+    }
+
+    public function invoiceDiscountCouponAction(Request $request)
+    {
+
+        /* @var $config RestaurantConfig */
+
+        $em = $this->getDoctrine()->getManager();
+        $invoice = $request->request->get('invoice');
+        $discountCoupon = $request->request->get('discountCoupon');
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        /* @var $config RestaurantConfig */
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+       // $coupon = $this->getDoctrine()->getRepository('RestaurantBundle:Coupon')->getValidCouponCode($this->getUser()->getGlobalOption(),$discountCoupon);
+        $total = 0;
+        $discount = 0;
+        if($config->getDiscountType() == 'flat' and !empty($discountCoupon)){
+            $total = ($subTotal  - $config->getDiscountPercentage());
+        }elseif($config->getDiscountType() == 'percentage' and !empty($discountCoupon)){
+            $discount = ($subTotal * $config->getDiscountPercentage())/100;
+            $total = ($subTotal  - $discount);
+        }
+        if( $subTotal > $discount and $discount > 0 ){
+            $entity->setDiscountCoupon($discountCoupon);
+            $entity->setDiscount($discount);
+            $entity->setTotal($total);
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
+            $em->flush();
+            $msg = 'Discount added successfully';
+        }else{
+            $msg = 'Discount is not use properly';
+        }
+        $returnEntity =  $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($entity);
+        $result = $this->returnResultData($returnEntity,$msg);
+        return new Response(json_encode($result));
+
     }
 
     public function searchAction(Request $request)
@@ -313,7 +348,7 @@ class InvoiceController extends Controller
         $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
         $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
         return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-        exit;
+
     }
 
     public function showAction(Invoice $entity)
@@ -371,7 +406,7 @@ class InvoiceController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
+
     }
 
     public function deleteEmptyInvoiceAction()
@@ -388,7 +423,7 @@ class InvoiceController extends Controller
         $invoice = $request->request->get('invoice');
         $status = $em->getRepository('RestaurantBundle:Invoice')->checkTokenBooking($invoice,$tokenNo);
         echo $status;
-        exit;
+
     }
 
     public function reverseAction($invoice){
@@ -402,10 +437,9 @@ class InvoiceController extends Controller
         $entity->setRevised(true);
         $entity->setProcess('Revised');
         $entity->setRevised(true);
-        $entity->setTotal($entity->getSubTotal());
         $entity->setPaymentStatus('Due');
         $entity->setDiscount(null);
-        $entity->setDue($entity->getSubTotal());
+        $entity->setDue($entity->getTotal() - $entity->getPayment());
         $entity->setPaymentInWord(null);
         $em->flush();
         $template = $this->get('twig')->render('RestaurantBundle:Invoice:reverse.html.twig',array(

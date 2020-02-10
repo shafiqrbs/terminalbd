@@ -105,45 +105,9 @@ $(document).on('click', '.addProduct', function() {
     $.ajax({
         url: url,
         success: function (response) {
-            obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').val(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
+            setTimeout(jsonResult(response),100);
         }
     })
-});
-
-$(document).on('change', '.updateProduct', function() {
-    var url = $(this).attr('data-action');
-    var quantity = $(this).val();
-    if(quantity > 0 ){
-        $.ajax({
-            url: url,
-            type: 'get',
-            data: 'quantity='+quantity,
-            success: function (response) {
-                obj = JSON.parse(response);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#netTotal').val(obj['netTotal']);
-                $('.paymentAmount').html(obj['payment']);
-                $('.vat').val(obj['vat']);
-                $('.due').html(obj['due']);
-                $('#due').val(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
-            }
-        })
-    }
-
 });
 
 $('form#particularForm').on('keypress', 'input,select,textarea', function (e) {
@@ -171,47 +135,10 @@ $(document).on('click', '#addParticular', function() {
         type: 'POST',
         data: 'particularId='+particularId+'&quantity='+quantity+'&process=create',
         success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').val(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            setTimeout(jsonResult(response),100);
             $('#quantity').val('1');
             $("#restaurant_item_particular").select2().select2("val","").select2('open');
             $('.receiveBtn').attr("disabled", false);
-        }
-    })
-});
-
-$(document).on('click', '.addCart', function() {
-
-    var id = $(this).attr('data-text');
-    var price = parseInt($(this).attr('data-title'));
-    var particularId = $(this).attr('data-id');
-    var quantity = parseInt($('#quantity-'+id).val());
-    var subTotal = (price * quantity);
-    $('#subTotal-'+id).html('= '+subTotal);
-    var url = $(this).attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&process=update',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').val(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
         }
     })
 });
@@ -223,16 +150,7 @@ $(document).on("click", ".removeDiscount", function() {
         url: url,
         type: 'GET',
         success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-
+            setTimeout(jsonResult(response),100);
         }
     })
 });
@@ -245,15 +163,8 @@ $(document).on("click", ".particularDelete", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                obj = JSON.parse(data);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.due').html(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('.discount').val('').attr( "placeholder", obj['discount'] );
-                $('.total'+id).html(obj['total']);
-                $('#msg').html(obj['msg']);
+            $.get(url, function( response ) {bvvgf
+                setTimeout(jsonResult(response),100);
                 $('#remove-'+id).hide();
             });
         }
@@ -273,16 +184,7 @@ $(document).on('change', '#restaurant_invoice_discountType , #restaurant_invoice
         type: 'POST',
         data:'invoice=' + invoice+'&discount=' + discount+'&discountType='+discountType,
         success: function(response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.discount').html(obj['discount']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
+            setTimeout(jsonResult(response),100);
         }
     })
 });
@@ -290,28 +192,36 @@ $(document).on('change', '#restaurant_invoice_discountType , #restaurant_invoice
 $(document).on('change', '#restaurant_invoice_discountCoupon', function() {
 
     var discount = $('#restaurant_invoice_discountCoupon').val();
+    var invoice = $('#invoiceId').val();
     if(discount === "NaN"){
         return false;
     }
     $.ajax({
         url: Routing.generate('restaurant_temporary_discount_coupon'),
         type: 'POST',
-        data:'discount=' + discount,
+        data:'discount=' + discount+'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
+            setTimeout(jsonResult(response),100);
         }
     })
 });
 
+function jsonResult(response) {
 
+    obj = JSON.parse(response);
+    $('#invoiceParticulars').html(obj['invoiceParticulars']);
+    $('#subTotal').html(obj['subTotal']);
+    $('.netTotal').html(obj['netTotal']);
+    $('#netTotal').val(obj['netTotal']);
+    $('.payment').html(obj['payment']);
+    $('.vat').val(obj['vat']);
+    $('.due').html(obj['due']);
+    $('#due').val(obj['due']);
+    $('.discountAmount').html(obj['discount']);
+    $('.discount').val(obj['discount']).attr( "placeholder", obj['discount'] );
+
+}
 
 /*$(document).on("change", "#invoiceForm", function() {
 
@@ -340,6 +250,10 @@ $(document).on('change', '#restaurant_invoice_discountCoupon', function() {
 
 });*/
 
+$(document).on('click', '.payment', function() {
+    $(this).attr('value', '');
+});
+
 
 $(document).on('keyup', '#restaurant_invoice_payment', function() {
 
@@ -350,7 +264,7 @@ $(document).on('keyup', '#restaurant_invoice_payment', function() {
         $('#balance').html('Due Tk.');
         $('#dueable').html(dueAmount);
     }else{
-        var balance =  payment - due ;
+        var balance =  payment - netTotal;
         $('#balance').html('Return Tk.');
         $('#dueable').html(balance);
     }
@@ -372,6 +286,54 @@ $('#salesList').DataTable( {
     paging:         false,
     bInfo : false,
     bSort: false
+});
+
+$(document).on( "click", ".btn-number", function(e){
+
+    e.preventDefault();
+    url = $(this).attr('data-action');
+    var price = $(this).attr('data-title');
+    fieldId = $(this).attr('data-id');
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $('#quantity-'+fieldId);
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function( response ) {
+                        subTotal = (existVal * parseInt(price));
+                        $('#subTotal-'+fieldId).html(subTotal);
+                        setTimeout(jsonResult(response),100);
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function( response ) {
+                        subTotal = (existVal * parseInt(price));
+                        $('#subTotal-'+fieldId).html(subTotal);
+                        setTimeout(jsonResult(response),100);
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(1);
+    }
 });
 
 /*

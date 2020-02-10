@@ -41,6 +41,24 @@ function formSubmit() {
         $( ".customer" ).slideToggle( "slow" );
     });
 
+    $('#search').keyup(function(){
+
+        // Search text
+        var text = $(this).val();
+
+        // Hide all content class element
+        $('.product-content').hide();
+
+        // Search
+        $('.product-content .title').each(function(){
+
+            if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+                $(this).closest('.product-content').show();
+            }
+        });
+
+    });
+
 
     $(document).on('change', '.particular', function() {
         var id = $(this).val();

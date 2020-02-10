@@ -51,11 +51,11 @@ class InvoiceType extends AbstractType
                 'choices'   => array('flat' => 'Flat', 'percentage' => 'Percentage'),
                 'required'  => true,
             ))
-           /* ->add('process', 'choice', array(
+            ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'choices'   => array('Created' => 'Created','Hold' => 'Hold','Kitchen' => 'Kitchen','Paid' => 'Paid','Delivered' => 'Delivered','Done' => 'Done','Canceled' => 'Canceled'),
+                'choices'   => array('Created' => 'Created','Hold' => 'Hold','Kitchen' => 'Kitchen','Delivered' => 'Delivered','Done' => 'Done','Canceled' => 'Canceled','Revised' => 'Revised'),
                 'required'  => true,
-            ))*/
+            ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
