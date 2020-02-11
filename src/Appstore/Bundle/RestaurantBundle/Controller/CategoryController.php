@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         $entity = new Category();
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config),array('sorting'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -109,7 +109,7 @@ class CategoryController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config),array('sorting'=>'ASC'));
         $entity = $em->getRepository('RestaurantBundle:Category')->find($id);
 
@@ -152,7 +152,7 @@ class CategoryController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $pagination = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config),array('sorting'=>'ASC'));
         $entity = $em->getRepository('RestaurantBundle:Category')->find($id);
 
