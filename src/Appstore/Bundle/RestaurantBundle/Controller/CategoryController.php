@@ -166,6 +166,7 @@ class CategoryController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $entity->setSlug($entity->getName());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

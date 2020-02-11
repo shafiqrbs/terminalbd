@@ -4,6 +4,7 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * RestaurantCategory
@@ -44,12 +45,14 @@ class Category
      */
     private $name;
 
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="slug", type="string", length=50, nullable=true)
+     * @Gedmo\Slug(fields={"name"})
+     * @Doctrine\ORM\Mapping\Column(length=255)
      */
     private $slug;
+
+
 
     /**
      * @var string
