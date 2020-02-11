@@ -81,7 +81,7 @@ class AccountSales
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Sales", inversedBy="accountSales" )
-     * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     * @ORM\JoinColumn(name="assets_sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $assetsSales;
 

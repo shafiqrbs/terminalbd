@@ -756,22 +756,11 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 
     public function removeApprovedAccountPurchase(Purchase $purchase)
     {
-
+        $em = $this->_em;
         $accountPurchase = $purchase->getAccountPurchase();
         if(!empty($accountPurchase)) {
-            $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead' => 'Purchase', 'globalOption' => $accountPurchase->getGlobalOption(), 'accountRefNo' => $accountPurchase->getAccountRefNo()));
-            if ($accountCash) {
-                $this->_em->remove($accountCash);
-                $this->_em->flush();
-            }
-            $transactions = $this->_em->getRepository('AccountingBundle:Transaction')->findBy(array('processHead' => 'Purchase', 'globalOption' => $accountPurchase->getGlobalOption(), 'accountRefNo' => $accountPurchase->getAccountRefNo()));
-            foreach ($transactions as $transaction) {
-                if ($transaction) {
-                    $this->_em->remove($transaction);
-                    $this->_em->flush();
-                }
-            }
-
+            $em->remove($accountPurchase);
+            $em->flush();
         }
 
     }
@@ -779,20 +768,9 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
     public function accountPurchaseReverse(Purchase $entity)
     {
         $em = $this->_em;
-        if($entity->getAccountPurchase()){
-            /* @var AccountPurchase $purchase */
-            foreach ($entity->getAccountPurchase() as $purchase ){
-                $globalOption = $purchase->getGlobalOption()->getId();
-                $accountRefNo = $purchase->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
-                $transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Purchase'");
-                $accountCash->execute();
-            }
-        }
-        $purchase = $em->createQuery('DELETE AccountingBundle:AccountPurchase e WHERE e.purchase = '.$entity->getId());
-        if(!empty($purchase)){
-            $purchase->execute();
+        $remove = $em->createQuery("DELETE AccountingBundle:AccountPurchase e WHERE e.purchase ={$entity->getId()}");
+        if($remove){
+            $remove->execute();
         }
     }
 

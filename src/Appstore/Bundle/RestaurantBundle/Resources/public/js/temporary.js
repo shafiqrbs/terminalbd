@@ -227,6 +227,8 @@ function formSubmit() {
             },
             success     : function(response){
                 $('form#invoiceForm')[0].reset();
+                $('.initialVat').html('');
+                $('#subTotal').html('');
                 $('#restaurant_invoice_vat').val(0);
                 $('#restaurant_invoice_payment').val(0);
                 $('#posButton').html("<i class='icon-print'></i> POS Print").attr('disabled','disabled');

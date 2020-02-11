@@ -238,17 +238,17 @@ function InventoryPurchasePage(){
     });
 
 
-    $("form#purchaseForm").validate({
+    $("form#purchaseFormxxx").validate({
 
         rules: {
 
             "purchase[vendor]": {required: true},
-            "purchase[memo]": {required: true},
+            "purchase[memo]": {required: false},
             "purchase[totalItem]": {required: false},
             "purchase[totalQnt]": {required: false},
             "purchase[totalAmount]": {required: true},
             "purchase[dueAmount]": {required: false},
-            "purchase[paymentAmount]": {required: true},
+            "purchase[paymentAmount]": {required: false},
             "purchase[accountBank]": {required: false},
             "purchase[accountMobileBank]": {required: false},
             "purchase[file]": {required: false},
@@ -259,7 +259,6 @@ function InventoryPurchasePage(){
             "purchase[vendor]":"Enter vendor name",
             "purchase[memo]":"Enter memo or invoice no",
             "purchase[receiveDate]":"Enter receive date",
-            "purchase[paymentAmount]":"Enter payment amount",
         },
 
         tooltip_options: {
@@ -269,8 +268,6 @@ function InventoryPurchasePage(){
             "purchase[totalItem]": {placement:'top',html:true},
             "purchase[totalQnt]": {placement:'top',html:true},
             "purchase[totalAmount]": {placement:'top',html:true},
-            "purchase[paymentAmount]": {placement:'top',html:true}
-
         }
 
     });

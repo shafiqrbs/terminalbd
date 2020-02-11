@@ -715,21 +715,6 @@ class AccountSalesRepository extends EntityRepository
 	public function accountSalesReverse(Sales $entity)
 	{
 		$em = $this->_em;
-		if(!empty($entity->getAccountSales())){
-			/* @var AccountSales $sales*/
-			foreach ($entity->getAccountSales() as $sales ){
-				$globalOption = $sales->getGlobalOption()->getId();
-				$accountRefNo = $sales->getAccountRefNo();
-				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				if($transaction){
-                    $transaction->execute();
-                }
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
-                if($accountCash){
-                    $accountCash->execute();
-                }
-			}
-		}
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.sales = '.$entity->getId());
 		if(!empty($accountCash)){
 			$accountCash->execute();
@@ -934,19 +919,6 @@ class AccountSalesRepository extends EntityRepository
 	public function accountMedicineSalesReverse(MedicineSales $entity)
 	{
 		$em = $this->_em;
-		if(!empty($entity->getAccountSales())){
-			/* @var AccountSales $sales*/
-			foreach ($entity->getAccountSales() as $sales ){
-				$globalOption = $sales->getGlobalOption()->getId();
-				$accountRefNo = $sales->getAccountRefNo();
-				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				$transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
-                if($accountCash){
-                    $accountCash->execute();
-                }
-			}
-		}
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.medicineSales = '.$entity->getId());
 		if(!empty($accountCash)){
 			$accountCash->execute();
@@ -1014,25 +986,6 @@ class AccountSalesRepository extends EntityRepository
 	public function accountBusinessSalesReverse(BusinessInvoice $entity)
 	{
 		$em = $this->_em;
-		if(!empty($entity->getAccountSales())){
-
-			/* @var AccountSales $sales */
-
-			foreach ($entity->getAccountSales() as $sales ){
-
-				$globalOption = $sales->getGlobalOption()->getId();
-				$accountRefNo = $sales->getAccountRefNo();
-				$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-				if($transaction){
-                    $transaction->execute();
-                }
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountSales ={$sales->getId()} AND e.processHead = 'Sales'");
-                if($accountCash){
-                    $accountCash->execute();
-                }
-
-			}
-		}
 		$accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.businessInvoice = '.$entity->getId());
 		if(!empty($accountCash)){
 			$accountCash->execute();
@@ -1121,9 +1074,7 @@ class AccountSalesRepository extends EntityRepository
 	public function accountReverse(AccountSales $entity)
 	{
 		$em = $this->_em;
-		$transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$entity->getGlobalOption()->getId()}AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.processHead = 'Sales'");
-		$transaction->execute();
-		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.accountSales ={$entity->getId()} AND e.processHead = 'Sales'");
+		$accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.accountSales = {$entity->getId()}");
 		$accountCash->execute();
 	}
 
@@ -1136,13 +1087,8 @@ class AccountSalesRepository extends EntityRepository
         $entity = $this->findOneBy(array('globalOption'=>$adjustment->getGlobalOption(),'sourceInvoice'=>$adjustment->getAccountRefNo(),'processHead'=>'Sales-adjustment'));
         if($entity){
             $em = $this->_em;
-            $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.processHead = 'Sales'");
-            $transaction->execute();
-            $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.accountSales ={$entity->getId()} AND e.processHead = 'Sales'");
-            $accountCash->execute();
             $em->remove($entity);
             $em->flush();
-
         }
 
 

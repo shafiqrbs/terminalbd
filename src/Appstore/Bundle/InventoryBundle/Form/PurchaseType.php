@@ -33,7 +33,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'vendorWithCode',
-                'attr'=>array('class'=>'span12 m-wrap purchaseInput'),
+                'attr'=>array('class'=>'span12 select2 m-wrap purchaseInput'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
@@ -82,10 +82,7 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add  memo no'))
-            )))
+            ->add('memo','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no')))
 
             ->add('receiveDate', 'date', array(
                 'attr' => array('class'=>'m-wrap span12 purchaseInput'),
@@ -95,10 +92,7 @@ class PurchaseType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total amount BDT'))
                 )))
-            ->add('paymentAmount','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 numeric','placeholder'=>'Net payment amount BDT'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add payment amount BDT'))
-                )))
+            ->add('paymentAmount','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 numeric','placeholder'=>'Net payment amount BDT')))
             ->add('dueAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Due amount BDT')))
             ->add('totalQnt','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'No of Qnt'),
                 'constraints' =>array(

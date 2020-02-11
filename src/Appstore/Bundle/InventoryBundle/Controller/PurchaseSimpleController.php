@@ -217,10 +217,8 @@ class PurchaseSimpleController extends Controller
         if($purchase->getAsInvestment() == 1){
             $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
         }
-        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase);
-        $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($purchase,$accountPurchase);
+        $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase);
         return new Response(json_encode(array('success'=>'success')));
 
     }
@@ -342,7 +340,6 @@ class PurchaseSimpleController extends Controller
             if($entity->getAsInvestment() == 1){
                 $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($entity);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
             }
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity);
             $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase);
@@ -375,19 +372,6 @@ class PurchaseSimpleController extends Controller
         $em->remove($purchase);
         $em->flush();
         return $this->redirect($this->generateUrl('purchase'));
-
-        /*
-         * Item Remove Total quantity
-         * Stock Details
-         * Purchase Item
-         * Purchase Vendor Item
-         * Purchase
-         * Account Purchase
-         * Account Journal
-         * Transaction
-         * Delete Journal & Account Purchase
-         *
-         * */
     }
 
 
