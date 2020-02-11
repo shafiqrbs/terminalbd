@@ -2,6 +2,10 @@
     position:inherit;
 }
 
+.tabbable-custom .nav-tabs > li{
+    height: 34px!important;
+}
+
 .dropdown-menu .divider{
     margin: 0;
 }
