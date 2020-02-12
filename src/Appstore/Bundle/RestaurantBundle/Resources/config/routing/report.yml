@@ -6,9 +6,17 @@ restaurant_report_sales_details:
     path:     /sales-details
     defaults: { _controller: "RestaurantBundle:Report:salesDetails" }
 
-restaurant_report_sales_service:
-    path:     /service-wise-sales
-    defaults: { _controller: "RestaurantBundle:Report:serviceBaseSummary" }
+restaurant_report_sales_user:
+    path:     /user-wise-sales
+    defaults: { _controller: "RestaurantBundle:Report:userBaseSalesSummary" }
+
+restaurant_report_sales_category:
+    path:     /category-wise-sales
+    defaults: { _controller: "RestaurantBundle:Report:categoryBaseSalesSummary" }
+
+restaurant_report_sales_product:
+    path:     /product-wise-sales
+    defaults: { _controller: "RestaurantBundle:Report:productBaseSalesSummary" }
 
 restaurant_report_purchase_summary:
     path:     /purchase-summary
@@ -16,5 +24,5 @@ restaurant_report_purchase_summary:
 
 restaurant_report_stock:
     path:     /stock-summary
-    defaults: { _controller: "RestaurantBundle:Report:purchaseSummary" }
+    defaults: { _controller: "RestaurantBundle:Report:stock" }
 

@@ -10,6 +10,7 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -42,58 +43,141 @@ class ReportController extends Controller
 
         $user = $this->getUser();
 
-        $salesTotalTransactionOverview = $em->getRepository('RestaurantBundle:InvoiceTransaction')->todaySalesOverview($user,$data);
-        $salesTransactionOverview = $em->getRepository('RestaurantBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true');
-        $previousSalesTransactionOverview = $em->getRepository('RestaurantBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false');
+        $salesTotalTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data);
 
-        $diagnosticOverview = $em->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'diagnostic');
-        $admissionOverview = $em->getRepository('RestaurantBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
-        $serviceOverview = $em->getRepository('RestaurantBundle:Invoice')->findWithServiceOverview($user,$data);
-        $transactionOverview = $em->getRepository('RestaurantBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
-        $commissionOverview = $em->getRepository('RestaurantBundle:Invoice')->findWithCommissionOverview($user,$data);
+        $salesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'true');
 
-        return $this->render('RestaurantBundle:Report:salesSumary.html.twig', array(
+        $previousSalesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'false');
 
-            'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
-            'salesTransactionOverview'      => $salesTransactionOverview,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'diagnosticOverview'            => $diagnosticOverview,
-            'admissionOverview'             => $admissionOverview,
-            'serviceOverview'               => $serviceOverview,
-            'transactionOverview'           => $transactionOverview,
-            'commissionOverview'            => $commissionOverview,
-            'searchForm'                    => $data,
+        $transactionOverview = $em->getRepository('RestaurantBundle:Invoice')->transactionBaseOverview($user,$data);
 
-        ));
+        $userSalesOverview = $em->getRepository('RestaurantBundle:Invoice')->userSalesOverview($user,$data);
+
+        $categoryOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithCategoryOverview($user,$data);
+
+        $productOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductOverview($user,$data);
+
+
+        if(empty($data['pdf'])){
+
+            return $this->render('RestaurantBundle:Report:salesSummary.html.twig', array(
+
+                'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
+                'salesTransactionOverview'      => $salesTransactionOverview,
+                'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+                'transactionOverview' => $transactionOverview,
+                'userSalesOverview'            => $userSalesOverview,
+                'categoryOverview'            => $categoryOverview,
+                'productOverview'             => $productOverview,
+                'searchForm'                    => $data,
+
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'RestaurantBundle:Report:salesSummaryPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
+                    'salesTransactionOverview'      => $salesTransactionOverview,
+                    'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+                    'transactionOverview' => $transactionOverview,
+                    'categoryOverview'            => $categoryOverview,
+                    'productOverview'             => $productOverview,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-summary.pdf');
+        }
 
     }
-public function serviceBaseSummaryAction()
+    public function userBaseSalesSummaryAction()
     {
-
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        $userSalesOverview = $em->getRepository('RestaurantBundle:Invoice')->userSalesOverview($user,$data);
 
-        $user = $this->getUser();
-        $entity = '';
-        if(!empty($data) and $data['service']){
-            $entity = $em->getRepository('RestaurantBundle:Service')->find($data['service']);
+        if(empty($data['pdf'])){
+
+            return $this->render('RestaurantBundle:Report:userSummary.html.twig', array(
+                'userSalesOverview'          => $userSalesOverview,
+                'searchForm'            => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'RestaurantBundle:Report:userSummaryPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'userSalesOverview'          => $userSalesOverview,
+                    'searchForm'            => $data,
+                )
+            );
+            $this->downloadPdf($html,'user-sales-summary.pdf');
         }
-        $services = $em->getRepository('RestaurantBundle:Service')->findBy(array(),array('name'=>'ASC'));
-        $serviceOverview = $em->getRepository('RestaurantBundle:Invoice')->findWithServiceOverview($user,$data);
-        $serviceGroup = $em->getRepository('RestaurantBundle:InvoiceParticular')->serviceParticularDetails($user,$data);
-        return $this->render('RestaurantBundle:Report:serviceBaseSales.html.twig', array(
-            'serviceOverview'       => $serviceOverview,
-            'serviceGroup'          => $serviceGroup,
-            'services'              => $services,
-            'entity'                => $entity,
-            'searchForm'            => $data,
-        ));
 
     }
 
-    
+     public function categoryBaseSalesSummaryAction()
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $categoryOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithCategoryOverview($user,$data);
+        if(empty($data['pdf'])){
+            return $this->render('RestaurantBundle:Report:categorySummary.html.twig', array(
+                'categoryOverview'          => $categoryOverview,
+                'searchForm'            => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'RestaurantBundle:Report:categorySummaryPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'categoryOverview'          => $categoryOverview,
+                    'searchForm'            => $data,
+                )
+            );
+            $this->downloadPdf($html,'category-sales-summary.pdf');
+        }
 
+    }
 
+    public function productBaseSalesSummaryAction()
+    {
+
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $productOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductOverview($user,$data);
+        if(empty($data['pdf'])){
+            return $this->render('RestaurantBundle:Report:productSummary.html.twig', array(
+                'productOverview'          => $productOverview,
+                'searchForm'            => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'RestaurantBundle:Report:productSummaryPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'productOverview'          => $productOverview,
+                    'searchForm'            => $data,
+                )
+            );
+            $this->downloadPdf($html,'product-sales-summary.pdf');
+        }
+
+    }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
 
 }
 

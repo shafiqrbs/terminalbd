@@ -335,8 +335,9 @@ class MedicineSalesTemporaryController extends Controller
         }
         $printer -> feed();
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer->setFont(Printer::FONT_B);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> text("---------------------------------------------------------------\n");
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(false);
@@ -346,7 +347,6 @@ class MedicineSalesTemporaryController extends Controller
             /* @var $row MedicineSalesItem */
             foreach ($invoiceParticulars as $row){
                 $qnt = sprintf("%s", str_pad($row->getQuantity(),2, '0', STR_PAD_LEFT));
-                $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
                 if($row->getMedicineStock()->getMedicineBrand()){
                     $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getMedicineBrand()->getName(),$qnt,number_format($row->getSubTotal())));
                 }else{
@@ -355,7 +355,7 @@ class MedicineSalesTemporaryController extends Controller
                 $i++;
             }
         }
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("---------------------------------------------------------------\n");
     //    $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
@@ -369,7 +369,7 @@ class MedicineSalesTemporaryController extends Controller
             $printer->text($vat);
             $printer->setEmphasis(false);
         }*/
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("---------------------------------------------------------------\n");
         $printer->text($discount);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );

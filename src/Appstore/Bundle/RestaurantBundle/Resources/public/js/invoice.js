@@ -18,7 +18,7 @@ $('#search').keyup(function(){
     $('.product-content').hide();
 
     // Search
-    $('.product-content .title').each(function(){
+    $('.product-content .cta-title').each(function(){
 
         if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
             $(this).closest('.product-content').show();

@@ -372,6 +372,13 @@ class RestaurantConfig
      */
     private $kitchenPrint = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tablePlan", type="boolean",  nullable=true)
+     */
+    private $tablePlan = false;
+
 
     /**
      * Get id
@@ -1133,6 +1140,22 @@ class RestaurantConfig
     public function setSalesMode($salesMode)
     {
         $this->salesMode = $salesMode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTablePlan()
+    {
+        return $this->tablePlan;
+    }
+
+    /**
+     * @param bool $tablePlan
+     */
+    public function setTablePlan($tablePlan)
+    {
+        $this->tablePlan = $tablePlan;
     }
 
 

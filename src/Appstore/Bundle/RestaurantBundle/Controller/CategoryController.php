@@ -145,6 +145,7 @@ class CategoryController extends Controller
         ));
         return $form;
     }
+
     /**
      * Edits an existing Category entity.
      *

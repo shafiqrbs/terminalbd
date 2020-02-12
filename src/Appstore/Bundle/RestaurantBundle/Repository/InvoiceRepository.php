@@ -188,10 +188,10 @@ class InvoiceRepository extends EntityRepository
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
-       // $this->handleSearchBetween($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $this->handleDateRangeFind($qb,$data);
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Released','Death','Dead'));
+        $qb->setParameter('process', array('Done','Delivered'));
         $result = $qb->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
@@ -227,47 +227,39 @@ class InvoiceRepository extends EntityRepository
         return $data;
     }
 
-    public function findWithServiceOverview(User $user, $data)
+    public function transactionBaseOverview(User $user, $data)
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->leftJoin('e.invoiceParticulars','ip');
-        $qb->leftJoin('ip.particular','p');
-        $qb->leftJoin('p.service','s');
-        $qb->select('sum(ip.subTotal) as subTotal');
-        $qb->addSelect('s.name as serviceName');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->select('sum(e.total) as amount');
+        $qb->addSelect('t.name as name');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death','Released','Dead'));
+        $qb->setParameter('process', array('Done','Delivered'));
         $this->handleDateRangeFind($qb,$data);
-        $qb->groupBy('s.id');
+        $qb->groupBy('t.id');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
-    public function findWithTransactionOverview(User $user, $data)
+    public function userSalesOverview(User $user, $data)
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->leftJoin('ip.transactionMethod','p');
-        $qb->select('sum(ip.payment) as paymentTotal');
-        $qb->addSelect('p.name as transName');
+        $qb->leftJoin('e.salesBy','u');
+        $qb->leftJoin('u.profile','p');
+        $qb->select('sum(e.total) as amount');
+        $qb->addSelect('p.name as name');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->setParameter('process', array('Done','Delivered'));
         $this->handleDateRangeFind($qb,$data);
-        $qb->groupBy('p.id');
+        $qb->groupBy('u.id');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
+
 
     public function findWithCommissionOverview(User $user, $data)
     {
@@ -279,8 +271,6 @@ class InvoiceRepository extends EntityRepository
             $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
-
-
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.doctorInvoices','ip');
@@ -298,8 +288,6 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("ip.updated <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
-
-        $qb->groupBy('ip.assignDoctor');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

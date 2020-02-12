@@ -33,12 +33,12 @@ class InvoiceParticularRepository extends EntityRepository
         }
 
         if (!empty($data['startDate'])) {
-            $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            $qb->andWhere("i.created >= :startDate");
+            $qb->setParameter('startDate', "{$data['startDate']} 00:00:00");
         }
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+            $qb->andWhere("i.created <= :endDate");
+            $qb->setParameter('endDate', "{$data['endDate']} 23:59:59");
         }
     }
 
@@ -52,6 +52,47 @@ class InvoiceParticularRepository extends EntityRepository
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
+
+    public function findWithCategoryOverview(User $user, $data)
+    {
+
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoice','i');
+        $qb->leftJoin('e.particular','p');
+        $qb->leftJoin('p.category','c');
+        $qb->select('sum(e.subTotal) as amount');
+        $qb->addSelect('SUM(e.quantity) as quantity');
+        $qb->addSelect('c.name as categoryName');
+        $qb->where('i.restaurantConfig = :config')->setParameter('config', $config);
+        $qb->andWhere("i.process IN (:process)");
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('c.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function findWithProductOverview(User $user, $data)
+    {
+
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoice','i');
+        $qb->leftJoin('e.particular','p');
+        $qb->select('sum(e.subTotal) as amount');
+        $qb->addSelect('p.name as productName');
+        $qb->addSelect('p.price as price');
+        $qb->addSelect('SUM(e.quantity) as quantity');
+        $qb->where('i.restaurantConfig = :config')->setParameter('config', $config);
+        $qb->andWhere("i.process IN (:process)");
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('p.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
 
     public function initialInvoiceItems(User $user, Invoice $invoice)
     {

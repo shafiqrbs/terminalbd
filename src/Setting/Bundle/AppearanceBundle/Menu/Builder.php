@@ -220,32 +220,32 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
 
         if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE')) {
-	        $menu[$business]->addChild('Manage Invoice')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-            $menu[$business]['Manage Invoice']->addChild('Add Invoice', array('route' => 'business_invoice_new'))
+	        $menu[$business]->addChild('Sales')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+            $menu[$business]['Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
                 ->setAttribute('icon', 'icon-plus-sign');
-            $menu[$business]['Manage Invoice']->addChild('Invoice', array('route' => 'business_invoice'))
+            $menu[$business]['Sales']->addChild('Invoice', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
 	        if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')){
-		        $menu[$business]['Manage Invoice']->addChild( 'Reports' )
+		        $menu[$business]['Sales']->addChild( 'Reports' )
 		                                             ->setAttribute( 'icon', 'icon icon-bar-chart' )
 		                                             ->setAttribute( 'dropdown', true );
-		        $menu[$business]['Manage Invoice']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )
+		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )
 		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Manage Invoice']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )
+		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )
 		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Manage Invoice']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )
+		        $menu[$business]['Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )
 		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Manage Invoice']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )                              ->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Manage Invoice']['Reports']->addChild( 'User wise Invoice', array( 'route' => 'business_report_sales_user' ) )
+		        $menu[$business]['Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )                              ->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Sales']['Reports']->addChild( 'User wise Invoice', array( 'route' => 'business_report_sales_user' ) )
                     ->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Manage Invoice']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )
+                $menu[$business]['Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )
                     ->setAttribute( 'icon', 'icon-th-list' );
 	        }
 	    }
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
         if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
-            $menu[$business]->addChild('Manage Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Sales', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
                 $menu[$business]->addChild( 'Association Reports' )
                     ->setAttribute( 'icon', 'icon icon-bar-chart' )
@@ -1520,14 +1520,19 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Restaurant']['Reports']->addChild('Sales Summary', array('route' => 'restaurant_report_sales_summary'))
             ->setAttribute('icon', 'icon-th-list');
+        /*
+        $menu['Restaurant']['Reports']->addChild('Purchase Summary', array('route' => 'restaurant_report_purchase_summary'))
+            ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Reports']->addChild('Sales Details', array('route' => 'restaurant_report_sales_details'))
+            ->setAttribute('icon', 'icon-th-list');*/
+        $menu['Restaurant']['Reports']->addChild('User Wise Sales', array('route' => 'restaurant_report_sales_user'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Reports']->addChild('Product Wise Sales', array('route' => 'restaurant_report_sales_service'))
+        $menu['Restaurant']['Reports']->addChild('Product Wise Sales', array('route' => 'restaurant_report_sales_product'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Reports']->addChild('Stock Wise Sales', array('route' => 'restaurant_report_sales_service'))
+        $menu['Restaurant']['Reports']->addChild('Stock Wise Sales', array('route' => 'restaurant_report_sales_product'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
-            ->setAttribute('icon', 'icon-th-list');
+ /*       $menu['Restaurant']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
+            ->setAttribute('icon', 'icon-th-list');*/
         }
         return $menu;
 

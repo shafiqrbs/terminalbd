@@ -26,6 +26,7 @@ class ConfigType extends AbstractType
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span11','rows'=>5,'placeholder'=> "Enter office/store address")))
              ->add('invoiceNote','textarea',array('attr'=>array('class'=>'m-wrap span11','rows' => 3,'placeholder'=> "Enter invoice notes")))
             ->add('vatEnable')
+            ->add('tablePlan')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')

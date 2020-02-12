@@ -38,6 +38,7 @@ class RestaurantTemporaryController extends Controller
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
         $initialTotal = ($subTotal + $vat);
         $html = $this->renderView('RestaurantBundle:Invoice:gridPos.html.twig', array(
+            'config'     => $config,
             'temporarySubTotal'     => $subTotal,
             'initialVat'            => $vat,
             'initialTotal'            => $initialTotal,
@@ -96,12 +97,17 @@ class RestaurantTemporaryController extends Controller
         $form = $this->createTemporaryForm($entity);
         $form->handleRequest($request);
         $entity->setRestaurantConfig($config);
-        $entity->setTableNos($tableNos);
+        if($tableNos){
+            $entity->setTableNos($tableNos);
+        }
+        if(empty($entity->getSalesBy())){
+            $entity->setSalesBy($this->getUser());
+        }
         $entity->setPaymentStatus('Pending');
         $entity->setSubTotal($subTotal);
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $entity->setVat($vat);
-        $total = round($subTotal - $entity->getDiscount() + $entity->getVat());
+        $total = round(($subTotal - $entity->getDiscount()) + $entity->getVat());
         $entity->setTotal($total);
         if ($entity->getTotal() > 0) {
             $entity->setProcess('Done');
