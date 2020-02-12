@@ -19,14 +19,10 @@ class InvoiceListener
 
         // perhaps you only want to act on some "Sales" entity
         if ($entity instanceof Invoice) {
-
-
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
-
-
+            $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),6, '0', STR_PAD_LEFT)));
         }
     }
 
