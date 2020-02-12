@@ -447,7 +447,16 @@ class InvoiceController extends Controller
         ));
         $em->getRepository('RestaurantBundle:Reverse')->insertInvoice($entity,$template);
         return $this->redirect($this->generateUrl('restaurant_invoice_edit',array('id'=>$entity->getId())));
+    }
 
+    public function reverseShowAction($invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Reverse')->findOneBy(array('restaurantConfig'=>$config,'invoice' => $invoice));
+        return $this->render('RestaurantBundle:Invoice:reverse.html.twig', array(
+            'entity' => $entity,
+        ));
     }
 
     public function PosPrintAction(Request $request,$invoice)
@@ -458,6 +467,8 @@ class InvoiceController extends Controller
         $response = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->posPrint($entity);
         return new Response($response);
     }
+
+
 
     public function approvedOrder(Invoice $entity,$data)
     {

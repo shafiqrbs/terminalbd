@@ -76,6 +76,10 @@ restaurant_invoice_reverse:
     path:     /{invoice}/sales-reverse
     defaults: { _controller: "RestaurantBundle:Invoice:reverse" }
 
+restaurant_invoice_reverse_show:
+    path:     /{invoice}/sales-reverse-show
+    defaults: { _controller: "RestaurantBundle:Invoice:reverseShow" }
+
 
 
 restaurant_invoice_empty_delete:

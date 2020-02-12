@@ -1,36 +1,3 @@
-$(document).on("click", "#receiveBtn", function() {
-
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data : $('.form-horizontal').serialize(),
-                success: function (response) {
-                    jsPostPrint(response);
-                    setTimeout(pageRedirect(), 3000);
-                }
-            })
-        }
-    });
-});
-
-$(document).on("click", "#saveBtn", function() {
-    var url = $(this).attr('data-url');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( response ) {
-                setTimeout(pageRedirect(),3000);
-            });
-        }
-    });
-});
-
 $(document).on("click", "#kitchenBtn", function() {
     var url = $(this).attr('data-url');
     $('#confirm-content').confirmModal({
@@ -44,8 +11,6 @@ $(document).on("click", "#kitchenBtn", function() {
         }
     });
 });
-
-
 
 $(document).on("click", ".paymentReceive", function() {
     var url = $(this).attr('data-url');
@@ -61,8 +26,6 @@ $(document).on("click", ".paymentReceive", function() {
         }
     });
 });
-
-
 
 function pageRedirect() {
     window.location.href = "/restaurant/invoice/new";

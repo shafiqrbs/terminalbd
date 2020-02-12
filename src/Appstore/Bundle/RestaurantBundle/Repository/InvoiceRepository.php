@@ -110,7 +110,7 @@ class InvoiceRepository extends EntityRepository
 
     public function handleDateRangeFind($qb,$data)
     {
-        if(empty($data)){
+        if(empty($data['startDate']) and empty($data['endDate'])){
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
@@ -301,6 +301,7 @@ class InvoiceRepository extends EntityRepository
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
+        $this->handleDateRangeFind($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
