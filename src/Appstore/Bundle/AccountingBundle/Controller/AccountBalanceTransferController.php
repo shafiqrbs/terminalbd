@@ -156,7 +156,6 @@ class AccountBalanceTransferController extends Controller
             }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->balanceTransferAccountCash($entity,'BalanceTransfer');
-          //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountBalanceTransferTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -192,7 +191,6 @@ class AccountBalanceTransferController extends Controller
             throw $this->createNotFoundException('Unable to find AccountBalanceTransfer entity.');
         }
         $em->remove($entity);
-        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->approvedDeleteRecord($entity,'BalanceTransfer');
         $em->flush();
         return new Response('success');
         exit;
