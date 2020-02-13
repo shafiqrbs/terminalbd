@@ -115,6 +115,9 @@
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>
                                         {% endfor %}
+                                        <tr><td colspan="5" class="text-right">Total</td><th>{{ entity.netTotal|number_format(2) }}</th></tr>
+                                        <tr><td colspan="5" class="text-right">Payment</td><th>{{ entity.payment|number_format(2) }}</th></tr>
+                                        <tr><td colspan="5" class="text-right">Due</td><th>{{ entity.due|number_format(2) }}</th></tr>
                                         </tbody>
                                     </table>
                                 {% endif %}
