@@ -67,19 +67,6 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('deliveryDate', $created.'%');
         }
 
-        if(!empty($commission)){
-            $qb->andWhere("e.hmsCommission = :commission");
-            $qb->setParameter('commission', $commission);
-        }
-        if(!empty($assignDoctor)){
-            $qb->andWhere("e.assignDoctor = :assignDoctor");
-            $qb->setParameter('assignDoctor', $assignDoctor);
-        }
-
-        if(!empty($referred)){
-            $qb->andWhere("e.referredDoctor = :referredDoctor");
-            $qb->setParameter('referredDoctor', $referred);
-        }
 
         if(!empty($process)){
             $qb->andWhere("e.process = :process");
@@ -91,25 +78,11 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('transactionMethod', $transactionMethod);
         }
 
-        if(!empty($service)){
-            $qb->andWhere("e.service = :service");
-            $qb->setParameter('service', $service);
-        }
-
-        if(!empty($cabin)){
-            $qb->andWhere("e.cabin = :cabin");
-            $qb->setParameter('cabin', $cabin);
-        }
-        if(!empty($cabinGroup)){
-            $qb->leftJoin('e.cabin','cabin');
-            $qb->leftJoin('cabin.serviceGroup','sg');
-            $qb->andWhere("sg.id = :cabinGroup");
-            $qb->setParameter('cabinGroup', $cabinGroup);
-        }
     }
 
     public function handleDateRangeFind($qb,$data)
     {
+
         if(empty($data['startDate']) and empty($data['endDate'])){
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
