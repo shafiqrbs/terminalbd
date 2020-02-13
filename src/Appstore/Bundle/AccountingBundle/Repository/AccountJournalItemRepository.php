@@ -22,6 +22,56 @@ use Doctrine\ORM\EntityRepository;
  */
 class AccountJournalItemRepository extends EntityRepository
 {
+
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        if(!empty($data))
+        {
+
+            $accountHead = isset($data['accountHead']) ? $data['accountHead'] :'';
+            $accountSubHead = isset($data['accountSubHead']) ? $data['accountSubHead'] :'';
+            $startDate = isset($data['startDate']) ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
+
+
+            if (!empty($toUser)) {
+                $qb->join('e.toUser','u');
+                $qb->andWhere("u.username = :toUser");
+                $qb->setParameter('toUser', $toUser);
+            }
+
+            if (!empty($accountHead)) {
+                $qb->andWhere("e.accountHead = :accountHead");
+                $qb->setParameter('accountHead', $accountHead);
+            }
+
+            if (!empty($accountSubHead)) {
+                $qb->andWhere("e.accountSubHead = :accountSubHead");
+                $qb->setParameter('accountSubHead', $accountSubHead);
+            }
+
+            if (!empty($startDate) ) {
+                $datetime = new \DateTime($data['startDate']);
+                $startDate = $datetime->format('Y-m-d 00:00:00');
+                $qb->andWhere("j.created >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+            }
+
+            if (!empty($endDate)) {
+                $datetime = new \DateTime($data['endDate']);
+                $date = $datetime->format('Y-m-d 23:59:59');
+                $qb->andWhere("j.created <= :endDate");
+                $qb->setParameter('endDate', $date);
+            }
+        }
+    }
+
     public function insertDoubleEntry(AccountJournal $journal, $data)
     {
         $em = $this->_em;
@@ -54,5 +104,27 @@ class AccountJournalItemRepository extends EntityRepository
            }
 
         endforeach;
+    }
+
+
+    public function findDoubleEntrySearch(User $user,$data = '')
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.debit','e.credit','e.narration');
+        $qb->addSelect('j.created','j.accountRefNo');
+        $qb->addSelect('h.name accountHead');
+        $qb->addSelect('sh.name subAccountHead');
+        $qb->join('e.accountJournal','j');
+        $qb->join('e.accountHead','h');
+        $qb->leftJoin('e.accountSubHead','sh');
+        $qb->where("j.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('j.created','DESC');
+        $qb->orderBy('j.accountRefNo','ASC');
+        $result = $qb->getQuery();
+        return $result;
     }
 }

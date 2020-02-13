@@ -206,7 +206,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function sawmillParticularAction(Request $request, BusinessPurchase $invoice)
@@ -248,7 +248,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceParticularDeleteAction(BusinessPurchase $invoice, BusinessPurchaseItem $particular){
@@ -262,7 +262,7 @@ class PurchaseController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     /**
@@ -305,7 +305,7 @@ class PurchaseController extends Controller
         $msg = 'Discount successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function updateAction(Request $request, BusinessPurchase $entity)
@@ -373,9 +373,9 @@ class PurchaseController extends Controller
 		    if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
 			    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountBusinessPurchaseJournal($purchase);
 			    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-                $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
 		    }
-              return new Response('success');
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($purchase);
+            return new Response('success');
         } else {
             return new Response('failed');
         }

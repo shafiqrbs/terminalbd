@@ -94,7 +94,10 @@ class AccountProfitRepository extends EntityRepository
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyDueTransaction($profit, $row);
                 } elseif ($row['total'] > 0 and $row['processType'] == 'Purchase') {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyTransaction($profit, $row);
+                } elseif ($row['amount'] > 0 and $row['processType'] == 'Advance') {
+                    $em->getRepository('AccountingBundle:Transaction')->insertPurchaseAdvanceMonthlyTransaction($profit, $row);
                 }
+
 
             endforeach;
         }

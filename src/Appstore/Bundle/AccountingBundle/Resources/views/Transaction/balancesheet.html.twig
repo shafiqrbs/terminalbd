@@ -123,8 +123,9 @@
                                 {% for key, entity in creditStatement %}
                                     <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
                                     {% for val in  creditStatement[key] %}
-                                    {% set totalCredit = totalCredit + val.amount|abs %}
-                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>{{ val.amount|abs|number_format }}</th></tr>
+                                    {% set totalCredit = totalCredit + val.amount %}
+                                        <tr><td>&nbsp;</td><td colspan="2"> {{ val.code }} - {{ val.name }}</td><th>
+                                              {% if val.amount > 0  %} ({{ val.amount|abs|number_format }}){% else %} {{ val.amount|abs|number_format }} {% endif %}</th></tr>
                                         {% if payables is defined and payables is not empty %}
                                             {% for sub in payables %}
                                                 {% if sub.parentId == val.accountHeadId %}
@@ -135,7 +136,7 @@
                                     {% endfor %}
                                 {% endfor %}
                                 </tbody>
-                                <tr><th colspan="3">Grand Total</th><th> {{ totalCredit|number_format }}</th></tr>
+                                <tr><th colspan="3">Grand Total</th><th> {{ totalCredit|abs|number_format }}</th></tr>
                             </table>
                             <div class="clearfix"></div>
                             <div class="form-actions portlet box red">

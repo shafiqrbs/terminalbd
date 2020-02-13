@@ -2,6 +2,10 @@ account_double_entry:
     path:     /
     defaults: { _controller: "AccountingBundle:DoubleEntry:index" }
 
+account_double_entry_item:
+    path:     /entry-item
+    defaults: { _controller: "AccountingBundle:DoubleEntry:journalDetails" }
+
 account_double_entry_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:DoubleEntry:show" }

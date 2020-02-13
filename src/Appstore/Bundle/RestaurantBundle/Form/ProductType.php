@@ -65,11 +65,7 @@ class ProductType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter production/purchase price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter production/purchase price')))
             ->add('file')
         ;
     }

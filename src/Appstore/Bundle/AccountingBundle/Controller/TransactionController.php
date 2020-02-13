@@ -437,7 +437,6 @@ class TransactionController extends Controller
         $globalOption = $this->getUser()->getglobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->finalTransaction($globalOption);
         $paginate =$this->paginate($entities);
-
         return $this->render('AccountingBundle:Transaction:transactionJournal.html.twig', array(
             'entities' => $paginate,
 

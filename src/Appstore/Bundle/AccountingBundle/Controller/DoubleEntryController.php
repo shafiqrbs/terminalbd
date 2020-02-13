@@ -30,6 +30,7 @@ class DoubleEntryController extends Controller
         return $pagination;
     }
 
+
 	/**
 	 * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
 	 */
@@ -43,6 +44,30 @@ class DoubleEntryController extends Controller
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findDoubleEntrySearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:DoubleEntry:index.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN")
+     */
+
+    public function journalDetailsAction()
+    {
+        $option = $this->getUser()->getGlobalOption();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+         $accountSubHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('globalOption' => $option),array('name'=>'ASC'));
+
+        $entities = $em->getRepository('AccountingBundle:AccountJournalItem')->findDoubleEntrySearch( $this->getUser(),$data);
+        $pagination = $this->paginate($entities);
+
+        return $this->render('AccountingBundle:DoubleEntry:journalItem.html.twig', array(
+            'accountHead' => $accountHead,
+            'accountSubHeads' => $accountSubHeads,
             'entities' => $pagination,
             'searchForm' => $data,
         ));

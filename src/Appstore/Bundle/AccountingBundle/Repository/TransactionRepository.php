@@ -3071,6 +3071,48 @@ class TransactionRepository extends EntityRepository
         }
     }
 
+    public function insertPurchaseAdvanceMonthlyTransaction(AccountProfit $entity,$data)
+    {
+        $em = $this->_em;
+        $amount = round($data['amount']);
+        $transaction = new Transaction();
+        $transaction->setProcess("purchase-advance");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'account-payable'));
+        $transaction->setAccountHead($head);
+        $transaction->setAmount($amount);
+        $transaction->setDebit("-{$amount}");
+        $em->persist($transaction);
+        $em->flush();
+
+        $transaction = new Transaction();
+        $transaction->setProcess("purchase-advance");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        /* Cash - Cash various */
+        if ($data['method'] == 2) {
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'bank-account')));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankSubHead($data['bank']);
+            $transaction->setSubAccountHead($subAccount);
+        } elseif ($data['method'] == 3) {
+            $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'mobile-account')));
+            $subAccount = $em->getRepository('AccountingBundle:AccountHead')->insertMobileSubHead($data['mobile']);
+            $transaction->setSubAccountHead($subAccount);
+        } elseif ($data['method'] == 1) {
+            $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'cash-in-hand')));
+        }
+        $transaction->setAmount("-{$amount}");
+        $transaction->setCredit($amount);
+        $em->persist($transaction);
+        $em->flush();
+
+    }
+
     public function insertPurchaseMonthlyDueTransaction(AccountProfit $entity,$data)
     {
 
@@ -3182,6 +3224,7 @@ class TransactionRepository extends EntityRepository
         $em->persist($transaction);
         $em->flush();
     }
+
 
     public function insertSalesMonthlyTransaction(AccountProfit $entity,$data)
     {
