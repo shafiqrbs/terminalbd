@@ -424,10 +424,13 @@ class DoubleEntryController extends Controller
         $data['mode'] = "double-entry";
         $entities = $em->getRepository('AccountingBundle:AccountJournal')->findDoubleEntrySearch( $this->getUser(),$data);
         $pagination = $entities->getResult();
+
         /* @var $entity AccountJournal */
+
         foreach ( $pagination as $entity ){
             if (!empty($entity) and $entity->getProcess() == 'approved') {
-                $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountJournal ={$entity->getId()} AND e.processHead = 'Journal'")->execute();
+                $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountJournal ={$entity->getId()}")->execute();
+                $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountJournal ={$entity->getId()}")->execute();
                 $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->resetDoubleEntryTransaction($entity);
             } else {
                 return new Response('failed');

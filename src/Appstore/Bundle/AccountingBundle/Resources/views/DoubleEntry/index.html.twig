@@ -33,7 +33,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('account_double_entry_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add New</a>
-                                <a class="btn red" href="{{ path('account_double_entry_item') }}"><i class="icon-list"></i>&nbsp;Journal Item</a>
+                                <a class="btn blue" href="{{ path('account_double_entry_item') }}"><i class="icon-list"></i>&nbsp;Journal Item</a>
                                 {% if app.user.granted("ROLE_DOMAIN") %}
                                 <a class="btn purple" href="{{ path('account_double_entry_approve_reset') }}"><i class="icon-refresh"></i>&nbsp;Journal Reset</a>
                                 {% endif %}

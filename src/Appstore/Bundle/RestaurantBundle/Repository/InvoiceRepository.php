@@ -28,54 +28,27 @@ class InvoiceRepository extends EntityRepository
     {
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $commission = isset($data['commission'])? $data['commission'] :'';
-        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
-        $referred = isset($data['referred'])? $data['referred'] :'';
         $process = isset($data['process'])? $data['process'] :'';
-        $customerName = isset($data['name'])? $data['name'] :'';
-        $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
-        $created = isset($data['created'])? $data['created'] :'';
-        $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
-        $service = isset($data['service'])? $data['service'] :'';
-        $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
-        $cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
-        if (!empty($customerName)) {
-            $qb->join('e.customer','c');
-            $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
+        if (!empty($startDate) ) {
+            $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+            $qb->andWhere("e.created >= :startDate")->setParameter('startDate', $start);
         }
-
-        if (!empty($customerMobile)) {
-            $qb->join('e.customer','m');
-            $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
+        if (!empty($endDate)) {
+            $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+            $qb->andWhere("e.created <= :endDate")->setParameter('endDate',$end);
         }
-        if (!empty($created)) {
-            $compareTo = new \DateTime($created);
-            $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.created LIKE :created");
-            $qb->setParameter('created', $created.'%');
-        }
-
-        if (!empty($deliveryDate)) {
-            $compareTo = new \DateTime($deliveryDate);
-            $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.deliveryDateTime LIKE :deliveryDate");
-            $qb->setParameter('deliveryDate', $created.'%');
-        }
-
-
         if(!empty($process)){
-            $qb->andWhere("e.process = :process");
-            $qb->setParameter('process', $process);
+            $qb->andWhere("e.process = :process")->setParameter('process', $process);
         }
-
         if(!empty($transactionMethod)){
-            $qb->andWhere("e.transactionMethod = :transactionMethod");
-            $qb->setParameter('transactionMethod', $transactionMethod);
+            $qb->andWhere("e.transactionMethod = :transactionMethod")->setParameter('transactionMethod', $transactionMethod);
         }
 
     }
@@ -101,6 +74,18 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
+    }
+
+    public function invoiceLists(User $user,$data)
+    {
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
     }
 
     public function todaySalesOverview(User $user , $data , $previous ='')
@@ -231,80 +216,6 @@ class InvoiceRepository extends EntityRepository
         $qb->groupBy('u.id');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
-    }
-
-
-    public function findWithCommissionOverview(User $user, $data)
-    {
-        if(empty($data)){
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        }else{
-            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
-        }
-        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.doctorInvoices','ip');
-        $qb->leftJoin('ip.assignDoctor','d');
-        $qb->select('sum(ip.payment) as paymentTotal');
-        $qb->addSelect('d.name as referredName');
-        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
-        $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("ip.updated >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
-        }
-
-        if (!empty($data['endDate'])) {
-            $qb->andWhere("ip.updated <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
-        }
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
-    }
-
-
-    public function invoiceLists(User $user,$data)
-    {
-        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
-        //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        $this->handleSearchBetween($qb,$data);
-        $this->handleDateRangeFind($qb,$data);
-        $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
-
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
-    {
-        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
-        $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
-    }
-
-
-    public function doctorInvoiceLists(User $user,$data)
-    {
-        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
-        $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
     }
 
     public function updateInvoiceTotalPrice(Invoice $invoice)

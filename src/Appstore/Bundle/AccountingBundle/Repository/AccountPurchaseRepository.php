@@ -764,7 +764,6 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
             $em->remove($accountPurchase);
             $em->flush();
         }
-
     }
 
     public function accountPurchaseReverse(Purchase $entity)
@@ -784,7 +783,6 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
             $removeAccountPurchase->execute();
         }
     }
-
 
 	public function accountBusinessPurchaseReverse(BusinessPurchase $entity)
 	{
