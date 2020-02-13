@@ -372,6 +372,13 @@ class RestaurantConfig
      */
     private $kitchenPrint = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deliveryPrint", type="boolean",  nullable=true)
+     */
+    private $deliveryPrint = false;
+
     /**
      * @var boolean
      *
@@ -1156,6 +1163,22 @@ class RestaurantConfig
     public function setTablePlan($tablePlan)
     {
         $this->tablePlan = $tablePlan;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeliveryPrint()
+    {
+        return $this->deliveryPrint;
+    }
+
+    /**
+     * @param bool $deliveryPrint
+     */
+    public function setDeliveryPrint($deliveryPrint)
+    {
+        $this->deliveryPrint = $deliveryPrint;
     }
 
 

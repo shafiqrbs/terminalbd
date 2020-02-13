@@ -357,7 +357,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(false);
+        $printer -> setEmphasis(true);
         $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
         $printer -> setEmphasis(false);
         $printer -> text("Date: {$date}          {$transaction}\n");
@@ -408,9 +408,36 @@ class RestaurantTemporaryController extends Controller
             $printer->cut();
             $printer->setFont(Printer::FONT_A);
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer -> text("KITCHEN PRINT");
             $printer -> text("\n");
             $printer -> text("Invoice no. {$entity->getInvoice()}\n");
+            $printer -> selectPrintMode();
+            $printer -> setEmphasis(true);
+            $printer -> text("{$table}\n");
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer->setFont(Printer::FONT_B);
+            $printer -> setEmphasis(true);
+            $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+            $printer -> text("------------------------------------------------------------\n");
+            $i=1;
+            /* @var $row InvoiceParticular */
+            foreach ( $invoiceParticulars as $row){
+                $productName = "{$i}. {$row->getParticular()->getName()}";
+                $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
+                $i++;
+            }
+            $printer -> text("------------------------------------------------------------\n");
+        }
+        if($config->isDeliveryPrint() == 1 ){
+            $printer->cut();
+            $printer->setFont(Printer::FONT_A);
+            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer -> text("DELIVERY PRINT");
+            $printer -> text("\n");
+            $printer -> text("Invoice no. {$entity->getInvoice()}\n");
+            $printer -> selectPrintMode();
             $printer -> setEmphasis(true);
             $printer -> text("{$table}\n");
             $printer -> setJustification(Printer::JUSTIFY_LEFT);

@@ -574,6 +574,8 @@ class InvoiceRepository extends EntityRepository
         if(!empty($vatRegNo)){
             $printer -> text("BIN No - ".$vatRegNo."\n\n");
         }
+        $printer -> text(" RE-PRINT\n");
+        $printer -> feed(1);
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
