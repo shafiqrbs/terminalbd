@@ -176,8 +176,11 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $entity->setPurchasePrice($purchasePrice);
         $entity->setActualPurchasePrice($purchasePrice);
         $entity->setQuantity($data['quantity']);
-        $entity->setBonusQuantity($data['bonusQuantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
+        if($data['bonusQuantity']){
+            $entity->setBonusQuantity($data['bonusQuantity']);
+        }
+        $subTotal = round($data['quantity'] * $entity->getPurchasePrice(),2);
+        $entity->setPurchaseSubTotal($subTotal);
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);

@@ -23,7 +23,6 @@ business_report_item_stock:
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
 
 
-
 business_report_sales_vendor_customer:
     path:     /vendor-base-sales
     defaults: { _controller: "BusinessBundle:Report:salesVendorCustomer" }
@@ -74,6 +73,18 @@ business_report_customer_sales_item:
 business_report_sales_user:
     path:     /sales-user
     defaults: { _controller: "BusinessBundle:Report:salesUser" }
+
+business_report_sales_sr:
+    path:     /sales-sr
+    defaults: { _controller: "BusinessBundle:Report:salesSr" }
+
+business_report_sales_dsr:
+    path:     /sales-dsr
+    defaults: { _controller: "BusinessBundle:Report:salesDsr" }
+
+business_report_sales_area:
+    path:     /sales-area
+    defaults: { _controller: "BusinessBundle:Report:salesArea" }
 
 business_report_sales_user_monthly:
     path:     /sales-user-monthly

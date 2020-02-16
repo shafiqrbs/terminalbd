@@ -94,7 +94,7 @@ class BusinessPurchaseRepository extends EntityRepository
             ->getQuery()->getSingleResult();
 
         if($total['total'] > 0){
-            $subTotal = $total['total'];
+            $subTotal = round($total['total'],2);
             $entity->setSubTotal($subTotal);
             $entity->setDiscount($this->getUpdateDiscount($entity,$subTotal));
             $entity->setNetTotal($entity->getSubTotal() - $entity->getDiscount());

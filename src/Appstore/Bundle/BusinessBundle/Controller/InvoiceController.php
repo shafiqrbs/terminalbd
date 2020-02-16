@@ -181,6 +181,7 @@ class InvoiceController extends Controller
             if (in_array($entity->getProcess(), $done)) {
                 $entity->setApprovedBy($this->getUser());
             }
+            $entity->setTotal(round($entity->getTotal(),2));
             if($entity->getTotal() <= $entity->getReceived()){
                 $entity->setReceived(round($entity->getTotal()));
                 $entity->setDue(0);

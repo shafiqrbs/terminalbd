@@ -112,13 +112,18 @@
                                                 {% endif %}
                                                 <td class="span2">{{ item.purchasePrice|abs  }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
+                                                <td class="span1">{{ item.purchaseSubTotal|number_format(2) }}</td>
                                             </tr>
                                         {% endfor %}
-                                        <tr><td colspan="5" class="text-right">Total</td><th>{{ entity.netTotal|number_format(2) }}</th></tr>
-                                        <tr><td colspan="5" class="text-right">Payment</td><th>{{ entity.payment|number_format(2) }}</th></tr>
-                                        <tr><td colspan="5" class="text-right">Due</td><th>{{ entity.due|number_format(2) }}</th></tr>
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                                        </tr>
+                                        <tr><td colspan="5"><strong class="pull-right">Total</strong></td><th>{{ entity.netTotal|number_format(2) }}</th></tr>
+                                        <tr><td colspan="5" class="text-right"><strong class="pull-right">Payment</strong></td><th>{{ entity.payment|number_format(2) }}</th></tr>
+                                        <tr><td colspan="5" class="text-right"><strong class="pull-right">Due</strong></td><th>{{ entity.due|number_format(2) }}</th></tr>
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>

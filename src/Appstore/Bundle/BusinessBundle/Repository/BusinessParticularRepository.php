@@ -14,6 +14,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -479,6 +480,66 @@ class BusinessParticularRepository extends EntityRepository
         $em->flush();
         $this->remainingQnt($particular);
     }
+
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $customer = isset($data['customer'])? $data['customer'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+        $marketing = isset($data['marketing'])? $data['marketing'] :'';
+        $area = isset($data['area'])? $data['area'] :'';
+
+        if (!empty($customer)) {
+            $qb->andWhere("i.customer = :customer")->setParameter('customer', $customer);
+        }
+
+        if (!empty($marketing)) {
+            $qb->andWhere("i.marketing = :marketing")->setParameter('marketing', $marketing);
+        }
+
+        if (!empty($area)) {
+            $qb->andWhere("i.area = :area")->setParameter('area', $area);
+        }
+
+        if (!empty($startDate)) {
+            $compareTo = new \DateTime($startDate);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("i.created >= :created");
+            $qb->setParameter('created', $created);
+        }
+        if (!empty($endDate)) {
+            $compareTo = new \DateTime($endDate);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("i.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
+
+    }
+
+    public function salesSrReport( User $user , $data)
+    {
+
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.businessInvoiceParticulars', 'ip');
+        $qb->leftJoin('ip.businessInvoice', 'i');
+        $qb->select('e.name as name');
+        $qb->addSelect('SUM(ip.totalQuantity) as quantity');
+        $qb->addSelect('SUM(ip.subTotal) as amount');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('i.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('e.name');
+        $qb->orderBy('e.name','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
 
 
 }

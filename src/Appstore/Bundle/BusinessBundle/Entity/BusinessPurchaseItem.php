@@ -70,7 +70,7 @@ class BusinessPurchaseItem
      *
      * @ORM\Column(name="salesQuantity", type="integer",nullable=true)
      */
-    private $salesQuantity;
+    private $salesQuantity = 0;
 
     /**
      * @var integer

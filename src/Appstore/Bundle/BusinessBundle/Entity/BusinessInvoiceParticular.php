@@ -109,6 +109,13 @@ class BusinessInvoiceParticular
      */
     private $price;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $tloPrice;
+
     /**
      * @var float
      *
@@ -504,6 +511,22 @@ class BusinessInvoiceParticular
     public function setSpoilQnt($spoilQnt)
     {
         $this->spoilQnt = $spoilQnt;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTloPrice()
+    {
+        return $this->tloPrice;
+    }
+
+    /**
+     * @param float $tloPrice
+     */
+    public function setTloPrice($tloPrice)
+    {
+        $this->tloPrice = $tloPrice;
     }
 }
 

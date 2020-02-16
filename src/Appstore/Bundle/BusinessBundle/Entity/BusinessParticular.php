@@ -260,6 +260,13 @@ class BusinessParticular
 	 */
 	private $productionSalesPrice;
 
+    /**
+	 * @var float
+	 *
+	 * @ORM\Column(type="float", nullable=true)
+	 */
+	private $tloPrice;
+
 
 
     /**
@@ -1126,6 +1133,22 @@ class BusinessParticular
     public function setBonusSalesQuantity($bonusSalesQuantity)
     {
         $this->bonusSalesQuantity = $bonusSalesQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTloPrice()
+    {
+        return $this->tloPrice;
+    }
+
+    /**
+     * @param float $tloPrice
+     */
+    public function setTloPrice($tloPrice)
+    {
+        $this->tloPrice = $tloPrice;
     }
 
 }

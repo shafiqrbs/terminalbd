@@ -567,6 +567,8 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
+
+
     public function currentMonthSales(User $user , $data =array())
     {
 

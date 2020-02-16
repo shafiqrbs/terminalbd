@@ -176,6 +176,106 @@ class ReportController extends Controller
 		));
 	}
 
+    public function salesSrAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessParticular')->salesSrReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesSr.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities ,
+                'executives'        => $executives ,
+                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'        => $data ,
+            ));
+
+        }else{
+
+            $marketing = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->find($data['marketing']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesSrPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption() ,
+                    'marketing'     => $marketing ,
+                    'entities'      => $entities ,
+                    'searchForm'    => $data ,
+                )
+            );
+            $this->downloadPdf($html,'sales-sr.pdf');
+        }
+
+    }
+
+    public function salesDsrAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessParticular')->salesSrReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $user->getGlobalOption()));
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesDsr.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities,
+                'executives'        => $executives,
+                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'        => $data,
+            ));
+
+        }else{
+
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->find($data['customer']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesDsrPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption(),
+                    'marketing'     => $customer,
+                    'entities'      => $entities,
+                    'searchForm'    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-dsr.pdf');
+
+        }
+    }
+
+    public function salesAreaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessParticular')->salesSrReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesArea.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities,
+                'executives'        => $executives,
+                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'        => $data,
+            ));
+
+        }else{
+
+            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['area']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesAreaPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption(),
+                    'marketing'     => $customer,
+                    'entities'      => $entities,
+                    'searchForm'    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-area.pdf');
+
+        }
+    }
+
 	public function monthlyUserSalesAction(){
 
 		$em = $this->getDoctrine()->getManager();
