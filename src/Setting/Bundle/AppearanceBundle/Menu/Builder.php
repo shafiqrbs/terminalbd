@@ -229,17 +229,14 @@ class Builder extends ContainerAware
 		        $menu[$business]['Sales']->addChild( 'Reports' )
 		                                             ->setAttribute( 'icon', 'icon icon-bar-chart' )
 		                                             ->setAttribute( 'dropdown', true );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )
-		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )
-		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )
-		                                                        ->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )                              ->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Sales']['Reports']->addChild( 'User wise Invoice', array( 'route' => 'business_report_sales_user' ) )
-                    ->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )
-                    ->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Sales']['Reports']->addChild( 'Sales SR', array( 'route' => 'business_report_sales_sr' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Sales']['Reports']->addChild( 'Sales DSR', array( 'route' => 'business_report_sales_dsr' ) )->setAttribute( 'icon', 'icon-th-list' );
+                 $menu[$business]['Sales']['Reports']->addChild( 'Sales AREA', array( 'route' => 'business_report_sales_area' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }
 	    }
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
