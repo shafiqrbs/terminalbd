@@ -949,8 +949,8 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessHead('business');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
+        $accountSales->setCreated($entity->getUpdated());
+        $accountSales->setUpdated($entity->getUpdated());
         $em->persist($accountSales);
         $em->flush();
 	    $this->updateCustomerBalance($accountSales);
