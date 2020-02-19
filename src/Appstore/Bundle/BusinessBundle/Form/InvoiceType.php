@@ -65,6 +65,7 @@ class InvoiceType extends AbstractType
                     'Delivered' => 'Delivered',
                     'In-progress' => 'In-progress',
                     'Hold' => 'Hold',
+                    'Advance' => 'Advance',
                     'Quotation' => 'Quotation',
                     'Canceled' => 'Canceled',
                 ),
