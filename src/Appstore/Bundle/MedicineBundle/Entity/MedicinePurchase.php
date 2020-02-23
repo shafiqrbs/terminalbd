@@ -9,6 +9,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Core\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -74,6 +75,7 @@ class MedicinePurchase
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", mappedBy="medicinePurchase")
+     * @OrderBy({"id" = "DESC"})
      **/
     private  $medicinePurchaseItems;
 

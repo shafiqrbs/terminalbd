@@ -2,6 +2,18 @@ business_stock:
     path:     /
     defaults: { _controller: "BusinessBundle:Stock:index" }
 
+business_stock_shortlist:
+    path:     /short-list
+    defaults: { _controller: "BusinessBundle:Stock:shortList" }
+
+business_stock_history:
+    path:     /stock-history
+    defaults: { _controller: "BusinessBundle:Stock:stockItemHistory" }
+
+business_stock_ledger:
+    path:     /stock-ledger
+    defaults: { _controller: "BusinessBundle:Stock:stockLedger" }
+
 business_stock_new:
     path:     /new
     defaults: { _controller: "BusinessBundle:Stock:new" }

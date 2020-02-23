@@ -247,6 +247,9 @@ class PurchaseController extends Controller
             $purchase->setApprovedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getPurchaseUpdateQnt($purchase);
+            if($purchase->getRestaurantConfig()->isStockHistory() == 1 ) {
+                $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertPurchaseItem($purchase);
+            }
             $em->getRepository('AccountingBundle:AccountPurchase')->insertRestaurantAccountPurchase($purchase);
             return new Response('success');
         } else {

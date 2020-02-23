@@ -19,7 +19,7 @@ class DefaultController extends Controller
         $data['endDate'] = $datetime->format('Y-m-d');
         $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
         $user = $this->getUser();
-        $salesCashOverview                  = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','admission'));
+        $salesCashOverview                  = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('restaurant'));
         $purchaseCashOverview               = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user,$data);
         $transactionMethods                 = array(1);
         $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);

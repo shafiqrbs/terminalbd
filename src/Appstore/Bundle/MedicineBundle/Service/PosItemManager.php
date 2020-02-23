@@ -26,14 +26,14 @@ class PosItemManager {
 
     public function __toString() {
         $rightCols = 10;
-        $leftCols = 35;
+        $leftCols = 48;
         if($this -> dollarSign) {
             $leftCols = $leftCols / 2 - $rightCols / 2;
         }
         $left = str_pad($this -> name, $leftCols) ;
         $center = $this -> quantity ;
 
-        $sign = ($this -> dollarSign ? 'Tk. ' : '');
+        $sign = ($this -> dollarSign ? 'Tk.' : '');
         $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
         return "$left$center$right\n";
     }

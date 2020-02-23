@@ -45,6 +45,6 @@ class VendorType extends AbstractType
      */
     public function getName()
     {
-        return 'account_vendor';
+        return 'vendor';
     }
 }

@@ -90,6 +90,106 @@ class BusinessParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function stockShortListSearch($config, $data){
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $type = isset($data['type'])? $data['type'] :'';
+        $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->setParameter('config', $config);
+        $qb->andWhere("e.minQuantity > 0");
+        if($minQnt == 'minimum') {
+            $qb->andWhere("e.minQuantity > e.remainingQuantity");
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if(!empty($category)){
+            $qb->andWhere("e.category = :category");
+            $qb->setParameter('category', $category);
+        }
+        if(!empty($type)){
+            $qb->andWhere("e.businessParticularType = :type");
+            $qb->setParameter('type', $type);
+        }
+        $qb->orderBy('e.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+    public function getPurchaseDetails(BusinessConfig $config,BusinessParticular $stock){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessPurchaseItem','e');
+        $qb->join('e.businessPurchase','mp');
+        $qb->select('e');
+        $qb->where('e.businessParticular = :item')->setParameter('item',$stock->getId());
+        $qb->andWhere('mp.businessConfig = :config')->setParameter('config',$config->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process',"approved");
+        $qb->orderBy('mp.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function getPurchaseReturnDetails(BusinessConfig $config,BusinessParticular $stock){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessPurchaseReturnItem','e');
+        $qb->join('e.businessPurchaseReturn','mp');
+        $qb->select('e');
+        $qb->where('e.businessParticular = :item')->setParameter('item',$stock->getId());
+        $qb->andWhere('mp.businessConfig = :config')->setParameter('config',$config->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process',"approved");
+        $qb->orderBy('mp.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function getSalesDetails(BusinessConfig $config,BusinessParticular $stock){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessInvoiceParticular','e');
+        $qb->join('e.businessInvoice','mp');
+        $qb->select('e');
+        $qb->where('e.businessParticular = :item')->setParameter('item',$stock->getId());
+        $qb->andWhere('mp.businessConfig = :config')->setParameter('config',$config->getId());
+        $qb->andWhere('e.totalQuantity > 0');
+        $qb->orderBy('mp.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function getSalesReturnDetails(BusinessConfig $config,BusinessParticular $stock){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessInvoiceReturn','e');
+        $qb->select('e');
+        $qb->where('e.businessParticular = :item')->setParameter('item',$stock->getId());
+        $qb->andWhere('e.businessConfig = :config')->setParameter('config',$config->getId());
+        $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function getDamageDetails(BusinessConfig $config,BusinessParticular $stock){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessDamage','e');
+        $qb->select('e');
+        $qb->where('e.businessParticular = :item')->setParameter('item',$stock->getId());
+        $qb->andWhere('e.businessConfig = :config')->setParameter('config',$config->getId());
+        $qb->orderBy('e.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
     public function getApiStock(GlobalOption $option)
     {
         $config = $option->getBusinessConfig();

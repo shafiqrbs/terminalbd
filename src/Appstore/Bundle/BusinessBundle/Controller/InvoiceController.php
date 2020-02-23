@@ -204,18 +204,18 @@ class InvoiceController extends Controller
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity);
                 }
                 if(in_array($entity->getProcess(),$done)){
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-                //$em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+                    $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+                    if($entity->getBusinessConfig()->isStockHistory() == 1 ){
+                        $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesItem($entity);
+                    }
                 }
             }elseif(in_array($entity->getProcess(), $done)) {
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             }
             $inProgress = array('Hold', 'Created');
             if (in_array($entity->getProcess(), $inProgress)) {
@@ -478,6 +478,9 @@ class InvoiceController extends Controller
 		));
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($sales);
 		$em->getRepository('BusinessBundle:BusinessReverse')->salesReverse($sales, $template);
+        if($sales->getBusinessConfig()->isStockHistory() == 1 ) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processReverseSalesItem($sales);
+        }
 		return $this->redirect($this->generateUrl('business_invoice_edit',array('id' => $sales->getId())));
 	}
 

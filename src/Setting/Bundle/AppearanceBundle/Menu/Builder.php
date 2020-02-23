@@ -285,6 +285,12 @@ class Builder extends ContainerAware
         if ($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 
             $menu[$business]->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Stock Shortlist', array('route' => 'business_stock_shortlist'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Stock History', array('route' => 'business_stock_history'))->setAttribute('icon', 'icon-th-list');
+            if($config->isStockHistory() == 1) {
+                $menu[$business]->addChild('Product Ledger', array('route' => 'business_stock_ledger'))->setAttribute('icon', 'icon-th-list');
+            }
+
             if($config->getBusinessModel() == 'commission') {
                 $menu[$business]->addChild( 'Agency Stock' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );
                 $menu[$business]['Agency Stock']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'))->setAttribute('icon', 'icon-th-list');

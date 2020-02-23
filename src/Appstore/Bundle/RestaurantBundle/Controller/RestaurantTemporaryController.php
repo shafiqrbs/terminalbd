@@ -141,6 +141,9 @@ class RestaurantTemporaryController extends Controller
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+        if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
+        }
         $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
         if($btn == "posBtn"){
             $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));

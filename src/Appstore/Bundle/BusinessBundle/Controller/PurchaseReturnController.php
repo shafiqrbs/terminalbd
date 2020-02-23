@@ -191,6 +191,9 @@ class PurchaseReturnController extends Controller
             $purchase->setProcess('Approved');
 		    $em->flush();
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateReturnQnt($purchase);
+            if($config->isStockHistory() == 1 ){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseReturnItem($purchase);
+            }
             $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchaseReturn($purchase);
             return new Response('success');
         } else {

@@ -111,7 +111,7 @@ class BusinessPurchaseReturnRepository extends EntityRepository
             ->getQuery()->getSingleResult();
 
         if($result['total'] > 0){
-            $subTotal = $result['total'];
+            $subTotal = round($result['total'],2);
             $entity->setSubTotal($subTotal);
             $entity->setQuantity( $result['quantity']);
             $entity->setDamageQuantity( $result['damageQuantity']);

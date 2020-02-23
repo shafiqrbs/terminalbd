@@ -230,6 +230,9 @@ class InvoiceController extends Controller
             $em->flush();
             if(!empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Delivered','Done'))) {
                 $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+                if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
+                    $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
+                }
                 $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
             }
             return $this->redirect($this->generateUrl('restaurant_invoice'));
@@ -445,6 +448,9 @@ class InvoiceController extends Controller
         $template = $this->get('twig')->render('RestaurantBundle:Invoice:reverse.html.twig',array(
             'entity' => $entity,
         ));
+        if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processReverseSalesItem($entity);
+        }
         $em->getRepository('RestaurantBundle:Reverse')->insertInvoice($entity,$template);
         return $this->redirect($this->generateUrl('restaurant_invoice_edit',array('id'=>$entity->getId())));
     }

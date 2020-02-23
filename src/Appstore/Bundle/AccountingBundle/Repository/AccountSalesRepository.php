@@ -544,17 +544,13 @@ class AccountSalesRepository extends EntityRepository
 	{
 		$globalOption = $user->getGlobalOption();
 		if(empty($data)){
-
 			$datetime = new \DateTime("now");
 			$data['startDate'] = $datetime->format('Y-m-01 00:00:00');
 			$data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
 		}else{
-
 			$data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
 			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
 		}
-
 		$sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
 		$purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
 		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);

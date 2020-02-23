@@ -240,6 +240,13 @@ class BusinessConfig
      */
     private $isPrintFooter = true;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean",  nullable=true)
+     */
+    private $isStockHistory = false;
+
     /**
      * @var string
      *
@@ -1315,6 +1322,22 @@ class BusinessConfig
     public function getAndroidProcess()
     {
         return $this->androidProcess;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStockHistory()
+    {
+        return $this->isStockHistory;
+    }
+
+    /**
+     * @param bool $isStockHistory
+     */
+    public function setIsStockHistory($isStockHistory)
+    {
+        $this->isStockHistory = $isStockHistory;
     }
 
 

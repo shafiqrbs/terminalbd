@@ -371,7 +371,10 @@ class PurchaseController extends Controller
 		    $em->flush();
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->updatePurchaseItemPrice($purchase);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
-		    if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
+            if($config->isStockHistory() == 1 ){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseItem($purchase);
+            }
+            if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
 			    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountBusinessPurchaseJournal($purchase);
 			    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
 		    }
@@ -445,7 +448,10 @@ class PurchaseController extends Controller
 		$purchase->setApprovedBy(NULL);
 		$em->flush();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateQnt($purchase);
-		$template = $this->get('twig')->render('BusinessBundle:Purchase:purchaseReverse.html.twig', array(
+        if($config->isStockHistory() == 1 ) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processReversePurchaseItem($purchase);
+        }
+        $template = $this->get('twig')->render('BusinessBundle:Purchase:purchaseReverse.html.twig', array(
 			'entity' => $purchase,
 			'config' => $purchase->getBusinessConfig(),
 		));

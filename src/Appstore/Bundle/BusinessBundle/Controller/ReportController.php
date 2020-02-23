@@ -139,7 +139,7 @@ class ReportController extends Controller
 		));
 	}
 
-	public function customerSalesItemAction()
+	public function productLedgerAction()
 	{
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
@@ -149,7 +149,7 @@ class ReportController extends Controller
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
 		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
 
-		return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
+		return $this->render('BusinessBundle:Report:productLedger.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
 			'entities' => $pagination,
 			'types' => $type,
@@ -158,6 +158,8 @@ class ReportController extends Controller
 			'searchForm' => $data,
 		));
 	}
+
+
 
 
 	public function salesUserAction()

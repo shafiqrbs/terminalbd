@@ -144,6 +144,13 @@ class RestaurantConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isStockHistory", type="boolean",  nullable=true)
+     */
+    private $isStockHistory = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="barcodePrint", type="boolean",  nullable=true)
      */
     private $barcodePrint = false;
@@ -1179,6 +1186,22 @@ class RestaurantConfig
     public function setDeliveryPrint($deliveryPrint)
     {
         $this->deliveryPrint = $deliveryPrint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStockHistory()
+    {
+        return $this->isStockHistory;
+    }
+
+    /**
+     * @param bool $isStockHistory
+     */
+    public function setIsStockHistory($isStockHistory)
+    {
+        $this->isStockHistory = $isStockHistory;
     }
 
 

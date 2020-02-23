@@ -29,6 +29,7 @@ class ConfigType extends AbstractType
             ->add('tablePlan')
             ->add('deliveryPrint')
             ->add('invoicePrintLogo')
+            ->add('isStockHistory')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
             ->add('isPrintFooter')

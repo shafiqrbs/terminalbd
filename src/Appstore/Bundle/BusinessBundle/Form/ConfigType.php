@@ -71,6 +71,7 @@ class ConfigType extends AbstractType
             ->add('showStock')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
+            ->add('isStockHistory')
             ->add('removeImage')
             ->add('file')
             ->add('invoiceWidth','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

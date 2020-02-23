@@ -5,6 +5,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -53,6 +54,135 @@ class StockController extends Controller
             'searchForm' => $data,
         ));
 
+    }
+
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+    public function shortListAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $config ,'status'=>1));
+        return $this->render('BusinessBundle:Stock:shortlist.html.twig', array(
+            'pagination' => $pagination,
+            'types' => $type,
+            'categories' => $category,
+            'config' => $config,
+            'searchForm' => $data,
+        ));
+
+    }
+
+
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+
+    public function stockLedgerAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if(empty($data)){
+            $compare = new \DateTime();
+            $end =  $compare->format('j');
+            $data['monthYear'] = $compare->format('Y-m-d');
+            $data['month'] =  $compare->format('F');
+            $data['year'] = $compare->format('Y');
+        }else{
+            $month = $data['month'];
+            $year = $data['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $end =  $compare->format('t');
+            $data['monthYear'] = $compare->format('Y-m-d');
+        }
+        $product = "";
+        $openingBalance = [];
+        $daily = '';
+
+        if(isset($data['name']) and !empty($data['name'])){
+            for ($i = 1; $end >= $i ; $i++ ){
+                $no = sprintf("%s", str_pad($i,2, '0', STR_PAD_LEFT));
+                $start =  $compare->format("Y-m-{$no}");
+                $day =  $compare->format("{$no}-m-Y");
+                $data['startDate'] = $start;
+                $openingBalance[$day] = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->openingDailyQuantity($config,$data);
+
+            }
+            $daily = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->monthlyStockLedger($config,$data);
+        }
+        if(empty($data['pdf'])){
+            return $this->render('BusinessBundle:Stock:productLedger.html.twig', array(
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
+                'openingBalance'                => $openingBalance,
+                'entity'                        => $daily,
+                'searchForm'                    => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'BusinessBundle:Stock:productLedgerPdf.html.twig', array(
+                    'option'                  => $this->getUser()->getGlobalOption(),
+                    'openingBalance'                => $openingBalance,
+                    'entity'                        => $daily,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+
+
+    public function stockItemHistoryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $pagination = '';
+        $entity = '';
+        if(isset($data['name']) and !empty($data['name'])){
+            $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $config,'name'=> $data['name']));
+        }
+        if(!empty($data['name']) and $data['report'] == 'Purchase'){
+
+            $entities = $em->getRepository('BusinessBundle:BusinessParticular')->getPurchaseDetails($config,$entity);
+            $pagination = $this->paginate($entities);
+        }
+        if(!empty($data['name']) and $data['report'] == 'Purchase-Return'){
+            $entities = $em->getRepository('BusinessBundle:BusinessParticular')->getPurchaseReturnDetails($config,$entity);
+            $pagination = $this->paginate($entities);
+        }
+        if(!empty($data['name']) and $data['report'] == 'Sales'){
+            $entities = $em->getRepository('BusinessBundle:BusinessParticular')->getSalesDetails($config,$entity);
+            $pagination = $this->paginate($entities);
+        }
+        if(!empty($data['name']) and $data['report'] == 'Sales-Return'){
+            $entities = $em->getRepository('BusinessBundle:BusinessParticular')->getSalesReturnDetails($config,$entity);
+            $pagination = $this->paginate($entities);
+        }
+        if(!empty($data['name']) and $data['report'] == 'Damage'){
+            $entities = $em->getRepository('BusinessBundle:BusinessParticular')->getDamageDetails($config,$entity);
+            $pagination = $this->paginate($entities);
+        }
+
+        return $this->render('BusinessBundle:Stock:itemDetails.html.twig', array(
+            'entity' => $entity,
+            'pagination' => $pagination,
+            'searchForm' => $data,
+        ));
     }
 
     /**
@@ -126,7 +256,7 @@ class StockController extends Controller
     /**
      * Creates a form to create a Particular entity.
      *
-     * @param Particular $entity The entity
+     * @param BusinessParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -172,7 +302,7 @@ class StockController extends Controller
     /**
      * Creates a form to edit a Particular entity.
      *
-     * @param Particular $entity The entity
+     * @param BusinessParticular $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -291,9 +421,7 @@ class StockController extends Controller
 		    $setField = 'set' . $data['name'];
 		    $quantity = abs($data['value']);
 		    $entity->$setField($quantity);
-		   // $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
 		    $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->remainingQnt($entity);
-		   // $entity->setRemainingQuantity($remainingQuantity);
 	    }else{
 		    $setField = 'set' . $data['name'];
 		    $entity->$setField(abs($data['value']));
@@ -337,16 +465,16 @@ class StockController extends Controller
 		ignore_user_abort(true);
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getBussinessConfig();
-		$items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findBy(array('medicineConfig'=>$config));
+		$items = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findBy(array('businessConfig'=>$config));
 
 		/* @var BusinessParticular $item */
 
 		foreach ($items as $item){
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales-return');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'purchase-return');
-			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'damage');
+			$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($item,'');
+			$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($item,'sales');
+			$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($item,'sales-return');
+			$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($item,'purchase-return');
+			$this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateRemovePurchaseQuantity($item,'damage');
 		}
 		return $this->redirect($this->generateUrl('medicine_stock'));
 	}
@@ -393,6 +521,18 @@ class StockController extends Controller
         $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
         return $response;
     }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+    }
+
 
 
 }

@@ -52,7 +52,7 @@ class MedicineBrand
     private $medicineStock;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicineBrand")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicine")
      **/
     private $items;
 
