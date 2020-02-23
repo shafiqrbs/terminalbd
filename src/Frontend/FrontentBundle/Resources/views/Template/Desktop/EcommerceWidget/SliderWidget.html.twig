@@ -44,20 +44,16 @@
             {% endfor %}
         </div>
     {% endif %}
-
-
     {% if feature == 'category' %}
 
     <table border=0 class="rounded-list widget-feature-center">
         <tr>
             <td>
-                <ol class="scrollbar-inner wow fadeInDown" data-wow-delay="2s" style="overflow: hidden">
+                <div class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
                     {% for entity in entities %}
-                    {% if entity.category is not empty %}
-                        <li><p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p></li>
-                    {% endif %}
+                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p>
                     {% endfor %}
-                </ol>
+                </div>
             </td>
         </tr>
     </table>

@@ -145,6 +145,13 @@ class Feature
     private $featureFor;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="boolean",nullable=true)
+     */
+    private $isSliderTitle = true;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="content", type="text" , nullable=true)
@@ -723,6 +730,22 @@ class Feature
     public function setOrdering($ordering)
     {
         $this->ordering = $ordering;
+    }
+
+    /**
+     * @return array
+     */
+    public function getisSliderTitle()
+    {
+        return $this->isSliderTitle;
+    }
+
+    /**
+     * @param array $isSliderTitle
+     */
+    public function setIsSliderTitle($isSliderTitle)
+    {
+        $this->isSliderTitle = $isSliderTitle;
     }
 
 }

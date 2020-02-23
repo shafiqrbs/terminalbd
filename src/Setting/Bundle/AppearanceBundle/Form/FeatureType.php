@@ -35,7 +35,11 @@ class FeatureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Enter Feature Title Information')))
+            ->add('name','text', array('attr'=>array('class'=>'span12 m-wra','placeholder'=>'Enter Feature Title Information'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap')))
 
             ->add('category', 'entity', array(
@@ -117,6 +121,7 @@ class FeatureType extends AbstractType
                         ->orderBy('e.menu','ASC');
                 },
             ))
+            ->add('isSliderTitle')
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
             ->add('buttonBg','text', array('attr'=>array('class'=>'span10 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
             ->add('captionBgColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
@@ -165,7 +170,7 @@ class FeatureType extends AbstractType
                             'image/gif',
                         )
                     )),
-                    new NotBlank(array('message'=>'Please upload category image'))
+                    new NotBlank(array('message'=>'Please upload feature image'))
 
                 )
             ));

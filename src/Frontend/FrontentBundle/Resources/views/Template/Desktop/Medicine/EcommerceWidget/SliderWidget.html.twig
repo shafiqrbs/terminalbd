@@ -44,11 +44,11 @@
     <table border=0 class="rounded-list widget-feature-center">
         <tr>
             <td>
-                <ol class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
+                <div class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
                     {% for entity in entities %}
-                        <li><p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p></li>
+                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p>
                     {% endfor %}
-                </ol>
+                </div>
             </td>
         </tr>
     </table>
@@ -72,3 +72,11 @@
     {% endif %}
 
 </div>
+<style>
+    .rounded-list ol > li{
+        background: #ffffff!important;
+    }
+    .rounded-list ol > li p:before{
+        background: transparent!important;
+    }
+</style>
