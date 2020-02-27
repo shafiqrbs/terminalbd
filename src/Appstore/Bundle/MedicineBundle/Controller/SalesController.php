@@ -359,8 +359,7 @@ class SalesController extends Controller
             }
             $em->flush();
             if($entity->getProcess() == 'Done'){
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
             }
             if($data['process'] == 'save' or $data['process'] == 'hold' ){
                 return $this->redirect($this->generateUrl('medicine_sales'));
@@ -403,8 +402,7 @@ class SalesController extends Controller
             $sales->setApprovedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($sales);
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-           // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -566,8 +564,7 @@ class SalesController extends Controller
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-              //  $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
             }
         endforeach;
         exit;
@@ -596,8 +593,7 @@ class SalesController extends Controller
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
-                $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-            //    $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
                 $msg = "valid";
             }
         }
