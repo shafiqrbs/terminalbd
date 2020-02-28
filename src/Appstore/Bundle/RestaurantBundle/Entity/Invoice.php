@@ -847,7 +847,6 @@ class Invoice
         $this->approvedBy = $approvedBy;
     }
 
-
     /**
      * @return RestaurantConfig
      */

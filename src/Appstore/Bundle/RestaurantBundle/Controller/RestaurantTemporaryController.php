@@ -356,6 +356,14 @@ class RestaurantTemporaryController extends Controller
         if(!empty($vatRegNo)){
             $printer -> text("BIN No - ".$vatRegNo."\n\n");
         }
+        if($entity->getRestaurantConfig()->isPrintToken() == 1){
+            $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
+            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer -> text("Token No-{$token}\n\n");
+            $printer -> selectPrintMode();
+            $printer -> feed();
+        }
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
@@ -414,6 +422,14 @@ class RestaurantTemporaryController extends Controller
             $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer -> text("KITCHEN PRINT");
             $printer -> text("\n");
+            if($entity->getRestaurantConfig()->isPrintToken() == 1){
+                $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
+                $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+                $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                $printer -> text("Token No-{$token}\n\n");
+                $printer -> selectPrintMode();
+                $printer -> feed();
+            }
             $printer -> text("Invoice no. {$entity->getInvoice()}\n");
             $printer -> selectPrintMode();
             $printer -> setEmphasis(true);
@@ -439,6 +455,14 @@ class RestaurantTemporaryController extends Controller
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
             $printer -> text("DELIVERY PRINT");
             $printer -> text("\n");
+            if($entity->getRestaurantConfig()->isPrintToken() == 1){
+                $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
+                $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+                $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                $printer -> text("Token No-{$token}\n\n");
+                $printer -> selectPrintMode();
+                $printer -> feed();
+            }
             $printer -> text("Invoice no. {$entity->getInvoice()}\n");
             $printer -> selectPrintMode();
             $printer -> setEmphasis(true);

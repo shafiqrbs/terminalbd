@@ -504,4 +504,25 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function getLastCode(Invoice $entity)
+    {
+        $datetime = new \DateTime("now");
+        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->select('count(s.id)')
+            ->where('s.restaurantConfig = :config')
+            ->setParameter('config', $entity->getRestaurantConfig()->getId())
+            ->andWhere('s.updated >= :today_startdatetime')
+            ->andWhere('s.updated <= :today_enddatetime')
+            ->setParameter('today_startdatetime', $today_startdatetime)
+            ->setParameter('today_enddatetime', $today_enddatetime);
+        $lastCode = $qb->getQuery()->getSingleScalarResult();
+        if (empty($lastCode)) {
+            return 1;
+        }
+        return $lastCode;
+    }
+
 }
