@@ -1213,7 +1213,7 @@ class RestaurantConfig
     /**
      * @return bool
      */
-    public function isPrintToken(): bool
+    public function isPrintToken()
     {
         return $this->printToken;
     }
@@ -1221,7 +1221,7 @@ class RestaurantConfig
     /**
      * @param bool $printToken
      */
-    public function setPrintToken(bool $printToken)
+    public function setPrintToken($printToken)
     {
         $this->printToken = $printToken;
     }
