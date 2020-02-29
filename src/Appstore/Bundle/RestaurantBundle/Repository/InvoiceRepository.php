@@ -520,9 +520,11 @@ class InvoiceRepository extends EntityRepository
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {
-            return 1;
+            $code = (str_pad(1,3, '0', STR_PAD_LEFT));
+            return $code;
         }
-        return $lastCode;
+        $code = (str_pad($lastCode,3, '0', STR_PAD_LEFT));
+        return $code;
     }
 
 }

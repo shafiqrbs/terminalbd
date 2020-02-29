@@ -140,7 +140,7 @@ class Builder extends ContainerAware
 		    $result = array_intersect($menuName, array('Election'));
 		    if (!empty($result)) {
 			    if ($securityContext->isGranted('ROLE_ELECTION')){
-				    $menu = $this->ElectionMenu($menu);
+				    //$menu = $this->ElectionMenu($menu);
 				    $menu = $this->CommitteeMenu($menu);
 			    }
 		    }

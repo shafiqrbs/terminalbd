@@ -327,10 +327,10 @@ class RestaurantTemporaryController extends Controller
         $table = "Table no. {$slipNo}{$tableNo}";
 
         $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
-        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $subTotal       = new PosItemManager('SubTotal: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $grandTotal     = new PosItemManager('Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($dueBdt));
         $returnTk       = new PosItemManager('Return: ','Tk.',number_format($returnBdt));
