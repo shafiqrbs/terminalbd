@@ -30,16 +30,14 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Member list</div>
-                       {# <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('domain_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Customer</a>
-                            </div>
-                        </div>#}
+                        <div class="actions">
+                          {#  <div class="btn-group">
+                                <a class="btn red" href="{{ path('domain_association_new') }}"><i class="icon-user"></i>&nbsp;New Member</a>
+                            </div>#}
+                        </div>
                     </div>
-
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             <form class="search-form" action="" method="get" name="itemSearch">
@@ -90,8 +88,12 @@
                                         </td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
-                                        <td>{{ entity.studentBatch }}</td>
-                                        <td>{{ entity.bloodGroup }}</td>
+                                        <td>
+                                            <a  data-type="select" class="editable" id="studentBatch" data-name="StudentBatch" href="#" data-source="{{ path('domain_association_batch_select') }}"  data-url="{{ path('domain_association_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.studentBatch }}" data-original-title="Enter Student Batch">{{ entity.studentBatch }}</a>
+                                        </td>
+                                        <td>
+                                            <a  data-type="select" class="editable" id="bloodGroup" data-name="BloodGroup" href="#" data-source="{{ path('domain_association_blood_select') }}"  data-url="{{ path('domain_association_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.bloodGroup }}" data-original-title="Enter Student Batch">{{ entity.bloodGroup }}</a>
+                                        </td>
                                         <td>{{ entity.process }}</td>
                                         <td class="numeric">
                                             <div class="btn-group">
@@ -145,6 +147,7 @@
     {{ parent() }}
     {% javascripts
     '@ElectionBundle/Resources/public/js/messagebox.js'
+    '@DomainUserBundle/Resources/public/js/editable.js'
     '@DomainUserBundle/Resources/public/js/approveProcess.js'
     '@DomainUserBundle/Resources/public/js/association.js'
     %}
@@ -153,5 +156,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableInit();
     AssociationProcess();
 {% endblock %}
