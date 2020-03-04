@@ -54,19 +54,15 @@ class MemberEditProfileType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
                 )
             ))
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
+            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address details'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                )
+            ))
             ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your father name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input father name')),
-                )
-            ))
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your father name')))
             ->add('fatherDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter father occupation')))
-            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your mother name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input mother name')),
-                )
-            ))
+            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your mother name')))
             ->add('motherDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mother occupation')))
             ->add('ssc','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter SSS passing year')))
              ->add('hsc','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter HSC passing year')))
@@ -77,7 +73,6 @@ class MemberEditProfileType extends AbstractType
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter facebook ID')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no','autoComplete'=>false)))
-
             ->add('memberDesignation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your occupation')))
             ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))

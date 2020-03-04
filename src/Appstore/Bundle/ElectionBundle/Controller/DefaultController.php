@@ -35,7 +35,7 @@ class DefaultController extends Controller
 		$events    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionEvent')->getEvents($config);
 		$campaigns    = $this->getDoctrine()->getRepository('ElectionBundle:ElectionCampaignAnalysis')->getCampaigns($config);
 
-		return $this->render('ElectionBundle:Default:index.html.twig', array(
+		return $this->render('ElectionBundle:Default:comittee.html.twig', array(
 
 			'members'                   => $members,
 			'voters'                    => $voters,

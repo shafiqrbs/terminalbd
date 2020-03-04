@@ -120,7 +120,7 @@ class PurchaseType extends AbstractType
                     'flat' => 'Flat',
                 ),
             ))
-            ->add('asInvestment')
+           // ->add('asInvestment')
             ->add('discount','hidden');
     }
     

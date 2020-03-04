@@ -159,8 +159,7 @@ class MedicineSalesTemporaryController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user, $entity);
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
         if ($entity->getProcess() == 'Done'){
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
         }
         $btn = $request->request->get('buttonType');
         if($btn == "posBtn" and $entity->getProcess() == 'Done'){

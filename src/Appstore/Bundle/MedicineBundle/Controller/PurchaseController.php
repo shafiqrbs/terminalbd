@@ -100,7 +100,7 @@ class PurchaseController extends Controller
      */
     public function createAction(Request $request)
     {
-       
+
     }
 
 	/**

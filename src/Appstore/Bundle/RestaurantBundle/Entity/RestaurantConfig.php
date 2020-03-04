@@ -134,6 +134,12 @@ class RestaurantConfig
      */
     private $payFor;
 
+     /**
+     * @var boolean
+     * @ORM\Column(type="boolean",  nullable=true)
+     */
+    private $printToken = false;
+
     /**
      * @var boolean
      *
@@ -1202,6 +1208,22 @@ class RestaurantConfig
     public function setIsStockHistory($isStockHistory)
     {
         $this->isStockHistory = $isStockHistory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintToken()
+    {
+        return $this->printToken;
+    }
+
+    /**
+     * @param bool $printToken
+     */
+    public function setPrintToken($printToken)
+    {
+        $this->printToken = $printToken;
     }
 
 

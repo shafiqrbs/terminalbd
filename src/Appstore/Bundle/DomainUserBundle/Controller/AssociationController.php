@@ -23,8 +23,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AssociationController extends Controller
 {
-
-
     public function paginate($entities)
     {
 
@@ -63,13 +61,14 @@ class AssociationController extends Controller
      */
     public function createAction(Request $request)
     {
+        $globalOption = $this->getUser()->getGlobalOption();
         $entity = new Customer();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+        $entity = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile'=>$mobile));
+        if ($form->isValid() and empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-            $globalOption = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($globalOption);
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
@@ -78,7 +77,7 @@ class AssociationController extends Controller
             return $this->redirect($this->generateUrl('domain_customer'));
         }
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Association:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -93,9 +92,9 @@ class AssociationController extends Controller
      */
     private function createCreateForm(Customer $entity)
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerType($location), $entity, array(
-            'action' => $this->generateUrl('domain_customer_create'),
+        $em = $this->getDoctrine()->getRepository('DomainUserBundle:Customer');
+        $form = $this->createForm(new MemberEditProfileType($em), $entity, array(
+            'action' => $this->generateUrl('domain_association_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -112,7 +111,7 @@ class AssociationController extends Controller
         $entity = new Customer();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Association:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -247,13 +246,57 @@ class AssociationController extends Controller
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->flush();
-            return $this->redirect($this->generateUrl('domain_customer'));
+            return $this->redirect($this->generateUrl('domain_association'));
         }
 
         return $this->render('DomainUserBundle:Association:editProfile.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
+    }
+
+    public function batchSelectAction()
+    {
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->studentBatchChoiceList();
+        $items = array();
+        $items[] = array('value' => '','text'=> '-Select Batch-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity,'text'=> $entity);
+        endforeach;
+        $items[]=array('value' => '','text'=> 'Empty Batch');
+        return new JsonResponse($items);
+    }
+
+    public function bloodSelectAction()
+    {
+        $items[] = array('value' => '','text'=> '-Blood-');
+        $items[]=array('value' => 'A+','text'=> 'A+');
+        $items[]=array('value' => 'A-','text'=> 'A-');
+        $items[]=array('value' => 'B-','text'=> 'B-');
+        $items[]=array('value' => 'B+','text'=> 'B+');
+        $items[]=array('value' => 'O+','text'=> 'O+');
+        $items[]=array('value' => 'O-','text'=> 'O-');
+        $items[]=array('value' => 'AB+','text'=> 'AB+');
+        $items[]=array('value' => 'AB-','text'=> 'AB-');
+        $items[]=array('value' => '','text'=> 'Empty');
+        return new JsonResponse($items);
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $setName = 'set'.$data['name'];
+        $setValue = $data['value'];
+        $entity->$setName($setValue);
+        $em->persist($entity);
+        $em->flush();
+        exit;
+
     }
 
     /**
