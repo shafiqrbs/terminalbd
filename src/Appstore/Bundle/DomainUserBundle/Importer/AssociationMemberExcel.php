@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
-class GpCustomerExcel
+class AssociationMemberExcel
 {
     use ContainerAwareTrait;
 
@@ -40,6 +40,8 @@ class GpCustomerExcel
                 $em = $this->getDoctrain()->getManager();
                 $em->persist($entity);
                 $em->flush();
+
+
 
                 $pro = new Profile();
                 $pro->setUser($entity);
@@ -75,16 +77,16 @@ class GpCustomerExcel
                 $created = date('Y-m-d',$at);
                 $created_at = new \DateTime($created);
                 $profile->setCreated($created_at);
-               // $profile->setProfession($item['occupation']);
-              //  $profile->setMemberDesignation($item['designation']);
-               /* if($item['guardianType'] == "Father"){
+                $profile->setProfession($item['memberOccupation']);
+                $profile->setMemberDesignation($item['memberDesignation']);
+                if($item['guardianType'] == "Father"){
                     $profile->setFatherDesignation($item['guardianOccupation']);
                     $profile->setFatherName($item['guardianName']);
                 }else{
                     $profile->setSpouseOccupation($item['guardianOccupation']);
                     $profile->setSpouseName($item['guardianName']);
                     $profile->setSpouseDesignation($item['guardianDesignation']);
-                }*/
+                }
                 $profile->setMobile($user);
                 $em->persist($profile);
                 $em->flush();
