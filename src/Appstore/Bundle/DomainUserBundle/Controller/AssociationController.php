@@ -145,7 +145,7 @@ class AssociationController extends Controller
         $config = $this->getUser()->getGlobalOption();
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config, 'id' => $id ));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Election Member entity.');
+            throw $this->createNotFoundException('Unable to find Association Member entity.');
         }
         if ($entity->getProcess() == 'Pending'){
             $entity->setProcess('Checked');

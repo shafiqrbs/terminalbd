@@ -92,16 +92,17 @@
                     <div class="row-fluid">
                         <div class="span9">
                             <div class="row-fluid particular-info" >
-                                <div class="span4">
+                                <div class="span7">
                                     <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select product name ---</option>
                                        {% for particular in particulars %}
-                                           <option value="{{ path('restaurant_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
+                                           <option value="{{ path('restaurant_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} {{ particular.unit }}</option>
                                        {% endfor %}
                                      </select>
                                 </div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8"></div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="price" disabled="disabled" required="required" name="price" placeholder="Sales price" value="" maxlength="8"></div>
+                                <div class="span2">
+                                    <input type="text" class="m-wrap span5" id="purchasePrice" disabled="disabled" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8">
+                                    <input type="text" class="m-wrap span6" id="price" disabled="disabled" required="required" name="price" placeholder="Sales price" value="" maxlength="8"></div>
                                 <div class="span3">
                                     <div class="input-group input-append">
                                             <span class="input-group-btn">
@@ -115,11 +116,9 @@
                                                       <span class="fa fa-plus"></span>
                                               </button>
                                             </span>
+                                        <input type="hidden" id="particularId" name="particularId" value="">
+                                        <button type="button" class="btn blue" id="addParticular" data-url="{{ path('restaurant_production_particular_add',{'id':entity.id}) }}" >Add</button>
                                     </div>
-                                </div>
-                                <div class="span1">
-                                    <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('restaurant_production_particular_add',{'id':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +192,7 @@
 
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/invoice.css'
+    '@RestaurantBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -201,9 +200,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/purchase.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
-    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    '@RestaurantBundle/Resources/public/js/purchase.js'
+    '@RestaurantBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

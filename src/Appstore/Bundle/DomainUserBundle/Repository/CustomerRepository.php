@@ -332,7 +332,7 @@ class CustomerRepository extends EntityRepository
         $qb->andWhere("customer.mobile IS NOT NULL");
         $qb->andWhere("customer.status =1");
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('customer.customerId','DESC');
+        $qb->orderBy('customer.created','DESC');
         $qb->getQuery();
         return  $qb;
 
