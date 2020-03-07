@@ -59,8 +59,9 @@ class GpCustomerExcel
                 $profile->setBatchYear($item['studyDuration']);
                 $profile->setHsc($item['hsc']);
                 $profile->setSsc($item['ssc']);
-                $profile->setGender("male");
+                $profile->setGender("Female");
                 $profile->setBloodGroup($item['blood']);
+                $profile->setProcess("Pending");
                 $profile->setAdditionalPhone($item['altPhone']);
                 if($item['photo']){
                     $profile->setPath($item['photo']);

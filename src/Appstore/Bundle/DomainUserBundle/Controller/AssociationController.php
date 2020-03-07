@@ -171,6 +171,30 @@ class AssociationController extends Controller
      * Finds and displays a Customer entity.
      *
      */
+    public function groupSmsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $config));
+        /* @var $global GlobalOption */
+        $global = $this->getUser()->getGlobalOption();
+        if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+            foreach ($entities as $entity){
+                $msg = "Congratulation! your registration has done.your member ID is {$entity->getCustomerId()}";
+              //  $url =  "http://messaging.icombd.com:9000/api/v1/campaigns/sendsms/plain?username=umarit&password=umarit@148&sender=03590003151&text={$msg}&to=8801911709930";
+            //    header("Location: {$url}");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity, $msg));
+            exit;
+            }
+        }
+        return New Response("success");
+    }
+
+    /**
+     * Finds and displays a Customer entity.
+     *
+     */
 
     public function memberShowAction($id)
     {
@@ -315,32 +339,16 @@ class AssociationController extends Controller
         if($user){
             $user->setEnabled(false);
             $user->setIsDelete(true);
+            $user->setGlobalOption(NULL);
         }
+        $entity->setGlobalOption(NULL);
         $entity->setStatus(false);
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->deleteAssociationInvoice($entity);
         return new Response('Success');
-        /*try {
-
-            $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($entity->getUser());
-            if($user){
-                $user->setEnabled(false);
-                $user->setIsDelete(true);
-            }
-            $entity->setStatus(false);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'error',"Data has been deleted successfully"
-            );
-
-        } catch (ForeignKeyConstraintViolationException $e) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',"Data has been relation another Table"
-            );
-        }*/
-       // return $this->redirect($this->generateUrl('customer'));
     }
 
     public function autoSearchAction(Request $request)
