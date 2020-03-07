@@ -336,6 +336,13 @@
     }
     {% endif %}
 
+    {% if globalOption.templateCustomize.mobileCarouselHeight  is not empty %}
+    {{ globalOption.templateCustomize.mobileCarouselHeight }}
+        #main-carousel{
+            height:{{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
+        }
+    {% endif %}
+
     .feature-carousel-vertical .owl-controls .owl-buttons .owl-prev , .page-carousel-vertical .owl-controls .owl-buttons .owl-prev {
     {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty %}
         left: {{ globalOption.templateCustomize.sliderLeftRightPosition }}%!important;

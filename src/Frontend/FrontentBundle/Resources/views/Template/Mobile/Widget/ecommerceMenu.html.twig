@@ -1,5 +1,5 @@
 <nav id="mm-menu">
-    <ul>
+{#    <ul>
         {% for  menu in globalOption.ecommerceMenus  %}
             <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
                 <ul>
@@ -73,5 +73,5 @@
                 </ul>
             </li>
         {% endfor %}
-    </ul>
+    </ul>#}
 </nav>

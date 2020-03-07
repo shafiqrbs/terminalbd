@@ -39,6 +39,15 @@
                             <div class="row-fluid">
                                 <div class="span6">
                                     <div class="control-group">
+                                        <label class="control-label" for="name">Service Type<span class="required">*</span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.service) }}
+                                            {{ form_errors(form.service) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span6">
+                                    <div class="control-group">
                                         <label class="control-label" for="name">Category name<span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.name) }}

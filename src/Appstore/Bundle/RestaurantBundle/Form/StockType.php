@@ -35,7 +35,7 @@ class StockType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter accessories name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
@@ -78,8 +78,11 @@ class StockType extends AbstractType
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
+                        ->join('e.service','s')
                         ->where("e.status = 1")
                         ->andWhere("e.restaurantConfig = {$this->config}")
+                        ->andWhere('s.slug IN (:slugs)')
+                        ->setParameter('slugs',array('consuamble','stockable'))
                         ->orderBy("e.sorting","ASC");
                 }
             ))

@@ -22,7 +22,23 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
+            ->add('service', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Service',
+                'property' => 'name',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'empty_value' => '---Choose product type ---',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere('e.slug IN (:slugs)')
+                        ->setParameter('slugs',array('consuamble','stockable','product'))
+                        ->orderBy("e.sorting","ASC");
+                }
+            ))
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter category name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter category name'))

@@ -32,6 +32,13 @@ class Category
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Service")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $service;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", mappedBy="category")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -215,6 +222,22 @@ class Category
     public function setRestaurantConfig($restaurantConfig)
     {
         $this->restaurantConfig = $restaurantConfig;
+    }
+
+    /**
+     * @return Service
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * @param Service $service
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
     }
 
 

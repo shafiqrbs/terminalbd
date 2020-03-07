@@ -159,10 +159,9 @@ class FeatureType extends AbstractType
                 ),
             ))
             ->add('file', 'file',array(
-                'required' => true,
                 'constraints' =>array(
                     new File(array(
-                        'maxSize' => '1M',
+                        'maxSize' => '2M',
                         'mimeTypes' => array(
                             'image/png',
                             'image/jpg',
