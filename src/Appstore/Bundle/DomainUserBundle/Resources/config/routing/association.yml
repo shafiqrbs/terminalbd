@@ -14,6 +14,10 @@ domain_association_process:
     path:     /{id}/process
     defaults: { _controller: "DomainUserBundle:Association:process" }
 
+domain_association_group_sms:
+    path:     /group-sms
+    defaults: { _controller: "DomainUserBundle:Association:groupSms" }
+
 domain_association_show:
     path:     /{id}/show
     defaults: { _controller: "DomainUserBundle:Association:show" }
@@ -79,7 +83,7 @@ domain_association_code_search:
             expose: true
 
 domain_association_code:
-    path:      /{Association}/Association-code
+    path:      /{association}/Association-code
     defaults: { _controller: "DomainUserBundle:Association:searchCode" }
     options:
            expose: true
@@ -97,13 +101,13 @@ domain_location_name:
            expose: true
 
 domain_association_auto_name_search:
-    path:     /Association-auto-name-search
+    path:     /association-auto-name-search
     defaults: { _controller: "DomainUserBundle:Association:searchAutoCompleteName" }
     options:
            expose: true
 
 domain_association_ledger:
-    path:     /Association-ledger
+    path:     /association-ledger
     defaults: { _controller: "AccountingBundle:AccountSales:associationLedger" }
     options:
            expose: true

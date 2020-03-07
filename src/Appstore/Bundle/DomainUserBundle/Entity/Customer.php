@@ -566,6 +566,13 @@ class Customer
     private $created;
 
     /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $path;
@@ -1784,6 +1791,22 @@ class Customer
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
     }
 
 

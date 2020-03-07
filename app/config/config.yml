@@ -105,7 +105,7 @@ fos_comment:
 guzzle:
     clients:
         api_crm:
-            base_url: "http://api.bulksms.icombd.com"
+            base_url: "http://messaging.icombd.com:9000"
             headers:
                 Accept: "application/json"
 
