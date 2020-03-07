@@ -40,23 +40,14 @@ class ReportController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
-
         $salesTotalTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data);
-
         $salesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'true');
-
         $previousSalesTransactionOverview = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'false');
-
         $transactionOverview = $em->getRepository('RestaurantBundle:Invoice')->transactionBaseOverview($user,$data);
-
         $userSalesOverview = $em->getRepository('RestaurantBundle:Invoice')->userSalesOverview($user,$data);
-
         $categoryOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithCategoryOverview($user,$data);
-
         $productOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductOverview($user,$data);
-
 
         if(empty($data['pdf'])){
 

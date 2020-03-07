@@ -91,15 +91,17 @@ class InvoiceRepository extends EntityRepository
     public function todaySalesOverview(User $user , $data , $previous ='')
     {
 
+
         if (empty($data)) {
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d');
             $data['endDate'] = $datetime->format('Y-m-d');
         } elseif (!empty($data['startDate']) and !empty($data['endDate'])) {
             $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
+          //  $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
+            $endDate = new \DateTime($data['endDate']);
+            $data['endDate'] = $endDate->format("Y-m-d");
         }
-
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.total) as total ,sum(e.discount) as discount , sum(e.vat) as vat, sum(e.payment) as payment, sum(e.due) as due');
