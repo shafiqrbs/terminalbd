@@ -264,7 +264,7 @@ class ProductionController extends Controller
 	    $particularReturn = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->updateSalesPrice($particular);
         $production = $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionElement')->particularProductionElements($particular);
         return new Response(json_encode(array('subTotal' => $particularReturn->getSalesPrice(),'purchasePrice' => $particular->getPurchasePrice(),'particulars' => $production)));
-        exit;
+
     }
 
     public function deleteAction(BusinessParticular $particular , $id){

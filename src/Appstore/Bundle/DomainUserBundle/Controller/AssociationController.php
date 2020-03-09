@@ -173,6 +173,8 @@ class AssociationController extends Controller
      */
     public function groupSmsAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $config));
@@ -180,12 +182,9 @@ class AssociationController extends Controller
         $global = $this->getUser()->getGlobalOption();
         if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
             foreach ($entities as $entity){
-                $msg = "Congratulation! your registration has done.your member ID is {$entity->getCustomerId()}";
-              //  $url =  "http://messaging.icombd.com:9000/api/v1/campaigns/sendsms/plain?username=umarit&password=umarit@148&sender=03590003151&text={$msg}&to=8801911709930";
-            //    header("Location: {$url}");
+                $msg = "Congratulation! your registration has done.your member ID is {$entity->getCustomerId()}. Please click www.bhaws.org for update your info and give your monthly payment info. Thanks";
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity, $msg));
-            exit;
             }
         }
         return New Response("success");

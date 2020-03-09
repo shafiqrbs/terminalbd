@@ -91,7 +91,6 @@
                                             <th class="span1">Code</th>
                                             <th class="span4">Particular</th>
                                             <th class="span1">Qnt</th>
-                                            <th class="span2">Sales Price</th>
                                             <th class="span2">Purchase Price</th>
                                             <th class="span1">Sub-Total</th>
                                         </tr>
@@ -103,19 +102,25 @@
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
                                                 <td class="span4">{{ item.particular.name }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span2">{{ item.salesPrice }}</td>
                                                 <td class="span2">{{ item.purchasePrice }}</td>
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr><th colspan="5">SubTotal</th><th>{{ entity.subTotal|number_format(2) }}</th></tr>
+                                        <tr><th colspan="5">Discount</th><th>{{ entity.subTotal|number_format(2) }}</th></tr>
+                                        <tr><th colspan="5">Net Total</th><th>{{ entity.netTotal|number_format(2) }}</th></tr>
+                                        <tr><th colspan="5">Payment</th><th>{{ entity.payment|number_format(2) }}</th></tr>
+                                        <tr><th colspan="5">Due</th><th>{{ (entity.netTotal- entity.payment)|number_format(2) }}</th></tr>
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done') %}
+                                    {% if ( entity.process == 'Done' and ) %}
                                     <a  href="javascript:"  data-url="{{ path('restaurant_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>

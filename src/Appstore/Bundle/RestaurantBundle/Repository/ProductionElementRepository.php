@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
@@ -15,5 +16,65 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductionElementRepository extends EntityRepository
 {
+    public function insertProductionElement($particular, $data)
+    {
+        $em = $this->_em;
+        $existParticular = $this->_em->getRepository('RestaurantBundle:ProductionElement')->findOneBy(array('item'=> $particular,'material' => $data['particularId']));
+        if(empty($existParticular)){
+            $entity = new ProductionElement();
+            $entity->setItem($particular);
+            $material = $this->_em->getRepository('RestaurantBundle:Particular')->find($data['particularId']);
+            $entity->setMaterial($material);
+            $entity->setPrice($data['price']);
+            $entity->setQuantity($data['quantity']);
+            $entity->setSubTotal($data['quantity'] * $data['price']);
+            $em->persist($entity);
+            $em->flush();
 
+        }else{
+
+            /* @var $existParticular ProductionElement */
+
+           $existParticular->setPrice($data['price']);
+           $existParticular->setQuantity($data['quantity']);
+           $existParticular->setSubTotal($data['quantity'] * $data['price']);
+           $em->flush();
+
+        }
+    }
+
+    public function getProductionPrice(Particular $particular)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.price * e.quantity) as purchasePrice');
+        $qb->where('e.item = :particular');
+        $qb->setParameter('particular', $particular);
+        return $qb->getQuery()->getOneOrNullResult()['purchasePrice'];
+    }
+
+    public function particularProductionElements(Particular $particular)
+    {
+        $entities = $particular->getProductionItems();
+        $data = '';
+        $i = 1;
+
+        /* @var $entity ProductionElement */
+
+        foreach ($entities as $entity) {
+
+            $subPrice = $entity->getPrice() * $entity->getQuantity();
+            $unit = !empty($entity->getMaterial()->getUnit() && !empty($entity->getMaterial()->getUnit()->getName())) ? $entity->getMaterial()->getUnit()->getName():'Unit';
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td class='span1' >{$i}</td>";
+            $data .= "<td class='span3' >{$entity->getMaterial()->getName()}</td>";
+            $data .= "<td class='span1' >{$entity->getQuantity()}</td>";
+            $data .= "<td class='span1' >{$unit}</td>";
+            $data .= "<td class='span1' >{$entity->getPrice()}</td>";
+            $data .= "<td class='span1' >{$subPrice}</td>";
+            $data .= "<td class='span1' ><a id='{$entity->getId()}' data-url='/business/product-production/{$particular->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
+            $data .= '</tr>';
+            $i++;
+        }
+        return $data;
+    }
 }

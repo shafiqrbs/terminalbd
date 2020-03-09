@@ -40,6 +40,15 @@ class StockType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('productionType', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '---Production Type---',
+                'choices' => array(
+                    'pre-production' => 'Pre-production',
+                    'post-production' => 'Post-production'
+                ),
+            ))
             ->add('service', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Service',
@@ -53,36 +62,24 @@ class StockType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
                         ->andWhere('e.slug IN (:slugs)')
-                        ->setParameter('slugs',array('consuamble','stockable'))
+                        ->setParameter('slugs',array('consuamble','stockable','product'))
                         ->orderBy("e.sorting","ASC");
                 }
             ))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price')))
             ->add('category', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Category',
+                'group_by'  => 'service.name',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
+                'choice_translation_domain' => true,
                 'empty_value' => '---Choose a category ---',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->join('e.service','s')
                         ->where("e.status = 1")
                         ->andWhere("e.restaurantConfig = {$this->config}")
-                        ->andWhere('s.slug IN (:slugs)')
-                        ->setParameter('slugs',array('consuamble','stockable'))
                         ->orderBy("e.sorting","ASC");
                 }
             ))

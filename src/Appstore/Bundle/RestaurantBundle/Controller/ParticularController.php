@@ -38,7 +38,7 @@ class ParticularController extends Controller
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','category'));
+        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('token','value-added'));
         //$pagination = $this->paginate($pagination);
         $editForm = $this->createCreateForm($entity);
         return $this->render('RestaurantBundle:Particular:index.html.twig', array(

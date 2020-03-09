@@ -19,7 +19,6 @@ class StockController extends Controller
 
     public function paginate($entities)
     {
-
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
@@ -37,15 +36,19 @@ class StockController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getAccessoriesParticular($hospital);
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $data = $_REQUEST;
+        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getAccessoriesParticular($config,$data);
         $pagination = $this->paginate($entities);
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
+            'categories' => $categories,
             'entity' => $entity,
-            'formShow'            => 'hide',
+            'formShow' => 'hide',
+            'searchForm' => $data,
             'form'   => $form->createView(),
         ));
 
@@ -79,9 +82,11 @@ class StockController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Required field does not input"
         );
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
+            'categories' => $categories,
             'formShow'            => 'show',
             'form'   => $form->createView(),
         ));
@@ -125,9 +130,11 @@ class StockController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
+            'categories'            => $categories,
             'formShow'            => 'show',
             'form'              => $editForm->createView(),
         ));
@@ -184,9 +191,11 @@ class StockController extends Controller
             );
             return $this->redirect($this->generateUrl('restaurant_stock'));
         }
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'pagination'      => $pagination,
             'entity'      => $entity,
+            'categories'      => $categories,
             'formShow'            => 'show',
             'form'   => $editForm->createView(),
         ));

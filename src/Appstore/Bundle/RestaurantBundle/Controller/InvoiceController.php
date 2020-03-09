@@ -445,7 +445,7 @@ class InvoiceController extends Controller
         $entity->setDue($entity->getTotal() - $entity->getPayment());
         $entity->setPaymentInWord(null);
         $em->flush();
-        $template = $this->get('twig')->render('RestaurantBundle:Invoice:reverse.html.twig',array(
+        $template = $this->get('twig')->render('RestaurantBundle:Invoice:reverse-data.html.twig',array(
             'entity' => $entity,
         ));
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {

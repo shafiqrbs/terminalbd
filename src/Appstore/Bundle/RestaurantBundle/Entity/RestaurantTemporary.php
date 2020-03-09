@@ -77,6 +77,7 @@ class RestaurantTemporary
     private $subTotal;
 
 
+
     /**
      * Get id
      *

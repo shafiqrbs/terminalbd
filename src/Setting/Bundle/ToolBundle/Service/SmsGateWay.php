@@ -83,7 +83,7 @@ class SmsGateWay
         $response = curl_exec($curl);
         print_r(curl_error($curl));
         curl_close($curl);
-        //echo $response;
+      //  echo $response;
         return 'success';
 
     }

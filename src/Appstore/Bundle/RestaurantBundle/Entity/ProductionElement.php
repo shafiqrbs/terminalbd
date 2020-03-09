@@ -2,12 +2,8 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
+
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 /**
  * HmsPurchaseItem
  *
@@ -28,7 +24,12 @@ class ProductionElement
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionElements" )
      **/
-    private  $particular;
+    private  $material;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionItems" )
+     **/
+    private  $item;
 
     /**
      * @var float
@@ -37,20 +38,21 @@ class ProductionElement
      */
     private $quantity;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="purchasePrice", type="float")
-     */
-    private $purchasePrice;
-
 
     /**
      * @var float
      *
-     * @ORM\Column(name="salesPrice", type="float", nullable = true)
+     * @ORM\Column(name="price", type="float" , nullable = true)
      */
-    private $salesPrice;
+    private $price;
+
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float" , nullable = true)
+     */
+    private $subTotal;
 
 
     /**
@@ -83,61 +85,69 @@ class ProductionElement
         return $this->quantity;
     }
 
+
     /**
-     * Set purchasePrice
-     * @param float $purchasePrice
+     * @return Particular
      */
-    public function setPurchasePrice($purchasePrice)
+    public function getMaterial()
     {
-        $this->purchasePrice = $purchasePrice;
+        return $this->material;
     }
 
     /**
-     * Get purchasePrice
-     *
-     * @return float
+     * @param Particular $material
      */
-    public function getPurchasePrice()
+    public function setMaterial($material)
     {
-        return $this->purchasePrice;
-    }
-
-
-
-
-    /**
-     * Set salesPrice
-     * @param float $salesPrice
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-    }
-
-    /**
-     * Get salesPrice
-     *
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
+        $this->material = $material;
     }
 
     /**
      * @return Particular
      */
-    public function getParticular()
+    public function getItem()
     {
-        return $this->particular;
+        return $this->item;
     }
 
     /**
-     * @param Particular $particular
+     * @param Particular $item
      */
-    public function setParticular($particular)
+    public function setItem($item)
     {
-        $this->particular = $particular;
+        $this->item = $item;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
     }
 
 

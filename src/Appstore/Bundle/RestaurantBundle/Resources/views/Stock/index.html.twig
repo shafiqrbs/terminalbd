@@ -60,7 +60,7 @@
                                     <div class="row-fluid" >
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label"  for="category" >Product Category<span class="required">*</span></label>
+                                                <label class="control-label"  for="category" >Product Category</label>
                                                 <div class="controls">
                                                     {{ form_widget(form.category) }}
                                                     {{ form_errors(form.category) }}
@@ -68,6 +68,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="clearfix"><br/></div>
                                     <div class="row-fluid" >
                                         <div class="span12">
                                             <div class="control-group">
@@ -85,7 +86,18 @@
                                 </div>
                                 <div class="span4">
                                     <div class="row-fluid" >
-                                       <div class="span12">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="name">Production Type</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.productionType) }}
+                                                    {{ form_errors(form.productionType) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid" >
+                                        <div class="span12">
                                             <div class="control-group">
                                                 <label class="control-label"  for="category" >Unit<span class="required">*</span></label>
                                                 <div class="controls">
@@ -95,10 +107,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="clearfix"><br/></div>
                                     <div class="row-fluid" >
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label" for="name">Purchase Price<span class="required">*</span></label>
+                                                <label class="control-label" for="name">Purchase Price</label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-money"></i>
@@ -108,11 +121,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row-fluid" >
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label" for="name">Sales Price<span class="required">*</span></label>
+                                                <label class="control-label" for="name">Sales Price</label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-money"></i>
@@ -164,6 +175,38 @@
                         </div>
                         <!-- END FORM-->
                         <div class="clearfix"><br/></div>
+                        <div class="row-fluid" >
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid" style="margin-bottom: 10px">
+                                    <div class="span3">
+                                        <select name="service" id="service" class="m-wrap span12">
+                                            <option value="" >--Product Type--</option>
+                                            {% set types = {'product':'Production','consumable':'Consumable','stockable':'Stockable'} %}
+                                            {% for type,key in types %}
+                                            <option value="{{ type }}" {% if searchForm.service is defined and searchForm.service == type %} selected="selected" {% endif %} >{{ key }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <select name="category" id="category" class="m-wrap span12">
+                                            <option value="" >--Product Category--</option>
+                                           {% for cat in categories %}
+                                                <option value="{{ cat.id }}" {% if searchForm.category is defined and searchForm.category == cat.id %} selected="selected" {% endif %} >{{ cat.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="input-append span12">
+                                            <input type="text" id="name" name="name"  class="m-wrap span10" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter product name">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="clearfix"><br/></div>
                         <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -171,8 +214,10 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Receive Price</th>
-                                    <th class="numeric" >Price</th>
+                                    <th class="numeric" >Type</th>
+                                    <th class="numeric" >Category</th>
+                                    <th class="numeric" >PP</th>
+                                    <th class="numeric" >MRP</th>
                                     <th class="numeric" >Opening</th>
                                     <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
@@ -189,11 +234,14 @@
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('restaurant_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{% if entity.serviceName is not empty %}{{ entity.serviceName }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.categoryName is not empty %}{{ entity.categoryName }}{% endif %}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                             {% endif %}
                                         </td>
+
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="Price" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
@@ -222,6 +270,12 @@
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a href="{{ path('restaurant_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('restaurant_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            {% endif %}
+                                            {% if(app.user.granted("ROLE_DOMAIN") and entity.isProduction == 1 and entity.serviceSlug == "product" ) or (app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") and entity.isProduction == 1 and entity.serviceSlug == "product" ) %}
+                                                <a href="{{ path('restaurant_production_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-refresh"></i> Recipe</a>
+                                            {% endif %}
+                                            {% if(app.user.granted("ROLE_DOMAIN") and entity.isProduction == 1 and entity.productionType == 'pre-production' and entity.serviceSlug == "product" ) or (app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") and entity.isProduction == 1 and entity.serviceSlug == "product" and entity.productionType == 'pre-production') %}
+                                                <a href="{{ path('restaurant_production_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-retweet"></i> Production</a>
                                             {% endif %}
                                         </td>
                                     </tr>

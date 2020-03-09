@@ -1,26 +1,33 @@
 restaurant_production_edit:
     path:     /{id}/
-    defaults: { _controller: "RestaurantBundle:Product:production" }
+    defaults: { _controller: "RestaurantBundle:Production:production" }
 
 restaurant_production_update:
     path:     /{id}/update
-    defaults: { _controller: "RestaurantBundle:Product:productionUpdate" }
+    defaults: { _controller: "RestaurantBundle:Production:productionUpdate" }
     methods:  [POST, PUT]
 
 
 restaurant_production_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "RestaurantBundle:Product:productionElementDelete" }
+    path:     /{product}/{id}/delete
+    defaults: { _controller: "RestaurantBundle:Production:productionElementDelete" }
 
 restaurant_production_particular_search:
     path:     /{id}/particular-search
-    defaults: { _controller: "RestaurantBundle:Product:particularSearch" }
+    defaults: { _controller: "RestaurantBundle:Production:particularSearch" }
 
 
 restaurant_production_particular_add:
     path:     /{id}/particular-add
-    defaults: { _controller: "RestaurantBundle:Product:addParticular" }
+    defaults: { _controller: "RestaurantBundle:Production:addParticular" }
     methods:  POST
+    options:
+            expose: true
+
+restaurant_production_valueadded:
+    path:     /{id}/item-value-add
+    defaults: { _controller: "RestaurantBundle:Production:itemValueAdd" }
+    methods:  GET
     options:
             expose: true
 

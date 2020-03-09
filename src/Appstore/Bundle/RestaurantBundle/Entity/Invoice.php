@@ -283,12 +283,6 @@ class Invoice
      */
     private $comment;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="disease", type="text", nullable=true)
-     */
-    private $disease;
 
     /**
      * @var string
@@ -310,6 +304,13 @@ class Invoice
      * @ORM\Column(name="revised", type="boolean" )
      */
     private $revised = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isHold", type="boolean" )
+     */
+    private $isHold = false;
 
 
     /**
@@ -1062,6 +1063,22 @@ class Invoice
     public function setRevised($revised)
     {
         $this->revised = $revised;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHold()
+    {
+        return $this->isHold;
+    }
+
+    /**
+     * @param bool $isHold
+     */
+    public function setIsHold($isHold)
+    {
+        $this->isHold = $isHold;
     }
 
 

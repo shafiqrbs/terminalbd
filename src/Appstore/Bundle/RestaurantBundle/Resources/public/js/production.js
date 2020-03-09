@@ -25,6 +25,10 @@ $(document).on("click", ".approve", function() {
     });
 });
 
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
+
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
@@ -51,12 +55,22 @@ $(document).on('change', '#particular', function() {
         success: function (response) {
             obj = JSON.parse(response);
             $('#particularId').val(obj['particularId']);
-        //    $('#quantity').val(obj['quantity']);
-       //     $('#price').val(obj['price']);
-          //  $('#purchasePrice').val(obj['purchasePrice']);
-            $('#instruction').html(obj['instruction']);
+            $('#purchasePrice').val(obj['purchasePrice']);
         }
     })
+});
+
+$(document).on('keyup', ".amount", function() {
+    var sum = 0;
+    var id = $(this).attr('data-id');
+    var url = $("#amount-"+id).attr('data-action');
+    var amount = $("#amount-"+id).val();
+    $.get(url,{amount:amount} );
+    $(".amount").each(function(){
+        sum += + parseFloat($(this).val());
+    });
+    total = financial(sum);
+    $("#valueTotal").html(total);
 });
 
 $(document).on('click', '#addParticular', function() {

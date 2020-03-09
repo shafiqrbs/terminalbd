@@ -42,7 +42,7 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid box green">
-                                <div class="span4">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label " for="vatPercentage">Sales Mode</label>
                                         <div class="control">
@@ -51,11 +51,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span4">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label " >&nbsp;</label>
                                         <div class="control">
                                              {{ form_widget(form.isStockHistory) }}  Is Stock History
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label " >&nbsp;</label>
+                                        <div class="control">
+                                             {{ form_widget(form.isProduction) }}  Is Production
                                         </div>
                                     </div>
                                 </div>

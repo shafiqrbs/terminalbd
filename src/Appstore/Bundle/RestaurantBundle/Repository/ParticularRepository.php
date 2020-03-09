@@ -5,6 +5,7 @@ namespace Appstore\Bundle\RestaurantBundle\Repository;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
@@ -21,6 +22,29 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class ParticularRepository extends EntityRepository
 {
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $service = isset($data['service'])? $data['service'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.slug", "'%$$name%'"  ));
+        }
+        if(!empty($category)){
+            $qb->andWhere("c.id = :category")->setParameter('category', $category);
+        }
+        if(!empty($service)){
+            $qb->andWhere("s.slug = :service")->setParameter('service', $service);
+        }
+
+    }
 
     public function getServiceLists(Invoice $invoice,$data)
     {
@@ -241,37 +265,47 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.purchaseQuantity')
             ->where('e.restaurantConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.slug IN(:slugs)')
-            ->setParameter('slugs',array_values(array('stockable','consumable')))
+            ->setParameter('slugs',array_values(array('stockable','consuamble')))
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
     }
-    public function getAccessoriesParticular($config){
 
-        $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
-            ->select('e.id')
-            ->addSelect('e.name')
-            ->addSelect('e.particularCode')
-            ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
-            ->addSelect('e.quantity')
-            ->addSelect('e.status')
-            ->addSelect('e.salesQuantity')
-            ->addSelect('e.minQuantity')
-            ->addSelect('e.openingQuantity')
-            ->addSelect('u.name as unit')
-            ->addSelect('s.name as serviceName')
-            ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchasePrice')
-            ->addSelect('e.purchaseQuantity')
-            ->where('e.restaurantConfig = :config')->setParameter('config', $config)
-            ->andWhere('s.slug IN(:slugs)')
-            ->setParameter('slugs',array('stockable','consuamble'))
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getArrayResult();
-            return  $qb;
+    public function getAccessoriesParticular($config,$data = ""){
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.restaurantConfig','r');
+        $qb->leftJoin('e.service','s');
+            $qb->leftJoin('e.category','c');
+            $qb->leftJoin('e.unit','u');
+            $qb->select('e.id');
+            $qb->addSelect('e.name');
+            $qb->addSelect('e.productionType as productionType');
+            $qb->addSelect('r.id as restaurantConfig');
+            $qb->addSelect('r.isProduction as isProduction');
+            $qb->addSelect('e.particularCode');
+            $qb->addSelect('e.price');
+            $qb->addSelect('e.minimumPrice');
+            $qb->addSelect('e.quantity');
+            $qb->addSelect('e.status');
+            $qb->addSelect('e.salesQuantity');
+            $qb->addSelect('e.minQuantity');
+            $qb->addSelect('e.openingQuantity');
+            $qb->addSelect('u.name as unit');
+            $qb->addSelect('s.name as serviceName');
+            $qb->addSelect('s.slug as serviceSlug');
+            $qb->addSelect('s.code as serviceCode');
+            $qb->addSelect('c.name as categoryName');
+            $qb->addSelect('e.purchasePrice');
+            $qb->addSelect('e.purchaseQuantity');
+            $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
+            $qb->andWhere('s.slug IN(:slugs)');
+            $qb->setParameter('slugs',array('stockable','consuamble',"product"));
+            $this->handleSearchBetween($qb,$data);
+            $qb->orderBy('e.name','ASC');
+            $result = $qb->getQuery();
+            return  $result;
     }
 
     public function updateRemoveStockQuantity(Particular $stock,$fieldName=''){
@@ -445,6 +479,82 @@ class ParticularRepository extends EntityRepository
         return $data;
 
     }
+
+    public function insertInvoiceProductItem(Invoice $invoice){
+
+        $em = $this->_em;
+        if(!empty($invoice->getInvoiceParticulars())) {
+
+            /* @var  $item InvoiceParticular */
+
+            foreach ($invoice->getInvoiceParticulars() as $item) {
+                if(!empty($item->getParticular()) and $item->getQuantity() > 0) {
+                    if ( $item->getParticular()->getProductionType() == 'post-production') {
+                        $this->productionExpense( $item );
+                    }
+                  //  $this->getSalesUpdateQnt( $item );
+                }
+            }
+        }
+
+    }
+
+    public function productionExpense(InvoiceParticular  $item)
+    {
+        if(!empty($item->getParticular()->getProductionItems())){
+
+            $productionElements = $item->getParticular()->getProductionElements();
+
+            /* @var $element ProductionElement */
+
+            if($productionElements) {
+
+                foreach ($productionElements as $element) {
+
+                    $entity = new ProductionElement();
+                    $entity->setItem($item);
+                    $entity->setProductionItem($item->getBusinessParticular());
+                    $entity->setProductionElement($element->getParticular());
+                    $entity->setPurchasePrice($element->getPurchasePrice());
+                    $entity->setSalesPrice($element->getSalesPrice());
+                    if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() == 'Sft')) {
+                        $entity->setQuantity($item->getTotalQuantity());
+                    }else{
+                        $entity->setQuantity($element->getQuantity() * $item->getQuantity());
+                    }
+                    $this->_em->persist($entity);
+                    $this->_em->flush();
+                    $this->salesProductionQnt($element);
+                }
+            }
+        }
+    }
+
+    public function salesProductionQnt( ProductionElement  $element){
+
+        $em = $this->_em;
+        $particular = $element->getParticular();
+        $productionQnt = $this->getSumTotalProductionItemQuantity($particular);
+        $invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
+        $qnt = $productionQnt + $invoiceQnt;
+        $particular->setSalesQuantity($qnt);
+        $em->persist($particular);
+        $em->flush();
+        $this->remainingQnt($particular);
+    }
+
+    public function getSumTotalProductionItemQuantity(Particular $particular){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessProductionExpense','e');
+        $qb->select('COALESCE(SUM(e.quantity),0) AS quantity');
+        $qb->where('e.productionElement = :particular')->setParameter('particular', $particular->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        $productionQnt = ($qnt['quantity'] == 0 ) ? 0 : $qnt['quantity'];
+        return $productionQnt;
+
+    }
+
 
 
 }

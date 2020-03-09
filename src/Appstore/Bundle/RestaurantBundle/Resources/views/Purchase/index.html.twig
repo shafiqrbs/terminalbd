@@ -92,8 +92,8 @@
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' or entity.process == 'pending' %}
                                             <a href="{{ path('restaurant_purchase_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>

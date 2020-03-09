@@ -44,10 +44,22 @@ class Particular
     private $category;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", mappedBy="particular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", mappedBy="material" )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private $productionElements;
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionValueAdded", mappedBy="productionItem" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $productionValues;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", mappedBy="item" )
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private $productionItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", mappedBy="particular" )
@@ -156,9 +168,9 @@ class Particular
     private $purchaseAverage;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
     private $purchasePrice;
 
@@ -198,6 +210,13 @@ class Particular
      */
     private $content;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productionType", type="text", nullable=true)
+     */
+    private $productionType;
+
 
     /**
      * @var string
@@ -208,30 +227,44 @@ class Particular
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="price", type="decimal", nullable=true)
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="discountPrice", type="decimal", nullable=true)
+     * @ORM\Column(name="discountPrice", type="float", nullable=true)
      */
     private $discountPrice;
 
     /**
-     * @var \string
+     * @var float
      *
-     * @ORM\Column(name="minimumPrice", type="decimal", nullable=true)
+     * @ORM\Column(name="valueAddedAmount", type="float", nullable=true)
+     */
+    private $valueAddedAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="productionElementAmount", type="float", nullable=true)
+     */
+    private $productionElementAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="minimumPrice", type="float", nullable=true)
      */
     private $minimumPrice;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="commission", type="decimal" , nullable=true)
+     * @ORM\Column(name="commission", type="float" , nullable=true)
      */
     private $commission;
 
@@ -383,7 +416,7 @@ class Particular
     /**
      * Set price
      *
-     * @param string $price
+     * @param float $price
      *
      * @return Particular
      */
@@ -397,7 +430,7 @@ class Particular
     /**
      * Get price
      *
-     * @return string
+     * @return float
      */
     public function getPrice()
     {
@@ -806,7 +839,7 @@ class Particular
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getPurchasePrice()
     {
@@ -814,7 +847,7 @@ class Particular
     }
 
     /**
-     * @param string $purchasePrice
+     * @param float $purchasePrice
      */
     public function setPurchasePrice($purchasePrice)
     {
@@ -965,7 +998,7 @@ class Particular
     }
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getCategory()
     {
@@ -973,7 +1006,7 @@ class Particular
     }
 
     /**
-     * @param mixed $category
+     * @param Category $category
      */
     public function setCategory($category)
     {
@@ -1042,6 +1075,70 @@ class Particular
     public function setRemainingQuantity($remainingQuantity)
     {
         $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return ProductionElement
+     */
+    public function getProductionItems()
+    {
+        return $this->productionItems;
+    }
+
+    /**
+     * @return ProductionValueAdded
+     */
+    public function getProductionValues()
+    {
+        return $this->productionValues;
+    }
+
+    /**
+     * @return float
+     */
+    public function getProductionElementAmount()
+    {
+        return $this->productionElementAmount;
+    }
+
+    /**
+     * @param float $productionElementAmount
+     */
+    public function setProductionElementAmount($productionElementAmount)
+    {
+        $this->productionElementAmount = $productionElementAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getValueAddedAmount()
+    {
+        return $this->valueAddedAmount;
+    }
+
+    /**
+     * @param float $valueAddedAmount
+     */
+    public function setValueAddedAmount($valueAddedAmount)
+    {
+        $this->valueAddedAmount = $valueAddedAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductionType()
+    {
+        return $this->productionType;
+    }
+
+    /**
+     * @param string $productionType
+     */
+    public function setProductionType($productionType)
+    {
+        $this->productionType = $productionType;
     }
 
 

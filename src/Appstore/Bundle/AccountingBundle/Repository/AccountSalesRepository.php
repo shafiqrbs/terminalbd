@@ -800,7 +800,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setSourceInvoice($entity->getInvoice());
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
-        $accountSales->setTotalAmount($entity->getPayment());
+        $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setAmount($entity->getPayment());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setProcessHead('restaurant');

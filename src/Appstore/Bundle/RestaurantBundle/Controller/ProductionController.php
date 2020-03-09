@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\RestaurantBundle\Controller;
 
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionValueAdded;
 use Appstore\Bundle\RestaurantBundle\Form\ParticularType;
 use Appstore\Bundle\RestaurantBundle\Form\ProductionType;
 use Appstore\Bundle\RestaurantBundle\Form\ProductType;
@@ -48,9 +50,11 @@ class ProductionController extends Controller
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $editForm = $this->createProductionCostingForm($entity);
         $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($config);
+        $productionValues = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionValueAdded')->getProductionAdded($entity);
         return $this->render('RestaurantBundle:Product:production.html.twig', array(
             'entity'      => $entity,
             'particulars' => $particulars,
+            'productionValues' => $productionValues,
             'form'   => $editForm->createView(),
         ));
     }
@@ -58,33 +62,16 @@ class ProductionController extends Controller
     public function productionUpdateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $pagination = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($config,array('product'));
-        //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            if($entity->upload() && !empty($entity->getFile())){
-                $entity->removeUpload();
-            }
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been updated successfully"
-            );
-            return $this->redirect($this->generateUrl('restaurant_product'));
-        }
-
-        return $this->render('RestaurantBundle:Product:index.html.twig', array(
-            'entity'      => $entity,
-            'pagination'      => $pagination,
-            'form'   => $editForm->createView(),
-        ));
+        $productionPrice = $entity->getValueAddedAmount() + $entity->getProductionElementAmount();
+        $entity->setPurchasePrice($productionPrice);
+        $em->flush();
+        return $this->redirect($this->generateUrl('restaurant_product'));
     }
 
 
@@ -100,38 +87,45 @@ class ProductionController extends Controller
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('price');
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
-        $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
-        $msg = 'Particular added successfully';
+        $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->insertProductionElement($invoice, $invoiceItems);
+        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->getProductionPrice($invoice);
+        $invoice->setProductionElementAmount($subTotal);
+        $em->flush();
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->particularProductionElements($invoice);
+        $result = array('subTotal' => $subTotal , 'invoiceParticulars' => $invoiceParticulars);
+        return new Response(json_encode($result));
 
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
     }
 
-    public function productionElementDeleteAction(Purchase $invoice, PurchaseItem $particular){
+    public function itemValueAddAction(Request $request, ProductionValueAdded $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $amount = $_REQUEST['amount'];
+        $entity->setAmount($amount);
+        $em->flush();
+        $productionItem = $entity->getProductionItem();
+        $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->particularProductionElements($productionItem);
+        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionValueAdded')->totalValues($productionItem);
+        $productionItem->setValueAddedAmount($subTotal);
+        $em->flush();
+        return new Response('success');
+
+    }
+
+    public function productionElementDeleteAction(Particular $product, ProductionElement $particular){
 
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-
         $em->remove($particular);
         $em->flush();
-        $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Purchase')->updatePurchaseTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:PurchaseItem')->getPurchaseItems($invoice);
-
-        $msg = 'Particular deleted successfully';
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
-
+        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->getProductionPrice($product);
+        $product->setValueAddedAmount($subTotal);
+        $em->flush();
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->particularProductionElements($product);
+        $result = array('subTotal' => $subTotal,'invoiceParticulars' => $invoiceParticulars);
+        return new Response(json_encode($result));
 
     }
 

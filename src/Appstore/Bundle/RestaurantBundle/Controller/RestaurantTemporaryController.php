@@ -118,7 +118,7 @@ class RestaurantTemporaryController extends Controller
         $entity->setDeliveryDateTime($datetime);
         $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
         $entity->setCustomer($customer);
-        if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal()) or ($entity->getTotal() > 0 and empty($data['payment']))){
+        if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal()) or ($entity->getTotal() > 0 and empty($data['payment']) and $entity->isHold() != 1)){
             $entity->setPayment($entity->getTotal());
             $entity->setPaymentStatus("Paid");
             $entity->setDue(0);
@@ -128,11 +128,14 @@ class RestaurantTemporaryController extends Controller
             }
 
         }else{
-
-            $entity->setPayment($data['payment']);
+            $payment = floatval($data['payment']);
+            $entity->setPayment($payment);
             $entity->setPaymentStatus("Due");
             $amount = $entity->getTotal() -  $entity->getPayment();
             $entity->setDue($amount);
+        }
+        if($entity->isHold() == 1){
+            $entity->setProcess('Hold');
         }
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords(round($entity->getTotal()));
         $entity->setPaymentInWord($amountInWords);
@@ -140,12 +143,15 @@ class RestaurantTemporaryController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
-        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+        if($entity->isHold() != 1){
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+            $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
+        }
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
         }
-        $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
-        if($btn == "posBtn"){
+
+        if($btn == "posBtn" and $entity->isHold() != 1 ){
             $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
             $pos = $this->posPrint($entity,$invoiceParticulars);
             return new Response($pos);

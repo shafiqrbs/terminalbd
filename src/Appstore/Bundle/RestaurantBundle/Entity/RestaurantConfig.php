@@ -176,6 +176,13 @@ class RestaurantConfig
      */
     private $vatEnable = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isProduction", type="boolean",  nullable=true)
+     */
+    private $isProduction = false;
+
     /**
      * @var smallint
      *
@@ -1224,6 +1231,22 @@ class RestaurantConfig
     public function setPrintToken($printToken)
     {
         $this->printToken = $printToken;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProduction()
+    {
+        return $this->isProduction;
+    }
+
+    /**
+     * @param bool $isProduction
+     */
+    public function setIsProduction($isProduction)
+    {
+        $this->isProduction = $isProduction;
     }
 
 

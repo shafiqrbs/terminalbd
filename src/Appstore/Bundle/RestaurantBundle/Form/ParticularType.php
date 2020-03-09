@@ -41,7 +41,7 @@ class ParticularType extends AbstractType
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
                     ->andWhere('e.slug IN (:slugs)')
-                    ->setParameter('slugs',array('token','category'))
+                    ->setParameter('slugs',array('token','value-added'))
                     ->orderBy("e.sorting","ASC");
                 }
             ))

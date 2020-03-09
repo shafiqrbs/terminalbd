@@ -39,9 +39,9 @@ class PurchaseItemRepository extends EntityRepository
         $entity->setPurchase($invoice);
         $entity->setParticular($particular);
         $entity->setSalesPrice($particular->getPrice());
-        $entity->setPurchasePrice($data['price']);
+        $entity->setPurchasePrice($data['price']/$data['quantity']);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $data['price']);
+        $entity->setPurchaseSubTotal($data['price']);
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);
