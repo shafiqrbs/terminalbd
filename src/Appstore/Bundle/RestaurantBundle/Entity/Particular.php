@@ -104,59 +104,66 @@ class Particular
 
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
+     * @ORM\Column(name="quantity", type="float",  nullable=true)
      */
     private $quantity = 1;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="openingQuantity", type="float", nullable=true)
      */
     private $openingQuantity;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="minQuantity", type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $productionQuantity;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="minQuantity", type="float", nullable=true)
      */
     private $minQuantity;
 
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="purchaseQuantity", type="float", nullable=true)
      */
     private $purchaseQuantity;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="salesQuantity", type="float", nullable=true)
      */
     private $salesQuantity;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="damageQuantity", type="float", nullable=true)
      */
     private $damageQuantity;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="purchaseReturnQuantity", type="float", nullable=true)
      */
     private $purchaseReturnQuantity;
 
      /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
+     * @ORM\Column(name="remainingQuantity", type="float", nullable=true)
      */
     private $remainingQuantity;
 
@@ -1139,6 +1146,22 @@ class Particular
     public function setProductionType($productionType)
     {
         $this->productionType = $productionType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getProductionQuantity()
+    {
+        return $this->productionQuantity;
+    }
+
+    /**
+     * @param float $productionQuantity
+     */
+    public function setProductionQuantity($productionQuantity)
+    {
+        $this->productionQuantity = $productionQuantity;
     }
 
 

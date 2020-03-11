@@ -182,7 +182,7 @@ class AssociationController extends Controller
         $global = $this->getUser()->getGlobalOption();
         if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
             foreach ($entities as $entity){
-                $msg = "Congratulation! your registration has done.your member ID is {$entity->getCustomerId()}. Please click www.bhaws.org for update your info and give your monthly payment info. Thanks";
+                $msg = "Congratulation! your registration has done.your member ID is {$entity->getCustomerId()}. Please click www.bhaws.org for give your monthly payment info. Thanks BHAWS";
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($entity, $msg));
             }

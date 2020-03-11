@@ -1,11 +1,13 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionBatch;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense;
 use Doctrine\ORM\EntityRepository;
-use Terminalbd\ProductionBundle\Entity\ProductionBatch;
-use Terminalbd\ProductionBundle\Entity\ProductionBatchItem;
-use Terminalbd\ProductionBundle\Entity\ProductionExpense;
-use Terminalbd\ProductionBundle\Entity\ProductionReceiveBatchItem;
+
 
 
 /**
@@ -17,71 +19,62 @@ use Terminalbd\ProductionBundle\Entity\ProductionReceiveBatchItem;
 class ProductionExpenseRepository extends EntityRepository
 {
 
+    public function productionExpenseStockItemUpdate(Particular  $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.productionMaterial = :particular')->setParameter('particular', $stockItem->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
 
     public function productionElementExpense(ProductionBatch $batch)
     {
         $em = $this->_em;
 
+        /* @var $elm ProductionElement */
 
-        /* @var $batchItem ProductionBatchItem */
+        foreach ($batch->getProductionItem()->getProductionItems() as $elm):
 
-        foreach ($batch->getBatchItems() as $batchItem){
+            $expense = new ProductionExpense();
+            $exist = $this->findOneBy(array('productionBatch' => $batch ,'productionElement' => $elm));
+            if($exist){ $expense = $exist; }
+            $expense->setProductionItem($batch->getProductionItem());
+            $expense->setProductionBatch($batch);
+            $expense->setProductionElement($elm);
+            $expense->setProductionMaterial($elm->getMaterial());
+            $expense->setQuantity($elm->getQuantity()  * $batch->getQuantity());
+            $em->persist($expense);
+            $em->flush();
+            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getProductionMaterial(),"production");
 
-            foreach ($batchItem->getProductionItem()->getElements() as $elm):
-                $expense = new ProductionExpense();
-                $exist = $this->findOneBy(array('productionItem' => $batchItem->getProductionItem(),'productionBatchItem' => $batchItem,'productionElement' => $elm));
-                if($exist){ $expense = $exist; }
-                $expense->setProductionItem($batchItem->getProductionItem());
-                $expense->setProductionBatchItem($batchItem);
-                $expense->setProductionElement($elm);
-                $expense->setItem($elm->getMaterial());
-                $quantity = ($elm->getQuantity() + $elm->getWastageQuantity());
-                $expense->setQuantity($quantity  * $batchItem->getIssueQuantity());
-                $expense->setPurchasePrice($elm->getPrice());
-                $em->persist($expense);
-                $em->flush();
-                if($batch->getConfig()->getConsumptionMethod() == 'purachse-consumption'){
-                    $em->getRepository('TerminalbdInventoryBundle:PurchaseItem')->rawMaterialConsumtion($expense);
-                }else{
-                    $em->getRepository('TerminalbdInventoryBundle:StockItem')->rawMaterialDirectConsumption($expense);
-                }
-            endforeach;
-        }
+        endforeach;
 
     }
 
-    public function productionReturnElementExpense(ProductionReceiveBatchItem $batch)
+    public function salesProductionElementExpense(InvoiceParticular $batch)
     {
         $em = $this->_em;
 
-        $batchItem = $batch->getBatchItem();
-
-        /* @var $batchItem ProductionReceiveBatchItem */
-
-        foreach ($batchItem->getProductionItem()->getElements() as $elm):
+        /* @var $elm ProductionElement */
+        foreach ($batch->getParticular()->getProductionItems() as $elm):
 
             $expense = new ProductionExpense();
-            $exist = $this->findOneBy(array('returnReceiveBatchItem'=> $batch, 'productionElement' => $elm, 'item' => $elm->getMaterial()));
+            $exist = $this->findOneBy(array('salesItem' => $batch ,'productionElement' => $elm));
             if($exist){ $expense = $exist; }
-            $expense->setReturnReceiveBatchItem($batch);
-            $expense->setProductionBatchItem($batch->getBatchItem());
+            $expense->setProductionItem($batch->getParticular());
+            $expense->setSalesItem($batch);
             $expense->setProductionElement($elm);
-            $expense->setItem($elm->getMaterial());
-            $expense->setQuantity(0);
-            $quantity = ($elm->getQuantity() + $elm->getWastageQuantity());
-            $expense->setReturnQuantity($quantity * $batch->getReturnQuantity());
-            $expense->setPurchasePrice($elm->getPrice());
+            $expense->setProductionMaterial($elm->getMaterial());
+            $expense->setQuantity($elm->getQuantity()  * $batch->getQuantity());
             $em->persist($expense);
             $em->flush();
-            if($batch->getBatchItem()->getBatch()->getConfig()->getConsumptionMethod() == 'purachse-consumption') {
-                $em->getRepository('TerminalbdInventoryBundle:StockItem')->contructualProductionExpenBatchItemRetun($batch->getBatchItem(), $expense);
-            }else{
-
-                $em->createQuery("DELETE TerminalbdInventoryBundle:StockItem e WHERE e.productionExpenseReturn = '{$expense->getId()}'")->execute();
-                $em->getRepository('TerminalbdInventoryBundle:StockItem')->contructualDirectProductionExpenBatchItemRetun($batch->getBatchItem(), $expense);
-            }
+            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getProductionMaterial(),"production");
 
         endforeach;
+
     }
+
+
 
 }

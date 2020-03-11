@@ -1,6 +1,23 @@
+restaurant_production:
+    path:     /
+    defaults: { _controller: "RestaurantBundle:Production:index" }
+
+restaurant_production_new:
+    path:     /new
+    defaults: { _controller: "RestaurantBundle:Production:new" }
+
+restaurant_production_create:
+    path:     /create
+    defaults: { _controller: "RestaurantBundle:Production:create" }
+    methods:  POST
+
 restaurant_production_edit:
     path:     /{id}/
     defaults: { _controller: "RestaurantBundle:Production:production" }
+
+restaurant_production_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "RestaurantBundle:Production:approve" }
 
 restaurant_production_update:
     path:     /{id}/update

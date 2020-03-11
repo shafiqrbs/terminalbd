@@ -30,10 +30,27 @@ class ProductionExpense
     private  $productionItem;
 
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionBatch", inversedBy="productionExpense" )
+     **/
+    private  $productionBatch;
+
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", inversedBy="productionExpense" )
+     **/
+    private  $salesItem;
+
+
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement", inversedBy="productionExpenseItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", inversedBy="productionExpenseItem" )
      **/
     private  $productionElement;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionExpenseItem" )
+     **/
+    private  $productionMaterial;
 
     /**
      * @var float
@@ -42,27 +59,6 @@ class ProductionExpense
      */
     private $quantity;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(type="float", nullable = true)
-     */
-    private $returnQuantity;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="purchasePrice", type="float", nullable = true)
-     */
-    private $purchasePrice;
-
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="salesPrice", type="float", nullable = true)
-     */
-    private $salesPrice;
 
     /**
      * @var \DateTime
@@ -82,78 +78,8 @@ class ProductionExpense
         return $this->id;
     }
 
-
     /**
-     * @param integer $quantity
-     */
-
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return integer
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-
-    /**
-     * @return ProductionElement
-     */
-    public function getProductionElement()
-    {
-        return $this->productionElement;
-    }
-
-    /**
-     * @param ProductionElement $productionElement
-     */
-    public function setProductionElement($productionElement)
-    {
-        $this->productionElement = $productionElement;
-    }
-
-
-    /**
-     * @return Item
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param Item $item
-     */
-    public function setItem($item)
-    {
-        $this->item = $item;
-    }
-
-    /**
-     * @return ProductionInventory
-     */
-    public function getProductionInventory()
-    {
-        return $this->productionInventory;
-    }
-
-    /**
-     * @param ProductionInventory $productionInventory
-     */
-    public function setProductionInventory($productionInventory)
-    {
-        $this->productionInventory = $productionInventory;
-    }
-
-    /**
-     * @return ProductionItem
+     * @return mixed
      */
     public function getProductionItem()
     {
@@ -161,7 +87,7 @@ class ProductionExpense
     }
 
     /**
-     * @param ProductionItem $productionItem
+     * @param mixed $productionItem
      */
     public function setProductionItem($productionItem)
     {
@@ -169,99 +95,83 @@ class ProductionExpense
     }
 
     /**
+     * @return mixed
+     */
+    public function getProductionBatch()
+    {
+        return $this->productionBatch;
+    }
+
+    /**
+     * @param mixed $productionBatch
+     */
+    public function setProductionBatch($productionBatch)
+    {
+        $this->productionBatch = $productionBatch;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductionElement()
+    {
+        return $this->productionElement;
+    }
+
+    /**
+     * @param mixed $productionElement
+     */
+    public function setProductionElement($productionElement)
+    {
+        $this->productionElement = $productionElement;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getProductionMaterial()
+    {
+        return $this->productionMaterial;
+    }
+
+    /**
+     * @param Particular $productionMaterial
+     */
+    public function setProductionMaterial($productionMaterial)
+    {
+        $this->productionMaterial = $productionMaterial;
+    }
+
+    /**
+     * @return InvoiceParticular
+     */
+    public function getSalesItem()
+    {
+        return $this->salesItem;
+    }
+
+    /**
+     * @param InvoiceParticular $salesItem
+     */
+    public function setSalesItem($salesItem)
+    {
+        $this->salesItem = $salesItem;
+    }
+
+    /**
      * @return float
      */
-    public function getPurchasePrice()
+    public function getQuantity()
     {
-        return $this->purchasePrice;
+        return $this->quantity;
     }
 
     /**
-     * @param float $purchasePrice
+     * @param float $quantity
      */
-    public function setPurchasePrice(float $purchasePrice)
+    public function setQuantity($quantity)
     {
-        $this->purchasePrice = $purchasePrice;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * @param float $salesPrice
-     */
-    public function setSalesPrice(float $salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-    }
-
-    /**
-     * @return ProductionBatchItem
-     */
-    public function getProductionBatchItem()
-    {
-        return $this->productionBatchItem;
-    }
-
-    /**
-     * @param ProductionBatchItem $productionBatchItem
-     */
-    public function setProductionBatchItem($productionBatchItem)
-    {
-        $this->productionBatchItem = $productionBatchItem;
-    }
-
-    /**
-     * @return float
-     */
-    public function getReturnQuantity(): float
-    {
-        return $this->returnQuantity;
-    }
-
-    /**
-     * @param float $returnQuantity
-     */
-    public function setReturnQuantity(float $returnQuantity)
-    {
-        $this->returnQuantity = $returnQuantity;
-    }
-
-    /**
-     * @return ProductionReceiveBatchItem
-     */
-    public function getReturnReceiveBatchItem()
-    {
-        return $this->returnReceiveBatchItem;
-    }
-
-    /**
-     * @param ProductionReceiveBatchItem $returnReceiveBatchItem
-     */
-    public function setReturnReceiveBatchItem($returnReceiveBatchItem)
-    {
-        $this->returnReceiveBatchItem = $returnReceiveBatchItem;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
+        $this->quantity = $quantity;
     }
 
 

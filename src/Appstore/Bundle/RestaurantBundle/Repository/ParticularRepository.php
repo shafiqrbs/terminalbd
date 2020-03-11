@@ -6,6 +6,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
@@ -320,6 +321,9 @@ class ParticularRepository extends EntityRepository
         }elseif($fieldName == 'damage'){
             //$quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
           //  $stock->setDamageQuantity($quantity);
+        }elseif($fieldName == 'production'){
+            $quantity = $em->getRepository('RestaurantBundle:ProductionExpense')->productionExpenseStockItemUpdate($stock);
+            $stock->setProductionQuantity($quantity);
         }else{
             $qnt = $em->getRepository('RestaurantBundle:PurchaseItem')->purchaseStockItemUpdate($stock);
             $stock->setPurchaseQuantity($qnt);
@@ -332,7 +336,7 @@ class ParticularRepository extends EntityRepository
     public function remainingQnt(Particular $stock)
     {
         $em = $this->_em;
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity()) - ($stock->getSalesQuantity() + $stock->getDamageQuantity() + $stock->getPurchaseReturnQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity()) - ($stock->getSalesQuantity() + $stock->getDamageQuantity() + $stock->getPurchaseReturnQuantity() + $stock->getProductionQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();
@@ -363,6 +367,8 @@ class ParticularRepository extends EntityRepository
                 $particular = $item->getParticular();
                 if( $particular->getService()->getSlug() == 'stockable' ){
                     $this->updateRemoveStockQuantity($particular,'sales');
+                }elseif ($particular->getService()->getSlug() == 'product'){
+                    $em->getRepository('RestaurantBundle:ProductionExpense')->salesProductionElementExpense($item);
                 }
             }
         }
@@ -479,82 +485,6 @@ class ParticularRepository extends EntityRepository
         return $data;
 
     }
-
-    public function insertInvoiceProductItem(Invoice $invoice){
-
-        $em = $this->_em;
-        if(!empty($invoice->getInvoiceParticulars())) {
-
-            /* @var  $item InvoiceParticular */
-
-            foreach ($invoice->getInvoiceParticulars() as $item) {
-                if(!empty($item->getParticular()) and $item->getQuantity() > 0) {
-                    if ( $item->getParticular()->getProductionType() == 'post-production') {
-                        $this->productionExpense( $item );
-                    }
-                  //  $this->getSalesUpdateQnt( $item );
-                }
-            }
-        }
-
-    }
-
-    public function productionExpense(InvoiceParticular  $item)
-    {
-        if(!empty($item->getParticular()->getProductionItems())){
-
-            $productionElements = $item->getParticular()->getProductionElements();
-
-            /* @var $element ProductionElement */
-
-            if($productionElements) {
-
-                foreach ($productionElements as $element) {
-
-                    $entity = new ProductionElement();
-                    $entity->setItem($item);
-                    $entity->setProductionItem($item->getBusinessParticular());
-                    $entity->setProductionElement($element->getParticular());
-                    $entity->setPurchasePrice($element->getPurchasePrice());
-                    $entity->setSalesPrice($element->getSalesPrice());
-                    if(!empty($element->getParticular()->getUnit()) and ($element->getParticular()->getUnit()->getName() == 'Sft')) {
-                        $entity->setQuantity($item->getTotalQuantity());
-                    }else{
-                        $entity->setQuantity($element->getQuantity() * $item->getQuantity());
-                    }
-                    $this->_em->persist($entity);
-                    $this->_em->flush();
-                    $this->salesProductionQnt($element);
-                }
-            }
-        }
-    }
-
-    public function salesProductionQnt( ProductionElement  $element){
-
-        $em = $this->_em;
-        $particular = $element->getParticular();
-        $productionQnt = $this->getSumTotalProductionItemQuantity($particular);
-        $invoiceQnt = $this->getSumTotalInvoiceItemQuantity($particular);
-        $qnt = $productionQnt + $invoiceQnt;
-        $particular->setSalesQuantity($qnt);
-        $em->persist($particular);
-        $em->flush();
-        $this->remainingQnt($particular);
-    }
-
-    public function getSumTotalProductionItemQuantity(Particular $particular){
-
-        $qb = $this->_em->createQueryBuilder();
-        $qb->from('BusinessBundle:BusinessProductionExpense','e');
-        $qb->select('COALESCE(SUM(e.quantity),0) AS quantity');
-        $qb->where('e.productionElement = :particular')->setParameter('particular', $particular->getId());
-        $qnt = $qb->getQuery()->getOneOrNullResult();
-        $productionQnt = ($qnt['quantity'] == 0 ) ? 0 : $qnt['quantity'];
-        return $productionQnt;
-
-    }
-
 
 
 }
