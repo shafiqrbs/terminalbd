@@ -41,7 +41,7 @@ class RestaurantTemporaryController extends Controller
             'config'     => $config,
             'temporarySubTotal'     => $subTotal,
             'initialVat'            => $vat,
-            'initialTotal'            => $initialTotal,
+            'initialTotal'          => $initialTotal,
             'initialDiscount'       => 0,
             'user'                  => $user,
             'categories'            => $categories,
@@ -126,7 +126,6 @@ class RestaurantTemporaryController extends Controller
                 $amount = $data['payment'] - $entity->getTotal();
                 $entity->setReturnAmount($amount);
             }
-
         }else{
             $payment = floatval($data['payment']);
             $entity->setPayment($payment);

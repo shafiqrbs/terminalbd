@@ -1497,27 +1497,28 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-list');
         $menu['Restaurant']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
-        $menu['Restaurant']->addChild('Master Data')
-            ->setAttribute('icon', 'icon icon-cog')
-            ->setAttribute('dropdown', true);
-        $menu['Restaurant']['Master Data']->addChild('Production Item', array('route' => 'restaurant_product'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Master Data']->addChild('Product Sorting', array('route' => 'restaurant_product_sorting'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Master Data']->addChild('Category', array('route' => 'restaurant_category'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Master Data']->addChild('Particular', array('route' => 'restaurant_particular'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))
-            ->setAttribute('icon', 'icon-cog');
+
         $menu['Restaurant']->addChild('Manage Stock')
             ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
         $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))
             ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Manage Stock']->addChild('Production Item', array('route' => 'restaurant_production'))
+                ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Manage Stock']->addChild('Purchase', array('route' => 'restaurant_purchase'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Manage Stock']->addChild('Vendor', array('route' => 'restaurant_vendor'))->setAttribute('icon', 'icon-tag');
+            $menu['Restaurant']->addChild('Master Data')
+                ->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            $menu['Restaurant']['Master Data']->addChild('Product Sorting', array('route' => 'restaurant_product_sorting'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Master Data']->addChild('Category', array('route' => 'restaurant_category'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Master Data']->addChild('Particular', array('route' => 'restaurant_particular'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))
+                ->setAttribute('icon', 'icon-cog');
         $menu['Restaurant']->addChild('Reports')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);

@@ -80,6 +80,7 @@ class ProductionBatchRepository extends EntityRepository
         $qb->where('e.productionItem = :particular')->setParameter('particular', $stockItem->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
+
     }
 
 
