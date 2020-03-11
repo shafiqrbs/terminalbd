@@ -4,6 +4,7 @@ namespace Appstore\Bundle\RestaurantBundle\Repository;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
@@ -102,6 +103,16 @@ class RestaurantStockHistoryRepository extends EntityRepository
             $entity->setDamageItem($item);
             $entity->setProcess('sales-return');
 
+        }elseif($fieldName == 'production') {
+
+            /* @var $item RestaurantDamage */
+
+            $entity->setQuantity("-{$item->getQuantity()}");
+            $entity->setDamageQuantity($item->getQuantity());
+            $entity->setItem($item->getParticular());
+            $entity->setProductionExpense($item);
+            $entity->setProcess('production');
+
         }
         if($openingQnt){
             $entity->setOpeningQuantity(floatval($openingQnt));
@@ -176,6 +187,14 @@ class RestaurantStockHistoryRepository extends EntityRepository
                 }
             }
         }
+    }
+
+    public function processInsertProductionItem(ProductionExpense $entity){
+
+        $em = $this->_em;
+        $em->createQuery("DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.productionExpense = '{$entity->getId()}'")->execute();
+        $this->processStockQuantity($entity,"production");
+
     }
 
     public function processReverseSalesItem(Invoice $entity){

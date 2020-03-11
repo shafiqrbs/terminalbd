@@ -253,6 +253,7 @@ class ProductionController extends Controller
         $batch->setApprovedBy($this->getUser());
         $em->flush();
         $this->getDoctrine()->getRepository('RestaurantBundle:ProductionExpense')->productionElementExpense($batch);
+        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($batch->getProductionItem(),"production-in");
         return new Response("success");
 
     }

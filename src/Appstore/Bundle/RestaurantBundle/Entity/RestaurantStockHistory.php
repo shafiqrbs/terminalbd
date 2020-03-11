@@ -49,6 +49,13 @@ class RestaurantStockHistory
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $productionExpense;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDamage")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -82,7 +89,6 @@ class RestaurantStockHistory
      * @ORM\Column(type="float", nullable=true)
      */
     private $closingQuantity = 0;
-
 
 
     /**
@@ -122,6 +128,13 @@ class RestaurantStockHistory
      * @ORM\Column(type="float", nullable=true)
      */
     private $damageQuantity = 0;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $productionQuantity = 0;
 
     /**
      * @var float
@@ -459,6 +472,38 @@ class RestaurantStockHistory
     public function setRestaurantConfig($restaurantConfig)
     {
         $this->restaurantConfig = $restaurantConfig;
+    }
+
+    /**
+     * @return ProductionExpense
+     */
+    public function getProductionExpense()
+    {
+        return $this->productionExpense;
+    }
+
+    /**
+     * @param ProductionExpense $productionExpense
+     */
+    public function setProductionExpense($productionExpense)
+    {
+        $this->productionExpense = $productionExpense;
+    }
+
+    /**
+     * @return float
+     */
+    public function getProductionQuantity()
+    {
+        return $this->productionQuantity;
+    }
+
+    /**
+     * @param float $productionQuantity
+     */
+    public function setProductionQuantity($productionQuantity)
+    {
+        $this->productionQuantity = $productionQuantity;
     }
 
 

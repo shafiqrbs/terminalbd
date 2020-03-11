@@ -23,7 +23,7 @@ class ProductionExpenseRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.quantity) AS quantity');
-        $qb->where('e.productionMaterial = :particular')->setParameter('particular', $stockItem->getId());
+        $qb->where('e.particular = :particular')->setParameter('particular', $stockItem->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
     }
@@ -42,11 +42,14 @@ class ProductionExpenseRepository extends EntityRepository
             $expense->setProductionItem($batch->getProductionItem());
             $expense->setProductionBatch($batch);
             $expense->setProductionElement($elm);
-            $expense->setProductionMaterial($elm->getMaterial());
+            $expense->setParticular($elm->getMaterial());
             $expense->setQuantity($elm->getQuantity()  * $batch->getQuantity());
             $em->persist($expense);
             $em->flush();
-            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getProductionMaterial(),"production");
+            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getParticular(),"production");
+            if($elm->getMaterial()->getRestaurantConfig()->isStockHistory() == 1 ) {
+                $em->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertProductionItem($expense);
+            }
 
         endforeach;
 
@@ -57,19 +60,24 @@ class ProductionExpenseRepository extends EntityRepository
         $em = $this->_em;
 
         /* @var $elm ProductionElement */
+
         foreach ($batch->getParticular()->getProductionItems() as $elm):
 
+            echo $elm->getMaterial()->getName();
             $expense = new ProductionExpense();
             $exist = $this->findOneBy(array('salesItem' => $batch ,'productionElement' => $elm));
             if($exist){ $expense = $exist; }
             $expense->setProductionItem($batch->getParticular());
             $expense->setSalesItem($batch);
             $expense->setProductionElement($elm);
-            $expense->setProductionMaterial($elm->getMaterial());
+            $expense->setParticular($elm->getMaterial());
             $expense->setQuantity($elm->getQuantity()  * $batch->getQuantity());
             $em->persist($expense);
             $em->flush();
-            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getProductionMaterial(),"production");
+            $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($expense->getParticular(),"production");
+            if($elm->getMaterial()->getRestaurantConfig()->isStockHistory() == 1 ) {
+                $em->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertProductionItem($expense);
+            }
 
         endforeach;
 

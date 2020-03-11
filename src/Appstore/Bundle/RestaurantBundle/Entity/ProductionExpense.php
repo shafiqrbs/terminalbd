@@ -50,7 +50,7 @@ class ProductionExpense
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionExpenseItem" )
      **/
-    private  $productionMaterial;
+    private  $particular;
 
     /**
      * @var float
@@ -126,21 +126,6 @@ class ProductionExpense
         $this->productionElement = $productionElement;
     }
 
-    /**
-     * @return Particular
-     */
-    public function getProductionMaterial()
-    {
-        return $this->productionMaterial;
-    }
-
-    /**
-     * @param Particular $productionMaterial
-     */
-    public function setProductionMaterial($productionMaterial)
-    {
-        $this->productionMaterial = $productionMaterial;
-    }
 
     /**
      * @return InvoiceParticular
@@ -172,6 +157,22 @@ class ProductionExpense
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticular()
+    {
+        return $this->particular;
+    }
+
+    /**
+     * @param Particular $particular
+     */
+    public function setParticular($particular)
+    {
+        $this->particular = $particular;
     }
 
 

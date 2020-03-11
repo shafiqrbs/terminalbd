@@ -324,6 +324,9 @@ class ParticularRepository extends EntityRepository
         }elseif($fieldName == 'production'){
             $quantity = $em->getRepository('RestaurantBundle:ProductionExpense')->productionExpenseStockItemUpdate($stock);
             $stock->setProductionQuantity($quantity);
+        }elseif($fieldName == 'production-in'){
+            $quantity = $em->getRepository('RestaurantBundle:ProductionBatch')->productionBatchItemUpdate($stock);
+            $stock->setPurchaseQuantity($quantity);
         }else{
             $qnt = $em->getRepository('RestaurantBundle:PurchaseItem')->purchaseStockItemUpdate($stock);
             $stock->setPurchaseQuantity($qnt);
@@ -359,15 +362,21 @@ class ParticularRepository extends EntityRepository
     public function insertAccessories(Invoice  $invoice){
 
         $em = $this->_em;
+
+        $invoiceParticulars = $this->_em->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $invoice->getId()));
+
         /** @var InvoiceParticular $item */
 
-        if($invoice->getInvoiceParticulars()){
-            foreach($invoice->getInvoiceParticulars() as $item ){
+        if($invoiceParticulars){
+            foreach($invoiceParticulars as $item ){
+
                 /** @var Particular  $particular */
                 $particular = $item->getParticular();
                 if( $particular->getService()->getSlug() == 'stockable' ){
                     $this->updateRemoveStockQuantity($particular,'sales');
-                }elseif ($particular->getService()->getSlug() == 'product'){
+                }elseif ($particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "pre-production"){
+                    $this->updateRemoveStockQuantity($particular,'sales');
+                }elseif ($particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "post-production"){
                     $em->getRepository('RestaurantBundle:ProductionExpense')->salesProductionElementExpense($item);
                 }
             }

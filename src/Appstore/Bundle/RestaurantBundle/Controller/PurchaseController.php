@@ -211,10 +211,8 @@ class PurchaseController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('restaurant_purchase_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($entity->getRestaurantConfig());
         return $this->render('RestaurantBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
     }
@@ -256,7 +254,6 @@ class PurchaseController extends Controller
             return new Response('failed');
         }
     }
-
 
 
     /**
