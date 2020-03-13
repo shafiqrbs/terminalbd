@@ -417,6 +417,8 @@ class PurchaseController extends Controller
 
     public function updateAction(Request $request, MedicinePurchase $entity)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -480,6 +482,8 @@ class PurchaseController extends Controller
 
     public function approvedAction($id)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 	    $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));

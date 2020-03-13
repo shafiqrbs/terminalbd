@@ -3,14 +3,6 @@
 namespace Appstore\Bundle\DomainUserBundle\Form;
 
 use Appstore\Bundle\DomainUserBundle\Repository\CustomerRepository;
-use Core\UserBundle\Entity\User;
-use Core\UserBundle\Form\Type\ProfileType;
-use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\LocationBundle\Repository\LocationRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Form\DesignationType;
-use Setting\Bundle\ToolBundle\Form\InitialOptionType;
-use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
