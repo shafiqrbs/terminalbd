@@ -65,7 +65,7 @@
                         <div class="span2">
                             <div class="input-group input-append">
                                             <span class="input-group-btn">
-                                               <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
+                                               <button type="button" class="btn black btn-number" data-type="minus" data-field="quantity">
                                                         <span class="fa fa-minus"></span>
                                                </button>
                                             </span>
@@ -74,6 +74,7 @@
                                               <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
                                                       <span class="fa fa-plus"></span>
                                               </button>
+                                            <button type="button" class="btn yellow" id="unit" >Unit</button>
                                             </span>
                                 <input type="hidden" id="particularId" name="particularId" value="">
                                 <button type="button" class="btn blue" id="addParticular" data-url="{{ path('restaurant_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>

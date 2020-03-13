@@ -108,7 +108,7 @@ class RestaurantStockHistoryRepository extends EntityRepository
             /* @var $item RestaurantDamage */
 
             $entity->setQuantity("-{$item->getQuantity()}");
-            $entity->setDamageQuantity($item->getQuantity());
+            $entity->setProductionQuantity($item->getQuantity());
             $entity->setItem($item->getParticular());
             $entity->setProductionExpense($item);
             $entity->setProcess('production');

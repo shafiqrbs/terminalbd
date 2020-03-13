@@ -109,7 +109,7 @@
                                         </tbody>
                                         <tfoot>
                                         <tr><th colspan="5">SubTotal</th><th>{{ entity.subTotal|number_format(2) }}</th></tr>
-                                        <tr><th colspan="5">Discount</th><th>{{ entity.subTotal|number_format(2) }}</th></tr>
+                                        <tr><th colspan="5">Discount</th><th>{{ entity.discount|number_format(2) }}</th></tr>
                                         <tr><th colspan="5">Net Total</th><th>{{ entity.netTotal|number_format(2) }}</th></tr>
                                         <tr><th colspan="5">Payment</th><th>{{ entity.payment|number_format(2) }}</th></tr>
                                         <tr><th colspan="5">Due</th><th>{{ (entity.netTotal- entity.payment)|number_format(2) }}</th></tr>

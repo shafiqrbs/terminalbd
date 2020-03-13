@@ -71,7 +71,7 @@ class ProductionElementRepository extends EntityRepository
             $data .= "<td class='span1' >{$unit}</td>";
             $data .= "<td class='span1' >{$entity->getPrice()}</td>";
             $data .= "<td class='span1' >{$subPrice}</td>";
-            $data .= "<td class='span1' ><a id='{$entity->getId()}' data-url='/business/product-production/{$particular->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
+            $data .= "<td class='span1' ><a id='{$entity->getId()}' data-url='/restaurant/production/{$particular->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a></td>";
             $data .= '</tr>';
             $i++;
         }

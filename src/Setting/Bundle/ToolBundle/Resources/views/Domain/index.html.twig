@@ -53,7 +53,12 @@
                                     <input type="text" id="mobile" name="mobile"  class="span12 m-wrap select2User" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no">
                                 </div>
                                 <div class="span3">
-                                    <input type="text" id="domain" name="domain"  class="span12 m-wrap" value="{% if searchForm.domain is defined %}{{ searchForm.domain }}{% endif %}"  autocomplete="off" placeholder="Enter domain or subdomain name">
+                                    <select id="mainApp" name="mainApp" class="m-wrap span12">
+                                        <option value="">Select Main Application</option>
+                                        {% for app in apps %}
+                                        <option {% if searchForm.mainApp is defined and searchForm.mainApp == app.id %} selected {% endif %} value="{{ app.id }}">{{ app.name }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="span3">
                                     <div class="controls">

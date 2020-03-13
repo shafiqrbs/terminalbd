@@ -42,7 +42,7 @@ class ParticularRepository extends EntityRepository
             $qb->andWhere("c.id = :category")->setParameter('category', $category);
         }
         if(!empty($service)){
-            $qb->andWhere("s.slug = :service")->setParameter('service', $service);
+            $qb->andWhere($qb->expr()->like("s.slug", "'%$service%'"  ));
         }
 
     }
@@ -258,6 +258,7 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.status')
             ->addSelect('e.salesQuantity')
             ->addSelect('e.minQuantity')
+            ->addSelect('e.remainingQuantity')
             ->addSelect('e.openingQuantity')
             ->addSelect('u.name as unit')
             ->addSelect('s.name as serviceName')
@@ -293,6 +294,7 @@ class ParticularRepository extends EntityRepository
             $qb->addSelect('e.salesQuantity');
             $qb->addSelect('e.minQuantity');
             $qb->addSelect('e.openingQuantity');
+            $qb->addSelect('e.remainingQuantity');
             $qb->addSelect('u.name as unit');
             $qb->addSelect('s.name as serviceName');
             $qb->addSelect('s.slug as serviceSlug');

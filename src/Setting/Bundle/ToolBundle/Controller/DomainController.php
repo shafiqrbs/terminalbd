@@ -101,8 +101,10 @@ class DomainController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
         $entities = $this->paginate($entities);
+        $apps = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findAll();
         return $this->render('SettingToolBundle:Domain:index.html.twig', array(
             'entities' => $entities,
+            'apps' => $apps,
             'searchForm' => $data,
         ));
     }

@@ -55,6 +55,7 @@ $(document).on('change', '#particular', function() {
        //     $('#price').val(obj['price']);
           //  $('#purchasePrice').val(obj['purchasePrice']);
             $('#instruction').html(obj['instruction']);
+            $('#unit').html(obj['unit']);
         }
     })
 });
