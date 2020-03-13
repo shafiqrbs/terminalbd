@@ -48,8 +48,12 @@ class AssociationController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
+        $batches = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->studentBatchChoiceList();
+        $bloods = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->bloodsChoiceList();
         return $this->render('DomainUserBundle:Association:index.html.twig', array(
             'entities' => $pagination,
+            'batches' => $batches,
+            'bloods' => $bloods,
             'searchForm' => $data,
         ));
     }

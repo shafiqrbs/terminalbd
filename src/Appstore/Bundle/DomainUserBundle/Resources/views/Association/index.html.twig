@@ -45,13 +45,27 @@
                                     <div class="span4">
                                         <input type="text" id="mobile" name="mobile"  class="span12 m-wrap select2Customer" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Search member name/mobile">
                                     </div>
-                                    <div class="span4">
-                                        <input type="text" id="location" name="location"  class="span12 m-wrap select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="Customer location">
+                                    <div class="span3">
+                                       <select class="m-wrap span12 select2" name="studentBatch" id="studentBatch">
+                                           <option value="">Select Student Batch</option>
+                                           {% for batch in batches %}
+                                           <option {% if searchForm.studentBatch is defined and searchForm.studentBatch == batch  %} selected {% endif %} value="{{ batch }}">{{ batch }}</option>
+                                           {% endfor %}
+                                       </select>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span2">
+                                       <select class="m-wrap span12 select2" name="bloodGroup" id="bloodGroup">
+                                           <option value="">Select Blood Group</option>
+                                           {% for blood in bloods %}
+                                           <option {% if searchForm.bloodGroup is defined and searchForm.bloodGroup == blood  %} selected {% endif %} value="{{ blood }}">{{ blood }}</option>
+                                           {% endfor %}
+                                       </select>
+                                    </div>
+                                    <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span9">
-                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Enter member name{% endif %} ">
+                                                <input type="text" id="startDate" name="startDate"  class="m-wrap span6 search-input dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Enter DOB Start Date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="m-wrap span6 search-input dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Enter DOB End Date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -97,7 +111,7 @@
                                         <td>{{ entity.process }}</td>
                                         <td class="numeric">
                                             <div class="btn-group">
-                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
+                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_MEMBER_ASSOCIATION_MODERATOR")) or (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN"))  %}
                                                 <a class="btn mini green" href="{{ path('domain_association_profile_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                             {% endif %}
                                             {% if ((app.user.granted("ROLE_DOMAIN")) and entity.process != "Approved") or (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process != "Approved")  %}

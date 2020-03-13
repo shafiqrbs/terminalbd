@@ -350,6 +350,8 @@ class CustomerRepository extends EntityRepository
             $studentBatch =    isset($data['studentBatch'])? $data['studentBatch'] :'';
             $process =    isset($data['process'])? $data['process'] :'';
             $bloodGroup =    isset($data['bloodGroup'])? $data['bloodGroup'] :'';
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile LIKE :mobile");
@@ -366,8 +368,8 @@ class CustomerRepository extends EntityRepository
                 $qb->setParameter('name','%'. $customer.'%');
             }
             if (!empty($bloodGroup)) {
-                $qb->andWhere("customer.bloodGroup LIKE :bloodGroup");
-                $qb->setParameter('bloodGroup','%'. $bloodGroup.'%');
+                $qb->andWhere("customer.bloodGroup = :bloodGroup");
+                $qb->setParameter('bloodGroup',$bloodGroup);
             }
             if (!empty($customerId)) {
                 $qb->andWhere("customer.customerId LIKE :customerId");
@@ -385,6 +387,17 @@ class CustomerRepository extends EntityRepository
                 $qb->andWhere("customer.studentBatch = :studentBatch");
                 $qb->setParameter('studentBatch',$studentBatch);
             }
+            if (!empty($startDate) ) {
+                $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+                $qb->andWhere("customer.dob >= :startDate");
+                $qb->setParameter('startDate', $start);
+            }
+            if (!empty($endDate)) {
+                $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+                $qb->andWhere("customer.dob <= :endDate");
+                $qb->setParameter('endDate',$end);
+            }
+
         }
 
     }
@@ -760,6 +773,21 @@ class CustomerRepository extends EntityRepository
             "10 Years"=> "10 Years",
             "11 Years"=> "11 Years",
             "12 Years"=> "12 Years",
+        );
+
+        return $array;
+    }
+
+    public function bloodsChoiceList(){
+        $array = array(
+            "A+"=> "A+",
+            "A-"=> "A-",
+            "B+-"=> "B+",
+            "B-"=> "B-",
+            "O+"=> "O+",
+            "O-"=> "O-",
+            "AB+"=> "AB+",
+            "AB-"=> "A-",
         );
 
         return $array;
