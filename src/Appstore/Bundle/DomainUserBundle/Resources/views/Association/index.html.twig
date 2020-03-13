@@ -100,7 +100,7 @@
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('domain_association_profile_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                             {% endif %}
-                                            {% if (app.user.granted("ROLE_DOMAIN")) and entity.process != "Approved"  %}
+                                            {% if ((app.user.granted("ROLE_DOMAIN")) and entity.process != "Approved") or (app.user.granted("ROLE_MEMBER_ASSOCIATION_ADMIN") and entity.process != "Approved")  %}
                                                     <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_association_profile_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                             {% endif %}
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_MEMBER_ASSOCIATION"))  %}

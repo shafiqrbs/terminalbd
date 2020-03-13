@@ -219,7 +219,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-briefcase')
             ->setAttribute('dropdown', true);
 
-        if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE')) {
+        if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE') and $config->getBusinessModel() != "association") {
 	        $menu[$business]->addChild('Sales')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
             $menu[$business]['Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
                 ->setAttribute('icon', 'icon-plus-sign');
@@ -242,7 +242,7 @@ class Builder extends ContainerAware
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
         if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
-            $menu[$business]->addChild('Sales', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Member Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
                 $menu[$business]->addChild( 'Association Reports' )
                     ->setAttribute( 'icon', 'icon icon-bar-chart' )
@@ -291,14 +291,14 @@ class Builder extends ContainerAware
                 $menu[$business]->addChild('Product Ledger', array('route' => 'business_stock_ledger'))->setAttribute('icon', 'icon-th-list');
             }
 
-            if($config->getBusinessModel() == 'commission') {
+        if($config->getBusinessModel() == 'commission') {
                 $menu[$business]->addChild( 'Agency Stock' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );
                 $menu[$business]['Agency Stock']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Agency Stock']->addChild('Vendor Stock', array('route' => 'business_vendor_stock'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Agency Stock']->addChild( 'Stock Report' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );
                 $menu[$business]['Agency Stock']['Stock Report']->addChild( 'Vendor base Sales', array( 'route' => 'business_report_vendor_commission_sales' ) )
                     ->setAttribute( 'icon', 'icon-th-list' );
-            }
+        }
 	        if($config->getProductionType() == 'pre-production') {
 		        $menu[$business]->addChild( 'Pre-production', array( 'route' => 'business_production' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }

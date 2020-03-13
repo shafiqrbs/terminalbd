@@ -349,12 +349,14 @@ $(document).ready(function(){
         var randomNum1 = getRandom(),
             randomNum2 = getRandom();
         total =randomNum1 + randomNum2;
-        $( "#question" ).text( randomNum1 + " + " + randomNum2 + "=" );
+        var sum = randomNum1 + " + " + randomNum2 + "=";
+        $("#question").html(sum);
         $("#ans").val('');
         checkInput();
     }
 
     function checkInput(){
+
         var input = $("#ans").val(),
             slideSpeed = 200,
             hasInput = !!input,
