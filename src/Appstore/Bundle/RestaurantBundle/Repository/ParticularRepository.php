@@ -32,17 +32,18 @@ class ParticularRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $service = isset($data['service'])? $data['service'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
+        $name = isset($data['name']) ? $data['name'] :'';
+        $service = isset($data['service']) ? $data['service'] :'';
+        $category = isset($data['category']) ? $data['category'] :'';
+
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.slug", "'%$$name%'"  ));
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"));
         }
         if(!empty($category)){
             $qb->andWhere("c.id = :category")->setParameter('category', $category);
         }
         if(!empty($service)){
-            $qb->andWhere($qb->expr()->like("s.slug", "'%$service%'"  ));
+            $qb->andWhere($qb->expr()->like("s.slug", "'%$service%'"));
         }
 
     }
@@ -163,7 +164,7 @@ class ParticularRepository extends EntityRepository
         return  $result;
     }
 
-     public function productSortingList($config,$service){
+    public function productSortingList($config,$service){
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.service','s');
@@ -311,7 +312,7 @@ class ParticularRepository extends EntityRepository
             return  $result;
     }
 
-    public function updateRemoveStockQuantity(Particular $stock,$fieldName=''){
+    public function updateRemoveStockQuantity(Particular $stock , $fieldName=''){
 
         $em = $this->_em;
         if($fieldName == 'sales'){
@@ -356,8 +357,12 @@ class ParticularRepository extends EntityRepository
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             /** @var Particular  $particular */
+
             $particular = $purchaseItem->getParticular();
             $this->updateRemoveStockQuantity($particular);
+            $particular->setPurchasePrice($purchaseItem->getPurchasePrice());
+            $em->persist($particular);
+            $em->flush();
         }
     }
 
@@ -494,6 +499,33 @@ class ParticularRepository extends EntityRepository
             $data[$key]['tokenName'] = $row['name'];
         }
         return $data;
+
+    }
+
+    public function updateProductionPrice(RestaurantConfig $config)
+    {
+
+        $elem = "UPDATE `restaurant_production_element` as sub
+JOIN restaurant_particular ON sub.material_id = restaurant_particular.id
+SET sub.subTotal = (sub.quantity * sub.price)
+WHERE restaurant_particular.restaurantConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $config  ->getId());
+        $qb1->execute();
+
+        $sql = "Update restaurant_particular as stock
+inner join (
+  select item_id, COALESCE(SUM(ele.subTotal),0) as productionElementAmount
+  from restaurant_production_element as ele
+  where ele.item_id is not NULL
+  group by ele.item_id
+) as pa on stock.id = pa.item_id
+set stock.productionElementAmount = pa.productionElementAmount,
+stock.purchasePrice = COALESCE((stock.productionElementAmount + stock.valueAddedAmount),0)
+WHERE stock.restaurantConfig_id =:config";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('config', $config  ->getId());
+        $qb->execute();
 
     }
 

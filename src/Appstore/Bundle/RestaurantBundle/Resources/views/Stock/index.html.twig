@@ -35,12 +35,18 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
                         <div class="actions">
+                            <div class="btn-group">
                             <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add accessories" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
+                            {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                            <a href="javascript:" data-action="{{ path('restaurant_stock_update_price') }}" class="btn yellow productionProcess"><i class="fa fa-refresh"></i> Production Update</a>
+                            {% endif %}
+                            </div>
                         </div>
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
+                        <div class="loader loader-double" ></div>
                         <div class="{{ formShow }}" id="hide">
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
@@ -237,18 +243,21 @@
                                         <td class="numeric" >{% if entity.serviceName is not empty %}{{ entity.serviceName }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.categoryName is not empty %}{{ entity.categoryName }}{% endif %}</td>
                                         <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                            {% else %}
+                                                {{ entity.purchasePrice|number_format }}
                                             {% endif %}
                                         </td>
-
                                         <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="Price" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                            {% else %}
+                                                {{ entity.price|number_format }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                             {% endif %}
                                         </td>
@@ -256,7 +265,7 @@
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_DOMAIN_MANAGER_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>

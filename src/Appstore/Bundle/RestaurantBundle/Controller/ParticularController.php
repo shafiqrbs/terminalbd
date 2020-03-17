@@ -7,7 +7,7 @@ use Appstore\Bundle\RestaurantBundle\Form\ParticularType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * ParticularController controller.
@@ -241,5 +241,7 @@ class ParticularController extends Controller
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->setParticularSorting($data);
         exit;
     }
+
+
 
 }

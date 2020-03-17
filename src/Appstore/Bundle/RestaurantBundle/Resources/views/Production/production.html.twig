@@ -27,7 +27,7 @@
     <div class="row-fluid">
     <div class="span12">
 
-    <div class="portlet box green tabbable">
+    <div class="portlet box green">
         <div class="portlet-title">
             <div class="caption"><i class="icon-reorder"></i>Product: {{ entity.name }}</div>
             <div class="actions">
@@ -53,27 +53,21 @@
                                     <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select product name ---</option>
                                        {% for particular in particulars %}
-                                           <option value="{{ path('restaurant_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} {{ particular.unit }}</option>
+                                           <option value="{{ path('restaurant_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
                                        {% endfor %}
                                      </select>
                                 </div>
                                 <div class="span2">
-                                    <input type="text" class="m-wrap span12" id="purchasePrice"  required="required" name="purchasePrice" placeholder="Production price" value="" maxlength="8">
+                                    <input type="text" class="m-wrap span12" disabled="disabled" id="purchasePrice"  required="required" name="purchasePrice" placeholder="Production price" value="" maxlength="8">
                                     </div>
                                 <div class="span3">
                                     <div class="input-group input-append">
-                                            <span class="input-group-btn">
-                                               <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
-                                                        <span class="fa fa-minus"></span>
-                                               </button>
-                                            </span>
                                         <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="10000">
                                         <span class="input-group-btn">
-                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                      <span class="fa fa-plus"></span>
-                                              </button>
+                                              <button type="button" class="btn yellow" id="unit" >Unit</button>
                                             </span>
                                         <input type="hidden" id="particularId" name="particularId" value="">
+
                                         <button type="button" class="btn blue" id="addParticular" data-url="{{ path('restaurant_production_particular_add',{'id':entity.id}) }}" >Add</button>
                                     </div>
                                 </div>
@@ -103,11 +97,11 @@
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td class="span4">{{ item.material.name }}</td>
-                                    <td class="span1">{{ item.price }}</td>
+                                    <td class="span1">{{ item.price|number_format(2) }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{% if item.material.unit is not empty %}{{ item.material.unit.name }} {% endif %}</td>
-                                    <td class="span1">{{ item.subTotal|number_format }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('restaurant_production_delete',{'product': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1">{{ item.subTotal|number_format(2) }}</td>
+                                    <td class="span1"><a id="{{ item.id }}" data-url="{{ path('restaurant_production_delete',{'product': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -118,7 +112,7 @@
                         </tr>
                         <tr>
                             <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                            <td class="span1"><strong id="subTotal">{{ entity.productionElementAmount|number_format }}</strong></td>
+                            <td class="span1"><strong id="subTotal">{{ entity.productionElementAmount|number_format(2) }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         </tfoot>
@@ -134,7 +128,7 @@
                                 </label>
                                 <span class="span4 sales-right" >
                                     <input type="hidden" id="valueAddedId" name="valueAddedId[]" value="{{ productionValue.id }}">
-                                       <input type="text" data-action="{{ path('restaurant_production_valueadded',{'id': productionValue.id }) }}" class="span12 m-wrap amount" data-id="{{ productionValue.id }}" id="amount-{{ productionValue.id }}" name="amount[]" value="{{ productionValue.amount }}">
+                                       <input type="text" data-action="{{ path('restaurant_production_valueadded',{'id': productionValue.id }) }}" class="span12 m-wrap amount" data-id="{{ productionValue.id }}" id="amount-{{ productionValue.id }}" name="amount[]" value="{{ productionValue.amount|number_format(2) }}">
                                 </span>
                             </div>
                         </div>
@@ -146,7 +140,7 @@
                             <label class="span6" for="firstName">
                                 <strong>Total Value Added</strong>
                             </label>
-                            <strong class="span4 sales-right" id="valueTotal">{{ entity.valueAddedAmount }}</strong>
+                            <strong class="span4 sales-right" id="valueTotal">{{ entity.valueAddedAmount|number_format(2) }}</strong>
                         </div>
                     </div>
                 </div>
@@ -162,15 +156,18 @@
         </div>
 
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
  <style>
      .sales-right{
          width: 110px;
      }
  </style>
 {% endblock %}
-
 {% block cssBlock %}
-{% stylesheets filter='cssrewrite'
+    {% stylesheets filter='cssrewrite'
     '@RestaurantBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -189,4 +186,6 @@
     {{ parent() }}
     $('input[name=particular]').focus();
 {% endblock %}
+
+
 

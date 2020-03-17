@@ -141,7 +141,7 @@ class ProductionController extends Controller
         $editForm = $this->createProductionCostingForm($entity);
         $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($config);
         $productionValues = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionValueAdded')->getProductionAdded($entity);
-        return $this->render('RestaurantBundle:Product:production.html.twig', array(
+        return $this->render('RestaurantBundle:Production:production.html.twig', array(
             'entity'      => $entity,
             'particulars' => $particulars,
             'productionValues' => $productionValues,
@@ -201,6 +201,8 @@ class ProductionController extends Controller
         return new Response('success');
 
     }
+
+
 
     public function productionElementDeleteAction(Particular $product, ProductionElement $particular){
 

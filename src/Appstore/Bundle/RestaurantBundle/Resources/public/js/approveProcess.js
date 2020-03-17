@@ -57,6 +57,26 @@ $(document).on("click", ".confirm", function() {
     });
 });
 
+$(document).on("click", ".productionProcess", function() {
+    var url = $(this).attr('data-action');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.ajax({
+                url : url,
+                beforeSend: function(){
+                    $('.loader-double').fadeIn(5000).addClass('is-active');
+                },
+                complete: function(){
+                    $('.loader-double').fadeIn(5000).removeClass('is-active');
+                }
+            });
+
+        }
+    });
+});
+
 
 
 $(document).on("click", ".delete", function() {

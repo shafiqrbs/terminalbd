@@ -58,7 +58,16 @@ class InvoiceParticular
     private $salesPrice;
 
 
-    /**
+   /**
+     * @var float
+     *
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+     */
+    private $purchasePrice;
+
+
+
+     /**
      * @var string
      *
      * @ORM\Column(name="estimatePrice", type="decimal", nullable=true)
@@ -313,6 +322,22 @@ class InvoiceParticular
     public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 

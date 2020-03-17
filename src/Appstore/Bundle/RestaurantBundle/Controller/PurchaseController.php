@@ -250,6 +250,9 @@ class PurchaseController extends Controller
             if($purchase->getRestaurantConfig()->isStockHistory() == 1 ) {
                 $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertPurchaseItem($purchase);
             }
+            if($purchase->getRestaurantConfig()->isProduction() == 1 ) {
+                $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->updatePurchaseItemPrice($purchase);
+            }
             $em->getRepository('AccountingBundle:AccountPurchase')->insertRestaurantAccountPurchase($purchase);
             return new Response('success');
         } else {

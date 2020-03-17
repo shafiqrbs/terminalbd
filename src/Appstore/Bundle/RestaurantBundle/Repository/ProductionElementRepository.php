@@ -5,6 +5,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -43,6 +44,8 @@ class ProductionElementRepository extends EntityRepository
         }
     }
 
+
+
     public function getProductionPrice(Particular $particular)
     {
         $qb = $this->createQueryBuilder('e');
@@ -77,4 +80,27 @@ class ProductionElementRepository extends EntityRepository
         }
         return $data;
     }
+
+    public function updatePurchaseItemPrice(Purchase $purchase)
+    {
+        $em = $this->_em;
+
+        /* @var $item PurchaseItem */
+
+        foreach ($purchase->getPurchaseItems()  as $item ){
+
+            $qb = $this->createQueryBuilder('e');
+            $q = $qb->update()
+                ->set('e.price', '?1')
+                ->where('e.material = ?3')
+                ->setParameter(1, $item->getPurchasePrice())
+                ->setParameter(3, $item->getParticular()->getId())
+                ->getQuery();
+            $q->execute();
+
+        }
+
+    }
+
+
 }

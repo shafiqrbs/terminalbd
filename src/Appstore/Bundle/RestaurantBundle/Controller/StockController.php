@@ -8,7 +8,7 @@ use Appstore\Bundle\RestaurantBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * StockController controller.
@@ -270,4 +270,15 @@ class StockController extends Controller
         exit;
 
     }
+
+
+    public function productionUpdateAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        echo $config->getId();
+        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config);
+        return new Response('success');
+
+    }
+
 }

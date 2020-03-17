@@ -27,3 +27,7 @@ restaurant_stock_status:
 restaurant_stock_inline:
     path:     /inline-update
     defaults: { _controller: "RestaurantBundle:Stock:inlineUpdate" }
+
+restaurant_stock_update_price:
+    path:     /production-price-update
+    defaults: { _controller: "RestaurantBundle:Stock:productionUpdate" }

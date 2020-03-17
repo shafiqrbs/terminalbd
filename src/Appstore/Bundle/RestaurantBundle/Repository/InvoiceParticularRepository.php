@@ -103,6 +103,11 @@ class InvoiceParticularRepository extends EntityRepository
             $entity = new InvoiceParticular();
             $entity->setQuantity($temp->getQuantity());
             $entity->setSalesPrice($temp->getSalesPrice());
+            if($invoice->getRestaurantConfig()->isProduction() == 1 ){
+                $entity->setPurchasePrice($temp->getParticular()->getProductionElementAmount());
+            }else{
+                $entity->setPurchasePrice($temp->getParticular()->getPurchasePrice());
+            }
             $entity->setSubTotal($temp->getSubTotal());
             $entity->setInvoice($invoice);
             $entity->setParticular($temp->getParticular());
@@ -126,7 +131,7 @@ class InvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function insertInvoiceItems($invoice, $data)
+    public function insertInvoiceItems(Invoice $invoice, $data)
     {
         $em = $this->_em;
         $particularId = (int)$data['particularId'];
@@ -145,6 +150,11 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($particular->getPrice());
             $entity->setSubTotal($particular->getPrice() * 1);
+        }
+        if($invoice->getRestaurantConfig()->isProduction() == 1 ){
+            $entity->setPurchasePrice($particular->getProductionElementAmount());
+        }else{
+            $entity->setPurchasePrice($particular->getPurchasePrice());
         }
         $entity->setInvoice($invoice);
         $entity->setParticular($particular);

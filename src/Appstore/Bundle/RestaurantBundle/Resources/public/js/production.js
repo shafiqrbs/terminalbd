@@ -56,6 +56,7 @@ $(document).on('change', '#particular', function() {
             obj = JSON.parse(response);
             $('#particularId').val(obj['particularId']);
             $('#purchasePrice').val(obj['purchasePrice']);
+            $('#unit').html(obj['unit']);
         }
     })
 });

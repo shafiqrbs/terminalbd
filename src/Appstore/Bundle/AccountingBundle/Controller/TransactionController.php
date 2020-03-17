@@ -585,4 +585,27 @@ class TransactionController extends Controller
         }
     }
 
+    public function incomeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($user,$data);
+        if(empty($data['pdf'])){
+            return $this->render('AccountingBundle:Report/Medicine:income.html.twig', array(
+                'overview' => $overview,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Report/Medicine:incomePdf.html.twig', array(
+                    'overview' => $overview,
+                    'globalOption' => $this->getUser()->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'income.pdf');
+        }
+    }
+
 }

@@ -53,7 +53,7 @@
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
-                                    <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
+                                    <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} => [{{ particular.remainingQuantity }}]</option>
                                 {% endfor %}
                             </select>
                         </div>

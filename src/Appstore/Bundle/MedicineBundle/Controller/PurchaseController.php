@@ -763,4 +763,23 @@ class PurchaseController extends Controller
         exit;
     }
 
+    public function androidPurchaseAction()
+    {
+        $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf);
+        $pagination = $this->paginate($entities);
+        $sales = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findAndroidDeviceSales($pagination);
+        return $this->render('MedicineBundle:Sales:salesAndroid.html.twig', array(
+            'entities' => $pagination,
+            'sales' => $sales,
+        ));
+    }
+    public function androidSalesProcessAction($device)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
+        exit;
+    }
+
 }
