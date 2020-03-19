@@ -55,11 +55,11 @@ class RestaurantTemporary
     private $salesPrice;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="estimatePrice", type="decimal", nullable=true)
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
-    private $estimatePrice;
+    private $purchasePrice;
 
 
     /**
@@ -121,21 +121,6 @@ class RestaurantTemporary
         $this->salesPrice = $salesPrice;
     }
 
-    /**
-     * @return string
-     */
-    public function getEstimatePrice()
-    {
-        return $this->estimatePrice;
-    }
-
-    /**
-     * @param string $estimatePrice
-     */
-    public function setEstimatePrice($estimatePrice)
-    {
-        $this->estimatePrice = $estimatePrice;
-    }
 
     /**
      * @return bool
@@ -215,6 +200,22 @@ class RestaurantTemporary
     public function setParticular($particular)
     {
         $this->particular = $particular;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 }
 

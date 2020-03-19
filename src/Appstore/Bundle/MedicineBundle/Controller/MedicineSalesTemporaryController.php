@@ -116,6 +116,9 @@ class MedicineSalesTemporaryController extends Controller
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
             $entity->setCustomer($customer);
         }
+        $tempTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
+        $purchaseTotal = floor($tempTotal['purchaseSubTotal']);
+        $entity->setPurchasePrice(round($purchaseTotal));
         $entity->setSubTotal(round($data['salesSubTotal']));
         $entity->setNetTotal(round($data['salesNetTotal']));
         if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
@@ -133,6 +136,7 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setNetTotal($data['salesSubTotal'] - $discount);
             $entity->setReceived($data['salesSubTotal'] - $discount);
         }
+
         if ($entity->getNetTotal() <= $entity->getReceived()) {
             $entity->setReceived($entity->getNetTotal());
             $entity->setPaymentStatus('Paid');
@@ -190,7 +194,6 @@ class MedicineSalesTemporaryController extends Controller
 	        $initialDiscount = 0;
 	        $initialGrandTotal = $subTotal;
         }
-
         $data = array(
             'subTotal' => round($subTotal),
             'profit' => round($initialGrandTotal - $result['purchaseSubTotal']),

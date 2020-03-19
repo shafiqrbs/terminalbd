@@ -226,10 +226,12 @@ class InvoiceRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('RestaurantBundle:InvoiceParticular','si')
             ->select('sum(si.subTotal) as subTotal')
+            ->addSelect('sum(si.purchasePrice * si.quantity) as purchasePrice')
             ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        $purchasePrice = !empty($total['purchasePrice']) ? $total['purchasePrice'] :0;
         if($subTotal > 0){
             if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
               //  $totalAmount = ($subTotal- $invoice->getDiscount());
@@ -239,11 +241,13 @@ class InvoiceRepository extends EntityRepository
             $invoice->setSubTotal($subTotal);
             $total =($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setTotal($total);
+            $invoice->setPurchasePrice($purchasePrice);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
 
             $invoice->setSubTotal(0);
+            $invoice->setPurchasePrice(0);
             $invoice->setTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
@@ -372,21 +376,7 @@ class InvoiceRepository extends EntityRepository
     public function salesTransactionReverse(Invoice $entity){
 
         $em = $this->_em;
-
-        $sales = $this->_em->getRepository('AccountingBundle:AccountSales')->findOneBy(array('restaurantInvoice'=>$entity));
-
-        if(!empty($sales)){
-
-            /* @var $sales AccountSales  */
-                $globalOption = $sales->getGlobalOption()->getId();
-                $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
-                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $accountCash->execute();
-        }
-
-        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.restaurantInvoice = {$entity->getId()}");
         if(!empty($accountCash)){
             $accountCash->execute();
         }

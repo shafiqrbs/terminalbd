@@ -32,7 +32,9 @@ class RestaurantTemporaryController extends Controller
         $entity = new Invoice();
         $form = $this->createTemporaryForm($entity);
         $itemForm = $this->createInvoiceParticularForm(New RestaurantTemporary());
-        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
@@ -90,7 +92,9 @@ class RestaurantTemporaryController extends Controller
         $user = $this->getUser();
         $option = $user->getGlobalOption();
         $config = $user->getGlobalOption()->getRestaurantConfig();
-        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         $data = $request->request->all()['restaurant_invoice'];
         $btn = $request->request->get('buttonType');
         $tableNos = $request->request->get('tableNos');
@@ -105,6 +109,7 @@ class RestaurantTemporaryController extends Controller
         }
         $entity->setPaymentStatus('Pending');
         $entity->setSubTotal($subTotal);
+        $entity->setPurchasePrice($purchasePrice);
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $entity->setVat($vat);
         $total = round(($subTotal - $entity->getDiscount()) + $entity->getVat());
@@ -163,7 +168,9 @@ class RestaurantTemporaryController extends Controller
         $user = $this->getUser();
         $discount = (float)$request->request->get('discount');
         $discountType = $request->request->get('discountType');
-        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         if($discountType == 'flat'){
             $initialGrandTotal = ($subTotal  - $discount);
         }else{
@@ -187,7 +194,9 @@ class RestaurantTemporaryController extends Controller
         /* @var $config RestaurantConfig */
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $discount = $request->request->get('discount');
-        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         if($config->getDiscountType() == 'flat' and !empty($discount)){
             $initialGrandTotal = ($subTotal  - $config->getDiscountPercentage());
         }elseif($config->getDiscountType() == 'percentage' and !empty($discount)){
@@ -222,7 +231,9 @@ class RestaurantTemporaryController extends Controller
             $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesListItems($user);
         }
 
-        $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $data = array(
            'subTotal'           => $subTotal,

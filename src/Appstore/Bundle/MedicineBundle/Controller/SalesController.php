@@ -531,6 +531,46 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
         exit;
     }
+
+    public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
+    {
+        $msg = "invalid";
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+
+        $removeSales = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess= {$android->getId()}");
+        if(!empty($removeSales)){
+            $removeSales->execute();
+        }
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
+
+        /* @var $sales MedicineSales */
+
+        $salses = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->findBy(array('androidProcess' => $android));
+        foreach ($salses as $sales){
+            if($sales->getProcess() == "Device"){
+                $sales->setProcess('Done');
+                $sales->setUpdated($sales->getCreated());
+                $sales->setApprovedBy($this->getUser());
+                $em->flush();
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
+                $msg = "valid";
+            }
+        }
+        if($msg == "valid"){
+            $android->setStatus(true);
+            $em->persist($android);
+            $em->flush();
+        }
+        if($msg == "valid"){
+            return new Response('success');
+        }else{
+            return new Response('failed');
+	    }
+    }
+
     public function groupReverseAction()
     {
         set_time_limit(0);
@@ -571,42 +611,5 @@ class SalesController extends Controller
 
     }
 
-    public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
-    {
-        $msg = "invalid";
-        set_time_limit(0);
-        ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findBy(['medicineConfig' => $config ,'androidProcess' => $android]);
-        foreach ($entities as $entity){
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($entity);
-            $this->allSalesItemDelete($entity);
-            $em->remove($entity);
-            $em->flush();
-        }
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
-        /* @var $sales MedicineSales */
-        foreach ($android->getMedicineSales() as $sales){
-            if($sales->getProcess() == "Device"){
-                $sales->setProcess('Done');
-                $sales->setUpdated($sales->getCreated());
-                $sales->setApprovedBy($this->getUser());
-                $em->flush();
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($sales);
-                $msg = "valid";
-            }
-        }
-        if($msg == "valid"){
-            $android->setStatus(true);
-            $em->persist($android);
-            $em->flush();
-        }
-        if($msg == "valid"){
-            return new Response('success');
-        }else{
-            return new Response('failed');
-	    }
-    }
 
 }

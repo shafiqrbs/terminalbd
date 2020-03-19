@@ -103,7 +103,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity = new InvoiceParticular();
             $entity->setQuantity($temp->getQuantity());
             $entity->setSalesPrice($temp->getSalesPrice());
-            if($invoice->getRestaurantConfig()->isProduction() == 1 ){
+            if($invoice->getRestaurantConfig()->isProduction() == 1 and $temp->getParticular()->getService()->getSlug() == 'product'){
                 $entity->setPurchasePrice($temp->getParticular()->getProductionElementAmount());
             }else{
                 $entity->setPurchasePrice($temp->getParticular()->getPurchasePrice());
@@ -151,7 +151,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSalesPrice($particular->getPrice());
             $entity->setSubTotal($particular->getPrice() * 1);
         }
-        if($invoice->getRestaurantConfig()->isProduction() == 1 ){
+        if($invoice->getRestaurantConfig()->isProduction() == 1 and $particular->getService()->getSlug() == 'product' ){
             $entity->setPurchasePrice($particular->getProductionElementAmount());
         }else{
             $entity->setPurchasePrice($particular->getPurchasePrice());

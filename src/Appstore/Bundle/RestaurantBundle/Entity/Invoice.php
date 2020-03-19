@@ -271,6 +271,13 @@ class Invoice
     /**
      * @var float
      *
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+     */
+    private $purchasePrice = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment;
@@ -1079,6 +1086,22 @@ class Invoice
     public function setIsHold($isHold)
     {
         $this->isHold = $isHold;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 

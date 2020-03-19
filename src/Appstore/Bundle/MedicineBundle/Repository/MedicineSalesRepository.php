@@ -224,19 +224,24 @@ class MedicineSalesRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('MedicineBundle:MedicineSalesItem','si')
             ->select('sum(si.subTotal) as subTotal')
+            ->addSelect('sum(si.purchasePrice * si.quantity) as purchasePrice')
             ->where('si.medicineSales = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        $purchasePrice = !empty($total['purchasePrice']) ? $total['purchasePrice'] :0;
         if($subTotal > 0){
             $invoice->setSubTotal(floor($subTotal));
+            $invoice->setPurchasePrice(floor($purchasePrice));
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
             $invoice->setNetTotal(floor($subTotal - $invoice->getDiscount()));
             $invoice->setDue(floor($subTotal - $invoice->getDiscount()));
+
         }else{
+
             $invoice->setSubTotal(0);
-            $invoice->setTotal(0);
+            $invoice->setPurchasePrice(0);
             $invoice->setNetTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
@@ -814,22 +819,10 @@ class MedicineSalesRepository extends EntityRepository
                     $em->flush();
 
                 endforeach;
+
                 $this->insertApiSalesItem( $option, $process);
+                $this->updateApiSalesPurchasePrice($process->getId());
             }
-
-         /*
-          $countRecords = $this->countNumberSalesSubItem($process->getId());
-          $countRecords = $this->countNumberSalesItem($process->getId());
-          if($process->getItemCount() == $countRecords){
-                $this->insertApiSalesItem( $option, $process);
-           }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
-               $batch = $process->getId();
-               $remove = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess = {$batch}");
-               $remove->execute();
-           }else{
-               return "Failed";
-           }*/
-
     }
 
     public function countNumberSalesItem($batch)
@@ -891,6 +884,22 @@ class MedicineSalesRepository extends EntityRepository
 
     }
 
+    public function updateApiSalesPurchasePrice($android)
+    {
+        $sql = "Update medicine_sales as sales
+                inner join (
+                select ele.medicineSales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
+                from medicine_sales_item as ele
+                where ele.medicineSales_id is not NULL
+                group by ele.medicineSales_id
+                ) as pa on sales.id = pa.medicineSales_id
+                set sales.purchasePrice = pa.purchasePrice
+                WHERE sales.androidProcess_id =:android";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('android', $android);
+        $qb->execute();
+    }
+
     public function countNumberSalesSubItem($batch)
     {
         $em = $this->_em;
@@ -943,7 +952,6 @@ class MedicineSalesRepository extends EntityRepository
             $em->flush();
             $em->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
         }
     }
 
@@ -967,6 +975,8 @@ class MedicineSalesRepository extends EntityRepository
             return $data = ['total' => $total,'discount' => $discount];
         }
     }
+
+
 
 
 }

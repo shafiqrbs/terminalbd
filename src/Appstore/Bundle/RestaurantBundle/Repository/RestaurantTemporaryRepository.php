@@ -21,11 +21,12 @@ class RestaurantTemporaryRepository extends EntityRepository
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.subTotal) AS subTotal');
+        $qb->addSelect('SUM(e.purchasePrice * e.quantity) AS purchasePrice');
         $qb->where('e.restaurantConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere("e.user =".$user->getId());
         $res = $qb->getQuery()->getOneOrNullResult();
-        return $res['subTotal'];
+        return $res;
     }
 
     public function generateVat(User $user,$total)
@@ -59,10 +60,14 @@ class RestaurantTemporaryRepository extends EntityRepository
             $entity->setSalesPrice($data['price']);
             $entity->setSubTotal($data['price']);
         }
+        if($particular->getRestaurantConfig()->isProduction() == 1 and $particular->getService()->getSlug() == 'product'){
+            $entity->setPurchasePrice($particular->getProductionElementAmount());
+        }else{
+            $entity->setPurchasePrice($particular->getPurchasePrice());
+        }
         $entity->setUser($user);
-        $entity->setRestaurantConfig($user->getGlobalOption()->getRestaurantConfig());
+        $entity->setRestaurantConfig($particular->getRestaurantConfig());
         $entity->setParticular($particular);
-        $entity->setEstimatePrice($particular->getPrice());
         $em->persist($entity);
         $em->flush();
 

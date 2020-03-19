@@ -579,7 +579,7 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-    /* =============   Tally Module ================= */
+    /* =============   Assets Module ================= */
 
     public function insertAccountSalesTally(\Appstore\Bundle\AssetsBundle\Entity\Sales $entity) {
 
@@ -615,7 +615,6 @@ class AccountSalesRepository extends EntityRepository
         return $sales;
 
     }
-
 
 
 	/* =============   Inventory Module ================= */
@@ -801,6 +800,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
+        $accountSales->setPurchasePrice($entity->getPurchasePrice());
         $accountSales->setAmount($entity->getPayment());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setProcessHead('restaurant');
@@ -830,6 +830,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($entity->getMedicineConfig()->getGlobalOption());
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTotalAmount($entity->getNetTotal());
+        $accountSales->setPurchasePrice($entity->getPurchasePrice());
         if ($entity->getReceived() > 0){
             $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setAmount($entity->getReceived());

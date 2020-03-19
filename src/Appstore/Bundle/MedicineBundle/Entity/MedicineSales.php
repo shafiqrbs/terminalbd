@@ -234,6 +234,13 @@ class MedicineSales
     /**
      * @var float
      *
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+     */
+    private $purchasePrice = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="received", type="float", nullable=true)
      */
     private $received = 0;
@@ -1007,6 +1014,22 @@ class MedicineSales
     public function setAndroidProcess($androidProcess)
     {
         $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 

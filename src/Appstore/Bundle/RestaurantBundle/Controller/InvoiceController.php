@@ -370,8 +370,7 @@ class InvoiceController extends Controller
     private function createEditForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $particular = $this->getDoctrine()->getRepository('RestaurantBundle:Particular');
-        $form = $this->createForm(new InvoiceType($globalOption,$particular), $entity, array(
+        $form = $this->createForm(new InvoiceType($globalOption), $entity, array(
             'action' => $this->generateUrl('restaurant_invoice_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
