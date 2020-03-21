@@ -1,6 +1,15 @@
 <div class="portlet box">
     <div class="portlet-body" style="min-height: 460px">
-        <div class="clearfix">&nbsp;</div>
+        <div class="portlet box blue" style="margin-bottom: 0">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-reorder"></i>MANAGE ORDER</div>
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn" target="_blank" href="{{ path('restaurant_invoice') }}"><i class="icon-th-list"></i> Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row-fluid">
             <div class="span8">
                 <!--BEGIN TABS-->
@@ -82,9 +91,9 @@
                 <!--END TABS-->
             </div>
             <div class="span4">
-                <div class="portlet box purple">
+                <div class="portlet box yellow">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>MANAGE ORDER</div>
+                        <div class="caption"><i class="icon-reorder"></i>TRANSACTION INFORMATION</div>
                     </div>
 
                     <div class="portlet-body">
@@ -162,6 +171,43 @@
                             </div>
                             <div class="clearfix"></div>
                             {% endif %}
+                            <div class="clearfix"></div>
+                            {% if config.isCustomer == 1 %}
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile no">
+                                    <button type="button" class="pull-right btn btn-large blue addCustomer"><i class="icon-user"></i></button>
+                                </div>
+                            </div>
+                            <div class="row-fluid customer" id="">
+                                <div class="span12 input-append-border">
+                                    <div class="row-fluid">
+                                        <div class="input-icon left input-height">
+                                            <i class="icon-user"></i>
+                                            <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid customer">
+                                <div class="span12 input-append-border">
+                                    <div class="row-fluid">
+                                        <div class="input-icon left input-height">
+                                            <i class="icon-phone"></i>
+                                            <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid customer">
+                                <div class="span12 input-append-border">
+                                    <div class="row-fluid">
+                                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="clearfix"></div>
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
@@ -366,14 +412,26 @@
 </div>
 <style>
 
+    #calBorder, .select2-drop , .select2-drop-mask{
+        z-index: 999999!important;
+    }
+
+    .select2-container .select2-choice {
+        height: 35px!important;
+        z-index: 99999!important;
+    }
+
     input[type="text"].inline-m-wrap{
+
         width: 36px;
         font-size: 12px;
         border: 1px solid #c49f47;
         margin-bottom: 0;
         text-align: center;
         font-weight: bold;
+
     }
+
     input[class*="span"].m-wrap-bg{
         height: 50px!important;
         background: #ffffff;

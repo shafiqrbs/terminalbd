@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
@@ -510,10 +511,8 @@ class PurchaseController extends Controller
             if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
                 $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-              //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
             }
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
-          //  $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -580,6 +579,7 @@ class PurchaseController extends Controller
      * Status a Page entity.
      *
      */
+
     public function statusAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -723,6 +723,7 @@ class PurchaseController extends Controller
         exit;
         return $this->redirect($this->generateUrl('medicine_purchase'));
     }
+
     public function groupApprovedAction()
     {
         set_time_limit(0);
@@ -766,20 +767,36 @@ class PurchaseController extends Controller
     public function androidPurchaseAction()
     {
         $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf,"purchase");
         $pagination = $this->paginate($entities);
         $sales = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findAndroidDeviceSales($pagination);
-        return $this->render('MedicineBundle:Sales:salesAndroid.html.twig', array(
+        return $this->render('MedicineBundle:Purchase:purchaseAndroid.html.twig', array(
             'entities' => $pagination,
             'sales' => $sales,
         ));
     }
-    public function androidSalesProcessAction($device)
+
+    public function insertGroupApiPurchaseImportAction(MedicineAndroidProcess $android)
     {
+        $msg = "invalid";
         set_time_limit(0);
         ignore_user_abort(true);
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
-        exit;
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+
+        $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
+        if(!empty($removeSales)){
+            $removeSales->execute();
+        }
+        $msg = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->insertApiPurchase($config->getGlobalOption(),$android);
+        if($msg == "valid"){
+            $android->setStatus(true);
+            $em->persist($android);
+            $em->flush();
+            return new Response('success');
+        }else{
+            return new Response('failed');
+        }
     }
 
 }

@@ -35,13 +35,28 @@ class CategoryRepository extends EntityRepository
         }
     }
 
+    public function getCategories(RestaurantConfig  $config)
+    {
+        $config = $config->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.service','c');
+        $qb->where('s.restaurantConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('c.slug IN (:slugs)')->setParameter('slugs',array('product','stockable'));
+        $qb->andWhere('e.status = :status')->setParameter('status',1) ;
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
     public function getApiCategory(GlobalOption $option)
     {
 
         $config = $option->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->join('s.service','c');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.status = :status')->setParameter('status',1) ;
+        $qb->andWhere('c.slug IN (:slugs)')->setParameter('slugs',array('product','stockable'));
         $qb->orderBy('e.sorting','ASC');
         $result = $qb->getQuery()->getResult();
 

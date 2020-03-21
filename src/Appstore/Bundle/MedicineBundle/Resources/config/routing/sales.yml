@@ -22,6 +22,10 @@ medicine_sales_android_process:
     options:
             expose: true
 
+medicine_device_sales_import:
+    path:      /device-sales-delete-import/{android}
+    defaults: { _controller: "MedicineBundle:Sales:insertGroupApiSalesImport" }
+
 medicine_sales_item:
     path:     /sales-item
     defaults: { _controller: "MedicineBundle:Sales:salesItem" }

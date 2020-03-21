@@ -60,12 +60,12 @@ $(document).on( "click", ".androidProcess", function( e ) {
                     $('.loader-double').fadeIn(1000).addClass('is-active');
                 },
                 success:  function (response) {
-                  if(response == "success"){
+                 /* if(response == "success"){
                       location.reload();
                   }else{
                       alert('Data does not import successfully, Please try now');
                       location.reload();
-                  }
+                  }*/
                 }
             });
 

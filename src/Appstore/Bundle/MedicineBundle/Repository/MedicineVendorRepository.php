@@ -27,6 +27,7 @@ class MedicineVendorRepository extends EntityRepository
         $qb->orderBy('s.companyName','ASC');
         $qb->getQuery();
         return  $qb;
+
     }
 
     public function getApiVendor(GlobalOption $entity)
@@ -34,20 +35,19 @@ class MedicineVendorRepository extends EntityRepository
 
         $config = $entity->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
-        $qb->select('s.id as id' , 's.companyName as name');
+        $qb->select('s.id as id','s.companyName as name');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->orderBy('s.companyName','ASC');
-        $result = $qb->getQuery()->getResult();
+        $result = $qb->getQuery()->getArrayResult();
 
         $data = array();
 
         /* @var $row MedicineVendor */
 
         foreach($result as $key => $row) {
-            $data[$key]['vendor_id']    = (int) $row['id'];
-            $data[$key]['name']           = $row['name'];
+            $data[$key]['vendor_id']    = (int)$row['id'];
+            $data[$key]['name']         = $row['name'];
         }
-
         return $data;
     }
 

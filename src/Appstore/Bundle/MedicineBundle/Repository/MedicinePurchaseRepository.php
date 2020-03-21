@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
@@ -22,6 +23,7 @@ class MedicinePurchaseRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
+        $device = isset($data['device'])? $data['device'] :'';
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $medicine = isset($data['name'])? $data['name'] :'';
@@ -46,6 +48,10 @@ class MedicinePurchaseRepository extends EntityRepository
         if(!empty($vendor)){
             $qb->join('e.medicineVendor','v');
             $qb->andWhere("v.companyName = :vendor")->setParameter('vendor', $vendor);
+        }
+        if(!empty($device)){
+            //$qb->join('e.androidProcess','ap');
+            $qb->andWhere("e.androidProcess = :android")->setParameter('android', $device);
         }
         if(!empty($vendorId)){
             $qb->join('e.medicineVendor','v');
@@ -164,7 +170,6 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
-
     public function insertInstantPurchase(User $user ,$data)
     {
 
@@ -237,7 +242,6 @@ class MedicinePurchaseRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-
     public function medicinePurchaseMonthly(User $user , $data =array())
 	{
 
@@ -258,7 +262,6 @@ class MedicinePurchaseRepository extends EntityRepository
 		return $result;
 
 	}
-
 
 	public function reportPurchaseTransactionOverview(User $user , $data = array())
     {
@@ -637,75 +640,122 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
-    public function insertApiPurchase(GlobalOption $option,$device, $data)
+    public function findAndroidDeviceSales($x)
+    {
+        $ids = [];
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.androidProcess','a');
+        $qb->select('a.id as androidId');
+        $qb->addSelect('sum(s.subTotal) as subTotal ,sum(s.netTotal) as total ,sum(s.payment) as salesReceive ,sum(s.due) as due ,sum(s.discount) as discount , count(s.id) as voucher');
+        $qb->where("s.androidProcess IN (:salesId)")->setParameter('salesId', $ids);
+        $qb->groupBy('androidId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= [];
+        foreach ($result as $row ){
+            $array[$row['androidId']]= $row;
+        }
+        return $array;
+    }
+
+    public function insertApiPurchase(GlobalOption $option,MedicineAndroidProcess $process)
     {
         $em = $this->_em;
 
-        // $androidDevice =
+        $items = json_decode($process->getJsonItem(),true);
 
-        $sales = new MedicinePurchase();
-        $sales->setMedicineConfig($option->getMedicineConfig());
-        $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
-        $sales->setAndroidDevice($device);
-        $sales->setDevicePurchaseId($data['invoiceId']);
-        $sales->setSubTotal($data['subTotal']);
-        $sales->setDiscount($data['discount']);
-        $sales->setDiscountType($data['discountType']);
-        $sales->setDiscountCalculation($data['discountCalculation']);
-        $sales->setNetTotal($data['total']);
-        $sales->setPayment($data['payment']);
-        $sales->setDue($data['due']);
-        if($data['transactionMethod']){
-            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$data['transactionMethod']));
-            $sales->setTransactionMethod($method);
+        if($items){
+            foreach ($items as $item):
+
+                $sales = new MedicinePurchase();
+                $sales->setMedicineConfig($option->getMedicineConfig());
+                $sales->setAndroidDevice($process->getAndroidDevice());
+                $sales->setAndroidProcess($process);
+                $sales->setInvoice($item['invoiceId']);
+                $sales->setDevicePurchaseId($item['invoiceId']);
+                $sales->setSubTotal($item['subTotal']);
+                $sales->setNetTotal($item['total']);
+                if($item['total'] < $item['payment']){
+                    $sales->setPayment($item['total']);
+                }else{
+                    $sales->setPayment($item['payment']);
+                    $sales->setDue($item['total'] - $item['payment']);
+                }
+                if(isset($item['transactionMethod']) and $item['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                    if($method){
+                        $sales->setTransactionMethod($method);
+                    }
+                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getPayment() > 0){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+                    $sales->setTransactionMethod($method);
+                }
+                if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
+                    if($bank){ $sales->setAccountBank($bank); }
+                }
+                if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0 ){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
+                    if($mobile){ $sales->setAccountMobileBank($mobile); }
+                }
+                $vendor = $em->getRepository('MedicineBundle:MedicineVendor')->find($item['vendorId']);
+                $sales->setMedicineVendor($vendor);
+                if(($item['receivedBy']) and $item['receivedBy'] > 0){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($item['receivedBy']);
+                    $sales->setCreatedBy($createdBy);
+                }
+                $created = new \DateTime($item['created']);
+                $sales->setCreated($created);
+                $sales->setUpdated($created);
+                $sales->setProcess("Complete");
+                $em->persist($sales);
+                $em->flush();
+
+            endforeach;
+            $this->insertApiPurchaseItem( $option, $process);
+            return $msg = "valid";
         }
-        if($data['bankAccount']){
-            $bank = $em->getRepository('AccountingBundle:AccountBank')->find($data['bankAccount']);
-            $sales->setAccountBank($bank);
-        }
-        if($data['mobileBankAccount']){
-            $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($data['mobileBankAccount']);
-            $sales->setAccountMobileBank($mobile);
-        }
-        if($data['vendorId']){
-            $vendor = $em->getRepository('MedicineBundle:MedicineVendor')->find($data['vendorId']);
-            $sales->setMedicineVendor($vendor);
-        }
-        if($data['receivedBy']){
-            $createdBy = $em->getRepository('UserBundle:User')->find($data['receivedBy']);
-            $sales->setCreatedBy($createdBy);
-        }
-        $created = new \DateTime($data['created']);
-        $sales->setCreated($created);
-        $sales->setUpdated($created);
-        $sales->setProcess("Complete");
-        $em->persist($sales);
-        $em->flush();
-        return $sales->getId();
 
     }
 
-    public function insertApiPurchaseItem(GlobalOption $option , $data){
+    public function insertApiPurchaseItem(GlobalOption $option,MedicineAndroidProcess $process){
 
         $em = $this->_em;
         $conf = $option->getMedicineConfig();
-        $purchaseId = $data['purchaseId'];
-        $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig'=>$conf,'devicePurchaseId' => $purchaseId));
-        $salesItem = new MedicinePurchaseItem();
-        $salesItem->setMedicinePurchase($purchase);
-        $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($data['stockId']);
-        $salesItem->setMedicineStock($stockId);
-        $salesItem->setQuantity($data['quantity']);
-        $salesItem->setSalesPrice($data['salesPrice']);
-        $salesItem->setPurchasePrice($data['purchasePrice']);
-        $salesItem->setActualPurchasePrice($data['purchasePrice']);
-        $salesItem->setPurchaseSubTotal($data['subTotal']);
-        $em->persist($salesItem);
-        $em->flush();
-        return $salesItem->getId();
+
+        $items = json_decode($process->getJsonSubItem(),true);
+        if($items) {
+
+            foreach ($items as $item):
+
+                $deviceId = $item['purchaseId'];
+                $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $conf , 'devicePurchaseId' => $deviceId));
+                if ($purchase) {
+                    $salesItem = new MedicinePurchaseItem();
+                    $salesItem->setAndroidProcess($process);
+                    $salesItem->setMedicinePurchase($purchase);
+                    $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
+                    if ($stockId) {
+                        $salesItem->setMedicineStock($stockId);
+                        $salesItem->setActualPurchasePrice($stockId->getSalesPrice());
+                        $salesItem->setPurchasePrice($stockId->getSalesPrice());
+                        $salesItem->setSalesPrice($stockId->getSalesPrice());
+                    }
+                    $salesItem->setQuantity($item['quantity']);
+                    $salesItem->setPurchaseSubTotal($item['quantity'] * $stockId->getSalesPrice());
+                    $em->persist($salesItem);
+                    $em->flush();
+                    if ($salesItem->getMedicineStock()) {
+                        $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(), 'purchase');
+                    }
+                }
+
+            endforeach;
+        }
 
     }
-
-
 
 }

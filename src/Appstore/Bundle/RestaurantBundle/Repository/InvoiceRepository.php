@@ -5,10 +5,12 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess;
 use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Mike42\Escpos\Printer;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * PathologyRepository
@@ -27,6 +29,8 @@ class InvoiceRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
+        $customer = isset($data['customer'])? $data['customer'] :'';
+        $slipNo = isset($data['slipNo'])? $data['slipNo'] :'';
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
@@ -35,6 +39,13 @@ class InvoiceRepository extends EntityRepository
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+        }
+        if (!empty($slipNo)) {
+            $qb->andWhere($qb->expr()->like("e.slipNo", "'%$slipNo%'"  ));
+        }
+        if (!empty($customer)) {
+            $qb->join('e.customer','c');
+            $qb->andWhere($qb->expr()->like("c.mobile", "'%$customer%'"  ));
         }
         if (!empty($startDate) ) {
             $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
@@ -518,5 +529,203 @@ class InvoiceRepository extends EntityRepository
         $code = (str_pad($lastCode,3, '0', STR_PAD_LEFT));
         return $code;
     }
+
+    public function findAndroidDeviceSales($x)
+    {
+        $ids = [];
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.androidProcess','a');
+        $qb->select('a.id as androidId');
+        $qb->addSelect('sum(s.subTotal) as subTotal ,sum(s.total) as total ,sum(s.payment) as salesReceive ,sum(s.due) as due ,sum(s.discount) as discount , count(s.id) as voucher');
+        $qb->where("s.androidProcess IN (:salesId)")->setParameter('salesId', $ids);
+        $qb->groupBy('androidId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= [];
+        foreach ($result as $row ){
+            $array[$row['androidId']]= $row;
+        }
+        return $array;
+    }
+
+    public function insertApiSales(GlobalOption $option,RestaurantAndroidProcess $process)
+    {
+        $em = $this->_em;
+
+        $items = json_decode($process->getJsonItem(),true);
+        if($items){
+            foreach ($items as $item):
+                $sales = new Invoice();
+                $sales->setRestaurantConfig($option->getRestaurantConfig());
+                $sales->setAndroidProcess($process);
+                $sales->setInvoice($item['invoiceId']);
+                $sales->setDeviceSalesId($item['invoiceId']);
+                $sales->setSubTotal($item['subTotal']);
+                if(isset($item['discount']) and $item['discount'] > 0){
+                    $sales->setDiscount($item['discount']);
+                    $sales->setDiscountType($item['discountType']);
+                    $sales->setDiscountCalculation($item['discountCalculation']);
+                }
+                $sales->setTotal($item['total']);
+                if($item['total'] < $item['receive']){
+                    $sales->setPayment($item['total']);
+                }else{
+                    $sales->setPayment($item['receive']);
+                    $sales->setDue($item['total'] - $item['receive']);
+                }
+                $sales->setVat($item['vat']);
+                if(isset($item['transactionMethod']) and $item['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                    if($method){
+                        $sales->setTransactionMethod($method);
+                    }
+                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getPayment() > 0){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+                    $sales->setTransactionMethod($method);
+                }
+                if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
+                    if($bank){
+                        $sales->setAccountBank($bank);
+                    }
+                    if(isset($item['paymentCard']) and $item['paymentCard']){
+                        $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
+                        $sales->setPaymentCard($card);
+                    }
+                }
+                if(isset($item['paymentCardNo']) and $item['paymentCardNo']) {
+                    $sales->setCardNo($item['paymentCardNo']);
+                }
+                if(isset($item['transactionId']) and $item['transactionId']) {
+                    $sales->setCardNo($item['transactionId']);
+                }
+                if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
+                    if($mobile){
+                        $sales->setAccountMobileBank($mobile);
+                    }
+                }
+                if(isset($item['paymentMobile']) and $item['paymentMobile']) {
+                    $sales->setPaymentMobile($item['paymentMobile']);
+                }
+                if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
+                    $sales->setCustomer($customer);
+                }elseif(($item['customerId']) and $item['customerId'] > 0 ){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'id'=>$item['customerId']));
+                    $sales->setCustomer($customer);
+                }else{
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
+                    $sales->setCustomer($customer);
+                }
+                if(($item['createdBy']) and $item['createdBy'] > 0){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
+                    $sales->setCreatedBy($createdBy);
+                }
+                if(($item['salesBy']) and $item['salesBy'] > 0){
+                    $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
+                    $sales->setSalesBy($salesBy);
+                }
+                if($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setTotal($serviceCharge['total']);
+                    $sales->setPayment($serviceCharge['total']);
+                }elseif($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setTotal($serviceCharge['total']);
+                    $sales->setPayment($serviceCharge['total']);
+                }
+                $created = new \DateTime($item['created']);
+                $sales->setCreated($created);
+                $sales->setUpdated($created);
+                $sales->setProcess("Device");
+                $sales->setPaymentStatus("Paid");
+                $em->persist($sales);
+                $em->flush();
+
+            endforeach;
+
+            $this->insertApiSalesItem( $option, $process);
+        }
+    }
+
+    public function insertApiSalesItem(GlobalOption $option,RestaurantAndroidProcess $process){
+
+        $em = $this->_em;
+        $conf = $option->getRestaurantConfig();
+
+        $items = json_decode($process->getJsonSubItem(),true);
+        if($items) {
+            foreach ($items as $item):
+
+                $deviceSalesId = $item['salesId'];
+                $sales = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig' => $conf, 'deviceSalesId' => $deviceSalesId));
+                if ($sales) {
+                    $salesItem = new InvoiceParticular();
+                    $salesItem->setInvoice($sales);
+                    $stockId = $em->getRepository('RestaurantBundle:Particular')->find($item['stockId']);
+                    if ($stockId) {
+                        $salesItem->setParticular($stockId);
+                        if($stockId->getRestaurantConfig()->isProduction() == 1 and $stockId->getService()->getSlug() == 'product'){
+                            $salesItem->setPurchasePrice($stockId->getProductionElementAmount());
+                        }else{
+                            $salesItem->setPurchasePrice($stockId->getPurchasePrice());
+                        }
+                    }
+                    $salesItem->setQuantity($item['quantity']);
+                    if (isset($item['unitPrice']) and $item['unitPrice']) {
+                        $salesItem->setSalesPrice(floatval($item['unitPrice']));
+                    }
+                    $salesItem->setSubTotal($item['subTotal']);
+                    $em->persist($salesItem);
+                    $em->flush();
+                    if ($salesItem->getParticular()) {
+                        $em->getRepository('RestaurantBundle:Particular')->updateRemoveStockQuantity($salesItem->getParticular(), 'sales');
+                    }
+                }
+            endforeach;
+        }
+
+    }
+
+    public function updateApiSalesPurchasePrice($android)
+    {
+        $sql = "Update restaurant_invoice as sales
+            inner join (
+              select ele.invoice_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
+              from restaurant_invoice_particular as ele
+              where ele.invoice_id is not NULL
+              group by ele.invoice_id
+            ) as pa on sales.id = pa.invoice_id
+            inner JOIN account_sales as aSales ON sales.id = aSales.restaurant_id
+            set sales.purchasePrice = pa.purchasePrice , aSales.purchasePrice = pa.purchasePrice
+            WHERE sales.androidProcess_id =:android";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('android', $android);
+        $qb->execute();
+    }
+
+    public function getCalculationBankServiceCharge(Invoice $entity){
+
+        if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
+            $total = ( $entity->getSubTotal()- $discount);
+            return $data = ['total'=>$total,'discount' => $discount];
+        }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
+            $total = ( $entity->getSubTotal()- $discount);
+            return $data = ['total' => $total,'discount' => $discount];
+        }
+    }
+
 
 }

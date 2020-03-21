@@ -101,3 +101,13 @@ medicine_expiration_inline:
     methods:  POST
     options:
             expose: true
+
+
+medicine_purchase_android:
+    path:     /android
+    defaults: { _controller: "MedicineBundle:Purchase:androidPurchase" }
+
+
+medicine_device_purchase_import:
+    path:      /device-sales-delete-import/{android}
+    defaults: { _controller: "MedicineBundle:Purchase:insertGroupApiPurchaseImport" }

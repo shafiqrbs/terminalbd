@@ -21,13 +21,14 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class MedicineAndroidProcessRepository extends EntityRepository
 {
 
-    public function getAndroidSalesList( $config){
+    public function getAndroidSalesList( $config, $process = "" ){
 
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.androidDevice','a');
         $qb->select('e.id as id','e.created as created','e.itemCount as itemCount','e.status as status');
-         $qb->addSelect('a.device as device');
+        $qb->addSelect('a.device as device');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.process = :process')->setParameter('process', $process);
         $qb->orderBy('e.created',"DESC");
         $result = $qb->getQuery();
         return $result;

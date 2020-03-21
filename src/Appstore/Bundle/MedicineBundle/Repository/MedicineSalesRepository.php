@@ -821,20 +821,7 @@ class MedicineSalesRepository extends EntityRepository
                 endforeach;
 
                 $this->insertApiSalesItem( $option, $process);
-                $this->updateApiSalesPurchasePrice($process->getId());
             }
-    }
-
-    public function countNumberSalesItem($batch)
-    {
-        $em = $this->_em;
-        $total = $em->createQueryBuilder()
-            ->from('MedicineBundle:MedicineSales','si')
-            ->select('count(si.id) as totalCount')
-            ->where("si.androidProcess={$batch}")
-            ->getQuery()->getOneOrNullResult();
-        return $total['totalCount'];
-
     }
 
     public function insertApiSalesItem(GlobalOption $option,MedicineAndroidProcess $process){
@@ -887,17 +874,30 @@ class MedicineSalesRepository extends EntityRepository
     public function updateApiSalesPurchasePrice($android)
     {
         $sql = "Update medicine_sales as sales
-                inner join (
-                select ele.medicineSales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
-                from medicine_sales_item as ele
-                where ele.medicineSales_id is not NULL
-                group by ele.medicineSales_id
-                ) as pa on sales.id = pa.medicineSales_id
-                set sales.purchasePrice = pa.purchasePrice
-                WHERE sales.androidProcess_id =:android";
+            inner join (
+              select ele.medicineSales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
+              from medicine_sales_item as ele
+              where ele.medicineSales_id is not NULL
+              group by ele.medicineSales_id
+            ) as pa on sales.id = pa.medicineSales_id
+            inner JOIN account_sales as aSales ON sales.id = aSales.medicine_sales_id
+            set sales.purchasePrice = pa.purchasePrice , aSales.purchasePrice = pa.purchasePrice
+            WHERE sales.androidProcess_id =:android";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('android', $android);
         $qb->execute();
+    }
+
+    public function countNumberSalesItem($batch)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('MedicineBundle:MedicineSales','si')
+            ->select('count(si.id) as totalCount')
+            ->where("si.androidProcess={$batch}")
+            ->getQuery()->getOneOrNullResult();
+        return $total['totalCount'];
+
     }
 
     public function countNumberSalesSubItem($batch)

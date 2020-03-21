@@ -516,7 +516,7 @@ class SalesController extends Controller
     public function androidSalesAction()
     {
         $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf,"sales");
         $pagination = $this->paginate($entities);
         $sales = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findAndroidDeviceSales($pagination);
         return $this->render('MedicineBundle:Sales:salesAndroid.html.twig', array(
@@ -563,6 +563,7 @@ class SalesController extends Controller
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateApiSalesPurchasePrice($android->getId());
         }
         if($msg == "valid"){
             return new Response('success');

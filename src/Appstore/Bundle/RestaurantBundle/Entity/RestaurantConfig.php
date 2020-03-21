@@ -143,6 +143,13 @@ class RestaurantConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isCustomer", type="boolean",  nullable=true)
+     */
+    private $isCustomer = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
      */
     private $isBranch = false;
@@ -1247,6 +1254,22 @@ class RestaurantConfig
     public function setIsProduction($isProduction)
     {
         $this->isProduction = $isProduction;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomer()
+    {
+        return $this->isCustomer;
+    }
+
+    /**
+     * @param bool $isCustomer
+     */
+    public function setIsCustomer($isCustomer)
+    {
+        $this->isCustomer = $isCustomer;
     }
 
 

@@ -91,11 +91,12 @@ class RestaurantTemporaryController extends Controller
         $entity = New Invoice();
         $user = $this->getUser();
         $option = $user->getGlobalOption();
-        $config = $user->getGlobalOption()->getRestaurantConfig();
+        $config = $option->getRestaurantConfig();
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
         $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
-        $data = $request->request->all()['restaurant_invoice'];
+        $masterData = $request->request->all();
+        $data = $masterData['restaurant_invoice'];
         $btn = $request->request->get('buttonType');
         $tableNos = $request->request->get('tableNos');
         $form = $this->createTemporaryForm($entity);
@@ -106,6 +107,19 @@ class RestaurantTemporaryController extends Controller
         }
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());
+        }
+
+        if (isset($masterData['customerMobile']) and !empty($masterData['customerMobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($masterData['customerMobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option, $mobile, $masterData);
+            $entity->setCustomer($customer);
+        } elseif (isset($masterData['mobile']) and !empty($masterData['mobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($masterData['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $mobile));
+            $entity->setCustomer($customer);
+        }else{
+            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
+            $entity->setCustomer($customer);
         }
         $entity->setPaymentStatus('Pending');
         $entity->setSubTotal($subTotal);
@@ -121,8 +135,6 @@ class RestaurantTemporaryController extends Controller
         $deliveryDateTime = $request->request->get('deliveryDateTime');
         $datetime = empty($deliveryDateTime) ? '' : $deliveryDateTime ;
         $entity->setDeliveryDateTime($datetime);
-        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
-        $entity->setCustomer($customer);
         if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal()) or ($entity->getTotal() > 0 and empty($data['payment']) and $entity->isHold() != 1)){
             $entity->setPayment($entity->getTotal());
             $entity->setPaymentStatus("Paid");

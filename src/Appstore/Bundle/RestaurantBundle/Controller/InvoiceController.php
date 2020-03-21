@@ -5,6 +5,7 @@ namespace Appstore\Bundle\RestaurantBundle\Controller;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantParticularType;
@@ -198,7 +199,7 @@ class InvoiceController extends Controller
     public function updateAction(Request $request, Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
+        $option = $this->getUser()->getGlobalOption();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -207,20 +208,17 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
         if($editForm->isValid()) {
-            $newCustomerMobile = isset($data['new_customer_mobile'])?$data['new_customer_mobile']:'';
-            $newCustomerName = isset($data['new_customer_name'])?$data['new_customer_name']:'';
-            $customerMobile = isset($data['customerMobile'])?$data['customerMobile']:'';
-            if(!empty($customerMobile)){
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customerMobile);
-                $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
-                $em->getRepository('RestaurantBundle:Invoice')->insertNewCustomerWithDiscount($entity,$customer);
-            }
-            if(!empty($newCustomerMobile)){
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($newCustomerMobile);
-                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingRestaurantCustomer($globalOption,$mobile,$newCustomerName);
-                $em->getRepository('RestaurantBundle:Invoice')->insertNewCustomerWithDiscount($entity,$customer);
+
+            if (isset($data['customerMobile']) and !empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option, $mobile, $data);
+                $entity->setCustomer($customer);
+            } elseif (isset($data['mobile']) and !empty($data['mobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $mobile));
+                $entity->setCustomer($customer);
             }else{
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
+                $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
                 $entity->setCustomer($customer);
             }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
@@ -580,6 +578,63 @@ class InvoiceController extends Controller
         return new Response($template);
 
     }
+
+
+    public function androidSalesAction()
+    {
+        $conf = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
+        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantAndroidProcess')->getAndroidSalesList($conf,"sales");
+        $pagination = $this->paginate($entities);
+        $sales = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findAndroidDeviceSales($pagination);
+        return $this->render('RestaurantBundle:Invoice:salesAndroid.html.twig', array(
+            'entities' => $pagination,
+            'sales' => $sales,
+        ));
+    }
+
+    public function insertGroupApiSalesImportAction(RestaurantAndroidProcess $android)
+    {
+        $msg = "invalid";
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+
+        $removeSales = $em->createQuery("DELETE RestaurantBundle:Invoice e WHERE e.androidProcess= {$android->getId()}");
+        if(!empty($removeSales)){
+            $removeSales->execute();
+        }
+        $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->insertApiSales($config->getGlobalOption(),$android);
+
+        /* @var $sales Invoice */
+
+        $salses = $this->getDoctrine()->getRepository("RestaurantBundle:Invoice")->findBy(array('androidProcess' => $android));
+
+        foreach ($salses as $sales){
+            if($sales->getProcess() == "Device"){
+                $sales->setProcess('Done');
+                $sales->setUpdated($sales->getCreated());
+                $sales->setApprovedBy($this->getUser());
+                $em->flush();
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($sales);
+                $msg = "valid";
+            }
+        }
+
+        if($msg == "valid"){
+
+            $android->setStatus(true);
+            $em->persist($android);
+            $em->flush();
+            $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateApiSalesPurchasePrice($android->getId());
+        }
+        if($msg == "valid"){
+            return new Response('success');
+        }else{
+            return new Response('failed');
+        }
+    }
+
 
 }
 

@@ -127,16 +127,11 @@
                                     <td class="numeric">{{ item.salesprice }}</td>
                                     <td class="">
                                         <div class="input-append" style="margin-bottom: 0!important;">
-                                                    <span class="input-group-btn">
-  <a href="javascript:" data-action="{{ path('restaurant_invoice_product_update',{'invoice':entity.id,'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity">
-                                                            <span class="fa fa-minus"></span>
-                                                   </a>
-                                                                     <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" disabled="disabled" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" value="{{ item.quantity }}" data-action="" min="1" max="100">
-                                                      <a href="javascript:" data-action="{{ path('restaurant_invoice_product_update',{'invoice':entity.id,'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity">
-                                                          <span class="fa fa-plus"></span>
-                                                  </a>
-                                                    </span>
-
+                                            <span class="input-group-btn">
+                                                    <a href="javascript:" data-action="{{ path('restaurant_invoice_product_update',{'invoice':entity.id,'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"><span class="fa fa-minus"></span></a>
+                                                   <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" disabled="disabled" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" value="{{ item.quantity }}" data-action="" min="1" max="100">
+                                                   <a href="javascript:" data-action="{{ path('restaurant_invoice_product_update',{'invoice':entity.id,'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a>
+                                            </span>
                                         </div>
                                     </td>
                                     <td class="numeric">{{ item.subTotal }}</td>
@@ -180,6 +175,42 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
+                            {% if entity.restaurantConfig.isCustomer == 1 %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2Customer" value="{{ entity.customer.mobile }}"  autocomplete="off" placeholder="Customer mobile no">
+                                        <button type="button" class="pull-right btn btn-large blue addCustomer"><i class="icon-user"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row-fluid customer" id="">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <div class="input-icon left input-height">
+                                                <i class="icon-user"></i>
+                                                <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid customer">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <div class="input-icon left input-height">
+                                                <i class="icon-phone"></i>
+                                                <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid customer">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="clearfix"></div>
                             <div class="row-fluid">
                                 <div class="span12">
@@ -440,6 +471,7 @@
     {{ parent() }}
     {% javascripts
     '@RestaurantBundle/Resources/public/js/invoice.js'
+    '@RestaurantBundle/Resources/public/js/approveProcess.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

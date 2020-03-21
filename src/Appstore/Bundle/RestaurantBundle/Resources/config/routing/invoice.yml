@@ -138,3 +138,12 @@ restaurant_invoice_token_check:
     methods:  [POST]
     options:
             expose: true
+
+restaurant_invoice_android:
+    path:     /android
+    defaults: { _controller: "RestaurantBundle:Invoice:androidSales" }
+
+
+restaurant_device_sales_import:
+    path:      /device-sales-delete-import/{android}
+    defaults: { _controller: "RestaurantBundle:Invoice:insertGroupApiSalesImport" }

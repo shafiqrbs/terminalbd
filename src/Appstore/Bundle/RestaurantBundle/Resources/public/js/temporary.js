@@ -35,10 +35,65 @@ $(document).on('click', '.addInvoice', function() {
     });
 
 });
+
+$(".addTemporaryCustomer").click(function(){
+    $( ".customer" ).slideToggle( "slow" );
+}).toggle( function() {
+    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+}, function() {
+    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+});
+
 function formSubmit() {
 
-    $("form#invoicePatientForm").on('click', '.addCustomer', function() {
+
+    $(".addCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
+    }).toggle( function() {
+        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+    }, function() {
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+    });
+
+    $(".select2Customer").select2({
+
+        ajax: {
+
+            url: Routing.generate('domain_customer_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var customer = $(element).val();
+            $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
     });
 
     $('#search').keyup(function(){

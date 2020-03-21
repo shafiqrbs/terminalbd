@@ -50,6 +50,9 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
+                                            <input type="text" id="customer" name="customer"  class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}"  autocomplete="off" placeholder="Enter customer mobile no ">
+                                        </div>
+                                        <div class="span3">
                                             <select name="process" id="process" class="m-wrap span12">
                                                 <option value="" >--Process--</option>
                                                 <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
@@ -58,20 +61,21 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <div class="input-icon left">
-                                                <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start Date{% endif %}" >
-                                            </div>
-                                        </div>
-                                        <div class="span3">
-                                            <div class="input-icon left">
-                                                <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined and searchForm.endDate is not empty %}{{ searchForm.endDate }}{% else %}End Date{% endif %}" >
+                                            <div class="input-append span12">
+                                                <div class="input-icon left span6">
+                                                    <i class="icon-calendar"></i>
+                                                    <input class="m-wrap span12 search-input date-picker" name="startDate" id="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start Date{% endif %}" >
+                                                </div>
+                                                <div class="input-icon left span6">
+                                                    <i class="icon-calendar"></i>
+                                                    <input class="m-wrap span12 search-input date-picker" name="endDate" id="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined and searchForm.endDate is not empty %}{{ searchForm.endDate }}{% else %}End Date{% endif %}" >
+                                                    </div>
                                             </div>
                                         </div>
                                         <div class="span3">
                                             <div class="input-append span12">
-                                                <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no">
+                                                <input type="text" id="slipNo" name="slipNo"  class="m-wrap span5" value="{% if searchForm.slipNo is defined %}{{ searchForm.slipNo }}{% endif %}"  autocomplete="off" placeholder="Enter Slip no">
+                                                <input type="text" id="invoice" name="invoice"  class="m-wrap span5" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Enter invoice no">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -165,6 +169,7 @@
     {{ parent() }}
     {% javascripts
     '@RestaurantBundle/Resources/public/js/temporary.js'
+    '@RestaurantBundle/Resources/public/js/approveProcess.js'
     '@RestaurantBundle/Resources/public/js/posprint.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

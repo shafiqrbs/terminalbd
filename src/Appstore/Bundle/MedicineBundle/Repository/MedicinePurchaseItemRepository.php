@@ -422,7 +422,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return round($purchasePrice,2);
     }
 
-    public function insertPurchaseItems(MedicineConfig $config,MedicinePurchase $purchase, $data)
+    public function insertPurchaseItems(MedicineConfig $config, MedicinePurchase $purchase, $data)
     {
 
         $item = $this->checkInsertStockItem($config,$data);

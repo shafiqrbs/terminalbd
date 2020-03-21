@@ -188,6 +188,13 @@ class Invoice
      */
     private $invoice;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="deviceSalesId", type="string", length=20, nullable=true)
+     */
+    private $deviceSalesId;
+
     /**
      * @var integer
      *
@@ -1102,6 +1109,22 @@ class Invoice
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceSalesId()
+    {
+        return $this->deviceSalesId;
+    }
+
+    /**
+     * @param string $deviceSalesId
+     */
+    public function setDeviceSalesId($deviceSalesId)
+    {
+        $this->deviceSalesId = $deviceSalesId;
     }
 
 
