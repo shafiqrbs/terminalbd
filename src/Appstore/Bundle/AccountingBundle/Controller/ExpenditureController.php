@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -213,6 +214,61 @@ class ExpenditureController extends Controller
         $em->flush();
         return $this->redirect($this->generateUrl('account_expenditure'));
 
+    }
+
+
+    public function androidExpenseAction()
+    {
+        $conf = $this->getUser()->getGlobalOption()->getId();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseAndroidProcess')->getAndroidSalesList($conf);
+        $pagination = $this->paginate($entities);
+        $sales = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->findAndroidDeviceSales($pagination);
+        return $this->render('@Accounting/Expenditure/android.html.twig', array(
+            'entities' => $pagination,
+            'sales' => $sales,
+        ));
+    }
+
+    public function insertGroupApiSalesImportAction(ExpenseAndroidProcess $android)
+    {
+        $msg = "invalid";
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption();
+
+        $removeSales = $em->createQuery("DELETE AccountingBundle:Expenditure e WHERE e.androidProcess= {$android->getId()}");
+        if(!empty($removeSales)){
+            $removeSales->execute();
+        }
+        $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertApiExpense($config,$android);
+
+        /* @var $sales Expenditure */
+
+        foreach ($android->getExpendituries() as $sales){
+
+            if($sales->getProcess() == "Device"){
+                $sales->setProcess('approved');
+                $sales->setUpdated($sales->getCreated());
+                $sales->setApprovedBy($this->getUser());
+                $em->flush();
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($sales);
+                $msg = "valid";
+            }
+        }
+
+        if($msg == "valid"){
+
+            $android->setStatus(true);
+            $em->persist($android);
+            $em->flush();
+            $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateApiSalesPurchasePrice($android->getId());
+        }
+        if($msg == "valid"){
+            return new Response('success');
+        }else{
+            return new Response('failed');
+        }
     }
 
 }

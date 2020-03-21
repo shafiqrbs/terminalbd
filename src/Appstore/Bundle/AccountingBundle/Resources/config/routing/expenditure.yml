@@ -33,3 +33,11 @@ account_expenditure_delete:
 account_expenditure_reverse:
     path:     /{id}/reverse
     defaults: { _controller: "AccountingBundle:Expenditure:expenditureReverse" }
+
+account_expenditure_android:
+    path:     /android
+    defaults: { _controller: "AccountingBundle:Expenditure:androidExpense" }
+
+account_expenditure_expense_import:
+    path:      /device-expense-delete-import/{android}
+    defaults: { _controller: "AccountingBundle:Expenditure:insertGroupApiSalesImport" }

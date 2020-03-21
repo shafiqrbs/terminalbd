@@ -20,12 +20,14 @@ class ExpenseAndroidProcessRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.androidDevice','a');
         $qb->select('e.id as id','e.created as created','e.itemCount as itemCount','e.status as status');
-         $qb->addSelect('a.device as device');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        $qb->addSelect('a.device as device');
+        $qb->where('e.globalOption = :config')->setParameter('config', $config);
         $qb->orderBy('e.created',"DESC");
         $result = $qb->getQuery();
         return $result;
+
     }
+
     public function insertAndroidProcess(GlobalOption $option,$ipAddress,$device,$process,$data)
     {
         $em =  $this->_em;
@@ -38,7 +40,6 @@ class ExpenseAndroidProcessRepository extends EntityRepository
         $entity->setAndroidDevice($device);
         $entity->setProcess($process);
         $entity->setJsonItem($data['item']);
-        $entity->setItemCount($data['itemCount']);
         $entity->setStatus(false);
         $em->persist($entity);
         $em->flush();

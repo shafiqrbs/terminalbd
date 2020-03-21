@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Sales Android
+                    Expense Android
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Sales Android</a></li>
+                    <li><a href="#">Expense Android</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
             <div class="span12">
                 <div class="portlet box blue">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Sales Android</div>
+                        <div class="caption"><i class="icon-reorder"></i>Expense Android</div>
                     </div>
                     <div class="portlet-body">
                         <div class="loader loader-double" ></div>
@@ -39,11 +39,7 @@
                             <th>Created</th>
                             <th>Time</th>
                             <th>Total Invoice</th>
-                            <th>Sub-Total</th>
-                            <th>Discount</th>
-                            <th>Total</th>
-                            <th>Receive</th>
-                            <th>Due</th>
+                            <th>Amount</th>
                             <th>Device</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -54,18 +50,14 @@
                                 <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                 <td class="numeric" >{{ entity.created|date('h:i A') }}</td>
                                 <td class="numeric" >{{ entity.itemCount|number_format }}</td>
-                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].subTotal|number_format }}{% endif %}</td>
-                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].discount|number_format }}{% endif %}</td>
-                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].total|number_format }}{% endif %}</td>
-                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ sales[entity.id].salesReceive|number_format }}{% endif %}</td>
-                                <td class="numeric" >{% if sales[entity.id] is defined and sales[entity.id] is not empty %}{{ (sales[entity.id].total-sales[entity.id].salesReceive)|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if Expense[entity.id] is defined and Expense[entity.id] is not empty %}{{ Expense[entity.id].amount|number_format }}{% endif %}</td>
                                 <td class="numeric" >{{ entity.device }}</td>
                                 <td class="numeric" >{% if entity.status == 1 %}<span class="btn mini purple">Success</span>{% else %}<span class="btn mini red">Waiting</span>{% endif %}</td>
                                  <td class="numeric" >
                                      {% if entity.status == 1 %}
-                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('medicine_sales',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>
+                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('account_expenditure',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>
                                     {% else %}
-                                        <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('restaurant_device_sales_import',{'android':entity.id}) }}" href="javascript:" class="btn green mini androidProcess" ><i class="icon-retweet"></i> Process</a>
+                                        <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('account_expenditure_expense_import',{'android':entity.id}) }}" href="javascript:" class="btn green mini androidProcess" ><i class="icon-retweet"></i> Process</a>
                                      {% endif %}
                                  </td>
                             </tr>
@@ -87,7 +79,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@RestaurantBundle/Resources/public/js/approveProcess.js' %}
+    '@AccountingBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

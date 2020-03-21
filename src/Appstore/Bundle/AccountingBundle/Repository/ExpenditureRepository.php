@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Core\UserBundle\Entity\User;
@@ -31,6 +32,7 @@ class ExpenditureRepository extends EntityRepository
         $accountHead    = isset($data['accountHead'])? $data['accountHead'] :'';
         $transactionMethod    = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $category       = isset($data['category'])? $data['category'] :'';
+        $device       = isset($data['device'])? $data['device'] :'';
         if(!empty($startDate) and !empty($endDate)){
            $start = new \DateTime($data['startDate']);
            $startDate = $start->format('Y-m-d 00:00:00');
@@ -48,7 +50,10 @@ class ExpenditureRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("u.username", "'%$toUser%'" ));
         }
 
-        if (!empty($accountHead)) {
+        if (!empty($device)) {
+            $qb->andWhere("e.androidProcess = :android")->setParameter('android', $device);
+        }
+         if (!empty($accountHead)) {
             $qb->andWhere("e.accountHead = :accountHead");
             $qb->setParameter('accountHead', $accountHead);
         }
@@ -337,6 +342,78 @@ class ExpenditureRepository extends EntityRepository
         if($transaction){
             $transaction->execute();
         }
+    }
+
+    public function findAndroidDeviceSales($x)
+    {
+        $ids = [];
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.androidProcess','a');
+        $qb->select('a.id as androidId');
+        $qb->addSelect('sum(s.amount) as amount , count(s.id) as voucher');
+        $qb->where("s.androidProcess IN (:salesId)")->setParameter('salesId', $ids);
+        $qb->groupBy('androidId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= [];
+        foreach ($result as $row ){
+            $array[$row['androidId']]= $row;
+        }
+        return $array;
+    }
+
+    public function insertApiExpense(GlobalOption $option, ExpenseAndroidProcess $process)
+    {
+        $em = $this->_em;
+
+        $items = json_decode($process->getJsonItem(),true);
+
+        if($items){
+            foreach ($items as $item):
+
+                $sales = new Expenditure();
+                $sales->setGlobalOption($option);
+                $sales->setAndroidDevice($process->getAndroidDevice());
+                $sales->setAndroidProcess($process);
+                $sales->setAccountRefNo($item['invoiceId']);
+                $sales->setAmount($item['payment']);
+                if(isset($item['transactionMethod']) and $item['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                    if($method){
+                        $sales->setTransactionMethod($method);
+                    }
+                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getAmount() > 0){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+                    $sales->setTransactionMethod($method);
+                }
+                if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
+                    if($bank){ $sales->setAccountBank($bank); }
+                }
+                if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0 ){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
+                    if($mobile){ $sales->setAccountMobileBank($mobile); }
+                }
+                $category = $em->getRepository('AccountingBundle:ExpenseCategory')->find($item['expenseCategory']);
+                $sales->setExpenseCategory($category);
+                $sales->setAccountHead($sales->getExpenseCategory()->getAccountHead());
+                if(($item['toUser'])){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($item['toUser']);
+                    $sales->setCreatedBy($createdBy);
+                    $sales->setToUser($createdBy);
+                }
+                $sales->setProcess("Device");
+                $em->persist($sales);
+                $em->flush();
+
+            endforeach;
+
+            return $msg = "valid";
+        }
+
     }
 
 

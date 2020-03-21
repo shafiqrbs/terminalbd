@@ -551,6 +551,7 @@ class InvoiceRepository extends EntityRepository
         return $array;
     }
 
+
     public function insertApiSales(GlobalOption $option,RestaurantAndroidProcess $process)
     {
         $em = $this->_em;
