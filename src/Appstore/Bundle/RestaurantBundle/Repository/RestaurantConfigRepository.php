@@ -33,7 +33,7 @@ class RestaurantConfigRepository extends EntityRepository
     {
         $em = $this->_em;
         $cid = $config->getId();
-        $Invoice = $em->createQuery("DELETE RestaurantBundle:Invoice e WHERE e.paymentStatus = 'Pending' AND e.process = 'Created' and e.restaurantConfig = ".$cid);
+        $Invoice = $em->createQuery("DELETE RestaurantBundle:Invoice e WHERE  e.process = 'Created' and e.restaurantConfig = ".$cid);
         $Invoice->execute();
 
     }
