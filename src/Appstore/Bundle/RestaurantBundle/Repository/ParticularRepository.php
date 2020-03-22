@@ -510,7 +510,7 @@ JOIN restaurant_particular ON sub.material_id = restaurant_particular.id
 SET sub.subTotal = (sub.quantity * sub.price)
 WHERE restaurant_particular.restaurantConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
-        $qb1->bindValue('config', $config  ->getId());
+        $qb1->bindValue('config', $config->getId());
         $qb1->execute();
 
         $sql = "Update restaurant_particular as stock
@@ -524,7 +524,7 @@ set stock.productionElementAmount = pa.productionElementAmount,
 stock.purchasePrice = COALESCE((stock.productionElementAmount + stock.valueAddedAmount),0)
 WHERE stock.restaurantConfig_id =:config";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
-        $qb->bindValue('config', $config  ->getId());
+        $qb->bindValue('config', $config->getId());
         $qb->execute();
 
     }

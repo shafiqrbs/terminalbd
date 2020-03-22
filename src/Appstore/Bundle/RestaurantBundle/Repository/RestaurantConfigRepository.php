@@ -20,11 +20,24 @@ class RestaurantConfigRepository extends EntityRepository
         $em = $this->_em;
         $config = $option->getRestaurantConfig ()->getId();
 
-        $Invoice = $em->createQuery('DELETE RestaurantBundle:Invoice e WHERE e.restaurantConfig = '.$config);
-        $Invoice->execute();
+        $history = $em->createQuery('DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.restaurantConfig = '.$config);
+        $history->execute();
 
-        $hmsPurchase = $em->createQuery('DELETE RestaurantBundle:Purchase e WHERE e.restaurantConfig = '.$config);
-        $hmsPurchase->execute();
+        $batch = $em->createQuery('DELETE RestaurantBundle:ProductionBatch e WHERE e.restaurantConfig = '.$config);
+        $batch->execute();
+
+        $invoice = $em->createQuery('DELETE RestaurantBundle:Invoice e WHERE e.restaurantConfig = '.$config);
+        $invoice->execute();
+
+        $purchase = $em->createQuery('DELETE RestaurantBundle:Purchase e WHERE e.restaurantConfig = '.$config);
+        $purchase->execute();
+
+        $elem = "UPDATE `restaurant_particular` as sub
+                 SET sub.openingQuantity = '', sub.quantity = '', sub.productionQuantity = '', sub.purchaseQuantity = '', sub.purchaseQuantity = '', sub.salesQuantity = '', sub.damageQuantity = '', sub.purchaseReturnQuantity = '', sub.remainingQuantity = ''
+                 WHERE sub.restaurantConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $config);
+        $qb1->execute();
 
     }
 

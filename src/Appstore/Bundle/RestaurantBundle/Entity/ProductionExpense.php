@@ -30,14 +30,16 @@ class ProductionExpense
     private  $productionItem;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionBatch", inversedBy="productionExpense" )
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionBatch", inversedBy="productionExpense" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(name="productionBatch_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $productionBatch;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", inversedBy="productionExpense" )
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", inversedBy="productionExpense" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(name="salesItem_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $salesItem;
 
