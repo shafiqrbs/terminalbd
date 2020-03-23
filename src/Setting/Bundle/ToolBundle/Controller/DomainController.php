@@ -90,6 +90,24 @@ class DomainController extends Controller
 	    return $pagination;
     }
 
+    public function databaseDumpAction(){
+
+
+        $DBUSER="root";
+        $DBPASSWD="*rbs*terminalbd#";
+        $DATABASE="terminalbd";
+
+        $filename = "terminaldb-" . date("d-m-Y") . ".sql.gz";
+        $mime = "application/x-gzip";
+
+        header( "Content-Type: " . $mime );
+        header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+        $cmd = "mysqldump -u $DBUSER --password=$DBPASSWD $DATABASE | gzip --best";
+        passthru( $cmd );
+        exit(0);
+        
+    }
+
 
     /**
      * Lists all GlobalOption entities.

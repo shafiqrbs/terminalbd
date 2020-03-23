@@ -397,7 +397,7 @@ class PurchaseController extends Controller
             $total = ($subTotal  - $discount);
         }
         $vat = 0;
-        if($total > $discount ){
+        if(($subTotal - $discount) > 0){
             $entity->setDiscountType($discountType);
             $entity->setDiscountCalculation($discountCal);
             $entity->setDiscount(round($discount));

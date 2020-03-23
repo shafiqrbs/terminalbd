@@ -2,6 +2,10 @@ tools_domain:
     path:     /
     defaults: { _controller: "SettingToolBundle:Domain:index" }
 
+tools_domain_database:
+    path:     /database-dump
+    defaults: { _controller: "SettingToolBundle:Domain:databaseDump" }
+
 tools_domain_agent:
     path:     /client
     defaults: { _controller: "SettingToolBundle:Domain:client" }
