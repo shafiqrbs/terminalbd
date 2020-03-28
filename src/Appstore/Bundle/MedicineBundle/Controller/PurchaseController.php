@@ -49,6 +49,8 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
+        var_dump($pagination);
+        exit;
         return $this->render('MedicineBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
@@ -387,6 +389,7 @@ class PurchaseController extends Controller
         $discountType = $request->request->get('discountType');
         $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
+        /* @var $entity MedicinePurchase */
         $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
         $subTotal = $entity->getSubTotal();
         if($discountType == 'flat'){

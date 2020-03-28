@@ -77,7 +77,7 @@ class SmsGateWay
             CURLOPT_POSTFIELDS =>"{\"from\":\"{$from}\",\"text\":\"{$msg}\",\"to\":\"{$phone}\"}",
             CURLOPT_HTTPHEADER => array(
                 "Content-Type: application/json",
-                "Authorization: Basic dW1hcml0IDcxZmI4ODY4LWI5MGUtNDNkMy05ODFiLTNlY2U1YTI3MDJlNSB0ZXJtaW5hbGJkQGdtYWlsLmNvbQ=="
+                "Authorization: Basic dW1hcml0OnVtYXJpdDE0OA=="
             ),
         ));
         $response = curl_exec($curl);
