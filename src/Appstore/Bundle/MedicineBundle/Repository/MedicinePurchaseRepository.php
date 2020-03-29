@@ -84,8 +84,6 @@ class MedicinePurchaseRepository extends EntityRepository
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.id','DESC');
         $result = $qb->getQuery()->getArrayResult();
-        var_dump($result);
-        exit;
         return  $result;
     }
 
