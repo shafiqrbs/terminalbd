@@ -49,8 +49,6 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-        var_dump($pagination);
-        exit;
         return $this->render('MedicineBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,

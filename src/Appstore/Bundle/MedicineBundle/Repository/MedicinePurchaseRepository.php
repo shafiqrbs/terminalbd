@@ -76,14 +76,13 @@ class MedicinePurchaseRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
         if (!empty($instant)){
             $qb->andWhere('e.instantPurchase = :instant')->setParameter('instant', $instant);
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.id','DESC');
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery();
         return  $result;
     }
 
