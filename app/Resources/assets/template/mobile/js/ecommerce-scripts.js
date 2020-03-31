@@ -497,17 +497,18 @@ $(document).ready(function(){
             "registration_mobile": {placement:'top',html:true},
         },
         submitHandler: function(form) {
-            $.ajax({
 
-                url         : $('form#registerForm').attr( 'action' ),
-                type        : $('form#registerForm').attr( 'method' ),
-                data        : new FormData('form#registerForm'),
+            $.ajax({
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
                 processData : false,
                 contentType : false,
                 dataType: 'json',
                 success: function(response){
-                   // window.open(response+"#modal","_self");
-                    console.log('form#registerForm');
+                   if(response === 'success'){
+                       location.reload();
+                   }
                 },
                 complete: function(response){
 

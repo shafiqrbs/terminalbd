@@ -70,7 +70,7 @@
                     <a href="javascript:" class="bar-icon" id="filter"><i class="fa fa-camera"></i></a>
                     {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
                         {% set name = app.user.profile.name|split(" ") %}
-                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}"> {{ name[0] }}</a>
+                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}"><i class="fa fa-home"></i></a>&nbsp;&nbsp;<a href="/logout"> <i class="fa fa-sign-out"></i></a>
                     {% elseif app.user is not empty %}
                         {% set name = app.user.profile.name|split(" ") %}
                         <a href="{{ path('homepage') }}"> {{ name[0] }}</a>

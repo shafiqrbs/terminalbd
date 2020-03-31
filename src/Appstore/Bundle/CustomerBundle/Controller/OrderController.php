@@ -304,7 +304,6 @@ class OrderController extends Controller
             $created = $order->getCreated()->format('d-m-Y');
             $invoice = $order->getInvoice();
             $items = $order->getItem();
-
             if($order->getProcess() == 'wfc'){
                 $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form {$invoice} for ({$items}) dated {$created} and we thank you very much.");
                 $dispatcher = $this->container->get('event_dispatcher');

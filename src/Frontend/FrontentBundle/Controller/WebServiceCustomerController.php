@@ -319,7 +319,7 @@ class WebServiceCustomerController extends Controller
         return new Response('failed');
 
 
-}
+    }
 
 
     public function insertEcommerceAction($subdomain, Request $request)
@@ -333,7 +333,6 @@ class WebServiceCustomerController extends Controller
         $email = isset($data['registration_email']) ? $data['registration_email'] :"";
         $address = isset($data['registration_address']) ? $data['registration_address'] :"";
         $location = isset($data['registration_location']) ? $data['registration_location'] :"";
-
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         if($globalOption) {
             $intlMobile = $mobile;
@@ -360,7 +359,7 @@ class WebServiceCustomerController extends Controller
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
          //   $redirect = $this->generateUrl('domain_customer_homepage',array('shop' => $globalOption->getSlug()));
-          //  return new Response($redirect);
+         //   return new Response($redirect);
             return new Response('success');
         }
         return new Response('failed');
