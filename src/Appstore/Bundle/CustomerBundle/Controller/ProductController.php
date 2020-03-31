@@ -9,6 +9,7 @@ use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Frontend\FrontentBundle\Service\Cart;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,8 +27,16 @@ class ProductController extends Controller
             $this->get('request')->query->get('page', 1)/*page number*/,
             25  /*limit per page*/
         );
+        $detect = new MobileDetect();
+        if( $detect->isMobile() or  $detect->isTablet() ) {
+            $pagination->setTemplate('SettingToolBundle:Widget:mobile-pagination.html.twig');
+        }else{
+            $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        }
         return $pagination;
     }
+
+
     public function allProductAction(Request $request)
     {
         $cart = new Cart($request->getSession());
@@ -65,9 +74,17 @@ class ProductController extends Controller
             $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
         }
         $pagination = $this->paginate($entities);
-        $domainType =  $globalOption->getDomainType();
-        $domain = !empty($domainType) ? $domainType : "index";
-        return $this->render("CustomerBundle:Product:{$domain}.html.twig", array(
+        if( $globalOption->getDomainType() == 'medicine' ) {
+            $detect = new MobileDetect();
+            if( $detect->isMobile() or  $detect->isTablet() ) {
+                $theme = 'medicine/mobile';
+            }else{
+                $theme = 'medicine';
+            }
+        }else{
+            $theme = 'generic';
+        }
+        return $this->render("CustomerBundle:Product/{$theme}:index.html.twig", array(
             'globalOption' => $globalOption,
             'entities' => $pagination,
             'searchForm' => $data,

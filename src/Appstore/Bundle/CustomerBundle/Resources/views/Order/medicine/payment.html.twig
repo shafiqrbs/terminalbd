@@ -212,6 +212,7 @@
                             </table>
 
                         </div>
+                        {% if entity.process == 'created' and entity.ecommerceConfig.isAdditionalItem == 1 %}
                         <div class="clearfix"><br/> </div>
                         <div class="clearfix"> </div>
                         <div class="form-actions portlet box red">
@@ -239,6 +240,8 @@
                             </div>
                         </div>
                         {{ form_end(salesItem) }}
+                        {% endif %}
+                        {% if entity.process == 'created' %}
                         <div class="clearfix"><br/> </div>
                         <div class="clearfix"> </div>
                         <div class="form-actions portlet box green">
@@ -282,68 +285,66 @@
                             </div>
                         </div>
                         <div class="clearfix"><br/> </div>
-                        {% if entity.process == 'created' %}
-
-                            <div class="form-actions portlet box blue">
-                                <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Address & Confirm Information</div></div>
-                            </div>
-                            <div class="clearfix"><br/> </div>
-                            <div class="row-fluid">
-                                <div class="span6"></div>
-                                <div class="span6">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <div class="controls">
-                                                    {{ form_widget(orderForm.location) }}
-                                                    {{ form_errors(orderForm.location) }}
-                                                </div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Address & Confirm Information</div></div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <div class="row-fluid">
+                            <div class="span6"></div>
+                            <div class="span6">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                {{ form_widget(orderForm.location) }}
+                                                {{ form_errors(orderForm.location) }}
                                             </div>
                                         </div>
                                     </div>
-                                    <br/>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <div class="controls">
-                                                    {{ form_widget(orderForm.address) }}
-                                                    {{ form_errors(orderForm.address) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span6">
-                                            <div class="control-group">
-                                                <label>  Delivery Date</label>
-                                                <div class="controls">
-                                                    {{ form_widget(orderForm.deliveryDate) }}
-                                                    {{ form_errors(orderForm.deliveryDate) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="span6">
-                                            <div class="control-group">
-                                                <label>  Delivery Slot</label>
-                                                <div class="controls">
-                                                    {{ form_widget(orderForm.deliverySlot) }}
-                                                    {{ form_errors(orderForm.deliverySlot) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
-                            </div>
-                            <div class="clearfix"><br/> </div>
-                            <div class="form-actions portlet box">
-                                <div class="input-append input-append-footer">
-                                    {{ form_widget(orderForm.process) }}
-                                    {{ form_errors(orderForm.process) }}
-                                    <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
+                                <br/>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                {{ form_widget(orderForm.address) }}
+                                                {{ form_errors(orderForm.address) }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label>  Delivery Date</label>
+                                            <div class="controls">
+                                                {{ form_widget(orderForm.deliveryDate) }}
+                                                {{ form_errors(orderForm.deliveryDate) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label>  Delivery Slot</label>
+                                            <div class="controls">
+                                                {{ form_widget(orderForm.deliverySlot) }}
+                                                {{ form_errors(orderForm.deliverySlot) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                            {{ form_end(orderForm) }}
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <div class="form-actions portlet box">
+                            <div class="input-append input-append-footer">
+                                {{ form_widget(orderForm.process) }}
+                                {{ form_errors(orderForm.process) }}
+                                <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
+                            </div>
+                        </div>
+                        {{ form_end(orderForm) }}
 
                         {% endif %}
                         <div class="clearfix"><br/> </div>

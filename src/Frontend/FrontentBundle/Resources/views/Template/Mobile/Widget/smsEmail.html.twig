@@ -94,8 +94,6 @@
 </div><!-- /.modal -->
 <!-- Modal -->
 
-
-
 <style>
     .paginate-form-group label, .form-group label {
         font-weight: normal;
@@ -117,30 +115,30 @@
         color: #ffffff!important;
     }
 </style>
-<div id="register-modalxx" class="mfp-hide">
+<div id="register-modal" class="mfp-hide">
     <div class="modal-content  col-xs-12 col-md-12">
-        <form class="register" id="loginForm" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+        <form class="register" id="registerForm" action="{{ path(globalOption.subDomain ~ '_webservice_ecommerce_signup') }}" method="post" novalidate="novalidate">
             <div class="modal-header">
-                <h4 class="modal-title" style="line-height: 18px!important;">SIGNIN</h4>
+                <h4 class="modal-title" style="line-height: 18px!important;">SIGN IN</h4>
             </div>
             <div class="modal-body">
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                            <input type="text" id="name" name="name" required="required" class=" form-control" placeholder="Enter your full name">
+                            <input type="text" id="name" name="registration_name" required="required" class=" form-control" placeholder="Enter your full name">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
-                            <input type="text" id="mobile" name="mobile" required="required" class="mobile form-control" placeholder="Enter your mobile no">
+                            <input type="text" id="mobile" name="registration_mobile" required="required" class="mobile form-control" placeholder="Enter your mobile no">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
-                            <input type="text" id="address" name="address" required="required" class="form-control" placeholder="Enter your mobile no">
+                            <input type="text" id="address" name="registration_address" required="required" class="form-control" placeholder="Enter your address">
                         </div>
                     </div>
                     <div class="checkbox"></div>
@@ -148,8 +146,9 @@
             </div>
             <div class="modal-footer">
                     <span style="text-align: left; display:block; float: left">Click here for
-                    <a href="#login-modal" class="popup-top-anim" id="register-btn1">Login</a></span>
-                <button type="submit"  class="btn btn-sm btn-primary pull-right" role="button">Register</button>
+                    <a href="#login-modal" class="popup-top-anim" id="register-btn">Login</a></span>
+                <input type="hidden" name="token" value="{{ csrf_token('valid') }}"/>
+                <button type="submit"  class="btn btn-sm btn-blue pull-right" role="button">Register</button>
             </div>
         </form>
     </div><!-- /.modal-content -->

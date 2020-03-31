@@ -331,13 +331,21 @@
 
 
     {% if globalOption.templateCustomize.carouselHeight  is not empty %}
-    .carousel-img , .carousel-tab-img{
-        height:{{ globalOption.templateCustomize.carouselHeight }}!important;
-    }
+        .carousel-img , .carousel-tab-img{
+            height:100%!important;
+        }
+
+        @media (max-width:320px){
+            .carousel-img, .carousel-tab-img {
+                height: 320px!important;
+            }
+        }
+
     {% endif %}
 
+
+
     {% if globalOption.templateCustomize.mobileCarouselHeight  is not empty %}
-    {{ globalOption.templateCustomize.mobileCarouselHeight }}
         #main-carousel{
             height:{{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
         }
@@ -694,6 +702,12 @@
     {% if globalOption.templateCustomize.borderColor  is not empty%}
         color:{{ globalOption.templateCustomize.borderColor }}!important;
     {% endif %}
+    }
+
+    @media (max-width:320px){
+        .carousel-img, .carousel-tab-img {
+            height: 320px!important;
+        }
     }
 
 </style>

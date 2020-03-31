@@ -47,6 +47,7 @@ class CustomerRepository extends EntityRepository
         }
     }
 
+
     public function newExistingCustomer($globalOption,$mobile,$data)
     {
         $em = $this->_em;
@@ -69,6 +70,36 @@ class CustomerRepository extends EntityRepository
             return $entity;
         }
     }
+
+
+    public function eCommerceCustomer(User $user,$data)
+    {
+        $em = $this->_em;
+        $name = $data['name'];
+        $location = $data['location'];
+        $address = $data['address'];
+        $email = $data['email'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption() ,'mobile' => $user->getId()));
+        if($entity){
+            return $entity;
+        }else{
+
+            $entity = new Customer();
+            $entity->setMobile($user->getUsername());
+            $entity->setName($name);
+            $entity->setEmail($email);
+            if($location){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            $entity->setAddress($address);
+            $entity->setGlobalOption($user->getGlobalOption());
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+    }
+
 
     public function newExistingCustomerForSales($globalOption,$mobile,$data)
     {
@@ -441,7 +472,9 @@ class CustomerRepository extends EntityRepository
         $exist = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'user' => $user->getId()));
         if(empty($exist)){
             $entity = new Customer();
+            $country = $this->_em->getRepository("SettingLocationBundle:Country")->findOneBy(array("code"=>"BD"));
             $entity->setMobile($user->getUsername());
+            $entity->setCountry($country);
             if(isset($data['name']) && $data['name'] !=""){
                 $entity->setName($data['name']);
             }

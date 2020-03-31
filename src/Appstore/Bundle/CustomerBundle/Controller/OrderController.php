@@ -14,6 +14,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
@@ -100,7 +101,19 @@ class OrderController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
-        return $this->render('CustomerBundle:Order:show.html.twig', array(
+
+        if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
+            $detect = new MobileDetect();
+            if( $detect->isMobile() or  $detect->isTablet() ) {
+                $theme = 'medicine/mobile';
+            }else{
+                $theme = 'medicine';
+            }
+        }else{
+            $theme = 'ecommerce';
+        }
+
+        return $this->render("CustomerBundle:Order/{$theme}:show.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
         ));
@@ -130,6 +143,7 @@ class OrderController extends Controller
 
     public function paymentAction($id)
     {
+
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $user,'id' => $id));
@@ -142,7 +156,12 @@ class OrderController extends Controller
         }
         $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$entity);
         if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
-            $theme = 'medicine';
+            $detect = new MobileDetect();
+            if( $detect->isMobile() or  $detect->isTablet() ) {
+                $theme = 'medicine/mobile';
+            }else{
+                $theme = 'medicine';
+            }
         }else{
             $theme = 'ecommerce';
         }
@@ -287,7 +306,7 @@ class OrderController extends Controller
             $items = $order->getItem();
 
             if($order->getProcess() == 'wfc'){
-                $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form '.$invoice.' for ('.$items.') dated '.$created.' and we thank you very much.");
+                $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form {$invoice} for ({$items}) dated {$created} and we thank you very much.");
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
             }

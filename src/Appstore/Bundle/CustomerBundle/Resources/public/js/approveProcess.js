@@ -349,8 +349,6 @@ function ApproveProcess(){
     });
 
 
-
-
     /*$('#orderProcess').submit( function( e ) {
 
         var url = $('#orderProcess').attr("action");

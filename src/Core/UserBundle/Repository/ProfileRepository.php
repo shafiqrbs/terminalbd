@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ProfileRepository extends EntityRepository {
 
-    public function updateProfile($entity , $data , $file){
+    public function updateProfile(Profile $entity , $data , $file){
 
         $em = $this->_em;
         if(isset($file['file'])) {
@@ -46,7 +46,7 @@ class ProfileRepository extends EntityRepository {
 
     }
 
-    public function fileUploader($entity, $file = '')
+    public function fileUploader(Profile $entity, $file = '')
     {
         $em = $this->_em;
         if(isset($file['file'])){
@@ -75,6 +75,19 @@ class ProfileRepository extends EntityRepository {
         $profile->setAddress($address);
         $profile->setFacebookId($registration_facebookId);
         $profile->setEmail($registration_email);
+        $em->persist($profile);
+        $em->flush();
+    }
+
+    public function insertEcommerce(User $entity, $data = array())
+    {
+        $em = $this->_em;
+        $profile = new Profile();
+        $profile->setUser($entity);
+        $profile->setMobile($entity->getUsername());
+        $profile->setName($data['name']);
+        $profile->setAddress($data['address']);
+        $profile->setEmail($data['email']);
         $em->persist($profile);
         $em->flush();
     }

@@ -85,8 +85,7 @@ class WebServiceCustomerController extends Controller
         }else{
             $valid = 'true';
         }
-        echo $valid;
-        exit;
+        return new Response($valid);
     }
 
     /**
@@ -106,8 +105,7 @@ class WebServiceCustomerController extends Controller
         }else{
             $valid = 'true';
         }
-        echo $valid;
-        exit;
+        return new Response($valid);
     }
 
     /**
@@ -126,8 +124,7 @@ class WebServiceCustomerController extends Controller
         }else{
             $valid = 'true';
         }
-        echo $valid;
-        exit;
+        return new Response($valid);
     }
 
     /**
@@ -146,8 +143,7 @@ class WebServiceCustomerController extends Controller
         }else{
             $valid = 'true';
         }
-        echo $valid;
-        exit;
+        return new Response($valid);
     }
 
 
@@ -324,6 +320,53 @@ class WebServiceCustomerController extends Controller
 
 
 }
+
+
+    public function insertEcommerceAction($subdomain, Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new User();
+        $data = $request->request->all();
+        $mobile = isset($data['registration_mobile']) ? $data['registration_mobile'] :"";
+        $name = isset($data['registration_name']) ? $data['registration_name'] :"";
+        $email = isset($data['registration_email']) ? $data['registration_email'] :"";
+        $address = isset($data['registration_address']) ? $data['registration_address'] :"";
+        $location = isset($data['registration_location']) ? $data['registration_location'] :"";
+
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        if($globalOption) {
+            $intlMobile = $mobile;
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $entity->setPlainPassword("1234");
+            $entity->setEnabled(true);
+            $entity->setUsername($mobile);
+            if (empty($email)) {
+                $entity->setEmail($mobile . '@gmail.com');
+            } else {
+                $entity->setEmail($email);
+            }
+            $entity->setGlobalOption($globalOption);
+            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setUserGroup('customer');
+            $em->persist($entity);
+            $em->flush();
+            $data = array('name' => $name ,'email' => $email,'address' => $address,'location' => $location);
+            $this->getDoctrine()->getRepository('UserBundle:Profile')->insertEcommerce($entity, $data);
+            $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+            $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->eCommerceCustomer($this->getUser() , $data);
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
+         //   $redirect = $this->generateUrl('domain_customer_homepage',array('shop' => $globalOption->getSlug()));
+          //  return new Response($redirect);
+            return new Response('success');
+        }
+        return new Response('failed');
+
+
+    }
 
     public function confirmAction($subdomain)
     {

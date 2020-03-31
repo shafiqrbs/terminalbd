@@ -36,6 +36,13 @@ webservice_member_signup:
     options:
             expose: true
 
+webservice_ecommerce_signup:
+    path:     /{subdomain}/customer-ecommerce-insert
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:insertEcommerce }
+    methods:  POST
+    options:
+            expose: true
+
 webservice_product_cookie_base_list:
     path:     /cookie/product-list
     defaults: { _controller: FrontendBundle:EcommerceWidget:cookieBaseProductList }

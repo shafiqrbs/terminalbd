@@ -22,6 +22,7 @@ webservice_customer_create:
     path:     /{subdomain}/customer-registration-create
     defaults: { _controller: FrontendBundle:WebServiceCustomer:create }
 
+
 webservice_customer_confirm:
     path:     /{subdomain}/customer-registration-confirm
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }

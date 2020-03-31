@@ -159,6 +159,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isAdditionalItem", type="boolean")
+     */
+    private $isAdditionalItem = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="sidebarBrand", type="boolean")
      */
     private $sidebarBrand = false;
@@ -1017,6 +1024,22 @@ class EcommerceConfig
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalItem()
+    {
+        return $this->isAdditionalItem;
+    }
+
+    /**
+     * @param bool $isAdditionalItem
+     */
+    public function setIsAdditionalItem($isAdditionalItem)
+    {
+        $this->isAdditionalItem = $isAdditionalItem;
     }
 
 

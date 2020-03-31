@@ -470,6 +470,54 @@ $(document).ready(function(){
         }
     });
 
+    $("#registerForm").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_mobile": {
+                required: true,
+                remote:'/checking-member'
+            },
+            "registration_address": {required: true}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_mobile":{
+                required: "Enter valid mobile no",
+                remote: "This mobile no is already registered. Please try to another no."
+            },
+            "registration_address":"Enter your address",
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_mobile": {placement:'top',html:true},
+        },
+        submitHandler: function(form) {
+            $.ajax({
+
+                url         : $('form#registerForm').attr( 'action' ),
+                type        : $('form#registerForm').attr( 'method' ),
+                data        : new FormData('form#registerForm'),
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function(response){
+                   // window.open(response+"#modal","_self");
+                    console.log('form#registerForm');
+                },
+                complete: function(response){
+
+                }
+
+            });
+
+        }
+    });
+
     $("#loginForm").validate({
 
         rules: {
