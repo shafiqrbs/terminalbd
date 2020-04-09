@@ -12,6 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -115,110 +116,79 @@ class DefaultController extends Controller
 	    return $this->redirect($this->generateUrl('homepage'));
 	  }
 
-	public function copyToMedicineParticularAction(GlobalOption $option)
+	public function copyToMedicineParticularAction()
 	  {
-		  $em = $this->getDoctrine()->getManager();
-		  set_time_limit(0);
-		  ignore_user_abort(true);
-		  $config = $option->getMedicineConfig();
+          set_time_limit(0);
+          ignore_user_abort(true);
 
-		  $globalOption = $this->getUser()->getGlobalOption();
-		  $existConfig = $globalOption->getMedicineConfig();
+          $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+          $config = $option->getMedicineConfig();
+          if($option and !empty($option->getMedicineConfig())){
 
+              $em = $this->getDoctrine()->getManager();
+              $existConfig = $this->getUser()->getGlobalOption()->getMedicineConfig();
+              $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config));
 
-		  $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config));
+              /* @var $entity MedicineParticular */
 
-		  /* @var $entity MedicineParticular */
+              foreach ($entities as $entity){
 
-		  foreach ($entities as $entity){
-
-			  $newEntity = new MedicineParticular();
-			  $newEntity->setMedicineConfig($existConfig);
-			  $newEntity->setName($entity->getName());
-			  $newEntity->setStatus(1);
-			  $newEntity->setParticularType($entity->getParticularType());
-			  $newEntity->setSlug($entity->getSlug());
-			  $em->persist($newEntity);
-			  $em->flush();
-		  }
-		  return $this->redirect($this->generateUrl('homepage'));
-
+                  $newEntity = new MedicineParticular();
+                  $newEntity->setMedicineConfig($existConfig);
+                  $newEntity->setName($entity->getName());
+                  $newEntity->setStatus(1);
+                  $newEntity->setParticularType($entity->getParticularType());
+                  $newEntity->setSlug($entity->getSlug());
+                  $em->persist($newEntity);
+                  $em->flush();
+              }
+              return new Response('success');
+          }
+          return new Response('failed');
 	  }
 
-	public function copyToMedicineStockAction(GlobalOption $option)
+	public function copyToMedicineStockAction()
 	{
-		$em = $this->getDoctrine()->getManager();
+
 		set_time_limit(0);
 		ignore_user_abort(true);
-		$config = $option->getMedicineConfig();
-
-		$globalOption = $this->getUser()->getGlobalOption();
-		$existConfig = $globalOption->getMedicineConfig();
-
-
-		$data = array();
-		$entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($config,$data);
-
-		/* @var $entity MedicineStock */
-
-		foreach ($entity->getResult() as $entity){
-			$newEntity = new MedicineStock();
-			$newEntity->setMedicineConfig($existConfig);
-			$newEntity->setName($entity->getName());
-			$newEntity->setMode($entity->getMode());
-			$newEntity->setMedicineBrand($entity->getMedicineBrand());
-			$newEntity->setBrandName($entity->getBrandName());
-			$newEntity->setUnit($entity->getUnit());
-			$newEntity->setPurchasePrice($entity->getPurchasePrice());
-			$newEntity->setSalesPrice($entity->getSalesPrice());
-			$newEntity->setMinQuantity($entity->getMinQuantity());
-			if(!empty($entity->getRackNo())) {
-				$rack = $this->getDoctrine()->getRepository( 'MedicineBundle:MedicineParticular' )->findOneBy( array(
-					'medicineConfig' => $existConfig,
-					'name'           => $entity->getRackNo()->getName()
-				) );
-				$newEntity->setRackNo( $rack );
-			}
-			if(!empty($entity->getAccessoriesBrand())){
-				$accessories = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findOneBy(array('medicineConfig' => $existConfig,'name' => $entity->getAccessoriesBrand()->getName()));
-				$newEntity->setAccessoriesBrand($accessories);
-			}
-			$em->persist($newEntity);
-			$em->flush();
-		}
-		return $this->redirect($this->generateUrl('homepage'));
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+        $config = $option->getMedicineConfig();
+        if($option and !empty($config)) {
+            $fromConfig = $config->getId();
+            $toConfig = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->processStockMigration($fromConfig,$toConfig);
+            return new Response('success');
+        }
+        return new Response('failed');
 	}
 
-	public function copyToMedicineVendorAction(GlobalOption $option)
-	{
-		$em = $this->getDoctrine()->getManager();
-		set_time_limit(0);
-		ignore_user_abort(true);
-		$config = $option->getMedicineConfig();
+    public function copyToMedicineVendorAction()
+    {
 
-		$globalOption = $this->getUser()->getGlobalOption();
-		$existConfig = $globalOption->getMedicineConfig();
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+        $config = $option->getMedicineConfig();
+        if($option and !empty($config)) {
+            $fromConfig = $config->getId();
+            $toConfig = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->copyToMedicineVendor($fromConfig,$toConfig);
+            return new Response('success');
+        }
+        return new Response('failed');
 
+    }
 
-		$entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findBy(array('medicineConfig'=> $config));
+    public function copyStockToEcommerceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getUser()->getGlobalOption();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Item')->copyStockToEcommerce($option);
+        return new Response('success');
 
-		/* @var $entity MedicineVendor */
-
-		foreach ($entities as $entity){
-
-			$newEntity = new MedicineVendor();
-			$newEntity->setMedicineConfig($existConfig);
-			$newEntity->setName($entity->getName());
-			$newEntity->setCompanyName($entity->getCompanyName());
-			$newEntity->setVendorCode($entity->getVendorCode());
-			$newEntity->setStatus(1);
-			$newEntity->setSlug($entity->getSlug());
-			$em->persist($newEntity);
-			$em->flush();
-		}
-		return $this->redirect($this->generateUrl('homepage'));
-	}
-
+    }
 
     public function vendorCustomerAccountAction()
     {
@@ -313,7 +283,9 @@ class DefaultController extends Controller
             $em->flush();
             $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($sales);
             return new Response('success');
+
         }elseif($data['mode'] == 'payment'){
+
             $purchase = new  AccountPurchase();
             $purchase->setGlobalOption($user->getGlobalOption());
             $purchase->setProcessHead('medicine');
@@ -329,8 +301,9 @@ class DefaultController extends Controller
             $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
             return new Response('success');
         }
+
         return new Response('failed');
-        exit;
+
 
     }
 

@@ -51,8 +51,13 @@ class ItemController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
 		$entities = $em->getRepository('EcommerceBundle:Item')->findGoodsWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
-		$promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=>1,'type'=>'Promotion'));
-		return $this->render('EcommerceBundle:Item:index.html.twig', array(
+		$promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=> 1,'type'=>'Promotion'));
+        if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
+            $theme = 'medicine';
+        }else{
+            $theme = 'index';
+        }
+		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'promotions' => $promotions,
 			'pagination' => $pagination,
             'searchForm' => $data,

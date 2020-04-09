@@ -91,15 +91,19 @@ medicine_update_expiration:
     defaults: { _controller: MedicineBundle:Default:updateExpirationMedicine }
 
 medicine_particular_migration:
-    path:     /{id}/copy-particular-migration
+    path:     /copy-particular-migration
     defaults: { _controller: MedicineBundle:Default:copyToMedicineParticular }
 
 medicine_stock_migration:
-    path:     /{id}/copy-stock-migration
+    path:     /copy-stock-migration
     defaults: { _controller: MedicineBundle:Default:copyToMedicineStock }
 
+medicine_ecommerce_migration:
+    path:     /copy-ecommerce-migration
+    defaults: { _controller: MedicineBundle:Default:copyStockToEcommerce }
+
 medicine_vendor_migration:
-    path:     /{id}/copy-vendor-migration
+    path:     /copy-vendor-migration
     defaults: { _controller: MedicineBundle:Default:copyToMedicineVendor }
 
 medicine_report_vendor_sales:

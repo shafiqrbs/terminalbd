@@ -33,8 +33,22 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
                         <div class="actions">
-                            <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Stock</a>
-                            <a href="{{ path('medicine_stock_global') }}"  class=" btn yellow"><i class="icon-plus-sign"></i> Global Stock</a>
+                            <div class="btn-group">
+                                <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Stock</a>
+                                <a href="{{ path('medicine_stock_global') }}"  class=" btn yellow"><i class="icon-plus-sign"></i> Global Stock</a>
+                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:" class="migration" data-action="{{ path('medicine_particular_migration') }}"><i class="icon-th-list"></i>&nbsp; Particular</a></li>
+                                    <li><a href="javascript:" class="migration" data-action="{{ path('medicine_stock_migration') }}"><i class="icon-th-list"></i>&nbsp; Stock</a></li>
+                                    <li><a href="javascript:" class="migration" data-action="{{ path('medicine_vendor_migration') }}"><i class="icon-th-list"></i>&nbsp; Vendor</a></li>
+                                    <li><a href="javascript:" class="confirm" data-url="{{ path('medicine_ecommerce_migration') }}"><i class="icon-th-list"></i>&nbsp; E-commerce</a></li>
+                                </ul>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     <div class="portlet-body form">
@@ -186,10 +200,24 @@
             </div>
         </div>
     </div>
+    <style>
+        .messagebox{
+            max-width: 20%;
+            min-width: 250px;
+        }
+    </style>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@ElectionBundle/Resources/public/css/messagebox.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@ElectionBundle/Resources/public/js/messagebox.js'
     '@MedicineBundle/Resources/public/js/editable.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}

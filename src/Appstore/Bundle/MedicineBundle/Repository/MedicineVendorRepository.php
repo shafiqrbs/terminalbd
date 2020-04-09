@@ -126,4 +126,21 @@ class MedicineVendorRepository extends EntityRepository
 
     }
 
+    public function  copyToMedicineVendor($from, $to)
+    {
+
+        $em = $this->_em;
+        $stock = $em->createQuery("DELETE MedicineBundle:MedicineVendor e WHERE e.medicineConfig = {$to}");
+        if($stock){
+            $stock->execute();
+        }
+        $elem = "INSERT INTO medicine_vendor (`name`, `mode`, `companyName`, `slug`, `address`, `mobile`, `email`, `status`, `medicineConfig_id`)
+        SELECT `name`, `mode`, `companyName`, `slug`, `address`, `mobile`, `email`,status,$to
+  FROM medicine_vendor
+  WHERE medicineConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $from);
+        $qb1->execute();
+    }
+
 }

@@ -135,6 +135,14 @@ class Item
     /**
      * @var string
      *
+     * @ORM\Column(name="itemGroup", type="string", length=100, nullable = true)
+     */
+    private $itemGroup;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="webName", type="string", length=255, nullable = true)
      */
     private $webName;
@@ -1193,6 +1201,22 @@ class Item
     public function setMedicine($medicine)
     {
         $this->medicine = $medicine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemGroup()
+    {
+        return $this->itemGroup;
+    }
+
+    /**
+     * @param string $itemGroup
+     */
+    public function setItemGroup($itemGroup)
+    {
+        $this->itemGroup = $itemGroup;
     }
 
 

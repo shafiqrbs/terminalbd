@@ -126,6 +126,7 @@ class ItemKeyValueRepository extends EntityRepository
                 $em->persist($brand);
                 $em->flush($brand);
             }
+
             $form = $copyEntity->getMedicineBrand()->getMedicineForm();
             $formEn = new ItemKeyValue();
             $formEn->setItem($item);
@@ -153,7 +154,7 @@ class ItemKeyValueRepository extends EntityRepository
             $em->persist($packSizeEn);
             $em->flush($packSizeEn);
 
-            $dar = $copyEntity->getMedicineBrand()->getPackSize();
+            $dar = $copyEntity->getMedicineBrand()->getDar();
             $darEn = new ItemKeyValue();
             $darEn->setItem($item);
             $darEn->setSorting(3);

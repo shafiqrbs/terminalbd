@@ -1,0 +1,105 @@
+<div class="row  margin-bottom">
+<form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" data-example-id="input-group-segmented-buttons">
+    <a class="btn btn-warning text-center col-xs-12 col-md-12" href="tel:+8801753333652"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
+    <div class="input-group">
+        <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
+        <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
+        <span class="input-group-btn"><button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button></span>
+    </div>
+    <div class="sidebar-footer" >
+        <button type="button" id="filter"  class="btn btn-warning  col-xs-12 col-md-12"> <span class="fa fa-upload"></span> UPLOAD PRESCRIPTION</button>
+    </div>
+    <div id="showFilter" style="display:none;">
+        {% set sortBy = app.request.get('sortBy') %}
+        <select name="sortBy" id="sortBy" class="input-selector item-select col-xs-12 col-md-12"
+                onchange='this.form.submit()'>
+            <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
+                --
+            </option>
+            <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
+                    value="product.name=?=ASC">Name (A - Z)
+            </option>
+            <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
+                    value="product.name=?=DESC">Name (Z - A)
+            </option>
+            <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
+                    value="brand.name=?=ASC">Brand (A - Z)
+            </option>
+            <option {% if sortBy == 'brand.name=?=DESC' %} selected="selected" {% endif %}
+                    value="brand.name=?=DESC">Brand (Z - A)
+            </option>
+            <option {% if sortBy == 'product.salesPrice=?=ASC' %} selected="selected" {% endif %}
+                    value="product.salesPrice=?=ASC">Price (Low &gt; High)
+            </option>
+            <option {% if sortBy == 'product.salesPrice=?=DESC' %} selected="selected" {% endif %}
+                    value="product.salesPrice=?=DESC">Price (High &gt; Low)
+            </option>
+        </select>
+    </div>
+</form>
+    <div class="clearfix"></div>
+    <div id="productFilter">
+        <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
+            <div class=" panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
+            <div class="panel-heading"></div>
+            <div class="row-fluid">
+                <div class="clearfix"></div>
+                 <div id="stockCart">
+                         <table class="table table-hover table-striped table-bordered table-list">
+                             <tbody>
+                             <tr>
+                                 <td class="text-right">
+                                     <div style="height: 70px; margin-bottom: 15px">
+                                         <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone-mobile"/>
+                                     </div>
+                                     <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+                                 </td>
+                             </tr>
+                             </tbody>
+                         </table>
+                 </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-heading">
+                <div class="sidebar-footer" id="login-footer" >
+                    {% if  app.user %}
+                    <button type="submit"  class="btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span> Take Order <span class="glyphicon glyphicon-play"></span></button>
+                    {% else %}
+                    <a href="#login-modal" class="popup-top-anim btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span>  Send Prescription <span class="glyphicon glyphicon-play"></span></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    #accordion .panel-title a{
+        font-weight: normal !important;
+    }
+    .input-group{
+        margin-bottom: 0!important;
+    }
+    #priceStart , #priceEnd{
+        height:30px!important;
+        border-radius:0;
+        border: 1px solid #d2d2d2;
+
+    }
+    #accordion .panel-body{
+        background: #FFFFff!important;
+    }
+    #productFilter{
+        display:none;
+    }
+    .btn-warning{
+        background: #ff6a00!important;
+        color: #ffffff!important;
+    }
+    .dropzone-upload{
+        border-radius: 0px;
+        background-color: #535b5c!important;
+    }
+
+</style>

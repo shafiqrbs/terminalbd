@@ -40,9 +40,9 @@ class SiteSettingType extends AbstractType
                  'query_builder' => function(EntityRepository $er){
                          return $er->createQueryBuilder('wt')
                              ->andWhere("wt.status = 1")
-                             ->andWhere(':syndicate MEMBER OF wt.syndicates')
-                             ->orderBy('wt.name','ASC')
-                             ->setParameter('syndicate', $this->syndicateId);
+                             /*->andWhere(':syndicate MEMBER OF wt.syndicates')
+                             ->setParameter('syndicate', $this->syndicateId)*/
+                             ->orderBy('wt.name','ASC');
                  },
               ))
 

@@ -24,11 +24,23 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('fos_user_security_login'));
         }
         $globalOption = $user->getGlobalOption();
-        if( $user->getGlobalOption()){
-            $enable =$globalOption->getStatus();
+        /* @var $globalOption GlobalOption */
+        if($globalOption->getStatus() == 2 or $globalOption->getStatus() == 3 ) {
+            $this->get('security.context')->setToken(null);
+            $this->get('request')->getSession()->invalidate();
+            $this->get('session')->getFlashBag()->add('notice', "Your account has been temporary suspended. Please contact administrator for further any query");
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
+        }elseif($globalOption->getStatus() == 4 ){
+            $this->get('security.context')->setToken(null);
+            $this->get('request')->getSession()->invalidate();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Your account has been deleted. Please contact administrator for further any query"
+            );
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
         }else{
-            $enable = 0;
+            $enable = $globalOption->getStatus();
         }
+
         $apps = array();
         if (!empty($globalOption ->getSiteSetting())) {
 
@@ -82,6 +94,7 @@ class DefaultController extends Controller
         }elseif (!empty($user) && $enable == 2 ) {
             return $this->redirect($this->generateUrl('domain_pendig'));
         }elseif (!empty($user) && $enable == 3 ) {
+
             return $this->redirect($this->generateUrl('domain_suspended'));
         }else{
             return $this->redirect($this->generateUrl('bindu_homepage'));
@@ -189,7 +202,7 @@ class DefaultController extends Controller
     public function suspendedAction()
     {
         $user = $this->getUser();
-        return $this->render('UserBundle:Default:suspended.html.twig', array(
+        return $this->render('UserBundle:Default:lock.html.twig', array(
             'user' => $user,
         ));
     }

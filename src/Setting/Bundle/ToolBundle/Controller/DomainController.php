@@ -148,6 +148,7 @@ class DomainController extends Controller
         $items[]=array('value' =>1,'text'=> 'Active');
         $items[]=array('value' =>2,'text'=> 'Hold');
         $items[]=array('value' =>3,'text'=> 'Suspended');
+        $items[]=array('value' =>4,'text'=> 'Deleted');
         return new JsonResponse($items);
    }
 

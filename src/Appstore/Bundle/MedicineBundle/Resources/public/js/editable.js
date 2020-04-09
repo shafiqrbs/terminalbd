@@ -79,6 +79,20 @@ $('.trash').on("click", ".remove", function() {
     })
 });
 
+$( ".migration" ).click(function() {
+
+    var url = $(this).attr('data-action');
+    $.MessageBox({
+        input    : true,
+        message  : "Enter Migration Domain:"
+    }).done(function(data){
+        if ($.trim(data)) {
+            $.get(url,{option:data});
+            location.reload();
+        }
+    });
+});
+
 
 
 

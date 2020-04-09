@@ -320,10 +320,10 @@ class ParticularRepository extends EntityRepository
             $stock->setSalesQuantity($qnt);
         }elseif($fieldName == 'purchase-return'){
            // $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->purchaseReturnStockUpdate($stock);
-          //  $stock->setPurchaseReturnQuantity($qnt);
+          // $stock->setPurchaseReturnQuantity($qnt);
         }elseif($fieldName == 'damage'){
-            //$quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
-          //  $stock->setDamageQuantity($quantity);
+            // $quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
+           //  $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'production'){
             $quantity = $em->getRepository('RestaurantBundle:ProductionExpense')->productionExpenseStockItemUpdate($stock);
             $stock->setProductionQuantity($quantity);

@@ -39,6 +39,12 @@ class Theme
 
     private $syndicates;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="themes")
+     **/
+
+    private $app;
+
 
     /**
      * @var string
@@ -256,6 +262,22 @@ class Theme
     public function getSiteSetting()
     {
         return $this->siteSetting;
+    }
+
+    /**
+     * @return AppModule
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+
+    /**
+     * @param AppModule $app
+     */
+    public function setApp($app)
+    {
+        $this->app = $app;
     }
 
 }

@@ -40,7 +40,7 @@ class ItemKeyValue
     /**
      * @var string
      *
-     * @ORM\Column(name="metaValue", type="string", length=255 , nullable = true)
+     * @ORM\Column(name="metaValue", type="text", nullable = true)
      */
     private $metaValue;
 

@@ -35,6 +35,11 @@ class AppModule
      **/
     private $appDomains;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Theme", mappedBy="app")
+     **/
+    private $themes;
+
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ApplicationTestimonial", mappedBy="appModules")
      **/
@@ -455,6 +460,14 @@ class AppModule
     public function setApplicationManual($applicationManual)
     {
         $this->applicationManual = $applicationManual;
+    }
+
+    /**
+     * @return Theme
+     */
+    public function getThemes()
+    {
+        return $this->themes;
     }
 }
 

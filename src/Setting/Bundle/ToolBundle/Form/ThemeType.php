@@ -32,22 +32,6 @@ class ThemeType extends AbstractType
                     new Length(array('max'=>200))
                 )
             ))
-
-            ->add('syndicates', 'entity', array(
-                'required'      => true,
-                'expanded'      =>true,
-                'multiple'      =>true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
-                'property' => 'name',
-                'attr'=>array('class'=>''),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('s')
-                        ->andWhere("s.status = 1")
-                        ->andWhere("s.level = 1")
-                        ->orderBy('s.name','ASC');
-                },
-            ))
-            ->add('file')
             ->add('status');
     }
     
@@ -66,6 +50,6 @@ class ThemeType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_toolbundle_theme';
+        return 'theme';
     }
 }

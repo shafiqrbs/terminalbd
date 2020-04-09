@@ -1,0 +1,87 @@
+ {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+     {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
+ {% endif %}
+{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+    {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
+{% endif %}
+<section class="footer-menu">
+    <div class="container social-payment" >
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="bs-callout" >
+                    <h4>PAYMENT METHOD</h4>
+                    <p><img src="{{ asset('assets/img/credit-card.png') }}" ></p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h4>NEWS LETTER</h4>
+                <div class="social-tooltip">
+                    <form name="newsLetter" method="post" id="newsLetter" action="{{ path(globalOption.subDomain ~ '_webservice_news_letter_receive') }}">
+                        <div class="input-group">
+                            <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
+                            <div class="input-group-btn"> <button type="button" class="btn btn-info" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
+                            <button type="submit" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-3 text-center">
+                <h4>KEEP IN TOUCH</h4>
+                <div class="social-tooltip">
+                    <a data-toggle="tooltip" id="facebook" title="Follow on Facebook" target="_blank" href="http://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="twitter" title="Follow on Twitter" target="_blank" href="http://{{ globalOption.twitterUrl }}"><i class="fa fa-twitter fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="instagram" title="Follow on Instagram" target="_blank" href="http://{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container" id="footer-menu" >
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="bs-callout" >
+                    <h4>About</h4>
+                    <p>
+                        {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h4>{{ globalOption.name }}</h4>
+                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
+            </div>
+            <div class="col-sm-3 text-center">
+                <h4>CONTACT US</h4>
+                <address class="text-center">
+                    {% if globalOption.contactPage.address1 is not empty %}
+
+                        <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
+                            {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
+                                {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
+                            {% endif %}
+                            {% if globalOption.contactPage.postalCode is defined and globalOption.contactPage.postalCode %}
+                                -{{ globalOption.contactPage.postalCode }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    {% if globalOption.contactPage.startHour %}
+                        <i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
+                    {% endif %}
+                    {% if globalOption.contactPage.weeklyOffDay is not empty %}
+                        <br><i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;<strong>
+                        {% for day in globalOption.contactPage.weeklyOffDay %}
+                            {{ day }}
+                            {% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    </strong>
+                    {% endif %}
+                    <br>
+                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                    <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+                </address>
+            </div>
+        </div>
+    </div>
+</section>

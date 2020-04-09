@@ -192,30 +192,33 @@ class ItemRepository extends EntityRepository
     public function insertCopyMedicineItem(MedicineStock $copyEntity)
     {
         $em = $this->_em;
+        if($copyEntity)
         $config = $copyEntity->getMedicineConfig()->getGlobalOption()->getEcommerceConfig();
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'itemGroup'=> $copyEntity->getMode(), 'webName' => $copyEntity->getName()));
+        if(empty($exist)){
+            $entity = new Item();
+            $entity->setEcommerceConfig($config);
+            $entity->setName($copyEntity->getName());
+            $entity->setWebName($copyEntity->getName());
+            $entity->setQuantity($copyEntity->getRemainingQuantity());
+            $entity->setPurchasePrice($copyEntity->getPurchasePrice());
+            $entity->setSalesPrice($copyEntity->getSalesPrice());
+            $entity->setItemGroup($copyEntity->getMode());
+            if($copyEntity->getBrandName()){
+                $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
+                $entity->setBrand($brand);
+            }
+            $entity->setSource('medicine');
+            if($copyEntity->getMedicineBrand()) {
+                $entity->setMedicine($copyEntity->getMedicineBrand());
+            }
+            $em->persist($entity);
+            $em->flush();
+            if($copyEntity->getMedicineBrand()) {
+                $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity, $copyEntity);
+            }
+        }
 
-        $entity = new Item();
-        $entity->setEcommerceConfig($config);
-        $entity->setWebName($copyEntity->getName());
-        $entity->setQuantity($copyEntity->getRemainingQuantity());
-        $entity->setPurchasePrice($copyEntity->getPurchasePrice());
-        $entity->setSalesPrice($copyEntity->getSalesPrice());
-        if($copyEntity->getBrandName()){
-            $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
-            $entity->setBrand($brand);
-        }
-        $entity->setSource('medicine');
-        if($copyEntity->getMedicineBrand() and in_array($copyEntity->getMedicineBrand()->getMedicineForm(),array('Tablet','Capsule','Syrup','Injection'))){
-            $entity->setImageDefaultSource($copyEntity->getMedicineBrand()->getMedicineForm());
-        }
-        if($copyEntity->getMedicineBrand()) {
-            $entity->setMedicine($copyEntity->getMedicineBrand());
-        }
-        $em->persist($entity);
-        $em->flush();
-        if($copyEntity->getMedicineBrand()) {
-            $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity, $copyEntity);
-        }
     }
 
     public function getSliderFeatureProduct($config, $limit = 3)
@@ -268,7 +271,7 @@ class ItemRepository extends EntityRepository
 
     public function handleSearchBetween($qb,$data){
 
-        $webName           = isset($data['name'])? $data['name'] :'';
+        $webName        = isset($data['name'])? $data['name'] :'';
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
@@ -399,7 +402,6 @@ class ItemRepository extends EntityRepository
         $qb->where("item.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
-       // $qb->orderBy('item.updated', 'DESC');
         $qb->orderBy("{$sort}",$direction);
         $result = $qb->getQuery();
         return  $result;
@@ -1186,6 +1188,111 @@ class ItemRepository extends EntityRepository
         $qb->setMaxResults($limit);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+    }
+
+    public function copyStockToEcommerce(GlobalOption $option)
+    {
+        $medicineConfig = $option->getMedicineConfig()->getId();
+        $commerceConfig = $option->getEcommerceConfig()->getId();
+
+        $em = $this->_em;
+        $stock = $em->createQuery("DELETE EcommerceBundle:Item e WHERE e.ecommerceConfig = {$commerceConfig}");
+        if($stock){
+            $stock->execute();
+        }
+
+        $brand = $em->createQuery("DELETE EcommerceBundle:ItemBrand e WHERE e.ecommerceConfig = {$commerceConfig}");
+        if($brand){
+            $brand->execute();
+        }
+
+
+        $brandDql = "INSERT INTO ecommerce_item_brand (`ecommerceConfig_id`, `name`,`slug`, `status`)
+                 SELECT $commerceConfig, `brandName`,LOWER(`brandName`), 1
+                 FROM medicine_stock
+                 WHERE medicineConfig_id =:config 
+                 GROUP BY brandName";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($brandDql);
+        $qb1->bindValue('config', $medicineConfig);
+        $qb1->execute();
+
+        $product = "INSERT INTO ecommerce_item
+                (`ecommerceConfig_id`, `webName`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
+                SELECT $commerceConfig, e.name ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',UCASE(e.mode),1,(case when (item_brand.id > 0) 
+                 THEN
+                      item_brand.id
+                 END)
+                 as state
+                FROM medicine_stock AS e
+                LEFT JOIN ecommerce_item_brand AS item_brand ON e.brandName = item_brand.name AND item_brand.ecommerceConfig_id = $commerceConfig
+                WHERE e.medicineConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($product);
+        $qb1->bindValue('config', $medicineConfig);
+        $qb1->execute();
+
+
+        $meta1 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Mode',itemGroup,1 FROM ecommerce_item AS e
+                  WHERE ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta1);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+
+        $meta2 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Generic',generic.name,2 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  JOIN medicine_generic AS generic ON brand.medicineGeneric_id = generic.id
+                  WHERE itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta2);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $meta3 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Medicine Form',brand.medicineForm,3 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  WHERE  itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta3);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $meta4 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Strength',brand.strength,4 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  WHERE  itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta4);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $meta5 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Pack Size',brand.packSize,5 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  WHERE  itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta5);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $meta6 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'DAR',brand.dar,6 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  WHERE  itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta6);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $meta7 = "INSERT INTO ecommerce_item_key_value (`item_id`, `metaKey`,`metaValue`, `sorting`)
+                  SELECT e.id ,'Use For',brand.useFor,7 FROM ecommerce_item AS e
+                  JOIN medicine_brand AS brand ON e.medicine_id = brand.id
+                  WHERE  itemGroup='medicine' AND ecommerceConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($meta7);
+        $qb1->bindValue('config', $commerceConfig);
+        $qb1->execute();
+
+        $stockUpdate = "UPDATE medicine_stock SET isWeb = 1 WHERE  medicineConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->bindValue('config', $medicineConfig);
+        $qb1->execute();
+
     }
 
 }

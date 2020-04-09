@@ -111,7 +111,7 @@ class MedicineStock
     /**
      * @var string
      *
-     * @ORM\Column(name="mode", type="string", length=20,nullable = true)
+     * @ORM\Column(name="mode", type="string", length = 20,nullable = true)
      */
     private $mode = 'medicine';
 
