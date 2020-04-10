@@ -113,7 +113,13 @@ a:hover , a:visited, a:focus{
     color: #6f6f6f;
 }
 
-
+@media (min-width: 1366px) {
+    .container {
+        width: 1366px;
+        margin: 0 auto;
+        padding: 0 16px;
+    }
+}
 
 /* =================================  MENU STICKY  ===========================*/
 

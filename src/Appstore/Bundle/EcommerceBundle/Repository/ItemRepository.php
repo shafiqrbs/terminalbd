@@ -80,7 +80,7 @@ class ItemRepository extends EntityRepository
         }
 
         if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
+            $qb->orderBy('product.webName', 'ASC');
         }else{
             $qb->orderBy($sort ,$order);
         }
@@ -1192,6 +1192,8 @@ class ItemRepository extends EntityRepository
 
     public function copyStockToEcommerce(GlobalOption $option)
     {
+        $domainSlug = $option->getSlug();
+        $strtotime = strtotime("now");
         $medicineConfig = $option->getMedicineConfig()->getId();
         $commerceConfig = $option->getEcommerceConfig()->getId();
 
@@ -1206,9 +1208,8 @@ class ItemRepository extends EntityRepository
             $brand->execute();
         }
 
-
         $brandDql = "INSERT INTO ecommerce_item_brand (`ecommerceConfig_id`, `name`,`slug`, `status`)
-                 SELECT $commerceConfig, `brandName`,LOWER(`brandName`), 1
+                 SELECT $commerceConfig, `brandName`,REPLACE(REPLACE(LOWER(brandName), '/', '-'),' ','-'), 1
                  FROM medicine_stock
                  WHERE medicineConfig_id =:config 
                  GROUP BY brandName";
@@ -1217,8 +1218,8 @@ class ItemRepository extends EntityRepository
         $qb1->execute();
 
         $product = "INSERT INTO ecommerce_item
-                (`ecommerceConfig_id`, `webName`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
-                SELECT $commerceConfig, e.name ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',UCASE(e.mode),1,(case when (item_brand.id > 0) 
+                (`ecommerceConfig_id`, `webName`, `slug`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
+                SELECT $commerceConfig, e.name ,CONCAT(REPLACE(REPLACE(LOWER(e.name), '/', '-'),' ','-'),'-','{$domainSlug}-',LPAD(FLOOR(RAND() * 999999.99), 6, '0')) ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',CONCAT(UCASE(MID(e.mode,1,1)),MID(e.mode,2)) AS mode ,1,(case when (item_brand.id > 0) 
                  THEN
                       item_brand.id
                  END)

@@ -74,14 +74,15 @@ class WebServiceProductController extends Controller
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
@@ -113,16 +114,18 @@ class WebServiceProductController extends Controller
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(

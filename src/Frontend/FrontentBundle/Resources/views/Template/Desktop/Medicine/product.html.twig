@@ -97,6 +97,7 @@
                 </div>
             </div>
             {% endif %}
+
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
                 <div class="row paginate">
                    <div class="col-md-6">
@@ -107,7 +108,7 @@
 
                     <div class="col-md-6 navbar-right">
                         <div style="float: right">
-                            <button type="button" class="btn gray-dark-bg  cyan-font btn-cookie" id="list-grid"
+                            <button type="button" class="btn gray-dark-bg  cyan-font btn-cookie" id="faThLarge"
                                     data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
                                 <i class="fa fa-th"></i></button>
 
@@ -155,14 +156,14 @@
                     {{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/sidebar.html.twig')}}
                 </div>
             {% endif %}
-            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content" style="margin-top: 30px"  >
+            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content" style="margin-top: 30px"  >
                 {% if app.request.cookies.has('productList') %}
                     {% set cookieVal = app.request.cookies.get('productList') %}
                 {% else %}
-                    {% set cookieVal = 'list-grid' %}
+                    {% set cookieVal = 'faThLarge' %}
                 {% endif %}
                 <div class="row row-flex">
-                    {% if cookieVal == 'list-grid' %}
+                    {% if cookieVal == 'faThLarge' %}
                     {% for product in products %}
                             <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
                                 <form id="add_buy_cart-{{ product.id }}" class="addCart">

@@ -155,7 +155,7 @@ class Item
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"webName","code"})
-     * @Doctrine\ORM\Mapping\Column(length=255, unique=true, nullable = true)
+     * @Doctrine\ORM\Mapping\Column(unique=true, nullable = true)
      */
     private $slug;
 

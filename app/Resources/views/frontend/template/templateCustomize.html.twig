@@ -52,6 +52,12 @@
     }
     {% endif %}
 
+    {% if globalOption.templateCustomize.stickyBgColor is not empty %}
+        .fixed-top{
+            background: {{ globalOption.templateCustomize.stickyBgColor }} !important;
+        }
+    {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbColor is not empty %}
         .pageheader .title{
             color: {{ globalOption.templateCustomize.breadcrumbColor }} !important;

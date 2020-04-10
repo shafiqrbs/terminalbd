@@ -3,6 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -890,23 +891,30 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="siteTitleBgColor", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteTitleBgColor", type="string", length=50, nullable=true)
      */
     private $siteTitleBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="subPageBgColor", type="string", length=255, nullable=true)
+     * @ORM\Column(name="subPageBgColor", type="string", length=50, nullable=true)
      */
     private $subPageBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="footerBgColor", type="string", length=255, nullable=true)
+     * @ORM\Column(name="footerBgColor", type="string", length=50, nullable=true)
      */
     private $footerBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="stickyBgColor", type="string", length=50, nullable=true)
+     */
+    private $stickyBgColor;
 
     /**
      * @var string
@@ -3241,6 +3249,22 @@ class TemplateCustomize
     public function setSendSms($sendSms)
     {
         $this->sendSms = $sendSms;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStickyBgColor()
+    {
+        return $this->stickyBgColor;
+    }
+
+    /**
+     * @param string $stickyBgColor
+     */
+    public function setStickyBgColor($stickyBgColor)
+    {
+        $this->stickyBgColor = $stickyBgColor;
     }
 
 

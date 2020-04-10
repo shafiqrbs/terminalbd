@@ -672,6 +672,18 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
+                                    <label class="control-label" for="firstName">Sticky Bg Color</label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            <i class="icon-magic"></i>
+                                            {{ form_widget(form.stickyBgColor) }}
+                                            {{ form_errors(form.stickyBgColor) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="span3">
+                                <div class="control-group">
                                     <label class="control-label" for="firstName">Menu Bg Color</label>
                                     <div class="controls">
                                         <div class="input-icon left">
@@ -682,7 +694,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                            <div class="span2">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Menu Bg Color Hover</label>
                                     <div class="controls">

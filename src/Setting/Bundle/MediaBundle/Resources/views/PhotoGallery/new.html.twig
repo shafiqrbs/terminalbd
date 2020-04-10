@@ -37,7 +37,9 @@
                     <div class="actions">
                         <div class="btn-group">
                             <a class="btn black" href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp Gallery</a>
+                            {% if entity is not empty and entity.id is not empty %}
                             <a class="btn blue"  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

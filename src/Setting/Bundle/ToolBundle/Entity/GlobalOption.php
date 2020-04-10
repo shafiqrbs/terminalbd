@@ -2002,7 +2002,7 @@ class GlobalOption
 	/**
 	 * @param string $domainType
 	 */
-	public function setDomainType( string $domainType ) {
+	public function setDomainType($domainType ) {
 		$this->domainType = $domainType;
 	}
 
@@ -2016,7 +2016,7 @@ class GlobalOption
 	/**
 	 * @param string $youtube
 	 */
-	public function setYoutube( string $youtube ) {
+	public function setYoutube($youtube ) {
 		$this->youtube = $youtube;
 	}
 
@@ -2030,7 +2030,7 @@ class GlobalOption
 	/**
 	 * @param string $skype
 	 */
-	public function setSkype( string $skype ) {
+	public function setSkype( $skype ) {
 		$this->skype = $skype;
 	}
 
@@ -2044,7 +2044,7 @@ class GlobalOption
 	/**
 	 * @param string $linkedin
 	 */
-	public function setLinkedin( string $linkedin ) {
+	public function setLinkedin($linkedin ) {
 		$this->linkedin = $linkedin;
 	}
 

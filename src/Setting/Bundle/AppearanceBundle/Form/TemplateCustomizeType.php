@@ -90,6 +90,10 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>' span12'),
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
             ))
+            ->add('stickyBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('breadcrumbBg','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
