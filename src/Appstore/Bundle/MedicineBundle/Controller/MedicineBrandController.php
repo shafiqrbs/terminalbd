@@ -230,7 +230,7 @@ class MedicineBrandController extends Controller
             );
         }
         return new Response(json_encode($items));
-        exit;
+
 
     }
 

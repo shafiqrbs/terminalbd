@@ -1902,7 +1902,7 @@ class Builder extends ContainerAware
 	    $menu['Tools']['Master Data']->addChild('Business Sector', array('route' => 'syndicate'));
 	    $menu['Tools']['Master Data']->addChild('Designation', array('route' => 'designation'));
 	    $menu['Tools']['Master Data']->addChild('Medicine Import', array('route' => 'medicine_import'));
-	    $menu['Tools']['Master Data']->addChild('Medicine', array('route' => 'medicine_import_index'));
+	    $menu['Tools']['Master Data']->addChild('Medicine', array('route' => 'medicinebrand'));
 		$menu['Tools']->addChild('Appearance')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
 	    $menu['Tools']['Appearance']->addChild('Module', array('route' => 'module'));
         $menu['Tools']['Appearance']->addChild('Theme', array('route' => 'theme'));

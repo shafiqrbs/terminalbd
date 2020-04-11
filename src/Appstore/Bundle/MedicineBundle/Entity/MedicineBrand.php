@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -129,6 +128,13 @@ class MedicineBrand
      * @ORM\Column(name="packSize", type="string", length=100, nullable=true)
      */
     private $packSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status = true;
 
 
     /**
@@ -523,6 +529,22 @@ class MedicineBrand
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

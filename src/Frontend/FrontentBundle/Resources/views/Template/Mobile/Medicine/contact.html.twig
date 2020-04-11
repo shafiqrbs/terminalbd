@@ -49,7 +49,7 @@
                 <p><i class="fa fa-user"></i><strong>&nbsp;Contact Information</strong><br>
                 <p>{{ globalOption.contactPage.contactPerson|raw }}</p>
                 {% if globalOption.contactPage.designation %}<p>{{ globalOption.contactPage.designation|raw }}</p>{% endif %}
-                <p><i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a></p>
+                <p><i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.hotline }}" class="contact-call">{{ globalOption.hotline }}</a></p>
                 {% if  globalOption.email is not empty %}<p><i class="fa fa-envelope"></i>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></p>{% endif %}
                 {% if(globalOption.contactPage.additionalPhone) %}<p><i class="fa fa-phone-square"></i>&nbsp;+02 {{ globalOption.contactPage.additionalPhone|raw }}</p>{% endif %}
                 {% if(globalOption.contactPage.fax) %}<p><i class="fa fa-fax"></i>&nbsp;+ 02{{ globalOption.contactPage.fax|raw }}</p>{% endif %}

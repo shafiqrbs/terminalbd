@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Setting {{ entity.name }}
+                    Account Name: {{ entity.name }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -198,9 +198,9 @@
                         <div class="clearfix">&nbsp;</div>
                         <!--/row-->
                         <div class="row-fluid">
-                            <div class="span6 ">
+                            <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" >Mobile no</label>
+                                    <label class="control-label" >Account Mobile</label>
                                     <div class="controls">
                                         <div class="input-icon left">
                                             <i class="icon-phone"></i>
@@ -208,6 +208,18 @@
                                             {{ form_errors(edit_form.mobile) }}
                                         </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" >Hotline</label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            <i class="icon-phone"></i>
+                                            {{ form_widget(edit_form.hotline) }}
+                                            {{ form_errors(edit_form.hotline) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

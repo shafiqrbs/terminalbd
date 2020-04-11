@@ -68,7 +68,6 @@ class MedicineImportController extends Controller
 			/** @var $file UploadedFile */
 
 			$file = $entity->getFile();
-
 			$fileName = $file->getClientOriginalName();
 			$imgName =  uniqid(). '.' .$fileName;
 			// moves the file to the directory where brochures are stored
@@ -123,6 +122,10 @@ class MedicineImportController extends Controller
 		));
 	}
 
+
+
+
+
 	public function excelDataImportAction(MedicineImport $excelImporter)
 	{
 
@@ -162,17 +165,7 @@ class MedicineImportController extends Controller
 		return $this->redirect($this->generateUrl('medicine_import'));
 	}
 
-    public function medicineAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->findWithSearch($data);
-        $pagination = $this->paginate($entities);
-        return $this->render('SettingToolBundle:MedicineImport:medicine.html.twig', array(
-            'pagination' => $pagination,
-            'searchForm' => $data,
-        ));
-    }
+
 
     /**
      * Creates a new Vendor entity.
@@ -233,7 +226,6 @@ class MedicineImportController extends Controller
         }
         return $this->redirect( $this->generateUrl( 'medicine_import_index'));
     }
-
 
 
 }

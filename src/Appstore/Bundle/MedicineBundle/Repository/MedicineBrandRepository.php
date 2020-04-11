@@ -29,7 +29,7 @@ class MedicineBrandRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineGeneric','g');
         $query->join('e.medicineCompany','c');
-        $query->select('e.id as id','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as name','g.name as genericName','c.name as medicineCompany','e.dar as dar','e.packSize as pack','e.path as path');
+        $query->select('e.id as id','e.price as price','e.status as status','e.medicineForm as medicineForm','e.strength as strength', 'e.name as name','g.name as genericName','c.name as medicineCompany','e.dar as dar','e.packSize as pack','e.path as path');
         $query->where('e.name IS NOT NULL');
         if($name){
             $query->andWhere($query->expr()->like("e.name", "'$name%'"  ));
@@ -56,7 +56,8 @@ class MedicineBrandRepository extends EntityRepository
         $query->leftJoin('e.medicineCompany','c');
         $query->select('e.*');
         $query->select('e.id','e.price as salesPrice','e.medicineForm','e.strength', 'e.name as webName','g.name as genericName', 'c.name as brand');
-        $query->where($query->expr()->like("e.name", "'$name%'"  ));
+        $query->where('e.status = 1');
+        $query->andWhere($query->expr()->like("e.name", "'$name%'"  ));
         $query->orWhere($query->expr()->like("g.name", "'$name%'"  ));
         $query->orWhere($query->expr()->like("c.name", "'$name%'"  ));
         $query->groupBy('e.name');
@@ -76,6 +77,7 @@ class MedicineBrandRepository extends EntityRepository
         $qb->select('e.id as medicineId','e.price as salesPrice','e.medicineForm as medicineForm','e.strength as strength', 'e.name as medicineName', 'e.useFor as useFor');
         $qb->addSelect('g.name as genericName');
         $qb->addSelect( 'b.name as brand');
+        $qb->andWhere('e.status = 1');
         $qb->setFirstResult( $offset );
         $qb->setMaxResults( $limit );
         $qb->orderBy('e.name','ASC');
@@ -123,6 +125,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect('e.name AS text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '20' );
@@ -182,6 +185,28 @@ class MedicineBrandRepository extends EntityRepository
         $query->orderBy('e.strength', 'ASC');
         $query->setMaxResults( '20' );
         return $query->getQuery()->getResult();
+
+    }
+
+    public function selectStrengthAutoComplete()
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.strength as id');
+        $query->where("e.strength IS NOT NULL");
+        $query->groupBy('e.strength');
+        $query->orderBy('e.strength', 'ASC');
+        return $query->getQuery()->getArrayResult();
+
+    }
+
+    public function selectMedicineFormAutoComplete()
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.medicineForm as id');
+        $query->where("e.medicineForm IS NOT NULL");
+        $query->groupBy('e.medicineForm');
+        $query->orderBy('e.medicineForm', 'ASC');
+        return $query->getQuery()->getArrayResult();
 
     }
 

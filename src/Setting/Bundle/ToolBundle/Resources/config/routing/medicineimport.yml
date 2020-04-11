@@ -19,9 +19,6 @@ medicine_import_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingToolBundle:MedicineImport:delete" }
 
-medicine_import_index:
-    path:     /medicine
-    defaults: { _controller: "SettingToolBundle:MedicineImport:medicine" }
 
 medicine_file_upload:
     path:     /medicine/upload

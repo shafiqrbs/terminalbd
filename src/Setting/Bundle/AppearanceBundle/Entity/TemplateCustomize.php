@@ -867,6 +867,36 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="mobileFooterBgColor", type="string", length=20, nullable=true)
+     */
+    private $mobileFooterBgColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileFooterAnchorBg", type="string", length=20, nullable=true)
+     */
+    private $mobileFooterAnchorBg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileFooterAnchorColor", type="string", length=20, nullable=true)
+     */
+    private $mobileFooterAnchorColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileFooterAnchorColorHover", type="string", length=20, nullable=true)
+     */
+    private $mobileFooterAnchorColorHover;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="mobileMenuBgColor", type="string", length=20, nullable=true)
      */
     private $mobileMenuBgColor;
@@ -3358,6 +3388,70 @@ class TemplateCustomize
     public function setLiveChat($liveChat)
     {
         $this->liveChat = $liveChat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileFooterBgColor()
+    {
+        return $this->mobileFooterBgColor;
+    }
+
+    /**
+     * @param string $mobileFooterBgColor
+     */
+    public function setMobileFooterBgColor($mobileFooterBgColor)
+    {
+        $this->mobileFooterBgColor = $mobileFooterBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileFooterAnchorBg()
+    {
+        return $this->mobileFooterAnchorBg;
+    }
+
+    /**
+     * @param string $mobileFooterAnchorBg
+     */
+    public function setMobileFooterAnchorBg($mobileFooterAnchorBg)
+    {
+        $this->mobileFooterAnchorBg = $mobileFooterAnchorBg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileFooterAnchorColor()
+    {
+        return $this->mobileFooterAnchorColor;
+    }
+
+    /**
+     * @param string $mobileFooterAnchorColor
+     */
+    public function setMobileFooterAnchorColor($mobileFooterAnchorColor)
+    {
+        $this->mobileFooterAnchorColor = $mobileFooterAnchorColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileFooterAnchorColorHover()
+    {
+        return $this->mobileFooterAnchorColorHover;
+    }
+
+    /**
+     * @param string $mobileFooterAnchorColorHover
+     */
+    public function setMobileFooterAnchorColorHover($mobileFooterAnchorColorHover)
+    {
+        $this->mobileFooterAnchorColorHover = $mobileFooterAnchorColorHover;
     }
 
 

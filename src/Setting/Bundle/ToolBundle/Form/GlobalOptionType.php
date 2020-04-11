@@ -78,6 +78,8 @@ class GlobalOptionType extends AbstractType
 	                    new Length(array('max'=>200))
                     )
                 ))
+                ->add('hotline','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Hotline no')
+                ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please input required')),

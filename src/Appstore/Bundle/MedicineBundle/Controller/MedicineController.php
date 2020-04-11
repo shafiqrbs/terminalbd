@@ -46,19 +46,32 @@ class MedicineController extends Controller
         $data = $request->request->all();
         $option = $this->getUser()->getGlobalOption();
         $entity = new MedicineBrand();
-        $em = $this->getDoctrine()->getManager();
-        $entity->setGlobalOption($option);
-        $entity->setStrength($data['strength']);
-        $entity->setMedicineForm($data['medicineForm']);
-        $entity->setPackSize($data['packSize']);
-        $entity->setName($data['brand']);
-        $generic = $this->getDoctrine()->getRepository('MedicineBundle:MedicineGeneric')->checkGenericName($data['generic']);
-        $entity->setMedicineGeneric($generic);
-        $company = $this->getDoctrine()->getRepository('MedicineBundle:MedicineCompany')->checkCompanyName($data['companyName']);
-        $entity->setMedicineCompany($company);
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('medicine_user'));
+        $exist = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('name'=>$entity->getName(),'strength'=> $entity->getStrength(),'medicineForm'=>$entity->getMedicineForm()));
+        if(empty($exist)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($option);
+            $entity->setStrength($data['strength']);
+            $entity->setMedicineForm($data['medicineForm']);
+            $entity->setPackSize($data['packSize']);
+            $entity->setName($data['brand']);
+            $generic = $this->getDoctrine()->getRepository('MedicineBundle:MedicineGeneric')->checkGenericName($data['generic']);
+            $entity->setMedicineGeneric($generic);
+            $company = $this->getDoctrine()->getRepository('MedicineBundle:MedicineCompany')->checkCompanyName($data['companyName']);
+            $entity->setMedicineCompany($company);
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('medicine_user'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been already exist"
+        );
+        $entities = $em->getRepository('MedicineBundle:MedicineBrand')->findBy(array('globalOption' => $option));
+        $form   = $this->createCreateForm($entity);
+        return $this->render('MedicineBundle:MedicineBrand:medicine.html.twig', array(
+            'pagination' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
 
     }
 

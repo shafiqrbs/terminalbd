@@ -62,7 +62,6 @@
         color: {{ globalOption.templateCustomize.mobileMenuLiAHoverColor }}!important;
     }
 
-
     #side-bar-panel .handle{
         background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
     }
@@ -70,18 +69,25 @@
         background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
     }
 
-    {% if globalOption.templateCustomize.headerBgColor %}
+    {% if globalOption.templateCustomize.mobileFooterBgColor %}
     .footer-bg{
-        background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
+        background-color: {{ globalOption.templateCustomize.mobileFooterBgColor }}!important;
     }
     {% endif %}
+
     #mobile-footer ul.footer-icon li a{
-        color: {{ globalOption.templateCustomize.footerAnchorColor }}!important;
-        background: {{ globalOption.templateCustomize.footerBgColor }}!important;
+        {% if globalOption.templateCustomize.mobileFooterAnchorColor  %}
+            color: {{ globalOption.templateCustomize.mobileFooterAnchorColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.mobileFooterAnchorBg  %}
+            background: {{ globalOption.templateCustomize.mobileFooterAnchorBg }}!important;
+        {% endif %}
     }
 
     #mobile-footer ul.footer-icon li a:hover{
-        color: {{ globalOption.templateCustomize.footerAnchorColorHover }}!important;
+        {% if globalOption.templateCustomize.mobileFooterAnchorColorHover  %}
+            color: {{ globalOption.templateCustomize.mobileFooterAnchorColorHover }}!important;
+        {% endif %}
     }
 
     #mobile-footer ul.footer-icon{
@@ -699,10 +705,14 @@
     {% endif %}
     }
     .testimonial-list .testimonial-list-title{
-    {% if globalOption.templateCustomize.borderColor  is not empty%}
-        color:{{ globalOption.templateCustomize.borderColor }}!important;
-    {% endif %}
+        {% if globalOption.templateCustomize.borderColor  is not empty%}
+            color:{{ globalOption.templateCustomize.borderColor }}!important;
+        {% endif %}
     }
+
+    {% if globalOption.templateCustomize.siteCssStyle is not empty %}
+        {{ globalOption.templateCustomize.siteCssStyle|raw }}
+    {% endif %}
 
     @media (max-width:320px){
         .carousel-img, .carousel-tab-img {

@@ -138,6 +138,10 @@ SettingToolBundle_medicine:
         resource: "@SettingToolBundle/Resources/config/routing/medicineimport.yml"
         prefix:   /admin/medicine-import
 
+SettingToolBundle_medicinebrand:
+        resource: "@SettingToolBundle/Resources/config/routing/medicinebrand.yml"
+        prefix:   /admin/medicine-brand
+
 SettingToolBundle_taxtarrif_upload:
         resource: "@SettingToolBundle/Resources/config/routing/tarrif_upload.yml"
         prefix:   /admin/tariff-upload
