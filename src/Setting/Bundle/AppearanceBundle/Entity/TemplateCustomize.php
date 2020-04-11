@@ -222,6 +222,35 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="fbMessenger", type="string", nullable=true)
+     */
+    private $fbMessenger;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tawk", type="string", nullable=true)
+     */
+    private $tawk;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="powr", type="string", nullable=true)
+     */
+    private $powr;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="liveChat", type="string", nullable=true)
+     */
+    private $liveChat;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="siteTitleColor", type="string", length=15, nullable=true)
      */
     private $siteTitleColor;
@@ -3265,6 +3294,70 @@ class TemplateCustomize
     public function setStickyBgColor($stickyBgColor)
     {
         $this->stickyBgColor = $stickyBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFbMessenger()
+    {
+        return $this->fbMessenger;
+    }
+
+    /**
+     * @param string $fbMessenger
+     */
+    public function setFbMessenger($fbMessenger)
+    {
+        $this->fbMessenger = $fbMessenger;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTawk()
+    {
+        return $this->tawk;
+    }
+
+    /**
+     * @param string $tawk
+     */
+    public function setTawk($tawk)
+    {
+        $this->tawk = $tawk;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPowr()
+    {
+        return $this->powr;
+    }
+
+    /**
+     * @param string $powr
+     */
+    public function setPowr($powr)
+    {
+        $this->powr = $powr;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLiveChat()
+    {
+        return $this->liveChat;
+    }
+
+    /**
+     * @param string $liveChat
+     */
+    public function setLiveChat($liveChat)
+    {
+        $this->liveChat = $liveChat;
     }
 
 

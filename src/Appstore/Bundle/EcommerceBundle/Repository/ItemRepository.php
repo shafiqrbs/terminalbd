@@ -42,7 +42,7 @@ class ItemRepository extends EntityRepository
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         if (!empty($data['brand'])) {
-            $qb->andWhere("product.brand = :brand");
+            $qb->andWhere("product.brand IN (:brand)");
             $qb->setParameter('brand', $data['brand']);
         }
 
@@ -66,11 +66,11 @@ class ItemRepository extends EntityRepository
             $qb->andWhere("category.id = :catId");
             $qb->setParameter('catId', $data['categoryId']);
         }
-        if (!empty($data['category'])) {
+        if (!empty($data['categories'])) {
             $qb->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
-                    $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
+                    $qb->expr()->like('category.path', "'". intval($data['categories']) . "/%'"),
+                    $qb->expr()->like('category.path', "'%/" . intval($data['categories']) . "/%'")
                 )
             );
         }

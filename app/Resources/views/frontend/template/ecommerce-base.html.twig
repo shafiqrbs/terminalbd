@@ -25,8 +25,8 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
-    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
-
+   {# <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+#}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
     <!--[if lt IE 9]>
@@ -199,22 +199,35 @@
         {% block documentready %}{% endblock %}
     });
 
+
 </script>
-<!--Start of Tawk.to Script-->
-{#<script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/5962f3f71dc79b329518d6af/default';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-    })();
-</script>#}
-<!--End of Tawk.to Script-->
-{% if globalOption.templateCustomize.messengerScript  %}
-    {{  globalOption.templateCustomize.messengerScript|raw }}
+{% if globalOption.templateCustomize.fbMessenger is not empty  %}
+<div class="fb-customerchat"
+     page_id="<{{ globalOption.templateCustomize.fbMessenger }}>">
+</div>
+{% endif %}
+
+{% if globalOption.templateCustomize.tawk is not empty  %}
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/{{ globalOption.templateCustomize.tawk }}/default';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+{% endif %}
+
+{% if globalOption.templateCustomize.liveChat is not empty  %}
+    <script type="text/javascript">function add_chatinline(){var hccid={{ globalOption.templateCustomize.liveChat }};var nt=document.createElement("script");nt.async=true;nt.src="https://mylivechat.com/chatinline.aspx?hccid="+hccid;var ct=document.getElementsByTagName("script")[0];ct.parentNode.insertBefore(nt,ct);}
+        add_chatinline(); </script>
+{% endif %}
+
+{% if globalOption.templateCustomize.powr is not empty  %}
+    <div class="powr-chat" id="{{ globalOption.templateCustomize.powr }}"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 {% endif %}
 <style>
 

@@ -255,22 +255,25 @@ class CategoryRepository extends MaterializedPathRepository
 
     }
 
-    public function productCategorySidebar($category, $array = array()){
+    public function productCategorySidebar($category, $array = ''){
 
        $categories =  isset($array['categories']) ? $array['categories'] : array();
+
        if(empty($category) || count($category) == 0){
            return '';
        }
+
        $result = "<ul>";
        foreach ($category as $row)
        {
             $checked = in_array($row->getId() , $categories) ? 'checked':'';
+
             if (!empty($row->getChildren())) {
                 $result.= '<li><input type="checkbox" class="" '.$checked.'  id="categories" name="categories[]" value="'.$row->getId().'"><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a>';
                 $result.= $this->productCategorySidebar($row->getChildren());
                 $result.= "</li>";
             }else {
-                $result .= '<li><input type="checkbox" class="" '.$checked.' id="category" name="category[]" value="'.$row->getId().'"><input type="checkbox"><a href="/product/category/'.$row->getId().'">' . $row->getName() .'</a></li>';
+                $result .= '<li><input type="checkbox" class="" '.$checked.' id="categories" name="categories[]" value="'.$row->getId().'"><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a></li>';
             }
         }
 

@@ -35,6 +35,10 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSidebar')
             ->add('sidebarTooltip')
             ->add('menuBold')
+            ->add('fbMessenger','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Facebook Messenger ID')))
+            ->add('tawk','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Tawk ID')))
+            ->add('liveChat','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Live Chat ID')))
+            ->add('powr','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter POWR ID')))
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('topBarContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'placeholder'=>'Enter top bar text or button')))
             ->add('siteCssStyle','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 12,'placeholder'=>'Enter customize site css style')))
@@ -404,7 +408,7 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 numeric',
                 'placeholder'=>'')
             ))
-            ->add('messengerScript','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 6,'placeholder'=>'Enter messenger script')))
+           /* ->add('messengerScript','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 6,'placeholder'=>'Enter messenger script')))*/
             ->add('metaDescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'placeholder'=>'Enter meta description')))
             ->add('metaKeyword','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5,'placeholder'=>'Enter meta keywords')))
             ->add('placeholderColor','text', array('attr'=>array(

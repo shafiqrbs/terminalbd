@@ -1573,7 +1573,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix">&nbsp;</div>
+                       {# <div class="clearfix">&nbsp;</div>
                          <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
@@ -1584,7 +1584,59 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>#}
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box purple">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Chatting Plugin</div>
+                            </div>
                         </div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="row-fluid" >
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">FB Messenger ID</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.fbMessenger) }}
+                                        {{ form_errors(form.fbMessenger) }}
+                                        <p class="help">Please click here for <a target="_blank" href="https://www.facebook.com">Messenger</a>. 1030015557079724</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Tawk ID</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.tawk) }}
+                                        {{ form_errors(form.tawk) }}
+                                        <p class="help">Please click here for <a target="_blank" href="https://www.tawk.to">Tawk</a> 5962f3f71dc79b329518d6af</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid" >
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Live Chat ID</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.liveChat) }}
+                                        {{ form_errors(form.liveChat) }}
+                                        <p class="help">Please click here for <a target="_blank" href="https://www.mylivechat.com">Live Chat</a> 92294809</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Powr ID</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.powr) }}
+                                        {{ form_errors(form.powr) }}
+                                        <p class="help">Please click here for <a target="_blank" href="https://www.powr.io/">Powr</a> 831f3803_1586566370</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box yellow">
                             <div class="portlet-title">

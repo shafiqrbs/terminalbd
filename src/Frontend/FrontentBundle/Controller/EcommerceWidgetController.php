@@ -176,7 +176,7 @@ class EcommerceWidgetController extends Controller
 
             $inventoryCat = $this->getDoctrine()->getRepository('EcommerceBundle:ItemCategoryGrouping')->findOneBy(array('ecommerceConfig' => $inventory));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats,$searchForm);
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$searchForm);
             $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupBrands($inventory, $searchForm);
             $discountTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupDiscount($inventory, $searchForm);

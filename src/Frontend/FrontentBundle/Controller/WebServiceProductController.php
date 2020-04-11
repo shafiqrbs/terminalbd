@@ -99,7 +99,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productFilter(Request $request , $subdomain)
+    public function productFilterAction(Request $request , $subdomain)
     {
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();

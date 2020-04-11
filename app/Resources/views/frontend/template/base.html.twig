@@ -18,7 +18,7 @@
     <meta property="og:site_name" content="{{ globalOption.name }}" />
     <meta name="description" content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaDescription is not empty %}{{ globalOption.templateCustomize.metaDescription|raw }}{% endif %}">
     <meta name="keywords" content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaKeyword is not empty %}{{ globalOption.templateCustomize.metaKeyword|raw }}{% endif %}">
-    <meta name="yandex-verification" content="1543b5d597475fe4" />
+   {# <meta name="yandex-verification" content="1543b5d597475fe4" />#}
     <title>{{ globalOption.name }}</title>
     {% if globalOption.templateCustomize.favicon is not empty %}
     <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
@@ -151,8 +151,33 @@ $(document).ready(function(){
 
 });
 </script>
-{% if globalOption.templateCustomize.messengerScript  %}
-    {{  globalOption.templateCustomize.messengerScript|raw }}
+{% if globalOption.templateCustomize.fbMessenger is not empty  %}
+    <div class="fb-customerchat"
+         page_id="<{{ globalOption.templateCustomize.fbMessenger }}>">
+    </div>
+{% endif %}
+
+{% if globalOption.templateCustomize.tawk is not empty  %}
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/{{ globalOption.templateCustomize.tawk }}/default';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+{% endif %}
+
+{% if globalOption.templateCustomize.liveChat is not empty  %}
+    <script type="text/javascript">function add_chatinline(){var hccid={{ globalOption.templateCustomize.liveChat }};var nt=document.createElement("script");nt.async=true;nt.src="https://mylivechat.com/chatinline.aspx?hccid="+hccid;var ct=document.getElementsByTagName("script")[0];ct.parentNode.insertBefore(nt,ct);}
+        add_chatinline(); </script>
+{% endif %}
+
+{% if globalOption.templateCustomize.powr is not empty  %}
+    <div class="powr-chat" id="{{ globalOption.templateCustomize.powr }}"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 {% endif %}
 <script>
     window.dataLayer = window.dataLayer || [];
