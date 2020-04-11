@@ -34,6 +34,7 @@ class MedicineController extends Controller
             'form'   => $form->createView(),
         ));
 
+
     }
 
     /**
