@@ -8,7 +8,7 @@
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
                     <h4 class="feature-title"><i class="fa fa-th-large"></i> {% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}All Products{% endif %}
                     </h4>
-                    <div class="col-xs-5 col-md-5"> {{ knp_pagination_render(products) }}</div>
+                    {#<div class="col-xs-5 col-md-5"> {{ knp_pagination_render(products) }}</div>#}
                     {% if app.request.cookies.has('productList') %}
                         {% set cookieVal = app.request.cookies.get('productList') %}
                     {% else %}
