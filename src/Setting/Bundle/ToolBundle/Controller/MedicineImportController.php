@@ -200,7 +200,7 @@ class MedicineImportController extends Controller
         $data = explode( ',', $request->cookies->get( 'barcodes' ) );
         $em = $this->getDoctrine()->getManager();
         if ( is_null( $data ) ) {
-            return $this->redirect( $this->generateUrl( 'medicine_import_index'));
+            return $this->redirect( $this->generateUrl( 'medicinebrand'));
         }
         $file = $request->files->get('file');
         if($file){
@@ -226,6 +226,5 @@ class MedicineImportController extends Controller
         }
         return $this->redirect( $this->generateUrl( 'medicinebrand'));
     }
-
 
 }

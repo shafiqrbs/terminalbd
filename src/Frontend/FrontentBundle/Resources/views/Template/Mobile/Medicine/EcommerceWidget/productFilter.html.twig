@@ -1,6 +1,6 @@
 <div class="row  margin-bottom">
 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" data-example-id="input-group-segmented-buttons">
-    <a class="btn btn-warning text-center col-xs-12 col-md-12 mobile-order" href="tel:+880{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
+    <a class="btn btn-warning text-center col-xs-12 col-md-12 mobile-order" href="tel:+88{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
     <div class="input-group">
         <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
         <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">

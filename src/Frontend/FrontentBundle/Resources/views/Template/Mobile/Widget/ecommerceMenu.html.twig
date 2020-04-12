@@ -1,6 +1,5 @@
 <nav id="mm-menu">
     <ul>
-        <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">Home</a></li>
             {% for  menu in globalOption.ecommerceMenus  %}
             <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
                 <ul>
