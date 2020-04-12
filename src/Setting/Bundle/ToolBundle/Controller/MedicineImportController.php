@@ -224,7 +224,7 @@ class MedicineImportController extends Controller
                 }
             }
         }
-        return $this->redirect( $this->generateUrl( 'medicine_import_index'));
+        return $this->redirect( $this->generateUrl( 'medicinebrand'));
     }
 
 

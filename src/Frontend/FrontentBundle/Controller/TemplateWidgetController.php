@@ -209,7 +209,6 @@ class TemplateWidgetController extends Controller
         }else{
             return new Response('');
         }
-
     }
 
     public function moduleBaseContentAction(GlobalOption $globalOption , PageModule $pageModule )
