@@ -172,11 +172,12 @@
 
                                         {% if product.discount is not empty  %}<a class="product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                         <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
-                                            {% if product.medicine is not empty and product.webPath is empty %}
-                                            <img src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                                      {% else %}
-                                            <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                            {% if product.medicine is not empty and product.medicine.webPath is not empty and product.webPath is empty %}
+                                            <img alt="medicine" src="{{ image(product.medicine.webPath).resize(500,500, 'white') }}"/>                        {% else %}
+                                            <img alt="item" src="{{ image(product.webPath).resize(500,500) }}"/>
                                             {% endif %}
                                         </a>
+
                                         <div class="card-content" data-match-height="item-product">
                                             <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
                                         </div>
@@ -214,7 +215,7 @@
                                         <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">
                                             {% if product.medicine is not empty and product.webPath is empty %}
                                                 <img src="{{ image(product.medicine.webPath).resize(120,120, 'white') }}"/>                                      {% else %}
-                                                <img src="{{ image(product.webPath).resize(120,120, 'white') }}"/>
+                                                <img src="{{ image(product.webPath).resize(120,120) }}"/>
                                             {% endif %}
                                         </a>
                                     </div>
