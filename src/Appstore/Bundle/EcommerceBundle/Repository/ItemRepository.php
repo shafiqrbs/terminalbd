@@ -35,6 +35,8 @@ class ItemRepository extends EntityRepository
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
+       // var_dump($data);
+      //  exit;
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.brand','brand');
         $qb->leftJoin('product.category','category');

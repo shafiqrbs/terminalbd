@@ -10,14 +10,19 @@
                     </h4>
                 </div>
             </div>
+            {% if products is not empty %}
             <div class="row">
                 {% for product in products %}
                     <div class="col-xs-12 col-md-12 list-group-item">
                         <div class="col-xs-3 col-md-3">
-                            <a href="javascript:" >
-                                <img class="img-responsive"
-                                     src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.webPath is defined and product.webPath is not empty %}{{ image(product.webPath).forceResize(400,400) }}{% endif %}"
-                                     alt=""/>
+                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
+                                {% if product.medicine is not empty and product.webPath is empty %}
+                                    <img class="img-responsive"
+                                         src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                {% else %}
+                                    <img class="img-responsive"
+                                         src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                {% endif %}
                             </a>
                         </div>
                         <div class="col-xs-9 col-md-9">
@@ -63,6 +68,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+               {# {% if vendorEntities is not empty %}
                 {% for product in vendorEntities %}
                     <div class="col-xs-12 col-md-12 list-group-item">
                         <div class="col-xs-3 col-md-3">
@@ -106,6 +112,7 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}#}
     {#            {% for product in globalEntities %}
                     <div class="item  list-group-item">
                         <div  class="col-xs-2 col-md-2 text-left add-card" data-match-height="item-product" style="margin-left: -15px">
@@ -145,7 +152,17 @@
                     </div>
                 {% endfor %}#}
             </div>
+            {% endif %}
             <div class="clearfix"></div>
+            {% if products is not empty %}
+            <div class="row">
+                <div class="bs-callout bs-callout-info bs-callout-custom ">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6 col-xs-offset-3"> {{ knp_pagination_render(products) }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
         </div><!-- end container -->
     </div>

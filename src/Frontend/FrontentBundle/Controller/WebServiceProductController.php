@@ -110,7 +110,13 @@ class WebServiceProductController extends Controller
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
+            $post = array();
+            $post = empty($_REQUEST['item']) ? '' : $_REQUEST['item'];
             $data = $_REQUEST;
+            $data['category']= isset($post['category']) ? $post['category']:'';
+            $data['brand']= isset($post['brand']) ? $post['brand']:'';
+            $data['name']= isset($post['webName']) ? $post['webName']:'';
+
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
@@ -196,28 +202,32 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $rwaEntities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $entities =$rwaEntities->getResult();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+         //   $entities =$rwaEntities->getResult();
             $medicineConfig = $globalOption->getMedicineConfig()->getId();
-            $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
+           // $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
          //  $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
 
             /* Device Detection code desktop or mobile */
-
+            $config = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             $item = !empty($_REQUEST) ? $_REQUEST :array();
             $searchForm =$item;
             return $this->render('FrontendBundle:'.$theme.':productSearch.html.twig',
                 array(
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
-                    'products'          => $entities,
-                    'vendorEntities'    => $vendorEntities,
+                    'products'          => $pagination,
+                 //   'vendorEntities'    => $vendorEntities,
                   //  'globalEntities'    => $globalEntities,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,

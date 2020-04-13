@@ -2,9 +2,9 @@
 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" data-example-id="input-group-segmented-buttons">
     <a class="btn btn-warning text-center col-xs-12 col-md-12 mobile-order" href="tel:+88{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
     <div class="input-group">
-        <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
+        <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted mobile-filter-btn"><span class="fa fa-sort-numeric-asc"></span></button></span>
         <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
-        <span class="input-group-btn"><button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span></button></span>
+        <span class="input-group-btn"><button type="submit" class="btn btn-info mobile-search-btn"><span class="glyphicon glyphicon-search"></span></button></span>
     </div>
     <div class="sidebar-footer" >
         <button type="button" id="filter"  class="btn btn-warning  col-xs-12 col-md-12 upload-prescription"> <span class="fa fa-upload"></span> UPLOAD PRESCRIPTION</button>
@@ -16,11 +16,11 @@
             <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
                 --
             </option>
-            <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
-                    value="product.name=?=ASC">Name (A - Z)
+            <option {% if sortBy == 'product.webName=?=ASC' %} selected="selected" {% endif %}
+                    value="product.webName=?=ASC">Name (A - Z)
             </option>
-            <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
-                    value="product.name=?=DESC">Name (Z - A)
+            <option {% if sortBy == 'product.webName=?=DESC' %} selected="selected" {% endif %}
+                    value="product.webName=?=DESC">Name (Z - A)
             </option>
             <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
                     value="brand.name=?=ASC">Brand (A - Z)
@@ -63,9 +63,9 @@
             <div class="panel-heading">
                 <div class="sidebar-footer" id="login-footer" >
                     {% if  app.user %}
-                    <button type="submit"  class="btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span> Take Order <span class="glyphicon glyphicon-play"></span></button>
+                    <button type="submit"  class="btn btn-warning col-xs-12 col-md-12 take-order"><span class="glyphicon glyphicon-cart"></span> Take Order <span class="glyphicon glyphicon-play"></span></button>
                     {% else %}
-                    <a href="#login-modal" class="popup-top-anim btn btn-warning col-xs-12 col-md-12"><span class="glyphicon glyphicon-cart"></span>  Send Prescription <span class="glyphicon glyphicon-play"></span></a>
+                    <a href="#login-modal" class="popup-top-anim btn btn-warning col-xs-12 col-md-12 send-prescription"><span class="glyphicon glyphicon-cart"></span>  Send Prescription <span class="glyphicon glyphicon-play"></span></a>
                     {% endif %}
                 </div>
             </div>
@@ -94,7 +94,7 @@
         display:none;
     }
     .btn-warning{
-        background: #ff6a00!important;
+        background: #ff6a00;
         color: #ffffff!important;
     }
     .dropzone-upload{

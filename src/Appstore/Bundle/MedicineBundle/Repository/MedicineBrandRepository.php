@@ -121,6 +121,7 @@ class MedicineBrandRepository extends EntityRepository
 
     public function searchBrandNameAutoComplete($q)
     {
+
         $query = $this->createQueryBuilder('e');
         $query->select('e.id as id');
         $query->addSelect('e.name AS text');
@@ -129,7 +130,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -143,7 +144,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -158,7 +159,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('g.name');
         $query->orderBy('g.name', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -171,7 +172,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('e.packSize');
         $query->orderBy('e.packSize', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -184,7 +185,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('e.strength');
         $query->orderBy('e.strength', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -219,13 +220,14 @@ class MedicineBrandRepository extends EntityRepository
         $query->groupBy('e.medicineForm');
         $query->orderBy('e.medicineForm', 'ASC');
         $query->setMaxResults( '20' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
 
     public function searchMedicineAutoComplete($q)
     {
+
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineGeneric','g');
         $query->join('e.medicineCompany','c');
@@ -234,7 +236,7 @@ class MedicineBrandRepository extends EntityRepository
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -249,7 +251,7 @@ class MedicineBrandRepository extends EntityRepository
       //  $query->groupBy('g.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
     }
 
 	public function searchMedicineGenericAutoComplete($q)
@@ -265,7 +267,7 @@ class MedicineBrandRepository extends EntityRepository
 	//	$query->groupBy('e.name');
 		$query->orderBy('e.name', 'ASC');
 		$query->setMaxResults( '50' );
-		return $query->getQuery()->getResult();
+		return $query->getQuery()->getArrayResult();
 
 	}
 

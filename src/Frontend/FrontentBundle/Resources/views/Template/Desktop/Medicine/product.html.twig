@@ -121,10 +121,9 @@
                                 <label for="exampleInputName2">Sort By: </label>
                                 {% set sortBy = app.request.get('sortBy') %}
                                 <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()'>
-                                    <option>-- Sorting by --</option>
-                                    <option {% if sortBy == ''  %} selected="selected" {% endif %} value="" >Default</option>
-                                    <option {% if sortBy == 'product.name=?=ASC'  %} selected="selected" {% endif %} value="product.name=?=ASC">Name (A - Z)</option>
-                                    <option {% if sortBy == 'product.name=?=DESC'  %} selected="selected" {% endif %} value="product.name=?=DESC">Name (Z - A)</option>
+                                    <option value="">-- Sorting by --</option>
+                                    <option {% if sortBy == 'product.webName=?=ASC'  %} selected="selected" {% endif %} value="product.webName=?=ASC">Name (A - Z)</option>
+                                    <option {% if sortBy == 'product.webName=?=DESC'  %} selected="selected" {% endif %} value="product.webName=?=DESC">Name (Z - A)</option>
                                     <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
                                     <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
                                     <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
@@ -271,7 +270,7 @@
                     {% else %}
                     {% set page = 1 %}
                     {% endif %}
-                    <div class="col-md-3  navbar-left" style="line-height: 35px"><a href="javascript:">Total no of products: {{ products.getTotalItemCount }} {#out of {{ page * products|length }}#}</a></div>
+                    <div class="col-md-3  navbar-left" style="line-height: 35px"><a href="javascript:">Total no of products: {{ products.getTotalItemCount }} out of {{ page * products|length }}</a></div>
                     <div class="col-md-9">
                         <div class="pull-right">
                             {{ knp_pagination_render(products) }}

@@ -32,74 +32,74 @@ medicine_update:
     defaults: { _controller: "SettingToolBundle:Medicine:update" }
     methods:  [POST, PUT]
 
-medicine_select_search:
+medicinebrand_select_search:
     path:     /select-medicine-search
     defaults: { _controller: "SettingToolBundle:Medicine:selectSearchMedicine" }
     options:
             expose: true
 
-medicine_search:
+medicinebrand_search:
     path:     /medicine-search
     defaults: { _controller: "SettingToolBundle:Medicine:autoSearchMedicine" }
     options:
             expose: true
 
-medicine_details:
+medicinebrand_details:
     path:     /medicine-details
     defaults: { _controller: "SettingToolBundle:Medicine:medicineDetails" }
     options:
             expose: true
 
-generic_search:
+medicinebrand_generic_search:
     path:     /generic-search
     defaults: { _controller: "SettingToolBundle:Medicine:autoSearchGeneric" }
     options:
             expose: true
 
-medicine_name:
+medicinebrand_name:
     path:      /{medicine}/medicine-name
     defaults: { _controller: "SettingToolBundle:Medicine:searchProductName" }
     options:
             expose: true
 
 
-medicine_search_brand_name_complete:
+medicinebrand_search_brand_name_complete:
     path:     /search-brand-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchBrandNameAutoComplete" }
     options:
             expose: true
 
-medicine_search_company_name_complete:
+medicinebrand_search_company_name_complete:
     path:     /search-company-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchCompanyNameAutoComplete" }
     options:
             expose: true
 
-medicine_search_generic_name_complete:
+medicinebrand_search_generic_name_complete:
     path:     /search-generic-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchGenericNameAutoComplete" }
     options:
             expose: true
 
-medicine_search_pack_size_name_complete:
+medicinebrand_search_pack_size_name_complete:
     path:     /search-pack-size-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchPackSizeAutoComplete" }
     options:
             expose: true
 
-medicine_search_strength_name_complete:
+medicinebrand_search_strength_name_complete:
     path:     /search-strength-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchStrengthAutoComplete" }
     options:
             expose: true
 
-medicine_search_form_name_complete:
+medicinebrand_search_form_name_complete:
     path:     /search-form-name-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchMedicineFormAutoComplete" }
     options:
             expose: true
 
-medicine_search_medicine_generic_complete:
+medicinebrand_search_medicine_generic_complete:
     path:     /search-generic-medicine-auto-complete
     defaults: { _controller: "SettingToolBundle:Medicine:searchMedicineGenericNameAutoComplete" }
     options:

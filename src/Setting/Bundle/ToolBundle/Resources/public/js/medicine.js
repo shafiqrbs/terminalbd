@@ -74,7 +74,7 @@ $( "#brand" ).autocomplete({
 
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_brand_name_complete'),
+            url: Routing.generate('medicinebrand_search_brand_name_complete'),
             data: {
                 term: request.term
             },
@@ -87,7 +87,7 @@ $( "#brand" ).autocomplete({
     select: function( event, ui ) {
         $("#medicineId").val(ui.item.id); // save selected id to hidden input
         $.ajax( {
-            url: Routing.generate('medicine_details'),
+            url: Routing.generate('medicinebrand_details'),
             data: {
                 medicine: ui.item.id
             },
@@ -104,7 +104,7 @@ $( "#brand" ).autocomplete({
 $( "#companyName" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_company_name_complete'),
+            url: Routing.generate('medicinebrand_search_company_name_complete'),
             data: {
                 term: request.term
             },
@@ -123,7 +123,7 @@ $( "#generic" ).autocomplete({
 
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_generic_name_complete'),
+            url: Routing.generate('medicinebrand_search_generic_name_complete'),
             data: {
                 term: request.term
             },
@@ -142,7 +142,7 @@ $( "#generic" ).autocomplete({
 $( ".select2PackSize" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_pack_size_name_complete'),
+            url: Routing.generate('medicinebrand_search_pack_size_name_complete'),
             data: {
                 term: request.term
             },
@@ -161,7 +161,7 @@ $( ".select2PackSize" ).autocomplete({
 $( ".select2Strength" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_strength_name_complete'),
+            url: Routing.generate('medicinebrand_search_strength_name_complete'),
             data: {
                 term: request.term
             },
@@ -180,7 +180,7 @@ $( ".select2Strength" ).autocomplete({
 $( ".select2MedicineForm" ).autocomplete({
     source: function( request, response ) {
         $.ajax( {
-            url: Routing.generate('medicine_search_form_name_complete'),
+            url: Routing.generate('medicinebrand_search_form_name_complete'),
             data: {
                 term: request.term
             },

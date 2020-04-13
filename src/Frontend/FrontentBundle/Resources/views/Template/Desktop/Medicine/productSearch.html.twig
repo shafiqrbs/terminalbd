@@ -94,20 +94,20 @@
                 <div class="row paginate">
                    <div class="col-md-6">
                         <div class="btn-group pull-left">
-                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;keyword: {{ searchForm.webName }}</div>
+                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;keyword: {% if searchForm.webName is defined and searchForm.webName is not empty %} {{ searchForm.webName }}{% endif %}</div>
                    </div>
                     </div>
 
                     <div class="col-md-6 navbar-right">
-                        <form class="form-inline">
+                        <form class="form-inline" action="{{ app.request.uri }}" method="get" name="form" id="form">
                             <div class="form-group paginate-form-group">
                                 <label for="exampleInputName2">Sort By: </label>
                                 {% set sortBy = app.request.get('sortBy') %}
                                 <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()'>
                                     <option>-- Sorting by --</option>
-                                    <option {% if sortBy == ''  %} selected="selected" {% endif %} value="" >Default</option>
-                                    <option {% if sortBy == 'product.name=?=ASC'  %} selected="selected" {% endif %} value="product.name=?=ASC">Name (A - Z)</option>
-                                    <option {% if sortBy == 'product.name=?=DESC'  %} selected="selected" {% endif %} value="product.name=?=DESC">Name (Z - A)</option>
+
+                                    <option {% if sortBy == 'product.webName=?=ASC'  %} selected="selected" {% endif %} value="product.webName=?=ASC">Name (A - Z)</option>
+                                    <option {% if sortBy == 'product.webName=?=DESC'  %} selected="selected" {% endif %} value="product.webName=?=DESC">Name (Z - A)</option>
                                     <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
                                     <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
                                     <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
@@ -115,8 +115,6 @@
                                 </select>
                             </div>
                         </form>
-
-
                     </div>
 
                 </div>
@@ -183,7 +181,7 @@
                         </div>
                     </form>
                 {% endfor %}
-                {% for product in vendorEntities %}
+               {# {% for product in vendorEntities %}
                     <form id="add_buy_cart-{{ product.id }}" class="addCart">
                         <div class="item  list-group-item">
                             <div  class="col-xs-2 col-md-2 text-left add-card" data-match-height="item-product" style="margin-left: -15px">
@@ -223,7 +221,7 @@
                             </div>
                         </div>
                     </form>
-                {% endfor %}
+                {% endfor %}#}
               {#  {% for product in globalEntities %}
                     <form id="add_buy_cart-{{ product.id }}" class="addCart">
                         <div class="item  list-group-item">
@@ -275,6 +273,26 @@
             <div class="clearfix"></div>
         </div>
     </section>
+    <div class="clearfix"></div>
+        <section>
+            <div class="container " >
+                <div class="col-md-12">
+                    <div class="row paginate-footer" >
+                        {% if app.request.get('page') is not empty %}
+                            {% set page = app.request.get('page') %}
+                        {% else %}
+                            {% set page = 1 %}
+                        {% endif %}
+                        <div class="col-md-3  navbar-left" style="line-height: 35px"><a href="javascript:">Total no of products: {{ products.getTotalItemCount }} out of {{ page * products|length }}</a></div>
+                        <div class="col-md-9">
+                            <div class="pull-right">
+                                {{ knp_pagination_render(products) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     <div class="clearfix"></div>
 
 {% endblock %}
