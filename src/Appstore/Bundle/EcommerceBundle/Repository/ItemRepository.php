@@ -35,8 +35,6 @@ class ItemRepository extends EntityRepository
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
-       // var_dump($data);
-      //  exit;
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.brand','brand');
         $qb->leftJoin('product.category','category');
@@ -78,8 +76,18 @@ class ItemRepository extends EntityRepository
         }
         if (!empty($data['webName'])) {
             $search = strtolower($data['webName']);
-            $qb->andWhere($qb->expr()->like("product.slug", "'%$search%'"  ));
+            $qb->leftJoin('product.medicine','medicine');
+            $qb->leftJoin('medicine.medicineGeneric','generic');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('product.slug', "'%". $search . "%'"),
+                    $qb->expr()->like('brand.slug', "'%". $search . "%'"),
+                    $qb->expr()->like('generic.name', "'%". $search . "%'"),
+                    $qb->expr()->like('category.slug', "'%". $search . "%'")
+                )
+            );
         }
+
 
         if (empty($data['sortBy'])){
             $qb->orderBy('product.webName', 'ASC');
@@ -90,6 +98,8 @@ class ItemRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
         $res = $qb->getQuery();
+      //  echo $res;
+      //  exit;
         return  $res;
 
     }

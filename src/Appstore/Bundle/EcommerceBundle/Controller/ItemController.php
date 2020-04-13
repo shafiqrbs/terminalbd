@@ -613,7 +613,6 @@ class ItemController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
 		}
-		$setName = 'set'.$data['name'];
 		if($data['name'] == 'Discount'){
 
 			$discount = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
@@ -643,7 +642,9 @@ class ItemController extends Controller
             }else {
                 $entity->setCategory(NULL);
             }
-		}
+		}else{
+            $entity->$setName($data['value']);
+        }
 		$em->persist($entity);
 		$em->flush();
 		exit;

@@ -18,30 +18,33 @@
                             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
                                 {% if product.medicine is not empty and product.webPath is empty %}
                                     <img class="img-responsive"
-                                         src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                         src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,180) }}{% endif %}"  alt="">
                                 {% else %}
                                     <img class="img-responsive"
-                                         src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,160) }}{% endif %}"  alt="">
+                                         src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,180) }}{% endif %}"  alt="">
                                 {% endif %}
                             </a>
                         </div>
                         <div class="col-xs-9 col-md-9">
                             <div class="row">
                                 <div class="col-xs-12 col-md-12 list-group-product">
-                                    {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
-                                        <span class="group inner brand text-left">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}
-                                            &nbsp;</span>
-                                    {% endif %}
-                                    <span class="group inner product-name text-left"><a
-                                                href="javascript:">{{ product.webName }}
-                                                </a>
+                                    {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}                              <span class="group inner brand text-left category-name">
+                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.id }) }}">{{ product.category.name }}</a>
                                         </span>
+                                    {% endif %}
+                                    <span class="group inner product-name text-left">
+                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
+                                    </span>
+                                    {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}                                    <span class="group inner brand text-left brand-name">
+                                            <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}">{{ product.brand.name }}</a>
+                                        </span>
+                                    {% endif %}
                                     <div>
-                                        <div class="col-xs-6 col-md-6 text-left product-price">
+                                        <div class="col-xs-5 col-md-5 text-left product-price">
                                                 <span
                                                         class="currency">{{ globalOption.ecommerceConfig.currency }} {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
                                         </div>
-                                        <div class="col-xs-6 col-md-6 text-right">
+                                        <div class="col-xs-7 col-md-7 text-right">
                                             <div class="card-read-more">
                                                 <div class="input-group">
               <span class="input-group-btn input-group-btn-custom">
@@ -158,7 +161,7 @@
             <div class="row">
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
                     <div class="row">
-                        <div class="col-xs-6 col-md-6 col-xs-offset-3"> {{ knp_pagination_render(products) }}</div>
+                        <div class="col-xs-8 col-md-8 col-xs-offset-2"> {{ knp_pagination_render(products) }}</div>
                     </div>
                 </div>
             </div>

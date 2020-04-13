@@ -3,13 +3,14 @@
     <div class="input-group">
             <span class="input-group-btn">
                  {% if previous is defined %}
-                     <a style="float: left" class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
+                     <a style="float: left" class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span> Previous</a>
             {% else %}
-                     <a style="float: left" class="btn btn-info btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
+                     <a style="float: left" class="btn btn-info btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span> Previous</a>
                  {% endif %}
             </span>
         {% if pageCount > 1 %}
             {% set page = app.request.get('page') %}
+
             <select id="page" name="page" class="page-selector item-select"  onchange='this.form.submit()'>
                 <option value="">-Page-</option>
                 {% for i in 1..pageCount %}
@@ -19,8 +20,10 @@
         {% endif %}
         <span class="input-group-btn">
             {% if next is defined %}
-                <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}"><span class="glyphicon glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}">Next <span class="glyphicon glyphicon glyphicon-chevron-right"></span> </a>
             {% endif %}
         </span>
     </div>
+    {% set webName = app.request.get('webName') %}
+    <input type="hidden" name="webName" value="{% if webName is defined and webName is not empty  %}{{webName}}{% endif %}" id="webName" >
 </form>

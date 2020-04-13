@@ -694,3 +694,30 @@ strike{
     font-weight:normal;
 }
 
+/* =========  Product INFO ======= */
+
+.category-name{
+    display: block;
+}
+.category-name a.category-url{
+
+}
+.product-name{
+    display: block;
+}
+.product-name a.product-url{
+
+}
+.brand-name{
+    display: block;
+}
+.brand-name a.brand-url{
+
+}
+.product-price{
+    display: block;
+}
+
+/* =========  Product INFO ============ */
+
+

@@ -164,11 +164,14 @@
                     <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                         <div class='input-group search-box' style="width: 100%" >
                             <div class="input-group" style="width: 100%">
-                                <input style="float: right;" type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Product name,category,brand etc">
+
+                                <input style="float: right;" type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{% if searchForm.webName is defined and searchForm.webName is not empty %} {{ searchForm.webName }}{% endif %}" placeholder="Product name,category,brand etc">
                                 <span class="input-group-btn">
-                                    <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
+
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-warning"> <span  class="fa fa-upload"></span> Prescription</a>
+                                    <span style="position: relative;display: inline-block">
+                                          <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-warning"> <span  class="fa fa-upload"></span> Prescription</a></span>
                                     {% if app.user %}
                                         <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
                                         <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
@@ -361,7 +364,6 @@
         #item-qnt {
             position: absolute;
             top: -12px;
-            right: 40px;
             font-size: 9px;
             background: red;
             border-radius: 50%;

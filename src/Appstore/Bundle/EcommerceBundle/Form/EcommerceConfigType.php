@@ -62,6 +62,7 @@ class EcommerceConfigType extends AbstractType
             ->add('isAdditionalItem')
             ->add('showSidebar')
             ->add('showBrand')
+            ->add('showCategory')
             ->add('sidebarBrand')
             ->add('sidebarCategory')
             ->add('sidebarPrice')

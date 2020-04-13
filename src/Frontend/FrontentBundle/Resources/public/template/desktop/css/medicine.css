@@ -36,9 +36,7 @@
     display: flex;
 }
 
-.product-canvas .card-content{
-    text-align: center!important;
-}
+
 .product-canvas .product-eye , .product-canvas .product-buy{
     width: auto;
 }

@@ -154,7 +154,16 @@ class EcommerceConfig
      *
      * @ORM\Column(name="showBrand", type="boolean")
      */
-    private $showBrand = true;
+    private $showBrand = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showCategory", type="boolean")
+     */
+    private $showCategory = false;
+
+
 
     /**
      * @var boolean
@@ -1040,6 +1049,22 @@ class EcommerceConfig
     public function setIsAdditionalItem($isAdditionalItem)
     {
         $this->isAdditionalItem = $isAdditionalItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowCategory()
+    {
+        return $this->showCategory;
+    }
+
+    /**
+     * @param bool $showCategory
+     */
+    public function setShowCategory($showCategory)
+    {
+        $this->showCategory = $showCategory;
     }
 
 
