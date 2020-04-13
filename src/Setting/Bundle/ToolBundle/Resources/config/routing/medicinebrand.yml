@@ -6,7 +6,7 @@ medicinebrand_new:
     path:     /new
     defaults: { _controller: "SettingToolBundle:Medicine:new" }
 
-medicine_create:
+medicinebrand_create:
     path:     /create
     defaults: { _controller: "SettingToolBundle:Medicine:create" }
     methods:  POST
@@ -15,7 +15,7 @@ medicinebrand_edit:
     path:     /{id}/edit
     defaults: { _controller: "SettingToolBundle:Medicine:edit" }
 
-medicine_copy:
+medicinebrand_copy:
     path:     /{id}/copy
     defaults: { _controller: "SettingToolBundle:Medicine:copy" }
 
@@ -27,7 +27,7 @@ medicinebrand_status:
     path:     /{id}/status
     defaults: { _controller: "SettingToolBundle:Medicine:status" }
 
-medicine_update:
+medicinebrand_update:
     path:     /{id}/update
     defaults: { _controller: "SettingToolBundle:Medicine:update" }
     methods:  [POST, PUT]

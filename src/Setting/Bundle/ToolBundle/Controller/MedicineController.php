@@ -122,7 +122,7 @@ class MedicineController extends Controller
     private function createCreateForm(MedicineBrand $entity)
     {
         $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('medicine_create', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('medicinebrand_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -164,7 +164,7 @@ class MedicineController extends Controller
     private function createEditForm(MedicineBrand $entity)
     {
         $form = $this->createForm(new MedicineEditType(), $entity, array(
-            'action' => $this->generateUrl('medicine_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('medicinebrand_update', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -228,7 +228,7 @@ class MedicineController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEDICINE_STOCK")
+     * @Secure(roles="ROLE_medicinebrand_STOCK")
      */
 
     public function deleteAction(Request $request , MedicineBrand $entity)
