@@ -41,7 +41,7 @@ class CustomerSignupListener extends BaseSmsAwareListener
         $post = $event->getUser();
         $option = $event->getGlobalOption()->getDomain();
         $mobile = "88".$post->getUsername();
-        $msg = "Your account has been created, User name:$mobile. Thank you for using www.$option";
+        $msg = "Your account has been created, User name:{$post->getUsername()}. Thank you. Be with www.$option";
         $this->gateway->send($msg, $mobile);
 
     }

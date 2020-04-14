@@ -49,7 +49,8 @@
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Grand Total</th>
                                     <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due/Return</th>
+                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Return</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -64,7 +65,8 @@
                                         <td class="numeric" >{{ entity.item }}</td>
                                         <td class="numeric" >{{ entity.grandTotalAmount }}</td>
                                         <td class="numeric" >{{ entity.paidAmount }}</td>
-                                        <td class="numeric" >{% if entity.grandTotalAmount > entity.paidAmount %}-{{ entity.dueAmount }}{% else %}+{{ entity.returnAmount }}{% endif %}</td>
+                                        <td class="numeric" >{{ (entity.grandTotalAmount - entity.paidAmount)|number_format }}</td>
+                                        <td class="numeric" >{{ entity.returnAmount|number_format }}</td>
                                         <td class="" ><span class="btn blue mini">{{ entity.process|capitalize }}</span></td>
                                         <td class="numeric" >
                                             {% set preCondition = {'wfc': 'wfc' ,'confirm':'confirm'} %}

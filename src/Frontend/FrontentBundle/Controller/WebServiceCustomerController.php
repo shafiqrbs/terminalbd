@@ -428,10 +428,10 @@ class WebServiceCustomerController extends Controller
     {
         $valid = 'Your registered mobile number is not valid.';
 
-
         $intlMobile = $request->query->get('mobile',NULL,true);
         $em = $this->getDoctrine()->getManager();
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+
         $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
         /* @var $user User */
             if ($user) {

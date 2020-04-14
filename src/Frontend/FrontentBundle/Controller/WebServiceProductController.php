@@ -775,7 +775,7 @@ class WebServiceProductController extends Controller
             $productName = $ecommerceItem->getWebName();
             $productUnit = (!empty($ecommerceItem->getProductUnit())) ? $ecommerceItem->getProductUnit()->getName() : '';
             $brand = !empty($ecommerceItem->getBrand()) ? $ecommerceItem->getBrand()->getName() : '';
-            $category = !empty($ecommerceItem->getBrand()) ? $ecommerceItem->getBrand()->getName() : '';
+            $category = !empty($ecommerceItem->getCategory()) ? $ecommerceItem->getCategory()->getName() : '';
             $salesPrice = $ecommerceItem->getDiscountPrice() == null ?  $ecommerceItem->getSalesPrice() : $ecommerceItem->getDiscountPrice();
         }elseif($stockItem){
             $productId = $stockItem->getId();

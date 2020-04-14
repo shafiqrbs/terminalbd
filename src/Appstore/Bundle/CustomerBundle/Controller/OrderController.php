@@ -147,9 +147,7 @@ class OrderController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $user,'id' => $id));
-        $paymentEntity = new  OrderPayment();
         $order = $this->createEditForm($entity);
-       // $payment = $this->createEditPaymentForm($paymentEntity,$entity);
         $arrs = array('delivered','returned','cancel','delete');
         if(in_array($entity->getProcess(),$arrs)){
             return $this->redirect($this->generateUrl('order_show',array('id' => $entity->getId(),'shop' => $entity->getGlobalOption()->getUniqueCode())));
@@ -253,7 +251,7 @@ class OrderController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'id' => 'orderProcess',
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

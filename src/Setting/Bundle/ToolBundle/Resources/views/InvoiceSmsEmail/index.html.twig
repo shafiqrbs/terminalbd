@@ -55,8 +55,9 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Sms Quantity</th>
-                                    <th class="numeric" >Total Amount</th>
-                                    <th class="numeric" >Paid Amount</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Paid</th>
+                                    <th class="numeric" >Method</th>
                                     <th class="numeric" >Created By</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
@@ -73,6 +74,7 @@
                                         <td class="numeric" >{{ entity.smsQuantity }}</td>
                                         <td class="numeric" >{{ entity.totalAmount }}</td>
                                         <td class="numeric" >{{ entity.paidAmount }}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.process }}</td>
                                         <td class="numeric" >
@@ -83,7 +85,7 @@
                                             <a title="Are you sure went to delete ?" href="{{ path('invoicesmsemail_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.process == 'In-progress' and app.user.granted("ROLE_SUPER_ADMIN")   %}
-                                                <a href="javascript:" class="btn blue mini approve" data-id="{{ entity.id }}"  data-url="{{ path('invoicesmsemail_approve', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-ok"></i>&nbsp;Approve</a>
+                                                <a href="javascript:" class="btn blue mini approve" data-id="{{ entity.id }}"  data-url="{{ path('invoicesmsemail_approve', { 'id': entity.id }) }}"  ><i class="icon-ok"></i>&nbsp;Approve</a>
                                             {% endif %}
                                         </td>
                                     </tr>

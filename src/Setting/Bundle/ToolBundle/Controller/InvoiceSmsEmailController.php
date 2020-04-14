@@ -40,13 +40,12 @@ class InvoiceSmsEmailController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $option = '';
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+        $option = isset($_REQUEST['option']) ? $_REQUEST['option'] : '';
+        if (empty($option) and $this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array(), array('updated' => 'DESC'));
         }else{
-            $option = $globalOption;
-            $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
+            $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($option);
+            $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array('globalOption' => $option),array('updated'=>'desc'));
         }
         $entities = $this->paginate($entities);
         return $this->render('SettingToolBundle:InvoiceSmsEmail:index.html.twig', array(

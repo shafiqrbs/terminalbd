@@ -20,6 +20,19 @@ function ApproveProcess(){
         });
         e.preventDefault();
     });
+    $(document).on("change", "#ecommerce_order_cashOnDelivery", function(e) {
+        var val = this.checked ? 'hide' : 'show';
+        if(val === "show"){
+            $('#transactionInfo').removeClass('hide').addClass('show');
+        }else{
+            $('#transactionInfo').removeClass('show').addClass('hide');
+        }
+    });
+
+    $('#check').on('change', function() {
+        var val = this.checked ? this.value : '';
+        $('#show').html(val);
+    });
 
     $(document).on("click", " .approve, .confirm, .remove , .process , .remove-tr , .item-disable , .item-remove", function() {
 
