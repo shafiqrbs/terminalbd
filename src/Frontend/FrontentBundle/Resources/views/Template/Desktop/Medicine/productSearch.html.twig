@@ -100,6 +100,8 @@
 
                     <div class="col-md-6 navbar-right">
                         <form class="form-inline" action="{{ app.request.uri }}" method="get" name="form" id="form">
+                            {% set webName = app.request.get('webName') %}
+                            <input type="hidden" name="webName" value="{% if webName is defined and webName is not empty  %}{{webName}}{% endif %}" id="webName" >
                             <div class="form-group paginate-form-group">
                                 <label for="exampleInputName2">Sort By: </label>
                                 {% set sortBy = app.request.get('sortBy') %}

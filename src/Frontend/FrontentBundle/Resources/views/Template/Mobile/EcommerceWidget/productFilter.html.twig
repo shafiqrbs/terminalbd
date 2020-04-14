@@ -8,18 +8,17 @@
 
     </div>
     <div id="showFilter" style="display:none;">
-
         {% set sortBy = app.request.get('sortBy') %}
         <select name="sortBy" id="sortBy" class="input-selector item-select col-xs-12 col-md-12"
                 onchange='this.form.submit()'>
             <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
                 --
             </option>
-            <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
-                    value="product.name=?=ASC">Name (A - Z)
+            <option {% if sortBy == 'product.webName=?=ASC' %} selected="selected" {% endif %}
+                    value="product.webName=?=ASC">Name (A - Z)
             </option>
-            <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
-                    value="product.name=?=DESC">Name (Z - A)
+            <option {% if sortBy == 'product.webName=?=DESC' %} selected="selected" {% endif %}
+                    value="product.webName=?=DESC">Name (Z - A)
             </option>
             <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
                     value="brand.name=?=ASC">Brand (A - Z)

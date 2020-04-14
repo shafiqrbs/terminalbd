@@ -45,6 +45,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('product.brand','brand');
         $qb->leftJoin('product.category','category');
         $qb->leftJoin('product.promotion','promotion');
+        $qb->leftJoin('product.discount','discount');
         $qb->where("product.status = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
