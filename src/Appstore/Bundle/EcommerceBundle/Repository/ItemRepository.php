@@ -28,7 +28,13 @@ class ItemRepository extends EntityRepository
     public function findFrontendProductWithSearch($config, $data , $limit = 0)
     {
 
-
+        $webName        = isset($data['webName'])? $data['webName'] :'';
+        $name           = isset($data['keyword'])? $data['keyword'] :'';
+        $cat            = isset($data['category'])? $data['category'] :'';
+        $brand          = isset($data['brand'])? $data['brand'] :'';
+        $promotion      = isset($data['promotion'])? $data['promotion'] :'';
+        $discount       = isset($data['discount'])? $data['discount'] :'';
+        $tag            = isset($data['tag'])? $data['tag'] :'';
         if (!empty($data['sortBy'])) {
 
             $sortBy = explode('=?=', $data['sortBy']);
@@ -38,6 +44,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.brand','brand');
         $qb->leftJoin('product.category','category');
+        $qb->leftJoin('product.promotion','promotion');
         $qb->where("product.status = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
@@ -74,20 +81,14 @@ class ItemRepository extends EntityRepository
                 )
             );
         }
-        if (!empty($data['webName'])) {
-            $search = strtolower($data['webName']);
-            $qb->leftJoin('product.medicine','medicine');
-            $qb->leftJoin('medicine.medicineGeneric','generic');
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->like('product.slug', "'%". $search . "%'"),
-                    $qb->expr()->like('brand.slug', "'%". $search . "%'"),
-                    $qb->expr()->like('generic.name', "'%". $search . "%'"),
-                    $qb->expr()->like('category.slug', "'%". $search . "%'")
-                )
-            );
+        if (!empty($name)) {
+            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.$name.'%');
         }
-
+        if (!empty($webName)) {
+            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
+        }
 
         if (empty($data['sortBy'])){
             $qb->orderBy('product.webName', 'ASC');
@@ -98,8 +99,6 @@ class ItemRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
         $res = $qb->getQuery();
-      //  echo $res;
-      //  exit;
         return  $res;
 
     }
