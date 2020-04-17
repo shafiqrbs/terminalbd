@@ -39,6 +39,9 @@ class FeatureWidgetType extends AbstractType
                 'required'    => false,
                 'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
                 'empty_value' => '---Select Menu Page---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                ),
                 'property' => 'menu',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
@@ -52,6 +55,9 @@ class FeatureWidgetType extends AbstractType
             ->add('position', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
                 'empty_value' => '---Select Position---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                ),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(

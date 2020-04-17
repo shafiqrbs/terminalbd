@@ -27,7 +27,7 @@ class EcommerceConfigController extends Controller
     private function createEditForm(EcommerceConfig $entity)
     {
         $form = $this->createForm(new EcommerceConfigType(), $entity, array(
-            'action' => $this->generateUrl('ecommerce_config_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('ecommerce_config_update'),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -40,11 +40,12 @@ class EcommerceConfigController extends Controller
      * Edits an existing EcommerceConfig entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('EcommerceBundle:EcommerceConfig')->find($id);
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity EcommerceConfig */
+        $entity = $this->getUser()->getGlobalOption()->getEcommerceConfig();
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find EcommerceConfig entity.');
@@ -53,6 +54,12 @@ class EcommerceConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload()){
+                $entity->removeUpload();
+                $entity->upload();
+            }else{
+                $entity->upload();
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('ecommerce_config_modify'));

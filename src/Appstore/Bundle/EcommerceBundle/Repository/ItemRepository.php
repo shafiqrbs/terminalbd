@@ -32,6 +32,7 @@ class ItemRepository extends EntityRepository
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
+        $brandName      = isset($data['brandName'])? $data['brandName'] :'';
         $promotion      = isset($data['promotion'])? $data['promotion'] :'';
         $discount       = isset($data['discount'])? $data['discount'] :'';
         $tag            = isset($data['tag'])? $data['tag'] :'';
@@ -57,6 +58,15 @@ class ItemRepository extends EntityRepository
         if (!empty($data['promotion'])) {
             $qb->andWhere("product.promotion = :promotion");
             $qb->setParameter('promotion', $data['promotion']);
+        }
+
+        if (!empty($cat)) {
+            $qb->andWhere('category.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($cat).'%');
+        }
+        if (!empty($brandName)) {
+            $qb->andWhere('brand.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($brandName).'%');
         }
 
         if (!empty($data['tag'])) {
@@ -174,6 +184,49 @@ class ItemRepository extends EntityRepository
         return  $res;
 
     }
+
+    public function getFeatureCategoryProduct($config, $cat , $limit = 0)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin('product.category','category');
+        $qb->where("product.status = 1");
+        $qb->andWhere("product.isFeatureCategory = 1");
+        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($cat)) {
+            $qb->andWhere('category.id =:cat');
+            $qb->setParameter('cat', $cat);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+    public function getFeatureBrandProduct($config, $brand , $limit = 0)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin('product.brand','brand');
+        $qb->where("product.status = 1");
+        $qb->andWhere("product.isFeatureBrand = 1");
+        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($brand)) {
+            $qb->andWhere('brand.id =:brand');
+            $qb->setParameter('brand', $brand);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
 
     public function insertCopyPurchaseItem(Item $entity, Item $copyEntity)
     {
@@ -301,8 +354,8 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('category', $cat);
         }
         if (!empty($brand)) {
-            $qb->andWhere("item.brand = :brand");
-            $qb->setParameter('brand', $brand);
+            $qb->andWhere("brand.name LIKE :brand");
+            $qb->setParameter('brand', '%'.$brand.'%');
         }
         if (!empty($promotion)) {
             $qb->andWhere("item.promotion = :promotion");
@@ -1304,6 +1357,40 @@ class ItemRepository extends EntityRepository
         $stockUpdate = "UPDATE medicine_stock SET isWeb = 1 WHERE  medicineConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->bindValue('config', $medicineConfig);
+        $qb1->execute();
+
+    }
+
+    public function updateBrandItem(ItemBrand $brand,$status){
+
+        $stockUpdate = "UPDATE ecommerce_item SET status = {$status} WHERE  brand_id =:brand";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->bindValue('brand', $brand->getId());
+        $qb1->execute();
+
+    }
+
+    public function itemPriceUpdate(GlobalOption $option)
+    {
+        $domain = $this->_em->getRepository('SettingToolBundle:GlobalOption')->find(154);
+        $ecommerce = $option->getMedicineConfig()->getId();
+        $medicine = $option->getMedicineConfig()->getId();
+        $medicineConf = $domain->getMedicineConfig()->getId();
+
+        $stockUpdate = "Update medicine_stock as i
+        JOIN  medicine_stock as s ON i.medicineBrand_id = s.medicineBrand_id AND  s.medicineConfig_id = {$medicineConf} AND s.salesPrice > 0
+        SET i.salesPrice = s.salesPrice 
+        WHERE i.medicineConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->bindValue('config', $medicine);
+        $qb1->execute();
+
+        $itemUpdate = "Update ecommerce_item as i
+        JOIN  medicine_stock as s ON i.medicine_id = s.medicineBrand_id AND  s.medicineConfig_id = $medicine AND s.salesPrice > 0
+        SET i.salesPrice = s.salesPrice
+        WHERE i.ecommerceConfig_id =:ecommerceConfig";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($itemUpdate);
+        $qb1->bindValue('ecommerceConfig', $ecommerce);
         $qb1->execute();
 
     }

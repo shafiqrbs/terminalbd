@@ -532,13 +532,12 @@ class EcommerceWidgetController extends Controller
     public function categoryTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Category $category)
     {
 
-        $data = array('category' => $category->getId());
         $datalimit = $widget->getCategoryLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
         $featureCategory = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->findOneBy(array('globalOption' => $globalOption, 'category' => $category));
 
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureCategoryProduct($config, $category->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
 
@@ -564,11 +563,10 @@ class EcommerceWidgetController extends Controller
     public function brandTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, ItemBrand $brand)
     {
 
-        $data = array('brand' => $brand);
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureBrandProduct($config, $brand->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */

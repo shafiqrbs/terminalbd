@@ -32,6 +32,9 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('ecommerce_item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
+                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                <a class="btn blue" id="priceUpdate" data-url="{{ path('ecommerce_item_price_update') }}"><i class="icon-money"></i>&nbsp; Price Update</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -75,9 +78,12 @@
                                 <tr class="head-grey">
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
+                                    <th class="numeric" >FeatureBrand</th>
                                     <th {% if pagination.isSorted('item.webName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'item.webName') }}{% if( direction == 'desc' and sort == 'item.webName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
 
                                     <th {% if pagination.isSorted('item.category') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Category', 'item.category') }}{% if( direction == 'desc' and sort == 'item.category') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th class="numeric" >FeatureCat</th>
+
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
                                     <th {% if pagination.isSorted('item.discount') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Discount', 'item.discount') }}{% if( direction == 'desc' and sort == 'item.discount') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -90,10 +96,13 @@
                                 <tbody id="purchaseentity" >
                                 {% for entity in pagination %}
                                     <tr class="remove-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.webName }}</td>
+                                        <td class="numeric" ><input type="checkbox" data-url="{{ path('ecommerce_item_checkbox_applicable',{'id':entity.id,'applicable':'IsFeatureBrand'}) }}" name="IsFeatureBrand" class="isApplicable" {% if entity.isFeatureBrand == 1 %} checked="checked" {% endif %} value="{{ entity.isFeatureBrand }}"></td>
+                                        <td><a  data-type="text" class="editable" id="{{ entity.id }}" data-name="WebName" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.webName }}" data-original-title="Enter product name">{{ entity.webName }}</a></td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="Category" data-name="Category" href="#" data-source="{{ path('ecommerce_item_inline_category_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.category is defined and entity.tag is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter category name">{% if entity.category is defined and entity.category is not empty %}{{ entity.category.name }}{% endif %}</a>
                                         </td>
+                                        <td class="numeric" ><input type="checkbox" data-url="{{ path('ecommerce_item_checkbox_applicable',{'id':entity.id,'applicable':'IsFeatureCategory'}) }}" name="IsFeatureCategory" class="isApplicable" {% if entity.isFeatureCategory == 1 %} checked="checked" {% endif %} value="{{ entity.isFeatureCategory }}"></td>
+
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >

@@ -1,9 +1,5 @@
-ecommerce_config:
-    path:     /
-    defaults: { _controller: "EcommerceBundle:EcommerceConfig:index" }
-
 ecommerce_config_update:
-    path:     /{id}/update
+    path:     /update
     defaults: { _controller: "EcommerceBundle:EcommerceConfig:update" }
     methods:  [POST, PUT]
 

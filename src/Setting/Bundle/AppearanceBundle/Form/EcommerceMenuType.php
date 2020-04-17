@@ -81,6 +81,7 @@ class EcommerceMenuType extends AbstractType
                 'property' => 'name',
                 'choices'=> $this->categoryChoiceList()
             ))
+
             ->add('brands', 'entity', array(
 		        'required'    => false,
                 'multiple'    => true,

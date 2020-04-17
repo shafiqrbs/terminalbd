@@ -285,7 +285,7 @@
         {% for key in modules %}
             {% set menuNames = menuNames|merge([key.moduleClass]) %}
         {% endfor %}
-        {% if 'Miss' in menuNames %}
+        {% if 'Miss' in menuNames and is_granted('ROLE_MEDICINE') %}
         <div class="container-fluid">
             <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
                 <div class="row-fluid">

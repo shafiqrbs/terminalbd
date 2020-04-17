@@ -2,7 +2,6 @@
 {% block body %}
     <!-- Header Carousel -->
     <section class="home">
-
         <!-- Header Carousel -->
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
                 {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
@@ -44,5 +43,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    {% set  sliderItems = globalOption.ecommerceConfig.owlProductColumn  %}
     sliderPageOwl(4);
+    productSliderOwl({{ sliderItems }});
 {% endblock %}

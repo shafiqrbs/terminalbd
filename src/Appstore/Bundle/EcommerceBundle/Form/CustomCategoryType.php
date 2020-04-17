@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -76,7 +75,7 @@ class CustomCategoryType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getUseEcommerceItemCategory($this->config);
+        return $categoryTree = $this->em->getFlatEcommerceCategoryTree($this->config);
     }
 
 

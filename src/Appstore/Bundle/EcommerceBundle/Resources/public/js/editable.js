@@ -12,7 +12,7 @@ var EditableInit = function () {
         setTimeout(pageReload, 1000);
     });
     function pageReload() {
-        location.reload();
+        /*location.reload();*/
     }
 
 

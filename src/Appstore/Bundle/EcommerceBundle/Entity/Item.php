@@ -247,6 +247,20 @@ class Item
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isFeatureBrand", type="boolean", nullable = true)
+     */
+    private $isFeatureBrand = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isFeatureCategory", type="boolean", nullable = true)
+     */
+    private $isFeatureCategory = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="status", type="boolean", nullable = true)
      */
     private $status = true;
@@ -1174,7 +1188,7 @@ class Item
     /**
      * @return bool
      */
-    public function isQuantityApplicable()
+    public function getQuantityApplicable()
     {
         return $this->quantityApplicable;
     }
@@ -1217,6 +1231,38 @@ class Item
     public function setItemGroup($itemGroup)
     {
         $this->itemGroup = $itemGroup;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsFeatureBrand()
+    {
+        return $this->isFeatureBrand;
+    }
+
+    /**
+     * @param bool $isFeatureBrand
+     */
+    public function setIsFeatureBrand($isFeatureBrand)
+    {
+        $this->isFeatureBrand = $isFeatureBrand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsFeatureCategory()
+    {
+        return $this->isFeatureCategory;
+    }
+
+    /**
+     * @param bool $isFeatureCategory
+     */
+    public function setIsFeatureCategory($isFeatureCategory)
+    {
+        $this->isFeatureCategory = $isFeatureCategory;
     }
 
 

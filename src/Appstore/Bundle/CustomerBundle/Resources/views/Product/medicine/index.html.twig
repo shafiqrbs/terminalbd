@@ -88,7 +88,7 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <input type="text" id="brand" name="brand"  class="span12 m-wrap select2Brand" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
+                                            <input type="text" id="brandName" name="brandName"  class="span12 m-wrap select2Brand" value="{% if searchForm.item is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
                                         </div>
                                         <div class="span3">
                                             <input type="text" id="category" name="category"  class="leftMargin span12 select2Category m-wrap" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
@@ -113,9 +113,8 @@
                                 <tr class="head-blue">
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
+                                    <th class="numeric" >Category</th>
                                     <th {% if entities.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th class="numeric" >Strength</th>
-                                    <th class="numeric" >Generic</th>
                                     <th {% if entities.isSorted('e.brand') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Brand Name', 'e.brand') }}{% if( direction == 'desc' and sort == 'e.brand') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >MRP</th>
                                     <th class="numeric" >Sales Qnt</th>
@@ -127,13 +126,18 @@
 
                                     {% for entity in entities %}
                                         <tr>
-                                            <td>
-                                                {{ entity.name }}
+                                            <td class="numeric" >
+                                                {% if globalOption.ecommerceConfig.showCategory == 1 and entity.category is not empty %}
+                                                <a href="{{ path('order_product', {'shop': globalOption.slug,'category':entity.category.name}) }}" class="category-name pull-right"> {{ entity.category.name }}</a>
+                                            {% endif %}
                                             </td>
-                                            <td class="numeric" > {% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.strength }}{% endif %}</td>
-                                            <td class="numeric" > {% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineGeneric.name }}{% endif %}</td>
-                                             <td class="numeric" > {% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineCompany.name }} {% elseif entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}
-                                             </td>
+                                            <td>{{ entity.webName }}</td>
+                                            <td class="numeric" >
+                                                {% if globalOption.ecommerceConfig.showBrand == 1 and entity.brand is not empty %}
+                                                <a href="{{ path('order_product', { 'shop': globalOption.slug,'brandName':entity.brand.name}) }}" class="brand-name"> {{ entity.brand.name }}</a>
+                                            {% endif %}
+                                            </td>
+
                                             <td class="numeric">{{ entity.salesPrice|number_format(2) }}</td>
                                             <td class="numeric" >
                                                 <div class="btn-group">
@@ -142,8 +146,9 @@
                                                     <a class="btn blue mini cartSubmit" href="javascript:" data-url="{{ path('order_cart_to_medicine',{'shop':globalOption.slug,'id':entity.id}) }}" data-id="{{ entity.id }}" data-price="{{ entity.salesPrice }}" >Add</a>
                                                     {% endif %}
 
-                                                </div></td>
-                                            <td class="numeric" >{% if entity.unit is not empty %}{{ entity.unit.name }}{% endif %}</td>
+                                                </div>
+                                            </td>
+                                            <td class="numeric" >{% if entity.productUnit is not empty %}{{ entity.productUnit.name }}{% endif %}</td>
                                             <td class="numeric" id="subTotal-{{ entity.id }}" >
                                             {% if cartProducts[entity.id] is defined and cartProducts[entity.id] is not empty  %} {{ (cartProducts[entity.id].quantity * cartProducts[entity.id].price)|number_format(2) }} {% endif %}
                                             </td>

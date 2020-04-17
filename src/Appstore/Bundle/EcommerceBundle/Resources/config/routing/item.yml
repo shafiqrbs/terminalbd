@@ -2,6 +2,10 @@ ecommerce_item:
     path:     /
     defaults: { _controller: "EcommerceBundle:Item:index" }
 
+ecommerce_item_price_update:
+    path:     /price-update
+    defaults: { _controller: "EcommerceBundle:Item:itemPriceUpdate" }
+
 ecommerce_item_show:
     path:     /{id}/show
     defaults: { _controller: "EcommerceBundle:Item:show" }
@@ -55,9 +59,9 @@ ecommerce_item_inline_discount_search:
     options:
            expose: true
 
-ecommerce_item_quantity_applicable:
-    path:     /{id}/quantity-applicable
-    defaults: { _controller: "EcommerceBundle:Item:quantityApplicable" }
+ecommerce_item_checkbox_applicable:
+    path:     /{id}/{applicable}/checkbox-applicable
+    defaults: { _controller: "EcommerceBundle:Item:checkboxApplicable" }
     options:
            expose: true
 

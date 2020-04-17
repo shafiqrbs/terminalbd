@@ -171,6 +171,12 @@ class ItemBrandController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload()){
+                $entity->removeUpload();
+                $entity->upload();
+            }else{
+                $entity->upload();
+            }
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
@@ -183,6 +189,49 @@ class ItemBrandController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
+
+    public function statusAction(ItemBrand $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->getStatus();
+        if ($inventory != $entity->getEcommerceConfig()) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
+        if($status == 1){
+            $entity->setStatus(0);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateBrandItem($entity,0);
+        } else{
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateBrandItem($entity,1);
+            $entity->setStatus(1);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('ecommerce_brand'));
+    }
+
+    public function featureAction(ItemBrand $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->getStatus();
+        if ($inventory != $entity->getEcommerceConfig()) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
+        if($status == 1){
+            $entity->setIsFeature(0);
+        } else{
+            $entity->setIsFeature(1);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('ecommerce_brand'));
+    }
+
 
     /**
      * Deletes a ItemBrand entity.

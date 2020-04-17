@@ -68,6 +68,14 @@ class ItemBrand  implements CodeAwareEntity
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
+
+    /**
      * @Gedmo\Slug(fields={"name"})
      * @Doctrine\ORM\Mapping\Column(length=255)
      */
@@ -94,6 +102,14 @@ class ItemBrand  implements CodeAwareEntity
      * @ORM\Column(name="status", type="boolean")
      */
     private $status = true;
+
+
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="isFeature", type="boolean")
+     */
+    private $isFeature = true;
 
 
 	/**
@@ -381,6 +397,37 @@ class ItemBrand  implements CodeAwareEntity
 		$this->file = null;
 	}
 
+    /**
+     * @return mixed
+     */
+    public function getisFeature()
+    {
+        return $this->isFeature;
+    }
+
+    /**
+     * @param mixed $isFeature
+     */
+    public function setIsFeature($isFeature)
+    {
+        $this->isFeature = $isFeature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
 
 
 }

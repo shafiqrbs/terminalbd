@@ -33,6 +33,10 @@ class EcommerceConfigType extends AbstractType
                     '16'       => 'Per page-16',
                     '20'       => 'Per page-20',
                     '21'       => 'Per page-21',
+                    '24'       => 'Per page-24',
+                    '27'       => 'Per page-27',
+                    '28'       => 'Per page-28',
+                    '30'       => 'Per page-30',
                 ),
             ))
             ->add('perColumn', 'choice', array(
@@ -56,9 +60,28 @@ class EcommerceConfigType extends AbstractType
                 'choices' => array(
                     '3'       => 'Per Column-3',
                     '4'       => 'Per Column-4',
+                    '5'       => 'Per Column-5',
                     '6'       => 'Per Column-6',
                 ),
             ))
+            ->add('titleBar', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'none'       => 'None',
+                    'top'       => 'Top',
+                    'bottom'       => 'Bottom',
+                    'both'       => 'Both',
+                ),
+            ))
+            ->add('paginationShow', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'top'       => 'Top',
+                    'bottom'    => 'Bottom',
+                    'both'      => 'Both',
+                ),
+            ))
+            ->add('file')
             ->add('isAdditionalItem')
             ->add('showSidebar')
             ->add('showBrand')

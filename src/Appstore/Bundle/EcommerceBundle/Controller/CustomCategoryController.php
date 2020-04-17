@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Form\CustomCategoryType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,7 +58,6 @@ class CustomCategoryController extends Controller
         $entity = new Category();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $config =  $this->getUser()->getGlobalOption()->getEcommerceConfig();
@@ -66,11 +66,24 @@ class CustomCategoryController extends Controller
             $entity->setPermission('private');
             $entity->upload();
             $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been created successfully"
-            );
-            return $this->redirect($this->generateUrl('ecommerce_category_new'));
+            try {
+                $em->flush();
+                return $this->redirect($this->generateUrl('ecommerce_category_new'));
+
+            }catch (ForeignKeyConstraintViolationException $e) {
+                $this->get('session')->getFlashBag()->add(
+                'notice',"This category {$entity->getName()} is already exist"
+                );
+            }catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add(
+            'notice', "This category {$entity->getName()} is already exist"
+                );
+            }
+            return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
+                'entity' => $entity,
+                'form'   => $form->createView(),
+            ));
+
         }
 
         return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
@@ -95,7 +108,7 @@ class CustomCategoryController extends Controller
             'action' => $this->generateUrl('ecommerce_category_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

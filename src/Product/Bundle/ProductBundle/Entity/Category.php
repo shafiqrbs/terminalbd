@@ -23,7 +23,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @Gedmo\Tree(type="materializedPath")
  * @ORM\Table(name="categories")
- * @UniqueEntity(fields="name",message="This category name is already exist")
+ * @UniqueEntity(fields="slug",message="This category name is already exist")
  * @ORM\Entity(repositoryClass="Product\Bundle\ProductBundle\Entity\CategoryRepository")
  */
 class Category
@@ -137,7 +137,6 @@ class Category
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="category" )
      **/
     protected $particulars;
-
 
 
     /**

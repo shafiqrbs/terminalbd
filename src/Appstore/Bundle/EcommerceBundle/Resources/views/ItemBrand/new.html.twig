@@ -40,9 +40,7 @@
                                 <a class="btn yellow" href="{{ path('ecommerce_brand') }}"><i class="icon-th-list"></i>&nbsp; Item Brand</a>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="portlet-body">
 
                         <div class="portlet-body form">
@@ -54,13 +52,28 @@
                             <div class="row-fluid">
 
                                 <div class="span8">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Name</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.name) }}
-                                                {{ form_errors(form.name) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Name</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-font"></i>
+                                                        {{ form_widget(form.name) }}
+                                                        {{ form_errors(form.name) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Content</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.content) }}
+                                                    {{ form_errors(form.content) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -39,3 +39,12 @@ ecommerce_brand_update:
 ecommerce_brand_delete:
     path:     /{id}/delete
     defaults: { _controller: "EcommerceBundle:ItemBrand:delete" }
+
+ecommerce_brandm_status:
+    path:     /{id}/product-status
+    defaults: { _controller: "EcommerceBundle:ItemBrand:status" }
+
+ecommerce_brandm_feature:
+    path:     /{id}/product-feature
+    defaults: { _controller: "EcommerceBundle:ItemBrand:feature" }
+

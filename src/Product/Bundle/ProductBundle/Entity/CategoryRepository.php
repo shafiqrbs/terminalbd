@@ -334,20 +334,12 @@ class CategoryRepository extends MaterializedPathRepository
 
 
         $array =array();
-        /*$getCategories = $entity -> getCategories();
-        if(!empty($getCategories) && $entity ){
-            foreach($getCategories as $row ){
-                $array[] = $row->getId();
-            }
-
-        }*/
-
-
         $value ='';
         $value .='<ul>';
         foreach ($categories as $val) {
 
-            $checkd = in_array($val->getId(), $array)? 'checked':'';
+            $checked = "";
+            // $checked = in_array($val->getId(), $array)? 'checked':'';
 
             $name = $val->getName();
             if (!empty($name)) {
@@ -356,10 +348,10 @@ class CategoryRepository extends MaterializedPathRepository
                     $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
 
                     if($subIcon == 1){
-                        $value .= '<li class="dd-item1" ><input type="checkbox" '.$checkd.' name="categories[]" value="'.$val->getId().'" >' . $val->getName();
+                        $value .= '<li class="dd-item1" ><input type="checkbox"  '.$checked.' name="categories[]" value="'.$val->getId().'" >' . $val->getName();
                         $value .= $this->getSelectedCategories($val->getChildren(),$entity);
                     }else{
-                        $value .= '<li class="dd-item1" ><input type="checkbox" '.$checkd.' name="categories[]" value="'.$val->getId().'" >' . $val->getName();
+                        $value .= '<li class="dd-item1" ><input type="checkbox"  '.$checked.' name="categories[]" value="'.$val->getId().'" >' . $val->getName();
                     }
                     $value .= '</li>';
                 }
@@ -672,14 +664,21 @@ class CategoryRepository extends MaterializedPathRepository
             $qb = $this->createQueryBuilder('node');
             $orX = $qb->expr()->orX();
 
-            $categories = $config->getCategoryGrouping()->getCategories();
+            $categories = $this->createQueryBuilder("node")
+                ->where('node.ecommerceConfig = :config')
+                ->andWhere('node.level = :level')
+                ->setParameter('config', $config)
+                ->setParameter('level', 1)
+                ->orderBy('node.level','ASC')
+                ->getQuery()->getResult();
+
             foreach($categories as $category){
                 $orX->add("node.path like '" .$category->getId() . "/%'");
             }
 
             $results = $qb
                 ->orderBy('node.level, node.name', 'ASC')
-                ->where('node.level > 1')
+                ->where('node.level IN (2,3)')
                 ->andWhere($orX)
                 ->getQuery()
                 ->getResult();
@@ -781,13 +780,13 @@ class CategoryRepository extends MaterializedPathRepository
     public function getFlatEcommerceCategoryTree(EcommerceConfig $config)
     {
 
-        $qb = $this->createQueryBuilder("node");
-            $qb->select('node.id as id','node.name as name');
-            $qb->where('node.ecommerceConfig = :option');
-            $qb->setParameter('option', $config);
-            $qb->orderBy('node.level','ASC');
-        $categories = $qb->getQuery()->getArrayResult();
-        return $categories;
+        $categories = $this->createQueryBuilder("node")
+            ->where('node.ecommerceConfig = :config')
+            ->andWhere('node.level = :level')
+            ->setParameter('config', $config)
+            ->setParameter('level', 1)
+            ->orderBy('node.level','ASC')
+            ->getQuery()->getResult();
 
         $arr =array();
         $array =array();
@@ -796,6 +795,7 @@ class CategoryRepository extends MaterializedPathRepository
             /* @var $category Category */
 
             foreach($categories as $category){
+
                 $arr[] = array(
                     'id' => $category->getId(),
                     'name' => $category->getName(),
@@ -808,6 +808,22 @@ class CategoryRepository extends MaterializedPathRepository
         return $array == null ? array() : $array;
     }
 
+    function categoryTree($config){
+
+        $items = array();
+        $sql = "SELECT id,parent,name FROM categories WHERE  ecommerceConfig_id ={$config} AND level >2";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        $items[]=array('value' => '','text'=> '-- Add Category --');
+        if($results){
+            foreach($results as $row){
+                $items[]=array('value' => $row['id'],'text'=> $row['name']);
+            }
+        }
+        $items[]=array('value' => '0','text'=> 'Empty Category');
+        return $items;
+    }
 
     public function searchAutoComplete($inventory,$q)
     {

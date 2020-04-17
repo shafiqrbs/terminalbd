@@ -94,6 +94,20 @@ function ApproveProcess(){
     });
 
 
+    $(document).on("click", "#priceUpdate", function(event) {
+
+        url = $(this).attr("data-url");
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url);
+            }
+        });
+
+    });
+
+
     $(document).on("click", ".isApplicable", function() {
         var url = $(this).attr('data-url');
         $.get(url);

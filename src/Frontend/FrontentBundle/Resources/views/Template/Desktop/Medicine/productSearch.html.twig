@@ -149,10 +149,10 @@
                         <div class="item  list-group-item">
                             <div  class="col-xs-2 col-md-2 text-left add-card" data-match-height="item-product" style="margin-left: -15px">
                                 <a class="img-card" href="javascript:">
-                                    {% if product.medicine is not empty and product.medicine.webPath is not empty and product.webPath is empty %}
-                                        <img class="group list-group-image" style="max-height: 90px; min-height:90px;" alt="medicine" src="{{ image(product.medicine.webPath).resize(90,90, 'white') }}"/>
-                                    {% else %}
-                                        <img class="group list-group-image" style="max-height: 90px; min-height:90px;" alt="item" src="{{ image(product.webPath).resize(90,90) }}"/>
+                                    {% if  product.webPath is not empty %}
+                                        <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(90,90, 'white') }}"/>                     {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                                        <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(90,90, 'white') }}"/>                {% else %}
+                                        <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(90,90) }}"/>
                                     {% endif %}
                                 </a>
                             </div>

@@ -5,6 +5,8 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * EcommerceConfig
@@ -50,6 +52,7 @@ class EcommerceConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
     protected $orders;
+
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
@@ -99,6 +102,20 @@ class EcommerceConfig
      * @ORM\Column(name="menuType", type="text", nullable = true)
      */
     private $menuType = 'Mega';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleBar", type="text", nullable = true)
+     */
+    private $titleBar = 'top';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paginationShow", type="text", nullable = true)
+     */
+    private $paginationShow = 'bottom';
 
     /**
      * @var float
@@ -353,6 +370,15 @@ class EcommerceConfig
     private $isPrintFooter = true;
 
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
 
 
     /**
@@ -1065,6 +1091,118 @@ class EcommerceConfig
     public function setShowCategory($showCategory)
     {
         $this->showCategory = $showCategory;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param ItemBrand $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return ItemBrand
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/ecommerce/'.$this->getId().'/';
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleBar()
+    {
+        return $this->titleBar;
+    }
+
+    /**
+     * @param string $titleBar
+     */
+    public function setTitleBar($titleBar)
+    {
+        $this->titleBar = $titleBar;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaginationShow()
+    {
+        return $this->paginationShow;
+    }
+
+    /**
+     * @param string $paginationShow
+     */
+    public function setPaginationShow($paginationShow)
+    {
+        $this->paginationShow = $paginationShow;
     }
 
 

@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Almendra|Amita|Archivo|Cormorant+Upright|Croissant+One|Dynalight|Elsie|Elsie+Swash+Caps|Felipa|Germania+One|Great+Vibes|Italianno|Katibeh|Lovers+Quarrel|Marko+One|Meie+Script|Miss+Fajardose|Monsieur+La+Doulaise|Mrs+Sheppards|Niconne|Nova+Script|Pattaya|Petrona|Playball|Quintessential|Redressed|Roboto|Rochester|Romanesco|Sail|Saira+Semi+Condensed|Sevillana|Slabo+27px|Snippet|Sofia|Spirax|Stalemate|Tangerine');
 /*============================== Common CSS ===============================*/
+
+@media screen and (max-width: 6000px) and (min-width: 1301px){
+    .container {
+        width: 1300px;
+    }
+}
+
 a{
     color: #ffc400;
     text-decoration: none;
@@ -11,10 +18,10 @@ a:hover , a:visited, a:focus{
 }
 
 .btn{
-    color: #FFFFff!important;
+    color: #FFFFff;
 }
 .btn:hover{
-    color: #FBFBFB !important;
+    color: #FBFBFB;
 }
 
 .margin-bottom{
@@ -1752,13 +1759,6 @@ ul.sign-list > li.total {
 .paginate {
     margin-top:5px !important;
     margin-bottom: 5px !important;
-}
-
-.paginate-footer {
-    margin-top:0 !important;
-    margin-bottom: 20px !important;
-    padding-top: 20px;
-    border-top: 1px solid #1B1B1B;
 }
 
 .product-title{

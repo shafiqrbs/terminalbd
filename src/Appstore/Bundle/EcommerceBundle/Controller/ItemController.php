@@ -51,14 +51,14 @@ class ItemController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
 		$entities = $em->getRepository('EcommerceBundle:Item')->findGoodsWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
-		$promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=> 1,'type'=>'Promotion'));
+		// $promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=> 1,'type'=>'Promotion'));
         if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
             $theme = 'medicine';
         }else{
             $theme = 'index';
         }
 		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
-			'promotions' => $promotions,
+			'promotions' => '',
 			'pagination' => $pagination,
             'searchForm' => $data,
 		));
@@ -136,6 +136,18 @@ class ItemController extends Controller
 			'form'   => $form->createView(),
 		));
 	}
+
+	/**
+	 * Finds and displays a Item entity.
+	 *
+	 */
+	public function itemPriceUpdateAction()
+	{
+        $option = $this->getUser()->getGlobalOption();
+		$this->getDoctrine()->getRepository('EcommerceBundle:Item')->itemPriceUpdate($option);
+		return new Response('success');
+	}
+
 
 	/**
 	 * Finds and displays a Item entity.
@@ -541,17 +553,19 @@ class ItemController extends Controller
 	}
 
 
-	public function quantityApplicableAction(Item $item)
+	public function checkboxApplicableAction(Item $item,$applicable)
 	{
         $em = $this->getDoctrine()->getManager();
-	    if($item->isQuantityApplicable() == 1){
-            $item->setQuantityApplicable(0);
+        $setName = "set{$applicable}";
+        $getName = "get{$applicable}";
+	    if($item->$getName() == 1){
+            $item->$setName(0);
         }else{
-            $item->setQuantityApplicable(1);
+            $item->$setName(1);
         }
         $em->persist($item);
         $em->flush();
-        exit;
+        return new Response('success');
 
 	}
 
@@ -593,14 +607,9 @@ class ItemController extends Controller
     public function categorySelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFlatEcommerceCategoryTree($config);
-        $items = array();
-        $items[]=array('value' => '','text'=> '-- Add Category --');
-        foreach ($categoryTree as $entity):
-            $items[]=array('value' => $entity['id'],'text'=> $entity['name']);
-        endforeach;
-        $items[]=array('value' => '0','text'=> 'Empty Category');
-        return new JsonResponse($items);
+        $categories = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig' => $config ,'level' => 3),array('name'=>'asc'));
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->categoryTree($config->getId());
+        return new JsonResponse($categoryTree);
 
     }
 

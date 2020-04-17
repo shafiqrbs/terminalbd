@@ -77,7 +77,6 @@ class FeatureWidgetController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->insert($entity,$data);
-
             if(!empty($entity->getJsFeature()) and $entity->getJsFeature()->getSlug() == 'feature'){
                 return $this->redirect($this->generateUrl('appearancefeaturewidget_feature',array('id'=>$entity->getId())));
             }else{

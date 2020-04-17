@@ -72,6 +72,13 @@ input[type="color"]:focus,
     margin-top: 0;
 }
 
+.btn-pagination{
+    color: #1b1e21;
+}
+.btn-pagination-active{
+    background:#1b1e21;
+}
+
 /*=================================== HEADER =====================================*/
 
 
@@ -694,7 +701,7 @@ ul.dropdown-cart li .item-right button {
 
 /*=====================================  Slider Widget ============================*/
 .sidebar-top , .sidebar-footer{
-    background-color: #F88216;
+    background-color: #dddddd;
 }
 .sidebar-footer{
     display: table;
@@ -712,11 +719,17 @@ ul.dropdown-cart li .item-right button {
     height: 25px;
 }
 
+.paginate-top{
+    height: 5px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border-bottom: 1px solid #ddd;
+}
 .paginate-footer {
-    margin-top: 0 !important;
-    margin-bottom:0 !important;
-    padding-top: 5px;
-    border-top: 1px solid #F88216;
+    height: 5px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
 }
 
 .pagination{
@@ -728,7 +741,8 @@ ul.dropdown-cart li .item-right button {
 }
 
 .paginate{
-    background: #F88216;
+    color: #333333;
+    background: #FFFFff;
 }
 .input-selector{
     height: 33px !important;
@@ -823,7 +837,6 @@ div.treeview, .treeview ul {
     text-decoration: none;
     color:inherit;
     border:none;
-    background:transparent;
     margin:0px 0px 0px 0px;
     padding:0px 0px 0px 0px;
     outline: 0;

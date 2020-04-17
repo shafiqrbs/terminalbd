@@ -87,62 +87,78 @@
     <section>
         <div class="container " >
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
-            <div class="col-md-3 sidebar-top" >
-                <div class="row">
-                    <div class="col-md-12 paginate">
-                        <div class="btn-group pull-left">
-                            <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE</div>
+            <div class="col-md-3 " >
+                {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+                    <div class="row sidebar-top">
+                        <div class="col-md-12 paginate">
+                            <div class="btn-group pull-left">
+                                <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
             {% endif %}
-
+            {% if app.request.cookies.has('productList') %}
+                {% set cookieVal = app.request.cookies.get('productList') %}
+            {% else %}
+                {% set cookieVal = 'faThLarge' %}
+            {% endif %}
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
-                <div class="row paginate">
-                   <div class="col-md-6">
-                        <div class="btn-group pull-left">
-                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}ALL PRODUCT{% endif %}</div>
-                   </div>
-                    </div>
+                {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+                    <div class="row paginate">
+                        <div class="col-md-6">
+                            <div class="btn-group pull-left">
+                                <div style="float: right">
+                                    <button type="button" class="btn btn-cookie {% if cookieVal != 'faThLarge' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faThLarge"
+                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                                        <i class="fa fa-th"></i></button>
 
-                    <div class="col-md-6 navbar-right">
-                        <div style="float: right">
-                            <button type="button" class="btn gray-dark-bg  cyan-font btn-cookie" id="faThLarge"
-                                    data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
-                                <i class="fa fa-th"></i></button>
-
-                            <button type="button" class="btn gray-dark-bg danger-font btn-cookie" id="list-line"
-                                    data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
-                                <i class="fa fa-th-list"></i></button>
-                        </div>
-                        <form class="form-inline">
-                            <div class="form-group paginate-form-group">
-                                <label for="exampleInputName2">Sort By: </label>
-                                {% set sortBy = app.request.get('sortBy') %}
-                                <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()'>
-                                    <option value="">-- Sorting by --</option>
-                                    <option {% if sortBy == 'product.webName=?=ASC'  %} selected="selected" {% endif %} value="product.webName=?=ASC">Name (A - Z)</option>
-                                    <option {% if sortBy == 'product.webName=?=DESC'  %} selected="selected" {% endif %} value="product.webName=?=DESC">Name (Z - A)</option>
-                                    <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
-                                    <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
-                                    <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
-                                    <option {% if sortBy == 'product.salesPrice=?=DESC'  %} selected="selected" {% endif %} value="product.salesPrice=?=DESC">Price (High &gt; Low)</option>
-                                </select>
+                                    <button type="button" class="btn btn-cookie {% if cookieVal != 'list-line' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="list-line"
+                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                                        <i class="fa fa-th-list"></i></button>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+
+                        <div class="col-md-6 navbar-right">
+
+                            <form class="form-inline">
+                                <div class="form-group paginate-form-group">
+                                    <label for="exampleInputName2">Sort By: </label>
+                                    {% set sortBy = app.request.get('sortBy') %}
+                                    <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()' >
+                                        <option value="">-- Sorting by --</option>
+                                        <option {% if sortBy == 'product.webName=?=ASC'  %} selected="selected" {% endif %} value="product.webName=?=ASC">Name (A - Z)</option>
+                                        <option {% if sortBy == 'product.webName=?=DESC'  %} selected="selected" {% endif %} value="product.webName=?=DESC">Name (Z - A)</option>
+                                        <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
+                                        <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
+                                        <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
+                                        <option {% if sortBy == 'product.salesPrice=?=DESC'  %} selected="selected" {% endif %} value="product.salesPrice=?=DESC">Price (High &gt; Low)</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                    <div class="paginate-top"></div>
+                {% endif %}
+                {% if globalOption.ecommerceConfig.paginationShow == "top" or globalOption.ecommerceConfig.paginationShow == "both"  %}
+                    <div class="row" style="margin-bottom: 15px">
+                        <div class="col-md-12">  <div class="pull-right"> {{ knp_pagination_render(products) }} </div> </div>
+                    </div>
+                {% endif %}
             </div>
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
-                <div class="col-md-3 sidebar-top" >
-                    <div class="row">
+                <div class="col-md-3" >
+                    {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+                    <div class="row sidebar-top">
                         <div class="col-md-12 paginate">
                             <div class="btn-group pull-left">
                                 <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE RESULTS</div>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>
@@ -155,12 +171,8 @@
                     {{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/sidebar.html.twig')}}
                 </div>
             {% endif %}
-            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content" style="margin-top: 30px"  >
-                {% if app.request.cookies.has('productList') %}
-                    {% set cookieVal = app.request.cookies.get('productList') %}
-                {% else %}
-                    {% set cookieVal = 'faThLarge' %}
-                {% endif %}
+            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content"   >
+
                 <div class="row row-flex">
                     {% if cookieVal == 'faThLarge' %}
                     {% for product in products %}
@@ -171,9 +183,10 @@
 
                                         {% if product.discount is not empty  %}<a class="product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                         <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
-                                            {% if product.medicine is not empty and product.medicine.webPath is not empty and product.webPath is empty %}
-                                            <img alt="medicine" src="{{ image(product.medicine.webPath).resize(350,350, 'white') }}"/>                        {% else %}
-                                            <img alt="item" src="{{ image(product.webPath).resize(350,350) }}"/>
+                                            {% if  product.webPath is not empty %}
+                                                <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(600,600, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                                                <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(600,600, 'white') }}"/>            {% else %}
+                                                <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(600,600) }}"/>
                                             {% endif %}
                                         </a>
 
@@ -222,9 +235,10 @@
                                 <div class="item  list-group-item">
                                     <div  class="col-xs-2 col-md-2 text-left add-card" data-match-height="item-product" style="margin-left: -15px">
                                         <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">
-                                            {% if product.medicine is not empty and product.webPath is empty %}
-                                                <img src="{{ image(product.medicine.webPath).resize(120,120, 'white') }}"/>                                      {% else %}
-                                                <img src="{{ image(product.webPath).resize(120,120) }}"/>
+                                            {% if  product.webPath is not empty %}
+                                                <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(120,120, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                                                <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(120,120, 'white') }}"/>            {% else %}
+                                                <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(120,120) }}"/>
                                             {% endif %}
                                         </a>
                                     </div>
@@ -279,27 +293,80 @@
             <div class="clearfix"></div>
         </div>
     </section>
-
     <div class="clearfix"></div>
-    <section>
-        <div class="container " >
-            <div class="col-md-12">
-                <div class="row paginate-footer" >
-                    {% if app.request.get('page') is not empty %}
-                    {% set page = app.request.get('page') %}
-                    {% else %}
-                    {% set page = 1 %}
+        <section>
+            <div class="container " >
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
+                    <div class="col-md-3" >&nbsp;</div>
+                {% endif %}
+
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
+                    {% if globalOption.ecommerceConfig.titleBar == "bottom" or  globalOption.ecommerceConfig.titleBar == "both" %}
+
+                    <div class="row paginate">
+                        <div class="col-md-6">
+                            <div class="btn-group pull-left">
+                                <div style="float: right">
+                                    <button type="button" class="btn btn-cookie {% if cookieVal != 'faThLarge' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faThLarge"
+                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                                        <i class="fa fa-th"></i></button>
+
+                                    <button type="button" class="btn btn-cookie {% if cookieVal != 'list-line' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="list-line"
+                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                                        <i class="fa fa-th-list"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 navbar-right">
+
+                            <form class="form-inline">
+                                <div class="form-group paginate-form-group">
+                                    <label for="exampleInputName2">Sort By: </label>
+                                    {% set sortBy = app.request.get('sortBy') %}
+                                    <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()'>
+                                        <option value="">-- Sorting by --</option>
+                                        <option {% if sortBy == 'product.webName=?=ASC'  %} selected="selected" {% endif %} value="product.webName=?=ASC">Name (A - Z)</option>
+                                        <option {% if sortBy == 'product.webName=?=DESC'  %} selected="selected" {% endif %} value="product.webName=?=DESC">Name (Z - A)</option>
+                                        <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
+                                        <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
+                                        <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
+                                        <option {% if sortBy == 'product.salesPrice=?=DESC'  %} selected="selected" {% endif %} value="product.salesPrice=?=DESC">Price (High &gt; Low)</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     {% endif %}
-                    <div class="col-md-3  navbar-left" style="line-height: 35px"><a href="javascript:">Total no of products: {{ products.getTotalItemCount }} out of {{ page * products|length }}</a></div>
-                    <div class="col-md-9">
-                        <div class="pull-right">
-                            {{ knp_pagination_render(products) }}
+                </div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
+                    <div class="col-md-3 sidebar-top" >&nbsp;</div>
+                {% endif %}
+            </div>
+        </section>
+    <div class="clearfix"></div>
+        {% if globalOption.ecommerceConfig.paginationShow == "bottom" or  globalOption.ecommerceConfig.paginationShow == "both" %}
+            <section>
+                <div class="container " >
+                <div class="col-md-12">
+                    <div class="paginate-footer"></div>
+                    <div class="row" >
+                        {% if app.request.get('page') is not empty %}
+                        {% set page = app.request.get('page') %}
+                        {% else %}
+                        {% set page = 1 %}
+                        {% endif %}
+                        <div class="col-md-3  navbar-left" style="line-height: 35px"><a href="javascript:">Total no of products: {{ products.getTotalItemCount }} out of {{ page * products|length }}</a></div>
+                        <div class="col-md-9">
+                            <div class="pull-right">
+                                {{ knp_pagination_render(products) }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            </section>
+        {% endif %}
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}

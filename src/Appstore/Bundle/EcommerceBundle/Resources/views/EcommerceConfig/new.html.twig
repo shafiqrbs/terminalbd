@@ -14,11 +14,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('ecommerce_config_modify') }}">Manage E-commerce Config</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">Manage E-commerce Config new/edit</a></li>
+                    <li><a href="#">Manage E-commerce Config</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -47,7 +43,7 @@
 
                             <div class="clearfix"><br/></div>
                             <div class="row-fluid">
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="notes">Menu Type</label>
                                         <div class="controls">
@@ -56,7 +52,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3 ">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="notes">Slider column</label>
                                         <div class="controls">
@@ -65,7 +61,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3 ">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="notes">Per Column</label>
                                         <div class="controls">
@@ -74,12 +70,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3 ">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="notes">Per Page</label>
                                         <div class="controls">
                                             {{ form_widget(form.perPage) }}
                                             {{ form_errors(form.perPage) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Title Bar</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.titleBar) }}
+                                            {{ form_errors(form.titleBar) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="titleBar">Pagination Show</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.paginationShow) }}
+                                            {{ form_errors(form.paginationShow) }}
                                         </div>
                                     </div>
                                 </div>
@@ -247,68 +261,101 @@
                             </div>
                             <div class="clearfix"><br/> </div>
                             <div class="row-fluid">
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="isPrintHeader">Print Head {{ form_widget(form.isPrintHeader) }}
-                                            {{ form_errors(form.isPrintHeader) }}
-                                        </label>
+                                <div class="span8">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="isPrintHeader">Print Head {{ form_widget(form.isPrintHeader) }}
+                                                    {{ form_errors(form.isPrintHeader) }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="isPrintFooter">Print Bottom {{ form_widget(form.isPrintFooter) }}
+                                                    {{ form_errors(form.isPrintFooter) }}</label>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="printBy">Print By {{ form_widget(form.printBy) }}
+                                                    {{ form_errors(form.printBy) }}</label>
+                                            </div>
+                                        </div>
+
+
                                     </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="isPrintFooter">Print Bottom {{ form_widget(form.isPrintFooter) }}
-                                            {{ form_errors(form.isPrintFooter) }}</label>
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="notes">Printer</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.printer) }}
+                                                    {{ form_errors(form.printer) }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="notes">Left Margin</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.printLeftMargin) }}px
+                                                    {{ form_errors(form.printLeftMargin) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="printTopMargin">Top Margin</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.printTopMargin) }}px
+                                                    {{ form_errors(form.printTopMargin) }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label" for="printMarginBottom">Bottom Margin</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.printMarginBottom) }}px
+                                                    {{ form_errors(form.printMarginBottom) }}
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" for="printBy">Print By {{ form_widget(form.printBy) }}
-                                            {{ form_errors(form.printBy) }}</label>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="notes">Printer</label>
+                                        <label class="control-label" >Product Default Image</label>
                                         <div class="controls">
-                                            {{ form_widget(form.printer) }}
-                                            {{ form_errors(form.printer) }}
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="notes">Left Margin</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.printLeftMargin) }}px
-                                            {{ form_errors(form.printLeftMargin) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span8"></div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="printTopMargin">Top Margin</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.printTopMargin) }}px
-                                            {{ form_errors(form.printTopMargin) }}
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="printMarginBottom">Bottom Margin</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.printMarginBottom) }}px
-                                            {{ form_errors(form.printMarginBottom) }}
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div  class="fileupload-new thumbnail">
+                                                    {% if(entity.webPath) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/220x160/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        {{ form_widget(form.file) }}
+                                                        {{ form_errors(form.file) }}
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="clearfix"><br/></div>
                             <!--/span-->
                             <div class="form-actions portlet box grey">
@@ -319,8 +366,6 @@
                             {{ form_end(form) }}
                             <!-- END FORM-->
                         </div>
-                        <br/>
-                        <br/>
                     </div>
                 </div>
             </div>

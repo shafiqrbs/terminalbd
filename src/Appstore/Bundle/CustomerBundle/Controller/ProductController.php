@@ -68,11 +68,7 @@ class ProductController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
         $config = $globalOption->getEcommerceConfig();
         $domainType =  $globalOption->getDomainType();
-        if($domainType == 'medicine'){
-            $entities = $em->getRepository('MedicineBundle:MedicineStock')->findEcommerceWithSearch($globalOption->getMedicineConfig(),$data);
-        }else{
-            $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
-        }
+        $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         if( $globalOption->getDomainType() == 'medicine' ) {
             $detect = new MobileDetect();
