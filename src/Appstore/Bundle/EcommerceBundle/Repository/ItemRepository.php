@@ -122,18 +122,24 @@ class ItemRepository extends EntityRepository
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
-
         $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.masterItem",'masterItem');
-        $qb->leftJoin('product.goodsItems','goodsitems');
-        $qb->where("product.isWeb = 1");
-        $qb->andWhere("product.status = 1");
+        $qb->leftJoin("product.category",'category');
+        $qb->leftJoin('product.brand','brand');
+        $qb->leftJoin('product.promotion','promotion');
+        $qb->leftJoin('product.discount','discount');
+        $qb->leftJoin('product.tag','tag');
+        $qb->where("product.status = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
 
         if (!empty($data['brand'])) {
             $qb->andWhere("product.brand IN(:brand)");
             $qb->setParameter('brand',$data['brand']);
+        }
+
+         if (!empty($data['category'])) {
+            $qb->andWhere("product.category IN(:category)");
+            $qb->setParameter('category',array_values($data['category']));
         }
 
         if (!empty($data['size'])) {
@@ -539,17 +545,22 @@ class ItemRepository extends EntityRepository
         $qb->join('e.brand','brand');
         $qb->select('brand.id as id');
         $qb->addSelect('brand.name as name');
+        $qb->addSelect('count(e.id) as itemQnt');
         $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->andWhere('brand.status =1');
         $qb->groupBy('brand.id');
         $qb->orderBy('brand.name', 'ASC');
         $res = $qb->getQuery()->getArrayResult();
-        $value ='';
-        $value .='<ul class="ul-check-list-brand">';
+        $value ="";
+        $value .="<ul class='ul-check-list-brand'>";
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $brands) ? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label" >'.$val['name']. '</span></li>';
+            $checked = in_array($val['id'], $brands) ? 'checked':'';
+            $value.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='brands[]' {$checked} id='brand-{$val["id"]}' value='{$val["id"]}'>
+                <label for='brand-{$val["id"]}'></label>
+                </div><a class='' href='/product/brand/{$val["id"]}'>{$val["name"]}({$val['itemQnt']})</a></li>";
         }
-        $value .='</ul>';
+        $value .="</ul>";
         return $value;
 
     }
@@ -563,17 +574,21 @@ class ItemRepository extends EntityRepository
         $qb->select('discount.id as id');
         $qb->addSelect('discount.name as name');
         $qb->where('e.ecommerceConfig ='.$config->getId());
+        $qb->andWhere('discount.status=1');
         $qb->groupBy('discount.id');
         $qb->orderBy('discount.name', 'ASC');
         $res = $qb->getQuery()->getArrayResult();
 
-        $value ='';
-        $value .='<ul class="ul-check-list">';
+        $value ="";
+        $value .="<ul class='ul-check-list'>";
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $discounts )? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="discount[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+            $checked = in_array($val['id'], $discounts )? 'checked':'';
+            $value.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='discounts[]' {$checked} id='discount-{$val["id"]}' value='{$val["id"]}'>
+                <label for='category-{$val["id"]}'></label>
+                </div><a class='' href='/product/discount/{$val["id"]}'>{$val["name"]}</a></li>";
         }
-        $value .='</ul>';
+        $value .="</ul>";
         return $value;
 
     }

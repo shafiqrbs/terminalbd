@@ -607,8 +607,9 @@ class ItemController extends Controller
     public function categorySelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $categories = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig' => $config ,'level' => 3),array('name'=>'asc'));
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->categoryTree($config->getId());
+        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($config->getId());
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->selectCategoryTree($cats);
+      //  $categoryTree = array('value' => '','text'=> '-- Add Category --');
         return new JsonResponse($categoryTree);
 
     }

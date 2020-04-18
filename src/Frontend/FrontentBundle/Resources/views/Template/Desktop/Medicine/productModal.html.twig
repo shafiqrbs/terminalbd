@@ -6,17 +6,19 @@
     <div class="row">
         <div class="col-xs-5 col-md-5">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner" style="height:275px" role="listbox">
+                <div class="carousel-inner" role="listbox">
                     <div class="item active">
-                        {% if product.medicine is not empty and product.webPath is empty %}
+                        {% if  product.webPath is not empty %}
+                            <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(450,450) }}{% else %}{{ image(product.webPath).resize(450,450) }}{% endif %}" alt="{{ product.webName }}">
+                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
                             <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.medicine.webPath).resize(450,450) }}{% else %}{{ image(product.medicine.webPath).resize(450,450) }}{% endif %}" alt="{{ product.webName }}">
                         {% else %}
-                            <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(450,450) }}{% else %}{{ image(product.webPath).resize(450,450) }}{% endif %}" alt="{{ product.webName }}">
+                            <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).forceresize(275,275) }}"/>
                         {% endif %}
                     </div>
                     {% if(product.itemGalleries) %}
                         {% for photo in product.itemGalleries %}
-                            <div class="item"><img class="img-responsive "  data-match-height="image-gallery"  src="{{ image(photo.getAbsolutePath(product.ecommerceConfig.globalOption.id,product.id)).resize(450,450) }}" alt="" data-description="{{ product.webName }}"> </div>
+                            <div class="item"><img class="img-responsive "  data-match-height="image-gallery"  src="{{ image(photo.getAbsolutePath(product.ecommerceConfig.globalOption.id,product.id)).resize(275,275) }}" alt="" data-description="{{ product.webName }}"> </div>
                         {% endfor %}
                     {% endif %}
                 </div>

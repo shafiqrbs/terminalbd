@@ -90,7 +90,6 @@ $('.discountProductLeft .img-card-large img').css({
 
 $(document).on( "click", "#filter", function(e){
 
-    $('#productFilter').submit();
 
 });
 
@@ -126,6 +125,12 @@ $(document).on( "click", "#filter", function(e){
     $('#productFilter').slideToggle('2000');
     $("span", this).toggleClass("fa-close fa-filter");
 });
+
+$(document).on( "click", ".upload-pres", function(e){
+    $('#uploadPrescription').slideToggle('2000');
+    $("span", this).toggleClass("fa-close fa-camera");
+});
+
 
 
 $(document).on( "click", ".showCartItem", function(e){

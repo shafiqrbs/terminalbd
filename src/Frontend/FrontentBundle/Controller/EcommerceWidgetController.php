@@ -173,11 +173,17 @@ class EcommerceWidgetController extends Controller
             } else {
                 $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
             }
+            $post = $_REQUEST;
+            $catSelected = isset($post['category']) ? $post['category']:'';
+            $data['category']= isset($post['categories']) ? $post['categories']:'';
+            $data['brand']= isset($post['brands']) ? $post['brands']:'';
+            $data['tag']= isset($post['tags']) ? $post['tags']:'';
+            $data['promotion']= isset($post['promotions']) ? $post['promotions']:'';
+            $data['discount']= isset($post['discounts']) ? $post['discounts']:'';
 
-            $inventoryCat = $this->getDoctrine()->getRepository('EcommerceBundle:ItemCategoryGrouping')->findOneBy(array('ecommerceConfig' => $inventory));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventory->getId());
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats,$searchForm);
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$searchForm);
+            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryTreeForMobile($cats,$catSelected);
             $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupBrands($inventory, $searchForm);
             $discountTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupDiscount($inventory, $searchForm);
             $promotionTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findPromotionTree($inventory, $searchForm);
@@ -259,7 +265,7 @@ class EcommerceWidgetController extends Controller
     public function featureWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
     {
 
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'widgetFor'=>'e-commerce', 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
+        $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'widgetFor'=>'e-commerce', 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
 
         /* Device Detection code desktop or mobile */
 
@@ -281,7 +287,7 @@ class EcommerceWidgetController extends Controller
 
         $data = array('category' => $category);
         $inventory = $globalOption->getInventoryConfig()->getId();
-        $categoryProducts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit=12);
+        $categoryProducts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($inventory,$data,$limit = 12);
 
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();

@@ -110,16 +110,15 @@ class WebServiceProductController extends Controller
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
-            $post = array();
-            $post = empty($_REQUEST['item']) ? '' : $_REQUEST['item'];
-            $data = $_REQUEST;
-            $data['category']= isset($post['category']) ? $post['category']:'';
-            $data['brand']= isset($post['brand']) ? $post['brand']:'';
-            $data['name']= isset($post['webName']) ? $post['webName']:'';
-
+            $post = $_REQUEST;
+            $data['category']= isset($post['categories']) ? $post['categories']:'';
+            $data['brand']= isset($post['brands']) ? $post['brands']:'';
+            $data['tag']= isset($post['tags']) ? $post['tags']:'';
+            $data['promotion']= isset($post['promotions']) ? $post['promotions']:'';
+            $data['discount']= isset($post['discounts']) ? $post['discounts']:'';
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config->getId(),$data);
 
             /* Device Detection code desktop or mobile */
 

@@ -236,16 +236,15 @@ class CategoryRepository extends MaterializedPathRepository
 
 
 
-    function getParentId($inventoryCat) {
+    function getParentId($inventory) {
 
         $cats = array();
-        if(!empty($inventoryCat)){
-	        foreach ( $inventoryCat->getCategories() as $cat ){
-		        $cats[] = $cat->getId();
-	        }
+        if(!empty($inventory)){
 	        $qb = $this->createQueryBuilder('category');
-	        $qb->where('category.parent IN(:cats)');
-	        $qb->setParameter('cats',array_values($cats));
+	        $qb->where('category.status = 1');
+	        $qb->andWhere('category.level = 1');
+	        $qb->andWhere('category.ecommerceConfig =:config');
+	        $qb->setParameter('config',$inventory);
 	        $qb->orderBy('category.name','ASC');
 	        $result = $qb->getQuery()->getResult();
 	        return $result;
@@ -269,14 +268,19 @@ class CategoryRepository extends MaterializedPathRepository
             $checked = in_array($row->getId() , $categories) ? 'checked':'';
 
             if (!empty($row->getChildren())) {
-                $result.= '<li><input type="checkbox" class="" '.$checked.'  id="categories" name="categories[]" value="'.$row->getId().'"><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a>';
-                $result.= $this->productCategorySidebar($row->getChildren());
+                $result.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='categories[]' {$checked} id='category-{$row->getId()}' value='{$row->getId()}'>
+                <label for='category-{$row->getId()}'></label>
+                </div><a class='' href='/product/category/{$row->getId()}'>{$row->getName()}</a>";
+                $result.= $this->productCategorySidebar($row->getChildren(),$categories);
                 $result.= "</li>";
             }else {
-                $result .= '<li><input type="checkbox" class="" '.$checked.' id="categories" name="categories[]" value="'.$row->getId().'"><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a></li>';
+                $result.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='categories[]' {$checked} id='category-{$row->getId()}' value='{$row->getId()}'>
+                <label for='category-{$row->getId()}'></label>
+                </div><a class='' href='/product/category/{$row->getId()}'>{$row->getName()}</a></li>";
             }
         }
-
         $result.= "</ul>";
         return $result;
 
@@ -811,7 +815,7 @@ class CategoryRepository extends MaterializedPathRepository
     function categoryTree($config){
 
         $items = array();
-        $sql = "SELECT id,parent,name FROM categories WHERE  ecommerceConfig_id ={$config} AND level >2";
+        $sql = "SELECT id,parent,name FROM categories WHERE  ecommerceConfig_id ={$config} AND level > 2";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();
         $results =  $stmt->fetchAll();
@@ -821,9 +825,38 @@ class CategoryRepository extends MaterializedPathRepository
                 $items[]=array('value' => $row['id'],'text'=> $row['name']);
             }
         }
-        $items[]=array('value' => '0','text'=> 'Empty Category');
+        $items[] = array('value' => '0','text'=> 'Empty Category');
         return $items;
     }
+
+    public function selectCategoryTree( $category , $spacing = '--', $items = '' ) {
+
+        if (!is_array($items))
+            $items = array();
+        foreach($category as $row){
+            $items[] = array("value" => $row->getId(), "text" => $spacing . $row->getName());
+            if($row->getChildren()){
+                $items = $this->selectCategoryTree($row->getChildren(), $spacing . '--', $items);
+            }
+        }
+        return $items;
+
+    }
+
+    public function getCategoryTreeForMobile( $category , $selected, $spacing = '--', $items = '' ) {
+
+        foreach($category as $row){
+            $selected = ($selected === $row->getId() )? 'selected':'';
+            $items .= "<option  $selected  value='{$row->getId()}'>{$spacing}{$row->getName()}</option>";
+            if($row->getChildren()){
+                $items = $this->getCategoryTreeForMobile($row->getChildren(), $selected, $spacing . '--', $items);
+            }
+        }
+        return $items;
+
+    }
+
+
 
     public function searchAutoComplete($inventory,$q)
     {
