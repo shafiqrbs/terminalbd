@@ -18,6 +18,7 @@ class TemplateCustomizeType extends AbstractType
         $builder
 
             ->add('showSocialIcon')
+            ->add('mobileFooter')
             ->add('mobileLogin')
             ->add('contactForm')
             ->add('registrationForm')
