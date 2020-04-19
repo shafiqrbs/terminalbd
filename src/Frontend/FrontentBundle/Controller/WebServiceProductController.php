@@ -111,7 +111,9 @@ class WebServiceProductController extends Controller
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
 
             $post = $_REQUEST;
-            $data['category']= isset($post['categories']) ? $post['categories']:'';
+            $data['webName']= isset($post['webName']) ? $post['webName']:'';
+            $data['category']= isset($post['category']) ? $post['category']:'';
+            $data['categories']= isset($post['categories']) ? $post['categories']:'';
             $data['brand']= isset($post['brands']) ? $post['brands']:'';
             $data['tag']= isset($post['tags']) ? $post['tags']:'';
             $data['promotion']= isset($post['promotions']) ? $post['promotions']:'';

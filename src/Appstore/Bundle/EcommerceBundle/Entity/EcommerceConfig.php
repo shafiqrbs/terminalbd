@@ -176,6 +176,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="searchCategory", type="boolean")
+     */
+    private $searchCategory = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showCategory", type="boolean")
      */
     private $showCategory = false;
@@ -1203,6 +1210,22 @@ class EcommerceConfig
     public function setPaginationShow($paginationShow)
     {
         $this->paginationShow = $paginationShow;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchCategory()
+    {
+        return $this->searchCategory;
+    }
+
+    /**
+     * @param bool $searchCategory
+     */
+    public function setSearchCategory($searchCategory)
+    {
+        $this->searchCategory = $searchCategory;
     }
 
 

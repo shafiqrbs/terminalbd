@@ -77,6 +77,9 @@ class FeatureWidgetController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->insert($entity,$data);
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
             if(!empty($entity->getJsFeature()) and $entity->getJsFeature()->getSlug() == 'feature'){
                 return $this->redirect($this->generateUrl('appearancefeaturewidget_feature',array('id'=>$entity->getId())));
             }else{
@@ -86,8 +89,6 @@ class FeatureWidgetController extends Controller
         }
         $global = $this->getUser()->getGlobalOption();
         $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->findBy(array('globalOption' => $global));
-
-
         return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
             'entity' => $entity,
             'features' => $features,
@@ -151,11 +152,8 @@ class FeatureWidgetController extends Controller
             throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('SettingAppearanceBundle:FeatureWidget:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -221,8 +219,6 @@ class FeatureWidgetController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
@@ -245,7 +241,7 @@ class FeatureWidgetController extends Controller
             'features'      => $features,
             'featureIds'      => '',
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+
         ));
     }
 
@@ -263,7 +259,7 @@ class FeatureWidgetController extends Controller
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been deleted successfully"
+                'error',"Data has been deleted successfully"
             );
         }else{
             $this->get('session')->getFlashBag()->add(
@@ -273,22 +269,6 @@ class FeatureWidgetController extends Controller
         return $this->redirect($this->generateUrl('appearancefeaturewidget'));
     }
 
-    /**
-     * Creates a form to delete a FeatureWidget entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('appearancefeaturewidget_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
-    }
 
     /**
      * Status a news entity.
@@ -296,8 +276,6 @@ class FeatureWidgetController extends Controller
      */
     public function statusAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->find($id);

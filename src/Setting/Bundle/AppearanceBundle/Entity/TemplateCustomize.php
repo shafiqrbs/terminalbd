@@ -141,6 +141,14 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="mobileFooter", type="boolean", nullable=true)
+     */
+    private $mobileFooter = true;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="contactForm", type="boolean", nullable=true)
      */
     private $contactForm = false;
@@ -3452,6 +3460,22 @@ class TemplateCustomize
     public function setMobileFooterAnchorColorHover($mobileFooterAnchorColorHover)
     {
         $this->mobileFooterAnchorColorHover = $mobileFooterAnchorColorHover;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileFooter()
+    {
+        return $this->mobileFooter;
+    }
+
+    /**
+     * @param bool $mobileFooter
+     */
+    public function setMobileFooter($mobileFooter)
+    {
+        $this->mobileFooter = $mobileFooter;
     }
 
 

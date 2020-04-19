@@ -122,6 +122,10 @@ class ItemRepository extends EntityRepository
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
+
+        $webName        = isset($data['webName'])? $data['webName'] :'';
+        $category        = isset($data['category'])? $data['category'] :'';
+
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin("product.category",'category');
         $qb->leftJoin('product.brand','brand');
@@ -132,35 +136,45 @@ class ItemRepository extends EntityRepository
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
 
-        if (!empty($data['brand'])) {
-            $qb->andWhere("product.brand IN(:brand)");
-            $qb->setParameter('brand',$data['brand']);
+        if (!empty($webName)) {
+            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
         }
 
-         if (!empty($data['category'])) {
+        if (!empty($data['brand'])) {
+            $qb->andWhere("product.brand IN(:brand)");
+            $qb->setParameter('brand',array_values($data['brand']));
+        }
+
+        if (!empty($data['categories'])) {
             $qb->andWhere("product.category IN(:category)");
-            $qb->setParameter('category',array_values($data['category']));
+            $qb->setParameter('category',array_values($data['categories']));
+        }
+
+        if (!empty($data['category'])) {
+            $qb->andWhere("product.category =:category");
+            $qb->setParameter('category',$category);
         }
 
         if (!empty($data['size'])) {
             $qb->andWhere("goodsitems.size IN(:size)");
-            $qb->setParameter('size',$data['size']);
+            $qb->setParameter('size',array_values($data['size']));
         }
 
         if (!empty($data['color'])) {
             $qb->leftJoin('goodsitems.colors','colors');
             $qb->andWhere("colors.id IN(:color)");
-            $qb->setParameter('color',$data['color']);
+            $qb->setParameter('color',array_values($data['color']));
         }
 
         if (!empty($data['promotion'])) {
             $qb->andWhere("product.promotion IN(:promotion)");
-            $qb->setParameter('promotion',$data['promotion']);
+            $qb->setParameter('promotion',array_values($data['promotion']));
         }
 
         if (!empty($data['tag'])) {
             $qb->andWhere("product.tag IN(:tag)");
-            $qb->setParameter('tag',$data['tag']);
+            $qb->setParameter('tag',array_values($data['tag']));
         }
 
         if (!empty($data['discount'])) {
@@ -179,7 +193,7 @@ class ItemRepository extends EntityRepository
         }
         
         if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
+            $qb->orderBy('product.webName', 'ASC');
         }else{
             $qb->orderBy($sort ,$order);
         }

@@ -88,10 +88,7 @@ $('.discountProductLeft .img-card-large img').css({
 });
 
 
-$(document).on( "click", "#filter", function(e){
 
-
-});
 
 $(document).on( "change", ".modalChange", function( e ) {
 

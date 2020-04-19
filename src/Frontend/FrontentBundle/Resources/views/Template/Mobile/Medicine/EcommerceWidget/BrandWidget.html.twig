@@ -1,14 +1,30 @@
 {% for product in  products  %}
-    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6">
+    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
         <div class="thumbnail">
             <div class="product-preview group list-group-image">
-                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                    <img class="img-responsive"
-                         src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,160) }}{% endif %}"  alt=""></a>
+                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumb-product-img">
+                    {% if  product.webPath is not empty %}
+                        <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(product.webPath).resize(200,160, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                        <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(200,160, 'white') }}"/>            {% else %}
+                        <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(200,160) }}"/>
+                    {% endif %}
+                </a>
             </div>
             <div class="caption">
                 <div class="card-content" data-match-height="item-product">
-                    <a class="product-preview" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+                    {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
+                        <span class="category-name">
+                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.id }) }}">{{ product.category.name }}</a>
+                                        </span>
+                    {% endif %}
+                    <span class="product-name">
+                                        <a class="product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.webName }}</a>
+                                        </span>
+                    {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
+                        <span class="brand-name">
+                                        <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}">{{ product.brand.name }}</a>
+                                    </span>
+                    {% endif %}
                 </div>
 
                 <div class="card-read-more text-center" >
@@ -31,7 +47,7 @@
             </div>
         </div>
         {% if product.discount is not empty %}
-            <a class="btn btn-danger product-discount btn-xs" href="javascript:">
+            <a class="product-discount btn-xs" href="javascript:">
                 <span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
             </a>
         {% endif %}

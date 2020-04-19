@@ -16,12 +16,10 @@
                     <div class="col-xs-12 col-md-12 list-group-item">
                         <div class="col-xs-3 col-md-3">
                             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
-                                {% if product.medicine is not empty and product.webPath is empty %}
-                                    <img class="img-responsive"
-                                         src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,180) }}{% endif %}"  alt="">
-                                {% else %}
-                                    <img class="img-responsive"
-                                         src="{% if product.webPath is not empty %}{{ image(product.webPath).forceResize(200,180) }}{% endif %}"  alt="">
+                                {% if  product.webPath is not empty %}
+                                    <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(product.webPath).resize(200,160, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                                    <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(200,160, 'white') }}"/>            {% else %}
+                                    <img class="img-responsive" alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(200,160) }}"/>
                                 {% endif %}
                             </a>
                         </div>

@@ -43,7 +43,7 @@ class FeatureWidgetType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 ),
                 'property' => 'menu',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -53,7 +53,7 @@ class FeatureWidgetType extends AbstractType
             ))
 
             ->add('position', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '---Select Position---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
@@ -372,7 +372,7 @@ class FeatureWidgetType extends AbstractType
     protected function categoryChoiceList()
     {
 
-        return $categoryTree = $this->category->getUseEcommerceItemCategory($this->globalOption->getEcommerceConfig());
+        return $categoryTree = $this->category->getFlatEcommerceCategoryTree($this->globalOption->getEcommerceConfig());
 
     }
 

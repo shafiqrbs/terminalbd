@@ -83,13 +83,8 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            <div id="login-signip">
-            </div>
-            <div id="dialog_content" class="dialog_content" style="display:none; background: #000">
-                <div class="dialogModal_header"></div>
-                <div class="dialogModal_content"></div>
-            </div>
             <div class="w3agile">
+                {% if globalOption.templateCustomize.mobileFooter == 1 %}
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
                 <div class="footer-bg" id="mobile-footer">
                     <ul class="footer-icon">
@@ -122,7 +117,14 @@
                         </li>
                     </ul>
                 </div>
+                {% else %}
+                    <div class="container">
+                        <div class="copyright-footer">
+                            Copyright© {{ "now"|date('Y') }} <a href="http://{{ globalOption.domain }}">{{ globalOption.organizationName }}</a> All Rights Reserved.</div>
+                    </div>
+                {% endif %}
             </div>
+
             <!--/footer-->
         </div>
     </div>
@@ -169,254 +171,5 @@
     });
 
 </script>
-
-<style>
-    .menu-notify{
-        opacity: 0.8;
-        padding: 7px 0;
-    }
-    .fixed {
-        position: fixed;
-        width: 100%;
-        background: #222;
-        text-align: left;
-        z-index:9;
-        top:0!important;
-        opacity: 1!important;
-    }
-
-    .bar-icon{
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-
-    html.mm-opened.mm-opening .mm-page, html.mm-opened.mm-opening #mm-blocker, html.mm-opened.mm-opening .mm-fixed-top, html.mm-opened.mm-opening .mm-fixed-bottom{
-        left: 70%;
-    }
-    .mm-menu{
-        width:70%;
-    }
-
-    .modal-body {
-        padding:0 !important;
-    }
-    .panel-body{
-        padding:0 !important;
-    }
-
-    .bar-right {
-        margin-top: 5px!important;
-    }
-
-    .form-control{
-
-    }
-
-    .box-link{
-        height: 45px;
-    }
-    .social-links {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        padding-right: 5px;
-        position: absolute;
-        right: 0;
-        top: 8px;
-    }
-    .social-links li {
-        display: inline-block;
-        margin-left: 5px;
-    }
-    .social-links li a {
-        display: block;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        border-radius: 50%;
-        font-size: 17px;
-        color: #f9eee8;
-        border: 1px solid #f9eee8;
-        transition: all 0.5s ease 0s;
-        text-align: center;
-    }
-
-    .help-block{
-        margin-top: 0;
-    }
-    #cat-search{
-        margin-bottom:15px;
-        clear: both;
-    }
-    .mm-list.mm-panel{
-        padding-top:5px !important;
-    }
-
-    .mm-list a.mm-subclose:before {
-        border-right: none;
-        border-bottom: none;
-        margin-bottom: -13px;
-        left: 22px;
-    }
-
-    ul.cart-list{
-        list-style: none;
-        padding-top: 15px;
-    }
-    ul.cart-list li{
-        list-style: none;
-        margin-left: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #FFFFff;
-        margin-bottom: 15px;
-        display:inline-block;
-    }
-    .cart-product-title{
-        font-size: 15px;
-        padding-bottom: 15px;
-    }
-    .form-control.btn-number-cart{
-        height: 30px!important;
-    }
-
-    #side-bar-panel{
-           position: fixed;
-           width: 100%!important;
-           transition: all 300ms ease;
-           height: 100%;
-           top: 0px;
-           right: 0px;
-    }
-
-    #side-bar-panel{
-        background-color: #BDBDBD;
-        z-index: 1002;
-    }
-    .left-shadow-overlay{
-        box-shadow: 10px 0 15px 10px #585858;
-    }
-
-    #side-bar-panel .handle{
-        background-color:transparent !important;
-        left: -40px;
-        padding: 10px;
-        position: absolute;
-        top: 0;
-        cursor: pointer;
-        width: 40px!important;
-        -moz-transition: 200ms ease all;
-        -webkit-transition: 200ms ease all;
-        -o-transition: 200ms ease all;
-        transition: 200ms ease all;
-        font-size: 21px;
-        padding-top: 8px;
-        padding-left: 5px;
-        border:none;
-    }
-
-    #side-bar-panel .handle-right{
-        left: 1px!important;
-        z-index: 99;
-    }
-
-    #side-bar-panel .handle:hover{
-        background: transparent!important;
-    }
-
-    .carousel-main-control.carousel-left {
-        left: 6% !important;
-        text-decoration: none!important;
-    }
-
-    .carousel-main-control.carousel-right {
-        right: 6% !important;
-        text-decoration: none!important;
-    }
-    .carousel-inner{
-        height: 320px;
-        position: relative;
-    }
-    .carousel-cover{
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: fixed;
-        min-height: 100%;
-        height: 100%;
-        width: 100%;
-    }
-    .carousel-caption a{
-        font-weight: bold;
-    }
-
-    .header-grid {
-        background-position: center center;
-        background-size: cover;
-        height: 280px!important;
-        position: relative;
-    }
-
-    #mobile-logo{
-        left: 50%;
-        position: absolute;
-        z-index: 3;
-        -webkit-transform: translateX(-50%);
-        transform: translateX(-50%);
-        top:20%;
-    }
-    .feature-box{
-        padding: 5px !important;
-        position: relative;
-    }
-    .client-sidebar{
-        margin-bottom: 10px;
-    }
-    .client-sidebar .thumbnail{
-        margin-bottom: 0!important;
-    }
-    .clearfixTopMargin{
-        margin-top: 30px;
-        clear: both;
-        display: block;
-    }
-    #catlist dl{
-        padding-left: 0!important;
-    }
-    .panel-default>.panel-heading+.panel-collapse>.panel-body{
-        padding:15px !important;
-        text-align: justify;
-    }
-    #cart-item-list .dd-span-name{
-        align-items:center;
-        display:flex;
-    }
-    #item-qnt{
-        position: absolute;
-        top: -7px;
-        left: 22px;
-        font-size: 9px;
-        background: red;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        text-align: center;
-        line-height: 18px;
-        color: #fff;
-        font-weight: bold;
-    }
-    .btn-info {
-        color: #fff!important;
-        background-color: #187bb2;
-        border-color: #187bb2;
-    }
-    .closest-dropzone{
-        border-radius: 0!important;
-        box-shadow:none!important;
-    }
-    .closest-dropzone > span{
-        color: #ff6a00!important;
-    }
-
-</style>
 </body>
 </html>

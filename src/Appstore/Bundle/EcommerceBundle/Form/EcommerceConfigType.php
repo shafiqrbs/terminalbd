@@ -83,6 +83,7 @@ class EcommerceConfigType extends AbstractType
             ))
             ->add('file')
             ->add('isAdditionalItem')
+            ->add('searchCategory')
             ->add('showSidebar')
             ->add('showBrand')
             ->add('showCategory')
