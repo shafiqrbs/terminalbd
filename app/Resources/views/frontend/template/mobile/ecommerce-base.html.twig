@@ -3,7 +3,6 @@
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
-
 <head>
     <meta charset="utf-8"/>
     <title>{{ globalOption.name }}</title>
@@ -45,13 +44,29 @@
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    <style>
+        .bodyImageLoad{
+            background: #009b3a;
+            z-index: 999999999;
+            display:    none;
+            position:   fixed;
+            top:        0;
+            left:       0;
+            height:     100%;
+            width:      100%;
+            background-image: url("{{ asset('assets/img/loading/preloader.gif') }}")
+            50% 50%
+            no-repeat;
+        }
+    </style>
+
     <!-- web-fonts -->
     <link href='//fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
     <!-- //web-fonts -->
     {{ include('frontend/template/mobile/templateCustomize.html.twig')}}
 </head>
-<body >
+<body>
 {% block cssBlock %}{% endblock %}
 <div class="body-back siteBgColor">
     <div class="masthead pdng-stn1">
@@ -83,7 +98,7 @@
             <!-- banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            <div class="w3agile">
+            <div class="w3agile alt-mobile-footer">
                 {% if globalOption.templateCustomize.mobileFooter == 1 %}
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
                 <div class="footer-bg" id="mobile-footer">
@@ -173,3 +188,5 @@
 </script>
 </body>
 </html>
+
+

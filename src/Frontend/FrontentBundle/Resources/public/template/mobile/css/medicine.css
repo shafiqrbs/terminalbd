@@ -819,14 +819,13 @@ div.treeview, .treeview ul {
     display: none;
 }
 .product-preview{
-    text-align: left!important;
     display: inline-flex;
 }
 .btn{
-    color: #000000!important;
+    color: #000000;
 }
 .btn:hover{
-    color: #000000!important;
+    color: #000000;
 }
 .btn-transparent{
     background: transparent!important;
