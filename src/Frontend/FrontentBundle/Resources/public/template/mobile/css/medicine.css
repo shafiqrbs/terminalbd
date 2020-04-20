@@ -818,9 +818,7 @@ div.treeview, .treeview ul {
 .input-group-btn-left{
     display: none;
 }
-.product-preview{
-    display: inline-flex;
-}
+
 .btn{
     color: #000000;
 }
