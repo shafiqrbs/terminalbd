@@ -171,12 +171,12 @@
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                     <span style="position: relative;display: inline-block">
                                           <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
-                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-warning"> <span  class="fa fa-upload"></span> Prescription</a></span>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-prescription"> <span  class="fa fa-upload"></span> Prescription</a></span>
                                     {% if app.user %}
-                                        <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger" ><span class="fa fa-sign-in"></span></a>
-                                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+                                        <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger btn-logout" ><span class="fa fa-sign-in"></span></a>
+                                        <a href="{{ path('order',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-dashboard" ><span class="glyphicon glyphicon-user"></span></a>
                         {% else %}
-                                        <a type="button" class="btn btn-group btn-primary login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+                                        <a type="button" class="btn btn-group btn-login login-preview"  data-toggle="tooltip" title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
                                     {% endif %}
                          </span>
 
