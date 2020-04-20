@@ -98,8 +98,8 @@
             {% block body %}{% endblock %}
             <!--/footer-->
             <div class="w3agile alt-mobile-footer">
-                {% if globalOption.templateCustomize.mobileFooter == 1 %}
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
+                {% if globalOption.templateCustomize.mobileFooter == 1 %}
                 <div class="footer-bg" id="mobile-footer">
                     <ul class="footer-icon">
 

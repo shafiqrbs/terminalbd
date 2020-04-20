@@ -91,9 +91,9 @@
     float: left!important;">
                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
                                     {% if  product.webPath is not empty %}
-                                        <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(120,120, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
-                                        <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(120,120, 'white') }}"/>            {% else %}
-                                        <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(120,120) }}"/>
+                                        <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(100,100, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
+                                        <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(100,100, 'white') }}"/>            {% else %}
+                                        <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(100,100) }}"/>
                                     {% endif %}
                                 </a>
                             </div>
