@@ -90,13 +90,6 @@
     align-items: center;
     float: left!important;">
                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
-                                    {% if product.medicine is not empty and product.webPath is empty %}
-                                        <img class="img-responsive"
-                                             src="{% if product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).forceResize(200,180) }}{% endif %}"  alt="">
-                                    {% else %}
-                                        <img class="img-responsive"
-                                             src="{{ image(product.webPath).forceResize(200,180) }}"  alt="">
-                                    {% endif %}
                                     {% if  product.webPath is not empty %}
                                         <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(120,120, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
                                         <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(120,120, 'white') }}"/>            {% else %}
