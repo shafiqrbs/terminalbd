@@ -224,8 +224,8 @@ function jqueryTemporaryLoad() {
     $('.dropzone').inputFileZone({
         message: 'UPLOAD YOUR PRESCRIPTION',
         messageFile: 'Ready to upload',
-        zIndex: 9999999,
-        previewImages: true
+        zIndex: 999,
+        previewImages: false
     });
 
     var searchRequest = null;
