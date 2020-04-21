@@ -819,6 +819,14 @@ div.treeview, .treeview ul {
     display: none;
 }
 
+.input-selector {
+    height: 30px!important;
+}
+
+.btn-group-sm>.btn, .btn-sm {
+     border-radius: 0;
+}
+
 .btn{
     color: #000000;
 }
@@ -836,4 +844,14 @@ div.treeview, .treeview ul {
     width: 80%;
     text-align: center;
     margin: 0 auto;
+}
+
+#accordion .panel-title a.collapsed {
+    color: #ffffff!important;
+    background: #949498;
+    border-bottom: 1px solid #3d3537;
+}
+#accordion .panel-title a {
+    color: #170202 !important;
+    background: #c9cdd2;
 }

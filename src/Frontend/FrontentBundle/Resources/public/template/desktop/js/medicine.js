@@ -223,8 +223,6 @@ function jqueryTemporaryLoad() {
 
     $('.dropzone').inputFileZone({
         message: 'UPLOAD YOUR PRESCRIPTION',
-        messageFile: 'Ready to upload',
-        zIndex: 999,
         previewImages: false
     });
 

@@ -37,6 +37,7 @@
     'assets/template/plugin/textillate/assets/animate.css'
     'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/desktop/css/css-loader.css'
+    'assets/template/plugin/file-upload/file-upload.css'
     'assets/template/plugin/file-image-uploader/inputFileZone.css'
     'assets/template/desktop/css/module.css'
     'assets/template/mobile/css/style.css'
@@ -171,6 +172,7 @@
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/file-image-uploader/inputFileZone.js'
+'assets/template/plugin/file-upload/file-upload.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/mobile/js/ecommerce-scripts.js'
@@ -182,8 +184,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
+        $(window).on('load', function() {
+        });
     })
 </script>
+
 </body>
 </html>
 

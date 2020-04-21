@@ -4,9 +4,9 @@
     <div class="input-group">
             <span class="input-group-btn">
                  {% if previous is defined %}
-                     <a style="float: left" class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span> Previous</a>
+                     <a style="float: left" class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
             {% else %}
-                     <a style="float: left" class="btn btn-info btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span> Previous</a>
+                     <a style="float: left" class="btn btn-info btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
                  {% endif %}
             </span>
         {% if pageCount > 1 %}
@@ -20,7 +20,7 @@
         {% endif %}
         <span class="input-group-btn">
             {% if next is defined %}
-                <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}">Next <span class="glyphicon glyphicon glyphicon-chevron-right"></span> </a>
+                <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}"> <span class="glyphicon glyphicon glyphicon-chevron-right"></span> </a>
             {% endif %}
         </span>
     </div>

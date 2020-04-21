@@ -6,14 +6,49 @@
             <div class="row" id="showCartItem"></div>
             <div class="row">
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
-                    <h4 class="feature-title"><i class="fa fa-th-large"></i> {% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}All Products{% endif %}
-                    </h4>
-                    {#<div class="col-xs-5 col-md-5"> {{ knp_pagination_render(products) }}</div>#}
+                    {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+                    <div class="" style="width: 32%; float: left">
+                        <form class="form-inline">
+                        {% set sortBy = app.request.get('sortBy') %}
+                        <select name="sortBy" id="sortBy" class="input-selector item-select"
+                            onchange='this.form.submit()'>
+                        <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
+                            --
+                        </option>
+                        <option {% if sortBy == 'product.webName=?=ASC' %} selected="selected" {% endif %}
+                                value="product.webName=?=ASC">Name (A - Z)
+                        </option>
+                        <option {% if sortBy == 'product.webName=?=DESC' %} selected="selected" {% endif %}
+                                value="product.webName=?=DESC">Name (Z - A)
+                        </option>
+                        <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
+                                value="brand.name=?=ASC">Brand (A - Z)
+                        </option>
+                        <option {% if sortBy == 'brand.name=?=DESC' %} selected="selected" {% endif %}
+                                value="brand.name=?=DESC">Brand (Z - A)
+                        </option>
+                        <option {% if sortBy == 'product.salesPrice=?=ASC' %} selected="selected" {% endif %}
+                                value="product.salesPrice=?=ASC">Price (Low &gt; High)
+                        </option>
+                        <option {% if sortBy == 'product.salesPrice=?=DESC' %} selected="selected" {% endif %}
+                                value="product.salesPrice=?=DESC">Price (High &gt; Low)
+                        </option>
+                    </select>
+                        </form>
+                    </div>
+                    {% endif %}
+                    <div class="" style="width: 40%;float: left;margin-left: 3%;margin-right: 3%;display: inline-block">
+                        {% if globalOption.ecommerceConfig.paginationShow == "top" or globalOption.ecommerceConfig.paginationShow == "both"  %}
+                        {{ knp_pagination_render(products) }}
+                        {% endif %}
+                    </div>
+                    {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
                     {% if app.request.cookies.has('productList') %}
                         {% set cookieVal = app.request.cookies.get('productList') %}
                     {% else %}
                         {% set cookieVal = 'faThLarge' %}
                     {% endif %}
+                    <div class="" style="width: 22%; float: right">
                     <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Small button group">
                         <button type="button" class="btn btn-cookie {% if cookieVal != 'faListAlt' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faListAlt"
                                 data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
@@ -25,9 +60,15 @@
                                 data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
                             <i class="fa fa-list"></i></button>#}
                     </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
+
+
             <div class="row">
+                <!-- Upload  -->
+
                 {% for product in products %}
                     {% if cookieVal == 'faThLarge' %}
                         <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
@@ -149,9 +190,12 @@
             </div>
             <div class="clearfix"></div>
             <div class="row">
+
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
                     <div class="row">
+                        {% if globalOption.ecommerceConfig.paginationShow == "bottom" or globalOption.ecommerceConfig.paginationShow == "both"  %}
                         <div class="col-xs-10 col-md-10 col-xs-offset-1"> {{ knp_pagination_render(products) }}</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

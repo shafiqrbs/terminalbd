@@ -710,6 +710,12 @@
         {% endif %}
     }
 
+    {% if globalOption.templateCustomize.placeholderColor is not empty %}
+    input[type="text"]::placeholder , input[type="email"]::placeholder , input[type="password"]::placeholder  , input[type="number"]::placeholder ,textarea::placeholder , select::placeholder {
+        color: {{ globalOption.templateCustomize.placeholderColor }} !important;
+    }
+    {% endif %}
+
     {% if globalOption.templateCustomize.siteCssStyle is not empty %}
         {{ globalOption.templateCustomize.siteCssStyle|raw }}
     {% endif %}

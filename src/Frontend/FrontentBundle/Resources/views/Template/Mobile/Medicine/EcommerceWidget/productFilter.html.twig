@@ -10,12 +10,12 @@
     </div>
     {% endif %}
     <div class="input-group">
-        <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted mobile-filter-btn"><span class="fa fa-sort-numeric-asc"></span></button></span>
+        {% if globalOption.templateCustomize.showSidebar == 1 %}
+            <span class="input-group-btn"><button type="button" class="btn btn-warning" id="filter"><span class="fa fa-filter"></span></button></span>
+        {% endif %}
         <input type="text" name="webName" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
         <span class="input-group-btn"><button type="submit" class="btn btn-info mobile-search-btn"><span class="glyphicon glyphicon-search"></span></button></span>
-        {% if globalOption.templateCustomize.showSidebar == 1 %}
-        <span class="input-group-btn"><button type="button" class="btn btn-warning" id="filter"><span class="fa fa-filter"></span></button></span>
-        {% endif %}
+
     </div>
     <div class="sidebar-footer" >
         <button type="button" id="upload"  class="btn btn-warning  col-xs-12 col-md-12 upload-pres upload-prescription"> <span class="fa fa-upload"></span> UPLOAD PRESCRIPTION</button>
@@ -184,7 +184,7 @@
 </form>
     <div class="clearfix"></div>
     <div id="uploadPrescription">
-        <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
+        <form class="uploader" id="file-upload-form" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
             <div class=" panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
             <div class="panel-heading"></div>
             <div class="row-fluid">
@@ -195,7 +195,22 @@
                              <tr>
                                  <td class="text-right">
                                      <div style="height: 70px; margin-bottom: 15px">
-                                         <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone-mobile"/>
+                                         <input id="file-upload" type="file" name="prescriptionFile" accept="image/*" />
+                                         <label for="file-upload" id="file-drag">
+                                             <img id="file-image" src="#" alt="Preview" class="hidden">
+                                             <div id="start">
+                                                 <i class="fa fa-download" aria-hidden="true"></i>
+                                                 <div>Select a file or drag here</div>
+                                                 <div id="notimage" class="hidden">Please select an image</div>
+                                                 <span id="file-upload-btn" class="btn btn-upload">Select a file</span>
+                                             </div>
+                                             <div id="response" class="hidden">
+                                                 <div id="messages"></div>
+                                                 <progress class="progress" id="file-progress" value="0">
+                                                     <span>0</span>%
+                                                 </progress>
+                                             </div>
+                                         </label>
                                      </div>
                                      <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
                                  </td>
