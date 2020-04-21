@@ -3978,3 +3978,35 @@ ul.cart-list li{
     bottom: 0;
     width: 100%;
 }
+
+#mobile-footer ul.footer-icon{
+    padding: 0!important;
+    margin: 2px;
+
+}
+
+#mobile-footer ul.footer-icon li {
+    display: inline-block;
+    margin: 0 .3em;
+    font-size: 1em;
+    color: #999;
+}
+
+#mobile-footer ul.footer-icon li a{
+    color: #ffffff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: 5px;
+    background: #2ad2c9;
+
+}
+#mobile-footer ul.footer-icon li a:hover{
+    background: #000000;
+}
+#mobile-footer ul.footer-icon li a i {
+    line-height: 31px;
+}

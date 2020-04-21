@@ -90,41 +90,12 @@
         {% endif %}
     }
 
-    #mobile-footer ul.footer-icon{
-        padding: 0!important;
-        margin: 2px;
 
-    }
-
-    #mobile-footer ul.footer-icon li {
-        display: inline-block;
-        margin: 0 .3em;
-        font-size: 1em;
-        color: #999;
-    }
-
-    #mobile-footer ul.footer-icon li a{
-        color: #ffffff;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: inline-block;
-        vertical-align: middle;
-        text-align: center;
-        margin-left: 5px;
-        background: #2ad2c9;
-
-    }
 
     .agileinfo_copy_right{
         background: {{ globalOption.templateCustomize.footerBgColor }}!important;
     }
-    #mobile-footer ul.footer-icon li a:hover{
-        background: #000000;
-    }
-    #mobile-footer ul.footer-icon li a i {
-        line-height: 31px;
-    }
+
 
     .comment{
         width: 100%;
@@ -266,10 +237,7 @@
     #header{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
     }
-    #mobile-footer ul.footer-icon li a{
-        color: {{ globalOption.templateCustomize.footerTextColor }}!important;
-        background: {{ globalOption.templateCustomize.footerBgColor }}!important;
-    }
+
 
     {% if globalOption.templateCustomize.bodyColor  is not empty%}
     .bodyColor{
