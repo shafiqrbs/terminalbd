@@ -216,6 +216,13 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="websiteTitle", type="string", length=255, nullable=true)
+     */
+    private $websiteTitle;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="siteTitle", type="string", length=255, nullable=true)
      */
     private $siteTitle;
@@ -3476,6 +3483,22 @@ class TemplateCustomize
     public function setMobileFooter($mobileFooter)
     {
         $this->mobileFooter = $mobileFooter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsiteTitle()
+    {
+        return $this->websiteTitle;
+    }
+
+    /**
+     * @param string $websiteTitle
+     */
+    public function setWebsiteTitle($websiteTitle)
+    {
+        $this->websiteTitle = $websiteTitle;
     }
 
 

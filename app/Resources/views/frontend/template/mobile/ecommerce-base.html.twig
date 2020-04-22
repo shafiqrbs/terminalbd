@@ -5,18 +5,20 @@
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
-    <title>{{ globalOption.name }}</title>
+    <title>{% if globalOption.templateCustomize.websiteTitle is not empty %}{{ globalOption.templateCustomize.websiteTitle }} {% else %} {{ globalOption.name }} {% endif %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="{{ globalOption.domain }}" name="description"/>
     <meta content="{{ globalOption.domain }}" name="author"/>
     <meta name="MobileOptimized" content="320">
     <meta property="og:site_name" content="{{ globalOption.name }}">
-    <meta property="og:title" content="{{ globalOption.name }}">
+    <meta property="og:title" content="{% if globalOption.templateCustomize.websiteTitle is not empty %}{{ globalOption.templateCustomize.websiteTitle }} {% else %} {{ globalOption.name }} {% endif %}" />
     <meta property="og:description" content="{{ globalOption.domain }}">
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
     <meta property="og:url" content="{{ globalOption.domain }}">
+    <meta name="description"          content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaDescription is not empty %}{{ globalOption.templateCustomize.metaDescription|raw }}{% endif %}">
+    <meta name="keywords"             content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaKeyword is not empty %}{{ globalOption.templateCustomize.metaKeyword|raw }}{% endif %}">
     {% if globalOption.templateCustomize.favicon is not empty %}
         <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
     {% endif %}
@@ -76,13 +78,13 @@
                     <a href="#mm-menu" class="main-menu"><i class="fa fa-navicon"></i></a>
                 </div>
                 <div class="bar-mid">
-                    <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
+                    <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.mobileShowLogo == 1 %}<img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120,30) }}"> {% else %}{{ globalOption.mobileName }}{% endif %}</a></h5>
+
                 </div>
                 <div class="bar-right">
                     <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
                     <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
                     </a>
-                    <a href="javascript:" class="bar-icon upload-pres" id=""><i class="fa fa-camera"></i></a>
                     {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
                         {% set name = app.user.profile.name|split(" ") %}
                         <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}"><i class="fa fa-home"></i></a>&nbsp;&nbsp;<a href="/logout"> <i class="fa fa-sign-out"></i></a>
@@ -92,8 +94,23 @@
                     {% else %}
                     <a href="#login-modal" class="popup-top-anim bar-icon" ><i class="fa fa-lock"></i></a>
                     {% endif %}
+                    <a href="#modal-modal" class="bar-icon bar-search" ><i class="fa fa-search"></i></a>
                 </div>
                 <div class="clearfix"></div>
+                <div id="search-box">
+                    <form>
+                        <div class="input-group" style="margin-top: 6px">
+                            <span class="input-group-btn"><span type="button" class="btn btn-transparent bar-search"><i class="fa fa-arrow-left"></i></span></span>
+                            <div style="width: 100%; position: relative">
+                            <button  style="position: absolute; top: 5px; right: 5px;z-index: 999"><i class="fa fa-search"></i></button>
+                            <input type="text" name="webName" required="required" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
+                            </div>
+                            {% if globalOption.templateCustomize.showSidebar == 1 %}
+                                <span class="input-group-btn"><button type="button" class="btn btn-transparent" id="filter"><span class="fa fa-filter"></span></button></span>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
             </div>
             <!-- banner -->
             {% block body %}{% endblock %}
@@ -184,7 +201,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
-        $(window).on('load', function() {
+        $(window).on('load', function() {});
+        $(document).on( "click", ".bar-search", function(e){
+            $('#search-box').slideToggle('2000');
         });
     })
 </script>
@@ -223,6 +242,18 @@
     gtag('js', new Date());
     gtag('config', 'UA-111963509-1');
 </script>
+<style>
+
+    #search-box{
+        position: absolute;
+        z-index: 9999;
+        top: -1px;
+        width: 100%;
+        background:#DDDDDD;
+        height: 46px;
+        display: none;
+    }
+</style>
 </body>
 </html>
 

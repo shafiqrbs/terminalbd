@@ -88,7 +88,7 @@
                                         </span>
                                         {% endif %}
                                         <span class="product-name">
-                                        <a class="product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.webName }}</a>
+                                            <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
                                         </span>
                                         {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
                                             <span class="brand-name">
@@ -145,7 +145,7 @@
                                         {% endif %}
                                         <span class="group inner product-name text-left">
                                         <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
-                                    </span>
+                                        </span>
                                         {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}                                    <span class="group inner brand text-left brand-name">
                                             <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}">{{ product.brand.name }}</a>
                                         </span>

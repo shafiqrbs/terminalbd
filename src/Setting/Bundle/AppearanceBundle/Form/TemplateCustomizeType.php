@@ -130,6 +130,7 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('websiteTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Website title text')))
             ->add('siteTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Site page welcome text')))
             ->add('siteTitleSize', 'choice', array(
                 'attr'=>array('class'=>'span12'),

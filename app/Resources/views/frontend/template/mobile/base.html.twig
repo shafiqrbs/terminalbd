@@ -5,24 +5,25 @@
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 
 <head>
-    <meta charset="utf-8"/>
-    <title>{{ globalOption.name }}</title>
+    {% set currentPath = path(app.request.attributes.get('_route'),
+    app.request.attributes.get('_route_params')) %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta property="og:url"           content="htpp://www.{{ globalOption.domain }}{{ currentPath }}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{% if globalOption.templateCustomize.websiteTitle is not empty %}{{ globalOption.templateCustomize.websiteTitle }} {% else %} {{ globalOption.name }} {% endif %}" />
+    <meta property="og:description"   content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaDescription is not empty %}{{ globalOption.templateCustomize.metaDescription|raw }}{% endif %}" />
+    <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
+    <meta name="description"          content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaDescription is not empty %}{{ globalOption.templateCustomize.metaDescription|raw }}{% endif %}">
+    <meta name="keywords"             content="{{ globalOption.name }}-{% if globalOption.templateCustomize.metaKeyword is not empty %}{{ globalOption.templateCustomize.metaKeyword|raw }}{% endif %}">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta content="{{ globalOption.domain }}" name="description"/>
-    <meta content="{{ globalOption.domain }}" name="author"/>
-    <meta name="MobileOptimized" content="320">
-    <meta property="og:site_name" content="{{ globalOption.name }}">
-    <meta property="og:title" content="{{ globalOption.name }}">
-    <meta property="og:description" content="{{ globalOption.domain }}">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
-    <meta property="og:url" content="{{ globalOption.domain }}">
+    <title>{% if globalOption.templateCustomize.websiteTitle is not empty %}{{ globalOption.templateCustomize.websiteTitle }} {% else %} {{ globalOption.name }} {% endif %}</title>
     {% if globalOption.templateCustomize.favicon is not empty %}
         <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
     {% endif %}
-    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+   {# <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>#}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCgg9f-HbB1zWmQY_zsz-vPpYtQd6cA6JA"></script>
     <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>

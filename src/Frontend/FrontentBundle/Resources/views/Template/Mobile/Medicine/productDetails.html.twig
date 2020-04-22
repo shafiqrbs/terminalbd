@@ -68,7 +68,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="row meta-key-value"><div class="col-xs-12 col-md-12 "><strong>{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></div></div>
+                        <div class="row meta-key-value"><div class="col-xs-12 col-md-12 "><strong>{{ product.webName }}</strong></div></div>
                         <div class="row meta-key-value"><div class="col-xs-4 col-md-4">SKU<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 "><strong>{{ product.sku  }}</strong></div></div>
                         {% if product.category is defined and product.category is not empty %}
                             <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Category<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 text-left">{{ product.category.name }}</div></div>
