@@ -505,9 +505,9 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productModalAction($subdomain,Item $item)
+    public function productModalAction(Request $request ,$subdomain,Item $item)
     {
-
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $masterItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$item->getId(),'masterItem'=>1));
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
@@ -536,6 +536,7 @@ class WebServiceProductController extends Controller
                     'product'           => $item,
                     'next'              => $next,
                     'previous'          => $previous,
+                    'cart'              => $cart,
                     'subItem'           => $subItem
                 )
             );

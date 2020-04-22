@@ -392,7 +392,7 @@ $('.product-preview').click(function () {
         type: 'GET',
         success: function (response) {
             $('.product-modal-content').html(response);
-            $('#product-modal').modal('toggle');
+            $('#product-modal').modal('show');
         }
     })
 });
@@ -408,7 +408,6 @@ $(document).on( "click", ".preview", function(e){
         }
     })
 });
-
 
 
 $(document).on( "click", "#productBuy", function(e){
