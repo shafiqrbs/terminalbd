@@ -263,10 +263,13 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
@@ -309,10 +312,13 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
@@ -350,10 +356,13 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
@@ -389,8 +398,10 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
@@ -427,10 +438,13 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             $category = isset($data['category']) ? $data['category'] :0;
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();

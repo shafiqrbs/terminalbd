@@ -285,7 +285,7 @@
                                 <a class="brand-logo-preview"  href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}" >
                                     <img class="img-responsive" src="{{ image(brand.webPath).resize(120,120) }}" alt="">
                                 </a>
-                                <a class="feature-brand-title"  href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}">{{ brand.brand.name }}</a>
+                                <a class="feature-brand-title"  href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.brand.id }) }}">{{ brand.brand.name }}</a>
                             </div>
                         </div>
                     {% endfor %}
