@@ -500,8 +500,6 @@ class MedicineStockController extends Controller
         );
         $referer = $request->headers->get('referer');
         return new RedirectResponse($referer);
-
-
     }
 
     public function inlineUpdateAction(Request $request)

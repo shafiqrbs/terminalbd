@@ -306,6 +306,7 @@ class FeatureWidgetType extends AbstractType
                     'slider2'              => 'Slider Two Column',
                     'slider3'              => 'Slider Three Column',
                     'slider4'              => 'Slider Four Column',
+                    'slider6'              => 'Slider Six Column',
                     'grid1'                => 'Grid One Column',
                     'grid2'                => 'Grid Two Column',
                 ),

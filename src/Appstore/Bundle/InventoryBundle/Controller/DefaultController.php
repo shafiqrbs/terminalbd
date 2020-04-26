@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -123,4 +124,32 @@ class DefaultController extends Controller
 	    exit;
 	    return $this->redirect($this->generateUrl('homepage'));
     }
+
+    public function copyToItemStockAction()
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+        $config = $option->getMedicineConfig();
+        if($option and !empty($config)) {
+            $fromConfig = $config->getId();
+            $toConfig = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+            $this->getDoctrine()->getRepository('InventoryBundle:Item')->processStockMigration($fromConfig,$toConfig);
+            return new Response('success');
+        }
+        return new Response('failed');
+    }
+
+
+    public function copyStockToEcommerceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getUser()->getGlobalOption();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Item')->copyStockToEcommerce($option);
+        return new Response('success');
+
+    }
+
 }

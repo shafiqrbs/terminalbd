@@ -37,6 +37,11 @@ class EcommerceConfig
      */
     protected $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemImport", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $itemImports;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="ecommerceConfig"  , cascade={"persist", "remove"} )

@@ -152,7 +152,7 @@ class Category
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"name"})
-     * @Doctrine\ORM\Mapping\Column(length=255, unique=true)
+     * @Doctrine\ORM\Mapping\Column(unique=false)
      */
     private $slug;
 

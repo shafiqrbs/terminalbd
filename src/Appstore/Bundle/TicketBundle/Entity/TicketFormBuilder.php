@@ -63,7 +63,7 @@ class TicketFormBuilder
 
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TicketBundle\Entity\Ticket", mappedBy="builder" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\TicketBundle\Entity\Ticket", mappedBy="formBuilder" , cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $tickets;

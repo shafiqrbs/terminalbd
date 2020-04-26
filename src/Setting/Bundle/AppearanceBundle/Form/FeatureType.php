@@ -60,7 +60,7 @@ class FeatureType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                         return $er->createQueryBuilder('e')
                             ->where("e.status = 1")
-                            ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
+                            ->andWhere("e.ecommerceConfig ={$this->ecommerceConfig}")
                             ->orderBy('e.name','ASC');
                     },
             ))
@@ -199,7 +199,7 @@ class FeatureType extends AbstractType
     protected function categoryChoiceList()
     {
 
-        return $categoryTree = $this->category->getUseEcommerceItemCategory($this->globalOption->getEcommerceConfig());
+        return $categoryTree = $this->category->getFlatEcommerceCategoryTree($this->globalOption->getEcommerceConfig());
 
     }
 }

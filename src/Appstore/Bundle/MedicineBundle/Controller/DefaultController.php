@@ -27,8 +27,6 @@ class DefaultController extends Controller
 	public function indexAction()
     {
 
-
-
         /* @var GlobalOption $globalOption */
 
         $globalOption = $this->getUser()->getGlobalOption();
@@ -301,7 +299,6 @@ class DefaultController extends Controller
             $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
             return new Response('success');
         }
-
         return new Response('failed');
 
 

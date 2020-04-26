@@ -1030,10 +1030,8 @@ class Builder extends ContainerAware
             $menu['E-commerce']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-shopping-cart')
                 ->setAttribute('dropdown', true);
-            if (!in_array('inventory',$apps)) {
-
-                $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'))->setAttribute('icon', 'icon-th-list');
-            }
+            $menu['E-commerce']['Master Data']->addChild('Product Import', array('route' => 'ecommerce_itemimporter'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'))->setAttribute('icon', 'icon-th-list');
         }
 
         return $menu;

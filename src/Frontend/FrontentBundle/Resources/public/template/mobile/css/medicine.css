@@ -385,11 +385,11 @@ div.treeview, .treeview ul {
     background-color: #F9FAFA;
 }
 .bs-callout-info .btn-group-sm .btn{
-    color:#464646 !important;
+    color:#464646;
 }
 .bs-callout-info .btn-group-sm .btn.btn-active{
-    color: #fff!important;
-    background-color: #464646!important;
+    color: #fff;
+    background-color: #464646;
 }
 .product-item{
     position: relative;

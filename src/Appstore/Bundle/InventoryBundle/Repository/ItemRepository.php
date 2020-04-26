@@ -781,5 +781,28 @@ class ItemRepository extends EntityRepository
 
 	}
 
+    public function  processStockMigration($from, $to)
+    {
+
+        $em = $this->_em;
+        $stock = $em->createQuery("DELETE InventoryBundle:Item e WHERE e.inventoryConfig={$to}");
+        if($stock){
+            $stock->execute();
+        }
+
+        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`purchasePrice`,`salesPrice`, `medicineBrand_id`,`brandName`,`pack`,`averagePurchasePrice`,`averageSalesPrice`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
+  SELECT `unit_id`, `name`,`minQuantity`, `purchasePrice`, `salesPrice`, `medicineBrand_id`, `brandName`, `pack`, `averagePurchasePrice`, `averageSalesPrice`, `isAndroid`, `printHide`,mode,1,$to
+  FROM medicine_stock
+  WHERE medicineConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $from);
+        $qb1->execute();
+
+        $stockUpdate = "UPDATE medicine_stock SET mode = 'medicice' WHERE  medicineConfig_id =:config AND mode IS NULL";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->bindValue('config', $to);
+        $qb1->execute();
+    }
+
 
 }

@@ -8,6 +8,7 @@ use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
 use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
@@ -483,21 +484,33 @@ class ItemController extends Controller
      * Status a Page entity.
      *
      */
-    public function webStatusAction(Item $entity)
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function isWebAction(Request $request,Item $entity)
     {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig'=> $config,'id' => $entity->getId()));
         $em = $this->getDoctrine()->getManager();
-        $status = $entity->getIsWeb();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find District entity.');
+        }
+        $status = $entity->isWeb();
         if($status == 1){
             $entity->setIsWeb(0);
         } else{
             $entity->setIsWeb(1);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyMedicineItem($entity);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('item'));
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
+
 
     public function vendorItemAction($vendor)
     {

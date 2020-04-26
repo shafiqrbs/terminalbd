@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -84,6 +85,11 @@ class Item
     protected $brand;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="items")
+     */
+    protected $vendor;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineBrand", inversedBy="items")
      */
     protected $medicine;
@@ -155,7 +161,7 @@ class Item
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"webName","code"})
-     * @Doctrine\ORM\Mapping\Column(unique=true, nullable = true)
+     * @Doctrine\ORM\Mapping\Column(unique=false, nullable = true)
      */
     private $slug;
 
@@ -1263,6 +1269,22 @@ class Item
     public function setIsFeatureCategory($isFeatureCategory)
     {
         $this->isFeatureCategory = $isFeatureCategory;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
     }
 
 

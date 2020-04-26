@@ -18,6 +18,10 @@ ecommerce_ecommerce:
     resource: "@EcommerceBundle/Resources/config/routing/ecommerce.yml"
     prefix:   /product
 
+ecommerce_itemimorter:
+    resource: "@EcommerceBundle/Resources/config/routing/itemimporter.yml"
+    prefix:   /item-importer
+
 ecommerce_item_category:
     resource: "@EcommerceBundle/Resources/config/routing/itemcategory.yml"
     prefix:   /item-category

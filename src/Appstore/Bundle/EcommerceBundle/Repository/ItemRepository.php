@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\HotelBundle\Entity\Category;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
@@ -305,6 +306,39 @@ class ItemRepository extends EntityRepository
         }
 
     }
+
+    public function insertCopyInventoryItem(\Appstore\Bundle\InventoryBundle\Entity\Item  $copyEntity)
+    {
+        $em = $this->_em;
+        if($copyEntity)
+            $config = $copyEntity->getInventoryConfig()->getGlobalOption()->getEcommerceConfig();
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'itemGroup'=> $copyEntity->getMode(), 'webName' => $copyEntity->getName()));
+        if(empty($exist)){
+            $entity = new Item();
+            $entity->setEcommerceConfig($config);
+            $entity->setName($copyEntity->getName());
+            $entity->setWebName($copyEntity->getName());
+            $entity->setQuantity($copyEntity->getRemainingQuantity());
+            $entity->setPurchasePrice($copyEntity->geP());
+            $entity->setSalesPrice($copyEntity->getSalesPrice());
+            $entity->setItemGroup($copyEntity->getMode());
+            if($copyEntity->getBrandName()){
+                $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
+                $entity->setBrand($brand);
+            }
+            $entity->setSource('medicine');
+            if($copyEntity->getMedicineBrand()) {
+                $entity->setMedicine($copyEntity->getMedicineBrand());
+            }
+            $em->persist($entity);
+            $em->flush();
+            if($copyEntity->getMedicineBrand()) {
+                $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity, $copyEntity);
+            }
+        }
+
+    }
+
 
     public function getSliderFeatureProduct($config, $limit = 3)
     {

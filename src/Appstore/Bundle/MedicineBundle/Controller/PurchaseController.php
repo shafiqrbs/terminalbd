@@ -451,7 +451,7 @@ class PurchaseController extends Controller
                 $entity->setTransactionMethod($transactionMethod);
             }
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
+           // $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
         }
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);

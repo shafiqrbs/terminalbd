@@ -44,6 +44,11 @@ class AccountVendor
      **/
     private  $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemImport", mappedBy="vendor" , cascade={"persist", "remove"})
+     */
+    protected $itemImports;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="vendor" )
