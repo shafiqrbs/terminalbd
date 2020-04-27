@@ -178,30 +178,10 @@ class EcommerceMenuController extends Controller
             if (!$megamenu) {
                 throw $this->createNotFoundException('Unable to find EcommerceMenu entity.');
             }
-
             $em->remove($megamenu);
             $em->flush();
-            return $this->redirect($this->generateUrl('megamenu'));
+            return $this->redirect($this->generateUrl('ecommercemenu'));
     }
-
-    /**
-     * Creates a form to delete a Admission entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ecommercemenu_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
-    }
-
-
 
 
     public function sortedAction(Request $request){
@@ -232,7 +212,7 @@ class EcommerceMenuController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('megamenu'));
+        return $this->redirect($this->generateUrl('ecommercemenu'));
     }
 
 
