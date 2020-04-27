@@ -146,10 +146,6 @@ class EcommerceMenuController extends Controller
     public function updateAction(Request $request, EcommerceMenu $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
-
-
-        $deleteForm = $this->createDeleteForm($entity->getId());
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -164,7 +160,6 @@ class EcommerceMenuController extends Controller
         return $this->render('SettingAppearanceBundle:EcommerceMenu:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
@@ -196,11 +191,8 @@ class EcommerceMenuController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Request $request, Page $entity)
+    public function statusAction(EcommerceMenu $entity)
     {
-        $form = $this->createDeleteForm($entity->getId());
-        $form->handleRequest($request);
-
         $em = $this->getDoctrine()->getManager();
         $status = $entity->getStatus();
         if($status == 1){

@@ -175,7 +175,8 @@
                                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                                             <th class="span3">Name</th>
                                             <th class="span1">Rack</th>
-                                            <th class="span1">Expiration</th>
+                                           {# <th class="span1">Expiration</th>#}
+                                            <th class="span1">AVGPP</th>
                                             <th class="span1">PP</th>
                                             <th class="span1">MRP</th>
                                             <th class="span1">Pack</th>
@@ -192,7 +193,8 @@
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="span1">{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</td>
+                                                   {# <td class="span1">{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</td>#}
+                                                    <td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>
                                                     <td class="span1">
                                                         <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
                                                     </td>

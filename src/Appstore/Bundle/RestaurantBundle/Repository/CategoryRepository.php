@@ -53,12 +53,13 @@ class CategoryRepository extends EntityRepository
 
         $config = $option->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->join('s.service','c');
+        $qb->select('e.id','e.name','e.slug');
+        $qb->leftJoin('e.service','c');
         $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.status = :status')->setParameter('status',1) ;
         $qb->andWhere('c.slug IN (:slugs)')->setParameter('slugs',array('product','stockable'));
         $qb->orderBy('e.sorting','ASC');
-        $result = $qb->getQuery()->getResult();
+        $result = $qb->getQuery()->getArrayResult();
 
         $data = array();
 
@@ -67,9 +68,9 @@ class CategoryRepository extends EntityRepository
         foreach($result as $key => $row) {
 
             $data[$key]['global_id']        = (int) $option->getId();
-            $data[$key]['category_id']      = (int) $row->getId();
-            $data[$key]['name']             = $row->getName();
-            $data[$key]['slug']             = $row->getSlug();
+            $data[$key]['category_id']      = (int) $row['id'];
+            $data[$key]['name']             = $row['name'];
+            $data[$key]['slug']             = $row['slug'];
 
         }
 

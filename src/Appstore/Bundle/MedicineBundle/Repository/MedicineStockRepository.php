@@ -407,7 +407,8 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->leftJoin('e.rackNo', 'rack');
         $query->select('e.id as id');
-        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
+       // $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
+        $query->addSelect("CONCAT(e.name,' => MRP - ', e.salesPrice) as text");
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("e.status = 1");
         $query->andWhere("ic.id = :config");
