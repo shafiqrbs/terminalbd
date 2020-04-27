@@ -87,7 +87,7 @@ class FeatureCategoryType extends AbstractType
     protected function categoryChoiceList()
     {
 
-        return $categoryTree = $this->category->getUseEcommerceItemCategory($this->globalOption->getEcommerceConfig());
+        return $categoryTree = $this->category->getFlatEcommerceCategoryTree($this->globalOption->getEcommerceConfig());
 
     }
 }

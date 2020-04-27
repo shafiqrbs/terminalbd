@@ -74,6 +74,7 @@ class ItemImporterController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
                 'enctype' => 'multipart/form-data',
             )
         ));

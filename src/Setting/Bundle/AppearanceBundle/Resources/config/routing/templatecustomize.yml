@@ -16,11 +16,11 @@ templatecustomize_create:
     methods:  POST
 
 templatecustomize_edit:
-    path:     /{id}/edit
+    path:     /edit
     defaults: { _controller: "SettingAppearanceBundle:TemplateCustomize:edit" }
 
 templatecustomize_ecommerce_edit:
-    path:     /{id}/ecommerce-edit
+    path:     /ecommerce-edit
     defaults: { _controller: "SettingAppearanceBundle:TemplateCustomize:ecommerceEdit" }
 
 templatecustomize_reset:

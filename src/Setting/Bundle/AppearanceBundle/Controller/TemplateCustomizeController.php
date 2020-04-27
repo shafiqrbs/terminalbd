@@ -87,11 +87,12 @@ class TemplateCustomizeController extends Controller
      * Displays a form to edit an existing TemplateCustomize entity.
      *
      */
-    public function editAction($id)
+    public function editAction()
     {
 
+        $option = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$id));
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$option));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }
@@ -108,11 +109,12 @@ class TemplateCustomizeController extends Controller
      * Displays a form to edit an existing TemplateCustomize entity.
      *
      */
-    public function ecommerceEditAction($id)
-    {
 
+    public function ecommerceEditAction()
+    {
+        $option = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$id));
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption' => $option));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }

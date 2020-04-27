@@ -1157,8 +1157,8 @@ div.treeview, .treeview ul {
 
 .img-responsive-feature{
 
-    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
-    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+    /*filter: grayscale(1);
+    -webkit-filter: grayscale(1);*/
     transform: scale(1,1);
     transition:transform 7s linear 0s;
 }
@@ -1578,4 +1578,8 @@ div.treeview, .treeview ul {
     font-size: 14px;
     margin: 0 0 0 9px;
     vertical-align: middle;
+}
+
+.slider-category-feature{
+    list-style: none;
 }

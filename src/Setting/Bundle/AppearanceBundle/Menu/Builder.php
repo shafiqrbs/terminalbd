@@ -396,14 +396,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
 
-	        if (!empty($result)) {
-		        $menu['Manage Appearance']->addChild( 'Customize Template',
-			        array( 'route'=> 'templatecustomize_ecommerce_edit','routeParameters' => array( 'id' => $option->getId() )
-		        ));
-	        }else{
-		        $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'=> 'templatecustomize_edit','routeParameters' => array( 'id' => $option->getId() )
-		        ));
-	        }
+            $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'=> 'templatecustomize_edit'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_ECOMMERCE')){
                     $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
@@ -411,7 +404,7 @@ class Builder extends ContainerAware
                     $menu['Manage Appearance']['E-commerce']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
                 }
             }
-            if($website){
+            if($website and $option->getMainApp()->getSlug() == "website"){
                 $menu['Manage Appearance']->addChild('Website')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
                 $menu['Manage Appearance']['Website']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'))->setAttribute('icon', 'icon-th-list');
                 $menu['Manage Appearance']['Website']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');

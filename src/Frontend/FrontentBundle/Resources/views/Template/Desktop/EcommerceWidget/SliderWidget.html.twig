@@ -50,9 +50,11 @@
         <tr>
             <td>
                 <div class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
-                    {% for entity in entities %}
-                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p>
-                    {% endfor %}
+                    <ul class="slider-category-feature">
+                        {% for entity in entities %}
+                            <li class="{{ position }}"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </td>
         </tr>
@@ -61,7 +63,7 @@
 
     {% if feature == 'brand' %}
         <div class="widget-feature-center">
-           {% for entity in entities %}
+           {% for entity in entities|slice(0,8) %}
             {% if entity.brand is not empty %}
                 <div class="col-md-6  wow fadeInDown" data-wow-delay="2s" >
                     <div class="thumbnail">
@@ -72,5 +74,4 @@
             {% endfor %}
         </div>
     {% endif %}
-
 </div>

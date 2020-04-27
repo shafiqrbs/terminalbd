@@ -45,9 +45,11 @@
         <tr>
             <td>
                 <div class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
+                    <ul>
                     {% for entity in entities %}
-                        <p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p>
+                        <li class="{{ position }}"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></li>
                     {% endfor %}
+                    </ul>
                 </div>
             </td>
         </tr>
