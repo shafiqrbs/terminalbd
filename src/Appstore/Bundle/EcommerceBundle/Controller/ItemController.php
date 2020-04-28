@@ -684,6 +684,20 @@ class ItemController extends Controller
 
     }
 
+    public function brandSelectAction()
+    {
+        $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=>$getEcommerceConfig,'status'=>1),array('name'=>'ASC'));
+        $items = array();
+        $items[] = array('value' => '','text'=> '---Add Brand---');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Brand');
+        return new JsonResponse($items);
+
+    }
+
     public function categorySelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
@@ -733,6 +747,13 @@ class ItemController extends Controller
                 $entity->setCategory($setValue);
             }else {
                 $entity->setCategory(NULL);
+            }
+		}elseif($data['name'] == 'Brand'){
+			$setValue = $em->getRepository('EcommerceBundle:ItemBrand')->find($data['value']);
+			if($setValue){
+                $entity->setBrand($setValue);
+            }else {
+                $entity->setBrand(NULL);
             }
 		}else{
             $entity->$setName($data['value']);

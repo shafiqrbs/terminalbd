@@ -23,7 +23,6 @@ class PromotionRepository extends EntityRepository
         $qb->andWhere("e.ecommerceConfig =".$config);
         $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getResult();
-
         return $result;
 
     }
