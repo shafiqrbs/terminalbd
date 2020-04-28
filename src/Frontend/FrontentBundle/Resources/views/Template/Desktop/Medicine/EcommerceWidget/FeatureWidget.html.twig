@@ -266,7 +266,8 @@
                             <div class="col-md-12">
                                 <div class="thumbnail feature-category" data-match-height="feature-category">
                                     <div class="product-preview group" >
-                                        <img class="img-responsive" src="{{ image(category.webPath).resize(250,200, 'white') }}" alt="">
+                                        <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}">
+                                            <img class="img-responsive" src="{{ image(category.webPath).resize(250,200, 'white') }}" alt=""></a>
                                     </div>
                                 </div>
                                 <div class="caption">
@@ -281,13 +282,13 @@
         <div class="clearfix"></div>
         {% if widget.category is defined and widget.category is not empty %}
             {% for category in widget.category %}
-                <div class="wow fadeInDown feature-carousel" >
+                <div class="wow fadeInDown feature-carousel main-category-{{ category.id }}" >
                     <div class="page-title-bar">
                         <div class="col-md-12" >
                             <div class="page-title">{{ category.name }}</div>
                         </div>
                     </div>
-                    <div>
+                    <div class="inner-category-{{ category.id }}">
                         {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id,'widget':widget.id , 'category':category.id}) %}
                     </div>
                 </div>
@@ -307,7 +308,8 @@
                             <div class="col-md-12">
                                 <div class="thumbnail feature-brand" data-match-height="feature-brand">
                                     <div class="product-preview" >
-                                        <img class="img-responsive" src="{{ image(brand.webPath).resize(150,120) }}" alt="">
+                                      <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}">
+                                          <img class="img-responsive" src="{{ image(brand.webPath).resize(150,120) }}" alt=""></a>
                                     </div>
                                 </div>
                                 <div class="caption">
@@ -322,13 +324,13 @@
         <div class="clearfix"></div>
         {% if widget.brand is defined and widget.brand is not empty %}
         {% for brand in widget.brand %}
-            <div class="wow fadeInDown feature-carousel"  >
+            <div class="wow fadeInDown feature-carousel main-brand-{{ brand.id }}"  >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
                         <div class="page-title">{{ brand.name }}</div>
                     </div>
                 </div>
-                <div>
+                <div class="inner-brand-{{ brand.id }}">
                     {% render controller("FrontendBundle:EcommerceWidget:brandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id ,'brand':brand.id}) %}
                 </div>
             </div>
