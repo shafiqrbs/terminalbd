@@ -187,8 +187,10 @@
                                         </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
+                                        {% set totalPrice = 0 %}
                                         {% if entity.medicinePurchaseItems is not empty %}
                                             {% for item in entity.medicinePurchaseItems %}
+                                                {% set totalPrice = totalPrice + (item.medicineStock.averagePurchasePrice * item.quantity)  %}
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
@@ -218,7 +220,9 @@
                                             <td colspan="11" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <th colspan="3">AVG Purchase Price</th>
+                                            <th>{{ totalPrice|number_format }}</th>
+                                            <td colspan="4" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                             <td class="span1"></td>
                                             <td class="span1"></td>

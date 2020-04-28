@@ -35,7 +35,6 @@ class EcommerceProductSubItemType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.isValid = 1")
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -61,7 +60,6 @@ class EcommerceProductSubItemType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.isValid = 1")
                         ->orderBy("p.name","ASC");
                 },
             ));

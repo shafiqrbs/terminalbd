@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class EcommerceProductType extends AbstractType
+class EcommerceMedicineType extends AbstractType
 {
 
     /** @var  EcommerceConfig */
@@ -38,7 +38,7 @@ class EcommerceProductType extends AbstractType
     {
         $builder
 
-            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name')))
+            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 autoComplete2Medicine','placeholder'=>'Product name')))
             ->add('brand', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
@@ -61,32 +61,6 @@ class EcommerceProductType extends AbstractType
                     'Guarantee' => 'Guarantee',
                 ),
             ))
-            ->add('size', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductSize',
-                'empty_value' => '-Choose a size-',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                       ->orderBy("p.name","ASC");
-                },
-            ))
-
-            ->add('itemColors', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
-                'empty_value' => '-Choose a color-',
-                'property' => 'name',
-                'multiple' => 'multiple',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->orderBy("p.name","ASC");
-                },
-            ))
 
             ->add('itemAssurance', 'entity', array(
                 'required'    => true,
@@ -98,18 +72,6 @@ class EcommerceProductType extends AbstractType
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
                         ->orderBy("p.name","ASC");
-                },
-            ))
-            ->add('country', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
-                'empty_value' => '---Choose a country ---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->orderBy("p.name","ASC");
-
                 },
             ))
 	        ->add('category', 'entity', array(
@@ -139,15 +101,11 @@ class EcommerceProductType extends AbstractType
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price')))
-
-            ->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
-
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
             ->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
             ->add('subProduct')
             ->add('tag', 'entity', array(
                 'required'    => true,

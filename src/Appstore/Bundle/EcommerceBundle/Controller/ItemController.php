@@ -6,6 +6,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemGallery;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemKeyValue;
+use Appstore\Bundle\EcommerceBundle\Form\EcommerceMedicineEditType;
+use Appstore\Bundle\EcommerceBundle\Form\EcommerceMedicineType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductEditType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductSubItemType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductType;
@@ -51,9 +53,8 @@ class ItemController extends Controller
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
 		$entities = $em->getRepository('EcommerceBundle:Item')->findGoodsWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
-		// $promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$config,'status'=> 1,'type'=>'Promotion'));
         if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
-            $theme = 'medicine';
+            $theme = 'medicine/index';
         }else{
             $theme = 'index';
         }
@@ -72,12 +73,27 @@ class ItemController extends Controller
 	{
 		$entity = new Item();
 		$inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		$form = $this->createCreateForm($entity);
+        if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
+            $medicineId = $request->request->get('medicineId');
+            $form   = $this->createMedicineForm($entity);
+            $theme = 'medicine/new';
+        }else{
+            $medicineId = "";
+            $form   = $this->createCreateForm($entity);
+            $theme = 'new';
+        }
+
 		$form->handleRequest($request);
 		if ($form->isValid()) {
 			$em = $this->getDoctrine()->getManager();
 			$entity->setEcommerceConfig($inventory);
 			$entity->setMasterQuantity($entity->getQuantity());
+			if($medicineId){
+                $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($medicineId);
+                $entity->setMedicine($medicine);
+                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $entity->setWebName($name);
+            }
 			$entity->setSource('goods');
 			$entity->setSubProduct(true);
 			$entity->setIsWeb(true);
@@ -90,7 +106,7 @@ class ItemController extends Controller
 			$this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->initialInsertSubProduct($entity);
 			return $this->redirect($this->generateUrl('ecommerce_item_edit',array('id' => $entity->getId())));
 		}
-		return $this->render('EcommerceBundle:Item:new.html.twig', array(
+		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'entity' => $entity,
 			'form'   => $form->createView(),
 		));
@@ -119,6 +135,28 @@ class ItemController extends Controller
 		return $form;
 	}
 
+    /**
+     * Creates a form to create a Item entity.
+     *
+     * @param Item $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createMedicineForm(Item $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new EcommerceMedicineType($em,$config), $entity, array(
+            'action' => $this->generateUrl('ecommerce_item_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'action',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
 	/**
 	 * Displays a form to create a new Item entity.
@@ -130,7 +168,14 @@ class ItemController extends Controller
 		$entity = new Item();
 		$form   = $this->createCreateForm($entity);
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		return $this->render('EcommerceBundle:Item:new.html.twig', array(
+        if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
+            $form   = $this->createMedicineForm($entity);
+            $theme = 'medicine/new';
+        }else{
+            $form   = $this->createCreateForm($entity);
+            $theme = 'new';
+        }
+		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'entity' => $entity,
 			'ecommerceConfig' => $config,
 			'form'   => $form->createView(),
@@ -180,9 +225,17 @@ class ItemController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Item entity.');
 		}
-		$editForm = $this->inventoryEditForm($entity);
+
+        if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
+            $editForm = $this->medicineEditForm($entity);
+            $theme = 'medicine/edit';
+        }else{
+            $editForm = $this->inventoryEditForm($entity);
+            $theme = 'index';
+        }
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		return $this->render('EcommerceBundle:Item:edit.html.twig', array(
+
+        return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'entity'            => $entity,
 			'ecommerceConfig'   => $config,
 			'form'              => $editForm->createView(),
@@ -248,9 +301,7 @@ class ItemController extends Controller
         }
         $editForm = $this->uploadEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
-
             if($file['item']['file']){
                 $entity->removeUpload();
                 $img = $file['item']['file'];
@@ -269,6 +320,7 @@ class ItemController extends Controller
             );
             return $this->redirect($this->generateUrl('ecommerce_item'));
         }
+
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('EcommerceBundle:Item:upload.html.twig', array(
             'entity'            => $entity,
@@ -345,6 +397,28 @@ class ItemController extends Controller
 		return $form;
 	}
 
+    /**
+     * Creates a form to edit a Item entity.
+     *
+     * @param Item $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function medicineEditForm(Item $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new EcommerceMedicineEditType($em,$inventory), $entity, array(
+            'action' => $this->generateUrl('ecommerce_item_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'action',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
 	/**
 	 * Edits an existing Item entity.
@@ -361,7 +435,13 @@ class ItemController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find Item entity.');
 		}
-		$editForm = $this->createEditForm($entity);
+        if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
+            $editForm = $this->medicineEditForm($entity);
+            $theme = 'medicine/edit';
+        }else{
+            $editForm = $this->inventoryEditForm($entity);
+            $theme = 'index';
+        }
 		$editForm->handleRequest($request);
 
 		if ($editForm->isValid()) {
@@ -382,7 +462,7 @@ class ItemController extends Controller
 			return $this->redirect($this->generateUrl('ecommerce_item_edit', array('id' => $id)));
 		}
 		$ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		return $this->render('EcommerceBundle:Item:edit.html.twig', array(
+		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'entity'                => $entity,
 			'goodsItemForm'         => $goodsItemForm->createView(),
 			'ecommerceConfig'       => $ecommerceConfig,

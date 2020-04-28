@@ -71,13 +71,7 @@ class ProductSize
      */
     private $status=true;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isValid", type="boolean")
-     */
-    private $isValid=true;
-
+   
 
     /**
      * Get id
@@ -94,7 +88,7 @@ class ProductSize
      *
      * @param string $name
      *
-     * @return ItemSize
+     * @return ProductSize
      */
     public function setName($name)
     {
@@ -120,7 +114,7 @@ class ProductSize
      *
      * @param string $slug
      *
-     * @return ItemSize
+     * @return ProductSize
      */
     public function setSlug($slug)
     {
@@ -144,7 +138,7 @@ class ProductSize
      *
      * @param integer $code
      *
-     * @return ItemSize
+     * @return ProductSize
      */
     public function setCode($code)
     {
@@ -169,7 +163,7 @@ class ProductSize
      *
      * @param boolean $status
      *
-     * @return ItemSize
+     * @return ProductSize
      */
     public function setStatus($status)
     {
@@ -188,21 +182,7 @@ class ProductSize
         return $this->status;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
+   
 
 
     /**
@@ -214,38 +194,7 @@ class ProductSize
         return $code;
     }
 
-    /**
-     * @return GoodsItem
-     */
-    public function getGoodsItems()
-    {
-        return $this->goodsItems;
-    }
-
-    /**
-     * @return PurchaseVendorItem
-     */
-    public function getPurchaseVendorItems()
-    {
-        return $this->purchaseVendorItems;
-    }
-
-    /**
-     * @return Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param Category $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
+    
     /**
      * @return OrderItem
      */
@@ -254,36 +203,6 @@ class ProductSize
         return $this->orderItem;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getIsValid()
-    {
-        return $this->isValid;
-    }
-
-    /**
-     * @param boolean $isValid
-     */
-    public function setIsValid($isValid)
-    {
-        $this->isValid = $isValid;
-    }
-
-    /**
-     * @return StockItem
-     */
-    public function getStockItems()
-    {
-        return $this->stockItems;
-    }
-
-    /**
-     * @return ItemSizeGroup
-     */
-    public function getSizeGroup()
-    {
-        return $this->sizeGroup;
-    }
+    
 }
 

@@ -68,15 +68,6 @@ class ProductColor
      */
     private $status=true;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isValid", type="boolean")
-     */
-    private $isValid = true;
-
-
-
 
     /**
      * Get id
@@ -187,21 +178,7 @@ class ProductColor
         return $this->status;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
 
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
     /**
      * @return mixed
@@ -220,45 +197,5 @@ class ProductColor
         return $this->orderItem;
     }
 
-
-    /**
-     * @return boolean
-     */
-    public function getIsValid()
-    {
-        return $this->isValid;
-    }
-
-    /**
-     * @param boolean $isValid
-     */
-    public function setIsValid($isValid)
-    {
-        $this->isValid = $isValid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGoodsItem()
-    {
-        return $this->goodsItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseVendorItems()
-    {
-        return $this->purchaseVendorItems;
-    }
-
-    /**
-     * @return StockItem
-     */
-    public function getStockItems()
-    {
-        return $this->stockItems;
-    }
 }
 
