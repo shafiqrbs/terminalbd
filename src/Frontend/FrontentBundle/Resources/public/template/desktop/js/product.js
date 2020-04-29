@@ -236,11 +236,7 @@ $('.product-preview').click(function () {
     $.ajax({
         url: url,
         type: 'GET',
-        beforeSend: function () {
-            $('.loader-curtain').addClass('is-active').fadeIn(5000);
-        },
         success: function (response) {
-            $('.loader-curtain').fadeOut(2000).removeClass('is-active');
             $('.product-modal-content').html(response);
             $('#product-modal').modal('toggle');
         }
@@ -326,6 +322,72 @@ $(document).on( "click", ".btn-number-cart", function(e){
     }
 });
 
+$(document).on( "click", ".btn-inline-cart", function(e){
+
+    e.preventDefault();
+
+    var url         = $(this).attr('data-url');
+    var productId   = $(this).attr('data-text');
+    var price       = $(this).attr('data-title');
+    var fieldId     = $(this).attr('data-id');
+    var fieldName   = $(this).attr('data-field');
+    var type        = $(this).attr('data-type');
+    var input       = $('#quantity-'+ $(this).attr('data-id'));
+    var currentVal  = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function( data ) {
+                        obj = JSON.parse(data);
+                        var subTotal = (existVal * parseInt(price));
+                        $('#btn-total-'+fieldId).html(subTotal);
+                        $('#cart-item-list-box').html(obj['cartItem']);
+                        $('.totalItem').html(obj['totalItem']);
+                        $('.totalAmount').html(obj['cartTotal']);
+                        $('.vsidebar .txt').html(obj['cartResult']);
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $('#'+input).attr('disabled', true);
+            }else {
+                $('#'+input).attr('disabled', false);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function(data){
+                        obj = JSON.parse(data);
+                        if(obj['process'] == 'success'){
+                            var subTotal = (existVal * parseInt(price));
+                            $('#btn-total-'+fieldId).html(subTotal);
+                            $('#cart-item-list-box').html(obj['cartItem']);
+                            $('.totalItem').html(obj['totalItem']);
+                            $('.totalAmount').html(obj['cartTotal']);
+                            $('.vsidebar .txt').html(obj['cartResult']);
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('There is not enough product in stock at this moment')
+                        }
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $('#'+input).attr('disabled', true);
+            }else {
+                $('#'+input).attr('disabled', false);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
 
 $(document).on( "click", "#productBuy", function(e){
 

@@ -139,11 +139,11 @@ class TemplateCustomize
 
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="mobileFooter", type="boolean", nullable=true)
+     * @ORM\Column(name="mobileFooter", type="string", nullable=true)
      */
-    private $mobileFooter = true;
+    private $mobileFooter;
 
 
     /**
@@ -370,6 +370,14 @@ class TemplateCustomize
      * @ORM\Column(name="siteCssStyle", type="text" , nullable=true)
      */
     private $siteCssStyle;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cssStyleMobile", type="text" , nullable=true)
+     */
+    private $cssStyleMobile;
 
 
     /**
@@ -3470,7 +3478,7 @@ class TemplateCustomize
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function isMobileFooter()
     {
@@ -3478,7 +3486,7 @@ class TemplateCustomize
     }
 
     /**
-     * @param bool $mobileFooter
+     * @param string $mobileFooter
      */
     public function setMobileFooter($mobileFooter)
     {
@@ -3499,6 +3507,22 @@ class TemplateCustomize
     public function setWebsiteTitle($websiteTitle)
     {
         $this->websiteTitle = $websiteTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCssStyleMobile()
+    {
+        return $this->cssStyleMobile;
+    }
+
+    /**
+     * @param string $cssStyleMobile
+     */
+    public function setCssStyleMobile($cssStyleMobile)
+    {
+        $this->cssStyleMobile = $cssStyleMobile;
     }
 
 

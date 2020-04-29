@@ -845,9 +845,11 @@ class CategoryRepository extends MaterializedPathRepository
 
     public function getCategoryTreeForMobile( $category , $selected, $spacing = '--', $items = '' ) {
 
+        /* @var $row Category */
         foreach($category as $row){
             $selected = ($selected === $row->getId() )? 'selected':'';
-            $items .= "<option  $selected  value='{$row->getId()}'>{$spacing}{$row->getName()}</option>";
+            $name = $row->getName();
+            $items .= "<option  $selected  value='{$row->getId()}'>{$spacing}{$name}</option>";
             if($row->getChildren()){
                 $items = $this->getCategoryTreeForMobile($row->getChildren(), $selected, $spacing . '--', $items);
             }
@@ -888,6 +890,19 @@ class CategoryRepository extends MaterializedPathRepository
         return $res;
 
     }
+
+    public function getFeatureCategory($config, $limit)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $query->andWhere("e.status = 1");
+        $query->andWhere("e.feature = 1");
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults($limit);
+        return $query->getQuery()->getResult();
+
+    }
+
 
 
 }

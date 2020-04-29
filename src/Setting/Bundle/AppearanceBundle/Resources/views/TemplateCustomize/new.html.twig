@@ -983,8 +983,8 @@
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">{{ form_widget(form.mobileLogin) }} Mobile Login</label>
                                     <label class="control-label" for="firstName">{{ form_widget(form.mobileShowLogo) }} Logo Show</label>
-                                    <div class="controls">{{ form_widget(form.mobileHomeShowLogo) }}  Logo Show Home</div>
-                                    <div class="controls">{{ form_widget(form.mobileFooter) }}  Show Mobile Footer</div>
+                                    <div class="control-label">{{ form_widget(form.mobileHomeShowLogo) }}  Logo Show Home</div>
+                                    <div class="controls">{{ form_widget(form.mobileFooter) }}</div>
                                 </div>
                             </div>
                             <div class="span10">
@@ -1628,9 +1628,20 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
-                                    <label class="control-label"  for="siteCssStyle">Site Customization CSS</label>
+                                    <label class="control-label"  for="siteCssStyle">Desktop Customization CSS</label>
                                     <div class="controls">
                                         {{ form_widget(form.siteCssStyle) }}
+                                        <p>Site related all css add here.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label"  for="siteCssStyle">Mobile Customization CSS</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.cssStyleMobile) }}
                                         <p>Site related all css add here.</p>
                                     </div>
                                 </div>

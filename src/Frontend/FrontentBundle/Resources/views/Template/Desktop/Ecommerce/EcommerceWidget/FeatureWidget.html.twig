@@ -19,21 +19,25 @@
                     {% for slide in widget.featureWidgetItems %}
 
                         {% set path ='' %}
-                        {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
+                        {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty  %}
                             {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) %}
-                        {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
-                            {% set path =  path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id})  %}
-                        {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
-                            {% set path =  path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id})  %}
-                        {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
-                            {% set path =  path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id})  %}
                         {% elseif slide.feature.targetTo == 'Brand' and slide.feature.brand is not empty %}
-                            {% set path =  path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id})  %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id}) %}
+                        {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) %}
+                        {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) %}
+                        {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) %}
+                        {% elseif slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) %}
+                        {% else %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                         {% endif %}
 
                         <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
                             <a href="{{ path }}"><img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath)}}{% endif %}" alt="..."></a>
-                            {% if slide.feature.captionBgColor is not empty %}
+                            {% if slide.feature.isSliderTitle  != 1 %}
                                 <div class="carousel-caption {#caption-{{ slide.feature.captionPosition }}#}" style="background-color: {{ slide.feature.captionBgColor }}">
                                     {% if slide.feature.name is not empty %}<h4 class="animated fadeInLeftBig slide-delay-1" >{{ slide.feature.name }}{% endif %}</h4>
                                     {% if slide.feature.content is not empty %}<span class="animated fadeInUpBig slide-delay-2" >{{ slide.feature.content|raw }}</span>{% endif %}
@@ -70,7 +74,7 @@
          {% if globalOption.templateCustomize.siteTitle is not empty %}
              <div class="container wow fadeInDown grid" data-wow-delay="" >
                  <div class="section-header" style="margin-top:60px">
-                     <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                     <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1"  >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
                  {% if globalOption.templateCustomize.siteSlogan is not empty %}
                      <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
                  {% endif %}
@@ -103,20 +107,25 @@
                             {% for slide in widget.featureWidgetItems %}
 
                                 {% set path ='' %}
-                                {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
+                                {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty  %}
                                     {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) %}
-                                {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
-                                    {% set path =  path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id})  %}
-                                {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
-                                    {% set path =  path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id})  %}
-                                {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
-                                    {% set path =  path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id})  %}
                                 {% elseif slide.feature.targetTo == 'Brand' and slide.feature.brand is not empty %}
-                                    {% set path =  path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id})  %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id}) %}
+                                {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) %}
+                                {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) %}
+                                {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) %}
+                                {% elseif slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) %}
+                                {% else %}
+                                    {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                 {% endif %}
 
                                 <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
                                     <a href="{{ path }}"> <img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}" src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize() }}{% endif %}"  alt="..."></a>
+
                                     <div class="carousel-caption" >
                                         {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
                                             <a class="btn btn-mini " style="background-color: {{ slide.feature.buttonBg }}" href="{{ path }}">{{ slide.feature.buttonName }}</a>
@@ -156,16 +165,20 @@
                         {% for slide in widget.featureWidgetItems %}
 
                             {% set path ='' %}
-                            {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
+                            {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty  %}
                                 {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) %}
-                            {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
-                                {% set path =  path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id})  %}
-                            {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
-                                {% set path =  path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id})  %}
-                            {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
-                                {% set path =  path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id})  %}
                             {% elseif slide.feature.targetTo == 'Brand' and slide.feature.brand is not empty %}
-                                {% set path =  path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id})  %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id}) %}
+                            {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) %}
+                            {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) %}
+                            {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) %}
+                            {% elseif slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) %}
+                            {% else %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                             {% endif %}
 
                             <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
@@ -207,6 +220,7 @@
             {% for slide in widget.featureWidgetItems %}
                 {% if(slide.feature.webPath) %}
 
+                    {% set path ='' %}
                     {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty  %}
                         {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) %}
                     {% elseif slide.feature.targetTo == 'Brand' and slide.feature.brand is not empty %}
@@ -227,7 +241,9 @@
                         <div class="box-img" style="height: 100%">
                             {%  set imageWidth =  slide.divWidth~'%' %}
                             <a href="{{ path }}"><img class="img-responsive img-responsive-feature" style="height: 100%!important;"   src="{{ image(slide.feature.webPath) }}" alt=""></a>
+                             {% if slide.feature.isSliderTitle  != 1 %}
                             <span class="img-responsive-preview img-responsive-preview-{{  slide.feature.captionPosition }} " style="background-color: {{ slide.feature.captionBgColor }};color: {{ slide.feature.buttonBg }}; " >{{ slide.feature.name }}</span>
+                        {% endif %}
                         </div>
                     </div>
                 {% endif %}
@@ -241,39 +257,28 @@
             <div class="wow fadeInDown feature-carousel"   data-wow-delay="" >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
-                        <div class="page-title">Feature Category</div>
+                        <div class="page-title">Feature Category </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="feature-category-slider" class="">
-                        {% for category in  widget.globalOption.featureCategories  %}
-                            <div class="col-md-12">
-                                <div class="thumbnail" data-match-height="feature-category">
-                                    <div class="product-preview group" >
-                                        <img class="img-responsive" src="{{ image(category.webPath).resize(250,200, 'white') }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="caption">
-                                    <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}"><strong>{{ category.category.name }}</strong></a> </p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                <div class="feature-category-slider" >
+                    {% render controller("FrontendBundle:EcommerceWidget:featureCategoryTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id}) %}
                 </div>
             </div>
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.category is defined and widget.category is not empty %}
-            <div class="wow fadeInDown feature-carousel" >
-                <div class="page-title-bar">
-                    <div class="col-md-12" >
-                        <div class="page-title">{{ widget.category.name }}</div>
+            {% for category in widget.category %}
+                <div class="wow fadeInDown feature-carousel main-category-{{ category.id }}" >
+                    <div class="page-title-bar">
+                        <div class="col-md-12" >
+                            <div class="page-title">{{ category.name }}</div>
+                        </div>
+                    </div>
+                    <div class="inner-category-{{ category.id }}">
+                        {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id,'widget':widget.id , 'category':category.id}) %}
                     </div>
                 </div>
-                <div>
-                    {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id, 'category':widget.category.id}) %}
-                </div>
-            </div>
+            {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
@@ -283,62 +288,55 @@
                         <div class="page-title">Feature Brands</div>
                     </div>
                 </div>
-                <div>
-                    <div class="brand-slider">
-                        {% for brand in  widget.globalOption.featureBrands  %}
-                            <div class="col-md-12">
-                                <div class="thumbnail" data-match-height="feature-brand">
-                                    <div class="product-preview" >
-                                        <img class="img-responsive" src="{{ image(brand.webPath).resize(150,120) }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="caption">
-                                    <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}"><strong>{{ brand.brand.name }}</strong></a> </p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+                <div class="brand-slider">
+                    {% render controller("FrontendBundle:EcommerceWidget:featureBrandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id}) %}
                 </div>
             </div>
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.brand is defined and widget.brand is not empty %}
-            <div class="wow fadeInDown feature-carousel"  >
+        {% for brand in widget.brand %}
+            <div class="wow fadeInDown feature-carousel main-brand-{{ brand.id }}"  >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
-                        <div class="page-title">{{ widget.brand.name }}</div>
+                        <div class="page-title">{{ brand.name }}</div>
                     </div>
                 </div>
-                <div>
-                    {% render controller("FrontendBundle:EcommerceWidget:brandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id ,'brand':widget.brand.id}) %}
+                <div class="inner-brand-{{ brand.id }}">
+                    {% render controller("FrontendBundle:EcommerceWidget:brandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id ,'brand':brand.id}) %}
                 </div>
             </div>
+        {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
        {% if widget.promotion is defined and widget.promotion is not empty %}
+           {% for promotion in widget.promotion %}
                 <div class="wow fadeInDown feature-carousel"  style="">
                     <div class="page-title-bar">
                         <div class="col-md-12" >
-                            <div class="page-title">{{ widget.promotion.name }}</div>
+                            <div class="page-title">{{ promotion.name }}</div>
                         </div>
                     </div>
                     <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:promotionTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':widget.promotion.id}) %}
+                        {% render controller("FrontendBundle:EcommerceWidget:promotionTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':promotion.id}) %}
                     </div>
                 </div>
+           {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.tag is defined and widget.tag is not empty %}
-                <div class="wow fadeInDown feature-carousel"  style="">
-                    <div class="page-title-bar">
-                        <div class="col-md-12" >
-                            <div class="page-title">{{ widget.tag.name }}</div>
+            {% for tag in widget.tag %}
+                    <div class="wow fadeInDown feature-carousel"  style="">
+                        <div class="page-title-bar">
+                            <div class="col-md-12" >
+                                <div class="page-title">{{ tag.name }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':tag.id}) %}
                         </div>
                     </div>
-                    <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':widget.tag.id}) %}
-                    </div>
-                </div>
+            {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.discount is defined and widget.discount is not empty %}
@@ -356,4 +354,5 @@
     </div>
     {% endfor %}
 {% endif %}
+
 

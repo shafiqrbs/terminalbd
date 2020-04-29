@@ -231,7 +231,7 @@ class ItemController extends Controller
             $theme = 'medicine/edit';
         }else{
             $editForm = $this->inventoryEditForm($entity);
-            $theme = 'index';
+            $theme = 'edit';
         }
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
 

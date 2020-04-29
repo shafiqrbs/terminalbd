@@ -18,7 +18,10 @@ class TemplateCustomizeType extends AbstractType
         $builder
 
             ->add('showSocialIcon')
-            ->add('mobileFooter')
+            ->add('mobileFooter', 'choice', array(
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices' => array('' => '- Mobile Footer -','none' => 'None','contact' => 'Contact','cart' => 'Cart'),
+            ))
             ->add('mobileLogin')
             ->add('contactForm')
             ->add('registrationForm')
@@ -43,6 +46,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('topBarContent','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'placeholder'=>'Enter top bar text or button')))
             ->add('siteCssStyle','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 12,'placeholder'=>'Enter customize site css style')))
+            ->add('cssStyleMobile','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 12,'placeholder'=>'Enter customize site css style for mobile')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','left' => 'Left',  'right' => 'Right'),

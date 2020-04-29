@@ -146,6 +146,12 @@ class Category
     private $name;
 
     /**
+     * @var string
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
+    /**
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
      *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
@@ -630,6 +636,22 @@ class Category
 	public function setEcommerceConfig( $ecommerceConfig ) {
 		$this->ecommerceConfig = $ecommerceConfig;
 	}
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
 
 
 }

@@ -58,12 +58,13 @@
     'assets/template/desktop/css/css-loader.css'
     'assets/template/desktop/css/module.css'
     'assets/template/desktop/css/socialicon.css'
+    'assets/template/desktop/css/style.css'
     'assets/template/plugin/bootsnav-master/css/bootsnav.css'
     %}
 
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-      <link href="/assets/template/desktop/{{template}}/css/style.css" rel="stylesheet" />
+      {#<link href="/assets/template/desktop/{{template}}/css/style.css" rel="stylesheet" />#}
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -278,6 +279,88 @@
     .product-modal-content{
         background: #ffffff;
         margin-top: 9.7%;
+    }
+
+    .action{
+        width: 100%!important;
+    }
+    #searchResult {
+        list-style: none;
+        padding: 0;
+        width: 88%;
+        position: absolute;
+        margin: 0;
+        top: 35px;
+        left: -15px!important;
+        max-height:220px;
+        overflow-y: scroll;
+        z-index: 999999999;
+        background: #f5f5f5;
+    }
+
+    #searchResult li{
+        background: #eeeeee;
+        padding: 4px;
+        margin-bottom: 1px;
+    }
+
+    #searchResult li:nth-child(even){
+        background: #f5f5f5;
+    }
+
+    #searchResult li:hover{
+        cursor: pointer;
+        background-color:#FF5400;
+        color: #ffffff;
+    }
+    #item-qnt {
+        position: absolute;
+        top: -12px;
+        font-size: 9px;
+        background: red;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        color: #fff;
+        font-weight: bold;
+        z-index: 99;
+    }
+    .bs-example-form {
+        display : flex;
+        align-items : center;
+        float: left!important;
+    }
+
+    .rounded-list ol > li p:before
+    {
+        background: #e47911!important;
+    }
+
+    .fixed-top{
+        z-index: 99999;
+        width: 100%;
+    }
+
+    .input-group-field {
+        border-radius: 0!important;
+    }
+    .search-field{
+        font-size: 13px;
+    }
+    .search-select {
+        height: 34px;
+        padding: 3px 10px;
+        line-height: 1.5;
+        border: none;
+        background-color: #F9FAFA;
+        border-radius:0!important;
+        border-right:1px solid #d0dde4!important;
+    }
+    .single-dropdown-menu {
+        margin-top: 1px!important;
+        z-index: 9999999;
     }
 
 </style>

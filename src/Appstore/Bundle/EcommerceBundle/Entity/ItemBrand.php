@@ -107,9 +107,9 @@ class ItemBrand  implements CodeAwareEntity
 	/**
      * @var boolean
      *
-     * @ORM\Column(name="isFeature", type="boolean")
+     * @ORM\Column(name="isFeature", type="boolean", nullable=true)
      */
-    private $isFeature = true;
+    private $isFeature = false;
 
 
 	/**

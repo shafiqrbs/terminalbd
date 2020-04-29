@@ -134,8 +134,40 @@
             <!--/footer-->
             <div class="w3agile alt-mobile-footer">
                 {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
-                {% if globalOption.templateCustomize.mobileFooter == 1 %}
-                <div class="footer-bg" id="mobile-footer">
+                {% if globalOption.templateCustomize.mobileFooter == 'contact' %}
+                    <div class="footer-bg" id="mobile-footer">
+                    <ul class="footer-icon">
+
+                        <li>
+                            <a href="tel://88{{ globalOption.hotline }}" class="hvr-radial-out" data-title="Phone">
+                                <i area-hidden=true class="fa fa-phone"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#login-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
+                                <i class="fa fa-comment"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:" class="scrollToTop" data-title="Top up">
+                                <i class="fa fa-hand-o-up"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#email-modal" class="hvr-radial-out sign-in popup-top-anim">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="last hvr-radial-out"
+                               href="{{ path(globalOption.subDomain ~ '_webservice_contact') }}" data-title="">
+                                <i class="fa fa-map-marker"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% if globalOption.templateCustomize.mobileFooter == 'cart' %}
+                    <div class="footer-bg" id="mobile-footer">
                     <ul class="footer-icon">
 
                         <li>
@@ -169,7 +201,8 @@
                 {% else %}
                     <div class="container">
                         <div class="copyright-footer">
-                            © {{ "now"|date('Y') }} <a href="http://www.terminalbd.com">Terminalbd</a> All Rights Reserved.</div>
+                            © {{ "now"|date('Y') }} <a target="_blank" href="http://www.terminalbd.com">Terminalbd</a> All Rights Reserved.
+                        </div>
                     </div>
                 {% endif %}
             </div>

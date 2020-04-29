@@ -63,6 +63,17 @@ class ItemBrandRepository extends EntityRepository
         return $entity;
     }
 
+    public function getFeatureBrand($config, $limit)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $query->andWhere("e.status = 1");
+        $query->andWhere("e.isFeature = 1");
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults($limit);
+        return $query->getQuery()->getResult();
+
+    }
 
 
 }

@@ -47,35 +47,84 @@
             <!-- BEGIN FORM-->
             {{ form_start(form) }}
             {{ form_row(form._token) }}
-
             <div class="row-fluid">
-                <div class="span6 ">
-                    <div class="control-group">
-                        <label class="control-label" >Parent</label>
-                        <div class="controls">
-                            <div class="input-icon left">
+
+                <div class="span8">
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label" >Parent</label>
+                            <div class="controls">
                                 {{ form_widget(form.parent) }}
                                 {{ form_errors(form.parent) }}
                             </div>
-
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span6 ">
-                    <div class="control-group">
-                        <label class="control-label" for="firstName">Category Name <span class="required">*</span></label>
-                        <div class="controls">
-                            <div class="input-icon left">
-                                <i class="icon-font"></i>
-                                {{ form_widget(form.name) }}
-                                {{ form_errors(form.name) }}
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label" >&nbsp;</label>
+                            <div class="controls">
+                                Feature {{ form_widget(form.feature) }}
+                                {{ form_errors(form.feature) }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--/span-->
+                <br/>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label" for="firstName">Category Name <span class="required">*</span></label>
+                            <div class="controls">
+                                <div class="input-icon left">
+                                    <i class="icon-font"></i>
+                                    {{ form_widget(form.name) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="control-label" for="firstName">Content</label>
+                            <div class="controls">
+                                {{ form_widget(form.content) }}
+                                {{ form_errors(form.content) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="span4">
+                    <div class="control-group">
+                        <label class="control-label" >Brand Logo</label>
+                        <div class="controls">
+                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                <div  class="fileupload-new thumbnail">
+                                    {% if(entity.webPath) %}
+                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                    {% else %}
+                                        <img alt="" src="http://www.placehold.it/220x160/EFEFEF/AAAAAA&amp;text=no+image">
+                                    {% endif %}
+                                </div>
+                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        {{ form_widget(form.file) }}
+                                                        {{ form_errors(form.file) }}
+                                                    </span>
+                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-actions portlet box grey">

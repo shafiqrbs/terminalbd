@@ -28,3 +28,11 @@ ecommerce_category_delete:
     path:     /{id}/delete
     defaults: { _controller: "EcommerceBundle:CustomCategory:delete" }
 
+ecommerce_category_status:
+    path:     /{id}/status
+    defaults: { _controller: "EcommerceBundle:CustomCategory:status" }
+
+ecommerce_category_feature:
+    path:     /{id}/feature
+    defaults: { _controller: "EcommerceBundle:CustomCategory:feature" }
+

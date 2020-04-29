@@ -49,6 +49,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Name </th>
+                                    <th class="numeric" >Is Feature</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -59,10 +60,17 @@
                                     <tr>
                                         <td class="numeric" ><a href="{{ path('ecommerce_brand_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
-                                            {% if entity.status == 1 %}
-                                                <a href="{{ path('ecommerce_brandm_status', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
+                                            {% if entity.isFeature == 1 %}
+                                                <a href="{{ path('ecommerce_brand_feature', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
                                             {% else %}
-                                                <a href="{{ path('ecommerce_brandm_status', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
+                                                <a href="{{ path('ecommerce_brand_feature', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric" >
+                                            {% if entity.status == 1 %}
+                                                <a href="{{ path('ecommerce_brand_status', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
+                                            {% else %}
+                                                <a href="{{ path('ecommerce_brand_status', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >

@@ -7,6 +7,7 @@ use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -48,6 +49,22 @@ class CustomCategoryType extends AbstractType
                 'class' => 'ProductProductBundle:Category',
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
+            ))
+            ->add('feature')
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Category description')))
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        )
+                    ))
+                )
             ))
         ;
     }

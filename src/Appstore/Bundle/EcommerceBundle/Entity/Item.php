@@ -279,6 +279,20 @@ class Item
     private $quantityApplicable = 0;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="maxQuantity", type="integer", nullable = true)
+     */
+    private $maxQuantity = 100;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="minQuantity", type="integer", nullable = true)
+     */
+    private $minQuantity = 1;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="preOrder", type="boolean", nullable = true)
@@ -292,6 +306,21 @@ class Item
      * @ORM\Column(name="subProduct", type="boolean", nullable = true)
      */
     private $subProduct = false;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="warningLabel", type="string", length=10 , nullable = true)
+     */
+    private $warningLabel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="warningText", type="string", length=255 , nullable = true)
+     */
+    private $warningText;
 
 
     /**
@@ -309,19 +338,6 @@ class Item
      */
     private $gender;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="warningLabel", type="string", length=10 , nullable = true)
-     */
-    private $warningLabel;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="warningText", type="string", length=255 , nullable = true)
-     */
-    private $warningText;
 
 
     /**
@@ -1285,6 +1301,38 @@ class Item
     public function setVendor($vendor)
     {
         $this->vendor = $vendor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxQuantity()
+    {
+        return $this->maxQuantity;
+    }
+
+    /**
+     * @param int $maxQuantity
+     */
+    public function setMaxQuantity($maxQuantity)
+    {
+        $this->maxQuantity = $maxQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinQuantity()
+    {
+        return $this->minQuantity;
+    }
+
+    /**
+     * @param int $minQuantity
+     */
+    public function setMinQuantity($minQuantity)
+    {
+        $this->minQuantity = $minQuantity;
     }
 
 

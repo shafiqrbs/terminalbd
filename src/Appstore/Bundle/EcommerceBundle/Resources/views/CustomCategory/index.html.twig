@@ -48,7 +48,8 @@
                             <tr class="head-grey">
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Parent</th>
-                                <th class="numeric" >Permission</th>
+                                <th class="numeric" >Is Feature</th>
+                                <th class="numeric" >Status</th>
                                 <th class="numeric" >Action</th>
 
                             </tr>
@@ -59,7 +60,20 @@
                                 <tr>
                                     <td class="numeric" ><a href="{{ path('ecommerce_category_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                     <td class="numeric">{% if entity.parent is not empty %}{{ entity.parent.name|default('---') }}{% endif %}</td>
-                                    <td class="numeric" >{{ entity.permission|capitalize }}</td>
+                                    <td class="numeric" >
+                                        {% if entity.feature == 1 %}
+                                            <a href="{{ path('ecommerce_category_feature', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
+                                        {% else %}
+                                            <a href="{{ path('ecommerce_category_feature', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="numeric" >
+                                        {% if entity.status == 1 %}
+                                            <a href="{{ path('ecommerce_category_status', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
+                                        {% else %}
+                                            <a href="{{ path('ecommerce_category_status', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
+                                        {% endif %}
+                                    </td>
                                     <td class="numeric" >
                                       <a href="{{ path('ecommerce_category_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                         <a href="{{ path('ecommerce_category_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>

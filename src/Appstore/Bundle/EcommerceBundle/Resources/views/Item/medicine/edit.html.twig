@@ -273,11 +273,8 @@
                                                     <div class="btn-group">
                                                         <div class="input-append">
                                                             {{ form_widget(goodsItemForm.quantity) }}
-                                                            {{ form_errors(goodsItemForm.quantity) }}
                                                             {{ form_widget(goodsItemForm.purchasePrice) }}
-                                                            {{ form_errors(goodsItemForm.purchasePrice) }}
                                                             {{ form_widget(goodsItemForm.salesPrice) }}
-                                                            {{ form_errors(goodsItemForm.salesPrice) }}
                                                             <a href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('ecommerce_item_subproduct',{'id':entity.id}) }}" class="btn yellow">Save</a>
                                                         </div>
                                                     </div>

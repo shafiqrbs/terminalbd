@@ -21,7 +21,21 @@ class ItemBrandType extends AbstractType
                     new NotBlank(array('message'=>'Please add  brand name'))
             )))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Brand description')))
-            ->add('file');
+            ->add('isFeature')
+            ->add('file', 'file',array(
+                'required' => true,
+                'constraints' =>array(
+                    new File(array(
+                        'maxSize' => '1M',
+                        'mimeTypes' => array(
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        )
+                    ))
+                )
+            ));
     }
     
     /**

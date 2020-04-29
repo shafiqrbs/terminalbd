@@ -113,8 +113,8 @@ class ItemSubRepository extends EntityRepository
             $sizeId = isset($data['size']) ? $data['size'] :'';
             $unitId = isset($data['unit']) ? $data['unit'] :'';
             $quantity = isset($data['quantity']) ? $data['quantity'] :1;
-            $purchasePrice = isset($data['purchasePrice']) ? $data['purchasePrice'] :1;
-            $salesPrice = isset($data['salesPrice']) ? $data['salesPrice'] :1;
+            $purchasePrice = isset($data['purchasePrice']) ? $data['purchasePrice'] :0;
+            $salesPrice = isset($data['salesPrice']) ? $data['salesPrice'] :0;
 
 
             if (isset($data['salesPrice']) and !empty($data['salesPrice']) ) {

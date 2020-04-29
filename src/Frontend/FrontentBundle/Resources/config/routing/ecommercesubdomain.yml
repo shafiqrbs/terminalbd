@@ -84,6 +84,13 @@ webservice_product_cart:
     options:
             expose: true
 
+webservice_product_inline_cart:
+    path:     /cart/inline-item-cart/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productInlineCart }
+    methods:  GET
+    options:
+           expose: true
+
 webservice_product_single_cart:
     path:     /single-cart/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddSingleCart }

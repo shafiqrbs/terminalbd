@@ -588,8 +588,8 @@ class WebServiceProductController extends Controller
                 )
             );
 
-            echo $array = (json_encode(array('subItem' => $html ,'subItemQuantity' => $subItem->getQuantity())));
-            exit;
+            $array = (json_encode(array('subItem' => $html ,'subItemQuantity' => $subItem->getQuantity())));
+            return new Response($array);
         }
     }
 
@@ -619,13 +619,16 @@ class WebServiceProductController extends Controller
                     'subItem'    => $subItem
                 )
             );
+            $unit = empty($subItem->getProductUnit()) ? '' : $subItem->getProductUnit()->getName();
             if($subItem->getDiscountPrice()){
-                $price = '<strike>'.$subItem->getSalesPrice().'</strike> <strong class="list-price" >'.$subItem->getDiscountPrice().'</strong>';
+                $price = "<strike>{$subItem->getSalesPrice()}</strike> <strong class='list-price' >{$subItem->getDiscountPrice()}</strong>/{$unit}";
             }else{
-                $price = '<strong class="list-price">'.$subItem->getSalesPrice().'</strong>';
+                $price = "<strong class='list-price'>{$subItem->getSalesPrice()}</strong>/{$unit}";
             }
-            echo $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price )));
-            exit;
+
+            $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price )));
+            return new Response($array);
+
         }
     }
 
@@ -661,7 +664,6 @@ class WebServiceProductController extends Controller
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         $quantity = $request->request->get('quantity');
         $color = $request->request->get('color');
@@ -675,9 +677,7 @@ class WebServiceProductController extends Controller
         }
         /** @var GlobalOption $globalOption */
 
-        $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
-       // $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
         $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
         $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
@@ -706,10 +706,83 @@ class WebServiceProductController extends Controller
         }else{
             $array =(json_encode(array('process'=>'invalid')));
         }
-        echo $array;
-        exit;
+       return new Response($array);
 
     }
+
+    public function productInlineCartAction(Request $request , $subdomain , Item $product)
+    {
+
+        $data = $_REQUEST;
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        $productImg = !empty($data['productImg']) ? $data['productImg'] : '';
+        $quantity = !empty($data['quantity']) ? $data['quantity'] : 0;
+        $sub = !empty($data['subItem']) ? $data['subItem'] : 0;
+        $color = !empty($data['color']) ? $data['color'] : 0;
+
+        if ($color > 0) {
+            $colorName = $this->getDoctrine()->getRepository('SettingToolBundle:ProductColor')->find($color)->getName();
+        } else {
+            $colorName = '';
+        }
+
+        if ($sub > 0) {
+            $subitem = $this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->find($sub);
+        } else {
+            $subitem = '';
+        }
+
+
+        /** @var GlobalOption $globalOption */
+
+        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
+
+        if (!empty($subitem)) {
+
+            $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+            $insert = array(
+                'id' => $subitem->getId(),
+                'name' => $product->getWebName(),
+                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
+                'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
+                'sizeUnit' => !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '',
+                'productUnit' => $productUnit,
+                'color' => $colorName,
+                'colorId' => $color,
+                'price' => $salesPrice,
+                'quantity' => $quantity,
+                'productImg' => $productImg);
+            $cart->insert($insert);
+        }else{
+
+            $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
+            $insert = array(
+                'id' => $product->getId(),
+                'name' => $product->getWebName(),
+                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
+                'size' => !empty($product->getSize()) ? $product->getSize()->getName() : '',
+                'sizeUnit' => !empty($product->getProductUnit()) ? $product->getProductUnit()->getName() : '',
+                'price' => $salesPrice,
+                'quantity' => $quantity,
+                'productImg' => $productImg
+            );
+            $cart->insert($insert);
+        }
+
+        $cartTotal = (string)$cart->total();
+        $totalItems = (string)$cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        $array =json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems));
+        return new Response($array);
+
+    }
+
 
     public function productAddSingleCartAction(Request $request , $subdomain , Item $product)
     {

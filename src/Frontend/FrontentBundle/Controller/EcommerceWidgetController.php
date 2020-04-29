@@ -51,24 +51,23 @@ class EcommerceWidgetController extends Controller
         $cart = new Cart($request->getSession());
         $data = $_REQUEST;
 	    $categoryTree = '';
-        $category = isset($data['category']) ? $data['category'] :'';
-
-       // $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
-      //  $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+        $selected = isset($data['category']) ? $data['category'] :'';
+        $config = $globalOption->getEcommerceConfig();
+        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($config);
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryTreeForMobile($cats,$selected);
         $searchForm = $this->createCreateForm(new Item(),$globalOption);
         $detect = new MobileDetect();
         $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=> $globalOption->getEcommerceConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-        //    $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
             $theme = 'Template/Mobile/'.$themeName;
         }else{
-          //  $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
             $theme = 'Template/Desktop/'.$themeName;
         }
 
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'form'                  => $searchForm->createView(),
+            'categoryTree'          => $categoryTree,
             'brandTree'             => $brandTree,
             'menu'                  => $menu,
             'cart'                  => $cart,
@@ -535,6 +534,30 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
+    public function featureCategoryTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        $datalimit = $widget->getBrandLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $categories = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategory($config,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureCategoryWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureCategoryWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'categories'                  => $categories,
+            'globalOption'            => $globalOption,
+
+        ));
+    }
+
+
     public function categoryTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Category $category)
     {
 
@@ -563,6 +586,29 @@ class EcommerceWidgetController extends Controller
             'widget'                    => $widget,
             'featureCategory'           => $featureCategory,
             'category'                  => $category,
+        ));
+    }
+
+    public function featureBrandTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        $datalimit = $widget->getBrandLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
+        $config = $globalOption->getEcommerceConfig()->getId();
+        $brands = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->getFeatureBrand($config,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureBrandWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureBrandWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'brands'                  => $brands,
+            'globalOption'            => $globalOption,
+
         ));
     }
 
