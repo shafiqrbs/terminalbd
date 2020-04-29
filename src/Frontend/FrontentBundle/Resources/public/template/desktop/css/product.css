@@ -727,6 +727,14 @@ strike{
     height: 33px;
 }
 
+.sub-product-list {
+    display: flex;
+    align-items: center;
+    float: left!important;
+}
+.item-select-bg{
+    background: #ebf0f0;
+}
 
 /* =========  Product INFO ============ */
 
