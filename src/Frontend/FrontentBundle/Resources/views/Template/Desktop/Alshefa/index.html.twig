@@ -32,9 +32,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/common.js'
     '@FrontendBundle/Resources/public/template/desktop/js/owlcarousel.js'
     '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
     %}
@@ -44,6 +42,5 @@
 {% block documentready %}
     {{ parent() }}
     {% set  sliderItems = globalOption.ecommerceConfig.owlProductColumn  %}
-    sliderPageOwl(4);
     productSliderOwl({{ sliderItems }});
 {% endblock %}
