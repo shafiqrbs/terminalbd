@@ -76,6 +76,19 @@ class EcommerceProductEditType extends AbstractType
 					         ->orderBy("p.name","ASC");
 				},
 			))
+            /*->add('itemColors', 'entity', array(
+				'required'    => true,
+				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
+				'empty_value' => '-Choose a color-',
+				'property' => 'name',
+				'multiple' => 'multiple',
+				'attr'=>array('class'=>'span12 select2'),
+				'query_builder' => function(EntityRepository $er){
+					return $er->createQueryBuilder('p')
+					          ->where("p.status = 1")
+					          ->orderBy("p.name","ASC");
+				},
+			))*/
 			->add('country', 'entity', array(
 				'required'    => true,
 				'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
@@ -101,15 +114,14 @@ class EcommerceProductEditType extends AbstractType
 				},
 			))
 			->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
+			->add('minQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Min quantity')))
+			->add('maxQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Max quantity')))
 
 			->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price')))
-
-			->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
-
-			->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please add sales price')))))
 			->add('shortContent','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=> 5)))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))
+            /*->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' =>30)))*/
             ->add('subProduct')
             ->add('file', 'file',array(
                 'required' => true,
@@ -195,19 +207,7 @@ class EcommerceProductEditType extends AbstractType
 				),
 			))
 
-			->add('itemColors', 'entity', array(
-				'required'    => true,
-				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
-				'empty_value' => '-Choose a color-',
-				'property' => 'name',
-				'multiple' => 'multiple',
-				'attr'=>array('class'=>'span12 select2'),
-				'query_builder' => function(EntityRepository $er){
-					return $er->createQueryBuilder('p')
-					          ->where("p.status = 1")
-					          ->orderBy("p.name","ASC");
-				},
-			));
+			;
 	}
 
 	/**

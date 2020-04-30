@@ -99,6 +99,8 @@ class EcommerceMedicineType extends AbstractType
             ))
 
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
+            ->add('minQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Min quantity')))
+            ->add('maxQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Max quantity')))
 
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),

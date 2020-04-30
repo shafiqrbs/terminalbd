@@ -253,9 +253,9 @@ webservice_customer_mobile_validation:
     options:
             expose: true
 
-webservice_medicine_stock_search:
-    path:     /product-stock
-    defaults: { _controller: "FrontendBundle:WebServiceProduct:stockSearch" }
+webservice_product_stock_search:
+    path:     /product-stock-search
+    defaults: { _controller: "FrontendBundle:WebServiceProduct:productStockSearch" }
     options:
             expose: true
 
@@ -281,8 +281,8 @@ webservice_stock_item_create:
             expose: true
 
 webservice_stock_prescription:
-    path:     /prescription-stock-item
-    defaults: { _controller: FrontendBundle:WebServiceProduct:prescriptionPreview }
+    path:     /cart-stock-item
+    defaults: { _controller: FrontendBundle:WebServiceProduct:stockPreview }
     methods:  POST
     options:
             expose: true

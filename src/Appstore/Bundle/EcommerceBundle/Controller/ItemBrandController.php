@@ -73,7 +73,7 @@ class ItemBrandController extends Controller
             'action' => $this->generateUrl('ecommerce_brand_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -147,7 +147,7 @@ class ItemBrandController extends Controller
             'action' => $this->generateUrl('ecommerce_brand_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

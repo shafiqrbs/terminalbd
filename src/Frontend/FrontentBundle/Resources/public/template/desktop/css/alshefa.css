@@ -27,6 +27,10 @@
     right: 0;
 }
 
+.cart-input{
+    border: #ffffff!important;
+}
+
 .caption .brand{
     font-size: 11px;
 }

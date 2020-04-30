@@ -30,7 +30,7 @@
                 $.each(options.items, function (k, v) {
                     ul.append(
                             $('<li>').append(
-                            $('<a>').attr({'href': v.link,'id': v.id}).append(
+                            $('<a>').attr({'href': v.link,'id': v.id,'class': v.class}).append(
                             $('<span>').addClass('icon').append(
                             $('<img>').attr({'src': v.iconUrl})
                             ),

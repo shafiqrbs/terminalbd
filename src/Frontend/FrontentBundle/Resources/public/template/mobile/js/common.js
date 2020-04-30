@@ -102,7 +102,7 @@ $(document).on( "click", ".emailSender", function(e){
         $('#member-register-modal').show('toggle');
     });
 
-   
+
 
     $('.select2').on('change', function () {
         $(this).valid();

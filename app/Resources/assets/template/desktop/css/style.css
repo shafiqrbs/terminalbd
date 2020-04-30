@@ -17,14 +17,60 @@ input[type="email"]:focus,
 input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
-input[type="color"]:focus,
-.uneditable-input:focus {
-    outline: none;
-    border: none !important;
+input[type="color"]:focus
+{
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
 }
+
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn.focus:active,
+.btn:active:focus,
+.btn:focus {
+    outline: 0 !important;
+    outline-offset: 0  !important;
+    background-image: none  !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none  !important;
+}
+
+select:focus,
+button:focus,
+input[type="checkbox"]:focus,
+.uneditable-input:focus {
+    outline: none;
+    border: inherit !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.btn-round{
+    outline: 0 !important;
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px!important;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+.btn-round {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px!important;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
 a{
     color: #F88216;
     text-decoration: none;
@@ -768,7 +814,7 @@ ul.dropdown-cart li .item-right button {
     background: #FFFFff;
 }
 .input-selector{
-    height: 33px !important;
+    height: 33px;
 }
 
 .pagination>li>a, .pagination>li>span {
@@ -1606,4 +1652,7 @@ div.treeview, .treeview ul {
 
 .slider-category-feature{
     list-style: none;
+}
+.search-category{
+    height: 35px!important;
 }

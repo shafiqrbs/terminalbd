@@ -15,15 +15,17 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/product-canvas.css'
+    '@FrontendBundle/Resources/public/template/mobile/css/medicine.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}
+    {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/mobile/js/common.js'
-    '@FrontendBundle/Resources/public/template/mobile/js/product.js' %}
+    '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

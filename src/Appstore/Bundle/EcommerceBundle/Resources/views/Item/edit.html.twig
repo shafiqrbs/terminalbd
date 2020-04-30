@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                                 <br/>
-                                <div class="row-fluid">
+                                {#<div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Colors</label>
@@ -111,7 +111,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>#}
                                 <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="control-group">
@@ -149,7 +149,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" >Short Description</label>
+                                                    <label class="control-label" >Description</label>
                                                     <div class="controls">
                                                         {{ form_widget(form.shortContent) }}
                                                         {{ form_errors(form.shortContent) }}
@@ -212,7 +212,7 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="purchasePrice">Purchase Price<span class="required">*</span></label>
+                                            <label class="control-label" for="purchasePrice">Purchase Price</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-money"></i>
@@ -224,21 +224,7 @@
                                     </div>
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="overHeadCost">Overhead Cost</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-money"></i>
-                                                    {{ form_widget(form.overHeadCost) }}
-                                                    {{ form_errors(form.overHeadCost) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Sales Price<span class="required">*</span></label>
+                                            <label class="control-label" for="overHeadCost">Sales Price</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-money"></i>
@@ -248,15 +234,36 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span6">
+                                </div>
+                                <div class="row-fluid">
+
+                                    <div class="span4">
                                         <div class="control-group">
-                                            <label class="control-label" for="quantity">Quantity<span class="required">*</span></label>
+                                            <label class="control-label" for="quantity">Quantity</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-sort-by-order"></i>
                                                     {{ form_widget(form.quantity) }}
                                                     {{ form_errors(form.quantity) }}
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="salesPrice">Min Qnt</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.minQuantity) }}
+                                                {{ form_errors(form.minQuantity) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="salesPrice">Max Qnt</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.maxQuantity) }}
+                                                {{ form_errors(form.maxQuantity) }}
                                             </div>
                                         </div>
                                     </div>
@@ -287,7 +294,7 @@
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="row-fluid">
+                        {#<div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
                                     <label class="control-label" >Description</label>
@@ -298,7 +305,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix">&nbsp;</div>
+                        <div class="clearfix">&nbsp;</div>#}
                         <!--/span-->
                         {% if entity.subProduct == 1 %}
                             <div class="form-actions portlet box blue">
@@ -315,18 +322,18 @@
                                     <div class="clone-block trash" id="clone-sub-product">
                                         <div class="row-fluid clone  box blue">
                                             <div class="row-fluid">
-                                                <div class=" span2">
+                                                <div class=" span4">
                                                     {{ form_widget(goodsItemForm.size) }}
                                                     {{ form_errors(goodsItemForm.size) }}
                                                 </div>
-                                                <div class=" span2">
+                                                <div class=" span4">
                                                     {{ form_widget(goodsItemForm.productUnit) }}
                                                     {{ form_errors(goodsItemForm.productUnit) }}
                                                 </div>
-                                                <div class="span4">
+                                                {#<div class="span4">
                                                     {{ form_widget(goodsItemForm.colors) }}
                                                     {{ form_errors(goodsItemForm.colors) }}
-                                                </div>
+                                                </div>#}
                                                 <div class="span4">
                                                     <div class="btn-group">
                                                         <div class="input-append">

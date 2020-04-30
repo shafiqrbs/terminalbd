@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Almendra|Amita|Archivo|Cormorant+Upright|Croissant+One|Dynalight|Elsie|Elsie+Swash+Caps|Felipa|Germania+One|Great+Vibes|Italianno|Katibeh|Lovers+Quarrel|Marko+One|Meie+Script|Miss+Fajardose|Monsieur+La+Doulaise|Mrs+Sheppards|Niconne|Nova+Script|Pattaya|Petrona|Playball|Quintessential|Redressed|Roboto|Rochester|Romanesco|Sail|Saira+Semi+Condensed|Sevillana|Slabo+27px|Snippet|Sofia|Spirax|Stalemate|Tangerine');
-/*============================== Common CSS ===============================*/
 
 @media screen and (max-width: 6000px) and (min-width: 1301px){
     .container {
@@ -2493,7 +2491,7 @@ ul.sign-list > li.total {
 }
 .item.list-group-item:nth-of-type(odd)
 {
-    background: #eeeeee;
+    background: #FFFFff;
 }
 
 .item.list-group-item:before, .item.list-group-item:after

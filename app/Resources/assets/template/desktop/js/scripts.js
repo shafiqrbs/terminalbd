@@ -121,6 +121,7 @@ $(document).ready(function(){
         $( "#viewed" ).click(function() {
             $( "#viewed-item" ).slideToggle( "slow" );
         });
+
         $(document).on("click", ".login-preview", function() {
             $('#registerModal').modal('hide');
             $('#forgetModal').modal('hide');

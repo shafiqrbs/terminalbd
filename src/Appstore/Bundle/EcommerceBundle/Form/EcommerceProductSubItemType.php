@@ -50,7 +50,7 @@ class EcommerceProductSubItemType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-            ->add('colors', 'entity', array(
+            /*->add('colors', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
                 'empty_value' => '-Choose a color-',
@@ -62,7 +62,7 @@ class EcommerceProductSubItemType extends AbstractType
                         ->where("p.status = 1")
                         ->orderBy("p.name","ASC");
                 },
-            ));
+            ))*/;
 
 
     }

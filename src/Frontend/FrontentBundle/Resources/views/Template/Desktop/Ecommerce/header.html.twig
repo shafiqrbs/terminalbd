@@ -164,7 +164,8 @@
                         <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                             {% if globalOption.ecommerceConfig.searchCategory == 1 %}
                             <div class="col-md-3 col-lg-3" >
-                                        <select class="input-selector col-md-12 col-lg-12" name="category" id="category" >
+                                        <select class="input-selector col-md-12 col-lg-12 search-category" name="category" id="category" >
+                                            <option value="">-- Select Category --</option>
                                             {{ categoryTree|raw }}
                                         </select>
                             </div>
@@ -178,7 +179,7 @@
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                     <span style="position: relative;display: inline-block">
                                           <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
-                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-prescription"> <span  class="fa fa-upload"></span> Prescription</a></span>
+                              <a  href="javascript:" id="prescriptionUpload" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-prescription"> <span  class="fa fa-upload"></span> Upload</a></span>
                                         {% if app.user %}
                                             <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger btn-logout" ><span class="fa fa-sign-in"></span></a>
                                             <a href="{{ path('order',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-dashboard" ><span class="glyphicon glyphicon-user"></span></a>

@@ -736,6 +736,66 @@ strike{
     background: #ebf0f0;
 }
 
+.input-inline-cart{
+    border: 1px solid #ddd;
+}
+.btn-plus{
+    margin-left: 0;
+}
+
+.bs-example-form{
+    float: right;
+}
+.bs-example-form .box{
+    width: 100%;
+}
+
+.bs-example-form .quote-button-box{
+    float: right;
+}
+
+.bs-example-form .support-box{
+    margin-top: 0;
+    float: right;
+    padding-right: 15px;
+}
+
+.card-cart-box{
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.card-cart-box .btn{
+    color: #000101!important;
+}
+
+.btn-transparent {
+    background: #ffffff!important;
+    color: #000101!important;
+}
+
+.closest-dropzone{
+    line-height: 70px;
+}
+.closest-dropzone > span{
+    color: #FF5400!important;
+}
+.modal-dialog{
+    top:0!important;
+}
+
+div.bhoechie-tab-container {
+    margin-top: 7px;
+}
+
+.img-card , .add-card{
+    align-items:center;
+    display: flex;
+}
+
+
+
 /* =========  Product INFO ============ */
 
 
