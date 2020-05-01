@@ -12,12 +12,6 @@ $(document).on('click', ".cartUpload, #prescriptionUpload", function(el) {
     })
 });
 
-$('.dropzone-mobile').inputFileZone({
-    message: 'UPLOAD YOUR PRESCRIPTION',
-    messageFile: 'Ready to upload',
-    zIndex: 9999999,
-    previewImages: true
-});
 
 
 $(document).on('click', '.btn-sorted', function(el) {
@@ -34,8 +28,21 @@ $(document).on( "click", ".upload-pres", function(e){
     $("span", this).toggleClass("fa-close fa-camera");
 });
 
-
 $(document).on( "click", ".showCartItem", function(e){
+    $.ajax({
+        url: "/cart/product-details",
+        type: 'GET',
+        success: function (response) {
+            $('.product-modal-content').html(response);
+            $('#product-modal').modal('toggle');
+            jqueryTemporaryLoad();
+        }
+    })
+});
+
+
+
+$(document).on( "click", ".showCartItemxx", function(e){
     $.ajax({url:'/cart/product-details'}).done(function(content){
         $("#showCartItem").html(content).slideDown("slow");
         $('html, body').animate({
@@ -171,7 +178,7 @@ function jqueryTemporaryLoad() {
     });
 
     $('.dropzone').inputFileZone({
-        message: 'UPLOAD YOUR PRESCRIPTION',
+        message: 'UPLOAD YOUR ATTACH FILE',
         previewImages: false
     });
 
@@ -259,6 +266,8 @@ function jqueryTemporaryLoad() {
     });
 }
 
+function fileUpload() {
+}
 
 $('.cartItem').click(function(){
     $('.cartItem').popModal({

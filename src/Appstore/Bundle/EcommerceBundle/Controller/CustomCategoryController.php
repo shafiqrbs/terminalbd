@@ -271,9 +271,9 @@ class CustomCategoryController extends Controller
         }
         if($status == 1){
             $entity->setStatus(0);
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateBrandItem($entity,0);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateCategoryItem($entity,0);
         } else{
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateBrandItem($entity,1);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->updateCategoryItem($entity,1);
             $entity->setStatus(1);
         }
         $em->flush();

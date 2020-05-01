@@ -736,28 +736,27 @@ class WebServiceProductController extends Controller
             $subitem = '';
         }
 
-
-        /** @var GlobalOption $globalOption */
-
-        $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
+        /** @var  $globalOption GlobalOption */
 
         if (!empty($subitem)) {
 
             $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+            $unit = empty($subitem->getProductUnit()) ? '' : '-'.$subitem->getProductUnit()->getName();
+            $size = $subitem->getSize()->getName();
+            $sizeUnit = $size.$unit;
             $insert = array(
                 'id' => $subitem->getId(),
                 'name' => $product->getWebName(),
                 'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
                 'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
-                'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
-                'sizeUnit' => !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '',
-                'productUnit' => $productUnit,
+                'productUnit' => $sizeUnit,
                 'color' => $colorName,
                 'colorId' => $color,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
                 'productImg' => $productImg);
             $cart->insert($insert);
+
         }else{
 
             $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
@@ -776,7 +775,8 @@ class WebServiceProductController extends Controller
         }
 
         $cartTotal = (string)$cart->total();
-        $totalItems = (string)$cart->total_items();
+        //$totalItems = (string)$cart->total_items();
+        $totalItems = count($cart->contents());
         $cartResult = $cartTotal.'('.$totalItems.')';
         $array =json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems));
         return new Response($array);
@@ -909,12 +909,12 @@ class WebServiceProductController extends Controller
         $detect = new MobileDetect();
         $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
         if($detect->isMobile() || $detect->isTablet() ) {
-            $theme = "Template/Mobile/{$themeName}/";
+            $theme = "Template/Mobile/{$themeName}/EcommerceWidget/";
         }else{
-            $theme = "Template/Desktop/{$themeName}/";
+            $theme = "Template/Desktop/{$themeName}/EcommerceWidget/";
         }
         $html = $this->renderView(
-            'FrontendBundle:'.$theme.':upload.html.twig', array(
+            'FrontendBundle:'.$theme.':Cart.html.twig', array(
                 'cart' => $cart,
                 'globalOption' => $globalOption
             )
@@ -1021,23 +1021,21 @@ class WebServiceProductController extends Controller
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        /* Device Detection code desktop or mobile */
-        $theme = "";
-        if(!empty($globalOption)) {
-            if ($globalOption->getDomainType() == 'ecommerce') {
-                $theme = 'Template/Mobile/EcommerceWidget:ajaxCart.html.twig';
-            } elseif ($globalOption->getDomainType() == 'medicine') {
-                $theme = 'Template/Mobile/EcommerceWidget:ajaxMedicineCart.html.twig';
-            }
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $detect = new MobileDetect();
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+        if($detect->isMobile() || $detect->isTablet() ) {
+            $theme = "Template/Mobile/{$themeName}/EcommerceWidget/";
+        }else{
+            $theme = "Template/Desktop/{$themeName}/EcommerceWidget/";
         }
-        return $this->render("FrontendBundle:{$theme}",
-            array(
+        $html = $this->renderView(
+            'FrontendBundle:'.$theme.':Cart.html.twig', array(
                 'cart' => $cart,
-                'searchForm'        => $_REQUEST,
                 'globalOption' => $globalOption
             )
         );
+        return new Response($html);
     }
 
 
@@ -1065,8 +1063,8 @@ class WebServiceProductController extends Controller
         }else{
             $array =(json_encode(array('process'=>'invalid')));
         }
-        echo $array;
-        exit;
+        return new Response($array);
+
     }
 
     public function productMedicineUpdateCartAction(Request $request , $cartid)
@@ -1084,8 +1082,7 @@ class WebServiceProductController extends Controller
         $totalItems = (string)$cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
         $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
-        echo $array;
-        exit;
+        return new Response($array);
     }
 
     public function getCartItem(GlobalOption $globalOption , Cart $cart){

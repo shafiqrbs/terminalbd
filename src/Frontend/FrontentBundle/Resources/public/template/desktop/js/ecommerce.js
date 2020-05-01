@@ -60,16 +60,6 @@ $('.addCart').submit( function(e) {
 });
 
 
-$('#cartItem').mouseover(function(){
-    $('#cartItem').popModal({
-        html : function(callback) {
-            $.ajax({url:'/cart/product-details'}).done(function(content){
-                callback(content);
-            });
-        }
-    });
-});
-
 $(document).on( "click", ".cartSubmit", function(e){
 
     var url = $('.cartSubmit').attr("data-url");

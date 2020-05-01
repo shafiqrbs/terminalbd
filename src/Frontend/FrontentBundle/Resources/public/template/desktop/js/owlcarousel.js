@@ -1,4 +1,4 @@
-function productSliderOwl(items) {
+function productSliderOwl(items = 4) {
 
     var owlCategory = $(".category-slider");
     owlCategory.owlCarousel({

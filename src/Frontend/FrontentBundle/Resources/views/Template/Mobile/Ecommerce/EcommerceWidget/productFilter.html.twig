@@ -9,18 +9,6 @@
         </select>
     </div>
     {% endif %}
-   {# <div class="input-group">
-        {% if globalOption.templateCustomize.showSidebar == 1 %}
-            <span class="input-group-btn"><button type="button" class="btn btn-warning" id="filter"><span class="fa fa-filter"></span></button></span>
-        {% endif %}
-        <input type="text" name="webName" required="required" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find medicine">
-        <span class="input-group-btn"><button type="submit" class="btn btn-info mobile-search-btn"><span class="glyphicon glyphicon-search"></span></button></span>
-
-    </div>#}
-    <div class="sidebar-footer" >
-        <a class="btn btn-warning text-center col-xs-6 col-md-6 mobile-order" href="tel:+88{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
-        <a type="button" id="upload"  class="btn btn-warning  col-xs-6 col-md-6 upload-pres upload-prescription"> <span class="fa fa-upload"></span> PRESCRIPTION</a>
-    </div>
     <div id="showFilter" style="display:none;">
         {% set sortBy = app.request.get('sortBy') %}
         <select name="sortBy" id="sortBy" class="input-selector item-select col-xs-12 col-md-12"

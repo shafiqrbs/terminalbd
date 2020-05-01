@@ -6,7 +6,7 @@
     <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
         <div id="cart-item-list">
             {% if  cart.contents is not empty %}
-                <div class="top">Recent Buy Item's <span class="pull-right" style="margin-right:10px; margin-top:-2px" ><span class="btn btn-warning "><strong class="totalItem">{{ cart.contents|length }}</strong></span></span></div>
+                <div class="top">Recent Buy Item's <span class="pull-right" style="margin-right:10px; margin-top:-2px" ><span class="btn btn-warning "><strong class="totalItem">{{ cart.contents|length }} / {{ cart.total_items }}</strong></span></span></div>
                 <div id="cart-item-list-box">
                     {% for product in cart.contents %}
                         <dl class="entity-list" id="item-remove-{{ product.rowid }}">
@@ -72,17 +72,21 @@
                         <tbody>
                         <tr>
                             <td class="text-right">
-                                <div style="height: 35px">
+
+                                <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea>
+                                {% if globalOption.ecommerceConfig.uploadFile == 1 %}
+                                <div style="height:35px">
                                     <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone"/>
                                 </div>
-                                <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+                                <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+                                {% endif %}
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="bottom" id="login-cart">
-                        <span class="dd-span pull-right">
+                        <span class="dd-span pull-center">
                             <a  href="#login-modal"
                                 class="btn popup-top-anim btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> Login & Give an Order</a></span>
                     <span class="dd-span pull-right">

@@ -167,6 +167,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="uploadFile", type="boolean")
+     */
+    private $uploadFile = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showMasterName", type="boolean")
      */
     private $showMasterName = true;
@@ -1231,6 +1238,22 @@ class EcommerceConfig
     public function setSearchCategory($searchCategory)
     {
         $this->searchCategory = $searchCategory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUploadFile()
+    {
+        return $this->uploadFile;
+    }
+
+    /**
+     * @param bool $uploadFile
+     */
+    public function setUploadFile($uploadFile)
+    {
+        $this->uploadFile = $uploadFile;
     }
 
 

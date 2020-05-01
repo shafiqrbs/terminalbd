@@ -391,7 +391,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/desktop/js/common.js'
     '@FrontendBundle/Resources/public/template/desktop/js/owlcarousel.js'
     '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
     '@FrontendBundle/Resources/public/template/desktop/js/cart.js'
@@ -401,6 +400,8 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    {% set  sliderItems = globalOption.ecommerceConfig.owlProductColumn  %}
+    productSliderOwl({{ sliderItems }});
     $('body').on('click', '.btn-cookie', function(el) {
     var val = $(this).attr('id');
     Cookies.set('productList', val);

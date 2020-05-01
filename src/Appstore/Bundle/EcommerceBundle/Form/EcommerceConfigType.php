@@ -100,6 +100,7 @@ class EcommerceConfigType extends AbstractType
             ->add('isSize')
             ->add('cart')
             ->add('printBy')
+            ->add('uploadFile')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printer',

@@ -70,6 +70,7 @@
                 {% for product in products %}
                     {% if cookieVal == 'faThLarge' %}
                         <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
+                            <form id="add_buy_cart-{{ product.id }}" class="addCart">
                             <div class="thumbnail">
                                 <div class="product-preview group list-group-image">
                                     <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumb-product-img">
@@ -80,8 +81,9 @@
                                         {% endif %}
                                     </a>
                                 </div>
-                                <div class="caption">
-                                    <div class="card-content" data-match-height="item-product">
+                                <div class=""  data-match-height="item-product">
+
+                                    <div class="card-content" >
                                         {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                          <span class="category-name">
                                             <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.id }) }}">{{ product.category.name }}</a>
@@ -96,42 +98,63 @@
                                     </span>
                                         {% endif %}
                                     </div>
-
-                                    <div class="card-read-more text-center" >
-                                        <span id="currency-{{ product.id }}"> {{ globalOption.ecommerceConfig.currency }} {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
+                                    <div id="inlineLoading-{{ product.id }}">
+                                        {% if product.itemSubs is not empty  and product.itemSubs|length > 1  %}
+                                            <div>
+                                                <select class="input-selector item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
+                                                    {% for goodsItem in  product.itemSubs  %}
+                                                        <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}
+                                        {#{% if  product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
+                                            <div class="row-mini">
+                                                <select class="input-selector item-select item-select-bg" name="color" id="color-{{ product.id }}" >
+                                                    {% for color in  product.itemColors %}
+                                                        <option value="{{ color.id }}" >{{ color.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        {% endif %}#}
                                     </div>
-                                    <div class="card-price">
-                                        <div class="input-group">
-              <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-new-cart-item input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                  </button>
+                                    <div class="product-price" >
+                                        <span class="currency" > {{ globalOption.ecommerceConfig.currency }}</span>&nbsp;<span id="currency-{{ product.id }}"> {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
+                                    </div>
+
+                                </div>
+                                <div class="input-group">
+              <span class="input-group-btn">
+                   <button type="button" class="btn  btn-new-cart-item  btn-minus" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}">
+            <i class="fa fa-minus"></i>
+        </button>
               </span>
-                                            <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                                            <span class="input-group-btn">
-                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-new-cart-item" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                      <span class="glyphicon glyphicon-chevron-right"></span>
-                  </button>
+                                        <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-inline-cart" value="{{ product.minQuantity }}" data-id="{{ product.id }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}" data-type="plus" data-field="quant-{{ product.id }}" >
+                                        <span class="input-group-btn">
+                  <button type="button" data-id="{{ product.id }}" class="btn   btn-new-cart-item btn-plus" data-type="plus" data-field="quant-{{ product.id }}" >
+              <i class="fa fa-plus"></i></button>
+                                                <button type="button" id="productBuy-{{ product.id }}" data-id="{{ product.id }}" class="btn  btn-info product-inline-buy btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}">
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+            </button>
 
-              </span></div></div>
-                                </div>
-                                </div>
-                            {% if product.discount is not empty %}
-                                <a class="product-discount btn-xs" href="javascript:">
-                                    <span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
-                                </a>
-                            {% endif %}
-
+              </span></div>
+                                {% if product.discount is not empty %}
+                                    <a class="product-discount btn-xs" href="javascript:">
+                                        <span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                            </form>
                         </div>
                     {% elseif cookieVal == 'faListAlt' %}
                         <div class="col-xs-12 col-md-12 list-group-item">
+                            <form id="add_buy_cart-{{ product.id }}" class="addCart">
                             <div class="col-xs-4 col-md-4" data-match-height="item-product" style="display: flex;
     align-items: center;
     float: left!important;">
                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >
                                     {% if  product.webPath is not empty %}
-                                        <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(100,100, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
-                                        <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(100,100, 'white') }}"/>            {% else %}
+                                        <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(100,100, 'white') }}"/>                     {% else %}
                                         <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(100,100) }}"/>
                                     {% endif %}
                                 </a>
@@ -152,27 +175,38 @@
                                         {% endif %}
                                         <div>
                                             <div class="col-xs-8 col-md-8 text-left product-price">
-                                                <span class="currency">{{ globalOption.ecommerceConfig.currency }} {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
+                                                <span class="currency" > {{ globalOption.ecommerceConfig.currency }}</span>&nbsp;<span id="currency-{{ product.id }}"> {% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.productUnit.name }}{% endif %}</span>
                                             </div>
 
                                         </div>
                                         <div>
-                                            <div class="col-xs-offset-4 col-xs-8 col-md-8 text-right">
-                                                <div class="card-read-more">
-                                                    <div class="input-group">
-              <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-new-cart-item input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                  </button>
+                                            <div id="inlineLoading-{{ product.id }}">
+                                                {% if product.itemSubs is not empty  and product.itemSubs|length > 1  %}
+                                                    <div>
+                                                        <select class="input-selector item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
+                                                            {% for goodsItem in  product.itemSubs  %}
+                                                                <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="card-read-more">
+                                                <div class="input-group">
+              <span class="input-group-btn">
+                  <button type="button" class="btn  btn-new-cart-item  btn-minus" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}">
+            <i class="fa fa-minus"></i>
+        </button>
               </span>
-                                                        <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                                                        <span class="input-group-btn">
-                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-new-cart-item" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                      <span class="glyphicon glyphicon-chevron-right"></span>
-                  </button>
+                                                    <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-inline-cart" value="{{ product.minQuantity }}" data-id="{{ product.id }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}" data-type="plus" data-field="quant-{{ product.id }}" >
+                                                    <span class="input-group-btn">
+                  <button type="button" data-id="{{ product.id }}" class="btn   btn-new-cart-item btn-plus" data-type="plus" data-field="quant-{{ product.id }}" >
+              <i class="fa fa-plus"></i></button>
+                                                            <button type="button" id="productBuy-{{ product.id }}" data-id="{{ product.id }}" class="btn  btn-info product-inline-buy btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}">
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> ADD
+            </button>
 
               </span></div></div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -182,6 +216,7 @@
                                     class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
                                 </a>
                             {% endif %}
+                            </form>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -199,17 +234,41 @@
             </div>
         </div><!-- end container -->
     </div>
+    <style>
+        .input-group .form-control {
+            z-index: 0;
+        }
+        .card-content{
+            padding-left: 5px;
+            padding-right: 5px;
+            display: inline-block;
+        }
+        .item-select-bg{
+            margin-bottom: 5px;
+        }
+        .input-inline-cart{
+            text-align: center;
+            font-weight: bold;
+            height: 33px;
+        }
+        .row-mini{
+            margin-right: -8px;
+            margin-left: -8px;
+        }
+
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/medicine.css' %}
+    '@FrontendBundle/Resources/public/template/mobile/css/ecommerce.css' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
 {% block javascriptBlock %}
     {% javascripts
     '@FrontendBundle/Resources/public/template/mobile/js/common.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/ecommerce.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/cart.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -219,7 +278,6 @@
     $('.input-number').click(function() {
         $(this).attr('value','');
     });
-
 {% endblock %}
 
 

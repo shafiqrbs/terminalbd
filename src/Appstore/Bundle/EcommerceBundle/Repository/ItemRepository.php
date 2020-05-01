@@ -6,11 +6,10 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
-use Appstore\Bundle\HotelBundle\Entity\Category;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -1429,6 +1428,15 @@ class ItemRepository extends EntityRepository
         $stockUpdate = "UPDATE ecommerce_item SET status = {$status} WHERE  brand_id =:brand";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->bindValue('brand', $brand->getId());
+        $qb1->execute();
+
+    }
+
+    public function updateCategoryItem(Category $category,$status){
+
+        $stockUpdate = "UPDATE ecommerce_item SET status = {$status} WHERE  category_id =:category";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->bindValue('category', $category->getId());
         $qb1->execute();
 
     }
