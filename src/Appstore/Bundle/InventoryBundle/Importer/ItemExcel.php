@@ -8,6 +8,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemImport;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class ItemExcel
@@ -39,6 +40,8 @@ class ItemExcel
                 $product->setMasterQuantity($item['Quantity']);
                 $product->setPurchasePrice( $item['PurchasePrice']);
                 $product->setSalesPrice( $item['SalesPrice']);
+                $product->setMinQuantity( $item['MinQuantity']);
+                $product->setMaxQuantity($item['MaxQuantity']);
                 if($vendor){
                     $product->setVendor($vendor);
                 }
@@ -52,12 +55,17 @@ class ItemExcel
                      $brand = $this->getBrand(ucfirst(strtolower($brand)));
                      $product->setBrand($brand);
                  }
-                $unit = $item['Unit'];
-                if($unit){
+                 $size =  $item['Size'];
+                 if($size){
+                     $size = $this->getSize(ucfirst(strtolower($size)));
+                     $product->setSize($size);
+                 }
+                 $unit = $item['Unit'];
+                 if($unit){
                     $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
                     $product->setProductUnit($unit);
-                }
-                $this->save($product);
+                 }
+                 $this->save($product);
             }
 
         }
@@ -104,6 +112,26 @@ class ItemExcel
             $brand->setEcommerceConfig($config);
             $brand = $this->save($brand);
             return $brand;
+        }
+
+    }
+
+    private function getSize($item)
+    {
+
+        $sizeRepository = $this->getSizeRepository();
+
+        $size = $sizeRepository->findOneBy(array(
+            'name'              => $item
+        ));
+
+        if($size){
+            return $size;
+        }else{
+            $size = new ProductSize();
+            $size->setName($item);
+            $size = $this->save($size);
+            return $size;
         }
 
     }
@@ -165,6 +193,14 @@ class ItemExcel
     private function getBrandRepository()
     {
         return $this->getDoctrain()->getRepository('EcommerceBundle:ItemBrand');
+    }
+
+    /**
+     * @return  @return \Appstore\Bundle\SettingToolBundle\Repository\ProductSizeRepository
+     */
+    private function getSizeRepository()
+    {
+        return $this->getDoctrain()->getRepository('SettingToolBundle:ProductSize');
     }
 
     /**

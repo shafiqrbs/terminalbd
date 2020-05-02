@@ -663,42 +663,37 @@ class CategoryRepository extends MaterializedPathRepository
     {
         $grouped = array();
 
-        if(!empty($config->getCategoryGrouping())){
+        $qb = $this->createQueryBuilder('node');
+        $orX = $qb->expr()->orX();
 
-            $qb = $this->createQueryBuilder('node');
-            $orX = $qb->expr()->orX();
+        $categories = $this->createQueryBuilder("node")
+            ->where('node.ecommerceConfig = :config')
+            ->andWhere('node.level = :level')
+            ->setParameter('config', $config)
+            ->setParameter('level', 1)
+            ->orderBy('node.level','ASC')
+            ->getQuery()->getResult();
 
-            $categories = $this->createQueryBuilder("node")
-                ->where('node.ecommerceConfig = :config')
-                ->andWhere('node.level = :level')
-                ->setParameter('config', $config)
-                ->setParameter('level', 1)
-                ->orderBy('node.level','ASC')
-                ->getQuery()->getResult();
-
-            foreach($categories as $category){
-                $orX->add("node.path like '" .$category->getId() . "/%'");
-            }
-
-            $results = $qb
-                ->orderBy('node.level, node.name', 'ASC')
-                ->where('node.level IN (2,3)')
-                ->andWhere($orX)
-                ->getQuery()
-                ->getResult();
-
-            $categories = $this->getCategoriesIndexedById($results);
-
-            foreach ($categories as $category) {
-                switch($category->getLevel()) {
-                    case 2: break;
-                    default:
-                        $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
-                }
-            }
-            return $grouped;
+        foreach($categories as $category){
+            $orX->add("node.path like '" .$category->getId() . "/%'");
         }
 
+        $results = $qb
+            ->orderBy('node.level, node.name', 'ASC')
+            ->where('node.level IN (2,3)')
+            ->andWhere($orX)
+            ->getQuery()
+            ->getResult();
+
+        $categories = $this->getCategoriesIndexedById($results);
+
+        foreach ($categories as $category) {
+            switch($category->getLevel()) {
+                case 2: break;
+                default:
+                    $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
+            }
+        }
         return $grouped == null ? array() : $grouped;
 
     }
