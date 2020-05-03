@@ -46,6 +46,7 @@
             <div>
                 <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
                     <div class="clearfix"></div>
+                    {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                     <div class="row">
                         <div class="col-xs-offset-3 col-xs-6 col-md-6">
                             <div style="height: 70px">
@@ -54,6 +55,7 @@
                         </div>
                     </div>
                     <div class="clearfix"><br/></div>
+                    {% endif %}
                     <div id="stockCart">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">

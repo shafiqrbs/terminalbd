@@ -46,6 +46,7 @@
             <div>
                 <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
                     <div class="clearfix"></div>
+                    {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                     <div class="row">
                         <div class="col-xs-offset-3 col-xs-6 col-md-6">
                             <div style="height: 70px">
@@ -53,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="clearfix"><br/></div>
                     <div id="stockCart">
                         <div class="row">
@@ -162,8 +164,8 @@
                                     <tr>
                                         <td colspan="5">
                                             <ul>
-                                                <li>File must be JPG, GIF, PDF or PNG, less than 1MB</li>
-                                                <li>Please file attach afetr login, dont forget it.</li>
+                                                <li>File must be JPG, GIF, PDF or PNG, less than 5MB</li>
+                                                <li>Please file attach after login, dont forget it.</li>
                                             </ul>
                                         </td>
 

@@ -199,7 +199,8 @@ function jqueryTemporaryLoad() {
 
     $('.dropzone').inputFileZone({
         message: 'UPLOAD YOUR SHOPPING IMAGE',
-        previewImages: false
+        previewImages: false,
+        acceptedFiles:'image/*,application/pdf,.psd'
     });
 
     var searchRequest = null;

@@ -72,10 +72,14 @@
                         <tbody>
                         <tr>
                             <td class="text-right">
-                                <div style="height: 35px">
-                                    <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone"/>
-                                </div>
-                                <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea> <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+
+                                <textarea name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea>
+                                {% if globalOption.ecommerceConfig.uploadFile == 1 %}
+                                    <div style="height:35px">
+                                        <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone"/>
+                                    </div>
+                                    <p style="font-size: 11px; color: red; line-height: 20px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 1MB</p>
+                                {% endif %}
                             </td>
                         </tr>
                         </tbody>
