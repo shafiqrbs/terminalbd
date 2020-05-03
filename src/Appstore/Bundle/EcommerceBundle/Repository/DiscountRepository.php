@@ -12,5 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class DiscountRepository extends EntityRepository
 {
+    public function getFeatureDiscount($config, $limit)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $query->andWhere("e.status = 1");
+        $query->andWhere("e.feature = 1");
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults($limit);
+        return $query->getQuery()->getResult();
 
+    }
 }

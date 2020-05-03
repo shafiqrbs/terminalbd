@@ -21,6 +21,7 @@ class PromotionType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add your promotion/tag name'))
                 )))
+            ->add('feature')
             ->add('type', 'choice', array(
                 'attr'=>array('class'=>'check-list'),
                 'expanded'      =>true,

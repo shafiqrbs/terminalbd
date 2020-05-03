@@ -72,10 +72,13 @@ webservice_product_details:
     path:     /product/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productDetails }
 
+webservice_product_modal_subitem:
+    path:     /product-subitem-modal/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:modalSubItem }
+
 webservice_product_modal:
     path:     /product-modal/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productModal }
-
 
 webservice_product_cart:
     path:     /cart/{product}/{subitem}

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
@@ -32,6 +33,17 @@ class Discount
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="discounts")
      */
     protected $ecommerceConfig;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="discounts")
+     */
+    protected $brand;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="discounts")
+     */
+    protected $category;
 
 
     /**
@@ -95,6 +107,15 @@ class Discount
      * @ORM\Column(name="status", type="boolean")
      */
     private $status=true;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="feature", type="boolean")
+     */
+    private $feature = false;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -374,7 +395,53 @@ class Discount
         return $this->getName().'('.$this->getDiscountAmount().')'.$type;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFeature()
+    {
+        return $this->feature;
+    }
 
+    /**
+     * @param mixed $feature
+     */
+    public function setFeature($feature)
+    {
+        $this->feature = $feature;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return ItemBrand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param ItemBrand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
 
 
 }

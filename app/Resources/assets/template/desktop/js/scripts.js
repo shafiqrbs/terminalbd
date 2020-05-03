@@ -26,8 +26,6 @@ $(document).ready(function(){
         });
 
 
-
-
         $('.select-category').select2({
             placeholder: "Filter by category",
             allowClear: true,
@@ -331,7 +329,6 @@ $(document).ready(function(){
                     required: true,
                     remote:'/checking-username'
                 },
-                "Core_userbundle_user[profile][location]": {required: true},
                 "Core_userbundle_user[profile][termsConditionAccept]": {required: true}
             },
     
@@ -353,7 +350,6 @@ $(document).ready(function(){
 
                 "Core_userbundle_user[profile][name]": {placement:'top',html:true},
                 "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
-                "Core_userbundle_user[profile][location]": {placement:'top',html:true},
                 "Core_userbundle_user[profile][status]":{placement:'right',html:true},
             },
             submitHandler: function(form) {
@@ -367,12 +363,16 @@ $(document).ready(function(){
                     contentType : false,
                     success: function(response){
                         if(response === 'success') {
-                            location.reload();
+                            $(".panel-body").hide();
+                            $("#register-success").show();
+                            setTimeout(function(){location.reload();},1000);
                         }
                     },
                     complete: function(response){
                         if(response === 'success'){
-                            location.reload();
+                            $(".panel-body").hide();
+                            $("#register-success").show();
+                            setTimeout(function(){location.reload();},1000);
                         }else if(response === 'invalid'){
                             $('#registerModal').modal('hide');
                             $('#forgetModal').modal('hide');
@@ -524,7 +524,7 @@ $(document).ready(function(){
                 placement : 'center',
                 overlay : true,
                 type : 'notify',
-                icon : false
+                icon : true
             });
         });
 

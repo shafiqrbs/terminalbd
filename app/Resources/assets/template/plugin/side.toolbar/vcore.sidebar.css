@@ -12,6 +12,7 @@
     position: fixed;
     right: 0;
     bottom: 32%;
+    z-index: 99;
 }
 .vsidebar ul{
     margin: 0;

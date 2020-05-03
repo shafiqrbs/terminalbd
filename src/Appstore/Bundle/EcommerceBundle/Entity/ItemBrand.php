@@ -44,6 +44,11 @@ class ItemBrand  implements CodeAwareEntity
      */
     protected $ecommerceMenu;
 
+     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", mappedBy="brand")
+     */
+    protected $discounts;
+
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="brand")
      **/
@@ -110,6 +115,15 @@ class ItemBrand  implements CodeAwareEntity
      * @ORM\Column(name="isFeature", type="boolean", nullable=true)
      */
     private $isFeature = false;
+
+
+
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="feature", type="boolean", nullable=true)
+     */
+    private $feature = false;
 
 
 	/**
@@ -427,6 +441,22 @@ class ItemBrand  implements CodeAwareEntity
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFeature()
+    {
+        return $this->feature;
+    }
+
+    /**
+     * @param mixed $feature
+     */
+    public function setFeature($feature)
+    {
+        $this->feature = $feature;
     }
 
 

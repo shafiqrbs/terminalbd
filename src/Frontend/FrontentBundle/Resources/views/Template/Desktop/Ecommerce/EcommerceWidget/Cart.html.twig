@@ -12,11 +12,12 @@
 
                             <div class="clearfix"></div>
                             <div class="row">
-                                <div class="col-xs-7 col-md-7">
+                                <div class="col-xs-5 col-md-5">
                                     <input class="select2Stock form-control" autocomplete="off" name="itemName" id="itemName"  placeholder="Search your choose products..." style="border-radius:0!important; margin-left: -30px">
                                     <input type="hidden" name="stockId" id="stockId">
                                     <ul id="searchResult"></ul>
                                 </div>
+                                <div class="col-xs-2 col-md-2" id="cart-subitem"></div>
                                 <div class="col-xs-5 col-md-5">
                                     <div class="input-group">
                                         <div class="input-group-btn">
@@ -69,7 +70,7 @@
                                     </thead>
                                     <tbody>
                                     {% for product in cart.contents %}
-                                        <tr id="item-remove-{{ product.id }}">
+                                        <tr id="item-remove-{{ product.rowid }}">
                                             <td class="col-sm-6 col-md-6">
                                                 <div class="media">
                                                     <div class="media-body">
@@ -121,8 +122,8 @@
                                             </td>
                                             <td> <button id="{{ product.rowid }}"
                                                          data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}"
-                                                         class="btn btn-transparent hunger-remove-cart">
-                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                         class="btn btn-remove hunger-remove-cart">
+                                                    <span class="fa fa-trash"></span>
                                                 </button></td>
 
                                         </tr>
@@ -150,11 +151,11 @@
                                         <td colspan="2"  class="text-left">
                                             {% if app.user %}
                                                 <button type="submit" class="btn btn-success">
-                                                    Take Order <span class="glyphicon glyphicon-play"></span>
+                                                    Place Order <span class="glyphicon glyphicon-play"></span>
                                                 </button>
                                             {% else %}
                                                 <button type="button" class="btn search-box-bg login-preview">
-                                                    Login & Take Order <span class="glyphicon glyphicon-play"></span>
+                                                    Login & Place Order <span class="glyphicon glyphicon-play"></span>
                                                 </button>
                                             {% endif %}
                                         </td>
@@ -162,8 +163,8 @@
                                     <tr>
                                         <td colspan="5">
                                             <ul>
-                                                <li>File must be JPG, GIF, PDF or PNG, less than 1MB</li>
-                                                <li>Please file attach afetr login, dont forget it.</li>
+                                                <li>File must be JPG, GIF, PDF or PNG, less than 5MB</li>
+                                                <li>Please file attach after login, don't forget it.</li>
                                             </ul>
                                         </td>
 

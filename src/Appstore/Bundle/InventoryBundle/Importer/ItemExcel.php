@@ -40,32 +40,34 @@ class ItemExcel
                 $product->setMasterQuantity($item['Quantity']);
                 $product->setPurchasePrice( $item['PurchasePrice']);
                 $product->setSalesPrice( $item['SalesPrice']);
-                $product->setMinQuantity( $item['MinQuantity']);
-                $product->setMaxQuantity($item['MaxQuantity']);
+                $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
+                $product->setMinQuantity($min);
+                $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
+                $product->setMaxQuantity($max);
                 if($vendor){
                     $product->setVendor($vendor);
                 }
-                 $category = $item['Category'];
-                 if($category){
+                $category = $item['Category'];
+                if($category){
                      $category = $this->getCategory(ucfirst(strtolower($category)));
                      $product->setCategory($category);
-                 }
-                 $brand = $item['Brand'];
-                 if($brand){
+                }
+                $brand = $item['Brand'];
+                if($brand){
                      $brand = $this->getBrand(ucfirst(strtolower($brand)));
                      $product->setBrand($brand);
-                 }
-                 $size =  $item['Size'];
-                 if($size){
+                }
+                $size =  $item['Size'];
+                if($size){
                      $size = $this->getSize(ucfirst(strtolower($size)));
                      $product->setSize($size);
-                 }
-                 $unit = $item['Unit'];
-                 if($unit){
+                }
+                $unit = $item['Unit'];
+                if($unit){
                     $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
                     $product->setProductUnit($unit);
-                 }
-                 $this->save($product);
+                }
+                $this->save($product);
             }
 
         }

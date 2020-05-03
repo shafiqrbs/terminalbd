@@ -91,6 +91,21 @@ function financial(val) {
     return Number.parseFloat(val).toFixed(2);
 }
 
+$(document).on("click", ".addCart", function() {
+    var id = $(this).attr("id");
+    var url = $(this).attr("data-url");
+    var color = $("#color-"+id).val();
+    var quantity = $("#quantity-"+id).val();
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data:'color='+color+'&quantity='+quantity,
+        success: function (response) {
+            $('.cart span').html(response);
+        },
+    })
+
+});
 
 $(document).on( "click", ".cartSubmit", function(e){
 

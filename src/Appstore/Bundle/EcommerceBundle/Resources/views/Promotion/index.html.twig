@@ -39,23 +39,35 @@
 
                             <div class="row-fluid">
                                 <div class="span6">
-                                    <div class="control-group">
-                                        <label class="control-label" for="">Name</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.name) }}
-                                                {{ form_errors(form.name) }}
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Type</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.type) }}
+                                                {{ form_errors(form.type) }}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="">Type</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.type) }}
-                                            {{ form_errors(form.type) }}
+
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Name</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.name) }}
+                                                    {{ form_errors(form.name) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Is Feature</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.feature) }}
+                                                {{ form_errors(form.feature) }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -86,6 +98,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="clearfix"><br/></div>
                             <!--/span-->
@@ -169,9 +182,9 @@
         </div>
     </div>
 <style>
-    .check-list label {
+    check-list label {
         float: left;
-        width: 65%;
+        width: 30%;
     }
 </style>
 {% endblock %}

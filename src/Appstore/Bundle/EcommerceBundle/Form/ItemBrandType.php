@@ -22,7 +22,7 @@ class ItemBrandType extends AbstractType
                     new NotBlank(array('message'=>'Please add  brand name'))
             )))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Brand description')))
-            ->add('isFeature')
+            ->add('feature')
             ->add('file', 'file',array(
                 'required' => true,
                 'constraints' =>array(

@@ -50,7 +50,7 @@ class ProfileType extends AbstractType
                            new Length(array('max'=>200))
                        ))
                )
-               ->add('location', 'entity', array(
+               /*->add('location', 'entity', array(
                    'required'    => false,
                    'empty_value' => '---Select Location---',
                    'attr'=>array('class'=>'select-location span12 m-wrap form-control'),
@@ -61,13 +61,8 @@ class ProfileType extends AbstractType
                    'choices'=> $this->LocationChoiceList(),
                    'choices_as_values' => true,
                    'choice_label' => 'nestedLabel',
-               ))
-                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter your address required')),
-                    new Length(array('max'=>200))
-                    ))
-                )
+               ))*/
+                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address')))
                 ->add('termsConditionAccept','checkbox', array(
                     'attr'=>array('class'=>''),
                     'constraints' =>array(

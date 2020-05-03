@@ -39,45 +39,78 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
-                                <div class="span6">
+                                <div class="span8">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                        <label class="control-label" for="firstName">Discount Title</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.name) }}
-                                                {{ form_errors(form.name) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                        </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                            <label class="control-label" for="firstName">Type</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.type) }}
-                                                {{ form_errors(form.type) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label" for="firstName">Discount Amount</label>
-                                                    <div class="controls">
-                                                        {{ form_widget(form.discountAmount) }}
-                                                        {{ form_errors(form.discountAmount) }}
+                                                <label class="control-label" for="firstName">Discount Name</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-font"></i>
+                                                        {{ form_widget(form.name) }}
+                                                        {{ form_errors(form.name) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Is Feature</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.feature) }}
+                                                    {{ form_errors(form.feature) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Discount Type</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.type) }}
+                                                    {{ form_errors(form.type) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Discount Amount</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.discountAmount) }}
+                                                    {{ form_errors(form.discountAmount) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Category</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.category) }}
+                                                    {{ form_errors(form.category) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Brand</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.brand) }}
+                                                    {{ form_errors(form.brand) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                </div>
-                                <div class="span2"></div>
                                 <div class="span4">
                                     <div class="row-fluid">
                                         <div class="span12">

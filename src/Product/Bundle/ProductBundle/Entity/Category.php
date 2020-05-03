@@ -75,6 +75,11 @@ class Category
      **/
     protected $products;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", mappedBy="category")
+     */
+    protected $discounts;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="categories" )

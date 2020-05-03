@@ -216,14 +216,14 @@ class ItemBrandController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getManager();
-        $status = $entity->getisFeature();
+        $status = $entity->getFeature();
         if ($inventory != $entity->getEcommerceConfig()) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
         if($status == 1){
-            $entity->setIsFeature(0);
+            $entity->setFeature(0);
         } else{
-            $entity->setIsFeature(1);
+            $entity->setFeature(1);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(

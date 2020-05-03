@@ -82,7 +82,7 @@ class PromotionController extends Controller
             'action' => $this->generateUrl('ecommerce_promotion_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -124,7 +124,7 @@ class PromotionController extends Controller
             'action' => $this->generateUrl('ecommerce_promotion_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

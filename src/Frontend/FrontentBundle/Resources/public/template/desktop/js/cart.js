@@ -13,6 +13,26 @@ $(document).on('click', ".cartUpload, #prescriptionUpload", function(el) {
 });
 
 
+$(document).on( "click", ".hunger-remove-cart", function(e){
+    var url = $(this).attr("data-url");
+    var id = $(this).attr("id");
+    $('#item-remove-'+id).hide();
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+            obj = JSON.parse(response);
+            $('#cart-item-list-box').html(obj['cartItem']);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.cartTotal').html(obj['cartTotal']);
+            $('.vsidebar .txt').html(obj['cartResult']);
+
+        }
+    });
+    e.preventDefault();
+});
+
 
 $(document).on('click', '.btn-sorted', function(el) {
     $("#showFilter").slideToggle(200);
@@ -178,7 +198,7 @@ function jqueryTemporaryLoad() {
     });
 
     $('.dropzone').inputFileZone({
-        message: 'UPLOAD YOUR ATTACH FILE',
+        message: 'UPLOAD YOUR SHOPPING IMAGE',
         previewImages: false
     });
 
@@ -227,13 +247,31 @@ function jqueryTemporaryLoad() {
         $.get( "/product-stock-details", { stockId:stockId } )
             .done(function( response ) {
                 obj = JSON.parse(response);
-                $('#salesPrice').html("৳"+obj['price']);
+                $('#salesPrice').html("৳ "+obj['price']);
                 $('#unit').html(obj['unit']);
+                $('#cart-subitem').html(obj['subItems']);
                 $('#quantity').focus();
             });
     }
 
+    $(document).on( "change", ".changeSize", function( e ) {
+
+        var subItem = $(this).val();
+        var url = $(this).attr("data-url");
+        $.ajax({
+            url: url ,
+            type: 'GET',
+            data:'subItem='+subItem,
+            success: function(response) {
+                $('#subItemDetails').html(response);
+            },
+
+        })
+
+    });
+
     $("#stockItemForm").validate({
+
         rules: {
             "itemName": {required: true},
             "itemQuantity": {required: true},

@@ -276,7 +276,7 @@ class Item
      *
      * @ORM\Column(name="quantityApplicable", type="boolean", nullable = true)
      */
-    private $quantityApplicable = 0;
+    private $quantityApplicable = true;
 
     /**
      * @var integer

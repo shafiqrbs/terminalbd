@@ -90,6 +90,6 @@ class ProductImageType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getUseEcommerceItemCategory($this->config);
+        return $categoryTree = $this->em->getFlatEcommerceCategoryTree($this->config);
     }
 }

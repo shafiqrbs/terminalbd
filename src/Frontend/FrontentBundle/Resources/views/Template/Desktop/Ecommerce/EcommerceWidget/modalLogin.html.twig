@@ -9,8 +9,7 @@
                 </div>
                 <div class="modal-body">
                      <input type="hidden" name="_csrf_token" value="{{ csrfToken }}"/>
-                    <div class="panel panel-default">
-
+                    <div class="panel">
                         <div class="panel-body">
                             <div id="loginMsg"></div>
                             <div class="form-group">
@@ -31,18 +30,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <span style="text-align: left"> Don't have an account yet ?&nbsp;
+                                <a href="javascript:" class="register-btn">Create an account</a>
+                    </span>
                     <button type="submit"  class="btn btn-sm btn-primary pull-right" role="button">Log in</button>
                 </div>
-                <div class="modal-footer">
-                    <div class="" style="text-align: left">
-                        <div class="create-account">
-                            <span>
-                                Don't have an account yet ?&nbsp;
-                                <a href="javascript:" class="register-btn">Create an account</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -58,8 +51,8 @@
                 {{ form_start(form) }}
                 {{ form_row(form._token) }}
                 <div class="modal-body">
-                    <div class="panel panel-default">
-                        <div class="panel-body" style="height: 290px;">
+                    <div class="panel">
+                        <div class="panel-body" style="height: 240px;">
                             <div class="form-group">
                                 {{ form_errors(form.profile.name) }}
                                 <div class="input-group">
@@ -80,13 +73,13 @@
                                     {{ form_widget(form.email) }}
                                 </div>
                             </div>
-                            <div class="form-group">
+                            {#<div class="form-group">
                                 {{ form_errors(form.profile.location) }}
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
                                     {{ form_widget(form.profile.location) }}
                                 </div>
-                            </div>
+                            </div>#}
                             <div class="form-group">
                                 {{  form_errors(form.profile.address) }}
                                 <div class="input-group">
@@ -98,12 +91,16 @@
                                 {{  form_errors(form.profile.termsConditionAccept) }}
                                 <label>
                                     {{ form_widget(form.profile.termsConditionAccept) }}
-                                    I agree to &nbsp;<a target="_blank"  href="{{ path('bindu_page_content',{'slug':'terms-of-service'}) }}">Terms</a>&nbsp;&&nbsp;<a target="_blank" id="PrivacyLink" href="{{ path('bindu_page_content',{'slug':'privacy-policy'}) }}">Privacy</a>
+
+                                    I agree to &nbsp;<a target="_blank"  href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module':'terms-of-service'}) }}">Terms</a>&nbsp;&&nbsp;<a target="_blank" id="PrivacyLink" href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module':'privacy-policy'}) }}">Privacy</a>
                                 </label>
                             </div>
+
                         </div>
                     </div>
-
+                    <div id="register-success">
+                        Thank You! Your Registration has been complete with logged in.
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <span style="text-align: left; display:block; float: left">Click here for
@@ -124,7 +121,7 @@
                     <h4 class="modal-title">Reset Password</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="panel panel-default">
+                    <div class="panel">
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="input-group">
@@ -148,5 +145,24 @@
     p.help{
         font-size: 11px;
         margin-left: 53px;
+    }
+    .panel{
+        border:none!important;
+        -webkit-box-shadow:none;
+        box-shadow:none;
+
+    }
+    .modal-footer {
+        text-align: left;
+        border-top: 1px solid #e5e5e5;
+    }
+    #register-success{
+        margin-bottom: 3px;
+        padding: 6px;
+        width: 100%;
+        font-size: 12px;
+        color: #0b84fe;
+        display:none;
+        text-align: center;
     }
 </style>

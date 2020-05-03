@@ -72,7 +72,9 @@
                                         <ul class="unstyled" >
                                             <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
                                             <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
+                                            {% if entity.createdBy.profile.location is not empty %}
                                             <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
+                                            {% endif %}
                                             <li>{{ entity.address }}</li>
                                         </ul>
                                     </div>

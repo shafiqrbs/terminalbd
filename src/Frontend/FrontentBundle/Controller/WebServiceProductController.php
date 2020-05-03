@@ -147,21 +147,6 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productSearchAction(Request $request , $subdomain)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        if(!empty($globalOption)){
-            if($globalOption->getDomainType() == 'ecommerce'){
-                return $this->productFilter($request , $subdomain);
-            }elseif ($globalOption->getDomainType() == 'medicine'){
-                return $this->medicineProductSearch($request , $subdomain);
-            }
-        }else{
-            return $this->redirect($this->generateUrl('homepage'));
-        }
-    }
-
     public function productStockSearchAction($subdomain)
     {
         $em = $this->getDoctrine()->getManager();
@@ -180,14 +165,17 @@ class WebServiceProductController extends Controller
         return new Response(json_encode($search_arr));
     }
 
-    public function stockItemDetailsAction($subdomain)
+    public function productSearchAction(Request $request , $subdomain)
     {
-        $id = $_REQUEST['stockId'];
-        $entity = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($id);
-        $unit = empty($entity->getProductUnit()) ? '' : $entity->getProductUnit()->getName();
-        return new Response(json_encode(array('price' => $entity->getSalesPrice() , 'unit' => $unit)));
-
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if(!empty($globalOption)){
+            return $this->medicineProductSearch($request , $subdomain);
+        }else{
+            return $this->redirect($this->generateUrl('homepage'));
+        }
     }
+
 
     public function medicineProductSearch($request , $subdomain)
     {
@@ -519,6 +507,25 @@ class WebServiceProductController extends Controller
         }
     }
 
+    public function stockItemDetailsAction($subdomain)
+    {
+        $id = $_REQUEST['stockId'];
+        $entity = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($id);
+        $price = $entity->getSalesPrice();
+        $unit = empty($entity->getProductUnit()) ? '' : $entity->getProductUnit()->getName();
+        $subItems = "";
+        if($entity->getSubProduct() == 1 and count($entity->getItemSubs()) > 0){
+            $subItems .= "<select class='form-control modalChangeSubItem' id='size' name='size' data-url='/product-subitem-modal/{$entity->getId()}'>";
+            foreach ($entity->getItemSubs() as  $sub):
+                $subUnit = empty($sub->getProductUnit()) ? '' : $sub->getProductUnit()->getName();
+                $subItems .="<option  value='{$sub->getId()}' >{$sub->getSize()->getName()} - {$subUnit}</option>";
+            endforeach;
+            $subItems .= '</select>';
+        }
+        return new Response(json_encode(array('price' => $price , 'unit' => $unit, 'subItems' => $subItems)));
+
+    }
+
     public function productModalAction(Request $request ,$subdomain,Item $item)
     {
         $cart = new Cart($request->getSession());
@@ -630,6 +637,37 @@ class WebServiceProductController extends Controller
             return new Response($array);
 
         }
+    }
+
+    public function modalSubItemAction($subdomain , Item $product)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $subItem = $_REQUEST['subItem'];
+        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id'=>$subItem));
+        $colors = "";
+        if(count($subItem->getColors()) > 0 ){
+            $colors .='<div class="col-xs-3 col-md-3 pull-right">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-th"></span></span>
+                                    <select class="form-control" name="color" id="color" >';
+            foreach ($subItem->getColors() as  $color):
+                $colors .="<option  value='' >{$color->getName()}</option>";
+            endforeach;
+            $colors .='</select></div></div></div>';
+        }
+
+        $unit = empty($subItem->getProductUnit()) ? '' : $subItem->getProductUnit()->getName();
+        if($subItem->getDiscountPrice()){
+            $price = $subItem->getDiscountPrice();
+        }else{
+            $price =$subItem->getSalesPrice();
+        }
+        $array = (json_encode(array('colors' => $colors ,'salesPrice' => $price,'unit' => $unit )));
+        return new Response($array);
+
+
     }
 
     public function productSubProductCartAction($subdomain ,Item $product)
@@ -767,6 +805,7 @@ class WebServiceProductController extends Controller
                 'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
                 'size' => !empty($product->getSize()) ? $product->getSize()->getName() : '',
                 'sizeUnit' => !empty($product->getProductUnit()) ? $product->getProductUnit()->getName() : '',
+                'productUnit' => !empty($product->getProductUnit()) ? $product->getProductUnit()->getName() : '',
                 'price' => $salesPrice,
                 'quantity' => $quantity,
                 'productImg' => $productImg
@@ -890,7 +929,6 @@ class WebServiceProductController extends Controller
             );
 
             $cart->insert($data);
-            //var_dump($cart->contents());
             $cartTotal = (string)$cart->total();
             $totalItems = (string)$cart->total_items();
             $items = (string)count($cart->contents());
@@ -909,9 +947,9 @@ class WebServiceProductController extends Controller
         $detect = new MobileDetect();
         $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
         if($detect->isMobile() || $detect->isTablet() ) {
-            $theme = "Template/Mobile/{$themeName}/EcommerceWidget/";
+            $theme = "Template/Mobile/{$themeName}/EcommerceWidget";
         }else{
-            $theme = "Template/Desktop/{$themeName}/EcommerceWidget/";
+            $theme = "Template/Desktop/{$themeName}/EcommerceWidget";
         }
         $html = $this->renderView(
             'FrontendBundle:'.$theme.':Cart.html.twig', array(
@@ -936,28 +974,49 @@ class WebServiceProductController extends Controller
             /* @var $product Item */
             $product = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($data['stockId']);
             $quantity = isset($data['itemQuantity']) ? $data['itemQuantity'] : '';
+            $subItem = isset($data['size']) ? $data['size'] : '';
             $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
             /** @var GlobalOption $globalOption */
+            if(empty($subItem)){
+                $insert = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'brand' => empty($product->getBrand()) ? '' : $product->getBrand()->getName(),
+                    'category' => empty($product->getCategory()) ? '' : $product->getCategory()->getName(),
+                    'price' => $product->getSalesPrice(),
+                    'quantity' => $quantity,
+                    'productUnit' => $productUnit,
+                    'productImg' => ''
+                );
+                $cart->insert($insert);
 
-            $data = array(
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'brand' => empty($product->getBrand()) ? '' : $product->getBrand()->getName(),
-                'category' => empty($product->getCategory()) ? '' : $product->getCategory()->getName(),
-                'price' => $product->getSalesPrice(),
-                'quantity' => $quantity,
-                'productUnit' => $productUnit,
-                'productImg' => ''
-            );
-            $cart->insert($data);
+            }else{
+
+                $subitem = $this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->find($subItem);
+                $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+                $unit = empty($subitem->getProductUnit()) ? '' : '-'.$subitem->getProductUnit()->getName();
+                $size = $subitem->getSize()->getName();
+                $sizeUnit = $size.$unit;
+                $insert = array(
+                    'id' => $subitem->getId(),
+                    'name' => $product->getWebName(),
+                    'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                    'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
+                    'productUnit' => $sizeUnit,
+                    'price' => $salesPrice,
+                    'quantity' => $quantity,
+                    'productImg' => '');
+                $cart->insert($insert);
+            }
         }
-
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $detect = new MobileDetect();
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
         if($detect->isMobile() || $detect->isTablet() ) {
-            $theme = 'Template/Mobile/Medicine/';
+            $theme = "Template/Mobile/{$themeName}/EcommerceWidget";
         }else{
-            $theme = 'Template/Desktop/Medicine/';
+            $theme = "Template/Desktop/{$themeName}/EcommerceWidget";
         }
         $html = $this->renderView(
             'FrontendBundle:'.$theme.':stockCart.html.twig', array(

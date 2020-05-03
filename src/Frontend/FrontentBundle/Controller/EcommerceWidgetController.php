@@ -55,7 +55,7 @@ class EcommerceWidgetController extends Controller
         $config = $globalOption->getEcommerceConfig();
         $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($config);
         $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryTreeForMobile($cats,$selected);
-        $searchForm = $this->createCreateForm(new Item(),$globalOption);
+       // $searchForm = $this->createCreateForm(new Item(),$globalOption);
         $detect = new MobileDetect();
         $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=> $globalOption->getEcommerceConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
@@ -66,7 +66,7 @@ class EcommerceWidgetController extends Controller
 
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
-            'form'                  => $searchForm->createView(),
+        //    'form'                  => $searchForm->createView(),
             'categoryTree'          => $categoryTree,
             'brandTree'             => $brandTree,
             'menu'                  => $menu,
@@ -305,8 +305,8 @@ class EcommerceWidgetController extends Controller
     public function categoryShortWidgetAction(GlobalOption $globalOption , $position)
     {
 
-
-        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getSliderFeatureCategory($globalOption);
+        $config = $globalOption->getEcommerceConfig();
+        $entities  = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategory($config,12);
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
@@ -324,8 +324,8 @@ class EcommerceWidgetController extends Controller
 
     public function brandShortWidgetAction(GlobalOption $globalOption , $position)
     {
-
-        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption);
+        $config = $globalOption->getEcommerceConfig();
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->getFeatureBrand($config,8);
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
@@ -363,7 +363,8 @@ class EcommerceWidgetController extends Controller
     public function promotionShortWidgetAction(GlobalOption $globalOption ,$position)
     {
 
-        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Promotion');
+        $config = $globalOption->getEcommerceConfig();
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getFeaturePromotion($config,8);
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
@@ -382,7 +383,8 @@ class EcommerceWidgetController extends Controller
     public function tagShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
-        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Tag');
+        $config = $globalOption->getEcommerceConfig();
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getFeatureTag($config,8);
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
@@ -401,7 +403,8 @@ class EcommerceWidgetController extends Controller
     public function discountShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
-        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Discount');
+        $config = $globalOption->getEcommerceConfig();
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->getFeatureDiscount($config,8);
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';

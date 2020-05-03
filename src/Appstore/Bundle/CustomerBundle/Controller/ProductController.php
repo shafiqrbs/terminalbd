@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
@@ -90,36 +91,32 @@ class ProductController extends Controller
 
     }
 
-    public function productAddCartAction(Request $request , ItemSub $subitem)
+
+
+    public function productAddCartSubitemAction(Request $request , ItemSub $subitem)
     {
 
         $cart = new Cart($request->getSession());
 
-        $quantity = $request->request->get('quantity');
-        $color = $request->request->get('color');
-        $productImg = '';
-
-        $color = !empty($color) ? $color : 0;
-        if($color > 0){
-            $colorName = $this->getDoctrine()->getRepository('SettingToolBundle:ProductColor')->find($color)->getName();
-        }else{
-            $colorName ='';
-        }
         $product = $subitem->getItem();
+        $cartId = $product->getId()."-".$subitem->getId();
+        $quantity = $request->request->get('quantity');
+        $unit = ($product->getProductUnit()) ? $product->getProductUnit()->getName() :'';
+        $brand = ($product->getBrand()) ? $product->getBrand()->getName() :'';
+        $category = ($product->getCategory()) ? $product->getCategory()->getName() :'';
+        $size = !empty($subitem->getSize()) ? $subitem->getSize()->getName(): '';
         $data = array(
-
-            'id' => $subitem->getId(),
-            'name'=> $product->getWebName(),
-            'brand'=> !empty($product->getBrand()) ? $product->getBrand()->getName():'',
-            'category'=> !empty($product->getCategory()) ? $product->getCategory()->getName():'',
-            'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,
-            'color'=> $colorName ,
-            'colorId'=> $color,
-            'price'=> $subitem->getSalesPrice(),
+            'id' => $cartId,
+            'name'=> $product->getName(),
+            'size'=> $size,
+            'brand'=> $brand,
+            'productUnit'=> $unit,
+            'category'=> $category,
+            'price'=> $product->getSalesPrice(),
             'quantity' => $quantity,
-            'productImg' => $productImg
+            'subtotal' => ($quantity * $product->getSalesPrice()),
         );
-        
+
         $cart->insert($data);
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
@@ -128,19 +125,78 @@ class ProductController extends Controller
 
     }
 
-    public function medicineAddCartAction(Request $request , MedicineStock $product)
+    public function productUpdateCartSubitemAction(Request $request , $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cart = new Cart($request->getSession());
+        $quantity = (int)$_REQUEST['quantity'];
+        if (!empty($id) and  $quantity){
+            $data = array(
+                'rowid' => $id,
+                'quantity' => $quantity,
+            );
+            $cart->update($data);
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $items = (string)count($cart->contents());
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
+
+        }else{
+            $cart->remove($id);
+            $array =(json_encode(array('process'=>'invalid')));
+        }
+        echo $array;
+        exit;
+    }
+
+    public function productAddCartAction(Request $request , ItemSub $product)
     {
 
         $cart = new Cart($request->getSession());
         $quantity = $request->request->get('quantity');
-        $unit = ($product->getUnit()) ? $product->getUnit()->getName() :'';
+        $unit = ($product->getProductUnit()) ? $product->getProductUnit()->getName() :'';
+        $brand = ($product->getBrand()) ? $product->getBrand()->getName() :'';
+        $category = ($product->getCategory()) ? $product->getCategory()->getName() :'';
+        $size = !empty($product->getSize()) ? $product->getSize()->getName(): '';
         $data = array(
 
             'id' => $product->getId(),
             'name'=> $product->getName(),
-            'brand'=> $product->getBrandName(),
+            'brand'=> $brand,
+            'size'=> $size,
             'productUnit'=> $unit,
-            'category'=>'',
+            'category'=> $category,
+            'price'=> $product->getSalesPrice(),
+            'quantity' => $quantity,
+            'subtotal' => ($quantity * $product->getSalesPrice()),
+        );
+
+        $cart->insert($data);
+        $cartTotal = $cart->total();
+        $totalItems = $cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        return new Response($cartTotal);
+
+    }
+
+    public function medicineAddCartAction(Request $request , Item $product)
+    {
+
+        $cart = new Cart($request->getSession());
+        $quantity = $request->request->get('quantity');
+        $unit = ($product->getProductUnit()) ? $product->getProductUnit()->getName() :'';
+        $brand = ($product->getBrand()) ? $product->getBrand()->getName() :'';
+        $category = ($product->getCategory()) ? $product->getCategory()->getName() :'';
+        $size = !empty($product->getSize()) ? $product->getSize()->getName(): '';
+        $data = array(
+
+            'id' => $product->getId(),
+            'name'=> $product->getName(),
+            'brand'=> $brand,
+            'size'=> $size,
+            'productUnit'=> $unit,
+            'category'=> $category,
             'price'=> $product->getSalesPrice(),
             'quantity' => $quantity,
             'subtotal' => ($quantity * $product->getSalesPrice()),

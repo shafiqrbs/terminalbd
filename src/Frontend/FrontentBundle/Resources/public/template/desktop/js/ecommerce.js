@@ -1,3 +1,18 @@
+$(document).on( "change", ".modalChangeSubItem", function( e ) {
+
+    var subItem = $(this).val();
+    var url = $(this).attr("data-url");
+    $.get(url,{'subItem':subItem}).done(function(response) {
+        obj = JSON.parse(response);
+        $('#sub-product-load').html(obj['colors']);
+        $('#modal-sales-price').val(obj['salesPrice']);
+        $('#modal-item-unit').html(obj['unit']);
+        $('#salesPrice').html("৳ "+obj['salesPrice']);
+        $('#unit').html(obj['unit']);
+    });
+
+});
+
 $(document).on( "change", ".modalChange", function( e ) {
 
     var subItem = $(this).val();
@@ -13,6 +28,7 @@ $(document).on( "change", ".modalChange", function( e ) {
     })
 
 });
+
 
 $(document).on( "change", ".changeSize", function( e ) {
 
@@ -35,7 +51,7 @@ $(document).on( "change", ".changeSize", function( e ) {
 });
 
 
-$('.addCart').submit( function(e) {
+/*$('.addCart').submit( function(e) {
 
     var url = $('.cartSubmit').attr("data-url");
     $.ajax({
@@ -57,57 +73,48 @@ $('.addCart').submit( function(e) {
     });
     e.preventDefault();
 
-});
+});*/
 
+
+function cartInfo(response,quantity = 1) {
+    obj = JSON.parse(response);
+    $('.cartSubmit').attr("disabled", true).html(quantity+' in Basket');
+    setTimeout(function(){$('.cartSubmit').html('<i class="fa fa-shopping-cart"></i> ADD')}, 3000);
+    $('.totalItem').html(obj['totalItem']);
+    $('.totalAmount').html(obj['cartTotal']);
+    $('.dropdown-cart').html(obj['salesItem']);
+    $('.vsidebar .txt').html(obj['cartResult']).show().fadeOut(3000);
+}
 
 $(document).on( "click", ".cartSubmit", function(e){
 
-    var url = $('.cartSubmit').attr("data-url");
-    var data = $('.addCart').serialize();
-    var qnt = $('#quantity').val();
-
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        data:data,
-        beforeSend: function () {
-            $('.loader-double').fadeIn(5000).addClass('is-active');
-            $('.cartSubmit').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
-        },
-        success: function(response){
-            $('.loader-double').fadeOut(5000).removeClass('is-active');
-            obj = JSON.parse(response);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.dropdown-cart').html(obj['salesItem']);
-            $('.vsidebar .txt').html(obj['cartResult']);
-
-        }
-    });
-    e.preventDefault();
-
-});
-
-
-$(document).on( "click", ".hunger-remove-cart", function(e){
     var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
-    $('#item-remove-'+id).hide();
-    $.ajax({
-        url:url ,
-        type: 'GET',
-        success: function(response){
-            obj = JSON.parse(response);
-            $('#cart-item-list-box').html(obj['cartItem']);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.vsidebar .txt').html(obj['cartResult']);
-
-        }
-    });
+    var quantity = $('#quantity').val() !== '' ? $('#quantity').val() : '';
+    var subItem = $('#size').val() !== '' ? $('#size').val() : '';
+    var color = $('#color').val() !== '' ? $('#color').val() : '';
+    var productImg = $('#productImg').val() !== '' ? $('#productImg').val() : '';
+    $.get(url,{ quantity:quantity,subItem:subItem, color: color,productImg:productImg})
+        .done(function(response) {
+            cartInfo(response,quantity);
+        });
     e.preventDefault();
 });
 
+$(document).on( "click", ".product-inline-buy", function(e){
+
+    var dataId = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    var quantity = $('#quant-'+dataId).val() !== '' ? $('#quant-'+dataId).val() : '';
+    var subItem = $('#size-'+dataId).val() !== '' ? $('#size-'+dataId).val() : '';
+    var color = $('#color-'+dataId).val() !== '' ? $('#color-'+dataId).val() : '';
+    var productImg = $('#productImg-'+dataId).val() !== '' ? $('#productImg-'+dataId).val() : '';
+    $.get(url,{ quantity:quantity,subItem:subItem, color: color,productImg:productImg})
+        .done(function(response) {
+            $('#productBuy-'+dataId).attr("disabled", true).html(quantity+' in Basket');
+            setTimeout(function(){$('#productBuy-'+dataId).attr("disabled", false).html('<i class="fa fa-shopping-cart"></i> ADD')}, 3000);
+            cartInfo(response,quantity);
+        });
+});
 
 
 $('.remove-cart').click( function(e) {
@@ -167,14 +174,10 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 var existVal = (currentVal - 1);
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
-                    .done(function( data ) {
-                        obj = JSON.parse(data);
+                    .done(function( response ) {
                         var subTotal = (existVal * parseInt(price));
                         $('#btn-total-'+fieldId).html(subTotal);
-                        $('#cart-item-list-box').html(obj['cartItem']);
-                        $('.totalItem').html(obj['totalItem']);
-                        $('.totalAmount').html(obj['cartTotal']);
-                        $('.vsidebar .txt').html(obj['cartResult']);
+                        cartInfo(response,existVal);
                     });
             }
             if(parseInt(input.val()) == input.attr('min')) {
@@ -189,15 +192,11 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 var existVal = (currentVal + 1);
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
-                    .done(function(data){
-                        obj = JSON.parse(data);
+                    .done(function(response){
                         if(obj['process'] == 'success'){
                             var subTotal = (existVal * parseInt(price));
                             $('#btn-total-'+fieldId).html(subTotal);
-                            $('#cart-item-list-box').html(obj['cartItem']);
-                            $('.totalItem').html(obj['totalItem']);
-                            $('.totalAmount').html(obj['cartTotal']);
-                            $('.vsidebar .txt').html(obj['cartResult']);
+                            cartInfo(response,existVal);
                         }else{
                             input.val(existVal-1).change();
                             alert('There is not enough product in stock at this moment')
@@ -254,58 +253,6 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
         input.val(0);
     }
 });
-
-$(document).on( "click", "#productBuy", function(e){
-
-
-    var url = $('#productBuy').attr("data-url");
-    var data = $('.addCart').serialize();
-    var qnt = $('#quantity').val();
-
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $('.loader-curtain').fadeIn(5000).addClass('is-active');
-            $.post(url,data).done(function(response) {
-                obj = JSON.parse(response);
-                $('#productBuy').addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
-                $('.totalItem').html(obj['totalItem']);
-                $('.totalAmount').html(obj['cartTotal']);
-                $('.dropdown-cart').html(obj['salesItem']);
-                $('.vsidebar .txt').html(obj['cartResult']);
-                $('.loader-curtain').fadeOut(1000);
-            }).always(function() {
-                $('#product-confirm').notifyModal({
-                    duration : 10000,
-                    placement : 'center',
-                    overlay : true,
-                    type : 'notify',
-                    icon : false
-                });
-            });
-        }
-    });
-});
-
-$(document).on( "click", ".product-inline-buy", function(e){
-
-    var dataId = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    var quantity = $('#quant-'+dataId).val() !== '' ? $('#quant-'+dataId).val() : '';
-    var subItem = $('#size-'+dataId).val() !== '' ? $('#size-'+dataId).val() : '';
-    var color = $('#color-'+dataId).val() !== '' ? $('#color-'+dataId).val() : '';
-    var productImg = $('#productImg-'+dataId).val() !== '' ? $('#productImg-'+dataId).val() : '';
-    $.get(url,{ quantity:quantity,subItem:subItem, color: color,productImg:productImg})
-        .done(function(response) {
-            obj = JSON.parse(response);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.dropdown-cart').html(obj['salesItem']);
-            $('.vsidebar .txt').html(obj['cartResult']);
-        });
-});
-
 
 $(document).on( "change", ".inlineSizeChange", function( e ) {
 

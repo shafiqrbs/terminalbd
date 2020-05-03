@@ -48,6 +48,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('product.promotion','promotion');
         $qb->leftJoin('product.discount','discount');
         $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         if (!empty($data['brand'])) {
@@ -133,6 +134,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('product.discount','discount');
         $qb->leftJoin('product.tag','tag');
         $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
 

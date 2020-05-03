@@ -78,7 +78,9 @@ class DiscountController extends Controller
      */
     private function createCreateForm(Discount $entity)
     {
-        $form = $this->createForm(new DiscountType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new DiscountType($globalOption,$category), $entity, array(
             'action' => $this->generateUrl('ecommerce_discount_create'),
             'method' => 'POST',
             'attr' => array(
@@ -116,7 +118,9 @@ class DiscountController extends Controller
      */
     private function createEditForm(Discount $entity)
     {
-        $form = $this->createForm(new DiscountType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new DiscountType($globalOption,$category), $entity, array(
             'action' => $this->generateUrl('ecommerce_discount_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -26,4 +26,39 @@ class PromotionRepository extends EntityRepository
         return $result;
 
     }
+
+
+    public function getFeatureTag($config,$limit = 16)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb ->where("e.status = 1");
+        $qb->andWhere($qb->expr()->like('e.type', ':type'));
+        $qb->setParameter('type','%Promotion%');
+        $qb->andWhere("e.ecommerceConfig ={$config}");
+        $qb->andWhere("e.feature =1");
+        $qb->orderBy('e.id','DESC');
+        $qb->setMaxResults($limit);
+        $result = $qb->getQuery()->getResult();
+        return $result;
+
+    }
+
+    public function getFeaturePromotion($config,$limit = 16)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb ->where("e.status = 1");
+        $qb->andWhere($qb->expr()->like('e.type', ':type'));
+        $qb->setParameter('type','%Tag%');
+        $qb->andWhere("e.ecommerceConfig ={$config}");
+        $qb->andWhere("e.feature =1");
+        $qb->orderBy('e.id','DESC');
+        $qb->setMaxResults($limit);
+        $result = $qb->getQuery()->getResult();
+        return $result;
+
+    }
+
+
+
+
 }

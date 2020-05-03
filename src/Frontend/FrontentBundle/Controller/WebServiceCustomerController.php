@@ -430,7 +430,7 @@ class WebServiceCustomerController extends Controller
 
         $intlMobile = $request->query->get('mobile',NULL,true);
         $em = $this->getDoctrine()->getManager();
-        echo $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
 
         $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'enabled'=>1));
         /* @var $user User */

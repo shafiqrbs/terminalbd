@@ -280,7 +280,7 @@
                                                 </div>
                                                 <div class="row col-xs-6 col-lg-6" >
                                                     <div id="inlineLoading-{{ product.id }}">
-                                                        {% if product.itemSubs is not empty  and product.itemSubs|length > 1  %}
+                                                        {% if product.subProduct == 1 and  product.itemSubs is not empty  and product.itemSubs|length > 1  %}
                                                             <div class="col-xs-12 col-lg-12">
                                                                 <select class="col-xs-12 col-lg-12 item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
                                                                     {% for goodsItem in  product.itemSubs  %}
@@ -289,7 +289,7 @@
                                                                 </select>
                                                             </div>
                                                         {% endif %}
-                                                        {% if  product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
+                                                        {% if product.subProduct == 1 and  product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
                                                             <div class="col-xs-12 col-lg-12">
                                                                 <select class="item-select item-select-bg col-xs-12 col-lg-12" name="color" id="color-{{ product.id }}" >
                                                                     {% for color in  product.itemColors %}

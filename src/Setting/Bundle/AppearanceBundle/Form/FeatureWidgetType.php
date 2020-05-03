@@ -163,7 +163,6 @@ class FeatureWidgetType extends AbstractType
                     'category'          => 'Category',
                     'brand'             => 'Brand',
                     'discount'          => 'Discount',
-                    'featureProduct'    => 'Feature Product',
                     'promotion'         => 'Promotion',
                     'tag'               => 'Tag',
                 ),
