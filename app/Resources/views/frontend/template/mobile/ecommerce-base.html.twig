@@ -4,23 +4,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
-    <!-- Facebook Pixel Code -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1379708258879587');
-        fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-                   src="https://www.facebook.com/tr?id=1379708258879587&ev=PageView&noscript=1"
-        /></noscript>
-    <!-- End Facebook Pixel Code -->
+
     <meta charset="utf-8"/>
     <title>{% if globalOption.templateCustomize.websiteTitle is not empty %}{{ globalOption.templateCustomize.websiteTitle }} {% else %} {{ globalOption.name }} {% endif %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -66,14 +50,6 @@
     {% endstylesheets %}
     <style>
         .bodyImageLoad{
-            background: #009b3a;
-            z-index: 999999999;
-            display:    none;
-            position:   fixed;
-            top:        0;
-            left:       0;
-            height:     100%;
-            width:      100%;
             background-image: url("{{ asset('assets/img/loading/preloader.gif') }}")
             50% 50%
             no-repeat;
@@ -99,22 +75,23 @@
 
                 </div>
                 <div class="bar-right">
-                    <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
+                   {# <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
                     <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
-                    </a>
-                    {% if app.user is not empty and is_granted('ROLE_CUSTOMER') == true %}
-                        {% set name = app.user.profile.name|split(" ") %}
-                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}"><i class="fa fa-home"></i></a>&nbsp;&nbsp;<a href="/logout"> <i class="fa fa-sign-out"></i></a>
-                    {% elseif app.user is not empty %}
-                        {% set name = app.user.profile.name|split(" ") %}
-                        <a href="{{ path('homepage') }}"> {{ name[0] }}</a>
-                    {% else %}
-                    <a href="#login-modal" class="popup-top-anim bar-icon" ><i class="fa fa-lock"></i></a>
-                    {% endif %}
+                    </a>#}
+                    <div class="input-group">
+                    <span id="logged-in">
+                         {% if app.user is not empty %}
+                             {% set name = app.user.profile.name|split(" ") %}
+                             <a class="bar-icon" href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}"><i class="fa fa-home"></i></a>&nbsp;&nbsp;<a href="javascript:" class="logout bar-icon" data-action="/logout"> <i class="fa fa-sign-out"></i></a>
+                                            {% else %}
+                             <a href="#login-modal" class="popup-top-anim bar-icon" ><i class="fa fa-user"></i></a>
+                         {% endif %}
+                    </span>
                     {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                     <a href="javascript:" class="bar-icon showCartItem" ><i class="fa fa-camera"></i></a>
                     {% endif %}
-                    <a href="#modal-modal" class="bar-icon bar-search" ><i class="fa fa-search"></i></a>
+                    <a href="javascript:" class="bar-icon bar-search" ><i class="fa fa-search"></i></a>
+                    </div>
                 </div>
                 <div class="clearfix"></div>
                 <div id="search-box">
@@ -136,43 +113,43 @@
             {% block body %}{% endblock %}
             <!--/footer-->
             <div class="w3agile alt-mobile-footer">
-                {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
+
                 {% if globalOption.templateCustomize.mobileFooter == 'contact' %}
                     <div class="footer-bg" id="mobile-footer">
-                    <ul class="footer-icon">
+                        <ul class="footer-icon">
 
-                        <li>
-                            <a href="tel://88{{ globalOption.hotline }}" class="hvr-radial-out" data-title="Phone">
-                                <i area-hidden=true class="fa fa-phone"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#login-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
-                                <i class="fa fa-comment"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:" class="scrollToTop" data-title="Top up">
-                                <i class="fa fa-hand-o-up"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#email-modal" class="hvr-radial-out sign-in popup-top-anim">
-                                <i class="fa fa-envelope"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="last hvr-radial-out"
-                               href="{{ path(globalOption.subDomain ~ '_webservice_contact') }}" data-title="">
-                                <i class="fa fa-map-marker"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                            <li>
+                                <a href="tel://88{{ globalOption.hotline }}" class="hvr-radial-out" data-title="Phone">
+                                    <i area-hidden=true class="fa fa-phone"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#login-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
+                                    <i class="fa fa-comment"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:" class="scrollToTop" data-title="Top up">
+                                    <i class="fa fa-hand-o-up"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#email-modal" class="hvr-radial-out sign-in popup-top-anim">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="last hvr-radial-out"
+                                   href="{{ path(globalOption.subDomain ~ '_webservice_contact') }}" data-title="">
+                                    <i class="fa fa-map-marker"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 {% elseif globalOption.templateCustomize.mobileFooter == 'cart' %}
                     <div class="footer-bg" id="mobile-footer">
                         <div class="sidebar-footer">
-                                <a class="btn btn-warning text-center col-xs-6 col-md-6 mobile-order" href="tel:+{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
+                            <a class="btn btn-warning text-center col-xs-6 col-md-6 mobile-order" href="tel:+{{ globalOption.hotline }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
                             <a href="javascript:" class="btn cart-info col-xs-4 col-md-4 showCartItem"><span class="totalItem footer-item">{{ cart.contents|length }}</span> | {{ globalOption.ecommerceConfig.currency }} <span class="totalAmount footer-item-tk">{{ cart.total|number_format(2) }}</span></a>
                             <a href="javascript:"  class="btn btn-info col-xs-2 col-md-2 showCartItem btn-shopping-cart">
                                 <span class="fa fa-shopping-bag" aria-hidden="true"></span>
@@ -187,11 +164,12 @@
                     </div>
                 {% endif %}
             </div>
-
-            <!--/footer-->
         </div>
+
+        <!--/footer-->
     </div>
 </div>
+{% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
 <div id="product-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
     <div class="modal-dialog modal-lg" role="document">
         <div class="product-modal-content"></div>
@@ -211,6 +189,7 @@
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
+'assets/template/plugin/validation/additional-methods.js'
 'assets/plugins/jquery.cookie.min.js'
 'assets/template/mobile/js/bigSlide.js'
 'assets/template/mobile/js/jquery.magnific-popup.js'
@@ -225,10 +204,11 @@
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/file-image-uploader/inputFileZone.js'
-'assets/template/plugin/file-upload/file-upload.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/mobile/js/ecommerce-scripts.js'
+'assets/template/mobile/js/authentication.js'
+
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -272,12 +252,35 @@
 {% if globalOption.templateCustomize.powr is not empty  %}
     <div class="powr-chat" id="{{ globalOption.templateCustomize.powr }}"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 {% endif %}
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-111963509-1');
-</script>
+{% if globalOption.templateCustomize.googleAnalytic is not empty  %}
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ globalOption.templateCustomize.googleAnalytic }}');
+    </script>
+{% endif %}
+{% if globalOption.templateCustomize.facebookPixel is not empty  %}
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ globalOption.templateCustomize.facebookPixel }}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1"
+             src="https://www.facebook.com/tr?id={{ globalOption.templateCustomize.facebookPixel }}&ev=PageView
+&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+{% endif %}
 <style>
 
     #search-box{
@@ -309,6 +312,9 @@
         position: absolute;
         right: 0;
         top: 15px;
+    }
+    .mfp-wrap{
+        z-index: 9999;
     }
 </style>
 </body>

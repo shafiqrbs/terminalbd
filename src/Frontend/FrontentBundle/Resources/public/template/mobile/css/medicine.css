@@ -736,7 +736,6 @@ div.treeview, .treeview ul {
 #cart-item-list .top {
     background-color: #f5f5f5;
     height: 40px;
-    line-height: 40px;
     overflow: auto;
     padding-left: 11px;
     text-align: left;

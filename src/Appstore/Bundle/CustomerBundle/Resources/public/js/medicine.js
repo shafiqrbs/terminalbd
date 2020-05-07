@@ -2,10 +2,10 @@ var pathname = window.location.pathname;
 url = pathname.split("/")[2];
 $(".select2StockMedicine").select2({
 
-    placeholder: "Search stock medicine name",
+    placeholder: "Search stock product name",
 
     ajax: {
-        url: "/customer/"+url+"/order/order-stock-medicine-search",
+        url: "/customer/"+url+"/order/order-stock-product-search",
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -37,9 +37,9 @@ $(".select2StockMedicine").select2({
 
 $(document).on('change', '#orderItem_itemName', function() {
 
-    var medicine = $(this).val();
+    var item = $(this).val();
     $.ajax({
-        url: "/customer/"+url+"/order/order-medicine-stock?id="+medicine,
+        url: "/customer/"+url+"/order/order-stock-item-search?id="+item,
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);

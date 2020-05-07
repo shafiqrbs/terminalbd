@@ -34,6 +34,47 @@ class WebServiceController extends Controller
         }
     }
 
+    public function adminAuthentictionAction(Request $request)
+    {
+        $user = $this->getUser();
+        if(empty($user)){
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
+
+        $globalOption = $user->getGlobalOption();
+        /* @var $globalOption GlobalOption */
+
+        $enable = $globalOption->getStatus();
+
+        $apps = array();
+        if (!empty($globalOption ->getSiteSetting())) {
+
+            $modules = $globalOption->getSiteSetting()->getAppModules();
+
+            /* @var AppModule $mod */
+
+            foreach ($modules as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $apps[] = $mod->getSlug();
+                }
+            }
+        }
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $this->get('security.authorization_checker')->isGranted('ROLE_MEMBER') && $enable == 1 && in_array('website',$apps)) {
+            return $this->redirect($this->generateUrl('member_index'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
+            return $this->redirect($this->generateUrl('website'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER') && $enable == 1 && in_array('ecommerce',$apps)) {
+            return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ECOMMERCE_VENDOR') && $enable == 1 && in_array('ecommerce',$apps)) {
+            return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE')) {
+            return $this->redirect($this->generateUrl('ecommerce_dashboard'));
+        }
+
+    }
+
 	protected function renderEcommerce(Request $request ,GlobalOption $globalOption)
 	{
 

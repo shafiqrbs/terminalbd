@@ -5,54 +5,54 @@
                 <h4 class="modal-title">ORDER DETAILS</h4>
                 <a href="javascript:" class="close-btn btn btn-danger btn-sm" data-dismiss="modal" style="position: relative; float: right; top: -36px"><i class="glyphicon glyphicon-remove"></i></a>
             </div>
+
+            {% if globalOption.ecommerceConfig.cartSearch == 1 %}
             <form name="stockItemForm" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_stock_item_create') }}" enctype="multipart/form-data" id="stockItemForm" class="register" novalidate="novalidate">
-                <div class="modal-body">
-                    <div class="">
-                        <div class="panel-body">
+                <div class="clearfix"></div>
+                <div class="row" id="cart-search">
+                    <div class="col-xs-6 col-md-6">
+                        <input class="select2Stock form-control" autocomplete="off" name="itemName" id="itemName"  placeholder="Search your choose products..." style="border-radius:0!important;">
+                        <input type="hidden" name="stockId" id="stockId">
+                        <ul id="searchResult"></ul>
+                        <span class="help-inline">Here you can add on demand products. Just typing a product name and click add button.</span>
+                    </div>
+                    <div class="col-xs-2 col-md-2" id="cart-subitem"></div>
+                    <div class="col-xs-4 col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-transparent" aria-label="Bold"><strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong><span id="salesPrice"></span></button></div>
 
-                            <div class="clearfix"></div>
-                            <div class="row">
-                                <div class="col-xs-5 col-md-5">
-                                    <input class="select2Stock form-control" autocomplete="off" name="itemName" id="itemName"  placeholder="Search your choose products..." style="border-radius:0!important; margin-left: -30px">
-                                    <input type="hidden" name="stockId" id="stockId">
-                                    <ul id="searchResult"></ul>
-                                </div>
-                                <div class="col-xs-2 col-md-2" id="cart-subitem"></div>
-                                <div class="col-xs-5 col-md-5">
-                                    <div class="input-group">
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn btn-transparent" aria-label="Bold" id="salesPrice"></button></div>
-
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn  btn-number-stock text-center" data-type="minus" data-field="itemQuantity">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control text-center input-number" style="width: 100%" value="1" min="1" max="1000"  id="itemQuantity" name="itemQuantity">
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn  btn-number-stock" data-type="plus" data-field="itemQuantity">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button type="button" id="unit" class="btn btn-unit">Unit</button> <button type="submit" class="btn btn-warning " id="stockSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_stock_item_create') }}"><span class="glyphicon glyphicon-shopping-cart"></span> Add</button>
-                                        </div>
-                                    </div><!-- /.input-group -->
-                                </div>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn  btn-number-stock text-center" data-type="minus" data-field="itemQuantity">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
+                            <input type="text" class="form-control text-center input-number" style="width: 100%" value="1" min="1" max="1000"  id="itemQuantity" name="itemQuantity">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn  btn-number-stock" data-type="plus" data-field="itemQuantity">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button type="button" id="unit" class="btn btn-unit">Unit</button> <button type="submit" class="btn btn-warning " id="stockSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_stock_item_create') }}"><span class="glyphicon glyphicon-shopping-cart"></span> Add</button>
+                            </div>
+                        </div><!-- /.input-group -->
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </form>
+            {% endif %}
             <div class="clearfix"></div>
             <div>
-                <form class="" id="prescription" name="prescription" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
+                <form class="cart-form" id="cartForm" name="cartForm" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post" enctype="multipart/form-data">
                     <div class="clearfix"></div>
                     {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                     <div class="row">
-                        <div class="col-xs-offset-3 col-xs-6 col-md-6">
-                            <div style="height: 70px">
-                                <input type="file" id="prescriptionFile" name="prescriptionFile" class="dropzone"/>
+                        <div class="col-xs-8 col-md-8">
+                            <div style="height: 100px">
+                                <input type="file" id="uploadFile" name="uploadFile" class="dropzone"/>
                             </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <textarea class="cart-comment" name="comment" id="comment" rows="5" style="width: 100%; padding: 7px; font-size: 12px" placeholder="Enter order related instruction"></textarea>
                         </div>
                     </div>
                     <div class="clearfix"><br/></div>
@@ -149,15 +149,21 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" class="text-right"></td>
-                                        <td colspan="2"  class="text-left">
+                                        <td colspan="3" class="text-right">
+                                            {% if globalOption.ecommerceConfig.printer == "pos" %}
+                                            <button type="button" class="btn btn-print print-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_print') }}" id="cart-print">
+                                                <i class="fa fa-print"></i> Print
+                                            </button>
+                                            {% endif %}
+                                        </td>
+                                        <td colspan="2"  class="text-left" id="login-cart">
                                             {% if app.user %}
                                                 <button type="submit" class="btn btn-success">
-                                                    Place Order <span class="glyphicon glyphicon-play"></span>
+                                                    Place Order <span class="fa fa-play"></span>
                                                 </button>
                                             {% else %}
                                                 <button type="button" class="btn search-box-bg login-preview">
-                                                    Login & Place Order <span class="glyphicon glyphicon-play"></span>
+                                                    Login & Place Order <span class="fa fa-play"></span>
                                                 </button>
                                             {% endif %}
                                         </td>
@@ -175,7 +181,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="clearfix"></div>

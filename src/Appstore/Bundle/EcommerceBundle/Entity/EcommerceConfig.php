@@ -174,6 +174,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="cartSearch", type="boolean")
+     */
+    private $cartSearch = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showMasterName", type="boolean")
      */
     private $showMasterName = true;
@@ -1254,6 +1261,22 @@ class EcommerceConfig
     public function setUploadFile($uploadFile)
     {
         $this->uploadFile = $uploadFile;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCartSearch()
+    {
+        return $this->cartSearch;
+    }
+
+    /**
+     * @param bool $cartSearch
+     */
+    public function setCartSearch($cartSearch)
+    {
+        $this->cartSearch = $cartSearch;
     }
 
 

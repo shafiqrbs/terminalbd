@@ -108,6 +108,25 @@ $(document).ready(function(){
             inst.open();
         });
 
+        $(document).on( "change", ".userMobile", function( e ) {
+
+        var mobile = $(this).val();
+        var url = $(this).attr("data-action");
+        $.get(url,{ mobile:mobile} ).done(function(response) {
+            $("#mobile-validate").html(response);
+        }).always(function() {
+            $('#mobile-confirm').notifyModal({
+                duration : 10000,
+                placement : 'center',
+                overlay : true,
+                type : 'notify',
+                icon : false
+            });
+        });
+
+    });
+
+
         $("#sendSms").validate({
             ignore: ".ignore",
             rules: {
@@ -343,161 +362,97 @@ $(document).ready(function(){
         }
     });
 
-    var total;
-    function getRandom(){return Math.ceil(Math.random()* 20);}
-    function createSum(){
-        var randomNum1 = getRandom(),
-            randomNum2 = getRandom();
-        total =randomNum1 + randomNum2;
-        var sum = randomNum1 + " + " + randomNum2 + "=";
-        $("#question").html(sum);
-        $("#ans").val('');
-        checkInput();
-    }
+        /* Start This Registration form using for BHAWS Association */
 
-    function checkInput(){
-
-        var input = $("#ans").val(),
-            slideSpeed = 200,
-            hasInput = !!input,
-            valid = hasInput && input == total;
-        $('#verify').toggle(!hasInput);
-        $('#registrationSubmitForm').prop('disabled', !valid);
-        $('#success').toggle(valid);
-        $('#fail').toggle(hasInput && !valid);
-    }
-
-    createSum();
-    // On "reset button" click, generate new random sum
-    //   $('#registrationSubmitForm').click(createSum);
-    // On user input, check value
-    $( "#ans" ).keyup(checkInput);
-
-    $(document).on( "change", ".userMobile", function( e ) {
-
-        var mobile = $(this).val();
-        var url = $(this).attr("data-action");
-        $.get(url,{ mobile:mobile} ).done(function(response) {
-            $("#mobile-validate").html(response);
-        }).always(function() {
-            $('#mobile-confirm').notifyModal({
-                duration : 10000,
-                placement : 'center',
-                overlay : true,
-                type : 'notify',
-                icon : false
-            });
-        });
-
-    });
-
-
-    $("#registrationForm").validate({
-
-        rules: {
-
-            "registration_name": {required: true},
-            "registration_email": {
-                required: false,
-                remote:'/checking-member-email'
-            },
-            "registration_mobile": {
-                required: true,
-                remote:'/checking-member'
-            },
-            "registration_facebookId": {required: false},
-            "registration_address": {required: false}
-        },
-
-        messages: {
-
-            "registration_name":"Enter your full name",
-            "registration_mobile":{
-                required: "Enter valid mobile no",
-                remote: "This mobile no is already registered. Please try to another no."
-            },
-            "registration_email":{
-                remote: "This email is already registered. Please try to another email."
-            },
-
-        },
-
-        tooltip_options: {
-            "registration_name": {placement:'top',html:true},
-            "registration_mobile": {placement:'top',html:true},
-        },
-        submitHandler: function(form) {
-
-            $.ajax({
-
-                url         : $(form).attr( 'action' ),
-                type        : $(form).attr( 'method' ),
-                data        : new FormData(form),
-                processData : false,
-                contentType : false,
-                success: function(response){
-                    window.open(response+"#modal","_self");
-                },
-                complete: function(response){
-
-                }
-            });
+        var total;
+        function getRandom(){return Math.ceil(Math.random()* 20);}
+        function createSum(){
+            var randomNum1 = getRandom(),
+                randomNum2 = getRandom();
+            total =randomNum1 + randomNum2;
+            var sum = randomNum1 + " + " + randomNum2 + "=";
+            $("#question").html(sum);
+            $("#ans").val('');
+            checkInput();
         }
-    });
 
-    $("#loginForm").validate({
+        function checkInput(){
 
-        rules: {
-            "_username": {required: true},
-            "_password": {required: true},
-        },
+            var input = $("#ans").val(),
+                slideSpeed = 200,
+                hasInput = !!input,
+                valid = hasInput && input == total;
+            $('#verify').toggle(!hasInput);
+            $('#registrationSubmitForm').prop('disabled', !valid);
+            $('#success').toggle(valid);
+            $('#fail').toggle(hasInput && !valid);
+        }
 
-        messages: {
+        createSum();
+        // On "reset button" click, generate new random sum
+        //   $('#registrationSubmitForm').click(createSum);
+        // On user input, check value
+        $( "#ans" ).keyup(checkInput);
 
-            "_username":"Enter your mobile name",
-            "_password":"Enter valid OTP",
+        $("#registrationForm").validate({
 
-        },
+            rules: {
 
-        tooltip_options: {
-            "_username": {placement:'top',html:true},
-            "_password": {placement:'top',html:true}
-        },
-        submitHandler: function(form) {
+                "registration_name": {required: true},
+                "registration_email": {
+                    required: false,
+                    remote:'/checking-member-email'
+                },
+                "registration_mobile": {
+                    required: true,
+                    remote:'/checking-member'
+                },
+                "registration_facebookId": {required: false},
+                "registration_address": {required: false}
+            },
 
-            $.ajax({
+            messages: {
 
-                url         : $(form).attr( 'action' ),
-                type        : $(form).attr( 'method' ),
-                data        : new FormData(form),
-                processData : false,
-                contentType : false,
-                dataType: 'json',
-                success: function (data) {
-                    if (data.has_error) {
-                        $('#loginMsg').addClass('alert-danger');
-                        $('.alert-danger').html('There was an error with your Mobile no/Password combination. Please try again.');
-                    }else {
-                        $('#loginMsg').removeClass('alert-danger');
-                        $('#loginMsg').addClass('alert-success');
-                        $('.alert-success').html('Yor are login success.');
-                        setTimeout(function () {
-                            location.reload();
-                        }, 3000)
+                "registration_name":"Enter your full name",
+                "registration_mobile":{
+                    required: "Enter valid mobile no",
+                    remote: "This mobile no is already registered. Please try to another no."
+                },
+                "registration_email":{
+                    remote: "This email is already registered. Please try to another email."
+                },
+
+            },
+
+            tooltip_options: {
+                "registration_name": {placement:'top',html:true},
+                "registration_mobile": {placement:'top',html:true},
+            },
+            submitHandler: function(form) {
+
+                $.ajax({
+
+                    url         : $(form).attr( 'action' ),
+                    type        : $(form).attr( 'method' ),
+                    data        : new FormData(form),
+                    processData : false,
+                    contentType : false,
+                    success: function(response){
+                        window.open(response+"#modal","_self");
+                    },
+                    complete: function(response){
 
                     }
-                }
-            });
-        }
+                });
+            }
+        });
 
-    });
-
+        /* End This Registration form using for BHAWS Association */
 
 });
 
 
 
 
-                     
-     
-  
+
+

@@ -32,12 +32,6 @@ $(".myCarousel-target").on("click", function() {
     $(this).addClass("active");
 });
 
-$('body').on('click', '.btn-cookie', function(el) {
-    var val = $(this).attr('id');
-    var url = $(this).attr('data-url');
-    $.cookie('productList', val, {path: '/'});
-    setTimeout(location.reload(), 1000);
-});
 
 
 $(document).on( "click", ".emailSender", function(e){

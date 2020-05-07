@@ -153,15 +153,20 @@ class OrderController extends Controller
             return $this->redirect($this->generateUrl('order_show',array('id' => $entity->getId(),'shop' => $entity->getGlobalOption()->getUniqueCode())));
         }
         $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$entity);
+        $detect = new MobileDetect();
         if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
-            $detect = new MobileDetect();
+
             if( $detect->isMobile() or  $detect->isTablet() ) {
                 $theme = 'medicine/mobile';
             }else{
                 $theme = 'medicine';
             }
         }else{
-            $theme = 'ecommerce';
+            if( $detect->isMobile() or  $detect->isTablet() ) {
+                $theme = 'ecommerce/mobile';
+            }else{
+                $theme = 'ecommerce';
+            }
         }
 
         return $this->render("CustomerBundle:Order/{$theme}:payment.html.twig", array(
@@ -192,17 +197,18 @@ class OrderController extends Controller
      * Displays a form to edit an existing OrderItem entity.
      *
      */
-    public function medicineItemAddAction(Order $entity , Request $request)
+    public function itemAddAction(Order $entity , Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $orderItem = new OrderItem();
         $data = $request->request->all()['orderItem'];
         $stockId = $data['itemName'];
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockId);
-        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() :"";
+        $stock = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($stockId);
+        $unit = ($stock->getProductUnit()) ? $stock->getProductUnit()->getName() :"";
         $orderItem->setOrder($entity);
-        $orderItem->setItemName($stock->getName());
-        $orderItem->setBrandName($stock->getBrandName());
+        $orderItem->setItemName($stock->getWebName());
+        $orderItem->setBrandName($stock->getBrand()->getName());
+        $orderItem->setCategoryName($stock->getCategory()->getName());
         $orderItem->setUnitName($unit);
         $orderItem->setQuantity($data['quantity']);
         $orderItem->setPrice($data['price']);
@@ -218,21 +224,24 @@ class OrderController extends Controller
     public function stockDetailsAction()
     {
         $id = $_REQUEST['id'];
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($id);
-        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() : '';
+        $stock = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($id);
+        $unit = ($stock->getProductUnit()) ? $stock->getProductUnit()->getName() : '';
         return new Response(json_encode(array('unit' => $unit , 'price' => $stock->getSalesPrice())));
     }
 
     public function autoSearchAction($shop,Request $request)
     {
         $item = trim($_REQUEST['q']);
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $shop));
+        $inventory = $globalOption->getEcommerceConfig()->getId();
         if ($item) {
-            $inventory = $globalOption->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->ecommerceSearchAutoComplete($item,$inventory);
+            $inventory = $globalOption->getEcommerceConfig();
+            $item = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->searchWebStock($item,$inventory);
         }
         return new JsonResponse($item);
     }
+
+
 
 
     /**
@@ -396,6 +405,7 @@ class OrderController extends Controller
     }
 
 
+
     public function pdfAction($invoice)
     {
 
@@ -456,6 +466,24 @@ class OrderController extends Controller
 
     }
 
+    public function downloadAttachFileAction(Order $order)
+    {
 
+        $file = $order->getWebPath();
+        if (file_exists($file))
+        {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
+    }
 
 }

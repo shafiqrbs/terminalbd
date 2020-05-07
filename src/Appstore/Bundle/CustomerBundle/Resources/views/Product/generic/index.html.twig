@@ -31,11 +31,11 @@
                         <div class="caption"><i class="icon-reorder"></i>Product Lists</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn blue" href="{{ path('shoppingbag_to_order',{'shop':globalOption.slug}) }}">
+                                <a class="btn blue" id="orderCart" href="javascript:" data-url="{{ path('product_cart_preview',{'shop':globalOption.slug}) }}">
                                     <i class="icon-tasks"></i>&nbsp;Cart
                                 </a>
-                                <a class="dropdown-toggle btn purple cart" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="{{ path('order_cart',{'shop':globalOption.slug}) }}">
-                                    BDT. <span>{{ cart.total_items }} | {{ cart.total|number_format }}</span>
+                                <a class="dropdown-toggle btn purple cart" id="orderCart" href="javascript:" data-url="{{ path('product_cart_preview',{'shop':globalOption.slug}) }}">
+                                    {{ globalOption.ecommerceConfig.currency }} <span class="vsidebar">{{ cart.contents|length }} | {{ cart.total|number_format(2) }}</span>
                                 </a>
                             </div>
                         </div>
@@ -125,9 +125,9 @@
                                         <td class="numeric">{{ entity.salesPrice|number_format(2) }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                <input type="text" name="quantity[]" id="quantity-{{ entity.id }}" class="td-inline-input" value="{% if cartProducts[entity.id] is defined and cartProducts[entity.id] is not empty  %} {{ cartProducts[entity.id].quantity }} {% endif %}">
+                                                <input type="text" name="quantity[]" id="quantity-{{ entity.id }}" class="td-inline-input" value="{% if cartProducts[entity.id] is defined and cartProducts[entity.id] is not empty  %} {{ cartProducts[entity.id].quantity }} {% endif %}" max="{{ entity.maxQuantity }}" >
                                                 {% if cartProducts[entity.id] is defined and cartProducts[entity.id] is not empty  %}           <a class="btn yellow mini cartSubmit" href="javascript:" data-url="{{ path('order_cart_to_update',{'shop':globalOption.slug,'id':cartProducts[entity.id].rowid}) }}" data-id="{{ entity.id }}" data-price="{{ entity.salesPrice }}" >Update</a> {% else %}
-                                                    <a class="btn blue mini cartSubmit" href="javascript:" data-url="{{ path('order_cart_to_add',{'shop':globalOption.slug,'id':entity.id}) }}" data-id="{{ entity.id }}" data-price="{{ entity.salesPrice }}" >Add</a>
+                                                    <a class="btn blue mini cartSubmit" href="javascript:" data-url="{{ path('order_cart_to_item',{'shop':globalOption.slug,'id':entity.id}) }}" data-id="{{ entity.id }}" data-price="{{ entity.salesPrice }}" >Add</a>
                                                 {% endif %}
 
                                             </div>
@@ -244,7 +244,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@CustomerBundle/Resources/public/js/medicine.js'
+    '@CustomerBundle/Resources/public/js/ecommerce.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

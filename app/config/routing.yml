@@ -129,7 +129,6 @@ setting_location:
     resource: "@SettingLocationBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-
 fos_comment_api:
     type: rest
     resource: "@FOSCommentBundle/Resources/config/routing.yml"
@@ -139,7 +138,6 @@ fos_comment_api:
 domain_control:
     resource: "@XiideaDomainBundle/Resources/config/routing.yml"
     type:     rest
-
 
 bindu:
     resource: "@BinduBundle/Resources/config/main.yml"

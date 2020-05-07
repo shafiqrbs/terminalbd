@@ -2,15 +2,15 @@ order_product:
     path:      /order-new
     defaults: { _controller: "CustomerBundle:Product:index" }
 
-product_cart:
-    path:      /show-cart
-    defaults: { _controller: "CustomerBundle:Product:index" }
+product_cart_preview:
+    path:      /show-cart-preview
+    defaults: { _controller: "CustomerBundle:Product:cartPreview" }
 
 order_product_show:
     path:      /{slug}/order-show
     defaults: { _controller: "CustomerBundle:Product:show" }
 
-order_cart_to_add:
+order_cart_to_item:
     path:      /{id}/item-add-to-cart
     defaults: { _controller: "CustomerBundle:Product:productAddCart" }
 
@@ -30,6 +30,7 @@ order_cart_to_medicine:
     path:      /{id}/medicine-add-to-cart
     defaults: { _controller: "CustomerBundle:Product:medicineAddCart" }
 
+
 order_cart_to_remove_item:
     path:      /{id}/cart-to-item-remove
     defaults: { _controller: "CustomerBundle:Product:cartItemRemove" }
@@ -44,4 +45,4 @@ order_delete:
 
 order_item_delete:
     path:      /{id}/order-item-delete
-    defaults: { _controller: "CustomerBundle:Order:itemDelete" }
+    defaults: { _controller: "CustomerBundle:Product:itemDelete" }

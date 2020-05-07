@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
@@ -71,15 +72,20 @@ class ProductController extends Controller
         $domainType =  $globalOption->getDomainType();
         $entities = $em->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
         $pagination = $this->paginate($entities);
+        $detect = new MobileDetect();
         if( $globalOption->getDomainType() == 'medicine' ) {
-            $detect = new MobileDetect();
+
             if( $detect->isMobile() or  $detect->isTablet() ) {
                 $theme = 'medicine/mobile';
             }else{
                 $theme = 'medicine';
             }
         }else{
-            $theme = 'generic';
+            if( $detect->isMobile() or  $detect->isTablet() ) {
+                $theme = 'generic/mobile';
+            }else{
+                $theme = 'generic';
+            }
         }
         return $this->render("CustomerBundle:Product/{$theme}:index.html.twig", array(
             'globalOption' => $globalOption,
@@ -91,7 +97,17 @@ class ProductController extends Controller
 
     }
 
+    private function getCartData($cart)
+    {
+        $cartTotal = $cart->total();
+        $amount = number_format($cartTotal, 2, '.', '');
+        $items = count($cart->contents());
+        $totalItem = $cart->total_items();
+        $cartResult = $items .' | '.$amount;
 
+        $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItem,'items' => $items)));
+        return $array;
+    }
 
     public function productAddCartSubitemAction(Request $request , ItemSub $subitem)
     {
@@ -99,6 +115,9 @@ class ProductController extends Controller
         $cart = new Cart($request->getSession());
 
         $product = $subitem->getItem();
+
+        $config = $product->getEcommerceConfig();
+
         $cartId = $product->getId()."-".$subitem->getId();
         $quantity = $request->request->get('quantity');
         $unit = ($product->getProductUnit()) ? $product->getProductUnit()->getName() :'';
@@ -118,10 +137,8 @@ class ProductController extends Controller
         );
 
         $cart->insert($data);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        return new Response($cartTotal);
+        $array = $this->getCartData($cart);
+        return new Response($array);
 
     }
 
@@ -136,21 +153,16 @@ class ProductController extends Controller
                 'quantity' => $quantity,
             );
             $cart->update($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $items = (string)count($cart->contents());
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
-
+            $array = $this->getCartData($cart);
         }else{
             $cart->remove($id);
             $array =(json_encode(array('process'=>'invalid')));
         }
-        echo $array;
-        exit;
+        return new Response($array);
+
     }
 
-    public function productAddCartAction(Request $request , ItemSub $product)
+    public function productAddCartAction(Request $request , Item $product)
     {
 
         $cart = new Cart($request->getSession());
@@ -173,10 +185,8 @@ class ProductController extends Controller
         );
 
         $cart->insert($data);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        return new Response($cartTotal);
+        $array = $this->getCartData($cart);
+        return new Response($array);
 
     }
 
@@ -202,11 +212,8 @@ class ProductController extends Controller
             'subtotal' => ($quantity * $product->getSalesPrice()),
         );
 
-        $cart->insert($data);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        return new Response($cartTotal);
+        $array = $this->getCartData($cart);
+        return new Response($array);
 
     }
 
@@ -221,29 +228,20 @@ class ProductController extends Controller
                 'quantity' => $quantity,
             );
             $cart->update($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $items = (string)count($cart->contents());
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
-
+            $array = $this->getCartData($cart);
         }else{
             $cart->remove($id);
             $array =(json_encode(array('process'=>'invalid')));
         }
-        echo $array;
-        exit;
+        return  new Response($array);
+
     }
 
     public function cartItemRemoveAction(Request $request , $id)
     {
         $cart = new Cart($request->getSession());
         $cart->remove($id);
-        $cartTotal = (string)$cart->total();
-        $totalItems = (string)$cart->total_items();
-        $items = (string)count($cart->contents());
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
+        $array = $this->getCartData($cart);
         return new Response($array);
     }
 
@@ -323,6 +321,19 @@ class ProductController extends Controller
         );
         return new Response('success');
     }
+
+    public function cartPreviewAction(Request $request,$shop)
+    {
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        $cart = new Cart($request->getSession());
+        $html =  $this->renderView('CustomerBundle:Product/generic:cart.html.twig', array(
+            'globalOption' => $globalOption,
+            'cart' => $cart,
+
+        ));
+        return new Response($html);
+    }
+
 
 
 

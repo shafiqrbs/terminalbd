@@ -697,6 +697,20 @@ class WebServiceProductController extends Controller
         }
     }
 
+    private function returnCartSummaryAjaxData($cart)
+    {
+        $amount = number_format($cart->total(), 2, '.', '');
+        $data = array(
+            'cartTotal' =>  (string)$amount,
+            'totalItems' => count($cart->contents()),
+            'totalQuantity' => (string)$cart->total_items(),
+            'cartResult' => count($cart->contents())." | ৳ ".(string)$amount,
+            'process' => "success"
+        );
+        $array = json_encode($data);
+        return $array;
+    }
+
     public function productAddCartAction(Request $request , $subdomain , Item $product, ItemSub $subitem)
     {
 
@@ -735,12 +749,8 @@ class WebServiceProductController extends Controller
                 'maxQuantity' => $subitem->getQuantity(),
                 'productImg' => $productImg
             );
-
             $cart->insert($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+            $array = $this->returnCartSummaryAjaxData($cart);
         }else{
             $array =(json_encode(array('process'=>'invalid')));
         }
@@ -812,12 +822,7 @@ class WebServiceProductController extends Controller
             );
             $cart->insert($insert);
         }
-
-        $cartTotal = (string)$cart->total();
-        //$totalItems = (string)$cart->total_items();
-        $totalItems = count($cart->contents());
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        $array =json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems));
+        $array = $this->returnCartSummaryAjaxData($cart);
         return new Response($array);
 
     }
@@ -873,15 +878,11 @@ class WebServiceProductController extends Controller
                 'productImg' => $productImg
             );
             $cart->insert($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+            $array = $this->returnCartSummaryAjaxData($cart);
         }else{
             $array =(json_encode(array('process'=>'invalid')));
         }
-        echo $array;
-        exit;
+        return new Response($array);
 
     }
 
@@ -929,12 +930,8 @@ class WebServiceProductController extends Controller
             );
 
             $cart->insert($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $items = (string)count($cart->contents());
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
-        return new Response($array);
+            $array = $this->returnCartSummaryAjaxData($cart);
+            return new Response($array);
 
     }
 
@@ -961,6 +958,31 @@ class WebServiceProductController extends Controller
 
     }
 
+    public function cartPrintAction(Request $request , $subdomain)
+    {
+        $mobile = $_REQUEST['mobile'];
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $detect = new MobileDetect();
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+        if($detect->isMobile() || $detect->isTablet() ) {
+            $theme = "Template/Mobile/{$themeName}/EcommerceWidget";
+        }else{
+            $theme = "Template/Desktop/{$themeName}/EcommerceWidget";
+        }
+        $html = $this->renderView(
+            'FrontendBundle:'.$theme.':CartPrint.html.twig', array(
+                'cart' => $cart,
+                'globalOption' => $globalOption
+            )
+        );
+        return new Response($html);
+
+    }
+
+
+
     public function stockProductToCartAction(Request $request , $subdomain)
     {
 
@@ -975,10 +997,25 @@ class WebServiceProductController extends Controller
             $product = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($data['stockId']);
             $quantity = isset($data['itemQuantity']) ? $data['itemQuantity'] : '';
             $subItem = isset($data['size']) ? $data['size'] : '';
-            $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
 
             /** @var GlobalOption $globalOption */
-            if(empty($subItem)){
+            if(empty($subItem) and empty($product)){
+                $a = mt_rand(1000,9999);
+                $itemName = isset($data['itemName']) ? $data['itemName'] : '';
+                $insert = array(
+                    'id' => $a,
+                    'name' => $itemName,
+                    'brand' => '',
+                    'category' => '',
+                    'price' => '',
+                    'quantity' => $quantity,
+                    'productUnit' => '',
+                    'productImg' => ''
+                );
+                $cart->insert($insert);
+
+            }elseif(empty($subItem) and !empty($product)){
+                $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
                 $insert = array(
                     'id' => $product->getId(),
                     'name' => $product->getName(),
@@ -991,7 +1028,7 @@ class WebServiceProductController extends Controller
                 );
                 $cart->insert($insert);
 
-            }else{
+            }elseif(!empty($subItem)){
 
                 $subitem = $this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->find($subItem);
                 $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
@@ -1113,11 +1150,7 @@ class WebServiceProductController extends Controller
                 'quantity' => $quantity,
             );
             $cart->update($data);
-            $cartTotal = (string)$cart->total();
-            $totalItems = (string)$cart->total_items();
-            $items = (string)count($cart->contents());
-            $cartResult = $cartTotal.'('.$totalItems.')';
-            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'items' => $items)));
+            $array = $this->returnCartSummaryAjaxData($cart);
 
         }else{
             $array =(json_encode(array('process'=>'invalid')));
@@ -1137,10 +1170,7 @@ class WebServiceProductController extends Controller
         );
 
         $cart->update($data);
-        $cartTotal = (string)round($cart->total());
-        $totalItems = (string)$cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+        $array = $this->returnCartSummaryAjaxData($cart);
         return new Response($array);
     }
 
@@ -1175,11 +1205,8 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $cart->remove($cartid);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        $cartItems = $this->getCartItem($globalOption ,$cart);
-        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'cartItem' => '')));
+        $array = $this->returnCartSummaryAjaxData($cart);
+        return new Response($array);
     }
 
     public function productCartAction($subdomain, Request $request)

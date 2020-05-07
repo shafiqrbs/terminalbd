@@ -394,6 +394,7 @@ div.treeview, .treeview ul {
 }
 .product-item{
     position: relative;
+    margin-bottom: 15px;
 }
 
 .product-item .product-discount{
@@ -520,6 +521,8 @@ div.treeview, .treeview ul {
 .product-canvas .card-content {
     padding:15px;
     text-align:left;
+    width: 100%;
+    display: inline-block;
 }
 .product-canvas .card-title {
     margin-top:0;
@@ -700,6 +703,7 @@ div.treeview, .treeview ul {
 
 #cart-item-list #cart-item-list-box {
     overflow-y: auto;
+    width: 100%;
 }
 
 #cart-item-list dl {
@@ -734,14 +738,15 @@ div.treeview, .treeview ul {
     text-align: center;
 }
 
+/*
 #cart-item-list .top {
     background-color: #f5f5f5;
     height: 40px;
-    line-height: 40px;
     overflow: auto;
     padding-left: 11px;
     text-align: left;
 }
+*/
 
 #cart-item-list .dd-span {
     padding-left: 10px;
@@ -856,3 +861,48 @@ div.treeview, .treeview ul {
     color: #170202 !important;
     background: #c9cdd2;
 }
+
+/* Start Cart product Search */
+
+#cart-search{
+    background: #187bb2;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.help-inline {
+    font-size: 12px;
+    line-height: 12px;
+    display: inline-block;
+    color: #ffffff;
+    padding-top: 3px;
+    padding-bottom: 8px;
+    text-align: left;
+}
+
+.modalChangeSubItem{
+    border-radius:0;
+}
+
+#searchResult {
+    list-style: none;
+    padding: 0;
+    width: 88%;
+    position: absolute;
+    margin: 0;
+    top: 35px;
+    left: 15px!important;
+    max-height: 220px;
+    overflow-y: scroll;
+    z-index: 999999999;
+    background: #f5f5f5;
+}
+
+#searchResult li {
+    background: #eeeeee;
+    padding: 4px;
+    margin-bottom: 1px;
+}
+
+/* End Cart product Search */

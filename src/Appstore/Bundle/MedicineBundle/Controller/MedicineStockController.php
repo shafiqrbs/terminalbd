@@ -413,7 +413,7 @@ class MedicineStockController extends Controller
 	 * @Secure(roles="ROLE_MEDICINE_STOCK")
 	 */
 
-    public function deleteAction(MedicineStock $entity)
+    public function deleteAction(Request $request , MedicineStock $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -436,7 +436,8 @@ class MedicineStockController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('medicine_stock'));
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     public function rackSelectAction()
@@ -455,7 +456,7 @@ class MedicineStockController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(MedicineStock $entity)
+    public function statusAction(Request $request , MedicineStock $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -472,7 +473,8 @@ class MedicineStockController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('medicine_stock'));
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     /**

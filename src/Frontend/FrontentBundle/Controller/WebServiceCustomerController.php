@@ -6,8 +6,10 @@ use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Core\UserBundle\Form\SignupType;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -15,6 +17,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class WebServiceCustomerController extends Controller
 {
+
 
 
    public function registerAction($subdomain)
@@ -117,7 +120,7 @@ class WebServiceCustomerController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $email = $request->query->get('Core_userbundle_user[profile][email]',NULL,true);
+        $email = $request->query->get('Core_userbundle_user[email]',NULL,true);
         $entity = $em->getRepository('UserBundle:User')->findBy(array('email'=> $email));
         if( count($entity) > 0 ){
             $valid = 'false';
@@ -206,7 +209,6 @@ class WebServiceCustomerController extends Controller
     {
         $providerKey = 'secured_area'; // your firewall name
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-
         $this->container->get('security.context')->setToken($token);
     }
 

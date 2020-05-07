@@ -5,6 +5,8 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
+
 class DefaultController extends Controller
 {
     public function indexAction()

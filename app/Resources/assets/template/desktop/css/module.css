@@ -2521,13 +2521,13 @@ ul.sign-list > li.total {
 .product-preview img{
     width: 100%;
     height: auto;
-    transform: scale(1);
-    transition: all 0.40s linear 0s;
+   /* transform: scale(1);
+    transition: all 0.40s linear 0s;*/
 }
-.product-preview:hover img{
+/*.product-preview:hover img{
     transform: scale(1.3);
     transition:transform 3s linear 0s;
-}
+}*/
 .product-preview .team-content{
     position: absolute;
     top: 5%;

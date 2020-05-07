@@ -122,8 +122,8 @@ class OrderRepository extends EntityRepository
     public function fileUploader(Order $entity, $file = '')
     {
         $em = $this->_em;
-        if(isset($file['prescriptionFile'])){
-            $img = $file['prescriptionFile'];
+        if(isset($file['uploadFile'])){
+            $img = $file['uploadFile'];
             $fileName = $img->getClientOriginalName();
             $imgName =  uniqid(). '.' .$fileName;
             $img->move($entity->getUploadDir(), $imgName);

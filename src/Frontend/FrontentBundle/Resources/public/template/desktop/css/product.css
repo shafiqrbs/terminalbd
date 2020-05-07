@@ -775,12 +775,6 @@ strike{
     color: #000101!important;
 }
 
-.closest-dropzone{
-    line-height: 70px;
-}
-.closest-dropzone > span{
-    color: #FF5400!important;
-}
 .modal-dialog{
     top:0!important;
 }
@@ -793,9 +787,24 @@ div.bhoechie-tab-container {
     align-items:center;
     display: flex;
 }
-
-
-
+.cart-comment{
+    border: 1px solid #ddd8e5;
+}
+.help-inline{
+    font-size: 11px;
+    line-height: 20px;
+    display:inline-block;
+    color: #ffffff;
+}
+.modalChangeSubItem{
+    border-radius:0;
+}
+#cart-search{
+    background: #187bb2;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
 /* =========  Product INFO ============ */
 
 

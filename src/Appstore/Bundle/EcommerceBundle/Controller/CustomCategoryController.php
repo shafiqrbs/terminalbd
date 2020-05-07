@@ -9,7 +9,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Product\Bundle\ProductBundle\Form\CategoryType;
 
@@ -21,10 +21,13 @@ use Product\Bundle\ProductBundle\Form\CategoryType;
 class CustomCategoryController extends Controller
 {
 
+
     /**
-     * Lists all Category entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -49,10 +52,11 @@ class CustomCategoryController extends Controller
     }
 
 
+
     /**
-     * Creates a new Category entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function createAction(Request $request)
     {
         $entity = new Category();
@@ -116,9 +120,9 @@ class CustomCategoryController extends Controller
     }
 
     /**
-     * Displays a form to create a new Category entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function newAction()
     {
         $entity = new Category();
@@ -153,9 +157,9 @@ class CustomCategoryController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Category entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -197,9 +201,9 @@ class CustomCategoryController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Category entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -227,10 +231,10 @@ class CustomCategoryController extends Controller
         ));
     }
     /**
-     * Deletes a Category entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
-	public function deleteAction($id)
+
+    public function deleteAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();

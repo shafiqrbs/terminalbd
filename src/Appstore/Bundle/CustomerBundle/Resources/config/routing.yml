@@ -2,13 +2,10 @@ customer_domain_product:
     resource: "@CustomerBundle/Resources/config/routing/product.yml"
     prefix:   /{shop}/product
 
-customer_self:
-    resource: "@CustomerBundle/Resources/config/routing/customer.yml"
-    prefix:   /
 
 customer_domain:
     resource: "@CustomerBundle/Resources/config/routing/domain.yml"
-    prefix:   /
+    prefix:   /{shop}
 
 customer_order_process:
     resource: "@CustomerBundle/Resources/config/routing/order.yml"

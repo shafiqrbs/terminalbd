@@ -8,6 +8,7 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 /**
@@ -16,6 +17,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class DiscountController extends Controller
 {
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
+     */
+
 
     /**
      * Lists all Discount entities.
@@ -90,6 +98,13 @@ class DiscountController extends Controller
         ));
         return $form;
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
+     */
+
 
     /**
      * Displays a form to edit an existing PreOrder entity.
@@ -170,11 +185,12 @@ class DiscountController extends Controller
     }
 
 
-
     /**
-     * Deletes a Discount entity.
+     * Lists all Item entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function deleteAction( Discount $entity)
     {
 

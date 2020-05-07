@@ -292,11 +292,32 @@ class TemplateCustomize
     private $mobileLogin = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="otpLogin", type="boolean")
+     */
+    private $otpLogin = true;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="breadcrumbHome", type="string", length=20, nullable=true)
      */
     private $breadcrumbHome;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleAnalytic", type="string",nullable=true)
+     */
+    private $googleAnalytic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebookPixel", type="string",nullable=true)
+     */
+    private $facebookPixel;
 
     /**
      * @var string
@@ -3523,6 +3544,54 @@ class TemplateCustomize
     public function setCssStyleMobile($cssStyleMobile)
     {
         $this->cssStyleMobile = $cssStyleMobile;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOtpLogin()
+    {
+        return $this->otpLogin;
+    }
+
+    /**
+     * @param bool $otpLogin
+     */
+    public function setOtpLogin($otpLogin)
+    {
+        $this->otpLogin = $otpLogin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGoogleAnalytic()
+    {
+        return $this->googleAnalytic;
+    }
+
+    /**
+     * @param string $googleAnalytic
+     */
+    public function setGoogleAnalytic($googleAnalytic)
+    {
+        $this->googleAnalytic = $googleAnalytic;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookPixel()
+    {
+        return $this->facebookPixel;
+    }
+
+    /**
+     * @param string $facebookPixel
+     */
+    public function setFacebookPixel($facebookPixel)
+    {
+        $this->facebookPixel = $facebookPixel;
     }
 
 

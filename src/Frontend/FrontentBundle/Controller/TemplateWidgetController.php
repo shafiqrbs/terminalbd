@@ -129,7 +129,7 @@ class TemplateWidgetController extends Controller
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
-        return $this->render('@Frontend/Template/Desktop/sidebar.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/EcommerceWidget/sidebarCart.html.twig', array(
             'globalOption'             => $globalOption,
             'cartResult'               => $cartResult,
         ));

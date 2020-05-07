@@ -56,6 +56,7 @@
     'assets/template/plugin/file-image-uploader/inputFileZone.css'
     'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/desktop/css/css-loader.css'
+    'assets/template/plugin/message-box/messagebox.css'
     'assets/template/desktop/css/module.css'
     'assets/template/desktop/css/socialicon.css'
     'assets/template/desktop/css/style.css'
@@ -132,6 +133,7 @@
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
+'assets/template/plugin/validation/additional-methods.js'
 'assets/template/mobile/js/jquery.mmenu.min.all.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
 'assets/template/plugin/wow/js/wow.min.js'
@@ -142,6 +144,7 @@
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/slimscroll/jquery.slimscroll.js'
+'assets/template/plugin/message-box/messagebox.js'
 'assets/template/plugin/sidenav/js/sidebar-menu.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
@@ -149,6 +152,7 @@
 'assets/template/plugin/file-image-uploader/inputFileZone.js'
 'assets/template/plugin/js/cookies.js'
 'assets/template/desktop/js/scripts.js'
+'assets/template/desktop/js/authentication.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 
@@ -172,16 +176,6 @@
         var height = $("#logo-area").height();
         $(".bs-example-form").css({
             height:height+"px",
-        });
-
-        $('.logout').click( function(e) {
-
-            var url = $(this).attr("data-action");
-            $.get(url, function(data) {
-                if('success' == data){
-                    location.reload();
-                }
-            });
         });
         $.sidebarMenu($('.sidebar-menu'));
         $.sidebarMenu($('.sidebar-menu-rtl'));
@@ -291,7 +285,7 @@
         position: absolute;
         margin: 0;
         top: 35px;
-        left: -15px!important;
+        left:15px!important;
         max-height:220px;
         overflow-y: scroll;
         z-index: 999999999;
@@ -371,12 +365,15 @@
 
         border: 1px solid #ccc;
     }
+
     .select-location{
         width: 100%!important;
     }
+
     .select2-container{
         width: 100%!important;
     }
+
     .select2{
         width: 100%!important;
         border: 1px solid #cccccc;
@@ -384,6 +381,7 @@
         -moz-border-radius: 4px;
         border-radius: 4px;
     }
+
     .select2-dropdown{
         margin-left: -15px!important;
     }
@@ -395,15 +393,64 @@
         border: 1px solid #cccccc!important;
         border-radius: 0!important;
     }
+    .messagebox_overlay{
+        z-index:9999!important;
+    }
 
+    p.help{
+        font-size: 11px;
+        margin-left: 53px;
+    }
+    .panel{
+        border:none!important;
+        -webkit-box-shadow:none;
+        box-shadow:none;
+    }
 
+    .modal-footer {
+        text-align: left;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    #register-success{
+        margin-bottom: 3px;
+        padding: 6px;
+        width: 100%;
+        font-size: 12px;
+        color: #e20711;
+        display:none;
+        text-align: center;
+    }
 
 </style>
+{% if globalOption.templateCustomize.googleAnalytic is not empty  %}
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'UA-111963509-1');
+    gtag('config', '{{ globalOption.templateCustomize.googleAnalytic }}');
 </script>
+{% endif %}
+{% if globalOption.templateCustomize.facebookPixel is not empty  %}
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ globalOption.templateCustomize.facebookPixel }}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1"
+             src="https://www.facebook.com/tr?id={{ globalOption.templateCustomize.facebookPixel }}&ev=PageView
+&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+{% endif %}
 </body>
 </html>

@@ -25,6 +25,7 @@ class DefaultController extends Controller
         }
         $globalOption = $user->getGlobalOption();
         /* @var $globalOption GlobalOption */
+
         if($globalOption->getStatus() == 2 or $globalOption->getStatus() == 3 ) {
             $this->get('security.context')->setToken(null);
             $this->get('request')->getSession()->invalidate();
@@ -94,7 +95,6 @@ class DefaultController extends Controller
         }elseif (!empty($user) && $enable == 2 ) {
             return $this->redirect($this->generateUrl('domain_pendig'));
         }elseif (!empty($user) && $enable == 3 ) {
-
             return $this->redirect($this->generateUrl('domain_suspended'));
         }else{
             return $this->redirect($this->generateUrl('bindu_homepage'));

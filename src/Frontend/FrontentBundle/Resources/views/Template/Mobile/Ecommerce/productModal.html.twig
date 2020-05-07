@@ -10,10 +10,10 @@
                     <!-- me art lab slider -->
                     <div class='carousel-inner'>
                         <div data-match-height="image-carousel" class='item active'>
-                            {% if product.medicine is not empty and product.webPath is empty %}
-                                <img  id="zoom" src="{% if product.medicine.webPath is not empty  %}{{ image(product.medicine.webPath).resize(400,400) }}{% elseif product.medicine.webPath is defined and product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).resize() }}{% endif %}"  data-zoom-image="{% if product.medicine.webPath is not empty  %}{{ image(product.medicine.webPath).resize() }}{% elseif product.medicine.webPath is defined and product.medicine.webPath is not empty %}{{ image(product.medicine.webPath).resize() }}{% endif %}"/>
+                            {% if  product.webPath is not empty %}
+                                <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(product.webPath).resize(450,450, 'white') }}"/>
                             {% else %}
-                                <img  id="zoom" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(400,400) }}{% elseif product.webPath is defined and product.webPath is not empty %}{{ image(product.webPath).resize() }}{% endif %}"  data-zoom-image="{% if product.webPath is not empty  %}{{ image(product.webPath).resize() }}{% elseif product.webPath is defined and product.webPath is not empty %}{{ image(product.webPath).resize() }}{% endif %}"/>
+                                <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(450,450) }}"/>
                             {% endif %}
 
                         </div>

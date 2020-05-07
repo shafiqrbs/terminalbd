@@ -41,7 +41,7 @@ class OrderController extends Controller
     /**
      * Lists all Item entities.
      *
-     * @Secure(roles = "ROLE_ECOMMERCE,ROLE_DOMAIN")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -55,6 +55,12 @@ class OrderController extends Controller
             'entities' => $pagination,
         ));
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
 
     public function newAction()
     {
@@ -73,6 +79,12 @@ class OrderController extends Controller
         return $this->redirect($this->generateUrl('customer_order_edit', array('id' => $entity->getId())));
 
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
 
     public function editAction($id)
     {
@@ -169,6 +181,12 @@ class OrderController extends Controller
         ));
         return $form;
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
 
     public function paymentAction($id)
     {
@@ -272,6 +290,8 @@ class OrderController extends Controller
 
     }
 
+
+
     public function paymentProcessAction(Request $request ,Order $order)
     {
         $payment = $request->request->all();
@@ -308,6 +328,13 @@ class OrderController extends Controller
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
         return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
+
 
     public function updateOrderInformation(Order $order,$data)
     {
@@ -450,6 +477,12 @@ class OrderController extends Controller
         );
         return new Response($msg);
     }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
 
     public function confirmAction(Request $request ,Order $order)
     {
@@ -658,6 +691,26 @@ class OrderController extends Controller
             'print' => ''
         ));
 
+    }
+
+    public function downloadAttachFileAction(Order $order)
+    {
+
+        $file = $order->getWebPath();
+        if (file_exists($file))
+        {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
     }
 
 

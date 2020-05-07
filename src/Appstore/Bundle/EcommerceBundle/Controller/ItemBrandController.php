@@ -6,7 +6,7 @@ use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Form\ItemBrandType;
 
@@ -18,9 +18,10 @@ class ItemBrandController extends Controller
 {
 
     /**
-     * Lists all ItemBrand entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -31,10 +32,13 @@ class ItemBrandController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
-     * Creates a new ItemBrand entity.
+     * Lists all Item entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function createAction(Request $request)
     {
         $entity = new ItemBrand();
@@ -81,9 +85,11 @@ class ItemBrandController extends Controller
     }
 
     /**
-     * Displays a form to create a new ItemBrand entity.
+     * Lists all Item entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function newAction()
     {
         $entity = new ItemBrand();
@@ -115,9 +121,11 @@ class ItemBrandController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing ItemBrand entity.
+     * Lists all Item entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -153,10 +161,13 @@ class ItemBrandController extends Controller
         ));
          return $form;
     }
+
     /**
-     * Edits an existing ItemBrand entity.
+     * Lists all Item entities.
      *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
+
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();

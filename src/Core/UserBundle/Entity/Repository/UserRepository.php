@@ -180,10 +180,14 @@ class UserRepository extends EntityRepository
         if (!empty($result)) {
 
             $array['E-commerce'] = array(
-                'ROLE_ECOMMERCE'                            => 'E-commerce',
+                'ROLE_ECOMMERCE'                             => 'E-commerce',
                 'ROLE_DOMAIN_ECOMMERCE_PRODUCT'             => 'E-commerce Product',
                 'ROLE_DOMAIN_ECOMMERCE_ORDER'               => 'E-commerce Order',
-                'ROLE_DOMAIN_ECOMMERCE_SETTING'             => 'E-commerce Setting',
+                'ROLE_DOMAIN_ECOMMERCE_MANAGER'             => 'E-commerce Manager',
+                'ROLE_DOMAIN_ECOMMERCE_SETTING'             => 'E-commerce Admin',
+                'ROLE_DOMAIN_ECOMMERCE_VENDOR'              => 'E-commerce Vendor',
+                'ROLE_DOMAIN_ECOMMERCE_REPORT'              => 'E-commerce Report',
+                'ROLE_DOMAIN_ECOMMERCE_ADMIN'               => 'E-commerce Admin',
                 'ROLE_DOMAIN_ECOMMERCE_MENU'                => 'E-commerce Menu',
             );
         }

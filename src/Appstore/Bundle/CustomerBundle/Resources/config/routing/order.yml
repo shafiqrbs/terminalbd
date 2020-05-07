@@ -60,22 +60,25 @@ order_payment_delete:
     path:      /{id}/order-payment-delete
     defaults: { _controller: "CustomerBundle:Order:paymentDelete" }
 
+order_attach_download:
+    path:      /{id}/attach-download
+    defaults: { _controller: "CustomerBundle:Order:downloadAttachFile" }
+
 medicine_customer_order_stock_search:
-    path:     /order-stock-medicine-search
+    path:     /order-stock-product-search
     defaults: { _controller: "CustomerBundle:Order:autoSearch" }
     options:
             expose: true
 
-
 order_item_stock_details:
-    path:     /order-medicine-stock
+    path:     /order-stock-item-search
     defaults: { _controller: "CustomerBundle:Order:stockDetails" }
     options:
             expose: true
 
 medicine_order_item:
-    path:    /{id}/customer-medicine-order-item
-    defaults: { _controller: "CustomerBundle:Order:medicineItemAdd" }
+    path:    /{id}/customer-order-item-add
+    defaults: { _controller: "CustomerBundle:Order:itemAdd" }
     methods:  POST
     options:
             expose: true

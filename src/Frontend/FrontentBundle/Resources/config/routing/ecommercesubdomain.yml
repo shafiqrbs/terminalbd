@@ -2,6 +2,10 @@ ecommercesubdomain:
     path:     /
     defaults: { _controller: FrontendBundle:WebService:index }
 
+domain_authentication:
+    path:     /authentiction
+    defaults: { _controller: FrontendBundle:WebService:adminAuthentiction}
+
 webservice_sms_receive:
     path:     /receive/sms
     defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
@@ -193,6 +197,11 @@ webservice_contact:
 webservice_product_cart_details:
     path:     /basket
     defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }
+
+webservice_product_cart_print:
+    path:     /cart-print
+    defaults: { _controller: FrontendBundle:WebServiceProduct:cartPrint }
+
 
 webservice_product:
     path:     /product

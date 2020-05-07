@@ -43,7 +43,7 @@ class ItemController extends Controller
 	/**
 	 * Lists all Item entities.
 	 *
-	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
 	 */
 
 	public function indexAction()
@@ -160,7 +160,7 @@ class ItemController extends Controller
 
 	/**
 	 * Displays a form to create a new Item entity.
-	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
 	 */
 	public function newAction()
 	{
@@ -214,7 +214,7 @@ class ItemController extends Controller
 	}
 	/**
 	 * Displays a form to edit an existing Item entity.
-	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
 	 */
 
 	public function editAction(Item $entity)
@@ -245,7 +245,7 @@ class ItemController extends Controller
 
 	/**
 	 * Displays a form to edit an existing Item entity.
-	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
 	 */
 
 	public function uploadAction(Item $entity)
@@ -475,7 +475,7 @@ class ItemController extends Controller
 
 	/**
 	 * Deletes a Item entity.
-	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE,ROLE_DOMAIN")
+	 * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
 	 */
 	public function deleteAction(Item $vendorItem)
 	{
