@@ -556,9 +556,9 @@ strike{
 }
 .product-canvas .img-card img{
     width: 100%;
-    height: 250px;
+/*    height: 250px;
     object-fit:cover;
-    transition: all .25s ease;
+    transition: all .25s ease;*/
 }
 
 .product-canvas .card-content {

@@ -6,11 +6,12 @@
     <div class="row">
         <div class="col-xs-5 col-md-5">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner" style="height:320px" role="listbox">
+                <div class="carousel-inner"  role="listbox">
                     {% if product.webPath is not empty  %}
                     <div class="item active">
                         {% if  product.webPath is not empty %}
-                            <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(product.webPath).resize(450,450, 'white') }}"/>                     {% else %}
+                            <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(product.webPath).resize(450,450, 'white') }}"/>
+                        {% else %}
                             <img class="img-responsive "  data-match-height="image-gallery" alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(450,450) }}"/>
                         {% endif %}
                     </div>

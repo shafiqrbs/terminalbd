@@ -64,32 +64,34 @@
             <div class="panel-body">
                 <div id="loginMsg"></div>
                 <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
                         {% if globalOption.templateCustomize.otpLogin == 1 %}
-                            <input type="text" data-action="{{ path(globalOption.subDomain ~ '_webservice_customer_mobile_validation') }}" id="_username" name="_username" required="required" class="form-control  userMobile" placeholder="Enter your mobile no">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                                    <input type="text" data-action="{{ path(globalOption.subDomain ~ '_webservice_customer_mobile_validation') }}" id="_username" name="_username" required="required" class="form-control  userMobile" placeholder="Enter your mobile no">
+                            </div>
                             <p class="help">Enter your registered mobile no</p>
                         {% else %}
-                            <input type="text"  id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no or username">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+                                    <input type="text"  id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no or username">
+                            </div>
                         {% endif %}
-                    </div>
-
                 </div>
                 <div class="form-group">
 
                     {% if globalOption.templateCustomize.otpLogin == 1 %}
-                        <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                            <input type="text" id="_password" name="_password" required="required" class="form-control secured otp" placeholder="OTP ">
-                        </div>
-                        <p class="help">One-Time Password using your mobile phone</p>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input type="text" id="_password" name="_password" required="required" class="form-control secured otp" placeholder="OTP ">
+                            </div>
+                            <p class="help">One-Time Password using your mobile phone</p>
                     {% else %}
-                        <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                            <input type="password" id="_password" name="_password" required="required" class="form-control secured" placeholder="Password">
-                        </div>
-                        <p class="help">Using valid password</p>
-                        <input type="hidden" name="_remember_me" id="remember_me" value="on">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input type="password" id="_password" name="_password" required="required" class="form-control secured" placeholder="Password">
+                            </div>
+                            <p class="help">Using valid password</p>
+                            <input type="hidden" name="_remember_me" id="remember_me" value="on">
                     {% endif %}
                 </div>
             </div>

@@ -13,15 +13,17 @@
                         <div class="panel-body">
                             <div id="loginMsg"></div>
                             <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
                                     {% if globalOption.templateCustomize.otpLogin == 1 %}
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
                                         <input type="text" data-action="{{ path(globalOption.subDomain ~ '_webservice_customer_mobile_validation') }}" id="_username" name="_username" required="required" class="form-control  userMobile" placeholder="Enter your mobile no">
+                                    </div>
                                         <p class="help">Enter your registered mobile no</p>
                                     {% else %}
-                                        <input type="text"  id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no or username">
+                                        <div class="input-group">
+                                                <input type="text"  id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no or username">
+                                        </div>
                                     {% endif %}
-                                </div>
 
                             </div>
                             <div class="form-group">

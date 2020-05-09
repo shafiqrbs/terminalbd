@@ -183,8 +183,7 @@
                                             {% if product.discount is not empty  %}<a class="product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                             <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
                                                 {% if  product.webPath is not empty %}
-                                                    <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(600,600, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
-                                                    <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(600,600, 'white') }}"/>            {% else %}
+                                                    <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(400,400, 'white') }}"/>                      {% else %}
                                                     <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(600,600) }}"/>
                                                 {% endif %}
                                             </a>
@@ -259,7 +258,7 @@
                                                     {% endif %}
                                                 </a>
                                             </div>
-                                            <div class="col-xs-8 col-md-8 text-left" data-match-height="item-product" >
+                                            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-xs-7 col-md-7 {% else %} col-xs-8 col-md-8 {% endif %} text-left" data-match-height="item-product" >
                                                 <div class="caption">
                                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                                         <span class="category-name">
@@ -267,7 +266,7 @@
                                         </span>
                                                     {% endif %}
                                                     <span class="product-name">
-                                        <a class="img-card product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:" >{{ product.webName }}</a>
+                                        <a class="product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:" >{{ product.webName }}</a>
                                     </span>
                                                     {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
                                                         <span class="brand-name">
@@ -303,7 +302,7 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-xs-2 col-md-2 sub-product-list" data-match-height="item-product">
+                                            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-xs-3 col-md-3 {% else %} col-xs-2 col-md-2 {% endif %} sub-product-list" data-match-height="item-product">
                                                 <div class="row">
                                                     <div class="input-group col-xs-12 col-md-12">
     <span class="input-group-btn">

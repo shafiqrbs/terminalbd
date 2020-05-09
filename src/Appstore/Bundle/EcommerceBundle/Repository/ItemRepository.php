@@ -516,7 +516,7 @@ class ItemRepository extends EntityRepository
     public function findGoodsWithSearch($config,$data,$limit = 0)
     {
 
-        $sort = isset($data['sort'])? $data['sort'] :'item.webName';
+        $sort = isset($data['sort'])? $data['sort'] :'item.path';
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.ecommerceConfig = :config");
