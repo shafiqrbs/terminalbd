@@ -251,11 +251,15 @@ $('.tagProductLeft .img-card-large img').css({
     'height':(tagHeight-73)
 });
 
-var discountHeight = $('#discountProductRight').outerHeight(true);
+var discountHeight = $('#discountProductRight').height();
+
+/*
 $('.discountProductLeft').css({
     'height':(discountHeight-30)
 });
+*/
 
+/*
 $('.discountProductLeft .img-card-large').css({
     'height':(discountHeight-73)
 });
@@ -263,5 +267,6 @@ $('.discountProductLeft .img-card-large').css({
 $('.discountProductLeft .img-card-large img').css({
     'height':(discountHeight-73)
 });
+*/
 
 
