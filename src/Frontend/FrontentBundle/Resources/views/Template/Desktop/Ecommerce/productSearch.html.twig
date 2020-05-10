@@ -186,21 +186,20 @@
                                             {% if product.discount is not empty  %}<a class="product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                             <a class="img-card product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  >
                                                 {% if  product.webPath is not empty %}
-                                                    <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(600,600, 'white') }}"/>                        {% elseif product.medicine is not empty and product.medicine.webPath is not empty %}
-                                                    <img alt="{{ product.webName }}" src="{{ image(product.medicine.webPath).resize(600,600, 'white') }}"/>            {% else %}
-                                                    <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(600,600) }}"/>
+                                                    <img alt="{{ product.webName }}" src="{{ image(product.webPath).resize(400,400, 'white') }}"/>                       {% else %}
+                                                    <img alt="{{ product.webName }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(400,400) }}"/>
                                                 {% endif %}
                                             </a>
                                             <div class="card-content" data-match-height="item-product">
                                                 {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                                     <span class="category-name">
-                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.id }) }}">{{ product.category.name }}</a>
+                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.slug }) }}">{{ product.category.name }}</a>
                                         </span>
                                                 {% endif %}
                                                 <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.webName }}</a>
                                                 {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
                                                     <span class="brand-name">
-                                        <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}">{{ product.brand.name }}</a>
+                                        <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.slug }) }}">{{ product.brand.name }}</a>
                                     </span>
                                                 {% endif %}
                                                 <div class="row sub-product" id="inlineLoading-{{ product.id }}">
@@ -266,7 +265,7 @@
                                                 <div class="caption">
                                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                                         <span class="category-name">
-                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.id }) }}">{{ product.category.name }}</a>
+                                            <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':product.category.slug }) }}">{{ product.category.name }}</a>
                                         </span>
                                                     {% endif %}
                                                     <span class="product-name">
@@ -274,7 +273,7 @@
                                     </span>
                                                     {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
                                                         <span class="brand-name">
-                                        <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}">{{ product.brand.name }}</a>
+                                        <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.slug }) }}">{{ product.brand.name }}</a>
                                     </span>
                                                     {% endif %}
                                                     <p class="product-price">
@@ -346,7 +345,7 @@
                                                 <p class="group inner list-group-item-text">{{ product.content|raw|truncate(250) }}</p>
                                                 <p class="group inner list-group-item-text">
                                                     {% if product.category is not empty %}
-                                                        <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.id }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
+                                                        <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.slug }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
                                                     {% endif %}
                                                 </p>
                                             </div>
@@ -398,7 +397,7 @@
                                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
                                                 <p class="group inner list-group-item-text">
                                                     {% if product.category is not empty %}
-                                                        <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.id }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
+                                                        <a class="btn-info tag" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id': product.category.slug }) }}"><span class="glyphicon glyphicon-tag"></span> {{ product.category.name }}</a>
                                                     {% endif %}
                                                 </p>
 

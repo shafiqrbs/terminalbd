@@ -3,7 +3,7 @@
         <div class="widget-feature-center">
         {% for entity in entities %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
-                <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':entity.id}) }}" class=""  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+                <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'promotion':entity.slug}) }}" class=""  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt="{{ entity.name }}"></a>
             </div>
         {% endfor %}
         </div>
@@ -13,7 +13,7 @@
         <div class="widget-feature-center">
             {% for entity in entities %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
-             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'tag':entity.slug}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt="{{ entity.name }}"></a>
             </div>
             {% endfor %}
         </div>
@@ -23,7 +23,7 @@
         <div class="widget-feature-center">
             {% for entity in entities %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
-                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_discount',{'id':entity.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':entity.slug}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt="{{ entity.name }}"></a>
             </div>
             {% endfor %}
         </div>
@@ -33,7 +33,7 @@
         <div class="scrollbar-inner wow fadeInDown" style="overflow: hidden">
             <ul class="slider-category-feature">
                 {% for entity in entities %}
-                    <li class="{{ position }}"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.id}) }}" class="" >{{ entity.name }}</a></li>
+                    <li class="{{ position }}"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':entity.slug}) }}" class="" >{{ entity.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -44,7 +44,7 @@
            {% for entity in entities %}
                 <div class="col-md-6  wow fadeInDown" data-wow-delay="2s" >
                     <div class="thumbnail">
-                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':entity.id}) }}" class="" > <img class="img-responsive" src="{{ image(entity.webPath).forceResize(120,75) }}" alt=""></a>
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':entity.slug}) }}" class="" > <img class="img-responsive" src="{{ image(entity.webPath).forceResize(120,75) }}" alt="{{ entity.name }}"></a>
                     </div>
                 </div>
             {% endfor %}

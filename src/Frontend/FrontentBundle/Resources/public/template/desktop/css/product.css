@@ -172,6 +172,7 @@ strike{
 
 .panel-filter{
     width: 95%;
+    border: 1px solid #dddddd!important;
 }
 
 .product-item{
@@ -677,7 +678,7 @@ strike{
 .ul-check-list li{
     list-style: none;
     float: left;
-    width: 50%;
+    width: 100%;
     height: 30px;
 
 }

@@ -1,8 +1,8 @@
 $(".select2StockMedicine").select2({
 
-    placeholder: "Search stock medicine name",
+    placeholder: "Search stock item name",
     ajax: {
-        url: Routing.generate('order_medicine_stock_search'),
+        url: Routing.generate('order_stock_item_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -25,11 +25,6 @@ $(".select2StockMedicine").select2({
     formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
         var id = $(element).val();
-        $.ajax(Routing.generate('medicine_stock_name', { stock : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
     },
     allowClear: true,
     minimumInputLength: 1
@@ -41,7 +36,7 @@ $(document).on('change', '#orderItem_itemName', function() {
 
     var medicine = $(this).val();
     $.ajax({
-        url: Routing.generate('medicine_order_item_stock_details',{'id': medicine}),
+        url: Routing.generate('order_item_stock_details',{'id': medicine}),
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
@@ -101,7 +96,7 @@ $(document).on("change", ".transactionProcess", function() {
         contentType: false,
         data:formData,
         success: function(response){
-            location.reload();
+            $("#orderItems").html(response);
         }
     });
 

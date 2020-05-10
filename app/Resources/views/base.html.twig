@@ -90,15 +90,8 @@
 {#
     'assets/css/custom.css'
     'assets/css/pages/profile.css'#}
-
-    {% if app.request.cookies.has('productList') %}
-        {% set cookieVal = app.request.cookies.get('productList') %}
-    {% else %}
-        {% set cookieVal = '' %}
-    {% endif %}
-
  </head>
-<body class="page-header-fixed  page-footer-fixed {% if cookieVal != 'page-sidebar-closed' %} page-sidebar-closed  {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+<body class="page-header-fixed  page-footer-fixed  {% if is_granted('ROLE_CUSTOMER') is empty %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
 <div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
     {% image 'assets/img/ajax-modal-loading.gif'
     filter='' output='/img/ajax-modal-loading.gif' %}
@@ -484,12 +477,6 @@
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             return true;
-        });
-
-        $('body').on('click', '.btn-cookie', function(el) {
-            var val = $(this).attr('id');
-            Cookies.set('productList', val);
-            setTimeout(location.reload(), 1000);
         });
 
         $(document).on('change', '.targetTo', function() {

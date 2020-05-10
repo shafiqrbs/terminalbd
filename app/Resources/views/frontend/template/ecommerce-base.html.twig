@@ -197,9 +197,24 @@
 
 </script>
 {% if globalOption.templateCustomize.fbMessenger is not empty  %}
-<div class="fb-customerchat"
-     page_id="<{{ globalOption.templateCustomize.fbMessenger }}>">
-</div>
+    <div class="fb-send-to-messenger"
+         messenger_app_id="<228539388443745>"
+         page_id="hawamithai2020"
+         data-ref="<PASS_THROUGH_PARAM>"
+         color="<blue | white>"
+         size="<standard | large | xlarge>">
+    </div>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId            : '228539388443745',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v7.0'
+            });
+        };
+    </script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 {% endif %}
 
 {% if globalOption.templateCustomize.tawk is not empty  %}
@@ -402,7 +417,7 @@
         margin-left: 53px;
     }
     .panel{
-        border:none!important;
+        border:none;
         -webkit-box-shadow:none;
         box-shadow:none;
     }

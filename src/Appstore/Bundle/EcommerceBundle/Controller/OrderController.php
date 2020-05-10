@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\MedicineItemType;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
@@ -217,7 +218,7 @@ class OrderController extends Controller
     {
 
         $form = $this->createForm(new MedicineItemType(), $orderItem, array(
-            'action' => $this->generateUrl('customer_medicine_order_item',array('id' => $order->getId())),
+            'action' => $this->generateUrl('customer_order_item',array('id' => $order->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -232,17 +233,21 @@ class OrderController extends Controller
      * Displays a form to edit an existing OrderItem entity.
      *
      */
-    public function medicineItemAddAction(Order $entity , Request $request)
+    public function orderItemAddAction(Order $entity , Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $orderItem = new OrderItem();
         $data = $request->request->all()['orderItem'];
         $stockId = $data['itemName'];
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockId);
-        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() :"";
+        $product = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->find($stockId);
+        $unit = ($product->getProductUnit()) ? $product->getProductUnit()->getName() :'';
+        $brand = ($product->getBrand()) ? $product->getBrand()->getName() :'';
+        $category = ($product->getCategory()) ? $product->getCategory()->getName() :'';
+        $size = !empty($product->getSize()) ? $product->getSize()->getName(): '';
         $orderItem->setOrder($entity);
-        $orderItem->setItemName($stock->getName());
-        $orderItem->setBrandName($stock->getBrandName());
+        $orderItem->setItemName($product->getWebName());
+        $orderItem->setBrandName($brand);
+        $orderItem->setCategoryName($category);
         $orderItem->setUnitName($unit);
         $orderItem->setQuantity($data['quantity']);
         $orderItem->setPrice($data['price']);
@@ -250,14 +255,30 @@ class OrderController extends Controller
         $em->persist($orderItem);
         $em->flush();
         $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
-        return new Response('success');
+        $array = $this->renderCatrtItem($entity);
+        return new Response($array);
+
+    }
+
+    public function renderCatrtItem(Order $entity)
+    {
+        if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
+            $theme = 'medicine';
+        }else{
+            $theme = 'ecommerce';
+        }
+
+        $html =  $this->renderView("EcommerceBundle:Order/{$theme}:cartItem.html.twig", array(
+            'globalOption' => $entity->getGlobalOption(),
+            'entity' => $entity,
+        ));
 
     }
 
 
-    public function stockDetailsAction(MedicineStock $stock)
+    public function stockDetailsAction(Item $stock)
     {
-        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName() : '';
+        $unit = ($stock->getProductUnit()) ? $stock->getProductUnit()->getName() : '';
         return new Response(json_encode(array('unit' => $unit , 'price' => $stock->getSalesPrice())));
     }
 
@@ -265,8 +286,8 @@ class OrderController extends Controller
     {
         $item = trim($_REQUEST['q']);
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->ecommerceSearchAutoComplete($item,$inventory);
+            $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+            $item = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->searchWebStock($item,$inventory);
         }
         return new JsonResponse($item);
     }
@@ -427,7 +448,7 @@ class OrderController extends Controller
         $em->flush();
         $em->getRepository('EcommerceBundle:Order')->updateOrder($entity->getOrder());
         return new Response('success');
-        exit;
+
     }
 
     /**
@@ -691,26 +712,6 @@ class OrderController extends Controller
             'print' => ''
         ));
 
-    }
-
-    public function downloadAttachFileAction(Order $order)
-    {
-
-        $file = $order->getWebPath();
-        if (file_exists($file))
-        {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename='.basename($file));
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($file));
-            ob_clean();
-            flush();
-            readfile($file);
-            exit;
-        }
     }
 
 

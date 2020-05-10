@@ -173,7 +173,7 @@
                             <div class="input-group search-box {% if globalOption.ecommerceConfig.searchCategory == 1 %} col-md-9 col-lg-9 {% else %} col-md-12 col-lg-12 {% endif %}"  >
                                 <div class="input-group col-md-12 col-lg-12">
 
-                                    <input  type="text" id="webName" name="webName" required="required" class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{% if searchForm.webName is defined and searchForm.webName is not empty %} {{ searchForm.webName }}{% endif %}" placeholder="Product name,category,brand etc">
+                                    <input  type="text" id="webName" name="webName"  class="form-control serarch-keyword search-field col-md-12 col-lg-12" value="{% if searchForm.webName is defined and searchForm.webName is not empty %} {{ searchForm.webName }}{% endif %}" placeholder="Product name,category,brand etc">
                                     <span class="input-group-btn">
 
                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>

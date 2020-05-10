@@ -271,14 +271,14 @@ class CategoryRepository extends MaterializedPathRepository
                 $result.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='categories[]' {$checked} id='category-{$row->getId()}' value='{$row->getId()}'>
                 <label for='category-{$row->getId()}'></label>
-                </div><a class='' href='/product/category/{$row->getId()}'>{$row->getName()}</a>";
+                </div><a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a>";
                 $result.= $this->productCategorySidebar($row->getChildren(),$categories);
                 $result.= "</li>";
             }else {
                 $result.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='categories[]' {$checked} id='category-{$row->getId()}' value='{$row->getId()}'>
                 <label for='category-{$row->getId()}'></label>
-                </div><a class='' href='/product/category/{$row->getId()}'>{$row->getName()}</a></li>";
+                </div><a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a></li>";
             }
         }
         $result.= "</ul>";
@@ -844,7 +844,7 @@ class CategoryRepository extends MaterializedPathRepository
         foreach($category as $row){
             $selected = ($selected === $row->getId() )? 'selected':'';
             $name = $row->getName();
-            $items .= "<option  $selected  value='{$row->getId()}'>{$spacing}{$name}</option>";
+            $items .= "<option  $selected  value='{$row->getSlug()}'>{$spacing}{$name}</option>";
             if($row->getChildren()){
                 $items = $this->getCategoryTreeForMobile($row->getChildren(), $selected, $spacing . '--', $items);
             }

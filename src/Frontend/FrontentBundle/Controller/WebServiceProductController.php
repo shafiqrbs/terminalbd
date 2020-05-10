@@ -69,7 +69,7 @@ class WebServiceProductController extends Controller
             $data = $_REQUEST;
             $data['category']= isset($post['category']) ? $post['category']:'';
             $data['brand']= isset($post['brand']) ? $post['brand']:'';
-            $data['name']= isset($post['webName']) ? $post['webName']:'';
+            $data['webName']= isset($post['webName']) ? $post['webName']:'';
 
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
@@ -103,7 +103,7 @@ class WebServiceProductController extends Controller
     {
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         if(!empty($globalOption)){
 
@@ -112,13 +112,13 @@ class WebServiceProductController extends Controller
 
             $post = $_REQUEST;
             $data['webName']= isset($post['webName']) ? $post['webName']:'';
-            $data['category']= isset($post['category']) ? $post['category']:'';
             $data['categories']= isset($post['categories']) ? $post['categories']:'';
-            $data['brand']= isset($post['brands']) ? $post['brands']:'';
-            $data['tag']= isset($post['tags']) ? $post['tags']:'';
-            $data['promotion']= isset($post['promotions']) ? $post['promotions']:'';
-            $data['discount']= isset($post['discounts']) ? $post['discounts']:'';
+            $data['brands']= isset($post['brands']) ? $post['brands']:'';
+            $data['tags']= isset($post['tags']) ? $post['tags']:'';
+            $data['promotions']= isset($post['promotions']) ? $post['promotions']:'';
+            $data['discounts']= isset($post['discounts']) ? $post['discounts']:'';
             $config = $globalOption->getEcommerceConfig();
+
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config->getId(),$data);
 
@@ -147,42 +147,12 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productStockSearchAction($subdomain)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $item = trim($_REQUEST['q']);
-        $search_arr = array();
-        if ($item) {
-            $config = $globalOption->getEcommerceConfig();
-            $items = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->searchWebStock($item,$config);
-            foreach ($items as $item):
-                $id = $item['id'];
-                $name = $item['text'];
-                $search_arr[] = array("id" => $id, "name" => $name);
-            endforeach;
-        }
-        return new Response(json_encode($search_arr));
-    }
 
     public function productSearchAction(Request $request , $subdomain)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        if(!empty($globalOption)){
-            return $this->medicineProductSearch($request , $subdomain);
-        }else{
-            return $this->redirect($this->generateUrl('homepage'));
-        }
-    }
-
-
-    public function medicineProductSearch($request , $subdomain)
-    {
-
         $cart = new Cart($request->getSession());
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
         if(!empty($globalOption)){
 
@@ -192,10 +162,6 @@ class WebServiceProductController extends Controller
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-         //   $entities =$rwaEntities->getResult();
-            $medicineConfig = $globalOption->getMedicineConfig()->getId();
-           // $vendorEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($medicineConfig,$data);
-         //  $globalEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getMedicineBrandSearch($data);
 
             /* Device Detection code desktop or mobile */
             $config = $globalOption->getEcommerceConfig();
@@ -211,13 +177,11 @@ class WebServiceProductController extends Controller
 
             $item = !empty($_REQUEST) ? $_REQUEST :array();
             $searchForm =$item;
-            return $this->render('FrontendBundle:'.$theme.':productSearch.html.twig',
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
-                 //   'vendorEntities'    => $vendorEntities,
-                  //  'globalEntities'    => $globalEntities,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
@@ -226,7 +190,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function brandAction(Request $request , $subdomain, ItemBrand $brand)
+    public function categoryAction(Request $request , $subdomain, $category)
     {
 
         $cart = new Cart($request->getSession());
@@ -236,65 +200,16 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'brand'));
-
-            $data = $_REQUEST;
-            if(empty($data)){
-                $data = array('brand' => $brand );
-            }
-            $config = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if( $detect->isMobile() || $detect->isTablet() ) {
-                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
-                $theme = 'Template/Mobile/'.$themeName;
-            }else{
-                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
-                $theme = 'Template/Desktop/'.$themeName;
-            }
-
-            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
-
-            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
-                array(
-                    'titleName'         => 'Brand: '.$brand->getName(),
-                    'globalOption'      => $globalOption,
-                    'cart'              => $cart,
-                    'products'          => $pagination,
-                    'menu'              => $menu,
-                    'pageName'          => 'Product',
-                    'searchForm'        => $searchForm,
-                )
-            );
-        }
-    }
-
-    public function categoryAction(Request $request , $subdomain, Category $category)
-    {
-
-        $cart = new Cart($request->getSession());
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-
-        if(!empty($globalOption)){
-
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'category'));
 
-            $data = $_REQUEST;
-            if(empty($data)){
-                $data = array('categoryId' => $category->getId());
+
+            if(!empty($category)){
+                $data = array('category' => $category);
             }
 
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -317,28 +232,32 @@ class WebServiceProductController extends Controller
                     'pageName'              => 'Product',
                     'data'                  => $data['limit']= 20,
                     'searchForm'            => $data,
-                    'titleName'             => 'Category: '.$category->getName(),
+                    'titleName'             => 'Category',
                 )
             );
         }
     }
 
-    public function promotionAction(Request $request , $subdomain, Promotion $promotion)
+    public function brandAction(Request $request , $subdomain, $brand)
     {
 
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'promotion'));
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'brand'));
 
-            $data = $_REQUEST;
+            if(!empty($brand)){
+                $data = array('brand' => $brand);
+            }
+
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
+            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -351,99 +270,161 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
 
-
-            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
-                array(
-
-                    'globalOption'  => $globalOption,
-                    'menu'  => $menu,
-                    'searchForm'        => $data,
-                    'products'    => $pagination,
-                )
-            );
-        }
-    }
-
-    public function tagAction(Request $request , $subdomain, Promotion $tag)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-
-        if(!empty($globalOption)){
-
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'tag'));
-
-
-            $data = $_REQUEST;
-            $config = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if( $detect->isMobile() || $detect->isTablet() ) {
-                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
-                $theme = 'Template/Mobile/'.$themeName;
-            }else{
-                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
-                $theme = 'Template/Desktop/'.$themeName;
-            }
-            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
-                array(
-
-                    'globalOption'  => $globalOption,
-                    'menu'  => $menu,
-                    'searchForm'        => $data,
-                    'products'    => $pagination,
-                )
-            );
-        }
-    }
-
-    public function discountAction(Request $request , $subdomain)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-
-        if(!empty($globalOption)){
-
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'category'));
-
-
-            $data = $_REQUEST;
-            $config = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if( $detect->isMobile() || $detect->isTablet() ) {
-                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
-                $theme = 'Template/Mobile/'.$themeName;
-            }else{
-                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
-                $theme = 'Template/Desktop/'.$themeName;
-            }
-
-            $category = isset($data['category']) ? $data['category'] :0;
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-
-                    'globalOption'  => $globalOption,
-                    'categoryTree'  => $categoryTree,
-                    'menu'  => $menu,
+                    'titleName'         => 'Brand',
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
                     'searchForm'        => $searchForm,
-                    'products'    => $pagination,
+                )
+            );
+        }
+    }
+
+    public function promotionAction(Request $request , $subdomain, $promotion)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'product'));
+
+            if(!empty($promotion)){
+                $data = array('promotion' => $promotion);
+            }
+
+            $config = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+                    'titleName'         => 'Promotion',
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
+                    'searchForm'        => $searchForm,
+                )
+            );
+        }
+    }
+
+    public function tagAction(Request $request , $subdomain, $tag)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'product'));
+
+            if(!empty($tag)){
+                $data = array('tag' => $tag);
+            }
+
+            $config = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+                    'titleName'         => 'Tag',
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
+                    'searchForm'        => $searchForm,
+                )
+            );
+        }
+    }
+
+    public function discountAction(Request $request , $subdomain, $discount)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'product'));
+
+            if(!empty($discount)){
+                $data = array('discount' => $discount);
+            }
+
+            $config = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+                    'titleName'         => 'Discount',
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
+                    'searchForm'        => $searchForm,
                 )
             );
         }
@@ -564,6 +545,25 @@ class WebServiceProductController extends Controller
         }
 
     }
+
+    public function productStockSearchAction($subdomain)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $item = trim($_REQUEST['q']);
+        $search_arr = array();
+        if ($item) {
+            $config = $globalOption->getEcommerceConfig();
+            $items = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->searchWebStock($item,$config);
+            foreach ($items as $item):
+                $id = $item['id'];
+                $name = $item['text'];
+                $search_arr[] = array("id" => $id, "name" => $name);
+            endforeach;
+        }
+        return new Response(json_encode($search_arr));
+    }
+
 
     public function productSubProductAction($subdomain)
     {

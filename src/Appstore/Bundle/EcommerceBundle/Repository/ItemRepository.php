@@ -28,14 +28,20 @@ class ItemRepository extends EntityRepository
     public function findFrontendProductWithSearch($config, $data , $limit = 0)
     {
 
-        $webName        = isset($data['webName'])? $data['webName'] :'';
-        $name           = isset($data['keyword'])? $data['keyword'] :'';
-        $cat            = isset($data['category'])? $data['category'] :'';
-        $brand          = isset($data['brand'])? $data['brand'] :'';
-        $brandName      = isset($data['brandName'])? $data['brandName'] :'';
-        $promotion      = isset($data['promotion'])? $data['promotion'] :'';
-        $discount       = isset($data['discount'])? $data['discount'] :'';
-        $tag            = isset($data['tag'])? $data['tag'] :'';
+
+        $webName            = isset($data['webName'])? $data['webName'] :'';
+        $name               = isset($data['keyword'])? $data['keyword'] :'';
+        $category           = isset($data['category'])? $data['category'] :'';
+        $categories         = isset($data['categories'])? $data['categories'] :'';
+        $brand              = isset($data['brand'])? $data['brand'] :'';
+        $brands             = isset($data['brands'])? $data['brands'] :'';
+        $promotion          = isset($data['promotion'])? $data['promotion'] :'';
+        $promotions         = isset($data['promotions'])? $data['promotions'] :'';
+        $discount           = isset($data['discount'])? $data['discount'] :'';
+        $discounts          = isset($data['discounts'])? $data['discounts'] :'';
+        $tag                = isset($data['tag'])? $data['tag'] :'';
+        $tags               = isset($data['tags'])? $data['tags'] :'';
+
         if (!empty($data['sortBy'])) {
 
             $sortBy = explode('=?=', $data['sortBy']);
@@ -51,48 +57,7 @@ class ItemRepository extends EntityRepository
         $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
-        if (!empty($data['brand'])) {
-            $qb->andWhere("product.brand IN (:brand)");
-            $qb->setParameter('brand', $data['brand']);
-        }
 
-        if (!empty($data['promotion'])) {
-            $qb->andWhere("product.promotion = :promotion");
-            $qb->setParameter('promotion', $data['promotion']);
-        }
-
-        if (!empty($cat)) {
-            $qb->andWhere('category.slug LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.strtolower($cat).'%');
-        }
-        if (!empty($brandName)) {
-            $qb->andWhere('brand.name LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.strtolower($brandName).'%');
-        }
-
-        if (!empty($data['tag'])) {
-            $qb->leftJoin('product.tag','tag');
-            $qb->andWhere("tag.id = :tagId");
-            $qb->setParameter('tagId', $data['tag']);
-        }
-
-        if (!empty($data['discount'])) {
-            $qb->andWhere("product.discount >= :discount");
-            $qb->setParameter('discount', $data['discount']);
-        }
-
-        if (!empty($data['categoryId'])) {
-            $qb->andWhere("category.id = :catId");
-            $qb->setParameter('catId', $data['categoryId']);
-        }
-        if (!empty($data['categories'])) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->like('category.path', "'". intval($data['categories']) . "/%'"),
-                    $qb->expr()->like('category.path', "'%/" . intval($data['categories']) . "/%'")
-                )
-            );
-        }
         if (!empty($name)) {
             $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$name.'%');
@@ -101,6 +66,78 @@ class ItemRepository extends EntityRepository
             $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
         }
+
+        if (!empty($category)) {
+            $qb->andWhere('category.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($category).'%');
+        }
+
+        if (!empty($categories)) {
+            $qb->andWhere("product.category IN(:category)");
+            $qb->setParameter('category',array_values($categories));
+        }
+        if (!empty($brand)) {
+            $qb->andWhere('brand.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($brand).'%');
+        }
+
+        if (!empty($brands)) {
+            $qb->andWhere("product.brand IN(:brand)");
+            $qb->setParameter('brand',array_values($brands));
+        }
+
+        if (!empty($promotion))  {
+            $qb->andWhere('promotion.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($promotion).'%');
+        }
+
+        if (!empty($promotions)) {
+            $qb->andWhere("product.promotion IN(:promotion)");
+            $qb->setParameter('promotion',array_values($promotions));
+        }
+
+
+        if (!empty($tag)) {
+            $qb->leftJoin('product.tag','tag');
+            $qb->andWhere('tag.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($tag).'%');
+        }
+
+        if (!empty($tags)) {
+            $qb->leftJoin('product.tag','tag');
+            $qb->andWhere('tag.id IN (:tags)');
+            $qb->setParameter('tags', array_values($tags));
+        }
+
+        if (!empty($discount)) {
+            $qb->andWhere("discount.slug LIKE :searchTerm");
+            $qb->setParameter('searchTerm', '%'.strtolower($tag).'%');
+        }
+
+        if (!empty($discounts)) {
+            $qb->andWhere('discount.id IN (:discounts)');
+            $qb->setParameter('discounts', array_values($discounts));
+        }
+
+        if (!empty($data['priceStart'])) {
+            $qb->andWhere(' product.salesPrice >= :priceStart');
+            $qb->setParameter('priceStart',$data['priceStart']);
+        }
+
+        if (!empty($data['priceEnd'])) {
+            $qb->andWhere(' product.salesPrice <= :priceEnd');
+            $qb->setParameter('priceEnd',$data['priceEnd']);
+        }
+
+        /*if (!empty($data['categories'])) {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('category.path', "'". intval($data['categories']) . "/%'"),
+                    $qb->expr()->like('category.path', "'%/" . intval($data['categories']) . "/%'")
+                )
+            );
+        }*/
+
 
         if (empty($data['sortBy'])){
             $qb->orderBy('product.webName', 'ASC');
@@ -117,93 +154,6 @@ class ItemRepository extends EntityRepository
 
     public function filterFrontendProductWithSearch($config, $data , $limit = 0)
     {
-        if (!empty($data['sortBy'])) {
-
-            $sortBy = explode('=?=', $data['sortBy']);
-            $sort = $sortBy[0];
-            $order = $sortBy[1];
-        }
-
-        $webName        = isset($data['webName'])? $data['webName'] :'';
-        $category        = isset($data['category'])? $data['category'] :'';
-
-        $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin("product.category",'category');
-        $qb->leftJoin('product.brand','brand');
-        $qb->leftJoin('product.promotion','promotion');
-        $qb->leftJoin('product.discount','discount');
-        $qb->leftJoin('product.tag','tag');
-        $qb->where("product.status = 1");
-        $qb->andWhere("product.salesPrice > 0");
-        $qb->andWhere("product.ecommerceConfig = :config");
-        $qb->setParameter('config', $config);
-
-        if (!empty($webName)) {
-            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
-        }
-
-        if (!empty($data['brand'])) {
-            $qb->andWhere("product.brand IN(:brand)");
-            $qb->setParameter('brand',array_values($data['brand']));
-        }
-
-        if (!empty($data['categories'])) {
-            $qb->andWhere("product.category IN(:category)");
-            $qb->setParameter('category',array_values($data['categories']));
-        }
-
-        if (!empty($data['category'])) {
-            $qb->andWhere("product.category =:category");
-            $qb->setParameter('category',$category);
-        }
-
-        if (!empty($data['size'])) {
-            $qb->andWhere("goodsitems.size IN(:size)");
-            $qb->setParameter('size',array_values($data['size']));
-        }
-
-        if (!empty($data['color'])) {
-            $qb->leftJoin('goodsitems.colors','colors');
-            $qb->andWhere("colors.id IN(:color)");
-            $qb->setParameter('color',array_values($data['color']));
-        }
-
-        if (!empty($data['promotion'])) {
-            $qb->andWhere("product.promotion IN(:promotion)");
-            $qb->setParameter('promotion',array_values($data['promotion']));
-        }
-
-        if (!empty($data['tag'])) {
-            $qb->andWhere("product.tag IN(:tag)");
-            $qb->setParameter('tag',array_values($data['tag']));
-        }
-
-        if (!empty($data['discount'])) {
-            $qb->andWhere("product.discount IN(:discount)");
-            $qb->setParameter('discount',$data['discount']);
-        }
-
-        if (!empty($data['priceStart'])) {
-            $qb->andWhere(' product.salesPrice >= :priceStart');
-            $qb->setParameter('priceStart',$data['priceStart']);
-        }
-
-        if (!empty($data['priceEnd'])) {
-            $qb->andWhere(' product.salesPrice <= :priceEnd');
-            $qb->setParameter('priceEnd',$data['priceEnd']);
-        }
-        
-        if (empty($data['sortBy'])){
-            $qb->orderBy('product.webName', 'ASC');
-        }else{
-            $qb->orderBy($sort ,$order);
-        }
-        if($limit > 0 ) {
-            $qb->setMaxResults($limit);
-        }
-        $res = $qb->getQuery();
-        return  $res;
 
     }
 
@@ -213,6 +163,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin('product.category','category');
         $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.isFeatureCategory = 1");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
@@ -235,11 +186,79 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('product.brand','brand');
         $qb->where("product.status = 1");
         $qb->andWhere("product.isFeatureBrand = 1");
+        $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         if (!empty($brand)) {
-            $qb->andWhere('brand.id =:brand');
-            $qb->setParameter('brand', $brand);
+            $qb->andWhere('brand.id =:id');
+            $qb->setParameter('id', $brand);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+    public function getFeaturePromotionProduct($config, $promotion , $limit = 0)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin('product.promotion','promotion');
+        $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
+        $qb->andWhere($qb->expr()->like('promotion.type', ':type'));
+        $qb->setParameter('type','%Promotion%');
+        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($promotion)) {
+            $qb->andWhere('promotion.id =:id');
+            $qb->setParameter('id', $promotion);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+    public function getFeatureTagProduct($config, $promotion , $limit = 0)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin('product.promotion','promotion');
+        $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
+        $qb->andWhere($qb->expr()->like('promotion.type', ':type'));
+        $qb->setParameter('type','%Tag%');
+        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($promotion)) {
+            $qb->andWhere('promotion.id =:id');
+            $qb->setParameter('id', $promotion);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+    public function getFeatureDiscountProduct($config, $discount , $limit = 0)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin('product.discount','discount');
+        $qb->where("product.status = 1");
+        $qb->andWhere("product.salesPrice > 0");
+        $qb->andWhere("product.ecommerceConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($discount)) {
+            $qb->andWhere('discount.id =:id');
+            $qb->setParameter('id', $discount);
         }
         if($limit > 0 ) {
             $qb->setMaxResults($limit);
@@ -258,7 +277,7 @@ class ItemRepository extends EntityRepository
         $entity->setSubProduct(true);
         $entity->setQuantity($copyEntity->getQuantity());
         $entity->setMasterQuantity($copyEntity->getMasterQuantity());
-        $entity->setPurchasePrice($copyEntity->getPurchase());
+        $entity->setPurchasePrice($copyEntity->getPurchasePrice());
         $entity->setSalesPrice($copyEntity->getSalesPrice());
         $entity->setOverHeadCost($copyEntity->getOverHeadCost());
         $entity->setSize($copyEntity->getSize());
@@ -593,6 +612,7 @@ class ItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
         $qb->select('brand.id as id');
+        $qb->addSelect('brand.slug as slug');
         $qb->addSelect('brand.name as name');
         $qb->addSelect('count(e.id) as itemQnt');
         $qb->where('e.ecommerceConfig='.$config->getId());
@@ -601,13 +621,13 @@ class ItemRepository extends EntityRepository
         $qb->orderBy('brand.name', 'ASC');
         $res = $qb->getQuery()->getArrayResult();
         $value ="";
-        $value .="<ul class='ul-check-list-brand'>";
+        $value .="<ul class='ul-check-list'>";
         foreach ($res as $key => $val) {
             $checked = in_array($val['id'], $brands) ? 'checked':'';
             $value.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='brands[]' {$checked} id='brand-{$val["id"]}' value='{$val["id"]}'>
                 <label for='brand-{$val["id"]}'></label>
-                </div><a class='' href='/product/brand/{$val["id"]}'>{$val["name"]}({$val['itemQnt']})</a></li>";
+                </div><a class='' href='/product/brand/{$val["slug"]}'>{$val["name"]}({$val['itemQnt']})</a></li>";
         }
         $value .="</ul>";
         return $value;
@@ -622,6 +642,7 @@ class ItemRepository extends EntityRepository
         $qb->join('e.discount','discount');
         $qb->select('discount.id as id');
         $qb->addSelect('discount.name as name');
+        $qb->addSelect('discount.slug as slug');
         $qb->where('e.ecommerceConfig ='.$config->getId());
         $qb->andWhere('discount.status=1');
         $qb->groupBy('discount.id');
@@ -635,7 +656,7 @@ class ItemRepository extends EntityRepository
             $value.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='discounts[]' {$checked} id='discount-{$val["id"]}' value='{$val["id"]}'>
                 <label for='category-{$val["id"]}'></label>
-                </div><a class='' href='/product/discount/{$val["id"]}'>{$val["name"]}</a></li>";
+                </div><a class='' href='/product/discount/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
         $value .="</ul>";
         return $value;
@@ -649,18 +670,24 @@ class ItemRepository extends EntityRepository
         $qb->join('e.promotion','promotion');
         $qb->select('promotion.id as id');
         $qb->addSelect('promotion.name as name');
+        $qb->addSelect('promotion.slug as slug');
         $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->andWhere($qb->expr()->like('promotion.type', ':type'));
+        $qb->setParameter('type','%Promotion%');
         $qb->groupBy('promotion.id');
         $qb->orderBy('promotion.name', 'ASC');
         $res = $qb->getQuery()->getArrayResult();
 
         $value ='';
-        $value .='<ul class="ul-check-list">';
+        $value .="<ul class='ul-check-list'>";
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $promotions )? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="promotion[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+            $checked = in_array($val['id'], $promotions )? 'checked':'';
+            $value.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='promotions[]' {$checked} id='promotion-{$val["id"]}' value='{$val["id"]}'>
+                <label for='category-{$val["id"]}'></label>
+                </div><a class='' href='/product/promotion/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
-        $value .='</ul>';
+        $value .="</ul>";
         return $value;
     }
 
@@ -671,18 +698,24 @@ class ItemRepository extends EntityRepository
         $qb->join('e.tag','tag');
         $qb->select('tag.id as id');
         $qb->addSelect('tag.name as name');
+        $qb->addSelect('tag.slug as slug');
         $qb->where('e.ecommerceConfig='.$config->getId());
+        $qb->andWhere($qb->expr()->like('tag.type', ':type'));
+        $qb->setParameter('type','%Tag%');
         $qb->groupBy('tag.id');
         $qb->orderBy('tag.name', 'ASC');
         $res = $qb->getQuery()->getArrayResult();
 
         $value ='';
-        $value .='<ul class="ul-check-list">';
+        $value .="<ul class='ul-check-list'>";
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $tags )? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="tag[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+            $checked = in_array($val['id'], $tags )? 'checked':'';
+            $value.= "<li><div class='checkboxOverride'>
+                <input type='checkbox' name='tags[]' {$checked} id='tag-{$val["id"]}' value='{$val["id"]}'>
+                <label for='category-{$val["id"]}'></label>
+                </div><a class='' href='/product/tag/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
-        $value .='</ul>';
+        $value .="</ul>";
         return $value;
     }
 

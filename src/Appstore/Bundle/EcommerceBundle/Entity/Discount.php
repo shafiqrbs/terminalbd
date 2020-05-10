@@ -78,6 +78,12 @@ class Discount
      */
     private $name;
 
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @Doctrine\ORM\Mapping\Column(length=255)
+     */
+    private $slug;
+
 
     /**
      * @var string
@@ -441,6 +447,22 @@ class Discount
     public function setBrand($brand)
     {
         $this->brand = $brand;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
 

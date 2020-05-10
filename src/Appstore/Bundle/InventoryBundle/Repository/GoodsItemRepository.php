@@ -546,7 +546,7 @@ class GoodsItemRepository extends EntityRepository
         $value .='<ul class="ul-check-list-brand">';
         foreach ($res as $key => $val) {
             $checkd = in_array($val['id'], $brands) ? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label" >'.$val['name']. '</span></li>';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['slug'].'" ><span class="label" >'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
         return $value;

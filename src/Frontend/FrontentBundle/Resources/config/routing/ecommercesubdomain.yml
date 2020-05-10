@@ -167,23 +167,23 @@ webservice_module_category:
     defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
 
 webservice_product_category:
-    path:     /product/category/{id}
+    path:     /product/category/{category}
     defaults: { _controller: FrontendBundle:WebServiceProduct:category }
 
 webservice_product_promotion:
-    path:     /product/promotion/{id}
+    path:     /product/promotion/{promotion}
     defaults: { _controller: FrontendBundle:WebServiceProduct:promotion }
 
 webservice_product_tag:
-    path:     /product/tag/{id}
+    path:     /product/tag/{tag}
     defaults: { _controller: FrontendBundle:WebServiceProduct:tag }
 
 webservice_product_discount:
-    path:     /product/discount/{id}
+    path:     /product/discount/{discount}
     defaults: { _controller: FrontendBundle:WebServiceProduct:discount }
 
 webservice_product_brand:
-    path:     /product/brand/{id}
+    path:     /product/brand/{brand}
     defaults: { _controller: FrontendBundle:WebServiceProduct:brand }
 
 webservice_logout:

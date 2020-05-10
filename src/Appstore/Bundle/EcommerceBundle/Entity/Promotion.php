@@ -104,7 +104,7 @@ class Promotion
     /**
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"name"})
-     * @ORM\Column(length=255, unique=true)
+     * @ORM\Column(length=255)
      */
     private $slug;
 

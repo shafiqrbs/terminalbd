@@ -211,38 +211,6 @@ class EcommerceWidgetController extends Controller
     public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
     {
 
-        if(!empty($globalOption)) {
-
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-
-            /* @var InventoryConfig $inventory */
-            $inventory = $globalOption->getInventoryConfig();
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if ($detect->isMobile() || $detect->isTablet()) {
-                $theme = 'Template/Mobile/' . $themeName;
-            } else {
-                $theme = 'Template/Desktop/' . $themeName;
-            }
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
-            $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
-            $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
-        }
-
-        return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
-                'globalOption'              => $globalOption,
-                'categorySidebar'           => $categorySidebar,
-                'brandTree'                 => $brandTree,
-                'colorTree'                 => $colorTree,
-                'sizeTree'                  => $sizeTree,
-
-            )
-        );
 
     }
 
@@ -642,11 +610,10 @@ class EcommerceWidgetController extends Controller
     public function promotionTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $promotion)
     {
 
-        $data = array('promotion' => $promotion);
-        $datalimit = $widget->getPromotionLimit();
+        $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeaturePromotionProduct($config, $promotion->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -657,21 +624,20 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/PromotionWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'              => $products->getResult(),
-            'globalOption'                  => $globalOption,
-            'widget'                        => $widget,
+            'products'                  => $products->getResult(),
+            'globalOption'              => $globalOption,
+            'widget'                    => $widget,
             'promotion'                     => $promotion,
         ));
     }
 
-    public function tagTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $promotion)
+    public function tagTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $tag)
     {
 
-        $data = array('tag' => $promotion);
-        $datalimit = $widget->getTagLimit();
-        $limit = $datalimit > 0 ? $datalimit :12;
+        $datalimit = $widget->getBrandLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureTagProduct($config, $tag->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -682,20 +648,19 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/TagWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'              => $products->getResult(),
-            'globalOption'                  => $globalOption,
-            'widget'                        => $widget,
-            'promotion'                     => $promotion,
+            'products'                  => $products->getResult(),
+            'globalOption'              => $globalOption,
+            'widget'                    => $widget,
+            'tag'                     => $tag,
         ));
     }
     public function discountTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Discount $discount)
     {
 
-        $data = array('discount' => $discount);
-        $datalimit = $widget->getTagLimit();
-        $limit = $datalimit > 0 ? $datalimit :12;
+        $datalimit = $widget->getBrandLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data,$limit);
+        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureDiscountProduct($config, $discount->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
@@ -706,10 +671,10 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/DiscountWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'              => $products->getResult(),
-            'globalOption'                  => $globalOption,
-            'widget'                        => $widget,
-            'discount'                      => $discount,
+            'products'                  => $products->getResult(),
+            'globalOption'              => $globalOption,
+            'widget'                    => $widget,
+            'discount'                  => $discount,
         ));
     }
 

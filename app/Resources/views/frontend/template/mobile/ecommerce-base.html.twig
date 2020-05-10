@@ -253,6 +253,7 @@
     <div class="powr-chat" id="{{ globalOption.templateCustomize.powr }}"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 {% endif %}
 {% if globalOption.templateCustomize.googleAnalytic is not empty  %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ globalOption.templateCustomize.googleAnalytic }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
