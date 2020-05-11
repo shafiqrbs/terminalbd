@@ -439,7 +439,7 @@ class EcommerceWidgetController extends Controller
 
      /* =================================================Template Base Widget===================*/
 
-    public function featureTemplateMobileWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
+    public function featureTemplateMobileWidgetAction(GlobalOption $globalOption , $menu = '', $position ='' )
     {
 
         $siteEntity = $globalOption->getSiteSetting();
