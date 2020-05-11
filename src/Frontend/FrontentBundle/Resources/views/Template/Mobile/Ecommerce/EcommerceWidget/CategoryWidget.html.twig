@@ -16,7 +16,7 @@
         <div class="{% if category.featureCategory is not empty %} col-md-8 {% else %} col-md-12 {% endif %}" id="categoryProductRight"  >
             <div class="row" >
                 {% for product in  products  %}
-                    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
+                    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-match-height="item-product-thumb">
                         <div class="thumbnail">
                             <form id="add_buy_cart-{{ product.id }}" class="addCart">
                                 <div class="thumbnail">
@@ -122,7 +122,7 @@
             {% endif %}
             <div class="{% if category.children is not empty %} col-md-8 {% else %} col-md-12 {% endif %}">
                 {% for product in  products  %}
-                    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6   product-item" data-wow-delay="0.1s">
+                    <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6   product-item" data-match-height="item-product-thumb">
                         <div class="thumbnail">
                             <div class="product-preview group list-group-image">
                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumb-product-img">
@@ -134,7 +134,7 @@
                                 </a>
                             </div>
                             <div class="caption">
-                                <div class="card-content" data-match-height="item-product">
+                                <div class="card-content">
                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                         <span class="category-name">
                                             <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':product.category.slug  }) }}">{{ product.category.name }}</a>
@@ -197,7 +197,7 @@
                 <div class="row" >
                 {% for child in category.children|slice(0,6) %}
                     {% if child.featureCategory is not empty %}
-                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6   product-item" data-wow-delay="0.1s">
+                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6   product-item" data-match-height="item-product-thumb">
                             <div class="thumbnail">
                                 <div class="product-preview group list-group-image">
                                     <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumb-product-img">
@@ -258,7 +258,7 @@
         </div>
     {% elseif widget.categoryShow == 'slider' %}
         {% for product in  products  %}
-            <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
+            <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-match-height="item-product-thumb">
                 <form id="add_buy_cart-{{ product.id }}" class="addCart">
                     <div class="thumbnail">
                         <div class="productPreview group list-group-image">
@@ -346,7 +346,7 @@
         {% endfor %}
     {% else %}
         {% for product in  products  %}
-            <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-wow-delay="0.1s">
+            <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item" data-match-height="item-product-thumb">
                 <form id="add_buy_cart-{{ product.id }}" class="addCart">
                     <div class="thumbnail">
                         <div class="productPreview group list-group-image">
