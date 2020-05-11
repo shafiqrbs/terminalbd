@@ -1,6 +1,6 @@
 {% if products is not empty %}
     {% if widget.discountShow == 'imageProduct' %}
-        <div id="" class="feature-carousel">
+        <div  class="feature-carousel discount-product">
             <div class="col-md-4" data-match-height="item-discount">
                 <div id="" class="product-canvas feature-cat-image discountProductLeft" >
                     <a class="{% if products|length > 3  %} img-card-large {% else %} img-card {% endif %}" href="{{ path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':discount.slug }) }}">

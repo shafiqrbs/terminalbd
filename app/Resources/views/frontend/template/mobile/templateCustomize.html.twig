@@ -35,9 +35,9 @@
 
 
     {% if globalOption.templateCustomize.webPath('mobileCarouselHeight') %}
-    .carousel-inner-feature{
-        height: {{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
-    }
+        .carousel-inner-feature , .carousel-inner{
+            height: {{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
+        }
     {% endif %}
 
     .menu-notify{

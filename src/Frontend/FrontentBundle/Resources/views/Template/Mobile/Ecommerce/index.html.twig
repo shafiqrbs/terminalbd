@@ -11,11 +11,12 @@
             {% render controller("FrontendBundle:EcommerceWidget:featureTemplateMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
         </section>
     {% endif %}
+    <div class="clearfix"></div>
  </div>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/ecommerce.css'
+    '@FrontendBundle/Resources/public/template/mobile/css/product.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

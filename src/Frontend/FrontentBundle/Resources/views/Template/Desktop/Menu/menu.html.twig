@@ -19,15 +19,15 @@
                                             {% for feature in  menu.features %}
                                                 {% if(feature.webPath) %}
                                                     {% if feature.targetTo == 'Promotion' and feature.promotion is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'promotion':feature.promotion.slug}) %}
                                                     {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'tag':feature.tag.slug}) %}
                                                     {% elseif feature.targetTo == 'Category' and feature.category is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':feature.category.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'category':feature.category.slug}) %}
                                                     {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':feature.discount.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':feature.discount.slug}) %}
                                                     {% elseif feature.targetTo == 'Brand' and feature.brand is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':feature.brand.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':feature.brand.slug}) %}
                                                     {% elseif feature.targetTo == 'Page' and feature.page is not empty %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_module',{'id':feature.page.slug}) %}
                                                     {% else %}
@@ -54,7 +54,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Promotion's</li>
                                         {% for promotion in  menu.promotions %}
-                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.slug}) }}">{{ promotion.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -62,7 +62,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Discount Offer's</li>
                                         {% for discount in  menu.discounts %}
-                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.slug}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -70,7 +70,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Popular Tag's</li>
                                         {% for tag in  menu.tags %}
-                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.slug}) }}">{{ tag.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -102,7 +102,7 @@
                                 <ul class="col-sm-12">
                                     <li class="dropdown-header">Brand's</li>
                                     {% for brand in menu.brands %}
-                                        <li class="{% if menu.categories is empty  and menu.singleMenu != 1  %} col-sm-3 {% endif %}" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}" >{{ brand.name }}</a></li>
+                                        <li class="{% if menu.categories is empty  and menu.singleMenu != 1  %} col-sm-3 {% endif %}" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand' : brand.slug}) }}" >{{ brand.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -147,15 +147,15 @@
                             <ul>
                                 {% for feature in  menu.features %}
                                     {% if feature.targetTo == 'Category' and feature.category is not empty %}
-                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':feature.category.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'category':feature.category.slug}) %}
                                     {% elseif feature.targetTo == 'Promotion' and feature.promotion is not empty %}
-                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'promotion':feature.promotion.slug}) %}
                                     {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
-                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'tag':feature.tag.slug}) %}
                                     {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
-                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':feature.discount.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':feature.discount.slug}) %}
                                     {% elseif feature.targetTo == 'Brand' and feature.brand is not empty %}
-                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':feature.brand.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':feature.brand.slug}) %}
                                     {% elseif feature.targetTo == 'Page' and feature.menu is not empty %}
                                         {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':feature.menu.slug}) %}
                                     {% else %}
@@ -170,7 +170,7 @@
                         <li><a href="#">Promotion's</a>
                             <ul>
                                 {% for promotion in  menu.promotions %}
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.slug}) }}">{{ promotion.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -179,7 +179,7 @@
                         <li><a href="#">Discount Offer's</a>
                             <ul>
                                 {% for discount in  menu.discounts %}
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.slug}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -189,7 +189,7 @@
                         <li><a href="#">Popular Tag's</a>
                             <ul>
                                 {% for tag in  menu.tags %}
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.slug}) }}">{{ tag.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -202,7 +202,7 @@
                     {% endif %}
                     {% if menu.brands is not empty %}
                         {% for brand in menu.brands %}
-                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand' : brand.slug}) }}">{{ brand.name }}</a></li>
                         {% endfor %}
                     {% endif %}
 
@@ -230,15 +230,15 @@
                                 <ul>
                                     {% for feature in  menu.features %}
                                         {% if feature.targetTo == 'Category' and feature.category is not empty %}
-                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':feature.category.id}) %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'category':feature.category.slug}) %}
                                         {% elseif feature.targetTo == 'Promotion' and feature.promotion is not empty %}
-                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'promotion':feature.promotion.slug}) %}
                                         {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
-                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'tag':feature.tag.slug}) %}
                                         {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
-                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':feature.discount.id}) %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':feature.discount.slug}) %}
                                         {% elseif feature.targetTo == 'Brand' and feature.brand is not empty %}
-                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':feature.brand.id}) %}
+                                            {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':feature.brand.slug}) %}
                                         {% elseif feature.targetTo == 'Page' and feature.menu is not empty %}
                                             {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':feature.menu.slug}) %}
                                         {% else %}
@@ -253,7 +253,7 @@
                             <li><a href="#">Promotion's</a>
                                 <ul>
                                     {% for promotion in  menu.promotions %}
-                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.slug}) }}">{{ promotion.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
@@ -262,7 +262,7 @@
                             <li><a href="#">Discount Offer's</a></li>
                             <ul>
                                 {% for discount in  menu.discounts %}
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.slug}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
@@ -270,7 +270,7 @@
                             <li><a href="#">Popular Tag's</a></li>
                             <ul>
                                 {% for tag in  menu.tags %}
-                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.slug}) }}">{{ tag.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
@@ -281,7 +281,7 @@
                         {% endif %}
                         {% if menu.brands is not empty %}
                             {% for brand in menu.brands %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.slug}) }}">{{ brand.name }}</a></li>
                             {% endfor %}
                         {% endif %}
 

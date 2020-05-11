@@ -607,7 +607,7 @@ class ItemRepository extends EntityRepository
     public function findGroupBrands(EcommerceConfig $config , $array = array())
     {
 
-        $brands =  isset($array['brand']) ? $array['brand'] : array();
+        $brands =  isset($array) ? $array : array();
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
@@ -637,7 +637,7 @@ class ItemRepository extends EntityRepository
 
     public function findGroupDiscount(EcommerceConfig $config,  $array = array())
     {
-        $discounts = isset($array['discount']) ? $array['discount'] :array();
+        $discounts = isset($array) ? $array :array();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.discount','discount');
         $qb->select('discount.id as id');
@@ -655,7 +655,7 @@ class ItemRepository extends EntityRepository
             $checked = in_array($val['id'], $discounts )? 'checked':'';
             $value.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='discounts[]' {$checked} id='discount-{$val["id"]}' value='{$val["id"]}'>
-                <label for='category-{$val["id"]}'></label>
+                <label for='discount-{$val["id"]}'></label>
                 </div><a class='' href='/product/discount/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
         $value .="</ul>";
@@ -665,7 +665,7 @@ class ItemRepository extends EntityRepository
 
     public function findPromotionTree(EcommerceConfig $config , $array = array())
     {
-        $promotions = isset($array['promotion']) ? $array['promotion'] : array();
+        $promotions = isset($array) ? $array : array();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.promotion','promotion');
         $qb->select('promotion.id as id');
@@ -684,7 +684,7 @@ class ItemRepository extends EntityRepository
             $checked = in_array($val['id'], $promotions )? 'checked':'';
             $value.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='promotions[]' {$checked} id='promotion-{$val["id"]}' value='{$val["id"]}'>
-                <label for='category-{$val["id"]}'></label>
+                <label for='promotion-{$val["id"]}'></label>
                 </div><a class='' href='/product/promotion/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
         $value .="</ul>";
@@ -693,7 +693,7 @@ class ItemRepository extends EntityRepository
 
     public function findTagTree(EcommerceConfig $config , $array = array())
     {
-        $tags = isset($array['tag']) ? $array['tag'] : array();
+        $tags = isset($array) ? $array : array();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.tag','tag');
         $qb->select('tag.id as id');
@@ -712,7 +712,7 @@ class ItemRepository extends EntityRepository
             $checked = in_array($val['id'], $tags )? 'checked':'';
             $value.= "<li><div class='checkboxOverride'>
                 <input type='checkbox' name='tags[]' {$checked} id='tag-{$val["id"]}' value='{$val["id"]}'>
-                <label for='category-{$val["id"]}'></label>
+                <label for='tag-{$val["id"]}'></label>
                 </div><a class='' href='/product/tag/{$val["slug"]}'>{$val["name"]}</a></li>";
         }
         $value .="</ul>";

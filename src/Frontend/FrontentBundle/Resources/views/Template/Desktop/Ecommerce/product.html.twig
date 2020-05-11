@@ -107,7 +107,7 @@
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
                     {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
                         <div class="row paginate">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="btn-group pull-left">
                                     <div style="float: right">
                                         <button type="button" class="btn btn-cookie {% if cookieVal != 'faThLarge' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faThLarge"
@@ -122,10 +122,10 @@
                             </div>
                             <div class="col-md-6">
                                 {% if searchForm.webName is defined and searchForm.webName is not empty %}
-                                <div class="product-title">Search Keyword: {{ searchForm.webName }}</div>
+                                <div class="product-title"> Keyword:  {{ searchForm.webName }}</div>
                                 {% endif %}
                             </div>
-                            <div class="col-md-3 navbar-right">
+                            <div class="col-md-4 navbar-right">
 
                                 <form class="form-inline">
                                     <div class="form-group paginate-form-group">

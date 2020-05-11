@@ -63,7 +63,7 @@ class EcommerceMenuRepository extends EntityRepository
             $str .= '<ul class="'.$column.'" data-match-height="menu-category" >';
             $str .= '<li class="dropdown-header">' . $item['name'] .'</li>';
             foreach ($item['children'] as $child) {
-                $str .= '<li><a href="/product/category/'. $child->getId() .'">' . $child->getName() .'</a></li>';
+                $str .= '<li><a href="/product/category/'. $child->getSlug() .'">' . $child->getName() .'</a></li>';
             }
             $str .= '</ul>';
         }
@@ -90,7 +90,7 @@ class EcommerceMenuRepository extends EntityRepository
             $str .= "<li><a href='javascript:'><span>{$item['name']}</span></a>";
             $str .= "<ul class='sidebar-submenu'>";
             foreach ($item['children'] as $child) {
-                $str .= "<li><a href='/product/category/{$child->getId() }'>{$child->getName() }</a></li>";
+                $str .= "<li><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a></li>";
             }
             $str .= "</ul></li>";
         }

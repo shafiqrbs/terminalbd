@@ -251,8 +251,7 @@ $('.tagProductLeft .img-card-large img').css({
     'height':(tagHeight-73)
 });
 
-var discountHeight = $('#discountProductRight').height();
-
+var discountHeight = $('#discountProductRight').outerHeight(true);
 /*
 $('.discountProductLeft').css({
     'height':(discountHeight-30)

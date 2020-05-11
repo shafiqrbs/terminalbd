@@ -256,7 +256,7 @@ class CategoryRepository extends MaterializedPathRepository
 
     public function productCategorySidebar($category, $array = ''){
 
-       $categories =  isset($array['categories']) ? $array['categories'] : array();
+       $categories =  isset($array) ? $array : array();
 
        if(empty($category) || count($category) == 0){
            return '';

@@ -23,7 +23,7 @@ use Core\UserBundle\Entity\User;
 class WebServiceProductController extends Controller
 {
 
-    public function paginate($entities, $limit , $template = '')
+    public function paginate($entities, $limit = 20 , $template = '')
     {
 
         $paginator  = $this->get('knp_paginator');
@@ -117,11 +117,13 @@ class WebServiceProductController extends Controller
             $data['tags']= isset($post['tags']) ? $post['tags']:'';
             $data['promotions']= isset($post['promotions']) ? $post['promotions']:'';
             $data['discounts']= isset($post['discounts']) ? $post['discounts']:'';
+            $data['priceStart']= isset($post['priceStart']) ? $post['priceStart']:'';
+            $data['priceEnd']= isset($post['priceEnd']) ? $post['priceEnd']:'';
             $config = $globalOption->getEcommerceConfig();
 
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config->getId(),$data);
 
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
@@ -132,6 +134,7 @@ class WebServiceProductController extends Controller
                 $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
 
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',

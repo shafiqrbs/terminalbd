@@ -237,27 +237,23 @@
     {% endif %}
     <div class="container">
         <div class="clearfix"></div>
-        {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
-            <div class="wow fadeInDown feature-carousel"   data-wow-delay="" >
-                <div class="page-title-bar">
-                    <div class="col-md-12" >
-                        <div class="page-title">Feature Category </div>
+        {% if widget.discount is defined and widget.discount is not empty %}
+            {% for discount in widget.discount %}
+                <div class="wow row fadeInDown feature-carousel">
+                    <div class="page-title mobile-page-title">{{ discount.name }}</div>
+                    <div>
+                        {% render controller("FrontendBundle:EcommerceWidget:discountTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'discount':discount.id}) %}
                     </div>
                 </div>
+            {% endfor %}
+        {% endif %}
+        <div class="clearfix"></div>
+        {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
+            <div class="wow fadeInDown row feature-carousel"   data-wow-delay="" >
+                <div class="page-title mobile-page-title">Feature Category</div>
                 <div class="">
-                    <div class="feature-category-slider" class="">
-                        {% for category in  widget.globalOption.featureCategories  %}
-                            <div class="col-md-12">
-                                <div class="thumbnail" data-match-height="feature-category">
-                                    <div class="product-preview group" >
-                                        <img class="img-responsive" src="{{ image(category.webPath).resize(250,200, 'white') }}" alt="">
-                                    </div>
-                                </div>
-                                <div class="caption">
-                                    <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}"><strong>{{ category.category.name }}</strong></a> </p>
-                                </div>
-                            </div>
-                        {% endfor %}
+                    <div class="feature-category-slider" >
+                        {% render controller("FrontendBundle:EcommerceWidget:featureCategoryTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id}) %}
                     </div>
                 </div>
             </div>
@@ -279,16 +275,7 @@
             <div class="wow fadeInDown feature-carousel row" data-wow-delay="" >
                 <div class="page-title mobile-page-title">Feature Brands</div>
                 <div class="brand-slider">
-                    {% for brand in  widget.globalOption.featureBrands  %}
-                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated product-item">
-                            <div class="thumbnail" data-match-height="feature-brand">
-                                <a class="brand-logo-preview"  href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}" >
-                                    <img class="img-responsive" src="{{ image(brand.webPath).resize(120,120) }}" alt="">
-                                </a>
-                                <a class="feature-brand-title"  href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.brand.id }) }}">{{ brand.brand.name }}</a>
-                            </div>
-                        </div>
-                    {% endfor %}
+                    {% render controller("FrontendBundle:EcommerceWidget:featureBrandTemplateWidget",{'globalOption':globalOption.id, 'widget': widget.id}) %}
                 </div>
             </div>
         {% endif %}
@@ -320,20 +307,12 @@
                     <div class="wow row fadeInDown feature-carousel"  style="">
                         <div class="page-title mobile-page-title">{{ tag.name }}</div>
                         <div>
-                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':tag.id}) %}
+                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'tag':tag.id}) %}
                         </div>
                     </div>
             {% endfor %}
         {% endif %}
-        <div class="clearfix"></div>
-        {% if widget.discount is defined and widget.discount is not empty %}
-                <div class="wow row fadeInDown feature-carousel">
-                    <div class="page-title mobile-page-title">{{ widget.discount.name }}</div>
-                    <div>
-                        {% render controller("FrontendBundle:EcommerceWidget:discountTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'discount':widget.discount.id}) %}
-                    </div>
-                </div>
-        {% endif %}
+
     </div>
     {% endfor %}
 {% endif %}

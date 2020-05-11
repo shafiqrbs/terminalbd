@@ -173,20 +173,22 @@ class EcommerceWidgetController extends Controller
                 $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
             }
             $post = $_REQUEST;
-            $catSelected = isset($post['category']) ? $post['category']:'';
-            $data['category']= isset($post['categories']) ? $post['categories']:'';
-            $data['brand']= isset($post['brands']) ? $post['brands']:'';
-            $data['tag']= isset($post['tags']) ? $post['tags']:'';
-            $data['promotion']= isset($post['promotions']) ? $post['promotions']:'';
-            $data['discount']= isset($post['discounts']) ? $post['discounts']:'';
+            $catSelected = isset($post['category']) ? $post['category']:array();
+            $data['category']= isset($post['categories']) ? $post['categories']:array();
+            $data['brand']= isset($post['brands']) ? $post['brands']:array();
+            $data['tag']= isset($post['tags']) ? $post['tags']:array();
+            $data['promotion']= isset($post['promotions']) ? $post['promotions']:array();
+            $data['discount']= isset($post['discounts']) ? $post['discounts']:array();
+
 
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventory->getId());
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats,$searchForm);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats, $data['category']);
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryTreeForMobile($cats,$catSelected);
-            $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupBrands($inventory, $searchForm);
-            $discountTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupDiscount($inventory, $searchForm);
-            $promotionTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findPromotionTree($inventory, $searchForm);
-            $tagTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findTagTree($inventory, $searchForm);
+            $brandTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupBrands($inventory, $data['brand']);
+            $discountTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findGroupDiscount($inventory, $data['discount']);
+            $promotionTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findPromotionTree($inventory,$data['promotion']);
+            $tagTree = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findTagTree($inventory,$data['tag']);
+
         }
 
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
@@ -443,7 +445,7 @@ class EcommerceWidgetController extends Controller
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        return $this->render("@Frontend/Template/Mobile/Medicine/EcommerceWidget/FeatureWidget.html.twig", array(
+        return $this->render("@Frontend/Template/Mobile/{$themeName}/EcommerceWidget/FeatureWidget.html.twig", array(
             'features'                  => $features,
             'globalOption'              => $globalOption,
         ));
