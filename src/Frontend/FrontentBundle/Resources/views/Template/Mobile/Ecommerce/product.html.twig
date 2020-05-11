@@ -1,6 +1,11 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
     <div class="container-section">
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+            <section>
+                {% render controller("FrontendBundle:EcommerceWidget:featureTemplateMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
+            </section>
+        {% endif %}
         <div class="container" id="product-section">
             {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
             <div class="row">
@@ -71,7 +76,7 @@
                 <!-- Upload  -->
                 {% for product in products %}
                     {% if cookieVal == 'faThLarge' %}
-                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 product-item" data-wow-delay="0.1s">
+                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 product-item" data-match-height="item-product">
                             <form id="add_buy_cart-{{ product.id }}" class="addCart">
                         <div class="thumbnail">
                             <div class="productPreview group list-group-image">
@@ -82,7 +87,7 @@
                                     {% endif %}
                                 </a>
                             </div>
-                            <div class=""  data-match-height="item-product">
+                            <div class="" >
                                 <div class="card-content" >
                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                                         <span class="category-name">
@@ -221,7 +226,7 @@
                             </form>
                         </div>
                     {% elseif cookieVal == 'faList' %}
-                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 product-item">
+                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 product-item" data-match-height="item-product-faList">
                             <form id="add_buy_cart-{{ product.id }}" class="addCart">
                                 <div class="thumbnail">
                                     <div class="productPreview group list-group-image">
