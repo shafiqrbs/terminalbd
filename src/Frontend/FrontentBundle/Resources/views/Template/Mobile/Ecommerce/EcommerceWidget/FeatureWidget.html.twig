@@ -1,5 +1,6 @@
 {% if features is defined and features is not empty  %}
     {% for widget in features %}
+        {% if widget.featureWidgetItems is not empty %}
         <div class="">
             <div id="main-carousel" class="carousel slide" data-ride="carousel" data-match-height="slider-height">
                 <!-- Indicators -->
@@ -56,6 +57,7 @@
                 <a class="carousel-post-control carousel-right" href="#main-carousel" data-slide="next">›</a>
             </div>
         </div>
+        {% endif %}
     <div class="container">
         <div class="clearfix"></div>
         {% if widget.discount is defined and widget.discount is not empty %}

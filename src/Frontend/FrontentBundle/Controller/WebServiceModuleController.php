@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 
 
+use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Setting\Bundle\ToolBundle\Entity\SiteSetting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,13 +14,13 @@ class WebServiceModuleController extends Controller
 {
 
 
-    public function moduleAction($subdomain,$module)
+    public function moduleAction(Request $request ,$subdomain,$module)
     {
 
         $em = $this->getDoctrine()->getManager();
         $page ='';
         $pagination ='';
-
+        $cart = new Cart($request->getSession());
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){
 
@@ -74,7 +75,9 @@ class WebServiceModuleController extends Controller
                 'globalOption'  => $globalOption,
                 'pagination'    => $pagination,
                 'page'          => $page,
+                'cart'          => $cart,
                 'menu'          => $menu,
+                'searchForm'        => $_REQUEST,
                 'pageName'      => 'pageName',
             )
         );
