@@ -1682,6 +1682,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row-fluid" >
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Play Store ID</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.playStore) }}
+                                        {{ form_errors(form.playStore) }}
+                                        <p class="help"><a target="_blank" href="https://play.google.com/store">Play Store</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Apple Store</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.appleStore) }}
+                                        {{ form_errors(form.appleStore) }}
+                                        <p class="help"><a target="_blank" href="https://www.apple.com/ios/app-store/">Apple Store</a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">

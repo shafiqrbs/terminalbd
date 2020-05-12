@@ -6,6 +6,7 @@ use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Form\FeatureWidgetType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 /**
@@ -16,15 +17,14 @@ class FeatureWidgetController extends Controller
 {
 
     /**
-     * Lists all FeatureWidget entities.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption,'widgetFor'=>'e-commerce'));
-
         return $this->render('SettingAppearanceBundle:FeatureWidget:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -121,9 +121,9 @@ class FeatureWidgetController extends Controller
     }
 
     /**
-     * Displays a form to create a new FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function newAction()
     {
         $entity = new FeatureWidget();
@@ -158,9 +158,9 @@ class FeatureWidgetController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -245,11 +245,10 @@ class FeatureWidgetController extends Controller
         ));
     }
 
-
     /**
-     * Deletes a FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();

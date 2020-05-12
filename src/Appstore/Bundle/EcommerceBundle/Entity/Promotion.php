@@ -77,12 +77,12 @@ class Promotion
     private  $featureTags;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="promotions" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="promotions")
      **/
     private  $ecommerceMenuPromotion;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="tags" , cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="tags")
      **/
     private  $ecommerceMenuTag;
 

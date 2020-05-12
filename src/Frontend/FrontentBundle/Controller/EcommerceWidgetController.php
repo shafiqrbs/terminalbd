@@ -216,6 +216,61 @@ class EcommerceWidgetController extends Controller
 
     }
 
+    public function footerProductCategoryAction(GlobalOption $globalOption)
+    {
+
+        if(!empty($globalOption)) {
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+
+            /* @var EcommerceConfig $inventory */
+
+            $inventory = $globalOption->getEcommerceConfig();
+
+            /* Device Detection code desktop or mobile */
+
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventory->getId());
+           // $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->footerProductCategory($cats);
+
+        }
+
+        return $this->render('@Frontend/'.$theme.'/footerCategory.html.twig', array(
+
+                'globalOption'              => $globalOption,
+                'categories'                => $cats,
+
+
+            )
+        );
+
+    }
+
+    public function footerProductChildCategoryAction(GlobalOption $globalOption, Category $category)
+    {
+
+        if(!empty($globalOption)) {
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+
+            /* @var EcommerceConfig $inventory */
+
+            $inventory = $globalOption->getEcommerceConfig();
+
+            /* Device Detection code desktop or mobile */
+
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
+            $child = $category->getChildren();
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->footerProductCategory($child);
+        }
+
+        return $this->render('@Frontend/'.$theme.'/footerSubCategory.html.twig', array(
+                'categorySidebar'           => $categorySidebar,
+            )
+        );
+
+    }
+
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)
     {
 

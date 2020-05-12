@@ -73,17 +73,17 @@
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
                                     <th class="numeric" >FeatureBrand</th>
-                                    <th class="numeric" >Brand</th>
+                                    <th {% if pagination.isSorted('brand.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Brand Name', 'brand.name') }}{% if( direction == 'desc' and sort == 'brand.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if pagination.isSorted('item.webName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'item.webName') }}{% if( direction == 'desc' and sort == 'item.webName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
 
-                                    <th {% if pagination.isSorted('item.category') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Category', 'item.category') }}{% if( direction == 'desc' and sort == 'item.category') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    <th {% if pagination.isSorted('category.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Category', 'category.name') }}{% if( direction == 'desc' and sort == 'category.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >FeatureCat</th>
 
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
                                     <th {% if pagination.isSorted('item.discount') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Discount', 'item.discount') }}{% if( direction == 'desc' and sort == 'item.discount') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if pagination.isSorted('item.promotion') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Promotion', 'item.promotion') }}{% if( direction == 'desc' and sort == 'item.promotion') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th class="numeric" >Image</th>
+                                    <th {% if pagination.isSorted('item.path') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Image', 'item.path') }}{% if( direction == 'desc' and sort == 'item.path') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if pagination.isSorted('item.status') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Status', 'item.status') }}{% if( direction == 'desc' and sort == 'item.status') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Action</th>
                                 </tr>

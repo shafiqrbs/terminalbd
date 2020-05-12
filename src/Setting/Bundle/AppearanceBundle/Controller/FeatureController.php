@@ -8,6 +8,7 @@ use Setting\Bundle\AppearanceBundle\Form\PageFeatureType;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 /**
@@ -18,9 +19,9 @@ class FeatureController extends Controller
 {
 
     /**
-     * Lists all Feature entities.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -111,11 +112,10 @@ class FeatureController extends Controller
         return $form;
     }
 
-
     /**
-     * Displays a form to create a new Feature entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function newAction()
     {
         $entity = new Feature();
@@ -164,9 +164,9 @@ class FeatureController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Feature entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();

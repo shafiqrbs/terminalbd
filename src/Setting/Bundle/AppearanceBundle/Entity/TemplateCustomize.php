@@ -244,6 +244,20 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="playStore", type="string", nullable=true)
+     */
+    private $playStore;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appleStore", type="string", nullable=true)
+     */
+    private $appleStore;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="tawk", type="string", nullable=true)
      */
     private $tawk;
@@ -3592,6 +3606,38 @@ class TemplateCustomize
     public function setFacebookPixel($facebookPixel)
     {
         $this->facebookPixel = $facebookPixel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlayStore()
+    {
+        return $this->playStore;
+    }
+
+    /**
+     * @param string $playStore
+     */
+    public function setPlayStore($playStore)
+    {
+        $this->playStore = $playStore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppleStore()
+    {
+        return $this->appleStore;
+    }
+
+    /**
+     * @param string $appleStore
+     */
+    public function setAppleStore($appleStore)
+    {
+        $this->appleStore = $appleStore;
     }
 
 

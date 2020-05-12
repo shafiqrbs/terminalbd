@@ -18,7 +18,6 @@ class ItemBrandController extends Controller
 {
 
     /**
-     *
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
 

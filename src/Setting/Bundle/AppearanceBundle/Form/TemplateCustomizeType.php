@@ -417,6 +417,8 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 numeric',
                 'placeholder'=>'')
             ))
+            ->add('playStore','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Play Store url')))
+            ->add('appleStore','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Apple store url')))
            /* ->add('messengerScript','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 6,'placeholder'=>'Enter messenger script')))*/
             ->add('metaDescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'placeholder'=>'Enter meta description')))
             ->add('metaKeyword','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>5,'placeholder'=>'Enter meta keywords')))

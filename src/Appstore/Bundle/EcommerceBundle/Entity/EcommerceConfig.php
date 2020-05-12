@@ -257,6 +257,13 @@ class EcommerceConfig
      */
     private $sidebarPrice = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="footerConfig", type="boolean")
+     */
+    private $footerCategory = false;
+
     /**
      * @var boolean
      *
@@ -1277,6 +1284,22 @@ class EcommerceConfig
     public function setCartSearch($cartSearch)
     {
         $this->cartSearch = $cartSearch;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFooterCategory()
+    {
+        return $this->footerCategory;
+    }
+
+    /**
+     * @param bool $footerCategory
+     */
+    public function setFooterCategory($footerCategory)
+    {
+        $this->footerCategory = $footerCategory;
     }
 
 

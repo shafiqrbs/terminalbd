@@ -95,7 +95,7 @@
                 </div>
                 <div class="clearfix"></div>
                 <div id="search-box">
-                    <form>
+                    <form  action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                         <div class="input-group" style="margin-top: 6px">
                             <span class="input-group-btn"><span type="button" class="btn btn-transparent bar-search"><i class="fa fa-arrow-left"></i></span></span>
                             <div style="width: 100%; position: relative">

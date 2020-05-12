@@ -418,14 +418,9 @@ class ItemRepository extends EntityRepository
         $discount       = isset($data['discount'])? $data['discount'] :'';
         $tag            = isset($data['tag'])? $data['tag'] :'';
 
-        $qb->leftJoin('item.category', 'category');
-        $qb->leftJoin('item.brand', 'brand');
-        $qb->leftJoin('item.promotion', 'promotion');
-        $qb->leftJoin('item.discount', 'discount');
-
         if (!empty($cat)) {
-            $qb->andWhere("item.category = :category");
-            $qb->setParameter('category', $cat);
+            $qb->andWhere("category.name LIKE :category");
+            $qb->setParameter('category', '%'.$cat.'%');
         }
         if (!empty($brand)) {
             $qb->andWhere("brand.name LIKE :brand");
@@ -482,62 +477,17 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($config,$data,$limit=0)
-    {
-
-        $qb = $this->createQueryBuilder('item');
-        $qb->leftJoin('item.purchase', 'purchase');
-        $qb->where("item.source ='config' ");
-        $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('item.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
-
-    }
-
-    public function findFoodWithSearch($config,$data,$limit=0)
-    {
-        $qb = $this->createQueryBuilder('item');
-        $qb->where("item.source = 'food'");
-        $qb->andWhere("item.ecommerceConfig = :config");
-        $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('item.updated','DESC');
-        $qb->getQuery();
-        return  $qb;
-
-    }
-
-    public function findAllProductWithSearch(EcommerceConfig $config , $data,$limit=0)
-    {
-
-
-        $order = isset($data['order'])? $data['order'] :'ASC';
-        $qb = $this->createQueryBuilder('item');
-        $qb->where("item.ecommerceConfig = {$config->getId()}");
-        $this->handleSearchBetween($qb,$data);
-        if(!empty($order)){
-            if($order == "ASC"){
-                $qb->orderBy('item.salesPrice','ASC');
-            }else{
-                $qb->orderBy('item.salesPrice','DESC');
-            }
-
-        }else{
-            $qb->orderBy('item.updated','DESC');
-        }
-        $qb->getQuery();
-        return  $qb;
-
-    }
-
-    public function findGoodsWithSearch($config,$data,$limit = 0)
+    public function findItemWithSearch($config,$data,$limit = 0)
     {
 
         $sort = isset($data['sort'])? $data['sort'] :'item.path';
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
+
         $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.category', 'category');
+        $qb->leftJoin('item.brand', 'brand');
+        $qb->leftJoin('item.promotion', 'promotion');
+        $qb->leftJoin('item.discount', 'discount');
         $qb->where("item.ecommerceConfig = :config");
         $qb->setParameter('config', $config);
         $this->handleSearchBetween($qb,$data);
@@ -547,35 +497,6 @@ class ItemRepository extends EntityRepository
 
     }
 
-
-    public function findItemWithSearch($config,$data,$limit = 0)
-    {
-
-        $qb = $this->createQueryBuilder('item');
-        $qb->where("item.source = 'service'");
-        $qb->andWhere("item.isWeb = 1");
-        $qb->andWhere("item.ecommerceConfig = :config");
-        $qb->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
-        if(!empty($order)){
-
-            if($order == "ASC"){
-                $qb->orderBy('item.salesPrice','ASC');
-            }else{
-                $qb->orderBy('item.salesPrice','DESC');
-            }
-
-        }else{
-
-            $qb->orderBy('item.updated','DESC');
-        }
-        if($limit > 0 ){
-            $qb->getMaxResults($limit);
-        }
-        $qb->getQuery();
-        return  $qb;
-
-    }
 
     public function salesItemWithSearch($config)
     {

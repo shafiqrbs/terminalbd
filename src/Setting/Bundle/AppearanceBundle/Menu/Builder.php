@@ -397,32 +397,22 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'=> 'templatecustomize_edit'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_ECOMMERCE')){
-                    $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-                    $menu['Manage Appearance']['E-commerce']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'))->setAttribute('icon', 'icon-th-list');
-                    $menu['Manage Appearance']['E-commerce']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
-                }
-            }
+
             if($website and $option->getMainApp()->getSlug() == "website"){
                 $menu['Manage Appearance']->addChild('Website')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
                 $menu['Manage Appearance']['Website']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'))->setAttribute('icon', 'icon-th-list');
                 $menu['Manage Appearance']['Website']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
 
             }
-            $menu['Manage Appearance']->addChild('Menu')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
             if (!empty($result) and $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_MENU') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
-                $menu['Manage Appearance']['Menu']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'))->setAttribute('icon', 'icon-th-list');
+                $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'))->setAttribute('icon', 'icon-th-list');
             }
-            $menu['Manage Appearance']['Menu']->addChild('Website Menu', array('route' => 'menu_manage'))->setAttribute('icon', 'icon-th-list');
+            $menu['Manage Appearance']->addChild('Website Menu', array('route' => 'menu_manage'))->setAttribute('icon', 'icon-th-list');
             if($website) {
-                $menu['Manage Appearance']['Menu']->addChild('Menu Grouping', array('route' => 'menugrouping'))->setAttribute('icon', 'icon-th-list');
+                $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'))->setAttribute('icon', 'icon-th-list');
             }
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN')) {
-            $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
-        }
         return $menu;
     }
 
@@ -1012,7 +1002,11 @@ class Builder extends ContainerAware
             }
 
         }
-
+        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_ECOMMERCE')){
+            $menu['E-commerce']->addChild('Page Feature')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+            $menu['E-commerce']['Page Feature']->addChild('Widget', array('route' => 'appearancefeaturewidget'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Page Feature']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
+        }
         if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING')) {
             $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
             $menu['E-commerce']->addChild('Master Data', array('route' => ''))

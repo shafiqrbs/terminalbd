@@ -59,6 +59,7 @@ class WebServiceModuleController extends Controller
         $page = ($page) ? $page->getPage() :'';
 
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
@@ -131,7 +132,6 @@ class WebServiceModuleController extends Controller
         );
     }
 
-
     public function moduleCategoryAction($subdomain,$module,$slug)
     {
 
@@ -194,7 +194,6 @@ class WebServiceModuleController extends Controller
             )
         );
     }
-
 
     public function contactAction($subdomain){
 

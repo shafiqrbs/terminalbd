@@ -63,16 +63,20 @@ class EcommerceMenu
 
     private $categories;
 
+
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="ecommerceMenuPromotion" )
-     * @ORM\OrderBy({"name" = "ASC"})
-     **/
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="ecommerceMenuPromotion")
+     * @ORM\JoinTable(name="ecommerce_menu_promotion",
+     *      joinColumns={@ORM\JoinColumn(name="ecommerce_promotion_id", referencedColumnName="id",onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="promotion_id", referencedColumnName="id")}
+     * )
+     */
     private  $promotions;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="ecommerceMenuTag")
-     * @ORM\JoinTable(name="ecommerce_tag",
-     *      joinColumns={@ORM\JoinColumn(name="ecommerce_id", referencedColumnName="id",onDelete="CASCADE")},
+     * @ORM\JoinTable(name="ecommerce_menu_tag",
+     *      joinColumns={@ORM\JoinColumn(name="ecommerce_tag_id", referencedColumnName="id",onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
      */

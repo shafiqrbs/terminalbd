@@ -286,6 +286,24 @@ class CategoryRepository extends MaterializedPathRepository
 
     }
 
+    public function footerProductCategory($category){
+
+        if(empty($category) || count($category) == 0){
+            return '';
+        }
+        $result = "";
+        foreach ($category as $row)
+        {
+            if (!empty($row->getChildren())) {
+                $result.= "<a class='footer-category' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a>";
+                $result.= $this->footerProductCategory($row->getChildren());
+            }else {
+                $result.= "<a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a>";
+            }
+        }
+        return $result;
+
+    }
 
 
     public function getSelectdDropdownCategories($data,$array,$slected=''){

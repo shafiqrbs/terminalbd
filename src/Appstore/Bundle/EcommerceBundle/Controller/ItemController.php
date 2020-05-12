@@ -51,7 +51,7 @@ class ItemController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-		$entities = $em->getRepository('EcommerceBundle:Item')->findGoodsWithSearch($config,$data);
+		$entities = $em->getRepository('EcommerceBundle:Item')->findItemWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
         if($this->getUser()->getGlobalOption()->getDomainType() == "medicine"){
             $theme = 'medicine/index';
@@ -276,7 +276,7 @@ class ItemController extends Controller
             'action' => $this->generateUrl('ecommerce_item_upload_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'action',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
                 'enctype' => 'multipart/form-data',
             )
@@ -302,7 +302,7 @@ class ItemController extends Controller
         $editForm = $this->uploadEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
-            if($file['item']['file']){
+           /* if($file['item']['file']){
                 $entity->removeUpload();
                 $img = $file['item']['file'];
                 $fileName = $img->getClientOriginalName();
@@ -313,7 +313,11 @@ class ItemController extends Controller
                 }
                 $this->get('helper.imageresizer')->resizeImage(512, $path, $img);
                 $entity->setPath($imgName);
+            }*/
+            if($entity->upload()){
+                $entity->removeUpload();
             }
+            $entity->upload();
             $em->flush();
              $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
