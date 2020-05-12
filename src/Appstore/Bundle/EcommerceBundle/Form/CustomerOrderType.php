@@ -47,16 +47,7 @@ class CustomerOrderType extends AbstractType
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
-            ->add('process', 'choice', array(
-                'attr'=>array('class'=>'span8 m-wrap'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'empty_value' => '---Process Status---',
-                'choices' => array(
-                    'created'  => 'Created',
-                    'wfc'      => 'Waiting for Confirm'
-                ),
-            ))
+            ->add('process', 'hidden')
             ->add('deliverySlot', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'expanded'      =>false,

@@ -306,6 +306,7 @@ class OrderController extends Controller
         $payment = $this->createEditPaymentForm($paymentEntity,$order);
         $orderForm->handleRequest($request);
         if ($orderForm->isValid()) {
+            $order->setProcess('wfc');
             $em->persist($order);
             $em->flush();
             $created = $order->getCreated()->format('d-m-Y');
