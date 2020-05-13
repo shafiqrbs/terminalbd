@@ -34,9 +34,9 @@
                                 <ul class="unstyled" >
                                     <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
                                     {% if entity.cashOnDelivery == 1 %}
-                                        <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
+                                        <li><strong>Payment</strong>:&nbsp;Cash On Delivery</li>
                                     {% endif %}
-                                    <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
+                                    <li><strong>Shipping</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                     <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                     <li><strong>Delivery Slot</strong>:&nbsp;{{ entity.deliverySlot }}</li>
                                     <li><strong>Process</strong>:&nbsp;{{ entity.process|capitalize }}</li>

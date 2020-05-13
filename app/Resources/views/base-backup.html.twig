@@ -33,65 +33,72 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     {% stylesheets filter='cssrewrite'
-        'assets/plugins/bootstrap/css/bootstrap.min.css'
-        'assets/plugins/bootstrap/css/bootstrap-responsive.min.css'
-        'assets/plugins/font-awesome/css/font-awesome.min.css'
-        'assets/plugins/font-awesome/css/font-awesome-4.7.0.min.css'
-        'assets/plugins/font-awesome/css/fa-font-awesome.css'
-        'assets/css/style.css'
-        'assets/css/style-responsive.css'
-        'assets/css/style-metro.css'
-        'assets/css/themes/darkblue.css'
-        'assets/plugins/uniform/css/uniform.default.css'
-        'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css'
-        'assets/plugins/gritter/css/jquery.gritter.css'
-        'assets/plugins/chosen-bootstrap/chosen/chosen.css'
-        'assets/plugins/select2/select2_metro.css'
-        'assets/plugins/clockface/css/clockface.css'
-        'assets/plugins/bootstrap-datepicker/css/datepicker.css'
-        'assets/plugins/data-tables/jquery.dataTables.min.css'
-        'assets/plugins/bootstrap-timepicker/compiled/timepicker.css'
-        'assets/plugins/bootstrap-colorpicker/css/colorpicker.css'
-        'assets/plugins/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css'
-        'assets/plugins/bootstrap-daterangepicker/daterangepicker.css'
-        'assets/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'
-        'assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css'
-        'assets/plugins/jquery-multi-select/css/multi-select.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-metro.css'
-        'assets/plugins/jquery-tags-input/jquery.tagsinput.css'
-        'assets/plugins/jquery-selectbox/css/jquery.selectbox.css'
-        'assets/plugins/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css'
-        'assets/plugins/data-tables/DT_bootstrap.css'
-        'assets/plugins/data-tables/dataTables.bootstrap.min.css'
-        'assets/plugins/glyphicons/css/glyphicons.css'
-        'assets/plugins/glyphicons_halflings/css/halflings.css'
-        'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
-        'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
-        'assets/plugins/colorpicker/css/evol.colorpicker.min.css'
-        'assets/plugins/jquery-nestable/jquery.nestable.css'
-        'assets/plugins/jquery-ui/jquery-ui-1.12.1.min.css'
-        'assets/plugins/jquery-tree/src/css/jquery.tree.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/remodal/css/remodal.css'
-        'assets/plugins/remodal/css/remodal-default-theme.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/calculator/SimpleCalculadorajQuery.css'
-        'assets/plugins/pop-modal/popModal.min.css'
-        'assets/plugins/jquery-checkradios/css/jquery.checkradios.css'
-        'assets/template/desktop/css/css-loader.css'
-        'assets/css/comments.css'
-        'assets/css/overwrite.css'
+    'assets/plugins/bootstrap/css/bootstrap.min.css'
+    'assets/plugins/bootstrap/css/bootstrap-responsive.min.css'
+    'assets/plugins/font-awesome/css/font-awesome.min.css'
+    'assets/plugins/font-awesome/css/font-awesome-4.7.0.min.css'
+    'assets/plugins/font-awesome/css/fa-font-awesome.css'
+    'assets/css/style.css'
+    'assets/css/style-responsive.css'
+    'assets/css/style-metro.css'
+    'assets/css/themes/darkblue.css'
+    'assets/plugins/uniform/css/uniform.default.css'
+    'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css'
+    'assets/plugins/gritter/css/jquery.gritter.css'
+    'assets/plugins/chosen-bootstrap/chosen/chosen.css'
+    'assets/plugins/select2/select2_metro.css'
+    'assets/plugins/clockface/css/clockface.css'
+    'assets/plugins/bootstrap-datepicker/css/datepicker.css'
+    'assets/plugins/data-tables/jquery.dataTables.min.css'
+    'assets/plugins/bootstrap-timepicker/compiled/timepicker.css'
+    'assets/plugins/bootstrap-colorpicker/css/colorpicker.css'
+    'assets/plugins/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css'
+    'assets/plugins/bootstrap-daterangepicker/daterangepicker.css'
+    'assets/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'
+    'assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css'
+    'assets/plugins/jquery-multi-select/css/multi-select.css'
+    'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+    'assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-metro.css'
+    'assets/plugins/jquery-tags-input/jquery.tagsinput.css'
+    'assets/plugins/jquery-selectbox/css/jquery.selectbox.css'
+    'assets/plugins/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css'
+    'assets/plugins/data-tables/DT_bootstrap.css'
+    'assets/plugins/data-tables/dataTables.bootstrap.min.css'
+    'assets/plugins/glyphicons/css/glyphicons.css'
+    'assets/plugins/glyphicons_halflings/css/halflings.css'
+    'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
+    'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
+    'assets/plugins/colorpicker/css/evol.colorpicker.min.css'
+    'assets/plugins/jquery-nestable/jquery.nestable.css'
+    'assets/plugins/jquery-ui/jquery-ui-1.12.1.min.css'
+    'assets/plugins/jquery-tree/src/css/jquery.tree.css'
+    'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+    'assets/plugins/remodal/css/remodal.css'
+    'assets/plugins/remodal/css/remodal-default-theme.css'
+    'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+    'assets/plugins/calculator/SimpleCalculadorajQuery.css'
+    'assets/plugins/pop-modal/popModal.min.css'
+    'assets/plugins/jquery-checkradios/css/jquery.checkradios.css'
+    'assets/template/desktop/css/css-loader.css'
+    'assets/css/comments.css'
+    'assets/css/overwrite.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
     {% block cssBlock %}
     {% endblock %}
-{#
-    'assets/css/custom.css'
-    'assets/css/pages/profile.css'#}
- </head>
-<body class="page-header-fixed  page-footer-fixed  {% if is_granted('ROLE_CUSTOMER') is empty %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+    {#
+        'assets/css/custom.css'
+        'assets/css/pages/profile.css'#}
+
+    {% if app.request.cookies.has('productList') %}
+        {% set cookieVal = app.request.cookies.get('productList') %}
+    {% else %}
+        {% set cookieVal = '' %}
+    {% endif %}
+
+</head>
+<body class="page-header-fixed  page-footer-fixed {% if cookieVal != 'page-sidebar-closed' %} page-sidebar-closed   {% if is_granted('ROLE_CUSTOMER') is empty %}  {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
 <div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
     {% image 'assets/img/ajax-modal-loading.gif'
     filter='' output='/img/ajax-modal-loading.gif' %}
@@ -99,37 +106,171 @@
     {% endimage %}
 </div>
 <!-- BEGIN HEADER -->
-    <div class="header navbar navbar-inverse navbar-fixed-top">
-<!-- BEGIN TOP NAVIGATION BAR -->
-<div class="navbar-inner">
-<div class="container-fluid">
-<!-- BEGIN LOGO -->
-<a class="brand" href="{{ path('home') }}" style="margin-left:0">
-    {% if app.user.globaloption is not empty and app.user.globaloption is defined %}
-        {{ app.user.globaloption.name }}
-    {% endif %}
-</a>
-<!-- END LOGO -->
-<!-- BEGIN RESPONSIVE MENU TOGGLER -->
-    <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-        {% image 'assets//img/menu-toggler.png'
-        filter='' output='/img/menu-toggler.png' %}
-        <img src="{{ asset_url }}" alt="" />
-        {% endimage %}
-    </a>
-    {% if is_granted('ROLE_CUSTOMER') %}
-        {{ include('customer/topbar.html.twig')}}
-    {% else %}
-        {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
-        {{ include('SettingToolBundle:Widget:common.html.twig')}}
-    {% endif %}
-<!-- END RESPONSIVE MENU TOGGLER -->
-<!-- BEGIN TOP NAVIGATION MENU -->
-<!-- END TOP NAVIGATION MENU -->
-</div>
+<div class="header navbar navbar-inverse navbar-fixed-top">
+    <!-- BEGIN TOP NAVIGATION BAR -->
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <!-- BEGIN LOGO -->
+            <a class="brand" href="{{ path('home') }}" style="margin-left:0">
+                {% if app.user.globaloption is not empty and app.user.globaloption is defined %}
+                    {{ app.user.globaloption.name }}
+                {% endif %}
+            </a>
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                {% image 'assets//img/menu-toggler.png'
+                filter='' output='/img/menu-toggler.png' %}
+                <img src="{{ asset_url }}" alt="" />
+                {% endimage %}
+            </a>
+            {% if is_granted('ROLE_CUSTOMER') %}
+                {{ include('customer/topbar.html.twig')}}
+            {% else %}
+                {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
+                {{ include('SettingToolBundle:Widget:common.html.twig')}}
+            {% endif %}
 
-</div>
-<!-- END TOP NAVIGATION BAR -->
+            {# <div class="navbar hor-menu hidden-phone hidden-tablet">
+                 <div class="navbar-inner">
+                     {{ knp_menu_render('SettingAppearanceBundle:HorizontalBuilder:mainMenu', {'template':'SettingAppearanceBundle:Menu:horizontal-menu.html.twig','currentClass': 'active'}) }}
+                 </div>
+             </div>#}
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        {#
+        <div class="navbar hor-menu hidden-phone hidden-tablet">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li class="visible-phone visible-tablet">
+                            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+                            <form class="sidebar-search">
+                                <div class="input-box">
+                                    <a href="javascript:;" class="remove"></a>
+                                    <input type="text" placeholder="Search...">
+                                    <input type="button" class="submit" value=" ">
+                                </div>
+                            </form>
+                            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+                        </li>
+                        <li>
+                            <a href="index.html">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a data-hover="dropdown" data-close-others="true" class="dropdown-toggle" href="javascript:;">
+                                <span class="selected"></span>
+                                Layouts
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="layout_language_bar.html">
+                                        <span class="badge badge-roundless badge-important">new</span>Language Switch Bar</a>
+                                </li>
+                                <li>
+                                    <a href="layout_horizontal_sidebar_menu.html">
+                                        Horizontal &amp; Sidebar Menu                     </a>
+                                </li>
+                                <li class="active">
+                                    <a href="layout_horizontal_menu1.html">
+                                        Horizontal Menu 1                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout_horizontal_menu2.html">
+                                        Horizontal Menu 2                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout_promo.html">
+                                        Promo Page                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout_email.html">
+                                        Email Templates                     </a>
+                                </li>
+                                <li>
+                                    <a href="layout_ajax.html">
+                                        Content Loading via Ajax</a>
+                                </li>
+                                <li>
+                                    <a href="layout_sidebar_closed.html">
+                                        Sidebar Closed Page                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout_blank_page.html">
+                                        Blank Page                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout_boxed_page.html">Boxed Page</a>
+                                </li>
+                                <li>
+                                    <a href="layout_boxed_not_responsive.html">
+                                        Non-Responsive Boxed Layout                     </a>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="javascript:;">
+                                        More options
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Second level link</a></li>
+                                        <li class="dropdown-submenu">
+                                            <a href="javascript:;">More options<span class="arrow"></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="index.html">Third level link</a></li>
+                                                <li><a href="index.html">Third level link</a></li>
+                                                <li><a href="index.html">Third level link</a></li>
+                                                <li><a href="index.html">Third level link</a></li>
+                                                <li><a href="index.html">Third level link</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="index.html">Second level link</a></li>
+                                        <li><a href="index.html">Second level link</a></li>
+                                        <li><a href="index.html">Second level link</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <b class="caret-out"></b>
+                        </li>
+                        <li>
+                            <a href="">Tables</a>
+                        </li>
+                        <li class="">
+                            <a data-hover="dropdown" data-close-others="true" class="dropdown-toggle" href="">Extra
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="index.html">About Us</a></li>
+                                <li><a href="index.html">Services</a></li>
+                                <li><a href="index.html">Pricing</a></li>
+                                <li><a href="index.html">FAQs</a></li>
+                                <li><a href="index.html">Gallery</a></li>
+                                <li><a href="index.html">Registration</a></li>
+                                <li><a href="index.html">2 Columns (Left)</a></li>
+                                <li><a href="index.html">2 Columns (Right)</a></li>
+                            </ul>
+                            <b class="caret-out"></b>
+                        </li>
+                        <li>
+                            <span class="hor-menu-search-form-toggler">&nbsp;</span>
+                            <div class="search-form hidden-phone hidden-tablet">
+                                <form class="form-search">
+                                    <div class="input-append">
+                                        <input type="text" placeholder="Search..." class="m-wrap">
+                                        <button type="button" class="btn"></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        #}
+    </div>
+    <!-- END TOP NAVIGATION BAR -->
 </div>
 <!-- END HEADER -->
 <div class="page-container row-fluid">
@@ -138,28 +279,28 @@
         <div class="page-sidebar nav-collapse" >
             <!-- BEGIN SIDEBAR MENU -->
             {% if is_granted('ROLE_CUSTOMER') %}
-            {{ include('customer/sidebar.html.twig')}}
+                {{ include('customer/sidebar.html.twig')}}
             {% else %}
-            {{ include('sidebar.html.twig')}}
+                {{ include('sidebar.html.twig')}}
             {% endif %}
         </div>
     {% endblock navigation %}
     <div class="page-content" >
         {% if app.user.globaloption.siteSetting.appModules is defined and app.user.globaloption.siteSetting.appModules is not empty %}
-        {% set modules = app.user.globaloption.siteSetting.appModules %}
-        {% set menuNames = [] %}
-        {% for key in modules %}
-            {% set menuNames = menuNames|merge([key.moduleClass]) %}
-        {% endfor %}
-        {% if 'Miss' in menuNames and is_granted('ROLE_MEDICINE') %}
-        <div class="container-fluid">
-            <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
-                <div class="row-fluid">
-                    <input type="text" id="name" name="name" style="border: 5px solid #c49f47 !important; height: 50px !important; background: #ffffff !important;"  class="span12 m-wrap select2GenericMedicine" value=""  autocomplete="off" placeholder="Enter medicine or generic name ">
+            {% set modules = app.user.globaloption.siteSetting.appModules %}
+            {% set menuNames = [] %}
+            {% for key in modules %}
+                {% set menuNames = menuNames|merge([key.moduleClass]) %}
+            {% endfor %}
+            {% if 'Miss' in menuNames and is_granted('ROLE_MEDICINE') %}
+                <div class="container-fluid">
+                    <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
+                        <div class="row-fluid">
+                            <input type="text" id="name" name="name" style="border: 5px solid #c49f47 !important; height: 50px !important; background: #ffffff !important;"  class="span12 m-wrap select2GenericMedicine" value=""  autocomplete="off" placeholder="Enter medicine or generic name ">
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        {% endif %}
+            {% endif %}
         {% endif %}
         {% block body %}{% endblock %}
     </div>
@@ -275,9 +416,9 @@
     jQuery(document).ready(function () {
 
         {% block documentready %}
-            App.init();
-            FormComponents.init();
-            TableAdvanced.init();
+        App.init();
+        FormComponents.init();
+        TableAdvanced.init();
         $('.select2').select2();
         $('.selectbox').selectBox();
         $('.selectbox select').selectBox();
@@ -300,7 +441,7 @@
 
         $('.multiselect').multiselect();
 
-       $('.toggle').click(function(){
+        $('.toggle').click(function(){
             var id = $(this).attr('id');
             $("#show-"+id).slideToggle(100);
         }).toggle( function() {
@@ -345,6 +486,12 @@
             return true;
         });
 
+        $('body').on('click', '.btn-cookie', function(el) {
+            var val = $(this).attr('id');
+            Cookies.set('productList', val);
+            setTimeout(location.reload(), 1000);
+        });
+
         $(document).on('change', '.targetTo', function() {
 
             var targetTo = $(this).val();
@@ -363,6 +510,12 @@
 
             $('#messenger-block').hide();
         });
+
+        $('#show-calculator').click(function(){
+            $('#calculator-block').show();
+            $('#messenger-block').hide();
+        });
+
 
         $( ".select2GenericMedicine" ).autocomplete({
 
@@ -384,10 +537,26 @@
             }
         });
 
+        $(document).on('click', '#calculator-close', function() {
+            $('#calculator-block').hide();
+        });
+
+        $("#micalc").Calculadora({'EtiquetaBorrar':'Clear'});
+
         {% endblock %}
     });
+    /*if(CKEDITOR) {
+        CKEDITOR.replace('page_content', {
+            extraPlugins = 'doksoft_backup,doksoft_stat,zoom,justify';
+            filebrowserBrowseUrl : '/assets/plugins/ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
+            filebrowserImageBrowseUrl : '/assets/plugins/ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+        });
+    }*/
 
-</script>
+
+
+
+</script>{##}
 <style>
     .action li a.btn{
         text-align: left!important;
@@ -428,7 +597,7 @@
         width: 400px;
     }
     .mbottom:nth-child(5),.mbottom:nth-child(9) ,.mbottom:nth-child(13) {
-       margin-left: 0!important;
+        margin-left: 0!important;
     }
     .txtr{
         margin-top: 10px;
@@ -483,6 +652,68 @@
     }
 
 </style>
+{#{% block footer %}
+    <div class="footer">
+        <div class="footer-inner">
+            {{ "now"|date("Y") }} &copy; Created By Umar Biz Limited.
+        </div>
+        <div class="footer-tools">
+        <span class="go-top">
+            <i class="fa fa-angle-up"></i>
+        </span>
+        </div>
+    </div>
+{% endblock footer %}#}
+<!-- WhatsHelp.io widget -->
+{#
+<script type="text/javascript">
+
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '369724209850316',
+            xfbml      : true,
+            version    : 'v2.8'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<div class="fb-messenger">
+    <div id="messenger-block">
+        <div class="panel panel-messenger">
+            <div class="panel-heading"><b>Facebook Messenger</b> <a id="fb-msg-close"  class="pull-right btn red mini"><i class="icon-remove icon-white"></i></a></div>
+            <div class="panel-body">
+                <div class="fb-page"
+                     data-href="https://www.facebook.com/Terminalbd-304478469740886"
+                     data-tabs="messages"
+                     data-width="400"
+                     data-height="400"
+                     data-small-header="true"
+                     data-adapt-container-width="false"
+                     data-hide-cover="true"
+                     data-show-facepile="false">
+                    <div class="fb-xfbml-parse-ignore">
+                        <blockquote>
+                            <a href="http://www.terminalbd.com">Message Us</a>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>#}
+<div class="calculator-messenger">
+    <div id="calculator-block">
+        <div id="micalc"></div>
+    </div>
+</div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111963509-1"></script>
 <script>

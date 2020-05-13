@@ -60,18 +60,20 @@ class WebServiceController extends Controller
                 }
             }
         }
-
+        var_dump($apps);
         if ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $this->get('security.authorization_checker')->isGranted('ROLE_MEMBER') && $enable == 1 && in_array('website',$apps)) {
+            echo "Valid";
             return $this->redirect($this->generateUrl('member_index'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
             return $this->redirect($this->generateUrl('website'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER') && $enable == 1 && in_array('ecommerce',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER') && $enable == 1 && in_array('e-commerce',$apps)) {
             return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ECOMMERCE_VENDOR') && $enable == 1 && in_array('ecommerce',$apps)) {
             return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE')) {
             return $this->redirect($this->generateUrl('ecommerce_dashboard'));
         }
+        exit;
 
     }
 

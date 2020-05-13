@@ -53,7 +53,7 @@ class PageType extends AbstractType
                 'choices' => array('thumb' => 'Thumb','carousel' => 'Carousel','thumbSlider' => 'Thumb Slider'),
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows' => 30)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap textarea-large','rows' => 30)))
             ->add('shortDescription','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows' => 5)))
 
             ->add('parent', 'entity', array(

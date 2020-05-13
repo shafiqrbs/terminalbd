@@ -193,28 +193,30 @@
 
         {% block documentready %}{% endblock %}
     });
-
-
 </script>
 {% if globalOption.templateCustomize.fbMessenger is not empty  %}
-    <div class="fb-send-to-messenger"
-         messenger_app_id="<228539388443745>"
-         page_id="hawamithai2020"
-         data-ref="<PASS_THROUGH_PARAM>"
-         color="<blue | white>"
-         size="<standard | large | xlarge>">
-    </div>
+    <div id="fb-root"></div>
     <script>
         window.fbAsyncInit = function() {
             FB.init({
-                appId            : '228539388443745',
-                autoLogAppEvents : true,
                 xfbml            : true,
                 version          : 'v7.0'
             });
         };
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     </script>
-    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <!-- Your customer chat code -->
+    <div class="fb-customerchat"
+         attribution=setup_tool
+         page_id="{{ globalOption.templateCustomize.fbMessenger }}"
+         theme_color="#20cef5">
+    </div>
 {% endif %}
 
 {% if globalOption.templateCustomize.tawk is not empty  %}
