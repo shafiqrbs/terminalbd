@@ -25,10 +25,12 @@
     <div id="categories">
         <ul class="footer-parent-category ">
             {% for category in categories %}
-                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':category.slug}) }}"><strong>{{ category.name }} :</strong></a> <span>{% if category.children is not empty %}
-                  {% render controller("FrontendBundle:EcommerceWidget:footerProductChildCategory",{'globalOption':globalOption.id , 'category':category.id}) %}
-                  {% endif %}</span>
-                </li>
+                {% if category.children is not empty %}
+                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':category.slug}) }}"><strong>{{ category.name }} :</strong></a> <span>
+                      {% render controller("FrontendBundle:EcommerceWidget:footerProductChildCategory",{'globalOption':globalOption.id , 'category':category.id}) %}
+                    </span>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
