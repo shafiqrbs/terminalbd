@@ -579,7 +579,8 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureCategoryWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'categories'                  => $categories,
+            'widget'                  => $widget,
+            'categories'              => $categories,
             'globalOption'            => $globalOption,
 
         ));
@@ -634,6 +635,7 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureBrandWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'widget'                  => $widget,
             'brands'                  => $brands,
             'globalOption'            => $globalOption,
 

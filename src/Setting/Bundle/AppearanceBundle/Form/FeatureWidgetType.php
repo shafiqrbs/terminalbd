@@ -279,10 +279,8 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'slider2'              => 'Slider Two Column',
-                    'slider3'              => 'Slider Three Column',
-                    'grid1'                => 'Grid One Column',
-                    'grid2'                => 'Grid Two Column',
+                    'slider'              => 'Slider',
+                    'grid'                => 'Grid',
                 ),
             ))
 
@@ -302,12 +300,8 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'slider2'              => 'Slider Two Column',
-                    'slider3'              => 'Slider Three Column',
-                    'slider4'              => 'Slider Four Column',
-                    'slider6'              => 'Slider Six Column',
-                    'grid1'                => 'Grid One Column',
-                    'grid2'                => 'Grid Two Column',
+                    'slider'              => 'Slider',
+                    'grid'                => 'Grid',
                 ),
             ))
 
