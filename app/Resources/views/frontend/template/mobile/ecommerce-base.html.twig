@@ -39,6 +39,7 @@
     'assets/template/plugin/owl.carousel/owl.transitions.css'
     'assets/template/plugin/textillate/assets/animate.css'
     'assets/plugins/pop-modal/popModal.min.css'
+    'assets/template/plugin/side.toolbar/vcore.sidebar.css'
     'assets/template/desktop/css/css-loader.css'
     'assets/template/plugin/file-upload/file-upload.css'
     'assets/template/plugin/file-image-uploader/inputFileZone.css'
@@ -181,6 +182,9 @@
 {#<div id="mobile-confirm" style="display:none; text-align: left!important;">Thank you for your interest in {{ globalOption.domain }}.<br/><span id="mobile-validate"></span></div>#}
 <div id="mobile-confirm" style="display:none; text-align: left!important;">
 <span id="mobile-validate"></span></div>
+{% if globalOption.templateCustomize.sidebarTooltip == 1 %}
+    <div class="side-toolbar" style=""></div>
+{% endif %}
 {% render controller("FrontendBundle:EcommerceWidget:mobileMenu",{'globalOption': globalOption.id}) %}
 {% javascripts
 'assets/template/mobile/js/jquery-2.1.4.min.js'
@@ -201,6 +205,7 @@
 'assets/template/plugin/matchHeight/height-match.js'
 'assets/template/plugin/wow/js/wow.min.js'
 'assets/template/plugin/treeview/treeview.js'
+'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/file-image-uploader/inputFileZone.js'
@@ -221,6 +226,15 @@
         $(document).on( "click", ".bar-search", function(e){
             $('#search-box').slideToggle('2000');
         });
+        {% if globalOption.templateCustomize.sidebarTooltip == 1 %}
+
+        $('.side-toolbar').vSidebar({
+            'items': [
+                {% render controller("FrontendBundle:TemplateWidget:sidebar",{'globalOption':globalOption.id}) %}
+            ],
+            'position': 'right bottom'
+        });
+        {% endif %}
     })
 </script>
 

@@ -26,7 +26,7 @@
         <ul class="footer-parent-category ">
             {% for category in categories %}
                 {% if category.children is not empty %}
-                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':category.slug}) }}"><strong>{{ category.name }} :</strong></a> <span>
+                    <li><a class="parent" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':category.slug}) }}"><strong>{{ category.name }} :</strong></a> <span>
                       {% render controller("FrontendBundle:EcommerceWidget:footerProductChildCategory",{'globalOption':globalOption.id , 'category':category.id}) %}
                     </span>
                     </li>
@@ -43,9 +43,11 @@
     .footer-parent-category {
         font-size: 11px;
     }
-    .footer-parent-category li a{
+    .footer-parent-category li a.parent{
         font-size: 12px;
+        display: inline-block;
     }
+
     a.footer-category{
         font-size: 11px;
         border-right: 1px solid #030303;

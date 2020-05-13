@@ -304,26 +304,18 @@
     }
 
 
-    {% if globalOption.templateCustomize.carouselHeight  is not empty %}
-        .carousel-img , .carousel-tab-img{
-            height:100%!important;
-        }
-
-        @media (max-width:320px){
-            .carousel-img, .carousel-tab-img {
-                height: 320px!important;
-            }
-        }
-
-    {% endif %}
-
-
-
     {% if globalOption.templateCustomize.mobileCarouselHeight  is not empty %}
         #main-carousel{
             height:{{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
         }
     {% endif %}
+
+    {% if globalOption.templateCustomize.mobileCarouselHeight  is not empty %}
+        .carousel-img , .carousel-tab-img{
+            height:{{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
+        }
+    {% endif %}
+
 
     .feature-carousel-vertical .owl-controls .owl-buttons .owl-prev , .page-carousel-vertical .owl-controls .owl-buttons .owl-prev {
     {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty %}

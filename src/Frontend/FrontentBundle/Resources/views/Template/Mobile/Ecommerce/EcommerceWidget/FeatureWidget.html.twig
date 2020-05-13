@@ -1,6 +1,6 @@
 {% if features is defined and features is not empty  %}
     {% for widget in features %}
-        {% if widget.featureWidgetItems is not empty %}
+        {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
         <div class="">
             <div id="main-carousel" class="carousel slide" data-ride="carousel" data-match-height="slider-height">
                 <!-- Indicators -->
@@ -57,6 +57,43 @@
                 <a class="carousel-post-control carousel-right" href="#main-carousel" data-slide="next">›</a>
             </div>
         </div>
+        {% endif %}
+        {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'feature' %}
+            <div class="container">
+                <div class="" data-wow-delay="">
+                    {% for slide in widget.featureWidgetItems %}
+                        {% if(slide.feature.webPath) %}
+
+                            {% set path ='' %}
+                            {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty  %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'category':slide.feature.category.slug}) %}
+                            {% elseif slide.feature.targetTo == 'Brand' and slide.feature.brand is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':slide.feature.brand.slug}) %}
+                            {% elseif slide.feature.targetTo == 'Promotion' and slide.feature.promotion is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'promotion':slide.feature.promotion.slug}) %}
+                            {% elseif slide.feature.targetTo == 'Tag' and slide.feature.tag is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'brand':slide.feature.tag.slug}) %}
+                            {% elseif slide.feature.targetTo == 'Discount' and slide.feature.discount is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'discount':slide.feature.discount.slug}) %}
+                            {% elseif slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) %}
+                            {% else %}
+                                {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
+                            {% endif %}
+
+                            <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 7px; position: relative"  class="col-xs-12 col-md-12 feature-box ">
+                                <div class="box-img" style="height: 100%">
+                                    {%  set imageWidth =  slide.divWidth~'%' %}
+                                    <a href="{{ path }}"><img class="img-responsive img-responsive-feature" style="height: 100%!important;"   src="{{ image(slide.feature.webPath) }}" alt=""></a>
+                                    {% if slide.feature.isSliderTitle  != 1 %}
+                                        <span class="img-responsive-preview img-responsive-preview-{{  slide.feature.captionPosition }} " style="background-color: {{ slide.feature.captionBgColor }};color: {{ slide.feature.buttonBg }}; " >{{ slide.feature.name }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         {% endif %}
     <div class="container">
         <div class="clearfix"></div>
