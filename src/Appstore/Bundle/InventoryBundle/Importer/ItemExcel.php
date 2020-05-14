@@ -404,7 +404,6 @@ class ItemExcel
             $item['Category'] = $defaultStr;
         }
 
-
         if (empty($item['Quantity'])) {
             $item['Quantity'] = 1;
         }
@@ -412,8 +411,6 @@ class ItemExcel
         if (empty($item['Unit'])) {
             $item['Unit'] = $defaultStr;
         }
-
-
         $this->data[$key] = $item;
 
         return $item;
