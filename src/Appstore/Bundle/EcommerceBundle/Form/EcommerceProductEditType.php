@@ -159,7 +159,7 @@ class EcommerceProductEditType extends AbstractType
 				'attr'=>array('class'=>'span12 select2'),
 				'query_builder' => function(EntityRepository $er){
 					$qb = $er->createQueryBuilder('p');
-					$qb->where("p.status ={$this->config->getId()}");
+					$qb->where("p.ecommerceConfig ={$this->config->getId()}");
 					$qb->andWhere("p.status = 1");
 					$qb->andWhere($qb->expr()->like('p.type', ':type'));
 					$qb->setParameter('type','%Tag%');

@@ -169,7 +169,6 @@ class FeatureType extends AbstractType
                             'image/gif',
                         )
                     ))
-
                 )
             ));
     }

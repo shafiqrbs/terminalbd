@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemImport;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -29,47 +30,188 @@ class ItemExcel
 
         foreach($this->data as $key => $item) {
 
-            $name = ucfirst(strtolower($item['Name']));
+            $name = ucfirst(strtolower($item['ProductName']));
+            $productID = $item['ProductID'];
+
             $productOld = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'webName' => $name));
-            if(empty($productOld) and !empty($item['Name'])){
+
+            $productId = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'id' => $productID));
+
+            if((empty($productOld) and !empty($item['ProductName']) and empty($productId))) {
+
                 $product = new Item();
                 $product->setEcommerceConfig($config);
-                $product->setName(ucfirst(strtolower($item['Name'])));
-                $product->setWebName(ucfirst(strtolower($item['Name'])));
-                $product->setQuantity( $item['Quantity']);
+                $product->setName($name);
+                $product->setWebName($name);
+                $product->setProductBengalName($item['ProductBengalName']);
+                $product->setQuantity($item['Quantity']);
                 $product->setMasterQuantity($item['Quantity']);
-                $product->setPurchasePrice( $item['PurchasePrice']);
-                $product->setSalesPrice( $item['SalesPrice']);
+                $product->setPurchasePrice($item['PurchasePrice']);
+                $product->setSalesPrice($item['SalesPrice']);
                 $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
                 $product->setMinQuantity($min);
                 $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
                 $product->setMaxQuantity($max);
-                if($vendor){
+                $path = empty($item['ImageLink']) ? '' : $item['ImageLink'];
+                $product->setPath($path);
+                if ($vendor) {
                     $product->setVendor($vendor);
                 }
                 $category = $item['Category'];
-                if($category){
-                     $category = $this->getCategory(ucfirst(strtolower($category)));
-                     $product->setCategory($category);
+                if ($category) {
+                    $category = $this->getCategory(ucfirst(strtolower($category)));
+                    $product->setCategory($category);
                 }
                 $brand = $item['Brand'];
-                if($brand){
-                     $brand = $this->getBrand(ucfirst(strtolower($brand)));
-                     $product->setBrand($brand);
+                if ($brand) {
+                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
+                    $product->setBrand($brand);
                 }
-                $size =  $item['Size'];
-                if($size){
-                     $size = $this->getSize(ucfirst(strtolower($size)));
-                     $product->setSize($size);
+                $size = $item['Size'];
+                if ($size) {
+                    $size = $this->getSize(ucfirst(strtolower($size)));
+                    $product->setSize($size);
                 }
-                $unit = $item['Unit'];
-                if($unit){
+                $unit = $item['ProductUnit'];
+                if ($unit) {
                     $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
                     $product->setProductUnit($unit);
                 }
+                $sizeUnit = $item['SizeUnit'];
+                if ($sizeUnit) {
+                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
+                    $product->setSizeUnit($sizeUnit);
+                }
+                $tags = $item['Tags'];
+                if ($tags) {
+                    $tagIds = explode(',', $tags);
+                    foreach ($tagIds as $tag) {
+                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
+                    }
+                    $product->setTag($tagObj);
+                }
+                $colors = $item['Colors'];
+                if ($colors) {
+                    $colorIds = explode(',', $colors);
+                    foreach ($colorIds as $color) {
+                        $colorObj[] = $this->getDoctrain()->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('name' => $color));
+                    }
+                    $product->setItemColors($colorObj);
+                }
+                $this->save($product);
+
+            }elseif(!empty($productId)){
+
+                $product = $productId;
+                $product->setName($name);
+                $product->setWebName($name);
+                $product->setProductBengalName($item['ProductBengalName']);
+                $product->setPurchasePrice($item['PurchasePrice']);
+                $product->setSalesPrice($item['SalesPrice']);
+                $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
+                $product->setMinQuantity($min);
+                $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
+                $product->setMaxQuantity($max);
+                $path = empty($item['ImageLink']) ? '' : $item['ImageLink'];
+                $product->setPath($path);
+                $category = $item['Category'];
+                if ($category) {
+                    $category = $this->getCategory(ucfirst(strtolower($category)));
+                    $product->setCategory($category);
+                }
+                $brand = $item['Brand'];
+                if ($brand) {
+                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
+                    $product->setBrand($brand);
+                }
+                $size = $item['Size'];
+                if ($size) {
+                    $size = $this->getSize(ucfirst(strtolower($size)));
+                    $product->setSize($size);
+                }
+                $unit = $item['ProductUnit'];
+                if ($unit) {
+                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
+                    $product->setProductUnit($unit);
+                }
+                $sizeUnit = $item['SizeUnit'];
+                if ($sizeUnit) {
+                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
+                    $product->setSizeUnit($sizeUnit);
+                }
+                $tags = $item['Tags'];
+                if (empty($tags) and empty($product->getTag())) {
+                    $tagIds = explode(',', $tags);
+                    foreach ($tagIds as $tag) {
+                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
+                    }
+                    $product->setTag($tagObj);
+                }
+                $colors = $item['Colors'];
+                if (empty($colors) and empty($product->getItemColors())) {
+                    $colorIds = explode(',', $colors);
+                    foreach ($colorIds as $color) {
+                        $colorObj[] = $this->getDoctrain()->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('name' => $color));
+                    }
+                    $product->setItemColors($colorObj);
+                }
+                $this->save($product);
+
+            }elseif(!empty($productOld)){
+
+                $product = $productOld;
+                $product->setProductBengalName($item['ProductBengalName']);
+                $product->setPurchasePrice($item['PurchasePrice']);
+                $product->setSalesPrice($item['SalesPrice']);
+                $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
+                $product->setMinQuantity($min);
+                $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
+                $product->setMaxQuantity($max);
+                $path = empty($item['ImageLink']) ? '' : $item['ImageLink'];
+                $product->setPath($path);
+                $category = $item['Category'];
+                if ($category) {
+                    $category = $this->getCategory(ucfirst(strtolower($category)));
+                    $product->setCategory($category);
+                }
+                $brand = $item['Brand'];
+                if ($brand) {
+                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
+                    $product->setBrand($brand);
+                }
+                $size = $item['Size'];
+                if ($size) {
+                    $size = $this->getSize(ucfirst(strtolower($size)));
+                    $product->setSize($size);
+                }
+                $unit = $item['ProductUnit'];
+                if ($unit) {
+                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
+                    $product->setProductUnit($unit);
+                }
+                $sizeUnit = $item['SizeUnit'];
+                if ($sizeUnit) {
+                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
+                    $product->setSizeUnit($sizeUnit);
+                }
+                $tags = $item['Tags'];
+                if (empty($tags) and empty($product->getTag())) {
+                    $tagIds = explode(',', $tags);
+                    foreach ($tagIds as $tag) {
+                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
+                    }
+                    $product->setTag($tagObj);
+                }
+                $colors = $item['Colors'];
+                if (empty($colors) and empty($product->getItemColors())) {
+                    $colorIds = explode(',', $colors);
+                    foreach ($colorIds as $color) {
+                        $colorObj[] = $this->getDoctrain()->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('name' => $color));
+                    }
+                    $product->setItemColors($colorObj);
+                }
                 $this->save($product);
             }
-
         }
 
     }
@@ -138,6 +280,29 @@ class ItemExcel
 
     }
 
+    private function getTags($item)
+    {
+
+        $config = $this->itemImport->getEcommerceConfig();
+        $tagRepository = $this->getPromotionRepository();
+
+        $tag = $tagRepository->findOneBy(array(
+            'ecommerceConfig'   => $config,
+            'name'              => $item
+        ));
+        if($tag){
+            return $tag;
+        }else{
+            $tag = new Promotion();
+            $tag->setName($item);
+            $tag->setType(array("Tag"));
+            $tag->setEcommerceConfig($config);
+            $brand = $this->save($tag);
+            return $brand;
+        }
+
+    }
+
     public function setItemImport($itemImport)
     {
         $this->itemImport = $itemImport;
@@ -195,6 +360,14 @@ class ItemExcel
     private function getBrandRepository()
     {
         return $this->getDoctrain()->getRepository('EcommerceBundle:ItemBrand');
+    }
+
+    /**
+     * @return  @return \Appstore\Bundle\EcommerceBundle\Repository\PromotionRepository
+     */
+    private function getPromotionRepository()
+    {
+        return $this->getDoctrain()->getRepository('EcommerceBundle:Promotion');
     }
 
     /**

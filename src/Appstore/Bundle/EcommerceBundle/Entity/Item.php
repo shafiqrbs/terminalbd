@@ -159,6 +159,14 @@ class Item
     private $webName;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="bengalName", type="string", length=255, nullable = true)
+     */
+    private $productBengalName;
+
+
     /**
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
@@ -907,7 +915,7 @@ class Item
     }
 
     /**
-     * @param Promotion $tag
+     * @param mixed $tag
      */
     public function setTag($tag)
     {
@@ -1354,6 +1362,22 @@ class Item
     public function setSizeUnit($sizeUnit)
     {
         $this->sizeUnit = $sizeUnit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductBengalName()
+    {
+        return $this->productBengalName;
+    }
+
+    /**
+     * @param string $productBengalName
+     */
+    public function setProductBengalName($productBengalName)
+    {
+        $this->productBengalName = $productBengalName;
     }
 
 
