@@ -755,7 +755,7 @@ class Item
 
     public function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/item/';
+        return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/ecommerce/product/';
     }
 
     public function upload()
@@ -770,7 +770,7 @@ class Item
 
         // move takes the target directory and then the
         // target filename to move to
-        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $filename = date('YmdHmi') . "-" . $this->getFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $filename
