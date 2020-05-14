@@ -125,7 +125,7 @@ class ItemSubRepository extends EntityRepository
                 $goods->setSalesPrice($salesPrice);
                 $goods->setPurchasePrice($purchasePrice);
                 $goods->setQuantity($quantity);
-                if($colors != 'null' and !empty($colors)){
+                if($colors != 'null'and  $colors != 'undefined' and !empty($colors)){
                     $colorIds = explode(',',$colors);
                     foreach ($colorIds as $color ){
                         $colorObj[] = $this->_em->getRepository('SettingToolBundle:ProductColor')->find($color);

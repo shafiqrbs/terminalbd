@@ -48,6 +48,11 @@ class ProductUnit
      */
     protected $item;
 
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="sizeUnit")
+     */
+    protected $sizeUnits;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="productUnit")
      */

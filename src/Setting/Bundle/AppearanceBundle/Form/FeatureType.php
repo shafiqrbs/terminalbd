@@ -161,15 +161,14 @@ class FeatureType extends AbstractType
             ->add('file', 'file',array(
                 'constraints' =>array(
                     new File(array(
-                        'maxSize' => '2M',
+                        'maxSize' => '5M',
                         'mimeTypes' => array(
                             'image/png',
                             'image/jpg',
                             'image/jpeg',
                             'image/gif',
                         )
-                    )),
-                    new NotBlank(array('message'=>'Please upload feature image'))
+                    ))
 
                 )
             ));

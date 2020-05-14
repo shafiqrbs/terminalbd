@@ -105,6 +105,11 @@ class Item
      **/
     private  $size;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="sizeUnits" )
+     **/
+    private  $sizeUnit;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="items" )
      **/
@@ -1333,6 +1338,22 @@ class Item
     public function setMinQuantity($minQuantity)
     {
         $this->minQuantity = $minQuantity;
+    }
+
+    /**
+     * @return ProductUnit
+     */
+    public function getSizeUnit()
+    {
+        return $this->sizeUnit;
+    }
+
+    /**
+     * @param ProductUnit $sizeUnit
+     */
+    public function setSizeUnit($sizeUnit)
+    {
+        $this->sizeUnit = $sizeUnit;
     }
 
 

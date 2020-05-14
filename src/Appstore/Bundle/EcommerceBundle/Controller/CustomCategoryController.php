@@ -21,6 +21,17 @@ use Product\Bundle\ProductBundle\Form\CategoryType;
 class CustomCategoryController extends Controller
 {
 
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
 
     /**
      *
@@ -31,27 +42,16 @@ class CustomCategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig' => $config ),array( 'name' =>'asc' ));
+        $entities = $em->getRepository('ProductProductBundle:Category')->findWithEcommerceSearch($config,$data);
         $pagination = $this->paginate($entities);
         return $this->render('EcommerceBundle:CustomCategory:index.html.twig', array(
-            'entities' => $pagination,
+            'pagination' => $pagination,
+            'searchForm' => $data,
         ));
 
     }
-
-    public function paginate($entities)
-    {
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            30  /*limit per page*/
-        );
-        return $pagination;
-    }
-
-
 
     /**
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")

@@ -275,18 +275,36 @@ var InventoryItemListPage = function () {
 
 }
 
-var InventoryItemEditPage = function (item) {
+$('#addSubProduct').attr("disabled", true);
 
+$('#goods_item_salesPrice').keyup(function(e) {
+
+    var salesPrice = $('#goods_item_salesPrice').val();
+    if(salesPrice !== "NaN" && salesPrice > 0 ){
+        $('#addSubProduct').attr("disabled", false);
+    }else{
+        $('#addSubProduct').attr("disabled", true);
+    }
+});
+
+
+
+var InventoryItemEditPage = function (item) {
 
     $('#addSubProduct').click(function(e) {
 
         var url = $(this).attr("data-url");
         var size = $('#goods_item_size').val();
         var unit = $('#goods_item_productUnit').val();
-        var colors = $('#goods_item_colors').val();
-        var salesPrice = $('#goods_item_purchasePrice').val();
-        var purchasePrice = $('#goods_item_salesPrice').val();
+        var colors = '';
+        var purchasePrice = $('#goods_item_purchasePrice').val();
+        var salesPrice = $('#goods_item_salesPrice').val();
         var quantity = $('#goods_item_quantity').val();
+
+        if(size === ""){
+            $('#goods_item_size').select2('open');
+            return false;
+        }
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',

@@ -545,6 +545,7 @@ class ItemController extends Controller
 	{
 
 		$data = $request->request->all();
+
 		$this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->insertSubProduct($entity,$data);
 		$subItem = $this->renderView( 'EcommerceBundle:Item:subItem.html.twig', array(
 			'entity'           => $entity,

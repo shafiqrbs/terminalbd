@@ -47,7 +47,7 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
-                            <div class="span10">
+                            <div class="span8">
                                 <div class="control-group">
                                     <label class="control-label" for="name">Item name <span class="required">*</span></label>
                                     <div class="controls">
@@ -57,6 +57,13 @@
                                             {{ form_errors(form.webName) }}
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="name">Item Unit</label>
+                                    {{ form_widget(form.productUnit) }}
+                                    {{ form_errors(form.productUnit) }}
                                 </div>
                             </div>
                             <div class="span2">
@@ -201,10 +208,10 @@
                                     </div>
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="productUnit">Unit</label>
+                                            <label class="control-label" for="productUnit">Size Unit</label>
                                             <div class="controls">
-                                                {{ form_widget(form.productUnit) }}
-                                                {{ form_errors(form.productUnit) }}
+                                                {{ form_widget(form.sizeUnit) }}
+                                                {{ form_errors(form.sizeUnit) }}
                                             </div>
                                         </div>
                                     </div>
@@ -343,7 +350,7 @@
                                                             {{ form_errors(goodsItemForm.purchasePrice) }}
                                                             {{ form_widget(goodsItemForm.salesPrice) }}
                                                             {{ form_errors(goodsItemForm.salesPrice) }}
-                                                            <a href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('ecommerce_item_subproduct',{'id':entity.id}) }}" class="btn yellow">Save</a>
+                                                            <button type="button" href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('ecommerce_item_subproduct',{'id':entity.id}) }}" class="btn yellow">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>

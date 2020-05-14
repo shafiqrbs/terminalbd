@@ -17,7 +17,30 @@ use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 class CategoryRepository extends MaterializedPathRepository
 {
 
-   public function findWithSearch($data){
+
+    public function findWithEcommerceSearch($config , $data){
+
+        $sort = isset($data['sort'])? $data['sort'] :'e.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $parent = isset($data['parent'])? $data['parent'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.parent','p');
+        $qb->where('e.ecommerceConfig = :config')->setParameter('config', $config) ;
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if(!empty($parent)){
+            $qb->andWhere("p.name LIKE :parent");
+            $qb->setParameter('parent', '%'.$parent.'%');
+        }
+        $qb->orderBy("{$sort}",$direction);
+        $qb->getQuery();
+        return  $qb;
+    }
+
+    public function findWithSearch($data){
 
        $name = isset($data['name'])? $data['name'] :'';
        $parent = isset($data['parent'])? $data['parent'] :'';

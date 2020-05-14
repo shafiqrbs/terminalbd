@@ -113,6 +113,18 @@ class EcommerceProductEditType extends AbstractType
 					          ->orderBy("p.name","ASC");
 				},
 			))
+            ->add('sizeUnit', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
+                'empty_value' => '-Choose a size unit-',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
+                },
+            ))
 			->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 			->add('minQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Min quantity')))
 			->add('maxQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Max quantity')))
