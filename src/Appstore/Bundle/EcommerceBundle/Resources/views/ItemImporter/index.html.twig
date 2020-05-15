@@ -66,9 +66,8 @@
                                             {% if entity.progress == 'created' or entity.progress == 'invalid' %}
                                             <a href="{{ path('ecommerce_itemimporter_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a href="{{ path('ecommerce_itemimporter_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-remove"></i></a>
-                                             <a title="" href="{{ path('ecommerce_itemimporter_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Product</i></a>
+                                             <a href="{{ path('ecommerce_itemimporter_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import</i></a>
                                             {% endif %}
-                                            <a title="" href="{{ path('ecommerce_itemimporter_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Product</i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

@@ -262,6 +262,13 @@ class MedicineStock
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isImport", type="boolean",  nullable=true)
+     */
+    private $isImport = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="noDiscount", type="boolean",  nullable=true)
      */
     private $noDiscount = false;
@@ -885,6 +892,22 @@ class MedicineStock
         $this->file = null;
     }
 
+    /**
+     * @return bool
+     */
+    public function isImport()
+    {
+        return $this->isImport;
+    }
+
+
+    /**
+     * @param bool $isImport
+     */
+    public function setIsImport($isImport)
+    {
+        $this->isImport = $isImport;
+    }
 
 
 }

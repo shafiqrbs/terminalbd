@@ -46,8 +46,6 @@ class MedicineConfigRepository extends EntityRepository
             ->set('s.salesQuantity', '?4')
             ->set('s.salesReturnQuantity', '?5')
             ->set('s.damageQuantity', '?6')
-            ->set('s.averagePurchasePrice', '?7')
-            ->set('s.averageSalesPrice', '?8')
             ->set('s.minQuantity', '?9')
             ->where('s.medicineConfig = ?10')
             ->setParameter(1, 0)
@@ -56,8 +54,6 @@ class MedicineConfigRepository extends EntityRepository
             ->setParameter(4, 0)
             ->setParameter(5, 0)
             ->setParameter(6, 0)
-            ->setParameter(7, 0)
-            ->setParameter(8, 0)
             ->setParameter(9, 0)
             ->setParameter(10, $config)
             ->getQuery();
