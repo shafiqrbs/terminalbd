@@ -50,7 +50,7 @@
                             <div class="span8">
                                 <div class="row-fluid">
 
-                                    <div class="span10">
+                                    <div class="span8">
                                         <div class="control-group">
                                             <label class="control-label" for="name">Item Name<span class="required">*</span></label>
                                             <div class="controls">
@@ -64,13 +64,34 @@
                                     </div>
                                     <div class="span2">
                                         <div class="control-group">
+                                            <label class="control-label" for="name">Item Unit</label>
+                                            {{ form_widget(form.productUnit) }}
+                                            {{ form_errors(form.productUnit) }}
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
                                             <label class="control-label" for="name">&nbsp;</label>
                                           Sub Item {{ form_widget(form.subProduct) }}
                                         </div>
                                     </div>
 
                                 </div>
+                                {% if ecommerceConfig.showBengal is defined and ecommerceConfig.showBengal is not empty %}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Product Bangla Name</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.productBengalName) }}
+                                                    {{ form_errors(form.productBengalName) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                                 <div class="row-fluid">
+
                                     <div class="span4">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Category<span class="required">*</span></label>
@@ -185,10 +206,10 @@
                                     </div>
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="productUnit">Product Unit<span class="required">*</span></label>
+                                            <label class="control-label" for="productUnit">Size Unit<span class="required">*</span></label>
                                             <div class="controls">
-                                                {{ form_widget(form.productUnit) }}
-                                                {{ form_errors(form.productUnit) }}
+                                                {{ form_widget(form.sizeUnit) }}
+                                                {{ form_errors(form.sizeUnit) }}
                                             </div>
                                         </div>
                                     </div>

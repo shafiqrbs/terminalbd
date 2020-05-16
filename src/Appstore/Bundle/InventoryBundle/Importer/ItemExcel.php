@@ -112,7 +112,7 @@ class ItemExcel
                 $product->setMinQuantity($min);
                 $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
                 $product->setMaxQuantity($max);
-                $path = empty($item['ImageLink']) ? '' : $item['ImageLink'];
+                $path = empty($name) ? '' : $name.".jpg";
                 $product->setPath($path);
                 $category = $item['Category'];
                 if ($category) {
@@ -167,7 +167,7 @@ class ItemExcel
                 $product->setMinQuantity($min);
                 $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
                 $product->setMaxQuantity($max);
-                $path = empty($item['ImageLink']) ? '' : $item['ImageLink'];
+                $path = empty($name) ? '' : $name.".jpg";
                 $product->setPath($path);
                 $category = $item['Category'];
                 if ($category) {

@@ -165,6 +165,13 @@ class EcommerceConfig
     private $showSidebar = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="showBengal", type="string", length=50, nullable = true )
+     */
+    private $showBengal;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="uploadFile", type="boolean")
@@ -1300,6 +1307,22 @@ class EcommerceConfig
     public function setFooterCategory($footerCategory)
     {
         $this->footerCategory = $footerCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShowBengal()
+    {
+        return $this->showBengal;
+    }
+
+    /**
+     * @param string $showBengal
+     */
+    public function setShowBengal($showBengal)
+    {
+        $this->showBengal = $showBengal;
     }
 
 

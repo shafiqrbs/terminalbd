@@ -26,6 +26,15 @@ class EcommerceConfigType extends AbstractType
                     '$'       => 'Dollar($)'
                 ),
             ))
+            ->add('showBengal', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '-Choose Product Name-',
+                'choices' => array(
+                    'englishbangla' => 'English(Bangla)',
+                    'englishb-bangla' => 'English-Bangla',
+                    'bangla'       => 'Bangla'
+                ),
+            ))
             ->add('perPage', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(

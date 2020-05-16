@@ -3,7 +3,6 @@
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
-
 <head>
     <meta charset="utf-8"/>
     <title>{% if app.user.globaloption is not empty and app.user.globaloption is defined %}{{ app.user.globaloption.name }}{% else %} {{ app.user.profile.name }} {% endif %} | MANAGE PANEL</title>
@@ -87,56 +86,36 @@
     {% endstylesheets %}
     {% block cssBlock %}
     {% endblock %}
-{#
-    'assets/css/custom.css'
-    'assets/css/pages/profile.css'#}
  </head>
 <body class="page-header-fixed  page-footer-fixed  {% if is_granted('ROLE_CUSTOMER') is empty %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
-<div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
-    {% image 'assets/img/ajax-modal-loading.gif'
-    filter='' output='/img/ajax-modal-loading.gif' %}
-    <img src="{{ asset_url }}" alt="" class="loading"/>
-    {% endimage %}
-</div>
 <!-- BEGIN HEADER -->
-    <div class="header navbar navbar-inverse navbar-fixed-top">
+<div class="header navbar navbar-inverse navbar-fixed-top">
 <!-- BEGIN TOP NAVIGATION BAR -->
 <div class="navbar-inner">
-<div class="container-fluid">
+    <div class="container-fluid">
 <!-- BEGIN LOGO -->
 <a class="brand" href="{{ path('home') }}" style="margin-left:0">
-    {% if app.user.globaloption is not empty and app.user.globaloption is defined %}
-        {{ app.user.globaloption.name }}
-    {% endif %}
+{% if app.user.globaloption is not empty and app.user.globaloption is defined %}
+    {{ app.user.globaloption.name }}
+{% endif %}
 </a>
 <!-- END LOGO -->
 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-    <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-        {% image 'assets//img/menu-toggler.png'
-        filter='' output='/img/menu-toggler.png' %}
-        <img src="{{ asset_url }}" alt="" />
-        {% endimage %}
-    </a>
-    {% if is_granted('ROLE_CUSTOMER') %}
-        {{ include('customer/topbar.html.twig')}}
-    {% else %}
-        {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
-        {{ include('SettingToolBundle:Widget:common.html.twig')}}
-    {% endif %}
+{% if is_granted('ROLE_CUSTOMER') %}
+    {{ include('customer/topbar.html.twig')}}
+{% else %}
+    {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
+    {{ include('SettingToolBundle:Widget:common.html.twig')}}
+{% endif %}
 <!-- END RESPONSIVE MENU TOGGLER -->
-<!-- BEGIN TOP NAVIGATION MENU -->
-<!-- END TOP NAVIGATION MENU -->
 </div>
-
 </div>
 <!-- END TOP NAVIGATION BAR -->
 </div>
 <!-- END HEADER -->
 <div class="page-container row-fluid">
-    {#{{ dump(app.security.token.user.roles) }}#}
     {% block navigation %}
         <div class="page-sidebar nav-collapse" >
-            <!-- BEGIN SIDEBAR MENU -->
             {% if is_granted('ROLE_CUSTOMER') %}
             {{ include('customer/sidebar.html.twig')}}
             {% else %}
@@ -144,25 +123,7 @@
             {% endif %}
         </div>
     {% endblock navigation %}
-    <div class="page-content" >
-        {% if app.user.globaloption.siteSetting.appModules is defined and app.user.globaloption.siteSetting.appModules is not empty %}
-        {% set modules = app.user.globaloption.siteSetting.appModules %}
-        {% set menuNames = [] %}
-        {% for key in modules %}
-            {% set menuNames = menuNames|merge([key.moduleClass]) %}
-        {% endfor %}
-        {% if 'Miss' in menuNames and is_granted('ROLE_MEDICINE') %}
-        <div class="container-fluid">
-            <form class="search-form" action="" method="get" name="itemSearch" style="margin-bottom:0;">
-                <div class="row-fluid">
-                    <input type="text" id="name" name="name" style="border: 5px solid #c49f47 !important; height: 50px !important; background: #ffffff !important;"  class="span12 m-wrap select2GenericMedicine" value=""  autocomplete="off" placeholder="Enter medicine or generic name ">
-                </div>
-            </form>
-        </div>
-        {% endif %}
-        {% endif %}
-        {% block body %}{% endblock %}
-    </div>
+    <div class="page-content">{% block body %}{% endblock %}</div>
     <div id="confirm-content" style="display:none">
         <div class="confirmModal_content">
             Are you sure to confirm this record?
@@ -177,7 +138,6 @@
         <div class="dialogModal_content"></div>
     </div>
 </div>
-
 {% javascripts
 'assets/plugins/jquery-1.10.2.min.js'
 'assets/plugins/jquery-migrate-1.2.1.min.js'
@@ -268,8 +228,6 @@
 {% endjavascripts %}
 {% block javascriptBlock %}
 {% endblock %}
-{#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
-
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
@@ -483,7 +441,6 @@
     }
 
 </style>
-<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111963509-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -491,6 +448,5 @@
     gtag('js', new Date());
     gtag('config', 'UA-111963509-1');
 </script>
-<!-- /WhatsHelp.io widget -->
 </body>
 </html>

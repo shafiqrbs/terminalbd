@@ -37,7 +37,9 @@ class EcommerceProductEditType extends AbstractType
 	{
 		$builder
 
-			->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name')))
+            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Product name'),
+        'constraints' =>array( new NotBlank(array('message'=>'Enter product name')))))
+
 			->add('category', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Select product category---',
@@ -217,9 +219,11 @@ class EcommerceProductEditType extends AbstractType
 					'Warranty' => 'Warranty',
 					'Guarantee' => 'Guarantee',
 				),
-			))
+			));
 
-			;
+        if($this->config->getShowBengal()) {
+            $builder->add('productBengalName', 'text', array('attr' => array('class' => 'm-wrap span12 ', 'placeholder' => 'Product Bengal name')));
+        }
 	}
 
 	/**

@@ -57,6 +57,6 @@ class MedicineConfigRepository extends EntityRepository
             ->setParameter(9, 0)
             ->setParameter(10, $config)
             ->getQuery();
-        $p = $q->execute();
+        $q->execute();
     }
 }
