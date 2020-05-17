@@ -157,7 +157,7 @@
                             </a>
                         </div>
                     </div>
-                {% else %}
+                {% elseif globalOption.templateCustomize.mobileFooter == 'footer' %}
                     <div class="container">
                         <div class="copyright-footer">
                             © {{ "now"|date('Y') }} <a target="_blank" href="http://www.terminalbd.com">Terminalbd</a> All Rights Reserved.
@@ -235,12 +235,18 @@
             'position': 'right bottom'
         });
         {% endif %}
+        if( /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+
+        }else if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
+            $(".bs-callout").css('margin-bootm','40px');
+        }
+
     })
 </script>
 
 {% if globalOption.templateCustomize.fbMessenger is not empty  %}
     <div class="fb-customerchat"
-         page_id="<{{ globalOption.templateCustomize.fbMessenger }}>">
+         page_id="{{ globalOption.templateCustomize.fbMessenger }}">
     </div>
 {% endif %}
 

@@ -20,7 +20,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSocialIcon')
             ->add('mobileFooter', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'choices' => array('' => '- Mobile Footer -','none' => 'None','contact' => 'Contact','cart' => 'Cart'),
+                'choices' => array('' => '- Mobile Footer -','none' => 'None','footer' => 'Simple Footer','contact' => 'Contact','cart' => 'Cart'),
             ))
             ->add('mobileLogin')
             ->add('contactForm')
