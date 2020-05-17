@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div id="search-box">
+                <div id="search-box" style="display: none">
                     <form  action="{{ path(globalOption.subDomain ~ '_webservice_product_search') }}"  method="get" >
                         <div class="input-group" style="margin-top: 6px">
                             <span class="input-group-btn"><span type="button" class="btn btn-transparent bar-search"><i class="fa fa-arrow-left"></i></span></span>
@@ -185,7 +185,7 @@
 {% if globalOption.templateCustomize.sidebarTooltip == 1 %}
     <div class="side-toolbar" style=""></div>
 {% endif %}
-{% render controller("FrontendBundle:EcommerceWidget:mobileMenu",{'globalOption': globalOption.id}) %}
+
 {% javascripts
 'assets/template/mobile/js/jquery-2.1.4.min.js'
 'assets/template/mobile/js/bootstrap.min.js'
@@ -240,10 +240,14 @@
         }else if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
             $(".bs-callout").css('margin-bottom','60px');
         }
+        $(document).on( "click", ".menuLink", function(e){
+           url = $(this).attr('data-action');
+            window.location = url;
 
+        });
     })
 </script>
-
+{% render controller("FrontendBundle:EcommerceWidget:mobileMenu",{'globalOption': globalOption.id}) %}
 {% if globalOption.templateCustomize.fbMessenger is not empty  %}
     <div class="fb-customerchat"
          page_id="{{ globalOption.templateCustomize.fbMessenger }}">
@@ -303,16 +307,10 @@
     <!-- End Facebook Pixel Code -->
 {% endif %}
 <style>
-
-    #search-box{
-        position: absolute;
-        z-index: 9999;
-        top: -1px;
-        width: 100%;
-        background:#DDDDDD;
-        height: 46px;
-        display: none;
+    .mm-menu.mm-current {
+        display: block!important;
     }
+
     .modal-dialog {
         top: 0%;
     }

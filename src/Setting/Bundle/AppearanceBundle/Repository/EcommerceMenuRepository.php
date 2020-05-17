@@ -80,6 +80,7 @@ class EcommerceMenuRepository extends EntityRepository
                 $menues[$parent->getId()]  = array(
                     'id' => $parent->getId(),
                     'name' => $parent->getName(),
+                    'slug' => $parent->getSlug(),
                     'children' => array()
                 );
             }
@@ -87,7 +88,8 @@ class EcommerceMenuRepository extends EntityRepository
         }
         $str = "";
         foreach ($menues as $item) {
-            $str .= "<li><a href='javascript:'><span>{$item['name']}</span></a>";
+
+            $str .= "<li><a href='javascript:'><span class='menuLink' data-action='/product/category/{$item['slug'] }' >{$item['name']}</span></a>";
             $str .= "<ul class='sidebar-submenu'>";
             foreach ($item['children'] as $child) {
                 $str .= "<li><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a></li>";

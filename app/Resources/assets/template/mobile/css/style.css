@@ -133,6 +133,15 @@ h1,h2,h3,h4,h5,h6{
     text-transform: uppercase;
 }
 
+#search-box{
+    position: absolute;
+    z-index: 9999;
+    top: -1px;
+    width: 100%;
+    background:#DDDDDD;
+    height: 46px;
+    display: none;
+}
 
 .gmap{
     height: 350px!important;

@@ -1,4 +1,4 @@
-<nav id="mm-menu">
+<nav id="mm-menu" style="display: none">
     <ul>
             {% for  menu in globalOption.ecommerceMenus  %}
             <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
