@@ -382,8 +382,8 @@ div.treeview, .treeview ul {
     border: none!important;
     border-radius:0;
     text-align: center;
-    background-color: #F9FAFA;
 }
+
 .bs-callout-info .btn-group-sm .btn{
     color:#464646;
 }
