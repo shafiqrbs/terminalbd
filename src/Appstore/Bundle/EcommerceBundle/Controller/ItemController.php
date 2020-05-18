@@ -490,8 +490,11 @@ class ItemController extends Controller
 		}
 
 		try {
+
 			$em = $this->getDoctrine()->getManager();
-			$vendorItem->deleteImageDirectory();
+			if($vendorItem->upload()){
+                $vendorItem->removeUpload();
+            }
 			$em->remove($vendorItem);
 			$em->flush();
 			$this->get('session')->getFlashBag()->add(
