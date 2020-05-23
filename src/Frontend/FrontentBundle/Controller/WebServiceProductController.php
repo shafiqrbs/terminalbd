@@ -2,22 +2,16 @@
 
 namespace Frontend\FrontentBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
-use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
-use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Core\UserBundle\Entity\User;
+
 
 
 class WebServiceProductController extends Controller
@@ -70,27 +64,49 @@ class WebServiceProductController extends Controller
             $data['category']= isset($post['category']) ? $post['category']:'';
             $data['brand']= isset($post['brand']) ? $post['brand']:'';
             $data['webName']= isset($post['webName']) ? $post['webName']:'';
-
+            /* @var $config EcommerceConfig */
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config,$data);
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if( $detect->isMobile() || $detect->isTablet() ) {
+
+            if( $detect->isMobile() ||  $detect->isTablet() ) {
                 $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/ProductTemplate";
+                }else{
+                    $themeProduct = "Template/Mobile/EcommerceWidget/ProductTemplate";
+                }
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+                }else{
+                    $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+                }
                 $theme = 'Template/Desktop/'.$themeName;
             }
+            $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+            $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+                array(
+                    'globalOption'      => $globalOption,
+                    'config'            => $config,
+                    'products'          => $pagination,
+                    'imagePath'         => $imagePath,
+                )
+            );
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
+                    'entities'          => $products,
+                    'imagePath'         => $imagePath,
                     'menu'              => $menu,
                     'pageName'          => 'Product',
                     'searchForm'        => $searchForm,
@@ -123,7 +139,7 @@ class WebServiceProductController extends Controller
 
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
 
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config->getId(),$data);
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
@@ -135,13 +151,30 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
 
-exit;
+            if( $detect->isMobile() ||  $detect->isTablet() ) {
+                $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                $themeProduct = 'Template/Mobile/'.$themeName.'/EcommerceWidget/ProductTemplate';
+                $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget';
+            }else{
+                $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                $themeProduct = 'Template/Desktop/'.$themeName.'/EcommerceWidget/ProductTemplate';
+                $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
+            }
+
+            $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+                array(
+                    'globalOption'      => $globalOption,
+                    'products'          => $pagination,
+                )
+            );
+
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
+                    'entities'          => $products,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
@@ -149,7 +182,6 @@ exit;
             );
         }
     }
-
 
     public function productSearchAction(Request $request , $subdomain)
     {
@@ -164,10 +196,10 @@ exit;
 
             $data = $_REQUEST;
             $config = $globalOption->getEcommerceConfig();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
 
             /* Device Detection code desktop or mobile */
-            $config = $globalOption->getEcommerceConfig();
+
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
@@ -177,7 +209,7 @@ exit;
                 $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
                 $theme = 'Template/Desktop/'.$themeName;
             }
-
+            $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
             $item = !empty($_REQUEST) ? $_REQUEST :array();
             $searchForm =$item;
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
@@ -185,6 +217,7 @@ exit;
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
                     'products'          => $pagination,
+                    'imagePath'          => $imagePath,
                     'menu'              => $menu,
                     'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
@@ -212,25 +245,46 @@ exit;
 
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config,$data);
+
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if( $detect->isMobile() || $detect->isTablet() ) {
+            if( $detect->isMobile() ||  $detect->isTablet() ) {
                 $pagination = $this->paginate($entities, $limit,"nextPrevDropDown");
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/ProductTemplate";
+                }else{
+                    $themeProduct = "Template/Mobile/EcommerceWidget/ProductTemplate";
+                }
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+                }else{
+                    $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+                }
                 $theme = 'Template/Desktop/'.$themeName;
             }
-
+            $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+            $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+                array(
+                    'globalOption'      => $globalOption,
+                    'config'            => $config,
+                    'products'          => $pagination,
+                    'imagePath'         => $imagePath,
+                )
+            );
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'          => $globalOption,
                     'cart'                  => $cart,
                     'products'              => $pagination,
+                    'entities'              => $products,
+                    'imagePath'             => $imagePath,
                     'menu'                  => $menu,
                     'pageName'              => 'Product',
                     'data'                  => $data['limit']= 20,
@@ -356,7 +410,6 @@ exit;
             $config = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $config->getPerPage();
             $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config->getId(),$data);
-            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -835,56 +888,24 @@ exit;
     {
 
         $cart = new Cart($request->getSession());
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
-
-        $data = $_REQUEST;
-        $color = isset($data['color']) ? $data['color'] :'';
-        $size =  isset($data['size']) ? $data['size'] :'';
-        $productImg = isset($data['productImg']) ? $data['productImg'] :'';
-
-        /* @var ItemSub $subitem */
-
-        if(empty($size)){
-            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'masterItem' => 1));
-        }else{
-            $subitem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id' => $size));
-        }
         $quantity = 1;
-        $color = !empty($color) ? $color : 0;
-        if ($color > 0) {
-            $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
-        } else {
-            $colorName = '';
-        }
-
-        /** @var GlobalOption $globalOption */
-        $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
-        $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
-        $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
+        $salesPrice = $product->getDiscountPrice() == null ?  $product->getSalesPrice() : $product->getDiscountPrice();
+        $size = !empty($product->getSize()) ? "-".$product->getSize()->getName() : '';
+        $sizeUnit = !empty($product->getSizeUnit()) ? $product->getSizeUnit()->getName() : '';
         $productUnit = (!empty($product->getProductUnit())) ? $product->getProductUnit()->getName() : '';
-
-        if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
-            $data = array(
-                'id' => $subitem->getId(),
-                'name' => $product->getWebName(),
-                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
-                'category' => !empty($product->getCategory()) ? $product->getCategory()->getName() : '',
-                'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
-                'sizeUnit' => $sizeUnit,
-                'productUnit' => $productUnit,
-                'color' => $colorName,
-                'colorId' => $color,
-                'price' => $salesPrice,
-                'quantity' => $quantity,
-                'maxQuantity' => $subitem->getQuantity(),
-                'productImg' => $productImg
-            );
-            $cart->insert($data);
-            $array = $this->returnCartSummaryAjaxData($cart);
-        }else{
-            $array =(json_encode(array('process'=>'invalid')));
-        }
+        $productName = $product->getName()." ".$size.$sizeUnit;
+        $insert = array(
+            'id' => $product->getId(),
+            'name' => $productName,
+            'brand' => empty($product->getBrand()) ? '' : $product->getBrand()->getName(),
+            'category' => empty($product->getCategory()) ? '' : $product->getCategory()->getName(),
+            'price' => $salesPrice,
+            'quantity' => $quantity,
+            'productUnit' => $productUnit,
+            'productImg' => ''
+        );
+        $cart->insert($insert);
+        $array = $this->returnCartSummaryAjaxData($cart);
         return new Response($array);
 
     }

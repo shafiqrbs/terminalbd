@@ -205,12 +205,25 @@ class ItemSubRepository extends EntityRepository
         $em->flush();
     }
 
+    public function getCulculationDiscountPrice(Item $purchase , Discount $discount)
+    {
+        $discountPrice = "";
+        if($discount->getType() == 'percentage' and $purchase->getSalesPrice() > $discount->getDiscountAmount() ){
+            $price = ( ($purchase->getSalesPrice() * (int)$discount->getDiscountAmount())/100 );
+            $discountPrice = $purchase->getSalesPrice() - $price;
+        }elseif($purchase->getSalesPrice() > $discount->getDiscountAmount()){
+            $discountPrice = ( $purchase->getSalesPrice() - (int)$discount->getDiscountAmount());
+        }
+        return $discountPrice;
+    }
+
     public function subItemDiscountPrice(Item $entity ,Discount $discount)
     {
         $em = $this->_em;
         /** @var ItemSub $item */
+
         foreach( $entity->getItemSubs() as $item){
-            $discountPrice = $this->getCulculationDiscountPrice($entity,$discount);
+            $discountPrice = $this->getCalculationSubItemDiscountPrice($item,$discount);
             $item->setDiscountPrice($discountPrice);
             $em->persist($item);
             $em->flush();
@@ -218,7 +231,7 @@ class ItemSubRepository extends EntityRepository
 
     }
 
-    public function getCulculationDiscountPrice(Item $purchase , Discount $discount)
+    public function getCalculationSubItemDiscountPrice(ItemSub $purchase , Discount $discount)
     {
         $discountPrice = "";
         if($discount->getType() == 'percentage' and $purchase->getSalesPrice() > $discount->getDiscountAmount() ){

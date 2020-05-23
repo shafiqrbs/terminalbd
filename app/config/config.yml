@@ -35,9 +35,9 @@ twig:
             #myGlobaService: "@SettingContentBundle.content_footer_service"  'footer-content'
             portal_domain: 'http://www.terminalbd.com'
             portal_name: 'terminalbd.com'
-            portal_design_development: 'TERMINAL BD.COM - 01828148148'
+            portal_design_development: 'TERMINALBD.COM'
             portal_power: 'Powered By: www.terminalbd.com'
-            portal_copyright: 'Copy Right TERMINAL BD.COM'
+            portal_copyright: 'Copy Right TERMINALBD.COM'
 
 # Assetic Configuration
 assetic:
@@ -117,4 +117,10 @@ fos_js_routing:
         smaxage: null   # integer value, e.g. 300
         expires: null   # anything that can be fed to "new \DateTime($expires)", e.g. "5 minutes"
         vary: []        # string or array, e.g. "Cookie" or [ Cookie, Accept ]
+
+doctrine:
+    orm:
+        dql:
+            string_functions:
+                group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
 

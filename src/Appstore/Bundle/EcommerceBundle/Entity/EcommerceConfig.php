@@ -151,11 +151,25 @@ class EcommerceConfig
      private $currency = "৳";
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cartProcess", type="text",  length=50, nullable = true)
+     */
+     private $cartProcess = "single";
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="owlProductColumn", type="smallint", nullable = true)
      */
      private $owlProductColumn = 4;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="gridProductColumn", type="smallint", nullable = true)
+     */
+     private $gridProductColumn = 4;
 
     /**
      * @var boolean
@@ -164,12 +178,33 @@ class EcommerceConfig
      */
     private $showSidebar = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customTheme", type="boolean")
+     */
+    private $customTheme = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="productDetails", type="boolean")
+     */
+    private $productDetails = false;
+
     /**
      * @var string
      *
      * @ORM\Column(name="showBengal", type="string", length=50, nullable = true )
      */
     private $showBengal;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="productTheme", type="string", length=50, nullable = true )
+     */
+    private $productTheme;
 
     /**
      * @var boolean
@@ -350,14 +385,15 @@ class EcommerceConfig
      */
     private $printBy = false;
 
+
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="printer", type="string", length=50,nullable = true)
+     * @ORM\Column(name="printer", type="array", nullable=true)
      */
     private $printer;
 
- /**
+    /**
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=50,nullable = true)
@@ -894,20 +930,13 @@ class EcommerceConfig
         $this->menuType = $menuType;
     }
 
-    /**
-     * @return string
-     */
-    public function getPrinter()
-    {
-        return $this->printer;
-    }
 
     /**
-     * @param string $printer
+     * @param string $vatRegNo
      */
-    public function setPrinter($printer)
+    public function setVatRegNo($vatRegNo)
     {
-        $this->printer = $printer;
+        $this->vatRegNo = $vatRegNo;
     }
 
     /**
@@ -918,13 +947,6 @@ class EcommerceConfig
         return $this->vatRegNo;
     }
 
-    /**
-     * @param string $vatRegNo
-     */
-    public function setVatRegNo($vatRegNo)
-    {
-        $this->vatRegNo = $vatRegNo;
-    }
 
     /**
      * @return smallint
@@ -1323,6 +1345,104 @@ class EcommerceConfig
     public function setShowBengal($showBengal)
     {
         $this->showBengal = $showBengal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCartProcess()
+    {
+        return $this->cartProcess;
+    }
+
+    /**
+     * @param string $cartProcess
+     */
+    public function setCartProcess($cartProcess)
+    {
+        $this->cartProcess = $cartProcess;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getProductTheme()
+    {
+        return $this->productTheme;
+    }
+
+    /**
+     * @param string $productTheme
+     */
+    public function setProductTheme($productTheme)
+    {
+        $this->productTheme = $productTheme;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGridProductColumn()
+    {
+        return $this->gridProductColumn;
+    }
+
+    /**
+     * @param int $gridProductColumn
+     */
+    public function setGridProductColumn($gridProductColumn)
+    {
+        $this->gridProductColumn = $gridProductColumn;
+    }
+
+    /**
+     * @param array $printer
+     */
+    public function setPrinter($printer)
+    {
+        $this->printer = $printer;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrinter()
+    {
+        return $this->printer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductDetails()
+    {
+        return $this->productDetails;
+    }
+
+    /**
+     * @param bool $productDetails
+     */
+    public function setProductDetails($productDetails)
+    {
+        $this->productDetails = $productDetails;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomTheme()
+    {
+        return $this->customTheme;
+    }
+
+    /**
+     * @param bool $customTheme
+     */
+    public function setCustomTheme($customTheme)
+    {
+        $this->customTheme = $customTheme;
     }
 
 

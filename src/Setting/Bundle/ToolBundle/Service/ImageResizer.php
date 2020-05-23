@@ -1,5 +1,5 @@
 <?php
-namespace Setting\Bundle\ToolBundle\Service;
+
 namespace Setting\Bundle\ToolBundle\Service;
 use Symfony\Component\Filesystem\Filesystem;
 

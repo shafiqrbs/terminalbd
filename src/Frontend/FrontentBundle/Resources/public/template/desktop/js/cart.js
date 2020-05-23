@@ -81,6 +81,21 @@ $(document).on( "click", ".hideCartItem", function(e){
     $("#showCartItem").slideUp("slow");
 });
 
+
+$('.productSingleCart').click( function(e) {
+
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+            cartInfo(response,1);
+        }
+    });
+    e.preventDefault();
+
+});
+
 $(document).on( "click", ".productToCart", function(e){
 
     var cartForm = $(this).closest("form");

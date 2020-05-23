@@ -934,7 +934,9 @@ class CategoryRepository extends MaterializedPathRepository
         $query->andWhere("e.status = 1");
         $query->andWhere("e.feature = 1");
         $query->orderBy('e.name', 'ASC');
-        $query->setMaxResults($limit);
+        if($limit > 0){
+            $query->setMaxResults($limit);
+        }
         return $query->getQuery()->getResult();
 
     }

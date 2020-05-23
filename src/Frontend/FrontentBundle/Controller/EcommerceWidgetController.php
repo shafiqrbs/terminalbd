@@ -599,18 +599,28 @@ class EcommerceWidgetController extends Controller
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
 
+        $entities = $products->getResult();
+
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
 
         if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $themeProduct = 'Template/Mobile/'.$themeName.'/EcommerceWidget/ProductFeature';
             $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget';
         }else{
+            $themeProduct = 'Template/Desktop/'.$themeName.'/EcommerceWidget/ProductFeature';
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
         }
 
+        $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'products'          => $entities,
+            )
+        );
         return $this->render('@Frontend/'.$theme.'/CategoryWidget.html.twig', array(
-            'products'                  => $products->getResult(),
+            'products'                  => $products,
             'globalOption'              => $globalOption,
             'widget'                    => $widget,
             'featureCategory'           => $featureCategory,

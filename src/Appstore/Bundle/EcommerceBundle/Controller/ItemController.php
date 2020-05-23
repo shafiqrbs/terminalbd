@@ -735,7 +735,9 @@ class ItemController extends Controller
                 if($discountPrice > 0){
                     $entity->setDiscountPrice($discountPrice);
                     $entity->setDiscount($discount);
-                    $em->getRepository('EcommerceBundle:ItemSub')->subItemDiscountPrice($entity,$entity->getDiscount());
+                    if($discount->isDiscountSubItem() == 1){
+                        $em->getRepository('EcommerceBundle:ItemSub')->subItemDiscountPrice($entity,$discount);
+                    }
                 }
             }else{
                 $entity->setDiscount(NULL);

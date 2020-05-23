@@ -1,0 +1,334 @@
+<div class="row">
+    <div class="bs-callout bs-callout-info bs-callout-custom ">
+        {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+            <div class="" style="width: 32%; float: left">
+                <form class="form-inline">
+                    {% set sortBy = app.request.get('sortBy') %}
+                    <select name="sortBy" id="sortBy" class="input-selector item-select"
+                            onchange='this.form.submit()'>
+                        <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
+                            --
+                        </option>
+                        <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
+                                value="product.name=?=ASC">Name (A - Z)
+                        </option>
+                        <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
+                                value="product.name=?=DESC">Name (Z - A)
+                        </option>
+                        <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
+                                value="brand.name=?=ASC">Brand (A - Z)
+                        </option>
+                        <option {% if sortBy == 'brand.name=?=DESC' %} selected="selected" {% endif %}
+                                value="brand.name=?=DESC">Brand (Z - A)
+                        </option>
+                        <option {% if sortBy == 'product.salesPrice=?=ASC' %} selected="selected" {% endif %}
+                                value="product.salesPrice=?=ASC">Price (Low &gt; High)
+                        </option>
+                        <option {% if sortBy == 'product.salesPrice=?=DESC' %} selected="selected" {% endif %}
+                                value="product.salesPrice=?=DESC">Price (High &gt; Low)
+                        </option>
+                    </select>
+                </form>
+            </div>
+        {% endif %}
+        <div class="" style="width: 35%;float: left;margin-left: 2%;margin-right: 2%;display: inline-block">
+            {% if globalOption.ecommerceConfig.paginationShow == "top" or globalOption.ecommerceConfig.paginationShow == "both"  %}
+                {{ knp_pagination_render(products) }}
+            {% endif %}
+        </div>
+        {% if globalOption.ecommerceConfig.titleBar == "top" or  globalOption.ecommerceConfig.titleBar == "both" %}
+            {% if app.request.cookies.has('productList') %}
+                {% set cookieVal = app.request.cookies.get('productList') %}
+            {% else %}
+                {% set cookieVal = 'faList' %}
+            {% endif %}
+            <div class="" style="width: 33%; float: right">
+                <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Small button group">
+                    <button type="button" class="btn btn-cookie {% if cookieVal == 'faList' %} btn-pagination {% else %} btn-pagination-active {% endif %}"  id="faList"
+                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                        <i class="fa fa-th-large"></i></button>
+
+                    <button type="button" class="btn btn-cookie {% if cookieVal == 'faThLarge' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faThLarge"
+                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}"> <i class="fa fa-list-alt"></i>
+                    </button>
+                    <button type="button" class="btn btn-cookie {% if cookieVal == 'faListAlt' %} btn-pagination {% else %} btn-pagination-active {% endif %}" id="faListAlt"
+                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}">
+                        <i class="fa fa-list"></i></button>
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="clearfix"></div>
+<style>
+    .single-cart{
+        margin-bottom: 30px;
+        margin-top: 15px;
+        display: inline-block;
+        width: 100%;
+    }
+</style>
+{% if products is not empty %}
+    <div class="row">
+         {% for product in products %}
+             {% if cookieVal == 'faThLarge' %}
+                 <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 product-item" data-match-height="item-product">
+                     <form id="add_buy_cart-{{ product.id }}" class="addCart">
+                 <div class="thumbnail">
+                     <div class="productPreview group list-group-image">
+                         <a class="product-preview " data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:" >
+                             {% if  product.path is not empty %}
+                                 <img class="img-responsive" alt="{{ product.name }}" src="{{ web_image(imagePath~product.path).resize(400,320) }}"/>
+                             {% else %}
+                                 <img class="img-responsive" alt="{{ product.name }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(400,320) }}"/>
+                             {% endif %}
+                         </a>
+                     </div>
+                     <div class="" >
+                         <div class="card-content" >
+                             {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
+                                 <span class="category-name">
+                                                <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':product.categorySlug }) }}">{{ product.categoryName }}</a>
+                                            </span>
+                             {% endif %}
+                             <h3 class="title">
+                                 {% if globalOption.ecommerceConfig.productDetails == 1 %}
+                                     <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >{{ product.name }}</a>
+                                 {% else %}
+                                     <a class="item-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.name }}</a>
+                                 {% endif %}
+                             </h3>
+                             {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
+                                 <span class="brand-name">
+                             <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':product.brandSlug }) }}">{{ product.brandName }}</a>
+                        </span>
+                             {% endif %}
+                         </div>
+                         <div id="inlineLoading-{{ product.id }}">
+                             {% if product.subProductIds is not empty  and product.subProductIds|length > 1  %}
+                                 <div>
+                                     <select class="input-selector item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >                                                     {% set subIds = product.subProductIds|split(',') %}
+                                         {% set subProductIds = product.subProducts|split(',') %}
+
+                                         {% for key,goodsItem in  subProductIds  %}
+                                             <option  value="{{ subIds[key] }}" >{{ goodsItem }}</option>
+                                         {% endfor %}
+                                     </select>
+                                 </div>
+                             {% endif %}
+                         </div>
+                         <div class="product-price" >
+                             <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.unitName }}{% endif %}</span>
+                         </div>
+
+                     </div>
+                    {% if globalOption.ecommerceConfig.cartProcess == "inline" %}
+                     <div class="input-group">
+                       <span class="input-group-btn">
+                            <button type="button" class="btn  btn-new-cart-item  btn-minus" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}">
+                     <i class="fa fa-minus"></i>
+                            </button>
+                       </span>
+                         <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-inline-cart" value="{{ product.minQuantity }}" data-id="{{ product.id }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}" data-type="plus" data-field="quant-{{ product.id }}" >
+                         <span class="input-group-btn">
+               <button type="button" data-id="{{ product.id }}" class="btn   btn-new-cart-item btn-plus" data-type="plus" data-field="quant-{{ product.id }}" >
+           <i class="fa fa-plus"></i></button>
+                                             <button type="button" id="productBuy-{{ product.id }}" data-id="{{ product.id }}" class="btn  btn-info product-inline-buy btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}">
+             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> ADD</span>
+         </button>
+
+           </span></div>
+                     {% else %}
+                         <div class="text-center single-cart">
+                             <a type="button" class="btn  btn-info productSingleCart btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product' : product.id }) }}">
+                                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> ADD TO CART</span>
+                             </a>
+                         </div>
+
+                     {% endif %}
+                     {% if product.discount is not empty %}
+                         <a class="product-discount btn-xs" href="javascript:">
+                             <span class="glyphicon glyphicon-tag"></span> {{ product.discountAmount }}{% if product.discountType !='flat' %}%{% endif %}
+                         </a>
+                     {% endif %}
+                 </div>
+             </form>
+                 </div>
+             {% elseif cookieVal == 'faListAlt' %}
+                 <div class="col-xs-12 col-md-12 list-group-item">
+                     <form id="add_buy_cart-{{ product.id }}" class="addCart">
+                     <div class="col-xs-4 col-md-4" data-match-height="item-product" style="display: flex;
+align-items: center;
+float: left!important;">
+                         <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:" >
+                             {% if  product.path is not empty %}
+                                 <img alt="{{ product.name }}" src="{{ web_image(imagePath~product.path).resize(120,120) }}"/>                     {% else %}
+                                 <img alt="{{ product.name }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(100,100) }}"/>
+                             {% endif %}
+                         </a>
+                     </div>
+                     <div class="col-xs-8 col-md-8" data-match-height="item-product">
+                         <div class="row">
+                             <div class="col-xs-12 col-md-12 list-group-product">
+                                 <div class="card-content" >
+                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
+                                         <span class="category-name">
+                                                <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':product.categorySlug }) }}">{{ product.categoryName }}</a>
+                                            </span>
+                                     {% endif %}
+                                     <h3 class="title">
+                                         {% if globalOption.ecommerceConfig.productDetails == 1 %}
+                                             <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >{{ product.name }}</a>
+                                         {% else %}
+                                             <a class="item-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.name }}</a>
+                                         {% endif %}
+                                     </h3>
+                                     {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
+                                         <span class="brand-name">
+                             <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':product.brandSlug }) }}">{{ product.brandName }}</a>
+                        </span>
+                                     {% endif %}
+                                 </div>
+                                 <div class="col-xs-8 col-md-8 text-left product-price">
+                                     <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.unitName }}{% endif %}</span>
+                                 </div>
+                                 <div class="clearfix"></div>
+                                 <div>
+                                     <div id="inlineLoading-{{ product.id }}">
+                                         {% if product.subProductIds is not empty  and product.subProductIds|length > 1  %}
+                                             <select class="input-selector item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >                                                     {% set subIds = product.subProductIds|split(',') %}
+                                             {% set subProductIds = product.subProducts|split(',') %}
+
+                                             {% for key,goodsItem in  subProductIds  %}
+                                                 <option  value="{{ subIds[key] }}" >{{ goodsItem }}</option>
+                                             {% endfor %}
+                                            </select>
+                                         {% endif %}
+                                     </div>
+                                     <div class="card-read-more">
+                                        {% if globalOption.ecommerceConfig.cartProcess == "inline" %}
+                                         <div class="input-group">
+       <span class="input-group-btn">
+           <button type="button" class="btn  btn-new-cart-item  btn-minus" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}">
+     <i class="fa fa-minus"></i>
+ </button>
+       </span>
+                                             <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-inline-cart" value="{{ product.minQuantity }}" data-id="{{ product.id }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}" data-type="plus" data-field="quant-{{ product.id }}" >
+                                             <span class="input-group-btn">
+           <button type="button" data-id="{{ product.id }}" class="btn   btn-new-cart-item btn-plus" data-type="plus" data-field="quant-{{ product.id }}" >
+       <i class="fa fa-plus"></i></button>
+                                                     <button type="button" id="productBuy-{{ product.id }}" data-id="{{ product.id }}" class="btn  btn-info product-inline-buy btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}">
+         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> ADD
+     </button>
+
+       </span></div>
+                                        {% else %}
+                                         <div class="text-center single-cart">
+                                             <a type="button" class="btn  btn-info productSingleCart btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product' : product.id }) }}">
+                                                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> ADD TO CART</span>
+                                             </a>
+                                         </div>
+                                        {% endif %}
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     {% if product.discount is not empty %}
+                         <a class="product-discount btn-xs" href="javascript:"><span
+                             class="glyphicon glyphicon-tag"></span> {{ product.discountAmount }}{% if product.discountType !='flat' %}%{% endif %}
+                         </a>
+                     {% endif %}
+                     </form>
+                 </div>
+             {% elseif cookieVal == 'faList' %}
+                 <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 product-item" data-match-height="item-product-faList">
+                     <form id="add_buy_cart-{{ product.id }}" class="addCart">
+                         <div class="thumbnail">
+                             <div class="productPreview group list-group-image">
+                                 <a class="product-preview" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:" >
+                                     {% if  product.path is not empty %}
+                                         <img alt="{{ product.name }}" src="{{ web_image(imagePath~product.path).resize(120,120) }}"/>
+                                     {% else %}
+                                         <img class="img-responsive" alt="{{ product.name }}" src="{{ image(globalOption.ecommerceConfig.webPath).resize(200,160) }}"/>
+                                     {% endif %}
+                                 </a>
+                             </div>
+                             <div class=""  data-match-height="item-product">
+
+                                 <div class="card-content" >
+                                     {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
+                                         <span class="category-name">
+                                                <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':product.categorySlug }) }}">{{ product.categoryName }}</a>
+                                            </span>
+                                     {% endif %}
+                                     <h3 class="title">
+                                         {% if globalOption.ecommerceConfig.productDetails == 1 %}
+                                             <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" >{{ product.name }}</a>
+                                         {% else %}
+                                             <a class="item-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:">{{ product.name }}</a>
+                                         {% endif %}
+                                     </h3>
+                                     {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
+                                         <span class="brand-name">
+                             <a class="brand-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand':product.brandSlug }) }}">{{ product.brandName }}</a>
+                        </span>
+                                     {% endif %}
+                                 </div>
+                                 <div id="inlineLoading-{{ product.id }}">
+                                     {% if product.subProductIds is not empty  and product.subProductIds|length > 1  %}
+                                         <select class="input-selector item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >                                                     {% set subIds = product.subProductIds|split(',') %}
+                                             {% set subProductIds = product.subProducts|split(',') %}
+
+                                             {% for key,goodsItem in  subProductIds  %}
+                                                 <option  value="{{ subIds[key] }}" >{{ goodsItem }}</option>
+                                             {% endfor %}
+                                         </select>
+                                     {% endif %}
+                                 </div>
+                                 <div class="product-price" >
+                                     <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}  <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %} {% if product.productUnit is not empty %} / {{ product.unitName }}{% endif %}</span>
+                                 </div>
+
+                             </div>
+                             {% if globalOption.ecommerceConfig.cartProcess == "inline" %}
+                             <div class="input-group">
+       <span class="input-group-btn">
+            <button type="button" class="btn  btn-new-cart-item  btn-minus" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}">
+     <i class="fa fa-minus"></i>
+ </button>
+       </span>
+                                 <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-inline-cart" value="{{ product.minQuantity }}" data-id="{{ product.id }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}" data-type="plus" data-field="quant-{{ product.id }}" >
+                                 <span class="input-group-btn">
+           <button type="button" data-id="{{ product.id }}" class="btn   btn-new-cart-item btn-plus" data-type="plus" data-field="quant-{{ product.id }}" >
+       <i class="fa fa-plus"></i></button>
+       </span>
+                             </div>
+                             <div>
+                                 <button type="button" id="productBuy-{{ product.id }}" data-id="{{ product.id }}" class="btn  btn-info product-inline-buy btn-action col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}">
+                                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> ADD
+                                 </button>
+                             </div>
+
+                             {% else %}
+                                 <div class="text-center single-cart">
+                                     <a type="button" class="btn  btn-info productSingleCart btn-action" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product' : product.id }) }}">
+                                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"> ADD TO CART</span>
+                                     </a>
+                                 </div>
+
+                             {% endif %}
+
+                             {% if product.discount is not empty %}
+                                 <a class="product-discount btn-xs" href="javascript:">
+                                     <span class="glyphicon glyphicon-tag"></span> {{ product.discountAmount }}{% if product.discountType !='flat' %}%{% endif %}
+                                 </a>
+                             {% endif %}
+                         </div>
+                     </form>
+                 </div>
+             {% endif %}
+         {% endfor %}
+    </div>
+{% endif %}

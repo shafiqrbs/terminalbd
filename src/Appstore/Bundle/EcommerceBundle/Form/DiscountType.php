@@ -75,6 +75,7 @@ class DiscountType extends AbstractType
                 },
             ))
             ->add('feature')
+            ->add('discountSubItem')
             ->add('file', 'file',array(
                 'required' => true,
                 'constraints' =>array(

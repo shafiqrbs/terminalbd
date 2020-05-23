@@ -101,9 +101,6 @@ webservice_product_inline_cart:
 webservice_product_single_cart:
     path:     /single-cart/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddSingleCart }
-    methods:  GET
-    options:
-            expose: true
 
 webservice_product_medicine_cart:
     path:     /single-medicine-cart/{product}

@@ -31,8 +31,16 @@ class EcommerceConfigType extends AbstractType
                 'empty_value' => '-Choose Product Name-',
                 'choices' => array(
                     'englishbangla' => 'English(Bangla)',
-                    'englishb-bangla' => 'English-Bangla',
+                    'english-bangla' => 'English-Bangla',
                     'bangla'       => 'Bangla'
+                ),
+            ))
+            ->add('cartProcess', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '-Choose Cart Process-',
+                'choices' => array(
+                    'single' => 'Single',
+                    'inline' => 'Inline',
                 ),
             ))
             ->add('perPage', 'choice', array(
@@ -51,6 +59,8 @@ class EcommerceConfigType extends AbstractType
             ->add('perColumn', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
+                    '6'       => 'Per Column-6',
+                    '5'       => 'Per Column-5',
                     '4'       => 'Per Column-3',
                     '3'       => 'Per Column-4',
                     '2'       => 'Per Column-6',
@@ -73,13 +83,14 @@ class EcommerceConfigType extends AbstractType
                     '6'       => 'Per Column-6',
                 ),
             ))
-            ->add('titleBar', 'choice', array(
+             ->add('gridProductColumn', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
-                    'none'       => 'None',
-                    'top'       => 'Top',
-                    'bottom'       => 'Bottom',
-                    'both'       => 'Both',
+                    '2'       => 'Per Column-2',
+                    '3'       => 'Per Column-3',
+                    '4'       => 'Per Column-4',
+                    '5'       => 'Per Column-5',
+                    '6'       => 'Per Column-6',
                 ),
             ))
             ->add('paginationShow', 'choice', array(
@@ -90,8 +101,25 @@ class EcommerceConfigType extends AbstractType
                     'both'      => 'Both',
                 ),
             ))
+            ->add('productTheme', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'default'       => 'Default',
+                    'theme-1'       => 'Theme-1',
+                    'theme-2'       => 'Theme-2',
+                    'theme-3'       => 'Theme-3',
+                    'theme-4'       => 'Theme-4',
+                    'theme-5'       => 'Theme-5',
+                    'theme-6'       => 'Theme-6',
+                    'theme-7'       => 'Theme-7',
+                    'theme-8'       => 'Theme-8',
+                    'theme-9'       => 'Theme-9',
+                    'theme-19'       => 'Theme-10',
+                ),
+            ))
             ->add('file')
             ->add('cartSearch')
+            ->add('productDetails')
             ->add('footerCategory')
             ->add('isAdditionalItem')
             ->add('searchCategory')
@@ -108,25 +136,22 @@ class EcommerceConfigType extends AbstractType
             ->add('sidebarTag')
             ->add('isPreorder')
             ->add('isColor')
+            ->add('customTheme')
             ->add('isSize')
-            ->add('cart')
             ->add('printBy')
             ->add('uploadFile')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
-            ->add('printer',
-                'choice', array(
-                    'attr'=>array('class'=>'m-wrap span12'),
-                    'choices' => array(
-                        'save'          => 'Save',
-                        'printer'       => 'Printer',
-                        'pos'           => 'Pos Printer',
-                    ),
-                    'required'    => true,
-                    'multiple'    => false,
-                    'expanded'  => false,
-                    'empty_data'  => null,
-                ))
+            ->add('printer', 'choice', array(
+                'attr'=>array('class'=>'check-list'),
+                'expanded'      =>true,
+                'multiple'      =>true,
+                'choices' => array(
+                    'save'          => 'Save',
+                    'printer'       => 'Printer',
+                    'pos'           => 'Pos Printer',
+                ),
+            ))
             ->add('vatEnable')
             ->add('vat','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('vatRegNo','text',array('attr'=>array('class'=>'m-wrap numeric span8')))

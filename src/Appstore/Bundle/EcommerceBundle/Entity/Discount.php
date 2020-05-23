@@ -106,6 +106,12 @@ class Discount
      */
     private $code;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="discountSubItem", type="boolean")
+     */
+    private $discountSubItem = false;
 
     /**
      * @var boolean
@@ -463,6 +469,22 @@ class Discount
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDiscountSubItem()
+    {
+        return $this->discountSubItem;
+    }
+
+    /**
+     * @param bool $discountSubItem
+     */
+    public function setDiscountSubItem($discountSubItem)
+    {
+        $this->discountSubItem = $discountSubItem;
     }
 
 

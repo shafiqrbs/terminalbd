@@ -30,7 +30,7 @@ class EcommerceConfigController extends Controller
             'action' => $this->generateUrl('ecommerce_config_update'),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
