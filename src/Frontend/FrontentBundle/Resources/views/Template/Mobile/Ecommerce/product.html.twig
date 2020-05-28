@@ -2,7 +2,12 @@
 {% block body %}
     <style>
         .grid-products {
-            grid-template-columns: repeat({{ globalOption.ecommerceConfig.perColumn }}, calc(100%/{{ globalOption.ecommerceConfig.perColumn }}));
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.mobileProductColumn }}, calc(100%/{{ globalOption.ecommerceConfig.mobileProductColumn }}));
+            display: grid;
+        }
+        .feature-grid-products {
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.mobileFeatureColumn }}, calc(100%/{{ globalOption.ecommerceConfig.mobileFeatureColumn }}));
+            display: grid;
         }
     </style>
     <div class="container-section">
@@ -13,13 +18,49 @@
         {% endif %}
         <div class="container" id="product-section">
             {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
-
             <div class="clearfix"></div>
-            {{ entities|raw }}
+            {% set arrs = ['top','both'] %}
+            <div class="row product-header">
+                <div class="{% if globalOption.ecommerceConfig.paginationShow in arrs %} col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 {% else %} col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 {% endif %}">
+                    <form class="form-inline ">
+                            {% set sortBy = app.request.get('sortBy') %}
+                            <select name="sortBy" id="sortBy" class="input-selector item-select"
+                                    onchange='this.form.submit()'>
+                                <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
+                                    --
+                                </option>
+                                <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
+                                        value="product.name=?=ASC">Name (A - Z)
+                                </option>
+                                <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
+                                        value="product.name=?=DESC">Name (Z - A)
+                                </option>
+                                <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
+                                        value="brand.name=?=ASC">Brand (A - Z)
+                                </option>
+                                <option {% if sortBy == 'brand.name=?=DESC' %} selected="selected" {% endif %}
+                                        value="brand.name=?=DESC">Brand (Z - A)
+                                </option>
+                                <option {% if sortBy == 'product.salesPrice=?=ASC' %} selected="selected" {% endif %}
+                                        value="product.salesPrice=?=ASC">Price (Low &gt; High)
+                                </option>
+                                <option {% if sortBy == 'product.salesPrice=?=DESC' %} selected="selected" {% endif %}
+                                        value="product.salesPrice=?=DESC">Price (High &gt; Low)
+                                </option>
+                            </select>
+                        </form>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6">
+                    {% if globalOption.ecommerceConfig.paginationShow in arrs %}
+                        {{ knp_pagination_render(products) }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <section style="margin-right: -15px; margin-left: -15px" class="grid-products">{{ entities|raw }}</section>
             <div class="clearfix"></div>
             {% if products is not empty %}
             <div class="row">
-
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
                     <div class="row">
                         {% if globalOption.ecommerceConfig.paginationShow == "bottom" or globalOption.ecommerceConfig.paginationShow == "both"  %}
@@ -41,7 +82,7 @@
 {% endblock %}
 {% block javascriptBlock %}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/desktop/js/owlcarousel.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/owlcarousel.js'
     '@FrontendBundle/Resources/public/template/desktop/js/ecommerce.js'
     '@FrontendBundle/Resources/public/template/desktop/js/cart.js'
     %}
@@ -50,14 +91,16 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('.input-number').click(function() {
+    var items = "{{ globalOption.ecommerceConfig.mobileFeatureColumn }}";
+    productSliderOwl(items);
+   {# $('.input-number').click(function() {
         $(this).attr('value','');
     });
     $('body').on('click', '.btn-cookie', function(el) {
         var val = $(this).attr('id');
         $.cookie('productList', val, {path: '/'});
         setTimeout(location.reload(), 1000);
-    });
+    });#}
 {% endblock %}
 
 

@@ -1380,6 +1380,55 @@ class Item
         $this->productBengalName = $productBengalName;
     }
 
+    public function getProductName()
+    {
+        $name = "";
+        $language = $this->getEcommerceConfig()->getShowBengal();
+        if($language === "englishbangla"){
+          if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()){
+                $name = $this->getWebName() .' ('.$this->getProductBengalName().') '.$this->getSize()->getName().' '.$this->getSizeUnit()->getName();
+          }elseif($this->getProductBengalName() and $this->getSize()) {
+                $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ') ' . $this->getSize()->getName();
+          }elseif($this->getProductBengalName()) {
+                $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ')';
+          }else{
+              $name = $this->getWebName();
+          }
+
+        }elseif($language === "english-bangla") {
+
+            if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
+                $name = $this->getWebName() . ' -' . $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+            }elseif($this->getProductBengalName() and $this->getSize()) {
+                $name = $this->getWebName() . ' - ' . $this->getProductBengalName() . ' ' . $this->getSize()->getName();
+            }elseif($this->getProductBengalName()) {
+                $name = $this->getWebName() . ' - ' . $this->getProductBengalName();
+            }else{
+                $name = $this->getWebName();
+            }
+        }elseif($language === "bangla") {
+
+            if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
+                $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+            }elseif($this->getProductBengalName() and $this->getSize()) {
+                $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName();
+            }elseif($this->getProductBengalName()) {
+                $name = $this->getProductBengalName();
+            }else{
+                $name = $this->getWebName();
+            }
+        }else{
+            if($this->getSize() and $this->getSizeUnit()) {
+                $name = $this->getWebName() .' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+            }elseif($this->getSize()) {
+                $name = $this->getWebName() . ' '. $this->getSize()->getName();
+            }else{
+                $name = $this->getWebName();
+            }
+        }
+        return $name;
+    }
+
 
 }
 

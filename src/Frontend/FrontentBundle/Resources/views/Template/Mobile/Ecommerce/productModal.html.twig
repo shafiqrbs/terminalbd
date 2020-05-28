@@ -1,5 +1,5 @@
 <div class="modal-header" style="position: relative">
-    <h5 class="modal-title">{{ product.webName }}</h5>
+    <h5 class="modal-title">{{ product.productName }}</h5>
     <button type="button" class="close-btn btn btn-sm modal-close-btn" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
 </div>
 <div class="modal-body">
@@ -45,45 +45,53 @@
     </div>
     <div class="">
         <div class="col-xs-12 col-md-12" >
-            {% if product.subProduct == 1 and  product.itemSubs is not empty  and product.itemSubs|length > 1  %}
-                <div class="row" >
-                    <select class="form-control item-select item-select-bg modalChangeSubItem" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal_subitem', {'product' : product.id }) }}" name="size" id="size" >
-                        {% for goodsItem in  product.itemSubs  %}
-                            <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %}-Default-{% endif %}{% if goodsItem.productUnit is not empty %} {{ goodsItem.productUnit.name }}{% endif %} - {{ globalOption.ecommerceConfig.currency }} {{ goodsItem.salesPrice }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            {% endif %}
             <div class="clearfix"></div>
-            <div class="row meta-caption">
-                <div class="col-xs-5 col-md-5"><strong>PRICE</strong>
-                    <span class="product-price-lg" id="salesPrice">
-                        <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}
-                    </span>
+            <form class="addCart" id="sizeLoad">
+                <div class="row meta-caption">
+                    <div class="col-xs-4 col-md-4"><strong>PRICE</strong></div>
+                    <div class="col-xs-8 col-md-8">
+                        <span class="product-price-lg" id="itemPrice">
+                        <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</span> {% if product.productUnit is not empty %}<span> / {{ product.productUnit.name }}</span>{% endif %}
+                    </div>
                 </div>
-                <div class="col-xs-7 col-md-7">
-                    <form class="addCart" id="sizeLoad">
+                <div class="row meta-caption">
+                    <div class="col-xs-12 col-md-12">
                         <div class="row">
                             <div class="card-read-more">
                                 <div class="input-group">
               <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-new-cart-item"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" class="btn  btn-number"  data-type="minus" data-field="quantity">
                     <span class="glyphicon glyphicon-minus"></span>
                   </button>
               </span>
-                                    <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-number" readonly="readonly" value=0 min="1" max="100">
+                                    <input type="text" id="quantity" name="quantity" class="form-control cart-input input-number" readonly="readonly" value="{{ product.minQuantity }}" min="{{ product.minQuantity }}" max="{{ product.maxQuantity }}">
                                     <span class="input-group-btn">
-                  <button type="button" class="btn btn-transparent  cyan-font btn-new-cart-item" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                  <button type="button" class="btn btn-number" data-type="plus" data-field="quantity">
                       <span class="glyphicon glyphicon-plus"></span>
                   </button>
                   <button type="button" class="btn btn-info cartSubmit" data-style="zoom-in" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_inline_cart',{'product' : product.id }) }}"><i class="fa fa-shopping-cart"></i> ADD</button>
-              </span>
+              </span><input type="hidden" name="size" id="size" value="">
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+                {% if product.subProduct == 1 and  product.itemSubs is not empty  and product.itemSubs|length > 1  %}
+                    <div class="row meta-key-value">
+                        <div class="col-xs-4 col-md-4">Pack Size<span class="meta-key-clone">:</span></div>
+                        <div class="col-xs-8 col-md-8 ">
+                            <div class="funkyradio">
+                                {% for goodsItem in  product.itemSubs  %}
+                                    <div class="funkyradio-default modalMobileChangeSubItem" data-id="{{ goodsItem.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal_subitem', {'product' : product.id,'subItem':goodsItem.id }) }}">
+                                        <input type="radio" name="packSize" id="{{ goodsItem.id }}" value="{{ goodsItem.id }}" />
+                                        <label for="{{ goodsItem.id }}">{{ goodsItem.size.name }}{% if goodsItem.productUnit is not empty %} {{ goodsItem.productUnit.name }}{% endif %} - {{ globalOption.ecommerceConfig.currency }} {{ goodsItem.salesPrice }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </form>
             <div class="row meta-key-value"><div class="col-xs-4 col-md-4">SKU<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 "><strong>{{ product.sku  }}</strong></div></div>
             {% if product.category is defined and product.category is not empty %}
                 <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Category<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 text-left">{{ product.category.name }}</div></div>

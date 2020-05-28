@@ -1,5 +1,10 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
+    <style>
+        .grid-products {
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.gridProductColumn }}, calc(100%/{{ globalOption.ecommerceConfig.gridProductColumn }}));
+        }
+    </style>
     <!-- Header Carousel -->
     <section class="home">
         <!-- Header Carousel -->
@@ -24,6 +29,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@FrontendBundle/Resources/public/template/desktop/css/product.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/product-template.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

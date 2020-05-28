@@ -135,6 +135,21 @@ div.treeview, .treeview ul {
     right: 0;
 }
 
+.feature-grid-products{
+display: grid;
+}
+.owl-carousel .owl-controls .owl-buttons .owl-next, .owl-carousel .owl-controls .owl-buttons .owl-prev{
+    top: 30%;
+    position: absolute;
+    background: #000000;
+}
+.owl-carousel .owl-controls .owl-buttons .owl-next{
+    right: 0;
+}
+.owl-carousel .owl-controls .owl-buttons .owl-prev{
+    left: 0;
+}
+
 .col-lg-cus-1, .col-lg-cus-10, .col-lg-cus-11, .col-lg-cus-12, .col-lg-cus-2, .col-lg-cus-3, .col-lg-cus-4, .col-lg-cus-5, .col-lg-cus-6, .col-lg-cus-7, .col-lg-cus-8, .col-lg-cus-9, .col-md-cus-1, .col-md-cus-10, .col-md-cus-11, .col-md-cus-12, .col-md-cus-2, .col-md-cus-3, .col-md-cus-4, .col-md-cus-5, .col-md-cus-6, .col-md-cus-7, .col-md-cus-8, .col-md-cus-9,.col-sm-cus-1,
 .col-sm-cus-10, .col-sm-cus-11, .col-sm-cus-12, .col-sm-cus-2, .col-sm-cus-3, .col-sm-cus-4, .col-sm-cus-5, .col-sm-cus-6, .col-sm-cus-7, .col-sm-cus-8, .col-sm-cus-9, .col-xs-cus-1, .col-xs-cus-10, .col-xs-cus-11, .col-xs-cus-12, .col-xs-cus-2, .col-xs-cus-3, .col-xs-cus-4, .col-xs-cus-5, .col-xs-cus-6, .col-xs-cus-7, .col-xs-cus-8, .col-xs-cus-9{
     position: relative;
@@ -364,7 +379,7 @@ div.treeview, .treeview ul {
     right: 0;
     opacity: 0.8;
     color: red!important;
-    background: #ccc;
+    background: #0000001a;
     border: 1px solid #ff6a00;
     border-radius: 0;
 }
@@ -422,6 +437,14 @@ div.treeview, .treeview ul {
     margin-top: 5px;
 }
 
+.img {
+    object-fit: cover;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    margin: auto;
+}
 
 .list-group-iem .list-group-product{
     min-height: 75px;
@@ -930,4 +953,160 @@ div.treeview, .treeview ul {
     margin-top: 15px;
 }
 
-/* End Cart product Search */
+
+/* Radio Check list */
+
+.funkyradio div {
+    clear: both;
+    overflow: hidden;
+}
+
+.funkyradio label {
+    width: 100%;
+    border-radius:0;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+    display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+    position: relative;
+    line-height: 30px;
+    text-indent: 50px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius:0;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+    color: #888;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+    color: #1e9c20;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #1e9c20;
+    background-color: #0000001a;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+    box-shadow: 0 0 0 3px #999;
+}
+
+.funkyradio-default input[type="radio"]:checked ~ label:before,
+.funkyradio-default input[type="checkbox"]:checked ~ label:before {
+    color: #333;
+    background-color: #0000001a;
+}
+
+.funkyradio-primary input[type="radio"]:checked ~ label:before,
+.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before,
+.funkyradio-success input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before,
+.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before,
+.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked ~ label:before,
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5bc0de;
+}
+
+.product-header{
+    margin-bottom: 15px;
+    border-bottom: 1px solid #0000001a;
+    padding-bottom: 15px;
+}
+
+ .card-content{
+     width: 100%;
+ }
+
+.single-cart{
+    margin-bottom: 30px;
+    margin-top: 15px;
+    display: inline-block;
+    width: 100%;
+}
+
+.page-selector {
+    float: left;
+    text-align: center;
+    height: 28px!important;
+    margin-top: 1px!important;
+    border: 1px solid #0000001a;
+
+}
+
+.product-item{
+    border: 1px solid #0000001a;
+    margin: 5px;
+}
+
+.row-thumb{
+    display: inline-flex;
+    margin-bottom: 15px;
+}
+
+.product-content-inner{
+    padding: 5px;
+}
+
+.product-price-thumb {
+    color: red;
+    font-weight: bold;
+    padding-top: 0;
+    font-size: 13px;
+    line-height: 27px;
+    text-align: center;
+}

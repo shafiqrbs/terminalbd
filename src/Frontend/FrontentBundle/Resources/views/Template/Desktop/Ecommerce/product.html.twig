@@ -4,6 +4,10 @@
         .grid-products {
             grid-template-columns: repeat({{ globalOption.ecommerceConfig.perColumn }}, calc(100%/{{ globalOption.ecommerceConfig.perColumn }}));
         }
+        .feature-grid-products {
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.gridProductColumn }}, calc(100%/{{ globalOption.ecommerceConfig.gridProductColumn }}));
+        }
+
     </style>
     <section class="siteBgColor">
         <div class="clearfix"></div>

@@ -3,15 +3,16 @@ function productSliderOwl(items = 4) {
     var owlCategory = $(".category-slider");
     owlCategory.owlCarousel({
         items: items ,
-        slideSpeed : 1000,
+        slideSpeed : 500,
         itemsCustom : false,
         itemsDesktop : [1199,4],
         itemsDesktopSmall : [980,3],
         itemsTablet: [768,2],
         itemsTabletSmall: false,
-        itemsMobile : [479,1],
+        itemsMobile : [479,2],
         itemsScaleUp : false,
         autoPlay:false,
+        lazyLoad : true,
         navigation : true,
         navigationText: [
             "<a id='prevCatItem-1' class='glyphicon glyphicon-chevron-left'></a>",
@@ -24,7 +25,7 @@ function productSliderOwl(items = 4) {
     var owlCategory3 = $(".category-slider-3");
     owlCategory3.owlCarousel({
         items: 3 ,
-        slideSpeed : 1000,
+        slideSpeed : 500,
         itemsCustom : false,
         itemsDesktop : [1199,4],
         itemsDesktopSmall : [980,3],
@@ -33,6 +34,29 @@ function productSliderOwl(items = 4) {
         itemsMobile : [479,1],
         itemsScaleUp : false,
         autoPlay:false,
+        lazyLoad : true,
+        navigation : true,
+        navigationText: [
+            "<a id='prevCatItem-1' class='glyphicon glyphicon-chevron-left'></a>",
+            "<a id='nextCatItem-1' class='glyphicon glyphicon-chevron-right'></a>"
+        ],
+        rewindNav : false,
+        pagination : false,
+    });
+
+    var owlCategory4 = $(".category-slider-4");
+    owlCategory4.owlCarousel({
+        items: 4 ,
+        slideSpeed : 500,
+        itemsCustom : false,
+        itemsDesktop : [1199,4],
+        itemsDesktopSmall : [980,3],
+        itemsTablet: [768,2],
+        itemsTabletSmall: false,
+        itemsMobile : [479,1],
+        itemsScaleUp : false,
+        autoPlay:false,
+        lazyLoad : true,
         navigation : true,
         navigationText: [
             "<a id='prevCatItem-1' class='glyphicon glyphicon-chevron-left'></a>",
@@ -43,14 +67,15 @@ function productSliderOwl(items = 4) {
     });
 
 
-    /* ======================================== End Category Product ========================================================*/
 
-    /* ======================================== Start Feature Product ========================================================*/
+    /* ================ End Category Product ===================*/
+
+    /* =============== Start Feature Product =====================*/
 
     var owlPromotion = $(".promotion-slider");
     owlPromotion.owlCarousel({
         items: items ,
-        slideSpeed : 5000,
+        slideSpeed : 500,
         itemsCustom : false,
         itemsDesktop : [1199,4],
         itemsDesktopSmall : [980,3],
@@ -60,6 +85,7 @@ function productSliderOwl(items = 4) {
         itemsScaleUp : false,
         autoPlay:false,
         navigation : true,
+        lazyLoad : true,
         navigationText: [
             "<a id='prevPromotion-1' class='glyphicon glyphicon-chevron-left'></a>",
             "<a id='nextPromotion-1' class='glyphicon glyphicon-chevron-right'></a>"
@@ -149,31 +175,12 @@ function productSliderOwl(items = 4) {
 
     /* ================================== Start Feature Category ==============================*/
 
-    var owlFeatureCategory = $(".feature-category-slider");
-    owlFeatureCategory.owlCarousel({
-        items: items ,
-        slideSpeed : 5000,
-        itemsCustom : false,
-        itemsDesktop : [1199,4],
-        itemsDesktopSmall : [980,3],
-        itemsTablet: [768,2],
-        itemsTabletSmall: false,
-        itemsMobile : [479,1],
-        itemsScaleUp : false,
-        autoPlay:false,
-        navigation : true,
-        navigationText: [
-            "<a id='featureCategorySlider' class='glyphicon glyphicon-chevron-left'></a>",
-            "<a id='featureCategorySlider' class='glyphicon glyphicon-chevron-right'></a>"
-        ],
-        rewindNav : false,
-        pagination : false,
-    });
-
 
     /* ======================================== End Feature Product ========================================================*/
 
 }
+
+/*
 
 var searchSubItemConfig = function (subdomain,product) {
 
@@ -252,7 +259,7 @@ $('.tagProductLeft .img-card-large img').css({
 });
 
 var discountHeight = $('#discountProductRight').outerHeight(true);
-/*
+
 $('.discountProductLeft').css({
     'height':(discountHeight-30)
 });

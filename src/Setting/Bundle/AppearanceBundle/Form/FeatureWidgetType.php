@@ -266,11 +266,10 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'slider'                => 'Slider',
-                    'imageProduct'                => 'Category image with product',
-                    'categorySubCategory'         => 'Category & Sub-category',
-                    'subCategoryProduct'         => 'Sub-category with product',
-                    'grid'                       => 'Product Grid',
+                    'slider'                    => 'Slider',
+                    'imageProduct'              => 'Category image with product',
+                    'categorySubCategory'       => 'Category & Sub-category',
+                    'grid'                      => 'Product Grid',
                 ),
             ))
 

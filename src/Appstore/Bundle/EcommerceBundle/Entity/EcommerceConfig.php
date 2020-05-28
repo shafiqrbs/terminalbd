@@ -158,6 +158,34 @@ class EcommerceConfig
      private $cartProcess = "single";
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="relatedProduct", type="text",  length=50, nullable = true)
+     */
+     private $relatedProduct;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relatedProductMode", type="text",  length=50, nullable = true)
+     */
+     private $relatedProductMode;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="mobileProductColumn", type="smallint", nullable = true)
+     */
+     private $mobileProductColumn;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="mobileFeatureColumn", type="smallint", nullable = true)
+     */
+     private $mobileFeatureColumn;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="owlProductColumn", type="smallint", nullable = true)
@@ -1443,6 +1471,70 @@ class EcommerceConfig
     public function setCustomTheme($customTheme)
     {
         $this->customTheme = $customTheme;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedProduct()
+    {
+        return $this->relatedProduct;
+    }
+
+    /**
+     * @param string $relatedProduct
+     */
+    public function setRelatedProduct($relatedProduct)
+    {
+        $this->relatedProduct = $relatedProduct;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedProductMode()
+    {
+        return $this->relatedProductMode;
+    }
+
+    /**
+     * @param string $relatedProductMode
+     */
+    public function setRelatedProductMode($relatedProductMode)
+    {
+        $this->relatedProductMode = $relatedProductMode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMobileProductColumn()
+    {
+        return $this->mobileProductColumn;
+    }
+
+    /**
+     * @param int $mobileProductColumn
+     */
+    public function setMobileProductColumn($mobileProductColumn)
+    {
+        $this->mobileProductColumn = $mobileProductColumn;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMobileFeatureColumn()
+    {
+        return $this->mobileFeatureColumn;
+    }
+
+    /**
+     * @param int $mobileFeatureColumn
+     */
+    public function setMobileFeatureColumn($mobileFeatureColumn)
+    {
+        $this->mobileFeatureColumn = $mobileFeatureColumn;
     }
 
 

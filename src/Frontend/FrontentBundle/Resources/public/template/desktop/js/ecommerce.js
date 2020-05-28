@@ -1,14 +1,28 @@
 $(document).on( "change", ".modalChangeSubItem", function( e ) {
 
-    var subItem = $(this).val();
     var url = $(this).attr("data-url");
-    $.get(url,{'subItem':subItem}).done(function(response) {
+    $.get(url).done(function(response) {
         obj = JSON.parse(response);
         $('#sub-product-load').html(obj['colors']);
         $('#modal-sales-price').val(obj['salesPrice']);
         $('#modal-item-unit').html(obj['unit']);
-        $('#salesPrice').html(obj['salesPrice']);
+        $('#itemPrice').html(obj['itemPrice']);
         $('#unit').html(obj['unit']);
+    });
+});
+
+$(document).on( "change", ".modalMobileChangeSubItem", function( e ) {
+
+    var url = $(this).attr("data-url");
+    var size = $(this).attr("data-id");
+    $.get(url).done(function(response) {
+        obj = JSON.parse(response);
+        $('#size').val(size);
+        $('#sub-product-load').html(obj['colors']);
+        $('#modal-item-unit').html(obj['unit']);
+        $('#itemPrice').html(obj['itemPrice']);
+        $('#unit').html(obj['unit']);
+        $('.cartSubmit').attr("disabled", false);
     });
 
 });
@@ -38,12 +52,8 @@ $(document).on( "change", ".changeSize", function( e ) {
         url: url ,
         type: 'GET',
         data:'subItem='+subItem,
-        beforeSend: function() {
-            $('#subItemDetails').show().addClass('loading').fadeIn(3000);
-        },
         success: function(response) {
             $('#subItemDetails').html(response);
-            $('#subItemDetails').removeClass('loading');
         },
 
     })

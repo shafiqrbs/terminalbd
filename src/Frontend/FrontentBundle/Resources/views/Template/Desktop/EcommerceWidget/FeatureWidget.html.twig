@@ -296,13 +296,13 @@
         <div class="clearfix"></div>
         {% if widget.category is defined and widget.category is not empty %}
             {% for category in widget.category %}
-                <div class=" feature-carousel main-category-{{ category.id }}" >
+                <div class="main-category-{{ category.id }}" >
                     <div class="page-title-bar">
                         <div class="col-md-12" >
                             <div class="page-title">{{ category.name }}</div>
                         </div>
                     </div>
-                    <div class="inner-category-{{ category.id }}">
+                    <div class="inner-category-{{ category.id }} {% if widget.categoryShow == "grid" %} feature-grid-products {% endif %} ">
                         {% render controller("FrontendBundle:EcommerceWidget:categoryTemplateWidget",{'globalOption':globalOption.id,'widget':widget.id , 'category':category.id}) %}
                     </div>
                 </div>
@@ -335,7 +335,6 @@
         {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
-
         {% if widget.tag is defined and widget.tag is not empty %}
             {% for tag in widget.tag %}
                     <div class=" feature-carousel main-tag-{{ tag.id }}"  style="">
@@ -345,13 +344,12 @@
                             </div>
                         </div>
                         <div>
-                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'promotion':tag.id}) %}
+                            {% render controller("FrontendBundle:EcommerceWidget:tagTemplateWidget",{'globalOption':globalOption.id, 'widget':widget.id ,'tag':tag.id}) %}
                         </div>
                     </div>
             {% endfor %}
         {% endif %}
         <div class="clearfix"></div>
-
     </div>
     {% endfor %}
 {% endif %}

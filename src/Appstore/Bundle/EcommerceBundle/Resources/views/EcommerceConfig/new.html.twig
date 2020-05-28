@@ -108,6 +108,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="mobileProductColumn">Mobile Product Column</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.mobileProductColumn) }}
+                                            {{ form_errors(form.mobileProductColumn) }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row-fluid">
                                 <div class="span3">
@@ -139,10 +148,10 @@
                                 </div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="notes">Upload File</label>
+                                        <label class="control-label" for="notes">Mobile Feature Column</label>
                                         <div class="controls inline-checkbox">
-                                            {{ form_widget(form.uploadFile) }}
-                                            {{ form_errors(form.uploadFile) }}
+                                            {{ form_widget(form.mobileFeatureColumn) }}
+                                            {{ form_errors(form.mobileFeatureColumn) }}
                                         </div>
                                     </div>
                                 </div>
@@ -233,8 +242,26 @@
                                     </div>
                                 </div>
                             </div>
-                                <div class="row-fluid">
+                            <div class="row-fluid">
                                  <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Related Product</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.relatedProduct) }}
+                                            {{ form_errors(form.relatedProduct) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Upload File</label>
+                                        <div class="controls inline-checkbox">
+                                            {{ form_widget(form.uploadFile) }}
+                                            {{ form_errors(form.uploadFile) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="notes">Product Size</label>
                                         <div class="controls inline-checkbox">
@@ -252,6 +279,18 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row-fluid">
+                                 <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Related Product Mode</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.relatedProductMode) }}
+                                            {{ form_errors(form.relatedProductMode) }}
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="clearfix"><br/></div>

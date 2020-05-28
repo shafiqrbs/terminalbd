@@ -468,97 +468,26 @@ class EcommerceWidgetController extends Controller
     }
 
 
-    /* =================================================Template Base Widget===================*/
+    /* =============================Template Base Widget===================*/
 
     public function featureTemplateWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
     {
 
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
-        /* Device Detection code desktop or mobile */
+        $features  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
 
-        $detect = new MobileDetect();
-        if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureWidget';
-        }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureWidget';
-        }
-
-
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'features'                  => $features,
-            'globalOption'              => $globalOption,
+        return $this->render('@Frontend/Template/Desktop/EcommerceWidget/FeatureWidget.html.twig', array(
+            'features'       => $features,
+            'globalOption'   => $globalOption,
         ));
     }
-
-     /* =================================================Template Base Widget===================*/
 
     public function featureTemplateMobileWidgetAction(GlobalOption $globalOption , $menu = '', $position ='' )
     {
 
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        return $this->render("@Frontend/Template/Mobile/{$themeName}/EcommerceWidget/FeatureWidget.html.twig", array(
-            'features'                  => $features,
-            'globalOption'              => $globalOption,
-        ));
-    }
-
-    public function ecommerceMobileWidgetAction(GlobalOption $globalOption , Menu $menu , $position ='' )
-    {
-
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'e-commerce','menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
-            'features'                  => $features,
-            'globalOption'            => $globalOption,
-        ));
-    }
-
-    public function sliderMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
-    {
-
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
-            'widget'                => $widget,
-            'globalOption'          => $globalOption
-
-        ));
-    }
-
-    public function FeatureBrandWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
-    {
-
-        $limit = $widget->getFeatureBrandLimit() > 0 ? $widget->getFeatureBrandLimit():8;
-        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption,$limit);
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/brandWidget.html.twig', array(
-            'entities'              => $entities,
-            'widget'                => $widget,
-            'globalOption'          => $globalOption
-        ));
-    }
-
-    public function FeatureCategoryWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
-    {
-
-        $limit = $widget->getCategoryLimit() > 0 ? $widget->getCategoryLimit():8;
-        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getSliderFeatureCategory($globalOption,$limit);
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/categoryWidget.html.twig', array(
-            'entities'              => $entities,
-            'widget'                => $widget,
-            'globalOption'          => $globalOption
-        ));
-    }
-
-    public function ecommerceMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
-    {
-
-        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;
-        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(), $widget->getModule() ,$limit);
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/page.html.twig', array(
-            'entities'              => $entities,
-            'widget'                => $widget,
-            'globalOption'          => $globalOption
+        $features  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
+        return $this->render("@Frontend/Template/Mobile/EcommerceWidget/FeatureWidget.html.twig", array(
+            'features'          => $features,
+            'globalOption'      => $globalOption,
         ));
     }
 
@@ -569,14 +498,12 @@ class EcommerceWidgetController extends Controller
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
         $categories = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategory($config,$limit);
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureCategoryWidget';
+            $theme = 'Template/Mobile/EcommerceWidget/FeatureCategoryWidget';
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureCategoryWidget';
+            $theme = 'Template/Desktop/EcommerceWidget/FeatureCategoryWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'widget'                  => $widget,
@@ -591,40 +518,49 @@ class EcommerceWidgetController extends Controller
     {
 
         $datalimit = $widget->getCategoryLimit();
-        $limit = $datalimit > 0 ? $datalimit : 12;
-        $config = $globalOption->getEcommerceConfig()->getId();
-        $featureCategory = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->findOneBy(array('globalOption' => $globalOption, 'category' => $category));
-
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureCategoryProduct($config, $category->getId(),$limit);
+        $limit = $datalimit > 0 ? $datalimit : '';
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureProduct($config, $category->getId(),'category',$limit);
 
-        $entities = $products->getResult();
 
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
 
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $themeProduct = 'Template/Mobile/'.$themeName.'/EcommerceWidget/ProductFeature';
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget';
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+            }else{
+                $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+            }
+            $theme = 'Template/Mobile/EcommerceWidget';
         }else{
-            $themeProduct = 'Template/Desktop/'.$themeName.'/EcommerceWidget/ProductFeature';
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+            }else{
+                $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+            }
+            $theme = 'Template/Desktop/EcommerceWidget';
         }
 
+        $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
         $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
             array(
                 'globalOption'      => $globalOption,
                 'products'          => $entities,
+                'imagePath'         => $imagePath,
+                'productMode'       => '',
             )
         );
-        return $this->render('@Frontend/'.$theme.'/CategoryWidget.html.twig', array(
-            'products'                  => $products,
+
+        return $this->render('@Frontend/'.$theme.'/ProductWidget.html.twig', array(
             'globalOption'              => $globalOption,
+            'products'                  => $products,
+            'entity'                    => $category,
             'widget'                    => $widget,
-            'featureCategory'           => $featureCategory,
-            'category'                  => $category,
+            'featureMode'               => 'category',
         ));
     }
 
@@ -635,19 +571,17 @@ class EcommerceWidgetController extends Controller
         $limit = $datalimit > 0 ? $datalimit : 12;
         $config = $globalOption->getEcommerceConfig()->getId();
         $brands = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->getFeatureBrand($config,$limit);
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureBrandWidget';
+            $theme = 'Template/Mobile/EcommerceWidget/FeatureBrandWidget';
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureBrandWidget';
+            $theme = 'Template/Desktop/EcommerceWidget/FeatureBrandWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'globalOption'            => $globalOption,
             'widget'                  => $widget,
             'brands'                  => $brands,
-            'globalOption'            => $globalOption,
 
         ));
     }
@@ -657,46 +591,106 @@ class EcommerceWidgetController extends Controller
 
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureBrandProduct($config, $brand->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureProduct($config, $brand->getId(),'brand',$limit);
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/BrandWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+            }else{
+                $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+            }
+            $theme = 'Template/Mobile/EcommerceWidget';
+
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/BrandWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+            }else{
+                $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+            }
+            $theme = 'Template/Desktop/EcommerceWidget';
         }
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'                  => $products->getResult(),
+
+        $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+
+        $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'products'          => $entities,
+                'imagePath'         => $imagePath,
+
+            )
+        );
+
+        return $this->render('@Frontend/'.$theme.'/ProductWidget.html.twig', array(
             'globalOption'              => $globalOption,
+            'products'                  => $products,
+            'entity'                    => $brand,
+            'featureMode'               => 'brand',
             'widget'                    => $widget,
-            'brand'                     => $brand,
         ));
     }
+
+
 
     public function promotionTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $promotion)
     {
 
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeaturePromotionProduct($config, $promotion->getId(),$limit);
+
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureProduct($config, $promotion->getId(),'promotion',$limit);
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
+
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/PromotionWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+            }else{
+                $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+            }
+            $theme = 'Template/Mobile/EcommerceWidget';
+
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/PromotionWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+            }else{
+                $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+            }
+            $theme = 'Template/Desktop/EcommerceWidget';
         }
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'                  => $products->getResult(),
+        $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+
+        $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'products'          => $entities,
+                'imagePath'         => $imagePath,
+                'productMode'       => '',
+            )
+        );
+
+        return $this->render('@Frontend/'.$theme.'/ProductWidget.html.twig', array(
             'globalOption'              => $globalOption,
+            'products'                  => $products,
+            'entity'                    => $promotion,
             'widget'                    => $widget,
-            'promotion'                     => $promotion,
+            'featureMode'               => 'promotion',
         ));
     }
 
@@ -705,45 +699,105 @@ class EcommerceWidgetController extends Controller
 
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureTagProduct($config, $tag->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureProduct($config, $tag->getId(),'tag',$limit);
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
+
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/TagWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+            }else{
+                $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+            }
+            $theme = 'Template/Mobile/EcommerceWidget';
+
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/TagWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+            }else{
+                $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+            }
+            $theme = 'Template/Desktop/EcommerceWidget';
         }
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'                  => $products->getResult(),
+        $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+
+        $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'products'          => $entities,
+                'imagePath'         => $imagePath,
+                'productMode'       => '',
+            )
+        );
+
+        return $this->render('@Frontend/'.$theme.'/ProductWidget.html.twig', array(
             'globalOption'              => $globalOption,
+            'products'                  => $products,
+            'entity'                    => $tag,
             'widget'                    => $widget,
-            'tag'                     => $tag,
+            'featureMode'               => 'tag',
         ));
+
     }
+
     public function discountTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Discount $discount)
     {
 
         $datalimit = $widget->getBrandLimit();
         $limit = $datalimit > 0 ? $datalimit : 12;
-        $config = $globalOption->getEcommerceConfig()->getId();
-        $products = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureDiscountProduct($config, $discount->getId(),$limit);
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureProduct($config, $discount->getId(),'discount',$limit);
+
         /* Device Detection code desktop or mobile */
+
         $detect = new MobileDetect();
+
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/DiscountWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+            }else{
+                $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+            }
+            $theme = 'Template/Mobile/EcommerceWidget';
+
         }else{
-            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/DiscountWidget';
+
+            if ($config->isCustomTheme() == 1){
+                $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+            }else{
+                $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+            }
+            $theme = 'Template/Desktop/EcommerceWidget';
         }
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'products'                  => $products->getResult(),
+        $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+
+        $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'products'          => $entities,
+                'imagePath'         => $imagePath,
+                'productMode'       => '',
+            )
+        );
+
+        return $this->render('@Frontend/'.$theme.'/ProductWidget.html.twig', array(
             'globalOption'              => $globalOption,
+            'products'                  => $products,
+            'entity'                    => $discount,
             'widget'                    => $widget,
-            'discount'                  => $discount,
+            'featureMode'               => 'discount',
         ));
     }
 

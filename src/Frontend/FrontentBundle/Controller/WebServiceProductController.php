@@ -97,6 +97,7 @@ class WebServiceProductController extends Controller
                     'config'            => $config,
                     'products'          => $pagination,
                     'imagePath'         => $imagePath,
+                    'productMode'       => "grid",
                 )
             );
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
@@ -275,6 +276,7 @@ class WebServiceProductController extends Controller
                     'config'            => $config,
                     'products'          => $pagination,
                     'imagePath'         => $imagePath,
+                    'productMode'       => "grid",
                 )
             );
 
@@ -498,33 +500,54 @@ class WebServiceProductController extends Controller
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product-details'));
 
-
+            /* @var $config EcommerceConfig */
+            $config = $globalOption->getEcommerceConfig();
 
             /*==========Related Product===============================*/
-
+            $relatedProducts = "";
             if(!empty ($entity->getCategory())){
 
-                $cat = $entity->getCategory()->getId();
+                $cat = $entity->getCategory()->getSlug();
                 $data = array('category' => $cat);
-                $config = $globalOption->getEcommerceConfig()->getId();
-                $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->findFrontendProductWithSearch($config,$data);
-                $products = $this->paginate($entities, $limit = 12 , $globalOption->getTemplateCustomize()->getPagination());
+                $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config,$data);
+                $relatedProducts = $entities->getArrayResult();
             }
-
 
             $next = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductNext($entity);
             $previous = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductPrev($entity);
 
             /* Device Detection code desktop or mobile */
 
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             $detect = new MobileDetect();
-            if($detect->isMobile() || $detect->isTablet() ) {
+            if( $detect->isMobile() ||  $detect->isTablet() ) {
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Mobile/{$themeName}/EcommerceWidget/FeatureProductTemplate";
+                }else{
+                    $themeProduct = "Template/Mobile/EcommerceWidget/FeatureProductTemplate";
+                }
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
+                if ($config->isCustomTheme() == 1){
+                    $themeProduct = "Template/Desktop/{$themeName}/EcommerceWidget/ProductTemplate";
+                }else{
+                    $themeProduct = "Template/Desktop/EcommerceWidget/ProductTemplate";
+                }
                 $theme = 'Template/Desktop/'.$themeName;
             }
+            if(!empty($relatedProducts)){
 
-            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+                $imagePath = "uploads/domain/{$globalOption->getId()}/ecommerce/product/";
+                $products =  $this->renderView('@Frontend/'.$themeProduct.'.html.twig',
+                    array(
+                        'globalOption'      => $globalOption,
+                        'config'            => $config,
+                        'products'          => $relatedProducts,
+                        'imagePath'         => $imagePath,
+                        'productMode'       => $config->getRelatedProductMode(),
+                    )
+                );
+            }
 
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
 
@@ -700,9 +723,9 @@ class WebServiceProductController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $subItem = $_REQUEST['subItem'];
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id'=>$subItem));
+        $subItem = $this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id'=>$subItem));
         $colors = "";
-        if(count($subItem->getColors()) > 0 ){
+        if(empty($subItem->getColors()) and count($subItem->getColors()) > 0 ){
             $colors .='<div class="col-xs-3 col-md-3 pull-right">
                             <div class="form-group">
                                 <div class="input-group input-group-sm">
@@ -720,7 +743,11 @@ class WebServiceProductController extends Controller
         }else{
             $price =$subItem->getSalesPrice();
         }
-        $array = (json_encode(array('colors' => $colors ,'salesPrice' => $price,'unit' => $unit )));
+
+        $itemPrice = ($subItem->getDiscountPrice()) ? " <strike>{$subItem->getSalesPrice()}</strike><strong>{$subItem->getDiscountPrice()}</strong>" : " <strong>{$subItem->getSalesPrice()}</strong>";
+        $subItemPrice = "<strong class='currency'>{$product->getEcommerceConfig()->getCurrency()}</strong> {$itemPrice}";
+
+        $array = (json_encode(array('colors' => $colors ,'salesPrice' => $price,'itemPrice' => $subItemPrice,'unit' => $unit )));
         return new Response($array);
 
 

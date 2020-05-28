@@ -61,9 +61,9 @@ class EcommerceConfigType extends AbstractType
                 'choices' => array(
                     '6'       => 'Per Column-6',
                     '5'       => 'Per Column-5',
-                    '4'       => 'Per Column-3',
-                    '3'       => 'Per Column-4',
-                    '2'       => 'Per Column-6',
+                    '4'       => 'Per Column-4',
+                    '3'       => 'Per Column-3',
+                    '2'       => 'Per Column-2',
                 ),
             ))
             ->add('menuType', 'choice', array(
@@ -93,12 +93,43 @@ class EcommerceConfigType extends AbstractType
                     '6'       => 'Per Column-6',
                 ),
             ))
+             ->add('mobileProductColumn', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    '1'       => 'Per Column-1',
+                    '2'       => 'Per Column-2',
+                    '3'       => 'Per Column-3',
+                ),
+            ))
+            ->add('mobileFeatureColumn', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    '1'       => 'Per Column-1',
+                    '2'       => 'Per Column-2',
+                    '3'       => 'Per Column-3',
+                ),
+            ))
             ->add('paginationShow', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     'top'       => 'Top',
                     'bottom'    => 'Bottom',
                     'both'      => 'Both',
+                ),
+            ))
+            ->add('relatedProduct', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '-Choose Related Product-',
+                'choices' => array(
+                    'category'    => 'Category',
+                    'brand'       => 'Brand',
+                ),
+            ))
+            ->add('relatedProductMode', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'grid'       => 'Grid',
+                    'slider'    => 'Slider',
                 ),
             ))
             ->add('productTheme', 'choice', array(

@@ -1,6 +1,42 @@
 #products .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
 }
 
+.feature-slider-left{
+    width: 25%;
+    float: left;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+.feature-cat-image{
+    border: 2px solid #000000;!important;
+}
+.feature-slider-right{
+    width: 75%;
+    float: right;
+    opacity: 1;
+    display: block;
+    position: relative!important;
+}
+
+.feature-slider-right .owl-controls {
+    margin-top:0;
+    text-align: center;
+    position: absolute;
+    top: -73px;
+    right: 10px;
+}
+.category-slider{
+    position: relative!important;
+}
+.category-slider .owl-controls {
+    text-align: center;
+    right: 10px;
+    position: absolute;
+    top:-5px
+}
+
+
 .popModal .close {
     right: 15px!important;
 }
@@ -110,7 +146,7 @@ strike{
     width: 154px;
 }
 .input-group .input-number{
-    width:75px;
+    width:56px;
     text-align: center;
     font-weight: bold;
 }
@@ -171,7 +207,7 @@ strike{
 }
 
 .panel-filter{
-    width: 95%;
+    width: 100%;
     border: 1px solid #dddddd!important;
 }
 
@@ -806,6 +842,115 @@ div.bhoechie-tab-container {
     margin-bottom: 15px;
     padding-bottom: 5px;
 }
+.mbm_social{
+    margin-top: 0!important;
+}
 /* =========  Product INFO ============ */
 
+/* Radio Check list */
 
+.funkyradio div {
+    clear: both;
+    overflow: hidden;
+}
+
+.funkyradio label {
+    width: 100%;
+    border-radius:0;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+    display: none;
+}
+
+.funkyradio input[type="radio"]:empty ~ label,
+.funkyradio input[type="checkbox"]:empty ~ label {
+    position: relative;
+    line-height: 30px;
+    text-indent: 50px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.funkyradio input[type="radio"]:empty ~ label:before,
+.funkyradio input[type="checkbox"]:empty ~ label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius:0;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+    color: #888;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:checked ~ label,
+.funkyradio input[type="checkbox"]:checked ~ label {
+    color: #1e9c20;
+}
+
+.funkyradio input[type="radio"]:checked ~ label:before,
+.funkyradio input[type="checkbox"]:checked ~ label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #1e9c20;
+    background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus ~ label:before,
+.funkyradio input[type="checkbox"]:focus ~ label:before {
+    box-shadow: 0 0 0 3px #999;
+}
+
+.funkyradio-default input[type="radio"]:checked ~ label:before,
+.funkyradio-default input[type="checkbox"]:checked ~ label:before {
+    color: #333;
+    background-color: #ccc;
+}
+
+.funkyradio-primary input[type="radio"]:checked ~ label:before,
+.funkyradio-primary input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked ~ label:before,
+.funkyradio-success input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked ~ label:before,
+.funkyradio-danger input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked ~ label:before,
+.funkyradio-warning input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked ~ label:before,
+.funkyradio-info input[type="checkbox"]:checked ~ label:before {
+    color: #fff;
+    background-color: #5bc0de;
+}
