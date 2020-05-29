@@ -1,7 +1,5 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-    <!--/welcome-->
-
     <div class="container-section">
         <div class="container" id="product-section">
             {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}

@@ -60,7 +60,6 @@ class WebServiceController extends Controller
                 }
             }
         }
-        var_dump($apps);
         if ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $this->get('security.authorization_checker')->isGranted('ROLE_MEMBER') && $enable == 1 && in_array('website',$apps)) {
             echo "Valid";
             return $this->redirect($this->generateUrl('member_index'));
@@ -73,7 +72,6 @@ class WebServiceController extends Controller
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE')) {
             return $this->redirect($this->generateUrl('ecommerce_dashboard'));
         }
-        exit;
 
     }
 

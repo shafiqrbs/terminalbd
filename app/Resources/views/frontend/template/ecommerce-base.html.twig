@@ -70,6 +70,15 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .grid-products {
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.perColumn }}, calc(100%/{{ globalOption.ecommerceConfig.perColumn }}));
+        }
+        .feature-grid-products {
+            grid-template-columns: repeat({{ globalOption.ecommerceConfig.gridProductColumn }}, calc(100%/{{ globalOption.ecommerceConfig.gridProductColumn }}));
+        }
+
+    </style>
     {% block cssBlock %}{% endblock %}
 </head>
 <body data-spy="scroll" >

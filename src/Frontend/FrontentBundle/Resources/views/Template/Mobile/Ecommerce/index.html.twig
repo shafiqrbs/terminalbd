@@ -1,11 +1,6 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
 <div class="container-section">
-    <style>
-        .feature-grid-products{
-            grid-template-columns: repeat({{ globalOption.ecommerceConfig.mobileFeatureColumn }}, calc(100%/{{ globalOption.ecommerceConfig.mobileFeatureColumn }}));
-        }
-    </style>
     <div class="container" id="product-section">
         {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
         <div class="row" id="showCartItem"></div>

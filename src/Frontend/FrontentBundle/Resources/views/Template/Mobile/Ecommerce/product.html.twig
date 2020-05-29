@@ -1,15 +1,5 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-    <style>
-        .grid-products {
-            grid-template-columns: repeat({{ globalOption.ecommerceConfig.mobileProductColumn }}, calc(100%/{{ globalOption.ecommerceConfig.mobileProductColumn }}));
-            display: grid;
-        }
-        .feature-grid-products {
-            grid-template-columns: repeat({{ globalOption.ecommerceConfig.mobileFeatureColumn }}, calc(100%/{{ globalOption.ecommerceConfig.mobileFeatureColumn }}));
-            display: grid;
-        }
-    </style>
     <div class="container-section">
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
             <section>
@@ -52,19 +42,19 @@
                 </div>
                 <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6">
                     {% if globalOption.ecommerceConfig.paginationShow in arrs %}
-                        {{ knp_pagination_render(products) }}
+                        {{ knp_pagination_render(pagination) }}
                     {% endif %}
                 </div>
             </div>
             <div class="clearfix"></div>
             <section style="margin-right: -15px; margin-left: -15px" class="grid-products">{{ entities|raw }}</section>
             <div class="clearfix"></div>
-            {% if products is not empty %}
+            {% if pagination is not empty %}
             <div class="row">
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
                     <div class="row">
                         {% if globalOption.ecommerceConfig.paginationShow == "bottom" or globalOption.ecommerceConfig.paginationShow == "both"  %}
-                        <div class="col-xs-8 col-md-8 col-xs-offset-2"> {{ knp_pagination_render(products) }}</div>
+                        <div class="col-xs-8 col-md-8 col-xs-offset-2"> {{ knp_pagination_render(pagination) }}</div>
                         {% endif %}
                     </div>
                 </div>

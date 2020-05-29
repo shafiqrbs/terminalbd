@@ -2,12 +2,13 @@
 {% block body %}
     {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
     <style>
-        .grid-products {
+        .related-grid-products {
             {% if globalOption.templateCustomize.showSidebar == 1 %}
                 grid-template-columns: repeat(4, calc(100%/4));
             {% else %}
                 grid-template-columns: repeat(5, calc(100%/5));
             {% endif %}
+            display: grid;
         }
     </style>
     <section class="siteBgColor">
@@ -350,7 +351,7 @@
                                 {% if globalOption.ecommerceConfig.relatedProductMode == 'slider' %}
                                     <div id="tag-category-carousel"> {{ products|raw }}</div>
                                 {% else %}
-                                    <div  class="grid-products">{{ products|raw }}</div>
+                                    <div  class="related-grid-products">{{ products|raw }}</div>
                                 {% endif %}
                             </div>
                         {% endif %}
