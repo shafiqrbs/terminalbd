@@ -123,5 +123,4 @@ doctrine:
         dql:
             string_functions:
                 group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
-                REGEX:   Setting\Bundle\ToolBundle\DQL\RegexFuncation
 
