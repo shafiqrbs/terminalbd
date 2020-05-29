@@ -118,9 +118,5 @@ fos_js_routing:
         expires: null   # anything that can be fed to "new \DateTime($expires)", e.g. "5 minutes"
         vary: []        # string or array, e.g. "Cookie" or [ Cookie, Accept ]
 
-doctrine:
-    orm:
-        dql:
-            string_functions:
-                group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
+
 
