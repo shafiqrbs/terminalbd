@@ -278,7 +278,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('c.name as categoryName','c.slug as categorySlug','c.id as category');
         $qb->addSelect('b.name as brandName','b.slug as brandSlug','b.id as brand');
         $qb->addSelect('d.name as discountName','d.id as discount','d.discountAmount as discountAmount','d.type as discountType');
-        $qb->addSelect('GROUP_CONCAT(subProduct.id) as subProductIds');
+       // $qb->addSelect('GROUP_CONCAT(subProduct.id) as subProductIds');
         $qb->addSelect("CASE WHEN (product.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subSize.name,' ',subUnit.name ,' - {$config->getCurrency()} ', subProduct.salesPrice))  ELSE  '' END  as subProducts");
 
         $qb->where("product.status = 1");
