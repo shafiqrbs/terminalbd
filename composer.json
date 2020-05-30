@@ -49,8 +49,7 @@
         "beberlei/DoctrineExtensions": "^1.2",
         "dompdf/dompdf": "^0.8.2",
         "symfony/security-acl": "^3.0",
-        "whiteoctober/tcpdf-bundle": "^1.1",
-        "tfox/mpdf-port-bundle": "^2.0"
+        "ajaxray/php-watermark": "^0.1.1"
     },
     "scripts": {
         "symfony-scripts": [
