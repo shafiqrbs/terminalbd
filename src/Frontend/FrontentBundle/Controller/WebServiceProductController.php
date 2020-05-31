@@ -516,6 +516,7 @@ class WebServiceProductController extends Controller
 
     public function productDetailsAction(Request $request , $subdomain, $item)
     {
+
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
@@ -536,7 +537,7 @@ class WebServiceProductController extends Controller
                 $cat = $entity->getCategory()->getSlug();
                 $data = array('category' => $cat);
                 $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->filterFrontendProductWithSearch($config,$data);
-                $relatedProducts = $entities->getArrayResult();
+                $relatedProducts = $entities->getResult();
             }
 
             $next = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->frontendProductNext($entity);
@@ -574,6 +575,7 @@ class WebServiceProductController extends Controller
                     )
                 );
             }
+
 
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
 

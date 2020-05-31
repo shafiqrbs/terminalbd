@@ -160,7 +160,7 @@ class ItemRepository extends EntityRepository
 
             $explode = explode(' ',strtolower($name));
             $implode = implode('-',$explode);
-            $qb->andWhere('product.slug LIKE :searchTerm OR c.slug LIKE :searchTerm OR b.slug LIKE :searchTerm  OR p.slug LIKE :searchTerm OR t.slug LIKE :searchTerm OR g.name LIKE :searchTerm');
+            $qb->andWhere('product.slug LIKE :searchTerm OR product.slug LIKE :searchTerm OR c.slug LIKE :searchTerm OR b.slug LIKE :searchTerm  OR p.slug LIKE :searchTerm OR t.slug LIKE :searchTerm OR g.name LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.strtolower($implode).'%');
         }
 
@@ -170,7 +170,6 @@ class ItemRepository extends EntityRepository
         }
 
         if (!empty($categories)) {
-            // $qb->expr()->orX()->add('REGEX(e.field, :pattern) = true');
             $qb->andWhere("c.id IN(:categories)");
             $qb->setParameter('categories',array_values($categories));
         }
@@ -237,51 +236,15 @@ class ItemRepository extends EntityRepository
         }
 
         $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin('product.productUnit','pu');
-        $qb->leftJoin('product.size','size');
-        $qb->leftJoin('product.sizeUnit','sizeUnit');
         $qb->leftJoin('product.category','c');
         $qb->leftJoin('product.brand','b');
         $qb->leftJoin('product.discount','d');
         $qb->leftJoin('product.promotion','p');
         $qb->leftJoin('product.tag','t');
-        $qb->leftJoin('product.itemSubs','subProduct');
-        $qb->leftJoin('subProduct.size','subSize');
-        $qb->leftJoin('subProduct.productUnit','subUnit');
         $qb->leftJoin('product.medicine','m');
         $qb->leftJoin('m.medicineGeneric','g');
-
-        $qb->select('product.id as id','product.slug as slug','product.salesPrice as salesPrice','product.discountPrice as discountPrice','product.masterQuantity as quantity','product.minQuantity as minQuantity','product.maxQuantity as maxQuantity');
-
-        $qb->addSelect("CASE WHEN (product.path IS NOT NULL) THEN product.path  WHEN (product.path IS  NULL AND m.path IS NOT NULL) THEN m.path ELSE '' END as path");
-
-        if($config->getShowBengal() == "englishbangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' (', product.productBengalName ,') ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-
-        }elseif($config->getShowBengal() == "english-bangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' - ', product.productBengalName ,' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }elseif($config->getShowBengal() == "bangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL AND product.productBengalName IS NOT NULL AND product.size IS NOT NULL ) THEN CONCAT(product.productBengalName, ' ', size.name,' ',sizeUnit.name) WHEN (product.productBengalName IS NOT NULL AND product.size IS NOT NULL) THEN CONCAT(product.productBengalName, ' ', size.name)  WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }else{
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }
-
-        $qb->addSelect('pu.name as unitName','pu.id as productUnit');
-        $qb->addSelect('c.name as categoryName','c.slug as categorySlug','c.id as category');
-        $qb->addSelect('b.name as brandName','b.slug as brandSlug','b.id as brand');
-        $qb->addSelect('d.name as discountName','d.id as discount','d.discountAmount as discountAmount','d.type as discountType');
-       // $qb->addSelect('GROUP_CONCAT(subProduct.id) as subProductIds');
-        $qb->addSelect("CASE WHEN (product.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subSize.name,' ',subUnit.name ,' - {$config->getCurrency()} ', subProduct.salesPrice))  ELSE  '' END  as subProducts");
-
-        $qb->where("product.status = 1");
+        $qb->where("product.ecommerceConfig = :config");
+        $qb->andWhere("product.status = 1");
         $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config->getId());
@@ -292,61 +255,25 @@ class ItemRepository extends EntityRepository
         }else{
             $qb->orderBy($sort ,$order);
         }
-        if($limit > 0 ) {
-             $qb->setMaxResults($limit);
-        }
         $qb->groupBy('product.id');
         $res = $qb->getQuery();
         return  $res;
     }
 
+
     public function getFeatureProduct(EcommerceConfig $config, $pram , $feature = 'category', $limit = 0)
     {
 
         $qb = $this->createQueryBuilder('product');
-        $qb->leftJoin('product.productUnit','pu');
-        $qb->leftJoin('product.size','size');
-        $qb->leftJoin('product.sizeUnit','sizeUnit');
         $qb->leftJoin('product.category','c');
         $qb->leftJoin('product.brand','b');
         $qb->leftJoin('product.discount','d');
-        $qb->leftJoin('product.medicine','m');
         $qb->leftJoin('product.promotion','p');
         $qb->leftJoin('product.tag','t');
-        $qb->leftJoin('product.itemSubs','subProduct');
-        $qb->leftJoin('subProduct.size','subSize');
-        $qb->leftJoin('subProduct.productUnit','subUnit');
-
-        $qb->select('product.id as id','product.slug as slug','product.salesPrice as salesPrice','product.discountPrice as discountPrice','product.masterQuantity as quantity','product.minQuantity as minQuantity','product.maxQuantity as maxQuantity');
-
-        $qb->addSelect("CASE WHEN (product.path IS NOT NULL) THEN product.path  WHEN (product.path IS  NULL AND m.path IS NOT NULL) THEN m.path ELSE '' END as path");
-
-        if($config->getShowBengal() == "englishbangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' (', product.productBengalName ,') ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-
-        }elseif($config->getShowBengal() == "english-bangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' - ', product.productBengalName ,' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }elseif($config->getShowBengal() == "bangla"){
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL AND product.productBengalName IS NOT NULL AND product.size IS NOT NULL ) THEN CONCAT(product.productBengalName, ' ', size.name,' ',sizeUnit.name) WHEN (product.productBengalName IS NOT NULL AND product.size IS NOT NULL) THEN CONCAT(product.productBengalName, ' ', size.name)  WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }else{
-
-            $qb->addSelect("CASE WHEN (product.size IS NOT NULL AND product.sizeUnit IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name,' ',sizeUnit.name)  WHEN (product.size IS NOT NULL) THEN CONCAT(product.webName, ' ', size.name) ELSE product.webName END as name");
-
-        }
-        $qb->addSelect('pu.name as unitName','pu.id as productUnit');
-        $qb->addSelect('c.name as categoryName','c.slug as categorySlug','c.id as category');
-        $qb->addSelect('b.name as brandName','b.slug as brandSlug','b.id as brand');
-        $qb->addSelect('d.name as discountName','d.id as discount','d.discountAmount as discountAmount','d.type as discountType');
-        $qb->addSelect('GROUP_CONCAT(subProduct.id) as subProductIds');
-        $qb->addSelect("CASE WHEN (product.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subSize.name,' ',subUnit.name ,' - {$config->getCurrency()} ', subProduct.salesPrice))  ELSE  '' END  as subProducts");
-
-        $qb->where("product.status = 1");
+        $qb->leftJoin('product.medicine','m');
+        $qb->leftJoin('m.medicineGeneric','g');
+        $qb->where("product.ecommerceConfig = :config");
+        $qb->andWhere("product.status = 1");
         $qb->andWhere("product.salesPrice > 0");
         $qb->andWhere("product.ecommerceConfig = :config")->setParameter('config', $config->getId());
         if (!empty($pram) and $feature == "category") {
@@ -372,10 +299,9 @@ class ItemRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
         $qb->groupBy('product.id');
-        $res = $qb->getQuery()->getArrayResult();
+        $res = $qb->getQuery()->getResult();
         return  $res;
     }
-
 
 
     public function insertCopyPurchaseItem(Item $entity, Item $copyEntity)
@@ -474,6 +400,7 @@ class ItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('product');
         $qb->where("product.isWeb = 1");
+        $qb->andWhere("product.salesPrice > 0");
         $qb->expr()->isNotNull('product.promotion');
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config->getId());
@@ -492,6 +419,7 @@ class ItemRepository extends EntityRepository
         $db = $this->getNextPrevious($entity);
         return $db->andWhere($db->expr()->gt('e.id',$entity->getId()))->getQuery()->getOneOrNullResult();
     }
+
     public function frontendProductPrev($entity){
         $db = $this->getNextPrevious($entity);
         return $db->andWhere($db->expr()->lt('e.id',$entity->getId()))->getQuery()->getOneOrNullResult();

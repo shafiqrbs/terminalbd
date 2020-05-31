@@ -33,7 +33,7 @@ class PromotionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb ->where("e.status = 1");
         $qb->andWhere($qb->expr()->like('e.type', ':type'));
-        $qb->setParameter('type','%Promotion%');
+        $qb->setParameter('type','%Tag%');
         $qb->andWhere("e.ecommerceConfig ={$config}");
         $qb->andWhere("e.feature =1");
         $qb->orderBy('e.id','DESC');
@@ -48,7 +48,7 @@ class PromotionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb ->where("e.status = 1");
         $qb->andWhere($qb->expr()->like('e.type', ':type'));
-        $qb->setParameter('type','%Tag%');
+        $qb->setParameter('type','%Promotion%');
         $qb->andWhere("e.ecommerceConfig ={$config}");
         $qb->andWhere("e.feature =1");
         $qb->orderBy('e.id','DESC');

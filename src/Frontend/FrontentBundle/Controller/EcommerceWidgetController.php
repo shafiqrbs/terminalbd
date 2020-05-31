@@ -369,7 +369,7 @@ class EcommerceWidgetController extends Controller
     public function featureProductShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
-        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getSliderFeatureProduct($globalOption->getInventoryConfig());
+        $entities  = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getSliderFeatureProduct($globalOption->getEcommerceConfig());
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';

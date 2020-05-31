@@ -119,4 +119,9 @@ fos_js_routing:
         vary: []        # string or array, e.g. "Cookie" or [ Cookie, Accept ]
 
 
+doctrine:
+    orm:
+        dql:
+            string_functions:
+                group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
 

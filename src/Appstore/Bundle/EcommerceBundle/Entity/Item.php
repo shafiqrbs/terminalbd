@@ -162,7 +162,7 @@ class Item
      /**
      * @var string
      *
-     * @ORM\Column(name="bengalName", type="string", length=255, nullable = true)
+     * @ORM\Column(name="productBengalName", type="string", length=255, nullable = true)
      */
     private $productBengalName;
 
@@ -1383,48 +1383,33 @@ class Item
     public function getProductName()
     {
         $name = "";
+
         $language = $this->getEcommerceConfig()->getShowBengal();
-        if($language === "englishbangla"){
-          if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()){
-                $name = $this->getWebName() .' ('.$this->getProductBengalName().') '.$this->getSize()->getName().' '.$this->getSizeUnit()->getName();
-          }elseif($this->getProductBengalName() and $this->getSize()) {
-                $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ') ' . $this->getSize()->getName();
-          }elseif($this->getProductBengalName()) {
-                $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ')';
-          }else{
-              $name = $this->getWebName();
-          }
 
-        }elseif($language === "english-bangla") {
-
-            if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
-                $name = $this->getWebName() . ' -' . $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-            }elseif($this->getProductBengalName() and $this->getSize()) {
-                $name = $this->getWebName() . ' - ' . $this->getProductBengalName() . ' ' . $this->getSize()->getName();
-            }elseif($this->getProductBengalName()) {
-                $name = $this->getWebName() . ' - ' . $this->getProductBengalName();
-            }else{
-                $name = $this->getWebName();
-            }
-        }elseif($language === "bangla") {
-
-            if($this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
-                $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-            }elseif($this->getProductBengalName() and $this->getSize()) {
-                $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName();
-            }elseif($this->getProductBengalName()) {
-                $name = $this->getProductBengalName();
-            }else{
-                $name = $this->getWebName();
-            }
+        if($language === "englishbangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()){
+            $name = $this->getWebName() .' ('.$this->getProductBengalName().') '.$this->getSize()->getName().' '.$this->getSizeUnit()->getName();
+        }elseif($language === "englishbangla" and $this->getProductBengalName() and $this->getSize()) {
+            $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ') ' . $this->getSize()->getName();
+        }elseif($language === "englishbangla" and $this->getProductBengalName()) {
+            $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ')';
+        }elseif($language === "english-bangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
+            $name = $this->getWebName() . ' -' . $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+        }elseif($language === "english-bangla" and $this->getProductBengalName() and $this->getSize()) {
+            $name = $this->getWebName() . ' - ' . $this->getProductBengalName() . ' ' . $this->getSize()->getName();
+        }elseif($language === "english-bangla" and $this->getProductBengalName()) {
+            $name = $this->getWebName() . ' - ' . $this->getProductBengalName();
+        }elseif($language === "bangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
+            $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+        }elseif($language === "bangla" and $this->getProductBengalName() and $this->getSize()) {
+            $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName();
+        }elseif($language === "bangla" and $this->getProductBengalName()) {
+            $name = $this->getProductBengalName();
+        }elseif($this->getSize() and $this->getSizeUnit()) {
+            $name = $this->getWebName(). ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
+        }elseif($this->getSize()) {
+            $name = $this->getWebName() . ' ' . $this->getSize()->getName();
         }else{
-            if($this->getSize() and $this->getSizeUnit()) {
-                $name = $this->getWebName() .' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-            }elseif($this->getSize()) {
-                $name = $this->getWebName() . ' '. $this->getSize()->getName();
-            }else{
-                $name = $this->getWebName();
-            }
+            $name = $this->getWebName();
         }
         return $name;
     }
