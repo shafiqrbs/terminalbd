@@ -24,11 +24,6 @@ class DiscountController extends Controller
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
 
-
-    /**
-     * Lists all Discount entities.
-     *
-     */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
