@@ -24,8 +24,3 @@ ecommerce_discount_status:
     path:     /{id}/status
     defaults: { _controller: "EcommerceBundle:Discount:status" }
 
-ecommerce_discount_search:
-    path:     /search
-    defaults: { _controller: "EcommerceBundle:Discount:autoSearch" }
-    options:
-            expose: true

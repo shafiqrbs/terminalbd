@@ -27,8 +27,8 @@ class DiscountController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=> $ecommerceConfig),array('name'=>'asc'));
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=> $config),array('name'=>'asc'));
 
         $entity = new Discount();
         $form   = $this->createCreateForm($entity);
@@ -62,8 +62,8 @@ class DiscountController extends Controller
             );
             return $this->redirect($this->generateUrl('ecommerce_discount'));
         }
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$ecommerceConfig),array('name'=>'asc'));
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$config),array('name'=>'asc'));
 
         return $this->render('EcommerceBundle:Discount:index.html.twig', array(
             'entities' => $entities,
@@ -99,17 +99,17 @@ class DiscountController extends Controller
      *
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
-    public function editAction(Request $request , Discount $entity)
+    public function editAction($id)
     {
 
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entity = $em->getRepository('EcommerceBundle:Discount')->findOneBy(array('ecommerceConfig'=> $config,'id'=> $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$ecommerceConfig),array('name'=>'asc'));
+        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$config),array('name'=>'asc'));
 
         return $this->render('EcommerceBundle:Discount:index.html.twig', array(
             'entities' => $entities,
@@ -142,16 +142,12 @@ class DiscountController extends Controller
     }
 
     /**
-     * Edits an existing PreOrder entity.
+     * Edits an existing Discount entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, Discount $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('EcommerceBundle:Discount')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PreOrder entity.');
-        }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -165,8 +161,8 @@ class DiscountController extends Controller
             return $this->redirect($this->generateUrl('ecommerce_discount'));
         }
 
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$ecommerceConfig),array('name'=>'asc'));
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$config),array('name'=>'asc'));
 
         return $this->render('EcommerceBundle:Discount:index.html.twig', array(
             'entities' => $entities,
@@ -210,9 +206,9 @@ class DiscountController extends Controller
 
     public function statusAction(Discount $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $em = $this->getDoctrine()->getManager();
-        if ($inventory != $entity->getEcommerceConfig()) {
+        if ($config != $entity->getEcommerceConfig()) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
         $status = $entity->getStatus();
@@ -222,8 +218,9 @@ class DiscountController extends Controller
             $entity->setStatus(1);
         }
         $em->flush();
+
         if($status != 1){
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->removeDiscount($inventory->getId(),$entity->getId());
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->removeDiscount($config->getId(),$entity->getId());
         }
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
@@ -231,22 +228,4 @@ class DiscountController extends Controller
         return $this->redirect($this->generateUrl('ecommerce_discount'));
     }
 
-
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchDiscountNameAction($promotion)
-    {
-        return new JsonResponse(array(
-            'id'=>$promotion,
-            'text'=>$promotion
-        ));
-    }
 }
