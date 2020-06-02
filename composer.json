@@ -46,8 +46,6 @@
         "xiidea/ez-maintenance": "^1.0",
         "symfony/yaml": "^2.8",
         "symfony/validator": "^2.8",
-        "beberlei/DoctrineExtensions": "^1.2",
-        "dompdf/dompdf": "^0.8.2",
         "symfony/security-acl": "^3.0",
         "ajaxray/php-watermark": "^0.1.1"
     },

@@ -24,7 +24,6 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class ItemRepository extends EntityRepository
 {
 
-
     public function findFrontendProductWithSearch($config, $data , $limit = 0)
     {
 
@@ -249,7 +248,6 @@ class ItemRepository extends EntityRepository
         $qb->andWhere("product.ecommerceConfig = :config");
         $qb->setParameter('config', $config->getId());
         $this->handleFrontendSearchBetween($qb,$data);
-
         if (empty($data['sortBy'])){
             $qb->orderBy('product.webName', 'ASC');
         }else{
@@ -329,7 +327,6 @@ class ItemRepository extends EntityRepository
         $em->flush();
     }
 
-
     public function insertCopyMedicineItem(MedicineStock $copyEntity)
     {
         $em = $this->_em;
@@ -394,7 +391,6 @@ class ItemRepository extends EntityRepository
 
     }
 
-
     public function getSliderFeatureProduct($config, $limit = 3)
     {
 
@@ -443,7 +439,6 @@ class ItemRepository extends EntityRepository
         return $db;
 
     }
-
 
     public function handleSearchBetween($qb,$data){
 
@@ -533,7 +528,6 @@ class ItemRepository extends EntityRepository
         return  $result;
 
     }
-
 
     public function salesItemWithSearch($config)
     {
@@ -930,6 +924,7 @@ class ItemRepository extends EntityRepository
             ->setParameter(3, $config)
             ->getQuery();
         $qr = $q->execute();
+        return $qr;
 
     }
 

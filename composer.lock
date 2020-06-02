@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efcce6598bba52e2d8a2038c312bd3c1",
+    "content-hash": "a4c4cc7749a109048d236bce59f8f914",
     "packages": [
         {
             "name": "ajaxray/php-watermark",
@@ -53,60 +53,6 @@
                 "watermark"
             ],
             "time": "2017-03-18T05:50:04+00:00"
-        },
-        {
-            "name": "beberlei/doctrineextensions",
-            "version": "v1.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beberlei/DoctrineExtensions.git",
-                "reference": "53da6deefe33cff09737bdcc73ac6dbb4423691f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/53da6deefe33cff09737bdcc73ac6dbb4423691f",
-                "reference": "53da6deefe33cff09737bdcc73ac6dbb4423691f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "doctrine/orm": "^2.6",
-                "friendsofphp/php-cs-fixer": "^2.14",
-                "nesbot/carbon": "*",
-                "phpunit/phpunit": "^7.0 || ^8.0",
-                "symfony/yaml": "^4.2",
-                "zf1/zend-date": "^1.12",
-                "zf1/zend-registry": "^1.12"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DoctrineExtensions\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Steve Lacey",
-                    "email": "steve@stevelacey.net"
-                }
-            ],
-            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL and Oracle.",
-            "keywords": [
-                "database",
-                "doctrine",
-                "orm"
-            ],
-            "time": "2019-06-24T06:58:56+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -1078,68 +1024,6 @@
                 "orm"
             ],
             "time": "2016-01-05T21:34:58+00:00"
-        },
-        {
-            "name": "dompdf/dompdf",
-            "version": "v0.8.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "5113accd9ae5d466077cce5208dcf3fb871bf8f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/5113accd9ae5d466077cce5208dcf3fb871bf8f6",
-                "reference": "5113accd9ae5d466077cce5208dcf3fb871bf8f6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-gd": "*",
-                "ext-mbstring": "*",
-                "phenx/php-font-lib": "0.5.*",
-                "phenx/php-svg-lib": "0.3.*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.*",
-                "squizlabs/php_codesniffer": "2.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "0.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Dompdf\\": "src/"
-                },
-                "classmap": [
-                    "lib/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Ménager",
-                    "email": "fabien.menager@gmail.com"
-                },
-                {
-                    "name": "Brian Sweeney",
-                    "email": "eclecticgeek@gmail.com"
-                },
-                {
-                    "name": "Gabriel Bull",
-                    "email": "me@gabrielbull.com"
-                }
-            ],
-            "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
-            "homepage": "https://github.com/dompdf/dompdf",
-            "time": "2017-11-26T14:49:08+00:00"
         },
         {
             "name": "eightpoints/guzzle-bundle",
@@ -5303,124 +5187,6 @@
             "time": "2016-09-07T02:04:25+00:00"
         },
         {
-            "name": "tecnickcom/tcpdf",
-            "version": "6.2.26",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "367241059ca166e3a76490f4448c284e0a161f15"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/367241059ca166e3a76490f4448c284e0a161f15",
-                "reference": "367241059ca166e3a76490f4448c284e0a161f15",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "config",
-                    "include",
-                    "tcpdf.php",
-                    "tcpdf_parser.php",
-                    "tcpdf_import.php",
-                    "tcpdf_barcodes_1d.php",
-                    "tcpdf_barcodes_2d.php",
-                    "include/tcpdf_colors.php",
-                    "include/tcpdf_filters.php",
-                    "include/tcpdf_font_data.php",
-                    "include/tcpdf_fonts.php",
-                    "include/tcpdf_images.php",
-                    "include/tcpdf_static.php",
-                    "include/barcodes/datamatrix.php",
-                    "include/barcodes/pdf417.php",
-                    "include/barcodes/qrcode.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "role": "lead",
-                    "email": "info@tecnick.com"
-                }
-            ],
-            "description": "TCPDF is a PHP class for generating PDF documents and barcodes.",
-            "homepage": "http://www.tcpdf.org/",
-            "keywords": [
-                "PDFD32000-2008",
-                "TCPDF",
-                "barcodes",
-                "datamatrix",
-                "pdf",
-                "pdf417",
-                "qrcode"
-            ],
-            "time": "2018-10-16T17:24:05+00:00"
-        },
-        {
-            "name": "tfox/mpdf-port-bundle",
-            "version": "2.0.0",
-            "target-dir": "TFox/MpdfPortBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tasmanianfox/MpdfPortBundle.git",
-                "reference": "dc99507983d782f19984c81b82a04a24f76e84ac"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tasmanianfox/MpdfPortBundle/zipball/dc99507983d782f19984c81b82a04a24f76e84ac",
-                "reference": "dc99507983d782f19984c81b82a04a24f76e84ac",
-                "shasum": ""
-            },
-            "require": {
-                "mpdf/mpdf": "^7.0",
-                "symfony/framework-bundle": ">=2.3",
-                "symfony/options-resolver": ">=2.3"
-            },
-            "require-dev": {
-                "sensio/framework-extra-bundle": "*",
-                "symfony/browser-kit": "*",
-                "symfony/class-loader": "*",
-                "symfony/security-bundle": "*",
-                "symfony/yaml": "*"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "TFox\\MpdfPortBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sergei Beljakov",
-                    "email": "sergei.beljakov@tfox.eu"
-                }
-            ],
-            "description": "A wrapper for mPDF class which allows to use mPDF in Symfony2 projects",
-            "homepage": "http://github.com/tasmanianfox/MpdfPortBundle",
-            "keywords": [
-                "mpdf",
-                "pdf"
-            ],
-            "time": "2017-12-24T21:43:07+00:00"
-        },
-        {
             "name": "twig/extensions",
             "version": "v1.3.0",
             "source": {
@@ -5532,49 +5298,6 @@
                 "templating"
             ],
             "time": "2016-01-11T14:02:19+00:00"
-        },
-        {
-            "name": "whiteoctober/tcpdf-bundle",
-            "version": "1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/whiteoctober/WhiteOctoberTCPDFBundle.git",
-                "reference": "33e57940af790c0c8ee6a200a1f0661e415d0a5c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/WhiteOctoberTCPDFBundle/zipball/33e57940af790c0c8ee6a200a1f0661e415d0a5c",
-                "reference": "33e57940af790c0c8ee6a200a1f0661e415d0a5c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/framework-bundle": ">=2.0",
-                "tecnickcom/tcpdf": "*"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "WhiteOctober\\TCPDFBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rich Sage",
-                    "email": "rich.sage@gmail.com"
-                }
-            ],
-            "description": "A bundle to easily integrate TCPDF into Symfony2",
-            "homepage": "https://github.com/whiteoctober/WhiteOctoberTCPDFBundle",
-            "keywords": [
-                "TCPDF",
-                "pdf"
-            ],
-            "time": "2019-01-14T13:51:20+00:00"
         },
         {
             "name": "willdurand/jsonp-callback-validator",

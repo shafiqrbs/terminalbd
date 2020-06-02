@@ -13,7 +13,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         return $this->render('UserBundle:Default:index.html.twig', array());
     }
 
@@ -27,6 +26,7 @@ class DefaultController extends Controller
         /* @var $globalOption GlobalOption */
 
         if($globalOption->getStatus() == 2 or $globalOption->getStatus() == 3 ) {
+
             $this->get('security.context')->setToken(null);
             $this->get('request')->getSession()->invalidate();
             $this->get('session')->getFlashBag()->add('notice', "Your account has been temporary suspended. Please contact administrator for further any query");
@@ -103,7 +103,6 @@ class DefaultController extends Controller
     }
 
     public function lockAction(){
-
         return $this->render('UserBundle:Default:lock.html.twig', array());
     }
 
