@@ -104,23 +104,23 @@ class DiscountController extends Controller
      *
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_MANAGER,ROLE_DOMAIN")
      */
-
-
-    /**
-     * Displays a form to edit an existing PreOrder entity.
-     *
-     */
     public function editAction(Request $request , Discount $entity)
     {
 
-        $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
-        $entity->setName($data['value']);
-        $em->flush();
-        exit;
+
+        $editForm = $this->createEditForm($entity);
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$ecommerceConfig),array('name'=>'asc'));
+
+        return $this->render('EcommerceBundle:Discount:index.html.twig', array(
+            'entities' => $entities,
+            'entity' => $entity,
+            'form' => $editForm->createView(),
+        ));
 
     }
 
@@ -153,14 +153,10 @@ class DiscountController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('EcommerceBundle:Discount')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
-
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 

@@ -116,7 +116,6 @@ class DiscountType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-
         return $categoryTree = $this->category->getFlatEcommerceCategoryTree($this->globalOption->getEcommerceConfig());
 
     }

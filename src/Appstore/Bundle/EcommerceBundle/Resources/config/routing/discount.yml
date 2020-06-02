@@ -15,9 +15,6 @@ ecommerce_discount_update:
 ecommerce_discount_edit:
     path:     /{id}/edit
     defaults: { _controller: "EcommerceBundle:Discount:edit" }
-    methods:  POST
-    options:
-            expose: true
 
 ecommerce_discount_delete:
     path:     /{id}/delete
