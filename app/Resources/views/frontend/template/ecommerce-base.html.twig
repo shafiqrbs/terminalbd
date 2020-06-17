@@ -137,7 +137,7 @@
 {% javascripts
 'assets/template/desktop/js/jquery-3.3.1.min.js'
 'assets/template/desktop/js/bootstrap.min.js'
-'assets/template/pulgin/js/jquery.ajax-cross-orgin.min.js'
+'assets/template/plugin/js/jquery.ajax-cross-origin.min.js'
 'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
@@ -170,6 +170,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 {% block javascriptBlock %}{% endblock %}
 <script>
+    $.ajaxSetup({
+        crossOrigin: true
+    });
     $(document).ready(function(){
         $("#mm-menu").mmenu();
         {% if globalOption.templateCustomize.sidebarTooltip == 1 %}
