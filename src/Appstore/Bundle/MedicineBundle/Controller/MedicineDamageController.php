@@ -223,7 +223,7 @@ class MedicineDamageController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$damage->setProcess('Approved');
 			$em->flush();
-			$em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
+		//	$em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
 			return new Response('success');
 		} else {
 			return new Response('failed');

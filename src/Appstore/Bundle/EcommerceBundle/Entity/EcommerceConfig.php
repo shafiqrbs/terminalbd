@@ -415,7 +415,7 @@ class EcommerceConfig
 
 
     /**
-     * @var array
+     * @var array()
      *
      * @ORM\Column(name="printer", type="array", nullable=true)
      */

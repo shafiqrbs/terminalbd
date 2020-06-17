@@ -43,7 +43,9 @@ class DefaultController extends Controller
 	    foreach($monthlyPurchase as $row) {
 		    $monthlyPurchaseArr[$row['month']] = $row['total'];
 	    }
-	    return $this->render('BusinessBundle:Default:index.html.twig', array(
+        $config = $globalOption->getBusinessConfig();
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'index';
+        return $this->render("BusinessBundle:Default:index.html.twig", array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
             'transactionCashOverviews'  => $transactionCashOverview,
