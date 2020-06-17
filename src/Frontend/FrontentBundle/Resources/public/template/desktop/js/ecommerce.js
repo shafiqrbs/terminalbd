@@ -210,13 +210,20 @@ $(document).on( "change", ".inlineSizeChange", function( e ) {
     var url = $(this).attr("data-url");
     var subItem = $(this).val();
     var product = $(this).attr("data-id");
-    $.get(url,{'subItem':subItem}).done(function(response) {
-        obj = JSON.parse(response);
-        $('#inlineLoading-'+product).html(obj['subItem']);
-        $('#currency-'+product).html(obj['salesPrice']);
-        $('#subSize-'+product).html(obj['size']);
-        $('#subSizeUnit-'+product).html(obj['sizeUnit']);
+    $.ajax({
+        url: url,
+        crossOrigin: true,
+        data: 'subItem='+subItem,
+        type: 'GET',
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('#inlineLoading-'+product).html(obj['subItem']);
+            $('#currency-'+product).html(obj['salesPrice']);
+            $('#subSize-'+product).html(obj['size']);
+            $('#subSizeUnit-'+product).html(obj['sizeUnit']);
+        }
     });
+
 });
 
 $(document).on( "click", "#spec", function(e){
