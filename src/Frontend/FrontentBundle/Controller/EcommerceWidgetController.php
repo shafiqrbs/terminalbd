@@ -42,7 +42,7 @@ class EcommerceWidgetController extends Controller
     }
 
 
-    public function headerAction(Request $request , GlobalOption $globalOption , Menu $menu )
+    public function headerAction(Request $request , GlobalOption $globalOption , $menu )
     {
         /* Device Detection code desktop or mobile */
 

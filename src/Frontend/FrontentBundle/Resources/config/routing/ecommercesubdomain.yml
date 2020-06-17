@@ -311,13 +311,7 @@ webservice_module:
     path:     /{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }
 
-frontend_category:
-    path:     /category/{slug}
-    defaults: { _controller: FrontendBundle:Default:category }
 
-frontend_brand:
-    path:     /brand/{slug}
-    defaults: { _controller: FrontendBundle:Default:brand }
 
 
 
