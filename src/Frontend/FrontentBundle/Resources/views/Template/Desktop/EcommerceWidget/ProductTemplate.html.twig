@@ -24,9 +24,9 @@
                             {% endif %}
                             <h3 class="title">
                                 {% if globalOption.ecommerceConfig.productDetails == 1 %}
-                                    <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug })}}" >{{ product.productName }}</a>
+                                    <a class="product-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug })}}" >{{ product.productName }} <span id="subSize-{{ product.id }}">{% if product.size is not empty %}{{ product.size.name }}{% endif %}</span>&nbsp;<span id="subSizeUnit-{{ product.id }}">{% if product.sizeUnit is not empty %}{{ product.sizeUnit.name }}{% endif %}</span></a>
                                 {% else %}
-                                    <a class="product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id })}}" href="javascript:">{{ product.productName }}</a>
+                                    <a class="product-preview product-url" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id })}}" href="javascript:">{{ product.productName }} <span id="subSize-{{ product.id }}">{% if product.size is not empty %}{{ product.size.name }}{% endif %}</span>&nbsp;<span id="subSizeUnit-{{ product.id }}">{% if product.sizeUnit is not empty %}{{ product.sizeUnit.name }}{% endif %}</span></a>
                                 {% endif %}
                             </h3>
                             {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}

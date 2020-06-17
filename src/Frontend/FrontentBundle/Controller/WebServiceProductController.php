@@ -733,14 +733,18 @@ class WebServiceProductController extends Controller
                     'subItem'    => $subItem
                 )
             );
-            $unit = empty($subItem->getProductUnit()) ? '' : $subItem->getProductUnit()->getName();
+
+            $unit       = empty($product->getProductUnit()) ? '' : $product->getProductUnit()->getName();
+            $size       = empty($subItem->getSize()) ? '' : $subItem->getSize()->getName();
+            $sizeUnit   = empty($subItem->getProductUnit()) ? '' : $subItem->getProductUnit()->getName();
+
             if($subItem->getDiscountPrice()){
                 $price = "<strike>{$subItem->getSalesPrice()}</strike> <strong class='list-price' >{$subItem->getDiscountPrice()}</strong>/{$unit}";
             }else{
                 $price = "<strong class='list-price'>{$subItem->getSalesPrice()}</strong>/{$unit}";
             }
 
-            $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price )));
+            $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price,'size' => $size,'sizeUnit' => $sizeUnit )));
             return new Response($array);
 
         }

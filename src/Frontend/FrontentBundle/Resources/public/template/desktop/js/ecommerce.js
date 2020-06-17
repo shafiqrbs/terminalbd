@@ -86,9 +86,10 @@ $(document).on( "change", ".changeSize", function( e ) {
 });*/
 
 
-function cartInfo(response,quantity = 1) {
+function cartInfo(response,quantity) {
     obj = JSON.parse(response);
-    $('.cartSubmit').attr("disabled", true).html(quantity+' in Basket');
+    var qnt = quantity === "" ? 1 : quantity;
+    $('.cartSubmit').attr("disabled", true).html(qnt+' in Basket');
     setTimeout(function(){$('.cartSubmit').html('<i class="fa fa-shopping-cart"></i> ADD')}, 3000);
     $('.totalItem').html(obj['totalItems']);
     $('.totalAmount').html(obj['cartTotal']);
@@ -213,6 +214,8 @@ $(document).on( "change", ".inlineSizeChange", function( e ) {
         obj = JSON.parse(response);
         $('#inlineLoading-'+product).html(obj['subItem']);
         $('#currency-'+product).html(obj['salesPrice']);
+        $('#subSize-'+product).html(obj['size']);
+        $('#subSizeUnit-'+product).html(obj['sizeUnit']);
     });
 });
 

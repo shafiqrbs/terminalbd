@@ -13,9 +13,10 @@ $(document).on('click', ".cartUpload, #prescriptionUpload", function(el) {
 });
 
 
-function cartInfo(response,quantity = 1) {
+function cartInfo(response,quantity) {
     obj = JSON.parse(response);
-    $('.cartSubmit').attr("disabled", true).html(quantity+' in Basket');
+    var qnt = quantity === "" ? 1 : quantity;
+    $('.cartSubmit').attr("disabled", true).html(qnt+' in Basket');
     setTimeout(function(){$('.cartSubmit').html('<i class="fa fa-shopping-cart"></i> ADD')}, 3000);
     $('.totalItem').html(obj['totalItems']);
     $('.cartQuantity').html(obj['totalQuantity']);

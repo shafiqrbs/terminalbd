@@ -1383,31 +1383,13 @@ class Item
     public function getProductName()
     {
         $name = "";
-
         $language = $this->getEcommerceConfig()->getShowBengal();
-
-        if($language === "englishbangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()){
-            $name = $this->getWebName() .' ('.$this->getProductBengalName().') '.$this->getSize()->getName().' '.$this->getSizeUnit()->getName();
-        }elseif($language === "englishbangla" and $this->getProductBengalName() and $this->getSize()) {
-            $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ') ' . $this->getSize()->getName();
-        }elseif($language === "englishbangla" and $this->getProductBengalName()) {
-            $name = $this->getWebName() . ' (' . $this->getProductBengalName() . ')';
-        }elseif($language === "english-bangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
-            $name = $this->getWebName() . ' -' . $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-        }elseif($language === "english-bangla" and $this->getProductBengalName() and $this->getSize()) {
-            $name = $this->getWebName() . ' - ' . $this->getProductBengalName() . ' ' . $this->getSize()->getName();
-        }elseif($language === "english-bangla" and $this->getProductBengalName()) {
-            $name = $this->getWebName() . ' - ' . $this->getProductBengalName();
-        }elseif($language === "bangla" and $this->getProductBengalName() and $this->getSize() and $this->getSizeUnit()) {
-            $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-        }elseif($language === "bangla" and $this->getProductBengalName() and $this->getSize()) {
-            $name = $this->getProductBengalName() . ' ' . $this->getSize()->getName();
-        }elseif($language === "bangla" and $this->getProductBengalName()) {
+        if($language === "englishbangla" and !empty($this->getProductBengalName())){
+            $name = $this->getWebName() .' ('.$this->getProductBengalName().') ';
+        }elseif($language === "english-bangla" and !empty($this->getProductBengalName())) {
+            $name = $this->getWebName() . ' -' . $this->getProductBengalName();
+        }elseif($language === "bangla" and !empty($this->getProductBengalName())) {
             $name = $this->getProductBengalName();
-        }elseif($this->getSize() and $this->getSizeUnit()) {
-            $name = $this->getWebName(). ' ' . $this->getSize()->getName() . ' ' . $this->getSizeUnit()->getName();
-        }elseif($this->getSize()) {
-            $name = $this->getWebName() . ' ' . $this->getSize()->getName();
         }else{
             $name = $this->getWebName();
         }
