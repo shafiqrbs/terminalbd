@@ -450,6 +450,7 @@ class AccountCashRepository extends EntityRepository
 		$em = $this->_em;
 		$cash = new AccountCash();
 		$cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setBalanceTransfer($entity);
 		$cash->setTransactionMethod($entity->getFromTransactionMethod());
 		$cash->setAccountBank($entity->getFromAccountBank());
 		$cash->setAccountMobileBank($entity->getFromAccountMobileBank());
@@ -478,6 +479,7 @@ class AccountCashRepository extends EntityRepository
 		$em = $this->_em;
 		$cash = new AccountCash();
 		$cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setBalanceTransfer($entity);
 		$cash->setTransactionMethod($entity->getToTransactionMethod());
 		$cash->setAccountBank($entity->getToAccountBank());
 		$cash->setAccountMobileBank($entity->getToAccountMobileBank());

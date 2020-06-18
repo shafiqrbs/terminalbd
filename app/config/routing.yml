@@ -17,6 +17,10 @@ site_domain_control:
     resource: "dynamic/sites.yml"
     type:     rest
 
+site_domain_ajax_control:
+     resource: "@FrontendBundle/Resources/config/routing/ajax.yml"
+     prefix:    /ajax
+
 android_portal_api:
     resource: "@BinduBundle/Resources/config/apiPortal.yml"
     prefix:   /android-api-portal

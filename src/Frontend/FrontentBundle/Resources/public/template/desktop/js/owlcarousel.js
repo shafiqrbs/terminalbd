@@ -1,4 +1,4 @@
-function productSliderOwl(items = 4) {
+function productSliderOwl(items) {
 
     var owlCategory = $(".category-slider");
     owlCategory.owlCarousel({
@@ -19,7 +19,7 @@ function productSliderOwl(items = 4) {
             "<a id='nextCatItem-1' class='glyphicon glyphicon-chevron-right'></a>"
         ],
         rewindNav : false,
-        pagination : false,
+        pagination : false
     });
 
     var owlCategory3 = $(".category-slider-3");

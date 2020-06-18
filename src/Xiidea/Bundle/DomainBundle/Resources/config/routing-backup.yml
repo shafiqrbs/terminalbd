@@ -6,6 +6,31 @@ _www_main_domain:
     requirements:
       domain_name: www.%domain.main%|%domain.main%
 
+_xiidea_main_domain_app:
+    prefix: /
+    host: "{subdomain}.%domain.main%"
+    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+    name_prefix: "main_app_"
+    defaults:
+        subdomain: ""
+
+_xiidea_ecommerce_domain:
+    prefix: /
+    name_prefix: "ecom_"
+    host: "{domain_name}"
+    resource: "@BinduBundle/Resources/config/main.yml"
+    requirements:
+        domain_name: www.%domain.ecommerce%|%domain.ecommerce%
+
+_xiidea_ecommerce_domain_app:
+    prefix:     /
+    name_prefix: "ecom_app_"
+    host: "{subdomain}.%domain.ecommerce%"
+    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+    defaults:
+        subdomain: ""
+
+
 #xiidea_education_domain_homepage:
 #    path:     /
 #    defaults: { _controller: XiideaDomainBundle:Default:educationHome }

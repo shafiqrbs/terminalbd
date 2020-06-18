@@ -707,48 +707,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function inlineSubProductAction($subdomain ,Item $product)
-    {
 
-        $subId = $_REQUEST['subItem'];
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        /* @var ItemSub $subItem */
-        $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=> $product,'id'=> $subId));
-        if(!empty($globalOption)){
-
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if($detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/'.$themeName;
-            }else{
-                $theme = 'Template/Desktop/'.$themeName;
-            }
-            $html =  $this->renderView('FrontendBundle:'.$theme.':inlineSubProduct.html.twig',
-                array(
-                    'globalOption'    => $globalOption,
-                    'product'    => $product,
-                    'subItem'    => $subItem
-                )
-            );
-
-            $unit       = empty($product->getProductUnit()) ? '' : $product->getProductUnit()->getName();
-            $size       = empty($subItem->getSize()) ? '' : $subItem->getSize()->getName();
-            $sizeUnit   = empty($subItem->getProductUnit()) ? '' : $subItem->getProductUnit()->getName();
-
-            if($subItem->getDiscountPrice()){
-                $price = "<strike>{$subItem->getSalesPrice()}</strike> <strong class='list-price' >{$subItem->getDiscountPrice()}</strong>/{$unit}";
-            }else{
-                $price = "<strong class='list-price'>{$subItem->getSalesPrice()}</strong>/{$unit}";
-            }
-
-            $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price,'size' => $size,'sizeUnit' => $sizeUnit )));
-            return new Response($array);
-
-        }
-    }
 
     public function modalSubItemAction($subdomain , Item $product)
     {

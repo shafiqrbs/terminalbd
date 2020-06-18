@@ -365,6 +365,126 @@ $('.cartItem').click(function(){
     });
 });
 
+$(document).on( "click", ".btn-new-cart-item", function(e){
+
+    e.preventDefault();
+    productId      = $(this).attr('data-id');
+    url         = $(this).attr('data-url');
+    fieldName   = $(this).attr('data-field');
+    type        = $(this).attr('data-type');
+    input = $("input[name='"+fieldName+"']");
+    currentVal = parseInt(input.val()) ? parseInt(input.val()) : 0;
+    if (!isNaN(currentVal)) {
+        if(type === 'minus') {
+            if(currentVal > input.attr('min')) {
+                existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:-1})
+                    .done(function( response ) {
+                        obj = JSON.parse(data);
+                        cartInfo(response,existVal);
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('min')) {
+                $(input).attr('disabled', true);
+                $('#btn-left-'+productId).hide();
+            }else {
+                $(input).attr('disabled', false);
+
+            }
+
+        } else if(type === 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:1})
+                    .done(function(response){
+                        obj = JSON.parse(response);
+                        if(obj['process'] === 'success'){
+                            cartInfo(response,existVal);
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('There is not enough product in stock at this moment')
+                        }
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('max')) {
+                $(input).attr('disabled', true);
+            }else {
+                $(input).attr('disabled', false);
+                $('#btn-left-'+productId).show();
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+
+$(document).on( "click", ".btn-new-cart-item-modal", function(e){
+
+    e.preventDefault();
+    productId      = $(this).attr('data-id');
+    url         = $(this).attr('data-url');
+    fieldName   = $(this).attr('data-field');
+    type        = $(this).attr('data-type');
+    input = $("input[name='"+fieldName+"']");
+    currentVal = parseInt(input.val()) ? parseInt(input.val()) : 0;
+    if (!isNaN(currentVal)) {
+        if(type === 'minus') {
+            if(currentVal > input.attr('min')) {
+                existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function( data ) {
+                        obj = JSON.parse(data);
+                        $('#cart-item-list-box').html(obj['cartItem']);
+                        $('.totalItem').html(obj['items']);
+                        $('.totalAmount').html(obj['cartTotal']);
+                        $('.vsidebar .txt').html(obj['cartResult']);
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('min')) {
+                $(input).attr('disabled', true);
+                $('#btn-left-modal').hide();
+            }else {
+                $(input).attr('disabled', false);
+
+            }
+
+        } else if(type === 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function(data){
+                        obj = JSON.parse(data);
+                        if(obj['process'] === 'success'){
+                            $('#cart-item-list-box').html(obj['cartItem']);
+                            $('.totalItem').html(obj['items']);
+                            $('.totalAmount').html(obj['cartTotal']);
+                            $('.vsidebar .txt').html(obj['cartResult']);
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('There is not enough product in stock at this moment')
+                        }
+                    });
+            }
+            if(parseInt(input.val()) === input.attr('max')) {
+                $(input).attr('disabled', true);
+            }else {
+                $(input).attr('disabled', false);
+                $('#btn-left-modal').show();
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+
 $(document).on('click',"#cart-print", function (event) {
 
     var url = $(this).attr('data-action');

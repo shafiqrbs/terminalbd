@@ -166,7 +166,7 @@ $(document).on( "click", ".preview", function(e){
     })
 });
 
-$(document).on( "click", ".btn-new-cart-item", function(e){
+/*$(document).on( "click", ".btn-new-cart-item", function(e){
 
     e.preventDefault();
     productId      = $(this).attr('data-id');
@@ -203,11 +203,12 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
     } else {
         input.val(0);
     }
-});
+});*/
 
 $(document).on( "change", ".inlineSizeChange", function( e ) {
 
     var url = $(this).attr("data-url");
+    alert(url);
     var subItem = $(this).val();
     var product = $(this).attr("data-id");
     $.ajax({

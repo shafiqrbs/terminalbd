@@ -170,9 +170,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 {% block javascriptBlock %}{% endblock %}
 <script>
-    $.ajaxSetup({
-        crossOrigin: true
-    });
     $(document).ready(function(){
         $("#mm-menu").mmenu();
         {% if globalOption.templateCustomize.sidebarTooltip == 1 %}

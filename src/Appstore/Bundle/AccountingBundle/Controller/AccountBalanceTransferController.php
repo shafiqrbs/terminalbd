@@ -160,7 +160,6 @@ class AccountBalanceTransferController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
 	/**

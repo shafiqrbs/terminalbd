@@ -136,6 +136,8 @@ class EcommerceConfigType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     'default'       => 'Default',
+                    'medicine'       => 'Medicine',
+                    'alshefa'       => 'Alshefa',
                     'theme-1'       => 'Theme-1',
                     'theme-2'       => 'Theme-2',
                     'theme-3'       => 'Theme-3',
