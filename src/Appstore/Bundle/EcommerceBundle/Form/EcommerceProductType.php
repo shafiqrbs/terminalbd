@@ -39,6 +39,8 @@ class EcommerceProductType extends AbstractType
         $builder
 
             ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name')))
+
+            ->add('productBengalName', 'text', array('attr' => array('class' => 'm-wrap span12 ', 'placeholder' => 'Product Bengal name')))
             ->add('brand', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\ItemBrand',
@@ -66,7 +68,7 @@ class EcommerceProductType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductSize',
                 'empty_value' => '-Choose a size-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -225,9 +227,7 @@ class EcommerceProductType extends AbstractType
                     ))
                 )
             ));
-            if(!empty($this->config->getShowBengal())) {
-                $builder->add('productBengalName', 'text', array('attr' => array('class' => 'm-wrap span12 ', 'placeholder' => 'Product Bengal name')));
-            }
+
 
     }
     

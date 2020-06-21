@@ -102,6 +102,13 @@ class ItemSub
      */
     private $masterItem = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status = true;
+
 
     /**
      * Get id
@@ -295,6 +302,22 @@ class ItemSub
 	public function setItem( $item ) {
 		$this->item = $item;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 
 
 }

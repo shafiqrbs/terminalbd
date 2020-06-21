@@ -317,6 +317,7 @@ var InventoryItemEditPage = function (item) {
                         $('#loadSubItem').html(response);
                         $('#goods_item_size, #goods_item_colors').find('option').prop("selected", false);
                         $('#goods_item_purchasePrice,#goods_item_salesPrice,#goods_item_quantity').val('');
+                        EditableInit();
                     }
                 })
             }

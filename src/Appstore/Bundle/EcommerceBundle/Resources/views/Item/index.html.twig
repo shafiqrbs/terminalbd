@@ -70,14 +70,15 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
-                                    <th class="numeric" >FeatureBrand</th>
+                                    <th class="numeric" >Brand</th>
                                     <th {% if pagination.isSorted('brand.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Brand Name', 'brand.name') }}{% if( direction == 'desc' and sort == 'brand.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if pagination.isSorted('item.webName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'item.webName') }}{% if( direction == 'desc' and sort == 'item.webName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
 
                                     <th {% if pagination.isSorted('category.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Category', 'category.name') }}{% if( direction == 'desc' and sort == 'category.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th class="numeric" >FeatureCat</th>
+                                    <th class="numeric" >Cat</th>
 
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
@@ -91,17 +92,24 @@
                                 <tbody id="purchaseentity" >
                                 {% for entity in pagination %}
                                     <tr class="remove-{{ entity.id }}">
+                                        <td>
+                                            {% if entity.subProduct == 1 %}
+                                            <span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" ><input type="checkbox" data-url="{{ path('ecommerce_item_checkbox_applicable',{'id':entity.id,'applicable':'IsFeatureBrand'}) }}" name="IsFeatureBrand" class="isApplicable" {% if entity.isFeatureBrand == 1 %} checked="checked" {% endif %} value="{{ entity.isFeatureBrand }}"></td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="brand" data-name="Brand" href="#" data-source="{{ path('ecommerce_item_inline_brand') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.brand is defined and entity.brand is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter Brand name">{% if entity.brand is defined and entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</a>
                                         </td>
                                         <td><a  data-type="text" class="editable" id="{{ entity.id }}" data-name="WebName" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.webName }}" data-original-title="Enter product name">{{ entity.webName }}</a></td>
                                         <td class="numeric" >
-                                            <a  data-type="select" class="editable" id="Category" data-name="Category" href="#" data-source="{{ path('ecommerce_item_inline_category_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.category is defined and entity.tag is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter category name">{% if entity.category is defined and entity.category is not empty %}{{ entity.category.name }}{% endif %}</a>
+                                            <a  data-type="select" class="editable" id="Category" data-name="Category" href="#" data-source="{{ path('ecommerce_item_inline_category_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.category is defined and entity.category is not empty %}{{ entity.category.id }}{% endif %}" data-original-title="Enter category name">{% if entity.category is defined and entity.category is not empty %}{{ entity.category.name }}{% endif %}</a>
                                         </td>
                                         <td class="numeric" ><input type="checkbox" data-url="{{ path('ecommerce_item_checkbox_applicable',{'id':entity.id,'applicable':'IsFeatureCategory'}) }}" name="IsFeatureCategory" class="isApplicable" {% if entity.isFeatureCategory == 1 %} checked="checked" {% endif %} value="{{ entity.isFeatureCategory }}"></td>
 
-                                        <td class="numeric" >{{ entity.purchasePrice }}</td>
+                                        <td class="numeric" >
+                                    <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="PurchasePrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.purchasePrice }}" data-original-title="Enter purchase price"> {{ entity.purchasePrice }}</a>
+                                           </td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('ecommerce_item_inline_discount_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-({{ entity.discount.discountAmount }}) {% if  entity.discount.type == 'percentage' %}%{% endif %}{% endif %}</a>
@@ -140,6 +148,82 @@
                                             </div>
                                         </td>
                                     </tr>
+                                {% if entity.subProduct == 1 %}
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="15">
+                                            {% if entity.itemSubs is defined and  entity.itemSubs is not empty  %}
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr class="head-green">
+                                                        <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                        <th class="numeric" >Size</th>
+                                                        <th class="numeric" >Unit</th>
+                                                        <th class="numeric" >Color</th>
+                                                        <th class="numeric" >Quantity</th>
+                                                        <th class="numeric" >Purchase price</th>
+                                                        <th class="numeric" >Sales price</th>
+                                                        <th class="numeric" >Discount price</th>
+                                                        <th class="numeric" >Status</th>
+                                                        <th class="numeric" >Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="loadSubItem">
+                                                    {% for subItem in entity.itemSubs  %}
+                                                        <tr id="removeProduct-{{ subItem.id }}">
+                                                            <td class="numeric" >{{ loop.index }}</td>
+                                                            <td class="numeric" >
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                    <a  data-type="select" class="editable" id="size" data-name="Size" href="#" data-source="{{ path('ecommerce_item_inline_size') }}"  data-url="{{ path('ecommerce_item_inline_subitem_update') }}" data-pk="{{ entity.id }}" data-value="{% if subItem.size is defined and subItem.size is not empty %}{{ subItem.size.id }}{% endif %}" data-original-title="Enter Size name">{% if subItem.size is defined and subItem.size is not empty %}{{ subItem.size.name }}{% endif %}</a>
+                                                                {% else %}
+                                                                    {% if subItem.size is not empty %}
+                                                                        {{ subItem.size.name }}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="numeric" >
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                    <a  data-type="select" class="editable" id="productUnit" data-name="ProductUnit" href="#" data-source="{{ path('ecommerce_item_inline_unit') }}"  data-url="{{ path('ecommerce_item_inline_subitem_update') }}" data-pk="{{ entity.id }}" data-value="{% if subItem.productUnit is defined and subItem.productUnit is not empty %}{{ subItem.productUnit.id }}{% endif %}" data-original-title="Enter Unit name">{% if subItem.productUnit is defined and subItem.productUnit is not empty %}{{ subItem.productUnit.name }}{% endif %}</a>
+                                                                {% else %}
+                                                                    {% if subItem.productUnit is not empty %}
+                                                                        {{ subItem.productUnit.name }}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="numeric" >{% if subItem.colors is not empty %}{% for color in subItem.colors %}{{ color.name }} {% if not loop.last %},{% endif %}{% endfor %}{% endif %}</td>
+                                                            <td class="numeric" >
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                <a  data-type="text" class="editable" id="{{ subItem.id }}" data-name="quantity" href="#"   data-url="{{ path('ecommerce_item_inline_subitem_update') }}" data-pk="{{ subItem.id }}" data-value="{{ subItem.quantity }}" data-original-title="Enter change quantity">{{ subItem.quantity }}</a></td>
+                                                            {% else %}
+                                                                {{ subItem.quantity }}
+                                                            {% endif %}
+                                                            <td class="numeric" >{{ subItem.purchasePrice|number_format() }}</td>
+                                                            <td class="numeric" >
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                    <a  data-type="text" class="editable" id="{{ subItem.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_subitem_update') }}" data-pk="{{ subItem.id }}" data-value="{{ subItem.salesPrice }}" data-original-title="Enter sales price">{{ subItem.salesPrice }}</a>
+                                                                {% else %}
+                                                                    {{ subItem.salesPrice }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="numeric" >{{ subItem.discountPrice }}</td>
+                                                            <td class="numeric" >
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                <input type="checkbox" data-url="{{ path('ecommerce_subitem_status',{'id':subItem.id}) }}" name="status" class="isApplicable" {% if subItem.status == 1 %} checked="checked" {% endif %} value="{{ subItem.status }}">
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                    <a class="btn red removeProduct mini" data-id="{{ subItem.id }}" data-url="{{ path('ecommerce_item_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

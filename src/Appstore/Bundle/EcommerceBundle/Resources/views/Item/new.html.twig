@@ -64,20 +64,20 @@
                                     </div>
                                     <div class="span2">
                                         <div class="control-group">
+                                            <label class="control-label" for="name">&nbsp;</label>
+                                            Sub Item {{ form_widget(form.subProduct) }}
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
                                             <label class="control-label" for="name">Item Unit</label>
                                             {{ form_widget(form.productUnit) }}
                                             {{ form_errors(form.productUnit) }}
                                         </div>
                                     </div>
-                                    <div class="span2">
-                                        <div class="control-group">
-                                            <label class="control-label" for="name">&nbsp;</label>
-                                          Sub Item {{ form_widget(form.subProduct) }}
-                                        </div>
-                                    </div>
+
 
                                 </div>
-                                {% if ecommerceConfig.showBengal is defined and ecommerceConfig.showBengal is not empty %}
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
@@ -89,7 +89,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endif %}
+
                                 <div class="row-fluid">
 
                                     <div class="span4">

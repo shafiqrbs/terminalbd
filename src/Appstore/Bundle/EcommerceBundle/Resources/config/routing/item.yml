@@ -65,6 +65,8 @@ ecommerce_item_checkbox_applicable:
     options:
            expose: true
 
+
+
 ecommerce_item_inline_tag_search:
     path:     /inline-tag-search
     defaults: { _controller: "EcommerceBundle:Item:tagSelect" }
@@ -76,6 +78,7 @@ ecommerce_item_inline_brand:
     defaults: { _controller: "EcommerceBundle:Item:brandSelect" }
     options:
            expose: true
+
 
 ecommerce_item_inline_category_search:
     path:     /inline-category-search
@@ -90,12 +93,30 @@ ecommerce_item_inline_update:
     options:
             expose: true
 
+ecommerce_item_inline_size:
+    path:     /inline-subitem-size
+    defaults: { _controller: "EcommerceBundle:Item:sizeSelect" }
+    options:
+           expose: true
+
+ecommerce_item_inline_unit:
+    path:     /inline-subitem-unit
+    defaults: { _controller: "EcommerceBundle:Item:unitSelect" }
+    options:
+           expose: true
+
 ecommerce_item_inline_subitem_update:
     path:     /inline-Product-subitem-update
     defaults: { _controller: "EcommerceBundle:Item:inlineSubItemUpdate" }
     methods:  POST
     options:
             expose: true
+
+ecommerce_subitem_status:
+    path:     /{id}/subitem-status
+    defaults: { _controller: "EcommerceBundle:Item:subitemStatus" }
+    options:
+           expose: true
 
 ecommerce_item_subproduct:
     path:     /{id}/sub-product

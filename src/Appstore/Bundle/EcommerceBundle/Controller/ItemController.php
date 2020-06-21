@@ -665,7 +665,7 @@ class ItemController extends Controller
         );
         $type = '';
         $items = array();
-        $items[]=array('value' => '','text'=> '---Add Discount---');
+        $items[]=array('value' => '','text'=> '-Add Discount-');
         foreach ($entities as $entity):
             if($entity->getType() == "percentage"){
                 $type ='%';
@@ -683,7 +683,7 @@ class ItemController extends Controller
         $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Promotion');
         $items = array();
-        $items[] = array('value' => '','text'=> '---Add Promotion---');
+        $items[] = array('value' => '','text'=> '-Add Promotion-');
         foreach ($entities as $entity):
             $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
         endforeach;
@@ -697,7 +697,7 @@ class ItemController extends Controller
         $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $entities = $this->getDoctrine()->getRepository('EcommerceBundle:ItemBrand')->findBy(array('ecommerceConfig'=>$getEcommerceConfig,'status'=>1),array('name'=>'ASC'));
         $items = array();
-        $items[] = array('value' => '','text'=> '---Add Brand---');
+        $items[] = array('value' => '','text'=> '-Add Brand-');
         foreach ($entities as $entity):
             $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
         endforeach;
@@ -774,6 +774,32 @@ class ItemController extends Controller
 
 	}
 
+    public function sizeSelectAction()
+    {
+
+        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:ProductSize')->findBy(array('status'=>1),array('name'=>'ASC'));
+        $items = array();
+        $items[] = array('value' => '','text'=> '---Select Size---');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+    public function unitSelectAction()
+    {
+
+        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->findBy(array('status'=>1),array('name'=>'ASC'));
+        $items = array();
+        $items[] = array('value' => '','text'=> '---Select Unit---');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
 	public function inlineSubItemUpdateAction(Request $request)
 	{
 		$data = $request->request->all();
@@ -782,9 +808,26 @@ class ItemController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
 		}
-		$setName = 'set'.$data['name'];
-		$setValue = $data['value'];
-		$entity->$setName($setValue);
+
+        if($data['name'] == 'Size'){
+            $setValue = $em->getRepository('SettingToolBundle:ProductSize')->find($data['value']);
+            if($setValue){
+                $entity->setSize($setValue);
+            }else {
+                $entity->setSize(NULL);
+            }
+        }elseif($data['name'] == 'ProductUnit'){
+            $setValue = $em->getRepository('SettingToolBundle:ProductUnit')->find($data['value']);
+            if($setValue){
+                $entity->setProductUnit($setValue);
+            }else {
+                $entity->setProductUnit(NULL);
+            }
+        }else{
+            $setName = 'set'.$data['name'];
+            $setValue = $data['value'];
+            $entity->$setName($setValue);
+        }
 		$em->persist($entity);
 		$em->flush($entity);
 		exit;
@@ -798,6 +841,20 @@ class ItemController extends Controller
 		exit;
 
 	}
+
+    public function subitemStatusAction(ItemSub $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->isStatus();
+        if($status == 1){
+            $entity->setStatus(0);
+        } else{
+            $entity->setStatus(1);
+        }
+        $em->flush();
+        exit('Success');
+    }
 
     public function statusAction(Item $entity)
     {
