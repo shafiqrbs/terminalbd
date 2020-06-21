@@ -265,8 +265,6 @@ var InventoryItemListPage = function () {
             }).done(function (data) {
                 return  callback(data);
             });
-
-
         },
         allowClear: true,
         minimumInputLength: 1
