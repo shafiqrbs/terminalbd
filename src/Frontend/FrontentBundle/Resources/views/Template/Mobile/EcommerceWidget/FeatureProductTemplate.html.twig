@@ -22,7 +22,7 @@
                         {% if product.category is not empty and  globalOption.ecommerceConfig.showCategory == 1 %}
                             <span class="category-name">
                                                     <a class="category-url" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'category':product.category.slug }) }}">{{ product.category.name }}</a>
-                                                </span>
+                            </span>
                         {% endif %}
                         <h3 class="title">
                             {% if globalOption.ecommerceConfig.productDetails == 1 %}
@@ -40,7 +40,9 @@
                             <div>
                                 <select class="col-xs-12 col-lg-12 item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
                                     {% for goodsItem in  product.itemSubs  %}
+                                        {% if goodsItem.status == 1 %}
                                         <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

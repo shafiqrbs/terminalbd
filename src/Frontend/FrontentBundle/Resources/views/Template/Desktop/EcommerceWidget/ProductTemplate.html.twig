@@ -35,11 +35,13 @@
                                     </span>
                             {% endif %}
                             <div class="row sub-product" id="inlineLoading-{{ product.id }}">
-                                {% if product.itemSubs is not empty  and product.itemSubs|length > 1  %}
+                                {% if product.itemSubs is not empty and product.itemSubs|length > 1   %}
                                     <div>
                                         <select class="col-xs-12 col-lg-12 item-select item-select-bg inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path('ajax_inline_item_load', {'subdomain':globalOption.subDomain,'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
-                                            {% for goodsItem in  product.itemSubs  %}
+                                            {% for goodsItem in  product.itemSubs   %}
+                                                {% if goodsItem.status == 1 %}
                                                 <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -204,6 +206,7 @@
         </div>
     {% endfor %}
 {% endif %}
+
 {% if globalOption.ecommerceConfig.productTheme is empty or globalOption.ecommerceConfig.productTheme == 'theme-1' %}
     {% for product in products %}
         <div class="product-grid" data-match-height="product-item-height" >
