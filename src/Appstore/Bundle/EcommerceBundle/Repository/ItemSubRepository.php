@@ -92,8 +92,8 @@ class ItemSubRepository extends EntityRepository
             if($reEntity->getItemColors()){
                 $goods->setColors($reEntity->getItemColors());
             }
-            if(!empty($reEntity->getProductUnit())){
-                $goods->setProductUnit($reEntity->getProductUnit());
+            if(!empty($reEntity->getSizeUnit())){
+                $goods->setProductUnit($reEntity->getSizeUnit());
             }
             $goods->setitem($reEntity);
             $em->persist($goods);

@@ -79,7 +79,7 @@ class SiteSetting
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="siteSettings")
      * @ORM\JoinTable(name="sitesetting_module",
-     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="module_id", referencedColumnName="id")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})
@@ -90,7 +90,7 @@ class SiteSetting
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SyndicateModule", inversedBy="siteSettings")
      * @ORM\JoinTable(name="sitesetting_syndicatemodule",
-     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="syndicate_module_id", referencedColumnName="id")}
      * )
      * @ORM\OrderBy({"name" = "DESC"})
@@ -101,7 +101,7 @@ class SiteSetting
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="siteSettings")
      * @ORM\JoinTable(name="sitesetting_appmodule",
-     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="app_module_id", referencedColumnName="id")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})

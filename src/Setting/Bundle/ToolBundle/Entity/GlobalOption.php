@@ -83,7 +83,7 @@ class GlobalOption
     protected $androids;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="appDomains" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule", inversedBy="appDomains")
      */
     protected $mainApp;
 
