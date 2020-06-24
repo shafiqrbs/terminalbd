@@ -485,7 +485,6 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
             $data .= '<th class="span1" >' .$rack. '</th>';
-            $data .= "<td >{$entity->getMedicineStock()->getAveragePurchasePrice()}</td>";
             $data .= "<td>";
             $data .= "<input type='text' class='numeric td-inline-input purchasePrice' data-id='{$entity->getid()}' autocomplete='off' id='purchasePrice-{$entity->getId()}' name='purchasePrice' value='{$entity->getActualPurchasePrice()}'>";
             $data .= "</td>";

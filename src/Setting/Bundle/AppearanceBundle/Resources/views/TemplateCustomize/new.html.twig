@@ -1351,7 +1351,7 @@
                                         <div data-provides="fileupload" class="fileupload fileupload-new">
                                             <div style="height:250px;" class="fileupload-new  span12">
                                                 {% if(entity.webPath('headerBgImage') is defined ) %}
-                                                    <img class="fileupload-preview fileupload-exists  span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
+                                                    <img class="large-image span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
                                                 {% else %}
                                                     <img alt="" src="http://www.placehold.it/1024x250/EFEFEF/AAAAAA&amp;text=no+image">
                                                 {% endif %}
@@ -1703,7 +1703,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box grey">
@@ -1720,12 +1719,18 @@
             </div>
         </div>
     </div>
+    <style>
+        .large-image{
+            height:220px;
+            width:100%;
+        }
+    </style>
 {% endblock %}
 
 {% block documentready %}
     {{ parent() }}
     $('#cp2').colorpicker({
-    format: 'hex'
+        format: 'hex'
     });
 {% endblock %}
 

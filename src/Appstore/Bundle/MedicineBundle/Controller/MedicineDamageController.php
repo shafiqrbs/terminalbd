@@ -36,15 +36,12 @@ class MedicineDamageController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new MedicineDamage();
-        $form = $this->createCreateForm($entity);
+        $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDamage')->findWithSearch($config);
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDamage')->findWithSearch($config,$data);
 	    $pagination = $this->paginate($entities);
 	    return $this->render('MedicineBundle:Damage:index.html.twig', array(
-            'entities' => $pagination,
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'entities' => $pagination
         ));
     }
 
@@ -223,7 +220,6 @@ class MedicineDamageController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$damage->setProcess('Approved');
 			$em->flush();
-		//	$em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
 			return new Response('success');
 		} else {
 			return new Response('failed');

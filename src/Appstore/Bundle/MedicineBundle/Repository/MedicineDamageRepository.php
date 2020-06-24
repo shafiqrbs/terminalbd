@@ -17,12 +17,24 @@ use Doctrine\ORM\EntityRepository;
 class MedicineDamageRepository extends EntityRepository
 {
 
-   public function findWithSearch(MedicineConfig $config)
+   public function findWithSearch(MedicineConfig $config,$data)
    {
-	    $qb = $this->createQueryBuilder('e');
-        $qb->select('e');
-        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId());
-	    $qb->orderBy('e.created','DESC');
+       $name = isset($data['name'])? $data['name'] :'';
+       $brand = isset($data['brandName'])? $data['brandName'] :'';
+       $qb = $this->createQueryBuilder('e');
+       $qb->select('e');
+       $qb->join('e.medicineStock','item');
+       $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId());
+       if (!empty($sku)) {
+           $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
+       }
+       if (!empty($brand)) {
+           $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
+       }
+       if (!empty($name)) {
+           $qb->andWhere($qb->expr()->like("item.name", "'%$name%'"  ));
+       }
+        $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
    }
