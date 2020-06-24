@@ -102,7 +102,7 @@
                                         <th class="numeric" >{{ entity.profit|number_format }}</th>
                                         <th class="numeric" >{{ entity.loss|number_format }}</th>
                                         <td class="numeric" >
-                                            {% if app.user.granted("ROLE_DOMAIN") %}
+                                            {% if app.user.granted("ROLE_DOMAIN") or (entity.updated|date('mY') == "now"|date("mY") and app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL") ) %}
                                             <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_profit_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
