@@ -208,7 +208,6 @@ $(document).on( "click", ".preview", function(e){
 $(document).on( "change", ".inlineSizeChange", function( e ) {
 
     var url = $(this).attr("data-url");
-    alert(url);
     var subItem = $(this).val();
     var product = $(this).attr("data-id");
     $.ajax({
