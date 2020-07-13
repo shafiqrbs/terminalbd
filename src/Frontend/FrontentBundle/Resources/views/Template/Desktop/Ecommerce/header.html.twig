@@ -153,13 +153,15 @@
         <div class="container">
             <div class="navbar-header">
                 <div class="col-md-2" id="logo-area">
-                    {% if globalOption.ecommerceConfig.menuType == 'Sidebar' %}   <button id="showLeft" class="btn btn-primary"><i class="fa fa-bars"></i> </button> {% endif %}
+                    {% if globalOption.ecommerceConfig.menuType == 'Sidebar' %}
+                        <button id="showLeft" class="btn btn-primary side-menu-bar"><i class="fa fa-bars"></i> </button>
+                    {% endif %}
                     <a class="img-logo"
                        href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-7 {% else %} col-md-10 {% endif %}" style="padding-right: 0!important;">
+                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-8 {% else %} col-md-10 {% endif %}" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                         <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" >
                             {% if globalOption.ecommerceConfig.searchCategory == 1 %}
@@ -198,7 +200,7 @@
                     {% endif %}
                 </div>
                 {% if globalOption.templateCustomize.topTextPosition == "menu-right" %}
-                    <div class="col-md-3 bs-example-form" >
+                    <div class="col-md-2 bs-example-form" >
                         <div class="attr-nav">
                             {% if globalOption.templateCustomize.socialIconPosition == "menu-right" %}
                                 {% if globalOption.templateCustomize.socialIconType == 'icon-fadein' %}

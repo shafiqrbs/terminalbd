@@ -30,6 +30,10 @@
     width: auto!important;
 }
 
+.price-block{
+    display: inline-block;
+}
+
 .product-canvas:hover .product-eye {
     left: 25%;
     opacity: 1;
