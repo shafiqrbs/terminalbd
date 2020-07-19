@@ -171,12 +171,6 @@ class AccountSales
      */
     private $amount = 0;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="purchaseAmount", type="float" , nullable=true)
-     */
-    private $purchaseAmount = 0;
 
      /**
      * @var float
@@ -821,21 +815,6 @@ class AccountSales
         $this->assetsSales = $assetsSales;
     }
 
-    /**
-     * @return float
-     */
-    public function getPurchaseAmount()
-    {
-        return $this->purchaseAmount;
-    }
-
-    /**
-     * @param float $purchaseAmount
-     */
-    public function setPurchaseAmount($purchaseAmount)
-    {
-        $this->purchaseAmount = $purchaseAmount;
-    }
 
     /**
      * @return float

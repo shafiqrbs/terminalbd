@@ -356,6 +356,20 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function getIncomeSummary(User $user , $data)
+    {
+        $option =  $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.totalAmount) as total , sum(e.purchasePrice) as purchasePrice, sum(e.vat) as vat');
+        $qb->where('e.globalOption = :option')->setParameter('option', $option);
+        $qb->andWhere('e.processType = :type')->setParameter('type', 'Sales');
+        $qb->andWhere('e.process = :process')->setParameter('process', 'approved');
+        $this->handleSearchBetween($qb,$data);
+        return $qb->getQuery()->getOneOrNullResult();
+
+
+    }
+
     /* =============  Sales Reports Module ======================= */
 
 	public function reportSalesIncome(User $user,$data)
@@ -365,11 +379,13 @@ class AccountSalesRepository extends EntityRepository
 			$data['startDate'] = $datetime->format('Y-m-d 00:00:00');
 			$data['endDate'] = $datetime->format('Y-m-d 23:59:59');
 		}
-		$salesOverview = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
-		$purchasePrice = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
-		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
-		$revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
-		$data =  array('salesAmount' => $salesOverview['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesOverview['totalVat']);
+        $option =  $user->getGlobalOption();
+		$salesOverview = $this->getIncomeSummary($user,$data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($option->getId(), $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditureAccountHead($option, $accountHeads = array(37), $data);
+       // $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
+        $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+		$data =  array('salesAmount' => $salesOverview['total'] ,'purchasePrice' => $salesOverview['purchasePrice'],'salesAdjustment' => $salesAdjustment,'revenues' => $revenues,'expenditures' => $expenditures,'salesVat' => $salesOverview['vat']);
 		return $data;
 
 	}
@@ -801,6 +817,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setPurchasePrice($entity->getPurchasePrice());
+        $accountSales->setVat($entity->getVat());
         $accountSales->setAmount($entity->getPayment());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setProcessHead('restaurant');

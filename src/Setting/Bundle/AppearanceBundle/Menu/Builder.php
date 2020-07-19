@@ -594,8 +594,6 @@ class Builder extends ContainerAware
             $menu['Accounting']['Journal']->addChild('Contra Account', array('route' => 'account_balancetransfer'));
             $menu['Accounting']['Journal']->addChild('Profit Withdrawal', array('route' => 'account_profit_withdrawal'));
             $menu['Accounting']['Journal']->addChild('Profit Generate', array('route' => 'account_profit'));
-
-
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
 
@@ -614,6 +612,13 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
                 /* $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
             }
+            $restaurant = array('restaurant');
+            $result = array_intersect($arrSlugs, $restaurant);
+            if (!empty($result)) {
+                $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income', array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+            }
+
             $accounting = array('hms');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
