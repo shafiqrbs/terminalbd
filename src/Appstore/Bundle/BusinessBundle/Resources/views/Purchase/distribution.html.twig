@@ -50,7 +50,7 @@
                 <div class="span12">
                     <div class="row-fluid particular-info" >
                         <div class="span7" style="margin-left:15px">
-                            <select id="particular" name="particular" class="span12 select2">
+                            <select id="particular" name="particular" class="span12 select2 stockInput">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
                                     <option value="{{ path('business_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}</option>
@@ -60,15 +60,15 @@
                         <div class="span4">
                             <div class="input-append">
                                 <div class="input-group">
-                                    <input type="text" class="m-wrap span4 tooltips"
+                                    <input type="text" class="m-wrap span4 tooltips stockInput"
                                            data-original-title="Enter Customize Purchase Price"  data-trigger="hover" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
-                                    <input type="number" class="m-wrap span3 form-control input-number tooltips"
-                                           data-original-title="Enter Purchase Quantity"  data-trigger="hover" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
-                                    <input type="number" class="m-wrap span3 form-control input-number tooltips"
+                                    <input type="number" class="m-wrap span3 form-control input-number tooltips stockInput"
+                                           data-original-title="Enter Purchase Quantity"  data-trigger="hover" id="quantity" name="quantity" value="" min="1" autocomplete="off">
+                                    <input type="number" class="m-wrap span3 form-control input-number tooltips stockInput"
                                            data-original-title="Enter Bonus Quantity"  data-trigger="hover" id="bonusQuantity" name="bonusQuantity" value="" min="0" autocomplete="off">
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
-                                    <button type="submit" class="btn blue" id="addParticular" ><i class="icon-save"></i> Add</button>
+                                    <button type="submit" class="btn blue stockInput" id="addParticular" ><i class="icon-save"></i> Add</button>
                                 </div>
                             </div>
                         </div>

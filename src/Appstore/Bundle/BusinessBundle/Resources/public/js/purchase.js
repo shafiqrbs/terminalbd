@@ -37,13 +37,54 @@ $(document).on('change', '#particular', function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
+            $('#quantity').focus();
             $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']);
+           // $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
             $('#purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
         }
     })
+});
+
+
+/*
+$('#particular').on("select2-selecting", function (e) {
+    setTimeout(function () {
+        $('#particular').select2('open');
+    }, 500)
+});
+*/
+
+$('form#purchaseItem').on('keypress', '.stockInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+
+            case 'particular':
+                $('#quantity').focus();
+                break;
+
+            case 'quantity':
+                $('#bonusQuantity').focus();
+                break;
+
+            case 'bonusQuantity':
+                $('#addParticular').click();
+                $('#particular').select2('open');
+                break;
+
+        }
+        return false;
+    }
 });
 
 var form = $("#purchaseItem").validate({
@@ -84,10 +125,10 @@ var form = $("#purchaseItem").validate({
                 $('#discount').html(obj['discount']);
                 $('#due').html(obj['due']);
                 $('#purchasePrice').val('');
-                $("#particular").select2().select2("val","");
+                $('#particular').select2('open');
                 $('form#purchaseItem')[0].reset();
                 $('#unit').html('Unit');
-                $('#quantity').val('1');
+                $('#quantity').val('');
 
             }
         });
