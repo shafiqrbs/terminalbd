@@ -11,6 +11,15 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class WebServiceController extends Controller
 {
+
+
+
+    public function orderAction()
+    {
+        echo "Order";
+        exit;
+    }
+
     /**
      * @param $subdomain
      * @return mixed

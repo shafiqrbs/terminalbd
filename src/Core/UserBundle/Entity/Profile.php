@@ -12,6 +12,7 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Designation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -74,6 +75,14 @@ class Profile
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="employeeProfiles" )
      */
     protected $employeeBranch;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation", inversedBy="profiles" )
+     */
+    protected $deliveryLocation;
+
+
 
     /**
      * @var string
@@ -988,6 +997,22 @@ class Profile
     public function setOccupation($occupation)
     {
         $this->occupation = $occupation;
+    }
+
+    /**
+     * @return DeliveryLocation
+     */
+    public function getDeliveryLocation()
+    {
+        return $this->deliveryLocation;
+    }
+
+    /**
+     * @param DeliveryLocation $deliveryLocation
+     */
+    public function setDeliveryLocation($deliveryLocation)
+    {
+        $this->deliveryLocation = $deliveryLocation;
     }
 
 

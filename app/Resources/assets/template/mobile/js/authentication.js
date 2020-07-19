@@ -33,6 +33,7 @@ function loginSigninButton() {
 }
 
 
+
 $("#loginForm").validate({
 
     rules: {

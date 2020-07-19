@@ -36,6 +36,7 @@
                                         {% if categories is not empty %}
                                             {% for category in categories %}
                                                 {% for product in category.particulars %}
+                                                    {% if product.status == 1 %}
                                                     <li class="product-content addProduct" data-action="{{ path('restaurant_temporary_product_add',{'product':product.id}) }}">
                                                         <div data-match-height="tab-content" class="bs-calltoaction bs-calltoaction-primary">
                                                             <div class="row">
@@ -48,6 +49,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endfor %}
                                         {% endif %}
@@ -64,6 +66,7 @@
                                         <ul class="unstyled">
                                             {% if category.particulars is not empty %}
                                                 {% for product in category.particulars %}
+                                                    {% if product.status == 1 %}
                                                     <li class="product-content addProduct" data-action="{{ path('restaurant_temporary_product_add',{'product':product.id}) }}">
                                                         <div data-match-height="tab-content" class="bs-calltoaction bs-calltoaction-primary">
                                                             <div class="row">
@@ -76,6 +79,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
 

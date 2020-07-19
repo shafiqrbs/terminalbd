@@ -86,11 +86,15 @@ $(document).on( "click", ".hideCartItem", function(e){
 $('.productSingleCart').click( function(e) {
 
     var url = $(this).attr("data-url");
+    var id = $(this).attr("data-id");
     $.ajax({
         url:url ,
         type: 'GET',
         success: function(response){
             cartInfo(response,1);
+            $("#item-cart-quantity-"+id).html(1);
+            $("#cart-product-"+id).addClass('cart-wrapper-show').removeClass('cart-wrapper-hide');
+            $('#single-cart-'+id).addClass('cart-wrapper-hide').removeClass('cart-wrapper-show');
         }
     });
     e.preventDefault();
@@ -350,7 +354,161 @@ function jqueryTemporaryLoad() {
             });
         }
     });
+
+
+
+    $("#customerOtpLogin").validate({
+
+        rules: {
+            "mobile": {required: true}
+        },
+
+        messages: {
+            "mobile":"Enter your mobile name"
+        },
+
+        tooltip_options: {
+            "mobile": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url: $('form#customerOtpLogin').attr('action'),
+                type: $('form#customerOtpLogin').attr('method'),
+                data: new FormData($('form#customerOtpLogin')[0]),
+                processData : false,
+                contentType : false,
+                success: function (data) {
+                    obj = JSON.parse(data);;
+                    if(obj['status'] === '301'){
+                        alert(obj['message'])
+                    }else{
+                        $('#customerOtpLogin').hide();
+                        $('#customerOtp').show();
+                        $('#otpCode').val(obj['otpCode']);
+                        $('#resendMobile').val(obj['mobile']);
+                    }
+                }
+            });
+        }
+
+    });
+
+    $("#customerOtp").validate({
+
+        rules: {
+            "otp": {required: true}
+        },
+
+        messages: {
+            "otp":"Enter 4 digit on time password"
+        },
+
+        tooltip_options: {
+            "otp": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url: $('form#customerOtp').attr('action'),
+                type: $('form#customerOtp').attr('method'),
+                data: new FormData($('form#customerOtp')[0]),
+                processData : false,
+                contentType : false,
+                success: function (data) {
+                    obj = JSON.parse(data);;
+                    if(obj['status'] === 'success'){
+                        location.reload();
+                    }else{
+                        return false;
+                    }
+
+                }
+            });
+        }
+
+    });
+
+    $(document).on( "click", "#resendPin", function( e ) {
+
+        var mobile = $('resendMobile').val();
+        var url = $(this).attr("data-url");
+        $.ajax({
+            url: url ,
+            type: 'GET',
+            data:'mobile='+mobile,
+            success: function(response) {
+                obj = JSON.parse(response);;
+                if(obj['status'] === '301'){
+                    alert(obj['message'])
+                }else{
+                    $('#customerOtpLogin').hide();
+                    $('#customerOtp').show();
+                    $('#otpCode').val(obj['otpCode']);
+                    $('#resendMobile').val(obj['mobile']);
+                }
+            }
+
+        })
+
+    });
+
+    $("#registerFormUpdate").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_mobile": {
+                required: false
+            },
+            "registration_additional_phone": {
+                required: false
+            },
+             "registration_location": {
+                required: true
+            },
+            "registration_address": {required: true}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_location":"Enter your delivery location",
+            "registration_address":"Enter your address"
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_address": {placement:'top',html:true},
+            "registration_location": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function(response){
+                    if(response === 'success'){
+                        $("#register-success").addClass('alert-success').show();
+                        loginSigninButton();
+                    }else if(response === 'invalid'){
+                        $("form").trigger("reset");
+                    }
+                },
+
+            });
+        }
+    });
+
 }
+
+
 
 function fileUpload() {
 }
@@ -373,15 +531,17 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
     fieldName   = $(this).attr('data-field');
     type        = $(this).attr('data-type');
     input = $("input[name='"+fieldName+"']");
+    itemCart = $("#item-cart-quantity-"+productId);
     currentVal = parseInt(input.val()) ? parseInt(input.val()) : 0;
     if (!isNaN(currentVal)) {
         if(type === 'minus') {
             if(currentVal > input.attr('min')) {
                 existVal = (currentVal - 1);
                 input.val(existVal).change();
+                itemCart.html(existVal).change();
                 $.get( url,{ quantity:-1})
                     .done(function( response ) {
-                        obj = JSON.parse(data);
+                        obj = JSON.parse(response);
                         cartInfo(response,existVal);
                     });
             }
@@ -398,6 +558,7 @@ $(document).on( "click", ".btn-new-cart-item", function(e){
             if(currentVal < input.attr('max')) {
                 existVal = (currentVal + 1);
                 input.val(existVal).change();
+                itemCart.html(existVal);
                 $.get( url,{ quantity:1})
                     .done(function(response){
                         obj = JSON.parse(response);

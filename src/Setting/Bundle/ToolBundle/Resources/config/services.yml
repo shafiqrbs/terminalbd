@@ -88,6 +88,12 @@ services:
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.change_password, method: sendSms }
 
+  setting_tool.listener.otp:
+      class: Setting\Bundle\ToolBundle\EventListener\OtpSmsListener
+      arguments: [@doctrine , @setting_tool.sms_gateWay]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.otp, method: sendSms }
+
   setting_tool.listener.association.invoice:
       class: Setting\Bundle\ToolBundle\EventListener\AssociationInvoiceListener
       arguments: [@doctrine , @setting_tool.sms_gateWay]

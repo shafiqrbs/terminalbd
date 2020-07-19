@@ -136,7 +136,8 @@ class EcommerceConfigType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     'default'       => 'Default',
-                    'medicine'       => 'Medicine',
+                    'family-mart'    => 'Family Mart',
+                    'medicine'      => 'Medicine',
                     'alshefa'       => 'Alshefa',
                     'theme-1'       => 'Theme-1',
                     'theme-2'       => 'Theme-2',
@@ -151,6 +152,7 @@ class EcommerceConfigType extends AbstractType
                 ),
             ))
             ->add('file')
+            ->add('mobileFilter')
             ->add('cartSearch')
             ->add('productDetails')
             ->add('footerCategory')

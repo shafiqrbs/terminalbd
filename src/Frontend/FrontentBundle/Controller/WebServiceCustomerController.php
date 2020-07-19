@@ -6,6 +6,7 @@ use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Core\UserBundle\Form\SignupType;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,7 +19,15 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class WebServiceCustomerController extends Controller
 {
 
+    /**
+     * @Secure(roles="ROLE_CUSTOMER")
+     */
 
+    public function orderAction()
+    {
+        echo "Order";
+        exit;
+    }
 
    public function registerAction($subdomain)
     {
@@ -298,7 +307,7 @@ class WebServiceCustomerController extends Controller
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
             if (empty($data['registration_email'])) {
-                $entity->setEmail($mobile . '@gmail.com');
+                $entity->setEmail($mobile.'@gmail.com');
             } else {
                 $entity->setEmail($data['registration_email']);
             }
@@ -319,8 +328,6 @@ class WebServiceCustomerController extends Controller
             return new Response($redirect);
         }
         return new Response('failed');
-
-
     }
 
 
@@ -367,6 +374,20 @@ class WebServiceCustomerController extends Controller
         return new Response('failed');
 
 
+    }
+
+    public function updateEcommerceAction($subdomain, Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $name = isset($data['registration_name']) ? $data['registration_name'] :"";
+        $address = isset($data['registration_address']) ? $data['registration_address'] :"";
+        $location = isset($data['registration_location']) ? $data['registration_location'] :"";
+        $pickupMobile = isset($data['registration_additional_phone']) ? $data['registration_additional_phone'] :"";
+        $data = array('name' => $name ,'address' => $address ,'pickupMobile' => $pickupMobile,'location' => $location);
+        $this->getDoctrine()->getRepository('UserBundle:Profile')->updateEcommerce($this->getUser(), $data);
+        return new Response('success');
     }
 
     public function confirmAction($subdomain)
@@ -451,6 +472,66 @@ class WebServiceCustomerController extends Controller
 
     }
 
+    public function mobileOtpAction($subdomain , Request $request)
+    {
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $mobile =  $_REQUEST['mobile'];
+        $otpCode = mt_rand(1000,9999);
+        $msg = "{$option->getDomain()}, Your One-Time PIN is {$otpCode}. Please call for any support {$option->getHotline()}.";
+        $mobileCode = "88".$mobile;
+       // $response = $this->send($msg,$mobileCode);
+     //   $items = json_decode($response,true);
+      //  if($items['status'] == '201'){
+            $this->get('session')->set('otpCode',$otpCode);
+      //  }
+        $array = (json_encode(array('status' => 201 ,'message' => '','mobile' => $mobile,'otpCode'=> $otpCode )));
+        return new Response($array);
+
+    }
+
+    public function otpConfirmAction($subdomain , Request $request)
+    {
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $data = $request->request->all();
+        $otpCode = $data['otp'];
+        $otp = $this->get('session')->get('otpCode');
+        $mobile =  $data['resendMobile'];
+        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $mobile));
+        if($otpCode == $otp and !empty($entity)){
+            $entity->setGlobalOption($option);
+            $this->get('fos_user.user_manager')->updateUser($entity);
+            $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+            $array = (json_encode(array('status' => 'success')));
+        }elseif($otpCode == $otp and empty($entity)){
+            $em = $this->getDoctrine()->getManager();
+            $user = new User();
+            $user->setPlainPassword("1234");
+            $user->setEnabled(true);
+            $user->setUsername($mobile);
+            if (empty($email)) {
+                $user->setEmail($mobile . '@gmail.com');
+            } else {
+                $user->setEmail($email);
+            }
+            $user->setGlobalOption($option);
+            $user->setRoles(array('ROLE_CUSTOMER'));
+            $user->setUserGroup('customer');
+            $em->persist($entity);
+            $em->flush();
+            $data = array('name' => '' ,'email' => '','address' => '');
+            $this->getDoctrine()->getRepository('UserBundle:Profile')->insertEcommerce($entity, $data);
+            $array = (json_encode(array('status' => 'new')));
+        }else{
+            $array = (json_encode(array('status' => 'invalid')));
+        }
+        return new Response($array);
+
+    }
+
+
+
     public function customerForgetPasswordAction()
     {
 
@@ -470,6 +551,34 @@ class WebServiceCustomerController extends Controller
             echo 'This mobile '.$mobile.' is not correct,Please try another mobile no.';
         }
         exit;
+    }
+
+    function send($msg, $phone, $sender = ""){
+
+        if(empty($sender)){
+            $from = "03590602016";
+        }else{
+            $from = $sender;
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.icombd.com/api/v1/campaigns/sms/1/text/single",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>"{\"from\":\"{$from}\",\"text\":\"{$msg}\",\"to\":\"{$phone}\"}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Authorization: Basic dW1hcml0OnVtYXJpdDE0OA=="
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+
     }
 
 

@@ -206,6 +206,13 @@ class EcommerceConfig
      */
     private $showSidebar = false;
 
+      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mobileFilter", type="boolean")
+     */
+    private $mobileFilter = false;
+
      /**
      * @var boolean
      *
@@ -1535,6 +1542,22 @@ class EcommerceConfig
     public function setMobileFeatureColumn($mobileFeatureColumn)
     {
         $this->mobileFeatureColumn = $mobileFeatureColumn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMobileFilter()
+    {
+        return $this->mobileFilter;
+    }
+
+    /**
+     * @param bool $mobileFilter
+     */
+    public function setMobileFilter($mobileFilter)
+    {
+        $this->mobileFilter = $mobileFilter;
     }
 
 

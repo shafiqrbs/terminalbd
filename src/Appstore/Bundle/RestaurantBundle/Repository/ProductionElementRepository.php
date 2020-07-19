@@ -83,20 +83,19 @@ class ProductionElementRepository extends EntityRepository
 
     public function updatePurchaseItemPrice(Purchase $purchase)
     {
-        $em = $this->_em;
 
         /* @var $item PurchaseItem */
 
         foreach ($purchase->getPurchaseItems()  as $item ){
 
-            $qb = $this->createQueryBuilder('e');
-            $q = $qb->update()
-                ->set('e.price', '?1')
-                ->where('e.material = ?3')
-                ->setParameter(1, $item->getPurchasePrice())
-                ->setParameter(3, $item->getParticular()->getId())
-                ->getQuery();
-            $q->execute();
+            $id = $item->getId();
+            $price = $item->getPurchasePrice();
+            $elem = "UPDATE `restaurant_production_element` as sub
+SET sub.price = $price , sub.subTotal = (sub.quantity * $price)
+WHERE sub.material_id =:material";
+            $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+            $qb1->bindValue('material', $id);
+            $qb1->execute();
 
         }
 

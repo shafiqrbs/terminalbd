@@ -4077,3 +4077,39 @@ ul.cart-list li{
 #mobile-footer ul.footer-icon li a i {
     line-height: 31px;
 }
+
+#sideMenu {
+    color: #f06060;
+    float: right;
+    z-index: 5;
+}
+#sideMenuContainer {
+    background: #DDDDDD;
+    min-height: 250px;
+    padding: 10px;
+    position: fixed;
+    top: 46px;
+    right: -200px;
+    width: 200px;
+    z-index: 4;
+}
+#sideMenuContainer h2 {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: #f2e7e7;
+    margin-left: -10px;
+    background: #000;
+    margin-right: -10px;
+    height: 28px;
+    line-height: 28px;
+}
+#sideMenuContainer > a {
+    display: block;
+    padding: 5px 10px;
+}
+#sideMenuContainer > a::after {
+    content: attr(title);
+    padding-left: 10px;
+}

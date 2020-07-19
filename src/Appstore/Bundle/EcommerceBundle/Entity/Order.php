@@ -74,6 +74,10 @@ class Order
      **/
     private  $coupon;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\TimePeriod", inversedBy="orders" )
+     */
+    protected $timePeriod;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderProcess" )
@@ -1144,6 +1148,22 @@ class Order
     public function setCustomerEmail($customerEmail)
     {
         $this->customerEmail = $customerEmail;
+    }
+
+    /**
+     * @return TimePeriod
+     */
+    public function getTimePeriod()
+    {
+        return $this->timePeriod;
+    }
+
+    /**
+     * @param TimePeriod $timePeriod
+     */
+    public function setTimePeriod($timePeriod)
+    {
+        $this->timePeriod = $timePeriod;
     }
 
 

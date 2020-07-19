@@ -363,6 +363,12 @@ class ParticularRepository extends EntityRepository
             $particular->setPurchasePrice($purchaseItem->getPurchasePrice());
             $em->persist($particular);
             $em->flush();
+            if($purchase->getRestaurantConfig()->isProduction() == 1 ) {
+                $this->updateProductionElementPrice($particular, $purchaseItem->getPurchasePrice());
+            }
+        }
+        if($purchase->getRestaurantConfig()->isProduction() == 1 ) {
+            $this->updateProductionPrice($purchase->getRestaurantConfig()->getId());
         }
     }
 
@@ -502,16 +508,20 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function updateProductionPrice(RestaurantConfig $config)
+    public function updateProductionElementPrice(Particular $entity ,$price)
     {
 
+        $id = $entity->getId();
         $elem = "UPDATE `restaurant_production_element` as sub
-JOIN restaurant_particular ON sub.material_id = restaurant_particular.id
-SET sub.subTotal = (sub.quantity * sub.price)
-WHERE restaurant_particular.restaurantConfig_id =:config";
+SET sub.price = $price , sub.subTotal = (sub.quantity * $price)
+WHERE sub.material_id =:material";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
-        $qb1->bindValue('config', $config->getId());
+        $qb1->bindValue('material', $id);
         $qb1->execute();
+    }
+
+    public function updateProductionPrice($config)
+    {
 
         $sql = "Update restaurant_particular as stock
 inner join (
@@ -524,7 +534,7 @@ set stock.productionElementAmount = pa.productionElementAmount,
 stock.purchasePrice = COALESCE((stock.productionElementAmount + stock.valueAddedAmount),0)
 WHERE stock.restaurantConfig_id =:config";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
-        $qb->bindValue('config', $config->getId());
+        $qb->bindValue('config', $config);
         $qb->execute();
 
     }

@@ -267,6 +267,12 @@ class StockController extends Controller
         $setField = 'set'.$data['name'];
         $entity->$setField(abs($data['value']));
         $em->flush();
+        if($data['name'] == "PurchasePrice"){
+            $price = abs($data['value']);
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionElementPrice($entity,$price);
+            $config = $entity->getRestaurantConfig()->getId();
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config);
+        }
         exit;
 
     }
@@ -274,8 +280,7 @@ class StockController extends Controller
 
     public function productionUpdateAction()
     {
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        echo $config->getId();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig()->getId();
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config);
         return new Response('success');
 

@@ -1066,6 +1066,7 @@ display: grid;
     margin-bottom: 15px;
     border-bottom: 1px solid #0000001a;
     padding-bottom: 15px;
+    margin-top: 8px;
 }
 
  .card-content{
@@ -1109,4 +1110,26 @@ display: grid;
     font-size: 13px;
     line-height: 27px;
     text-align: center;
+}
+
+.price-block{
+    display: inline-block;
+    width: 100%;
+}
+.cart-wrapper-hide{
+    display: none;
+}
+.cart-wrapper-show{
+    display: inline-table;
+}
+.item-cart-bag {
+    height: 34px;
+    background: #ffffff;
+    color: #000;
+    line-height: 34px;
+    display: inline-block;
+    width: 100%;
+}
+.productSingleCart{
+    width: 100%;
 }

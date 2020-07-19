@@ -40,7 +40,7 @@ class Category
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", mappedBy="category")
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $particulars;
 

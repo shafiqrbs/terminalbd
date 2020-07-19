@@ -92,4 +92,18 @@ class ProfileRepository extends EntityRepository {
         $em->flush();
     }
 
+    public function updateEcommerce(User $entity, $data = array())
+    {
+        $em = $this->_em;
+        $profile = $entity->getProfile();
+        $profile->setName($data['name']);
+        $profile->setAddress($data['address']);
+        $profile->setAdditionalPhone($data['pickupMobile']);
+        $locationId = $data['location'];
+        $location = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($locationId);
+        $profile->setDeliveryLocation($location);
+        $em->persist($profile);
+        $em->flush();
+    }
+
 }

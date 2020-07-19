@@ -36,6 +36,10 @@ webservice_login:
     path:     /{subdomain}/customer-login
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
+webservice_otp:
+    path:     /{subdomain}/customer-otp-check
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
+
 webservice_module:
     path:     /{subdomain}/{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }

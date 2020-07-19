@@ -16,6 +16,19 @@ webservice_user_signin:
     path:     /web/sign-in
     defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
+webservice_order:
+    path:     /order/customer
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:order }
+
+webservice_otp:
+    path:     /otp/customer-check
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:mobileOtp }
+
+webservice_otp_confirm:
+    path:     /otp/customer-confirm
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:otpConfirm }
+
+
 homepage:
      path:     /backend
      defaults: { _controller: BusinessBundle:Default:index }
@@ -43,6 +56,13 @@ webservice_member_signup:
 webservice_ecommerce_signup:
     path:     /{subdomain}/customer-ecommerce-insert
     defaults: { _controller: FrontendBundle:WebServiceCustomer:insertEcommerce }
+    methods:  POST
+    options:
+            expose: true
+
+webservice_ecommerce_customer_update:
+    path:     /{subdomain}/customer-ecommerce-update
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:updateEcommerce }
     methods:  POST
     options:
             expose: true

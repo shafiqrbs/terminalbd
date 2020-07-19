@@ -32,6 +32,21 @@
 
 .price-block{
     display: inline-block;
+    width: 100%;
+}
+
+.cart-wrapper-hide{
+    display: none;
+}
+.cart-wrapper-show{
+    display: inline-table;
+}
+
+.item-cart-bag{
+    height: 34px;
+    background: #ffffff;
+    color: #000;
+    line-height: 34px;
 }
 
 .product-canvas:hover .product-eye {
