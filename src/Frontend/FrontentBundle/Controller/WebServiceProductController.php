@@ -985,6 +985,9 @@ class WebServiceProductController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $detect = new MobileDetect();
         $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+        $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
+        $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
         if($detect->isMobile() || $detect->isTablet() ) {
             $theme = "Template/Mobile/{$themeName}/EcommerceWidget";
         }else{
@@ -993,6 +996,8 @@ class WebServiceProductController extends Controller
         $html = $this->renderView(
             'FrontendBundle:'.$theme.':Cart.html.twig', array(
                 'cart' => $cart,
+                'locations' => $locations,
+                'timePeriods' => $timePeriods,
                 'globalOption' => $globalOption
             )
         );

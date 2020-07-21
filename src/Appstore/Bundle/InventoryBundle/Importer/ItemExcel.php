@@ -17,6 +17,7 @@ class ItemExcel
     use ContainerAwareTrait;
 
     /* @var $itemImport ItemImport */
+
     protected $itemImport;
 
     private $data = array();

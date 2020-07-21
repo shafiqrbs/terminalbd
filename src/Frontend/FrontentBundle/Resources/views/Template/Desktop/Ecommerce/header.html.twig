@@ -161,18 +161,18 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-6 {% else %} col-md-8 {% endif %}" style="padding-right: 0!important;">
+                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-7 {% else %} col-md-7 {% endif %}" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                         <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" >
                             {% if globalOption.ecommerceConfig.searchCategory == 1 %}
-                            <div class="col-md-3 col-lg-3" >
+                            <div class="col-md-4 col-lg-4" >
                                         <select class="input-selector col-md-12 col-lg-12 search-category" name="category" id="category" >
                                             <option value="">-- Select Category --</option>
                                             {{ categoryTree|raw }}
                                         </select>
                             </div>
                             {% endif %}
-                            <div class="input-group search-box {% if globalOption.ecommerceConfig.searchCategory == 1 %} col-md-9 col-lg-9 {% else %} col-md-12 col-lg-12 {% endif %}"  >
+                            <div class="input-group search-box {% if globalOption.ecommerceConfig.searchCategory == 1 %} col-md-8 col-lg-8 {% else %} col-md-12 col-lg-12 {% endif %}"  >
                                 <div class="input-group col-md-12 col-lg-12">
 
                                     <input  type="text" id="webName" name="webName"  class="form-control serarch-keyword search-field col-md-12 col-lg-12" placeholder="Product name,category,brand etc" value="{{ app.request.get('webName') }}" >
@@ -190,29 +190,27 @@
                         </form>
                     {% endif %}
                 </div>
-                {% if app.user %}
-                <div class="col-md-2">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user }} <span class="glyphicon glyphicon-user pull-right"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-dashboard" > Dashboard<span class="glyphicon glyphicon-user pull-right"></span></a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
-                                <li class="divider"></li>
-                                <li><a href="#"> <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
-                                <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}" type="button" data-toggle="tooltip" title="System Logout" class="btn logout btn-group btn-danger btn-logout" >Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
 
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                {% endif %}
                 {% if globalOption.templateCustomize.topTextPosition == "menu-right" %}
-                    <div class="col-md-2 bs-example-form" >
+                    <div class="col-md-3 bs-example-form" >
+                        {% if app.user %}
+                            <div style="float: left;">
+                                <ul class="nav navbar-nav" style="background: #009b3a">
+                                    <li class="dropdown">
+                                        <a href="#" style="width: 120px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
+                                        <ul class="dropdown-menu">
+                                            <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
+                                            </li>
+                                            <li><a href="#">Messages</a></li>
+                                            <li><a href="#">Favourites Snippets</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout" >Sign Out <span class="fa fa-sign-out pull-right" style="margin-top: 4px"></span></a></li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
                         <div class="attr-nav">
                             {% if globalOption.templateCustomize.socialIconPosition == "menu-right" %}
                                 {% if globalOption.templateCustomize.socialIconType == 'icon-fadein' %}
@@ -341,6 +339,7 @@
                                 </div>
                             {% endif %}
                         </div>
+
                     </div>
                 {% endif %}
             </div>

@@ -70,6 +70,10 @@ class ExcelImporterController extends Controller
         $form = $this->createForm(new ExcelImporterType(), $entity, array(
             'action' => $this->generateUrl('inventory_excelimproter_create'),
             'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }
@@ -96,9 +100,16 @@ class ExcelImporterController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $inventory = $excelImporter->getInventoryConfig();
-        $importer = $this->get('appstore_inventory_importer_excel');
-        $importer->setInventoryConfig($inventory->getId());
-        $reader = $this->get('appstore_inventory.importer.excel_data_reader');
+
+        if($excelImporter->getMode() == 'purchase'){
+            $importer = $this->get('appstore_inventory_importer_excel');
+            $importer->setInventoryConfig($inventory->getId());
+            $reader = $this->get('appstore_inventory.importer.excel_data_reader');
+        }else{
+            $importer = $this->get('appstore_inventory_product_import');
+            $importer->setExcelImport($excelImporter);
+            $reader = $this->get('appstore_inventory.importer.product_excel_data_reader');
+        }
         $file =  realpath($excelImporter->getAbsolutePath());
         $data = $reader->getData($file);
         if($importer->isValid($data)) {

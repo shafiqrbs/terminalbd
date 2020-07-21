@@ -79,6 +79,14 @@ class ExcelImporter
     private $progress = 'created';
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", nullable=true)
+     */
+    private $mode = 'stock';
+
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -322,6 +330,22 @@ class ExcelImporter
     public function getPurchase()
     {
         return $this->purchase;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param mixed $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

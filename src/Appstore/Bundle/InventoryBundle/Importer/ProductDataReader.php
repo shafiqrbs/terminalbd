@@ -57,7 +57,7 @@ class ProductDataReader
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
 
-                $key = $dataArray['ProductName']. $dataArray['Unit'].$dataArray['Category'];
+                $key = $dataArray['ProductName'];
 
                 $namedDataArray[$key] = $dataArray;
 

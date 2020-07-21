@@ -20,6 +20,15 @@ class ExcelImporterType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please choose  any valid file which extension excel'))
                 )))
+            ->add('mode', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a Mode---',
+                'choices' => array(
+                    'stock' => 'Stock',
+                    'purchase' => 'Purchase',
+                ),
+            ))
             ->add('file');
     }
     
@@ -38,6 +47,6 @@ class ExcelImporterType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_excelimporter';
+        return 'excelimporter';
     }
 }

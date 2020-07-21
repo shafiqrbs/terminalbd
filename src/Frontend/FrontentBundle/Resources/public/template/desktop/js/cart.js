@@ -66,8 +66,6 @@ $(document).on( "click", ".showCartItem", function(e){
     })
 });
 
-
-
 $(document).on( "click", ".showCartItemxx", function(e){
     $.ajax({url:'/cart/product-details'}).done(function(content){
         $("#showCartItem").html(content).slideDown("slow");
@@ -433,7 +431,7 @@ function jqueryTemporaryLoad() {
 
     $(document).on( "click", "#resendPin", function( e ) {
 
-        var mobile = $('resendMobile').val();
+        var mobile = $('#resendMobile').val();
         var url = $(this).attr("data-url");
         $.ajax({
             url: url ,
@@ -455,7 +453,7 @@ function jqueryTemporaryLoad() {
 
     });
 
-    $("#registerFormUpdate").validate({
+    $("#registerFormCreate").validate({
 
         rules: {
 
@@ -492,7 +490,6 @@ function jqueryTemporaryLoad() {
                 data        : new FormData(form),
                 processData : false,
                 contentType : false,
-                dataType: 'json',
                 success: function(response){
                     if(response === 'success'){
                         $("#register-success").addClass('alert-success').show();
@@ -501,6 +498,50 @@ function jqueryTemporaryLoad() {
                         $("form").trigger("reset");
                     }
                 },
+
+            });
+        }
+    });
+
+    $("#registerFormUpdate").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_additional_phone": {
+                required: false
+            },
+            "registration_location": {
+                required: true
+            },
+            "registration_address": {required: true}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_location":"Enter your delivery location",
+            "registration_address":"Enter your address"
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_address": {placement:'top',html:true},
+            "registration_location": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    if(response === 'success') {
+                        $("#success-msg").show();
+                    }
+                }
 
             });
         }

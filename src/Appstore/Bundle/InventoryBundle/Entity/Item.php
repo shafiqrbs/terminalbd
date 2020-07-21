@@ -275,6 +275,14 @@ class Item
     /**
      * @var float
      *
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
+     */
+    private $purchasePrice;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="purchaseAvgPrice", type="float", nullable=true)
      */
     private $purchaseAvgPrice;
@@ -1045,6 +1053,22 @@ class Item
     public function setBarcode($barcode)
     {
         $this->barcode = $barcode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 }

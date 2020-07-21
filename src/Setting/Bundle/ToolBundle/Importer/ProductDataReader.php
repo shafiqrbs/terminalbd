@@ -28,7 +28,8 @@ class ProductDataReader
         return $this->getNamedArray($objPHPExcel);
     }
 
-    /**     * @param \PHPExcel $objPHPExcel
+    /**
+     * @param \PHPExcel $objPHPExcel
      *
      * @return array
      * @throws \PHPExcel_Exception
@@ -56,9 +57,7 @@ class ProductDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-
-                $key = $dataArray['ProductName']. $dataArray['Unit'].$dataArray['Category'];
-
+                $key = $dataArray['ProductName'];
                 $namedDataArray[$key] = $dataArray;
 
             }
