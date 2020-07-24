@@ -6,20 +6,19 @@
                     <div class="col-md-4 text-left">
                         <div class="box">
                             <ul class="info-links">
-                                {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
-                                    <li> Mail Us {{ globalOption.email }}</li>
-                                {% endif %}
-                                {% if globalOption.templateCustomize.showMobile == 1 %}
-                                    <li>Call Us {{ globalOption.hotline }}</li>
-                                {% endif %}
+                                <li class="top-mobile">Call Us <span>{{ globalOption.hotline }}</span></li>
+                                <li>|</li>
+                                <li class="top-email"> Mail Us <span>{{ globalOption.email }}</span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-4 text-center"></div>
                     <div class=" col-md-4 text-right">
                         <div class="box">
-                            <ul class="">
-                                <li><a class="checkout cartUpload" href="javascript:">Checkout</a> </li>
+                            <ul class="info-links">
+                                <li class="checkout cartUpload" >Checkout</li>
+                                <li>|</li>
+                                <li class="top-login cartUpload">Login</li>
                             </ul>
                         </div>
                     </div>
@@ -142,11 +141,11 @@
                             {% for  menu in globalOption.ecommerceMenus  %}
                                 <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
                                     <ul>
-                                        {% if menu.childMenus is not empty %}
+                                       {# {% if menu.childMenus is not empty %}
                                             {% for childMenu in  menu.childMenus %}
                                                 <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
                                             {% endfor %}
-                                        {% endif %}
+                                        {% endif %}#}
                                         {% if menu.features is not empty %}
                                             <li><a href="#">Feature's</a>
                                                 <ul>
@@ -201,32 +200,27 @@
 
                                         {% endif %}
                                         {% if menu.categories is not empty %}
-                                            <li>
-                                                {% render controller("FrontendBundle:EcommerceWidget:returnSimpleCategoryMenu",{categories: menu.categories}) %}
-                                            </li>
+                                            {% render controller("FrontendBundle:EcommerceWidget:returnSimpleCategoryMenu",{categories: menu.categories}) %}
                                         {% endif %}
                                         {% if menu.brands is not empty %}
                                             {% for brand in menu.brands %}
                                                 <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'brand' : brand.slug}) }}">{{ brand.name }}</a></li>
                                             {% endfor %}
                                         {% endif %}
-
                                     </ul>
                                 </li>
                             {% endfor %}
                         </ul>
                     </nav>
                 </div>
+            </div>
+            <div class="container">
                 <div class="verticle-menu category-list moremenu">
                     <div class="category-box">
                         <div class="home-category widget_product_categories">
-                            <h3 class="widget-title">Product categories</h3>
-
-
+                            <h3 class="widget-title">Product Categories</h3>
                             <ul class="product-categories toggle-block sidebar-category-inner">
                                 {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id}) %}
-
-
                             </ul>
                         </div>
                     </div>
@@ -235,7 +229,6 @@
         </section>
         <div class="clearfix"></div>
     {% endif %}
-
     <div class="clearfix"></div>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header'}) %}

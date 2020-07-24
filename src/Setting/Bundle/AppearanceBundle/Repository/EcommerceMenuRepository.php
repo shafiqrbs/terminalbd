@@ -91,7 +91,7 @@ class EcommerceMenuRepository extends EntityRepository
         foreach ($menues as $item) {
 
             $str .= "<li><a href='javascript:' class='menuLinkx' data-action='/product/category/{$item['slug'] }'>{$item['name']}</a>";
-            $str .= "<ul class='sidebar-submenu'>";
+            $str .= "<ul class=''>";
             foreach ($item['children'] as $child) {
                 $str .= "<li class='' ><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a>";
                 $row = $this->_em->getRepository('ProductProductBundle:Category')->find($child->getId());
@@ -109,17 +109,17 @@ class EcommerceMenuRepository extends EntityRepository
         $result = "";
       //  $row = $this->_em->getRepository('ProductProductBundle:Category')->find($id);
         if (!empty($row)) {
-            $result .= "<ul class='sidebar-submenu'>";
+            $result .= "<ul class=''>";
             foreach ($row as $child):
                 if(!empty($child->getChildren())){
                     $result.= "<li class=''><a class='' href='/product/category/{$child->getSlug()}'>{$child->getName()}</a>";
-                    $result.= $this->menuCategoryDropdownChild($child->getChildren());
+                   // $result.= $this->menuCategoryDropdownChild($child->getChildren());
                     $result.= "</li>";
                 }
             endforeach;
             $result.= "</ul>";
         }else {
-            $result.= "<li><<a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a></li>";
+            $result.= "<li><a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a></li>";
         }
         return $result;
 

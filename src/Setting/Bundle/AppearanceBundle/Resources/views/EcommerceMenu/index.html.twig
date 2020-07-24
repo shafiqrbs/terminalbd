@@ -61,7 +61,11 @@
                                                                 <span class="dd3-content">{{ entity.name }}
                                                                     <div style="float: right; margin-top: -3px">
                                                                         <span class="btn mini purple-stripe btn-action">
-                                                                            <a href="{{ path('ecommercemenu_status',{'id': entity.id }) }}">Status</a>
+                                                                            {% if entity.status == 1 %}
+                                                                           <a href="{{ path('ecommercemenu_status',{'id': entity.id }) }}" class="btn red mini"> <i class="icon-remove"></i> </a>
+                                                                           {% else %}
+                                                                            <a href="{{ path('ecommercemenu_status',{'id': entity.id }) }}" class="btn blue mini"> <i class="icon-ok"></i></a>
+                                                                            {% endif %}
 
                                                                         </span>
                                                                         <span class="btn mini green-stripe btn-action">

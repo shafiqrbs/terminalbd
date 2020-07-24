@@ -57,7 +57,7 @@
                                                                 <span class="dd3-content">{{ entity.name }}
                                                                     <div style="float: right; margin-top: -3px">
                                                                         <span class="btn mini purple-stripe btn-action">
-                                                                            <a href="{{ path('megamenu_status',{'id': entity.id }) }}">Status</a>
+                                                                            <a href="{{ path('megamenu_status',{'id': entity.id }) }}">{% if entity.status == 1 %} <span class="fa fa-remove red"></span> {% else %} <span class="fa fa-active red"></span> {% endif %} </a>
 
                                                                         </span>
                                                                         <span class="btn mini green-stripe btn-action">
