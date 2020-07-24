@@ -721,7 +721,7 @@ class CategoryRepository extends MaterializedPathRepository
 
         $results = $qb
             ->orderBy('node.level, node.name', 'ASC')
-            ->where('node.level IN (2,3)')
+            ->where('node.level IN (1,2)')
             ->andWhere($orX)
             ->getQuery()
             ->getResult();
@@ -730,9 +730,9 @@ class CategoryRepository extends MaterializedPathRepository
 
         foreach ($categories as $category) {
             switch($category->getLevel()) {
-                case 2: break;
+                case 1: break;
                 default:
-                    $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
+                    $grouped[$categories[$category->getParentIdByLevel(1)]->getName()][$category->getId()] = $category;
             }
         }
         return $grouped == null ? array() : $grouped;

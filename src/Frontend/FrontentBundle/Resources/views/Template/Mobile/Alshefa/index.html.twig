@@ -11,11 +11,12 @@
             {% render controller("FrontendBundle:EcommerceWidget:featureTemplateMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
         </section>
     {% endif %}
+    <div class="clearfix"></div>
  </div>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/medicine.css'
+    '@FrontendBundle/Resources/public/template/mobile/css/product.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -23,12 +24,15 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/medicine.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/owlcarousel.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/ecommerce.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/cart.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    var items = "{{ globalOption.ecommerceConfig.mobileFeatureColumn }}";
+    productSliderOwl(items);
 {% endblock %}

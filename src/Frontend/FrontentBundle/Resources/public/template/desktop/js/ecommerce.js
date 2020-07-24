@@ -1,3 +1,7 @@
+$( ".category-list" ).click(function() {
+    $('.home-category').slideToggle(500);
+});
+
 $(document).on( "change", ".modalChangeSubItem", function( e ) {
 
     var url = $(this).attr("data-url");

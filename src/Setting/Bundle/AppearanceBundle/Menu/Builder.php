@@ -387,7 +387,7 @@ class Builder extends ContainerAware
             $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING') OR $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_ADMIN')) {
 
             $result = array_intersect($menuName, array('Ecommerce'));
             $website = array_intersect($menuName, array('Website'));

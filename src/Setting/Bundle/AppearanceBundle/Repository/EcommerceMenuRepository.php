@@ -4,6 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Repository;
 
 use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityRepository;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -89,14 +90,38 @@ class EcommerceMenuRepository extends EntityRepository
         $str = "";
         foreach ($menues as $item) {
 
-            $str .= "<li><a href='javascript:'><span class='menuLink' data-action='/product/category/{$item['slug'] }' >{$item['name']}</span></a>";
+            $str .= "<li><a href='javascript:' class='menuLinkx' data-action='/product/category/{$item['slug'] }'>{$item['name']}</a>";
             $str .= "<ul class='sidebar-submenu'>";
             foreach ($item['children'] as $child) {
-                $str .= "<li><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a></li>";
+                $str .= "<li class='' ><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a>";
+                $row = $this->_em->getRepository('ProductProductBundle:Category')->find($child->getId());
+                $str .= $this->menuCategoryDropdownChild($row->getChildren());
+                $str .= "</li>";
             }
             $str .= "</ul></li>";
         }
         return $str;
+
+    }
+
+    public function menuCategoryDropdownChild($row){
+
+        $result = "";
+      //  $row = $this->_em->getRepository('ProductProductBundle:Category')->find($id);
+        if (!empty($row)) {
+            $result .= "<ul class='sidebar-submenu'>";
+            foreach ($row as $child):
+                if(!empty($child->getChildren())){
+                    $result.= "<li class=''><a class='' href='/product/category/{$child->getSlug()}'>{$child->getName()}</a>";
+                    $result.= $this->menuCategoryDropdownChild($child->getChildren());
+                    $result.= "</li>";
+                }
+            endforeach;
+            $result.= "</ul>";
+        }else {
+            $result.= "<li><<a class='' href='/product/category/{$row->getSlug()}'>{$row->getName()}</a></li>";
+        }
+        return $result;
 
     }
 }

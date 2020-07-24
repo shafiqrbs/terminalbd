@@ -339,7 +339,25 @@
                                 </div>
                             {% endif %}
                         </div>
+                    </div>
+                {% elseif app.user is not empty and globalOption.templateCustomize.topTextPosition != "menu-right" %}
+                    <div class="col-md-3 bs-example-form" >
+                        <div style="float: left;">
+                            <ul class="nav navbar-nav" style="background: #009b3a">
+                                <li class="dropdown">
+                                    <a href="#" style="width: 120px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
+                                    <ul class="dropdown-menu">
+                                        <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
+                                        </li>
+                                        <li><a href="#">Messages</a></li>
+                                        <li><a href="#">Favourites Snippets</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout" >Sign Out <span class="fa fa-sign-out pull-right" style="margin-top: 4px"></span></a></li>
 
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 {% endif %}
             </div>

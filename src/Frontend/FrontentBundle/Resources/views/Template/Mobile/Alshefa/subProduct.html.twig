@@ -1,4 +1,3 @@
-{#
 <div class="row">
     <div class="col-xs-4 col-md-4">
         {% if  subItem.size is defined  %}
@@ -54,27 +53,3 @@
             </button>
     </span>
 </div>
-#}
-
-<div class="col-xs-3 col-md-3 pull-right">
-    <div class="form-group">
-        <div class="input-group input-group-sm">
-            <span class="input-group-addon" id="sizing-addon3">{{ globalOption.ecommerceConfig.currency }}</span>
-            <input class="form-control" name="" id="" disabled="disabled" value="{% if subItem.discountPrice is not empty %}{{ subItem.discountPrice|number_format }} {% else %}{{ subItem.salesPrice|number_format }}{% endif %}" aria-label="Text input">
-        </div>
-    </div>
-</div>
-{% if product.subProduct == 1 and subItem.colors is not empty and subItem.colors is defined %}
-    <div class="col-xs-3 col-md-3 pull-right">
-        <div class="form-group">
-            <div class="input-group input-group-sm">
-                <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-th"></span></span>
-                <select class="form-control" name="color" id="color" >
-                    {% for color in  subItem.colors %}
-                        <option  value="{{ color.id }}" >{{ color.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-    </div>
-{% endif %}

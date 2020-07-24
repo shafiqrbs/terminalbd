@@ -111,8 +111,19 @@ class EcommerceWidgetController extends Controller
     public function returnSimpleCategoryMenuAction($categories){
 
         $categoryMegaMenu =  $this->getDoctrine()->getRepository('SettingAppearanceBundle:EcommerceMenu')->getSimpleCategoryMenu($categories);
-
         return new Response($categoryMegaMenu);
+    }
+
+    public function returnProductFeatureCategoryAction(GlobalOption $globalOption){
+
+        $config = $globalOption->getEcommerceConfig();
+        $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig'=>$config));
+        $data = '';
+        foreach ($category as $row){
+          $data .="<li class='cat-item'><a href='/product/category/{$row->getSlug() }'>{$row->getName()}</a></li>";
+        }
+        return new Response($data);
+
     }
 
     public function footerAction(GlobalOption $globalOption,Request $request)
