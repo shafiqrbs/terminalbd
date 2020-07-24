@@ -197,7 +197,6 @@
                                                     {% endfor %}
                                                 </ul>
                                             </li>
-
                                         {% endif %}
                                         {% if menu.categories is not empty %}
                                             {% render controller("FrontendBundle:EcommerceWidget:returnSimpleCategoryMenu",{categories: menu.categories}) %}
@@ -215,13 +214,15 @@
                 </div>
             </div>
             <div class="container">
-                <div class="verticle-menu category-list moremenu">
-                    <div class="category-box">
-                        <div class="home-category widget_product_categories">
-                            <h3 class="widget-title">Product Categories</h3>
-                            <ul class="product-categories toggle-block sidebar-category-inner">
-                                {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id}) %}
-                            </ul>
+                <div class="col-md-12">
+                    <div class="verticle-menu category-list moremenu">
+                        <div class="category-box">
+                            <div class="home-category widget_product_categories">
+                                <h3 class="widget-title">Product Categories</h3>
+                                <ul class="product-categories toggle-block sidebar-category-inner">
+                                    {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id}) %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
