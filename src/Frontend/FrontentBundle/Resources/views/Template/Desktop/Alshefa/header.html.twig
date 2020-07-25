@@ -139,6 +139,7 @@
                     <nav id="header-menu">
                         <ul>
                             {% for  menu in globalOption.ecommerceMenus  %}
+                                {% if menu.status == 1  %}
                                 <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
                                     <ul>
                                        {# {% if menu.childMenus is not empty %}
@@ -208,6 +209,7 @@
                                         {% endif %}
                                     </ul>
                                 </li>
+                            {% endif %}
                             {% endfor %}
                         </ul>
                     </nav>
