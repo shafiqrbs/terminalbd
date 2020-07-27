@@ -159,6 +159,32 @@ class ReportController extends Controller
 
     }
 
+    public function salesDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('RestaurantBundle:Invoice')->salesReport($user, $data);
+        $pagination = $this->paginate($entities);
+        $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        $banks = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption' => $user->getGlobalOption(),'status' => 1), array('name' => 'ASC'));
+        $mobiles =  $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption' => $user->getGlobalOption() , 'status' => 1), array('name' => 'ASC'));
+
+        $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
+        return $this->render('RestaurantBundle:Report:sales/sales.html.twig', array(
+            'option' => $user->getGlobalOption(),
+            'entities' => $pagination,
+            'banks' => $banks,
+            'mobiles' => $mobiles,
+            'cashOverview' => $cashOverview,
+            'purchaseSalesPrice' => $purchaseSalesPrice,
+            'transactionMethods' => $transactionMethods,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm' => $data,
+        ));
+    }
+
     public function downloadPdf($html,$fileName = '')
     {
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';

@@ -728,5 +728,56 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
+    public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
+
+        $userBranch = $user->getProfile()->getBranches();
+        $config =  $user->getGlobalOption()->getRestaurantConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.invoiceParticulars','si');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('COUNT(si.id) AS totalItem');
+        $qb->addSelect('SUM(e.purchasePrice) AS purchasePrice','SUM(e.total) AS salesPurchase');
+        $qb->where('e.restaurantConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
+    public function salesReport( User $user , $data)
+    {
+
+        $config =  $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.salesBy', 'u');
+        $qb->leftJoin('e.transactionMethod', 't');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('t.name as transactionMethod');
+        $qb->addSelect('e.id as id');
+        $qb->addSelect('e.created as created');
+        $qb->addSelect('e.process as process');
+        $qb->addSelect('e.invoice as invoice');
+        $qb->addSelect('(e.due) as due');
+        $qb->addSelect('(e.subTotal) as subTotal');
+        $qb->addSelect('(e.total) as total');
+        $qb->addSelect('(e.purchasePrice) as purchasePrice');
+        $qb->addSelect('(e.payment) as payment');
+        $qb->addSelect('(e.discount) as discount');
+        $qb->addSelect('(e.vat) as vat');
+        $qb->where('e.restaurantConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+
 
 }

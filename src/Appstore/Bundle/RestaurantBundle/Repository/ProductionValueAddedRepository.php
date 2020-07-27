@@ -30,12 +30,15 @@ class ProductionValueAddedRepository extends EntityRepository
         $values = $em->getRepository('RestaurantBundle:Particular')->findWithSearch($item->getRestaurantConfig(),array('value-added'));
         foreach ($values as $value){
            //$valueAdded = $em->getRepository('RestaurantBundle:Particular')->find($value['id']);
-            $entity = new ProductionValueAdded();
-            $entity->setValueAdded($value);
-            $entity->setProductionItem($item);
-            $entity->setAmount(0);
-            $em->persist($entity);
-            $em->flush($entity);
+            if($value->getStatus() == 1){
+                $entity = new ProductionValueAdded();
+                $entity->setValueAdded($value);
+                $entity->setProductionItem($item);
+                $entity->setAmount(0);
+                $em->persist($entity);
+                $em->flush($entity);
+            }
+
         }
     }
 
@@ -77,6 +80,15 @@ class ProductionValueAddedRepository extends EntityRepository
 
     }
 
-
+    public function updateProductionValueAddedParticular(Particular $particular)
+    {
+        $id = $particular->getId();
+        $elem = "UPDATE `restaurant_value_added` as sub
+SET sub.amount = 0)
+WHERE sub.valueAdded_id =:material";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('material', $id);
+        $qb1->execute();
+    }
 
 }

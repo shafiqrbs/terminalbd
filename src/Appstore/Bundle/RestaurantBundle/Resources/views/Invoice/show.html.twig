@@ -50,7 +50,7 @@
                         <div class="portlet-body form">
                             <div class="row-fluid">
 
-                               <div class="span6 invoice-payment">
+                                <div class="span4 invoice-payment">
                                     <h4>Payment Details:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Sub-Total BDT:</strong>&nbsp;{{ entity.subTotal|number_format() }}</li>
@@ -62,7 +62,7 @@
                                     </ul>
 
                                 </div>
-                                <div class="span6">
+                                <div class="span4">
                                     <h4>Invoice Info:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
@@ -71,6 +71,17 @@
                                         <li><strong>Received By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                     </ul>
                                 </div>
+                                <div class="span4">
+                                    {% if entity.customer.name != "Default" %}
+                                    <h4>Customer:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Customer:</strong>&nbsp;{{ entity.customer.name }}</li>
+                                        <li><strong>Mobile:</strong>&nbsp;{{ entity.customer.mobile }}</li>
+                                        <li><strong>Address:</strong>&nbsp;{{ entity.customer.address }}</li>
+                                    </ul>
+                                    {% endif %}
+                                </div>
+
 
                             </div>
                             {% include('flash-message.html.twig')  %}
@@ -152,7 +163,7 @@
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                     {% if  app.user.granted("ROLE_DOMAIN") %}
-                                        <a  href="{{ path('hms_invoice_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Admission Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                        <a  href="{{ path('restaurant_invoice_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                 </div>
                             </div>
