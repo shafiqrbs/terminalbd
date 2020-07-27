@@ -152,7 +152,6 @@ class ProductionController extends Controller
     public function productionUpdateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
         if (!$entity) {
@@ -161,7 +160,7 @@ class ProductionController extends Controller
         $productionPrice = $entity->getValueAddedAmount() + $entity->getProductionElementAmount();
         $entity->setPurchasePrice($productionPrice);
         $em->flush();
-        return $this->redirect($this->generateUrl('restaurant_stock'));
+        return $this->redirect($this->generateUrl('restaurant_production_edit',array('id' => $id)));
     }
 
 
@@ -213,7 +212,6 @@ class ProductionController extends Controller
         $em->remove($particular);
         $em->flush();
         $subTotal = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->getProductionPrice($product);
-        $product->setValueAddedAmount($subTotal);
         $em->flush();
         $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->particularProductionElements($product);
         $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($product->getRestaurantConfig()->getId());

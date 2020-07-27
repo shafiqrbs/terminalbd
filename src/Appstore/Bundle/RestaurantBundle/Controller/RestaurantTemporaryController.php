@@ -108,7 +108,6 @@ class RestaurantTemporaryController extends Controller
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());
         }
-
         if (isset($masterData['customerMobile']) and !empty($masterData['customerMobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($masterData['customerMobile']);
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option, $mobile, $masterData);
@@ -135,7 +134,7 @@ class RestaurantTemporaryController extends Controller
         $deliveryDateTime = $request->request->get('deliveryDateTime');
         $datetime = empty($deliveryDateTime) ? '' : $deliveryDateTime ;
         $entity->setDeliveryDateTime($datetime);
-        if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal()) or ($entity->getTotal() > 0 and empty($data['payment']) and $entity->isHold() != 1)){
+        if(($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() and $entity->isHold() != 1)){
             $entity->setPayment($entity->getTotal());
             $entity->setPaymentStatus("Paid");
             $entity->setDue(0);
@@ -143,12 +142,18 @@ class RestaurantTemporaryController extends Controller
                 $amount = $data['payment'] - $entity->getTotal();
                 $entity->setReturnAmount($amount);
             }
+
         }else{
+
             $payment = floatval($data['payment']);
             $entity->setPayment($payment);
             $entity->setPaymentStatus("Due");
             $amount = $entity->getTotal() -  $entity->getPayment();
-            $entity->setDue($amount);
+            if($amount > 0){
+                $entity->setDue($amount);
+            }else{
+                $entity->setReturnAmount(abs($amount));
+            }
         }
         if($entity->isHold() == 1){
             $entity->setProcess('Hold');
