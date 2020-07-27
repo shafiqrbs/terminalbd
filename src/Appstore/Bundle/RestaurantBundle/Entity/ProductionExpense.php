@@ -45,9 +45,11 @@ class ProductionExpense
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", inversedBy="productionExpenseItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionElement", inversedBy="productionExpenseItem", cascade={"detach","merge"})
+     * @ORM\JoinColumn(name="productionElement_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $productionElement;
+
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionExpenseItem" )

@@ -216,6 +216,7 @@ class ProductionController extends Controller
         $product->setValueAddedAmount($subTotal);
         $em->flush();
         $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->particularProductionElements($product);
+        $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($product->getRestaurantConfig()->getId());
         $result = array('subTotal' => $subTotal,'invoiceParticulars' => $invoiceParticulars);
         return new Response(json_encode($result));
 
