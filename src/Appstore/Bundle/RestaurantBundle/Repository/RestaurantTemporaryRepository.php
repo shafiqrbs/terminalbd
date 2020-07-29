@@ -49,7 +49,7 @@ class RestaurantTemporaryRepository extends EntityRepository
         $invoiceParticular = $this->findOneBy(array('user' => $user ,'particular' => $particular));
         if(!empty($invoiceParticular) and $data['process'] == 'update') {
             $entity = $invoiceParticular;
-            $entity->setQuantity((int)$data['quantity']);
+            $entity->setQuantity((float)$data['quantity']);
             $entity->setSubTotal($data['price'] * $entity->getQuantity());
         }elseif(!empty($invoiceParticular) and $data['process'] == "create") {
             $entity = $invoiceParticular;
@@ -88,7 +88,7 @@ class RestaurantTemporaryRepository extends EntityRepository
             $data .= '<td class="" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/restaurant/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
@@ -110,7 +110,7 @@ class RestaurantTemporaryRepository extends EntityRepository
   <a href='javascript:' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' class='btn yellow btn-number mini' data-type='minus' data-id='{$entity->getId()}'  data-text='{$entity->getId()}' data-title='{{ item.salesPrice }}'  data-field='quantity'>
                                                             <span class='fa fa-minus'></span>
                                                    </a>
-                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' disabled='disabled' id='quantity-{$entity->getId()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}' data-action='' min='1' max='1000'>
+                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' id='quantity-{$entity->getId()}' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}' data-action='' min='1' max='1000'>
                                                       <a href='javascript:' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' class='btn green btn-number mini'  data-type='plus' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-text='{$entity->getId()}' data-field='quantity'>
                                                           <span class='fa fa-plus'></span>
                                                   </a>

@@ -140,6 +140,12 @@ class RestaurantConfig
      */
     private $printToken = false;
 
+     /**
+     * @var boolean
+     * @ORM\Column(type="boolean",  nullable=true)
+     */
+    private $posPrint = true;
+
     /**
      * @var boolean
      *
@@ -1270,6 +1276,22 @@ class RestaurantConfig
     public function setIsCustomer($isCustomer)
     {
         $this->isCustomer = $isCustomer;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPosPrint()
+    {
+        return $this->posPrint;
+    }
+
+    /**
+     * @param bool $posPrint
+     */
+    public function setPosPrint($posPrint)
+    {
+        $this->posPrint = $posPrint;
     }
 
 

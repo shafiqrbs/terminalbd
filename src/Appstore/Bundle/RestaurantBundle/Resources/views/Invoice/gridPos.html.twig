@@ -124,7 +124,7 @@
   <a href="javascript:" data-action="{{ path('restaurant_temporary_product_update',{'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity">
                                                             <span class="fa fa-minus"></span>
                                                    </a>
-                                                                     <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" disabled="disabled" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_temporary_product_update',{'product':item.id}) }}" min="1" max="100">
+                                                                     <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.id }}"  id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-title="{{ item.salesPrice }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_temporary_product_update',{'product':item.particular.id}) }}" min="1" max="100">
                                                       <a href="javascript:" data-action="{{ path('restaurant_temporary_product_update',{'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity">
                                                           <span class="fa fa-plus"></span>
                                                   </a>
@@ -400,7 +400,9 @@
                                     <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
                                     <input type="hidden" name="buttonType" id="buttonType" value="">
                                     <button type="button" class="btn blue big  receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
+                                    {% if config.posPrint == 1 %}
                                     <button type="button" class="btn yellow big receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
+                                    {% endif %}
 
                                 </div>
                             </div>

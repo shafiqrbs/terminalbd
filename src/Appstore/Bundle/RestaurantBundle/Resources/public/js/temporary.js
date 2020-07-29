@@ -319,6 +319,21 @@ function formSubmit() {
         }
     });
 
+    $(document).on('change', '.updateProduct', function() {
+
+        url = $(this).attr('data-action');
+        var price = $(this).attr('data-title');
+        fieldId = $(this).attr('data-id');
+        quantity = $(this).val();
+        $.get( url,{ quantity:quantity})
+            .done(function( response ) {
+                subTotal = (quantity * parseInt(price));
+                $('#subTotal-'+fieldId).html(subTotal);
+                setTimeout(jsonResult(response),100);
+            });
+
+    });
+
     $(document).on( "click", ".btn-number", function(e){
 
         e.preventDefault();

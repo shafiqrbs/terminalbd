@@ -29,11 +29,11 @@ class DefaultController extends Controller
         $previousSalesTransactionOverview   = $em->getRepository('RestaurantBundle:Invoice')->todaySalesOverview($user,$data,'false');
 
         return $this->render('RestaurantBundle:Default:dashboard.html.twig', array(
+            'config'                            => $option->getRestaurantConfig(),
             'salesOverview'                     => $salesOverview,
             'salesTransactionOverview'          => $salesTransactionOverview,
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
             'option'                            => $user->getGlobalOption() ,
-            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
             'transactionCashOverview'           => $transactionCashOverview,
             'expenditureOverview'               => $expenditureOverview ,
             'salesCashOverview'                 => $salesCashOverview ,

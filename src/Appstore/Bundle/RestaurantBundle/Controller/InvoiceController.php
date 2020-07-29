@@ -54,6 +54,7 @@ class InvoiceController extends Controller
         $pagination = $this->paginate($entities);
 
         return $this->render('RestaurantBundle:Invoice:index.html.twig', array(
+            'config' => $config,
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
@@ -396,15 +397,12 @@ class InvoiceController extends Controller
     }
 
 
-    public function deleteAction(Invoice $entity)
+    public function deleteAction($id)
     {
 
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-        $em->remove($entity);
-        $em->flush();
+        $Invoice = $em->createQuery("DELETE RestaurantBundle:Invoice e WHERE e.id = {$id}");
+        $Invoice->execute();
         return new Response(json_encode(array('success' => 'success')));
 
     }

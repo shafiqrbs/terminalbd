@@ -41,9 +41,9 @@ class RestaurantTemporary
 
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="smallint")
+     * @ORM\Column(name="quantity", type="float")
      */
     private $quantity = 1;
 
@@ -89,21 +89,6 @@ class RestaurantTemporary
     }
 
 
-    /**
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int $quantity
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
 
     /**
      * @return float
@@ -216,6 +201,22 @@ class RestaurantTemporary
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param float $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
     }
 }
 
