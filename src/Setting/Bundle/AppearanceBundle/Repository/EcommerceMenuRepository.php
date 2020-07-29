@@ -90,7 +90,7 @@ class EcommerceMenuRepository extends EntityRepository
         $str = "";
         foreach ($menues as $item) {
 
-            $str .= "<li><a href='javascript:' class='menuLinkx' data-action='/product/category/{$item['slug'] }'>{$item['name']}</a>";
+            $str .= "<li><a href='/product/category/{$item['slug'] }' class='menuLinkx' data-action='/product/category/{$item['slug'] }'>{$item['name']}</a>";
             $str .= "<ul class=''>";
             foreach ($item['children'] as $child) {
                 $str .= "<li class='' ><a href='/product/category/{$child->getSlug() }'>{$child->getName() }</a>";

@@ -19,15 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class WebServiceCustomerController extends Controller
 {
 
-    /**
-     * @Secure(roles="ROLE_CUSTOMER")
-     */
-
-    public function orderAction()
-    {
-        echo "Order";
-        exit;
-    }
 
    public function registerAction($subdomain)
     {
@@ -185,7 +176,7 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setGlobalOption($globalOption);
-            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setRoles(array('ROLE_BUYER'));
             $em->persist($entity);
             $em->flush();
             //$dispatcher = $this->container->get('event_dispatcher');
@@ -241,7 +232,7 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setGlobalOption($globalOption);
-            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setRoles(array('ROLE_BUYER'));
             $entity->setUserGroup('customer');
             $em->persist($entity);
             $em->flush();
@@ -277,7 +268,7 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setGlobalOption($globalOption);
-            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setRoles(array('ROLE_BUYER'));
             $entity->setUserGroup('customer');
             $em->persist($entity);
             $em->flush();
@@ -355,7 +346,7 @@ class WebServiceCustomerController extends Controller
                 $entity->setEmail($email);
             }
             $entity->setGlobalOption($globalOption);
-            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setRoles(array('ROLE_BUYER'));
             $entity->setUserGroup('customer');
             $em->persist($entity);
             $em->flush();

@@ -6,9 +6,9 @@
                     <div class="col-md-4 text-left">
                         <div class="box">
                             <ul class="info-links">
-                                <li class="top-mobile">Call Us <span>{{ globalOption.hotline }}</span></li>
+                                <li class="top-mobile">Call Us <span>{{ globalOption.templateCustomize.contactNo }}</span></li>
                                 <li>|</li>
-                                <li class="top-email"> Mail Us <span>{{ globalOption.email }}</span></li>
+                                <li class="top-email"> Mail Us <span>{{ globalOption.templateCustomize.contactEmail }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -80,8 +80,9 @@
                                         <ul class="dropdown-menu">
                                             <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
                                             </li>
-                                            <li><a href="#">Messages</a></li>
-                                            <li><a href="#">Favourites Snippets</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order') }}">Order</a></li>
+                                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_preorder') }}">Pre-order</a></li>
+                                            <li><a href="#"></a></li>
                                             <li class="divider"></li>
                                             <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout" >Sign Out <span class="fa fa-sign-out pull-right" style="margin-top: 4px"></span></a></li>
 
@@ -141,11 +142,11 @@
                                 {% if menu.status == 1  %}
                                 <li><a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}"> {{ menu.name }}</a>
                                     <ul>
-                                       {# {% if menu.childMenus is not empty %}
+                                        {% if menu.childMenus is not empty %}
                                             {% for childMenu in  menu.childMenus %}
-                                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
+                                                <li><a href="/{{ childMenu.slug }}">{{ childMenu.menu }}</a></li>
                                             {% endfor %}
-                                        {% endif %}#}
+                                        {% endif %}
                                         {% if menu.features is not empty %}
                                             <li><a href="#">Feature's</a>
                                                 <ul>

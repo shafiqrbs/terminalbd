@@ -287,7 +287,8 @@ security:
         - { path: ^/medicine,           role: ROLE_MEDICINE }
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
-        - { path: ^/order,              role: ROLE_CUSTOMER }
+        - { path: ^/customer,           role: ROLE_CUSTOMER }
+        - { path: ^/buyer,              role: ROLE_BUYER }
         - { path: ^/agent,              role: ROLE_AGENT }
         - { path: ^/sms,                role: ROLE_SMS }
         - { path: ^/user,               role: ROLE_USER }

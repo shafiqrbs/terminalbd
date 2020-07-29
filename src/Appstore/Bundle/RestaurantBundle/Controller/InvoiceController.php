@@ -403,9 +403,6 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
-            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processReverseSalesItem($entity);
-        }
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));

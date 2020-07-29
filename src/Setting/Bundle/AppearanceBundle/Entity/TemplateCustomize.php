@@ -97,6 +97,21 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="contactNo", type="string", nullable=true)
+     */
+    private $contactNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contactEmail", type="string", nullable=true)
+     */
+    private $contactEmail;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="sidebarPosition", type="string", nullable=true)
      */
     private $sidebarPosition = 'left';
@@ -3638,6 +3653,38 @@ class TemplateCustomize
     public function setAppleStore($appleStore)
     {
         $this->appleStore = $appleStore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactNo()
+    {
+        return $this->contactNo;
+    }
+
+    /**
+     * @param string $contactNo
+     */
+    public function setContactNo($contactNo)
+    {
+        $this->contactNo = $contactNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactEmail()
+    {
+        return $this->contactEmail;
+    }
+
+    /**
+     * @param string $contactEmail
+     */
+    public function setContactEmail($contactEmail)
+    {
+        $this->contactEmail = $contactEmail;
     }
 
 

@@ -36,20 +36,24 @@ class RestaurantStockHistory
     private $item;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem")
-     * @ORM\OrderBy({"sorting" = "ASC"})
+      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem", inversedBy="stockHistory")
+      * @ORM\JoinColumn(name="productionExpense_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $purchaseItem;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular", cascade={"detach","merge"},inversedBy="stockHistory")
+     * @ORM\JoinColumn(name="salesItem_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
-    private $salesItem;
+    private  $salesItem;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense", inversedBy="stockHistory")
+     * @ORM\JoinColumn(name="productionExpense_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $productionExpense;
