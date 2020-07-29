@@ -76,6 +76,8 @@ class InvoiceController extends Controller
         $entity->setPaymentStatus('Pending');
         $entity->setCreatedBy($this->getUser());
         $entity->setSalesBy($this->getUser());
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
+        $entity->setCustomer($customer);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('restaurant_invoice_edit', array('id' => $entity->getId())));

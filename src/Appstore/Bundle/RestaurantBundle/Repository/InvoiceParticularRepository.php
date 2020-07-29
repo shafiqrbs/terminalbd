@@ -144,12 +144,12 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
         }elseif(!empty($invoiceParticular) and $data['process'] == 'update') {
             $entity = $invoiceParticular;
-            $entity->setQuantity((int)$data['quantity']);
+            $entity->setQuantity((float)$data['quantity']);
             $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
         }else{
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($particular->getPrice());
-            $entity->setSubTotal($particular->getPrice() * 1);
+            $entity->setSubTotal($particular->getPrice() * $entity->getQuantity());
         }
         if($invoice->getRestaurantConfig()->isProduction() == 1 and $particular->getService()->getSlug() == 'product' ){
             $entity->setPurchasePrice($particular->getProductionElementAmount());
@@ -213,7 +213,7 @@ class InvoiceParticularRepository extends EntityRepository
   <a href='javascript:' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' class='btn yellow btn-number mini' data-type='minus' data-id='{$entity->getId()}'  data-text='{$entity->getId()}' data-title='{{ item.salesPrice }}'  data-field='quantity'>
                                                             <span class='fa fa-minus'></span>
                                                    </a>
-                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' disabled='disabled' id='quantity-{$entity->getId()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}' data-action='' min='1' max='1000'>
+                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}' id='quantity-{$entity->getId()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}'  min='1' max='1000'>
                                                       <a href='javascript:' data-action='/restaurant/invoice/{$sales->getId()}/{$entity->getParticular()->getId()}/product-update' class='btn green btn-number mini'  data-type='plus' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-text='{$entity->getId()}' data-field='quantity'>
                                                           <span class='fa fa-plus'></span>
                                                   </a>
