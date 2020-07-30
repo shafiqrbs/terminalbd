@@ -498,9 +498,9 @@ class InvoiceController extends Controller
         $em->flush();
         if ($entity->getTotal() > 0) {
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
-            $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
         }
-        exit;
+        return $this->redirect($this->generateUrl('restaurant_invoice'));
 
     }
 
