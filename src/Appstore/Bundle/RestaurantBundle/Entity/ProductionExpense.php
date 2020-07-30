@@ -56,6 +56,11 @@ class ProductionExpense
      **/
     private  $particular;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantStockHistory", mappedBy="productionExpense" , cascade={"persist","remove"} )
+     **/
+    private  $stockHistory;
+
     /**
      * @var float
      *
@@ -177,6 +182,38 @@ class ProductionExpense
     public function setParticular($particular)
     {
         $this->particular = $particular;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return RestaurantStockHistory
+     */
+    public function getStockHistory()
+    {
+        return $this->stockHistory;
+    }
+
+    /**
+     * @param RestaurantStockHistory $stockHistory
+     */
+    public function setStockHistory($stockHistory)
+    {
+        $this->stockHistory = $stockHistory;
     }
 
 

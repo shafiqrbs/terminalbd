@@ -473,7 +473,7 @@ class InvoiceController extends Controller
 
 
 
-    public function approvedOrder(Invoice $entity,$data)
+    public function approvedOrderAction(Invoice $entity)
     {
         $globalOption = $entity->getRestaurantConfig()->getGlobalOption();
         $em =  $em = $this->getDoctrine()->getManager();
@@ -499,8 +499,8 @@ class InvoiceController extends Controller
         if ($entity->getTotal() > 0) {
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
             $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
         }
+        exit;
 
     }
 
@@ -549,8 +549,7 @@ class InvoiceController extends Controller
         $em->flush();
         if ($entity->getTotal() > 0) {
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
-            $accountInvoice = $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->restaurantSalesTransaction($entity, $accountInvoice);
+            $em->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($entity);
         }
 
     }

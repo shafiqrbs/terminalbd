@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,13 +13,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class WebServiceController extends Controller
 {
 
-
-
-    public function orderAction()
-    {
-        echo "Order";
-        exit;
-    }
 
     /**
      * @param $subdomain
@@ -74,8 +68,8 @@ class WebServiceController extends Controller
             return $this->redirect($this->generateUrl('member_index'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
             return $this->redirect($this->generateUrl('website'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER') && $enable == 1 && in_array('e-commerce',$apps)) {
-            return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUYER') && $enable == 1 && in_array('e-commerce',$apps)) {
+            return $this->redirect($this->generateUrl("{$globalOption->getSubDomain()}_webservice_buyer_dashboard"));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ECOMMERCE_VENDOR') && $enable == 1 && in_array('ecommerce',$apps)) {
             return $this->redirect($this->generateUrl('order',array('shop'=> $globalOption->getSlug())));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE')) {

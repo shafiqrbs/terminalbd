@@ -63,7 +63,6 @@ class ProductionExpenseRepository extends EntityRepository
 
         foreach ($batch->getParticular()->getProductionItems() as $elm):
 
-            echo $elm->getMaterial()->getName();
             $expense = new ProductionExpense();
             $exist = $this->findOneBy(array('salesItem' => $batch ,'productionElement' => $elm));
             if($exist){ $expense = $exist; }

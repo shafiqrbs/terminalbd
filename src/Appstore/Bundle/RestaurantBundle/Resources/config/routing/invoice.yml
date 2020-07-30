@@ -77,6 +77,10 @@ restaurant_invoice_reverse:
     path:     /{invoice}/sales-reverse
     defaults: { _controller: "RestaurantBundle:Invoice:reverse" }
 
+restaurant_invoice_approve:
+    path:     /{id}/sales-approve
+    defaults: { _controller: "RestaurantBundle:Invoice:approvedOrder" }
+
 restaurant_invoice_reverse_show:
     path:     /{invoice}/sales-reverse-show
     defaults: { _controller: "RestaurantBundle:Invoice:reverseShow" }

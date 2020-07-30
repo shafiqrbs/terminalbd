@@ -16,13 +16,17 @@ webservice_user_signin:
     path:     /web/sign-in
     defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
+webservice_buyer_dashboard:
+    path:     /buyer/dashboard
+    defaults: { _controller: FrontendBundle:WebOrder:dashboard }
+
 webservice_buyer_order:
     path:     /buyer/order
     defaults: { _controller: FrontendBundle:WebOrder:order }
 
-webservice_buyer_pre_order:
+webservice_buyer_preorder:
     path:     /buyer/pre-order
-    defaults: { _controller: FrontendBundle:WebOrder:order }
+    defaults: { _controller: FrontendBundle:WebOrder:preOrder }
 
 webservice_otp:
     path:     /otp/customer-check
