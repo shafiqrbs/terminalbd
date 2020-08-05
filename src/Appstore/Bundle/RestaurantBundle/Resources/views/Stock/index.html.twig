@@ -234,7 +234,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set productions = {'pre-production': 'post-production'} %}
+                                {% set productions = {'pre-production': 'pre-production','post-production': 'post-production'} %}
                                 {% for entity in pagination %}
                                     {% set stockQnt = (entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity %}
 
