@@ -14,12 +14,7 @@
                     </div>
                     <div class="col-md-4 text-center"></div>
                     <div class=" col-md-4 text-right">
-                        <div class="box">
-                            <ul class="info-links">
-                                <li class="checkout" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">Checkout</a></li>
-                                <li>|</li>
-                                <li class="top-login cartUpload">Login</li>
-                            </ul>
+                        <div class="box"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">Checkout</a> | <a href="javascript:" class="top-login cartUpload">Login</a>
                         </div>
                     </div>
                 </div>
@@ -41,7 +36,7 @@
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-7 {% else %} col-md-7 {% endif %}" style="padding-right: 0!important;">
+                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-6 {% else %} col-md-6 {% endif %}" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                         <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" >
                             {% if globalOption.ecommerceConfig.searchCategory == 1 %}
@@ -71,12 +66,12 @@
                     {% endif %}
                 </div>
                 {% if globalOption.templateCustomize.topTextPosition == "menu-right" %}
-                    <div class="col-md-3 bs-example-form" >
+                    <div class="col-md-4 bs-example-form" >
                         {% if app.user %}
                             <div style="float: left;">
                                 <ul class="nav navbar-nav" style="background: #009b3a">
                                     <li class="dropdown">
-                                        <a href="#" style="width: 120px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
+                                        <a href="#" style="width: 160px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
                                         <ul class="dropdown-menu">
                                             <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
                                             </li>

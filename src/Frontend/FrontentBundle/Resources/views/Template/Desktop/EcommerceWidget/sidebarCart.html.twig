@@ -5,5 +5,5 @@
 {link: '{{ path(globalOption.subDomain ~ '_webservice_contact') }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'},
 {% endif %}#}
 {% if cartResult is defined and cartResult is not empty and globalOption.ecommerceConfig.currency is not empty %}
-{link: 'javascript:',class: 'cartUpload',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cartResult }}'}
+{link: '{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}:',class: 'cartUpload',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cartResult }}'}
 {% endif %}
