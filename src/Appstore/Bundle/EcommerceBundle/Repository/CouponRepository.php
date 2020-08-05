@@ -38,12 +38,27 @@ class CouponRepository extends EntityRepository
 
     }
 
-    public function getCouponDiscount($config,$couponCode,$cart)
+    public function getCouponDiscount($config,$couponCode,$total)
     {
         /* @var $coupon Coupon */
+
+        $discount = 0;
         $coupon = $this->findOneBy(array('ecommerceConfig' => $config,'couponCode' => $couponCode));
-        $cal = $coupon->getDiscountCalculation();
-        $total = $cart->total();
+        if($coupon){
+            $cal = $coupon->getDiscountCalculation();
+            if($coupon->getValidAmount() <=  $total ){
+                if($cal == "percentage")
+                {
+                    $discount = (($total * $coupon->getAmount())/100);
+
+                }else{
+
+                    $discount = $coupon->getAmount();
+                }
+
+            }
+        }
+        return $discount;
 
     }
 

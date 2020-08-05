@@ -771,21 +771,6 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function returnCouponAction(Request $request)
-    {
-        $cart = new Cart($request->getSession());
-        $couponCode = $_REQUEST['coupon'];
-        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $coupon = $this->getDoctrine()->getRepository('EcommerceBundle:Coupon')->getCouponDiscount($config,$couponCode,$cart);
-        $discount = number_format($coupon->total(), 2, '.', '');
-        $total = number_format($cart->total(), 2, '.', '');
-        $data = array(
-            'total' =>  (string)$total,
-            'discount' =>  (string)$discount,
-        );
-        $array = json_encode($data);
-        return new Response($array);
-    }
 
 
     private function returnCartSummaryAjaxData($cart)
@@ -1308,6 +1293,23 @@ class WebServiceProductController extends Controller
             )
         );
     }
+
+    public function returnCouponAction(Request $request)
+    {
+        $cart = new Cart($request->getSession());
+        $couponCode = $_REQUEST['coupon'];
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $couponDiscount = $this->getDoctrine()->getRepository('EcommerceBundle:Coupon')->getCouponDiscount($config,$couponCode,$cart->total());
+        $discount = number_format(floatval($couponDiscount), 2, '.', '');
+        $total = number_format(($cart->total() - floatval($couponDiscount) + floatval($config->getShippingCharge()) ), 2, '.', '');
+        $data = array(
+            'grandTotal' =>  (string)$total,
+            'discount' =>  (string)$discount,
+        );
+        $array = json_encode($data);
+        return new Response($array);
+    }
+
 
     public function productAddWishListAction($subdomain ,Item $product)
     {

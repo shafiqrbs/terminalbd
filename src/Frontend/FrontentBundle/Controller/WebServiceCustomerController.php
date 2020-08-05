@@ -466,8 +466,9 @@ class WebServiceCustomerController extends Controller
     public function mobileOtpAction($subdomain , Request $request)
     {
         $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $mobile =  $_REQUEST['mobile'];
+        $intlMobile =  $_REQUEST['mobile'];
         $otpCode = mt_rand(1000,9999);
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $msg = "{$option->getDomain()}, Your One-Time PIN is {$otpCode}. Please call for any support {$option->getHotline()}.";
         $mobileCode = "88".$mobile;
        // $response = $this->send($msg,$mobileCode);
@@ -486,7 +487,8 @@ class WebServiceCustomerController extends Controller
         $data = $request->request->all();
         $otpCode = $data['otp'];
         $otp = $this->get('session')->get('otpCode');
-        $mobile =  $data['resendMobile'];
+        $intlMobile =  $data['resendMobile'];
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $mobile));
         if($otpCode == $otp and !empty($entity)){
             $entity->setGlobalOption($option);
