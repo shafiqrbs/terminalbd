@@ -274,6 +274,25 @@ class ParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function getProductionParticular($config){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->leftJoin('e.unit','u')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->addSelect('e.price')
+            ->addSelect('u.name as unit')
+            ->addSelect('e.purchasePrice')
+            ->where('e.restaurantConfig = :config')->setParameter('config', $config)
+            ->andWhere('s.slug IN(:slugs)')
+            ->setParameter('slugs',array_values(array('stockable','consuamble')))
+            ->orderBy('e.name','ASC')
+            ->getQuery()->getArrayResult();
+        return  $qb;
+    }
+
     public function getAccessoriesParticular($config,$data = ""){
 
 
@@ -322,8 +341,8 @@ class ParticularRepository extends EntityRepository
            // $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->purchaseReturnStockUpdate($stock);
           // $stock->setPurchaseReturnQuantity($qnt);
         }elseif($fieldName == 'damage'){
-            // $quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
-           //  $stock->setDamageQuantity($quantity);
+             $quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
+            $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'production'){
             $quantity = $em->getRepository('RestaurantBundle:ProductionExpense')->productionExpenseStockItemUpdate($stock);
             $stock->setProductionQuantity($quantity);

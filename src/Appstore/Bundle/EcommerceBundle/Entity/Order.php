@@ -37,7 +37,7 @@ class Order
     protected $ecommerceConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation", inversedBy="orders")
      **/
     protected $location;
 
@@ -114,9 +114,17 @@ class Order
     /**
      * @var string
      *
-     * @ORM\Column(name="delivery", type="string", length=255,  nullable=true)
+     * @ORM\Column(name="delivery", type="string", length=50,  nullable=true)
      */
     private $delivery = 'delivery';
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50,  nullable=true)
+     */
+    private $paymentMobile;
 
     /**
      * @var string
@@ -848,7 +856,7 @@ class Order
     }
 
     /**
-     * @return Location
+     * @return DeliveryLocation
      */
     public function getLocation()
     {
@@ -856,7 +864,7 @@ class Order
     }
 
     /**
-     * @param Location $location
+     * @param DeliveryLocation $location
      */
     public function setLocation($location)
     {
@@ -1164,6 +1172,22 @@ class Order
     public function setTimePeriod($timePeriod)
     {
         $this->timePeriod = $timePeriod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
     }
 
 

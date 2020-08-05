@@ -67,7 +67,6 @@ class StockController extends Controller
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setRestaurantConfig($config);
@@ -82,13 +81,13 @@ class StockController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Required field does not input"
         );
-        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config,'status' => 1),array('name'=>"ASC"));
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'categories' => $categories,
-            'formShow'            => 'show',
-            'form'   => $form->createView(),
+            'formShow'   => 'show',
+            'form'       => $form->createView(),
         ));
     }
 
@@ -101,7 +100,6 @@ class StockController extends Controller
      */
     private function createCreateForm(Particular $entity)
     {
-
         $global = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new StockType($global), $entity, array(
             'action' => $this->generateUrl('restaurant_stock_create', array('id' => $entity->getId())),
@@ -112,6 +110,7 @@ class StockController extends Controller
             )
         ));
         return $form;
+
     }
 
 
@@ -130,15 +129,17 @@ class StockController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
+        $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=> $config,'status' => 1),array('name' => "ASC"));
+
         return $this->render('RestaurantBundle:Stock:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
-            'categories'            => $categories,
-            'formShow'            => 'show',
+            'categories'        => $categories,
+            'formShow'          => 'show',
             'form'              => $editForm->createView(),
         ));
     }
+
 
     /**
      * Creates a form to edit a Particular entity.
@@ -285,5 +286,31 @@ class StockController extends Controller
         return new Response('success');
 
     }
+
+    /**
+     * Displays a form to edit an existing Particular entity.
+     *
+     */
+    public function copyAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity Particular */
+        $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
+        $newEntity = new Particular();
+        $em = $this->getDoctrine()->getManager();
+        $newEntity->setRestaurantConfig($entity->getRestaurantConfig());
+        $newEntity->setName($entity->getName());
+        $newEntity->setCategory($entity->getCategory());
+        $newEntity->setProductionType($entity->getProductionType());
+        $newEntity->setService($entity->getService());
+        $newEntity->setUnit($entity->getUnit());
+        $newEntity->setPrice($entity->getPrice());
+        $newEntity->setPurchasePrice($entity->getPurchasePrice());
+        $em->persist($newEntity);
+        $em->flush();
+        $this->getDoctrine()->getRepository('RestaurantBundle:ProductionElement')->copyElement($newEntity,$entity);
+        return $this->redirect($this->generateUrl('restaurant_production_edit',array('id'=>$newEntity->getId())));
+    }
+
 
 }

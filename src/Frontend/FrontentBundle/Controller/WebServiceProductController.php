@@ -748,7 +748,7 @@ class WebServiceProductController extends Controller
     {
         $subItem = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $subItem = $em->getRepository('EcommerceBundle:ItemSub')->findOneBy(array('item'=>$product,'id'=>$subItem));
         if(!empty($globalOption)){
 
@@ -770,6 +770,23 @@ class WebServiceProductController extends Controller
             );
         }
     }
+
+    public function returnCouponAction(Request $request)
+    {
+        $cart = new Cart($request->getSession());
+        $couponCode = $_REQUEST['coupon'];
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $coupon = $this->getDoctrine()->getRepository('EcommerceBundle:Coupon')->getCouponDiscount($config,$couponCode,$cart);
+        $discount = number_format($coupon->total(), 2, '.', '');
+        $total = number_format($cart->total(), 2, '.', '');
+        $data = array(
+            'total' =>  (string)$total,
+            'discount' =>  (string)$discount,
+        );
+        $array = json_encode($data);
+        return new Response($array);
+    }
+
 
     private function returnCartSummaryAjaxData($cart)
     {
@@ -1263,33 +1280,33 @@ class WebServiceProductController extends Controller
 
     public function productCartAction($subdomain, Request $request)
     {
+
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+        $detect = new MobileDetect();
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+        $config = $globalOption->getEcommerceConfig();
+        $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
+        $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        if(!empty($globalOption)){
+        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => 'basket'));
 
-            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => 'basket'));
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            if($detect->isMobile() && $detect->isTablet() ) {
-                $theme = 'Template/Mobile/'.$themeName;
-            }else{
-                $theme = 'Template/Desktop/'.$themeName;
-            }
-
-            $cart = new Cart($request->getSession());
-            return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
-                array(
-                    'globalOption'      => $globalOption,
-                    'menu'             => $menu,
-                    'cart'             => $cart,
-                    'pageName'          => 'Cart',
-                )
-            );
+        if($detect->isMobile() || $detect->isTablet() ) {
+            $theme = "Template/Mobile/{$themeName}";
+        }else{
+            $theme = "Template/Desktop/{$themeName}";
         }
 
+        return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
+            array(
+                'globalOption'      => $globalOption,
+                'menu'             => $menu,
+                'cart' => $cart,
+                'locations' => $locations,
+                'timePeriods' => $timePeriods,
+            )
+        );
     }
 
     public function productAddWishListAction($subdomain ,Item $product)

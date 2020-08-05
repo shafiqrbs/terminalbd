@@ -206,7 +206,14 @@ class EcommerceConfig
      */
     private $showSidebar = false;
 
-      /**
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cashOnDelivery", type="boolean")
+     */
+    private $cashOnDelivery = true;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="mobileFilter", type="boolean")
@@ -1558,6 +1565,22 @@ class EcommerceConfig
     public function setMobileFilter($mobileFilter)
     {
         $this->mobileFilter = $mobileFilter;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCashOnDelivery()
+    {
+        return $this->cashOnDelivery;
+    }
+
+    /**
+     * @param bool $cashOnDelivery
+     */
+    public function setCashOnDelivery($cashOnDelivery)
+    {
+        $this->cashOnDelivery = $cashOnDelivery;
     }
 
 

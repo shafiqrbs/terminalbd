@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Coupon;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
 
@@ -34,6 +35,15 @@ class CouponRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
 
+
+    }
+
+    public function getCouponDiscount($config,$couponCode,$cart)
+    {
+        /* @var $coupon Coupon */
+        $coupon = $this->findOneBy(array('ecommerceConfig' => $config,'couponCode' => $couponCode));
+        $cal = $coupon->getDiscountCalculation();
+        $total = $cart->total();
 
     }
 

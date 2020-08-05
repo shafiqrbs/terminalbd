@@ -6,6 +6,7 @@ security:
 
         ROLE_CUSTOMER:                                  [ROLE_USER]
         ROLE_AGENT:                                     [ROLE_AGENT]
+        ROLE_SHOP:                                      [ROLE_SHOP]
         ROLE_VENDOR:                                    [ROLE_USER]
         ROLE_MANAGER:                                   [ROLE_USER]
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_USER]
@@ -288,7 +289,7 @@ security:
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
         - { path: ^/customer,           role: ROLE_CUSTOMER }
-        - { path: ^/buyer,              role: ROLE_BUYER }
+        - { path: ^/shop,               role: ROLE_SHOP }
         - { path: ^/agent,              role: ROLE_AGENT }
         - { path: ^/sms,                role: ROLE_SMS }
         - { path: ^/user,               role: ROLE_USER }

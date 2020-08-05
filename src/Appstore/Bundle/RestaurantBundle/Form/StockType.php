@@ -98,9 +98,7 @@ class StockType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-            ->add('file')
-
-        ;
+            ->add('file');
     }
     
     /**
@@ -118,7 +116,7 @@ class StockType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'particular';
     }
 
 

@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\MedicineItemType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,8 +20,21 @@ use Symfony\Component\HttpFoundation\Response;
 class WebOrderController extends Controller
 {
 
+
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
     /**
-     * @Secure(roles="ROLE_BUYER")
+     * @Secure(roles="ROLE_SHOP")
      */
 
     public function dashboardAction()
@@ -30,7 +44,7 @@ class WebOrderController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUYER")
+     * @Secure(roles="ROLE_SHOP")
      */
 
     public function preOrderAction()
@@ -40,21 +54,32 @@ class WebOrderController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_BUYER")
+     * @Secure(roles="ROLE_SHOP")
      */
 
     public function orderAction()
     {
-        echo "Order";
-        exit;
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $globalOption = $user->getGlobalOption();
+        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'brand'));
+        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user , 'globalOption' => $globalOption), array('updated' => 'desc'));
+        $pagination = $this->paginate($entities);
+        return $this->render("FrontendBundle:Order:Ecommerce\index.html.twig", array(
+            'entities'      => $pagination,
+            'menu'          => $menu,
+            'globalOption'  => $globalOption,
+        ));
+
     }
 
     /**
      * @param $shop
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Secure(roles="ROLE_SHOP")
      */
-    public function cartToOrderAction(Request $request, $shop)
+    public function cartToOrderAction(Request $request)
     {
 
         $couponCode = isset($_REQUEST['couponCode']) and $_REQUEST['couponCode'] !='' ? $_REQUEST['couponCode']:'';
@@ -64,9 +89,9 @@ class WebOrderController extends Controller
         $user = $this->getUser();
         $data = $request->request->all();
         $files = $request->files->all();
-        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$data,$files);
+        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$cart,$data,$files);
         $cart->destroy();
-        return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
+        return $this->redirect($this->generateUrl("{$user->getGlobalOption()->getSubDomain()}_webservice_buyer_oder_details",array('invoice' => $order->getInvoice())));
 
     }
 
@@ -74,6 +99,7 @@ class WebOrderController extends Controller
      * @param $shop
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Secure(roles="ROLE_SHOP")
      */
     public function wishToOrderAction($shop , Request $request)
     {
@@ -89,13 +115,19 @@ class WebOrderController extends Controller
     }
 
 
-    public function showAction(Order $entity)
-    {
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Expenditure entity.');
-        }
+    /**
+     * @Secure(roles="ROLE_SHOP")
+     */
 
-        if( $entity->getGlobalOption()->getDomainType() == 'medicine' ) {
+    public function showAction($invoice)
+    {
+        $user = $this->getUser();
+        $menu = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $user->getGlobalOption() ,'slug' => 'brand'));
+        $entity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('invoice' => $invoice,'createdBy' => $user));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Order entity.');
+        }
+        if( $user->getGlobalOption()->getDomainType() == 'medicine' ) {
             $detect = new MobileDetect();
             if( $detect->isMobile() or  $detect->isTablet() ) {
                 $theme = 'medicine/mobile';
@@ -106,8 +138,9 @@ class WebOrderController extends Controller
             $theme = 'ecommerce';
         }
 
-        return $this->render("CustomerBundle:Order/{$theme}:show.html.twig", array(
-            'globalOption' => $entity->getGlobalOption(),
+        return $this->render("FrontendBundle:Order:Ecommerce/show.html.twig", array(
+            'globalOption' => $user->getGlobalOption(),
+            'menu' => $menu,
             'entity' => $entity,
         ));
     }
@@ -324,19 +357,20 @@ class WebOrderController extends Controller
     }
 
 
-    public function deleteAction(Order $entity)
+    public function deleteAction($subdomain,$invoice)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $user = $this->getUser();
+        $entity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('invoice'=>$invoice,'createdBy'=>$user));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+            throw $this->createNotFoundException('Unable to find Order entity.');
         }
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return new Response('success');
+        return $this->redirect($this->generateUrl("{$subdomain}_webservice_buyer_order"));
     }
 
     public function paymentDeleteAction(OrderPayment $entity)

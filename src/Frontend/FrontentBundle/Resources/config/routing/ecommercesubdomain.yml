@@ -17,15 +17,27 @@ webservice_user_signin:
     defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
 webservice_buyer_dashboard:
-    path:     /buyer/dashboard
+    path:     /shop/dashboard
     defaults: { _controller: FrontendBundle:WebOrder:dashboard }
 
+webservice_buyer_checkout:
+    path:     /shop/checkout
+    defaults: { _controller: FrontendBundle:WebOrder:cartToOrder }
+
+webservice_buyer_oder_details:
+    path:     /{invoice}/shop/order/show
+    defaults: { _controller: FrontendBundle:WebOrder:show }
+
+webservice_buyer_order_delete:
+    path:     /{invoice}/shop/order/delete
+    defaults: { _controller: FrontendBundle:WebOrder:delete }
+
 webservice_buyer_order:
-    path:     /buyer/order
+    path:     /shop/order
     defaults: { _controller: FrontendBundle:WebOrder:order }
 
 webservice_buyer_preorder:
-    path:     /buyer/pre-order
+    path:     /shop/pre-order
     defaults: { _controller: FrontendBundle:WebOrder:preOrder }
 
 webservice_otp:
@@ -36,6 +48,9 @@ webservice_otp_confirm:
     path:     /otp/customer-confirm
     defaults: { _controller: FrontendBundle:WebServiceCustomer:otpConfirm }
 
+webservice_order_coupon:
+    path:     /cart/coupon
+    defaults: { _controller: FrontendBundle:WebServiceProduct:returnCoupon }
 
 homepage:
      path:     /backend
@@ -140,7 +155,7 @@ webservice_product_medicine_cart:
 
 webservice_product_cart_update:
     path:     /cart/product-update/{cartid}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productMedicineUpdateCart }
     methods:  GET
     options:
             expose: true
@@ -152,6 +167,7 @@ webservice_product_medicine_cart_update:
     methods:  GET
     options:
             expose: true
+
 
 webservice_product_cart_ajax_details:
     path:      /cart/product-details

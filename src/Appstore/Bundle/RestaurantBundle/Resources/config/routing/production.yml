@@ -12,7 +12,7 @@ restaurant_production_create:
     methods:  POST
 
 restaurant_production_edit:
-    path:     /{id}/
+    path:     /recipe/{id}/
     defaults: { _controller: "RestaurantBundle:Production:production" }
 
 restaurant_production_approve:

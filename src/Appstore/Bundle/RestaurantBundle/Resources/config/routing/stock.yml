@@ -11,6 +11,10 @@ restaurant_stock_edit:
     path:     /{id}/edit
     defaults: { _controller: "RestaurantBundle:Stock:edit" }
 
+restaurant_stock_copy:
+    path:     /{id}/copy
+    defaults: { _controller: "RestaurantBundle:Stock:copy" }
+
 restaurant_stock_update:
     path:     /{id}/update
     defaults: { _controller: "RestaurantBundle:Stock:update" }

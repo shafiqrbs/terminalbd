@@ -20,7 +20,7 @@ class CouponController extends Controller
 
     /**
      * Lists all ItemSize entities.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN,ROLE_DOMAIN")
      */
     public function indexAction()
     {
@@ -62,7 +62,7 @@ class CouponController extends Controller
     /**
      * Creates a form to create a ItemSize entity.
      *
-     * @param  $entity The entity
+     * @param  $entity Coupon entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -81,7 +81,7 @@ class CouponController extends Controller
 
     /**
      * Displays a form to create a new ItemSize entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN,ROLE_DOMAIN")
      */
 
     public function newAction()
@@ -116,7 +116,7 @@ class CouponController extends Controller
 
     /**
      * Displays a form to edit an existing ItemSize entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
     public function editAction($id)
     {
@@ -156,7 +156,7 @@ class CouponController extends Controller
     }
     /**
      * Edits an existing ItemSize entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
     public function updateAction(Request $request, $id)
     {
@@ -187,7 +187,7 @@ class CouponController extends Controller
 
     /**
      * Deletes a ItemSize entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
     public function deleteAction($id)
     {

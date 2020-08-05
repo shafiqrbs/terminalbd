@@ -37,7 +37,6 @@ class ProductionController extends Controller
 
     /**
      * Lists all Particular entities.
-     *
      */
     public function indexAction()
     {
@@ -139,7 +138,7 @@ class ProductionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
         $editForm = $this->createProductionCostingForm($entity);
-        $particulars = $em->getRepository('RestaurantBundle:Particular')->getMedicineParticular($config);
+        $particulars = $em->getRepository('RestaurantBundle:Particular')->getProductionParticular($config->getId());
         $productionValues = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionValueAdded')->getProductionAdded($entity);
         return $this->render('RestaurantBundle:Production:production.html.twig', array(
             'entity'      => $entity,
@@ -201,8 +200,6 @@ class ProductionController extends Controller
 
     }
 
-
-
     public function productionElementDeleteAction(Particular $product, ProductionElement $particular){
 
         $em = $this->getDoctrine()->getManager();
@@ -219,8 +216,6 @@ class ProductionController extends Controller
         return new Response(json_encode($result));
 
     }
-
-
 
     public function sortingAction()
     {

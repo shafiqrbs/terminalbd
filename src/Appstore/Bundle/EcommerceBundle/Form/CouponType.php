@@ -49,22 +49,26 @@ class CouponType extends AbstractType
                 ),
             ))
             ->add('startDate', 'date', array(
-                'widget' => 'single_text',
+                'widget' => 'choice',
                 'placeholder' => array(
                     'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
 
                 ),
                 'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span5 date-picker'),
+                'attr' => array('class'=>'m-wrap span5'),
+                'years' => range(date('Y'), date('Y')+1),
                 'view_timezone' => 'Asia/Dhaka'))
+
+
             ->add('endDate', 'date', array(
-                'widget' => 'single_text',
+                'widget' => 'choice',
                 'placeholder' => array(
                     'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
 
                 ),
                 'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span5 date-picker'),
+                'attr' => array('class'=>'m-wrap span5'),
+                'years' => range(date('Y'), date('Y')+1),
                 'view_timezone' => 'Asia/Dhaka'))
 
         ;
@@ -85,6 +89,6 @@ class CouponType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_ecommercebundle_coupon';
+        return 'coupon';
     }
 }

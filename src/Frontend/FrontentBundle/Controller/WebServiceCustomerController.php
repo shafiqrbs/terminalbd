@@ -482,7 +482,7 @@ class WebServiceCustomerController extends Controller
 
     public function otpConfirmAction($subdomain , Request $request)
     {
-        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $data = $request->request->all();
         $otpCode = $data['otp'];
         $otp = $this->get('session')->get('otpCode');
@@ -494,7 +494,11 @@ class WebServiceCustomerController extends Controller
             $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
             $this->get('security.context')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
-            $array = (json_encode(array('status' => 'success')));
+            if(empty($entity->getProfile()->getName())){
+                $array = (json_encode(array('status' => 'new')));
+            }else{
+                $array = (json_encode(array('status' => 'success')));
+            }
         }elseif($otpCode == $otp and empty($entity)){
             $em = $this->getDoctrine()->getManager();
             $user = new User();
@@ -507,12 +511,15 @@ class WebServiceCustomerController extends Controller
                 $user->setEmail($email);
             }
             $user->setGlobalOption($option);
-            $user->setRoles(array('ROLE_CUSTOMER'));
+            $user->setRoles(array('ROLE_SHOP'));
             $user->setUserGroup('customer');
-            $em->persist($entity);
+            $em->persist($user);
             $em->flush();
             $data = array('name' => '' ,'email' => '','address' => '');
-            $this->getDoctrine()->getRepository('UserBundle:Profile')->insertEcommerce($entity, $data);
+            $this->getDoctrine()->getRepository('UserBundle:Profile')->insertEcommerce($user, $data);
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.context')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
             $array = (json_encode(array('status' => 'new')));
         }else{
             $array = (json_encode(array('status' => 'invalid')));

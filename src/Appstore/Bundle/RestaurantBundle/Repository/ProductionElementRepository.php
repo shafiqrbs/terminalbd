@@ -44,6 +44,28 @@ class ProductionElementRepository extends EntityRepository
         }
     }
 
+    public function copyElement($newEntity,$oldEntity)
+    {
+        /* @var $newEntity Particular */
+        /* @var $oldEntity Particular */
+
+        $em = $this->_em;
+
+        /* @var $element ProductionElement */
+
+        foreach ($oldEntity->getProductionItems() as $element):
+            $entity = new ProductionElement();
+            $entity->setItem($newEntity);
+            $entity->setMaterial($element->getMaterial());
+            $entity->setPrice($element->getPrice());
+            $entity->setQuantity($element->getQuantity());
+            $entity->setSubTotal($element->getSubTotal());
+            $em->persist($entity);
+            $em->flush();
+
+        endforeach;
+    }
+
 
 
     public function getProductionPrice(Particular $particular)

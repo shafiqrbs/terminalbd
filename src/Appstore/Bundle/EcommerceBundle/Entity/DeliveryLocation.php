@@ -40,6 +40,11 @@ class DeliveryLocation
     private $profiles;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="location")
+     **/
+    private $orders;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -161,6 +166,14 @@ class DeliveryLocation
     public function setEcommerceConfig($ecommerceConfig)
     {
         $this->ecommerceConfig = $ecommerceConfig;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 
 

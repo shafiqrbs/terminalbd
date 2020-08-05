@@ -1503,7 +1503,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
             $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))
             ->setAttribute('icon', 'icon-th-list');
-            $menu['Restaurant']['Manage Stock']->addChild('Production Item', array('route' => 'restaurant_production'))
+            $menu['Restaurant']['Manage Stock']->addChild('Pre-production', array('route' => 'restaurant_production'))
                 ->setAttribute('icon', 'icon-th-list');
 
             $menu['Restaurant']->addChild('Master Data')

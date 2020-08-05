@@ -134,37 +134,64 @@ class OrderRepository extends EntityRepository
     }
 
 
-    public function insertNewCustomerOrder(User $user,$shop, $cart, $data ='',$files = '')
+    public function insertNewCustomerOrder(User $user,$cart, $data = '',$files = '')
     {
 
         $em = $this->_em;
-
-        $couponCode = isset($data['couponCode']) and $data['couponCode'] !='' ? $data['couponCode']:'';
-        $comment = isset($data['comment']) and $data['comment'] !='' ? $data['comment']:'';
+        $couponCode     = empty($data['couponCode']) ? '' : $data['couponCode'];
+        $comment        = empty($data['comment']) ? '' : $data['comment'];
+        $name           = empty($data['customerName']) ? '' : $data['customerName'];
+        $phone          = empty($data['customerMobile']) ? '' : $data['customerMobile'];
+        $location       = empty($data['deliveryLocation']) ? '' : $data['deliveryLocation'];
+        $address        = empty($data['deliveryAddress']) ? '' : $data['deliveryAddress'];
+        $deliveryDate   = empty($data['deliveryDate']) ? '' : $data['deliveryDate'];
+        $timePeriod     = empty($data['timePeriod']) ? '' : $data['timePeriod'];
+        $accountMobile  = empty($data['accountMobile']) ? '' : $data['accountMobile'];
+        $paymentMobile  = empty($data['paymentMobile']) ? '' : $data['paymentMobile'];
+        $transactionId  = empty($data['transactionId']) ? '' : $data['transactionId'];
+        $grandDiscount  = empty($data['grandDiscount']) ? '' : $data['grandDiscount'];
+        $shippingCharge = empty($data['shippingCharge']) ? '' : $data['shippingCharge'];
         $order = new Order();
-        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $shop));
+        $globalOption = $user->getGlobalOption();
         $order->setGlobalOption($globalOption);
         $customer = $this->getDomainCustomer($user, $globalOption);
         $order->setCustomer($customer);
-        $order->setCustomerName($user->getProfile()->getName());
-        $order->setCustomerMobile($user);
-        $order->setAddress($user->getProfile()->getAddress());
-        if($user->getProfile()->getLocation()){
-            $order->setLocation($user->getProfile()->getLocation());
+        $order->setCustomerName($name);
+        if($phone){
+            $order->setCustomerMobile($user);
+        }else{
+            $order->setCustomerMobile($phone);
         }
-        $address = $user->getProfile()->getAddress().'-'.$user->getProfile()->getPostalCode();
         $order->setAddress($address);
-
+        if($location){
+            $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
+            $order->setLocation($loc);
+        }
+        if($timePeriod){
+             $period = $em->getRepository('EcommerceBundle:TimePeriod')->find($timePeriod);
+            $order->setTimePeriod($period);
+        }
+        if(empty($deliveryDate)){
+            $order->setDeliveryDate(new \DateTime("now"));
+        }else{
+            $date =new \DateTime($deliveryDate);
+            $order->setDeliveryDate($date);
+        }
+        if($accountMobile){
+            $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($accountMobile);
+            $order->setAccountMobileBank($account);
+        }
+        $order->setPaymentMobile($paymentMobile);
+        $order->setTransaction($transactionId);
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
-        $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
-        $order->setDeliveryDate(new \DateTime("now"));
+        $order->setShippingCharge($shippingCharge);
         $vat = $this->getCulculationVat($globalOption, $cart->total());
         $order->setVat($vat);
         $order->setComment($comment);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());
         $order->setItem($cart->total_items());
-        $grandTotal = $cart->total() + $globalOption->getEcommerceConfig()->getShippingCharge() + $vat;
+        $grandTotal = $cart->total() + $order->getShippingCharge() + $vat;
         if (!empty($couponCode)) {
             $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($globalOption,$couponCode);
             if (!empty($coupon)){
