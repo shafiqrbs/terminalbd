@@ -14,29 +14,28 @@
                     </div>
                     <div class="col-md-4 text-center"></div>
                     <div class=" col-md-4 text-right">
-                        <div class="box"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">Checkout</a> | <a href="javascript:" class="top-login cartUpload">Login</a>
+                        <div class="box"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">Checkout</a> |
+                            {% if app.user %}
+                            <a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout">Logout</a>
+                            {% else %}
+                            <a href="javascript:" class="top-login cartUpload">Login</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     {% endif %}
-{#    {% if globalOption.ecommerceConfig.menuType == 'Sidebar' %}
-        {{ include('FrontendBundle:Template/Desktop/Menu:sidebar.html.twig')}}
-    {% endif %}#}
     <section id="header" class="sticky" style="margin-bottom: 8px">
         <div class="container">
             <div class="navbar-header">
                 <div class="col-md-2" id="logo-area">
-                   {# {% if globalOption.ecommerceConfig.menuType == 'Sidebar' %}
-                        <button id="showLeft" class="btn btn-primary side-menu-bar"><i class="fa fa-bars"></i> </button>
-                    {% endif %}#}
                     <a class="img-logo"
                        href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                <div class="bs-example-form text-left {% if globalOption.templateCustomize.topTextPosition == "menu-right" %} col-md-6 {% else %} col-md-6 {% endif %}" style="padding-right: 0!important;">
+                <div class="bs-example-form text-left  {% if app.user %} col-md-6 {% else %} col-md-7 {% endif %}" style="padding-right: 0!important;">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                         <form class="action bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" >
                             {% if globalOption.ecommerceConfig.searchCategory == 1 %}
@@ -65,44 +64,18 @@
                         </form>
                     {% endif %}
                 </div>
-                {% if globalOption.templateCustomize.topTextPosition == "menu-right" %}
-                    <div class="col-md-4 bs-example-form" >
-                        {% if app.user %}
-                            <div style="float: left;">
-                                <ul class="nav navbar-nav" style="background: #009b3a">
-                                    <li class="dropdown">
-                                        <a href="#" style="width: 160px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
-                                        <ul class="dropdown-menu">
-                                            <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
-                                            </li>
-                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order') }}">Order</a></li>
-                                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_preorder') }}">Pre-order</a></li>
-                                            <li><a href="#"></a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout" >Sign Out <span class="fa fa-sign-out pull-right" style="margin-top: 4px"></span></a></li>
-
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        {% endif %}
-                        <div class="attr-nav">
-                            {% if  globalOption.templateCustomize.topBarContent is not empty %}
-                                {{  globalOption.templateCustomize.topBarContent|raw }}
-                            {% endif %}
-                        </div>
-                    </div>
-                {% elseif app.user is not empty and globalOption.templateCustomize.topTextPosition != "menu-right" %}
-                    <div class="col-md-3 bs-example-form" >
+                <div class="{% if app.user %} col-md-4 {% else %} col-md-3 {% endif %} bs-example-form" >
+                    {% if app.user %}
                         <div style="float: left;">
-                            <ul class="nav navbar-nav" style="background: #009b3a">
+                            <ul class="nav navbar-nav" id="header-login-menu" style="background: #009b3a">
                                 <li class="dropdown">
-                                    <a href="#" style="width: 120px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
+                                    <a href="#" style="width: 160px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
                                     <ul class="dropdown-menu">
                                         <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
                                         </li>
-                                        <li><a href="#">Messages</a></li>
-                                        <li><a href="#">Favourites Snippets</a></li>
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order') }}">Order</a></li>
+                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_preorder') }}">Pre-order</a></li>
+                                        <li><a href="#"></a></li>
                                         <li class="divider"></li>
                                         <li><a href="javascript:" data-action="{{ path(globalOption.subDomain ~ '_webservice_logout') }}"  data-toggle="tooltip" title="System Logout" class="logout btn-logout" >Sign Out <span class="fa fa-sign-out pull-right" style="margin-top: 4px"></span></a></li>
 
@@ -110,8 +83,13 @@
                                 </li>
                             </ul>
                         </div>
+                    {% endif %}
+                    <div class="attr-nav">
+                        {% if  globalOption.templateCustomize.topBarContent is not empty %}
+                            {{  globalOption.templateCustomize.topBarContent|raw }}
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </section>

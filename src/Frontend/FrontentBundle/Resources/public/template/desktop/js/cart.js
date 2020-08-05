@@ -204,6 +204,198 @@ $(document).on( "click", ".btn-number-cart", function(e){
     }
 });
 
+function jqueryTemporaryLoad() {
+
+
+    $("#customerOtpLogin").validate({
+
+        rules: {
+            "mobile": {required: true}
+        },
+
+        messages: {
+            "mobile":"Enter your mobile name"
+        },
+
+        tooltip_options: {
+            "mobile": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url: $('form#customerOtpLogin').attr('action'),
+                type: $('form#customerOtpLogin').attr('method'),
+                data: new FormData($('form#customerOtpLogin')[0]),
+                processData : false,
+                contentType : false,
+                success: function (data) {
+                    obj = JSON.parse(data);;
+                    if(obj['status'] === '301'){
+                        alert(obj['message'])
+                    }else{
+                        $('#customerOtpLogin').hide();
+                        $('#customerOtp').show();
+                        $('#otp').val(obj['otpCode']);
+                        $('#otpCode').val(obj['otpCode']);
+                        $('#resendMobile').val(obj['mobile']);
+                    }
+                }
+            });
+        }
+
+    });
+
+    $("#customerOtp").validate({
+
+        rules : {
+            otp : {
+                required: true,
+                minlength : 4
+            }
+        },
+
+        messages: {
+            "otp":"Enter 4 digit on time password"
+        },
+        tooltip_options: {
+            "otp": {placement:'top',html:true}
+        },
+        submitHandler: function() {
+
+            $.ajax({
+
+                url: $('form#customerOtp').attr('action'),
+                type: $('form#customerOtp').attr('method'),
+                data: new FormData($('form#customerOtp')[0]),
+                processData : false,
+                contentType : false,
+                success: function (data) {
+                    obj = JSON.parse(data);
+                    if(obj['status'] === 'success') {
+                        location.reload();
+                    }else if(obj['status'] === 'new'){
+                        $('#login-modal').hide();
+                        $('#user-modal').modal('toggle');
+                    }else{
+                        return false;
+                    }
+                }
+            });
+        }
+
+    });
+
+    $(document).on( "click", "#resendPin", function( e ) {
+
+        var mobile = $('#resendMobile').val();
+        var url = $(this).attr("data-url");
+        $.ajax({
+            url: url ,
+            type: 'GET',
+            data:'mobile='+mobile,
+            success: function(response) {
+                obj = JSON.parse(response);;
+                if(obj['status'] === '301'){
+                    alert(obj['message'])
+                }else{
+                    $('#customerOtpLogin').hide();
+                    $('#customerOtp').show();
+                    $('#otpCode').val(obj['otpCode']);
+                    $('#resendMobile').val(obj['mobile']);
+                }
+            }
+
+        })
+
+    });
+
+    $("#registerFormCreate").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_mobile": {
+                required: false
+            },
+            "registration_location": {
+                required: true
+            },
+            "registration_address": {required: true}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_location":"Enter your delivery location",
+            "registration_address":"Enter your address"
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_address": {placement:'top',html:true},
+            "registration_location": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    location.reload();
+                }
+
+            });
+        }
+    });
+
+    $("#registerFormUpdate").validate({
+
+        rules: {
+
+            "registration_name": {required: true},
+            "registration_additional_phone": {
+                required: false
+            },
+            "registration_location": {
+                required: true
+            },
+            "registration_address": {required: true}
+        },
+
+        messages: {
+
+            "registration_name":"Enter your full name",
+            "registration_location":"Enter your delivery location",
+            "registration_address":"Enter your address"
+        },
+
+        tooltip_options: {
+            "registration_name": {placement:'top',html:true},
+            "registration_address": {placement:'top',html:true},
+            "registration_location": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    location.reload();
+                }
+
+            });
+        }
+    });
+
+}
+
 $(document).on( "click", ".btn-new-cart-item", function(e){
 
     e.preventDefault();
