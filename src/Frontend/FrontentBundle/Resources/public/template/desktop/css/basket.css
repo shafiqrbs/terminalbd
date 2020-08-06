@@ -87,7 +87,7 @@ input.form-cart, .form-cart:focus {
     background: #fff;
     color: #000;
     border-radius: 0;
-    font-size: 11px;
+    font-size: 12px;
     padding: 3px 6px;
     height: 20px;
     border: 1px solid transparent!important;
@@ -103,13 +103,13 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
 .select-cart {
     text-align: center;
     height: 24px!important;
-    margin-top: 0!important;
     border: 1px solid transparent;
-    padding-left:6px;
+    padding: 2px 7px;
     width: 100%;
     border-bottom: 1px solid #ddd;
-    font-size: 11px;
-    background: #fff;
+    font-size: 12px;
+    background-color: #fff;
+    line-height: 12px;
 }
 
 #couponCode {
@@ -157,6 +157,22 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
     margin-top: 15px;
 }
 
+ul.accordion li span{
+    display: block;
+    min-height: 40px;
+}
+
+
+span label{
+    font-size: 11px;
+    line-height: 11px;
+    height: 11px;
+    display: block;
+    font-weight: normal;
+    margin-bottom: 0;
+    color: #999999;
+
+}
 p label{
     font-size: 11px;
     line-height: 11px;
@@ -273,13 +289,6 @@ p label{
     padding-right: 10px;
 }
 
-#cart-item-list .dd-span-name {
-    display: inline-block;
-    width: 70%;
-    text-align: left;
-    height: 43px;
-    overflow: hidden;
-}
 
 #cart-item-list .dd-span-action {
     display: inline-block;
@@ -303,7 +312,7 @@ p label{
 #cart-item-list .dd-span-name {
     align-items: center;
     display: flex;
-    width:90%;
+    width:60%;
     height: 75px;
     font-size: 12px;
     padding-right: 7px;

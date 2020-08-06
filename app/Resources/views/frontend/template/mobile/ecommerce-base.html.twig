@@ -192,7 +192,7 @@
         <h2 class="text-center">{{ app.user.profile.name }}</h2>
         {% set name = app.user.profile.name|split(" ") %}
         <a class="bar-icon" title="My profile" href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}"><i class="fa fa-user"></i></a>
-        <a href="javascript:" title="My Order" class="showCartItem" ><i class="fa fa-shopping-cart"></i></a>
+        <a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order') }}" title="My Order" class="" ><i class="fa fa-shopping-cart"></i></a>
         <a href="javascript:" class="logout" title="Logout" data-action="/logout"> <i class="fa fa-sign-out"></i></a>
     {% else %}
         <h2 class="text-center">{{ globalOption.name }}</h2>

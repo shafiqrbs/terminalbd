@@ -57,7 +57,7 @@ class WebOrderController extends Controller
      * @Secure(roles="ROLE_SHOP")
      */
 
-    public function orderAction()
+    public function orderAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
@@ -65,10 +65,19 @@ class WebOrderController extends Controller
         $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'brand'));
         $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user , 'globalOption' => $globalOption), array('updated' => 'desc'));
         $pagination = $this->paginate($entities);
-        return $this->render("FrontendBundle:Order:Ecommerce\index.html.twig", array(
+        $detect = new MobileDetect();
+        if( $detect->isMobile() or  $detect->isTablet() ) {
+            $theme = 'Mobile';
+        }else{
+            $theme = 'Desktop';
+        }
+        $cart = new Cart($request->getSession());
+        return $this->render("FrontendBundle:Order:{$theme}/index.html.twig", array(
             'entities'      => $pagination,
             'menu'          => $menu,
             'globalOption'  => $globalOption,
+            'cart'  => $cart,
+            'searchForm'  => array(),
         ));
 
     }
@@ -119,7 +128,7 @@ class WebOrderController extends Controller
      * @Secure(roles="ROLE_SHOP")
      */
 
-    public function showAction($invoice)
+    public function showAction(Request $request , $invoice)
     {
         $user = $this->getUser();
         $menu = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $user->getGlobalOption() ,'slug' => 'brand'));
@@ -127,21 +136,19 @@ class WebOrderController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Order entity.');
         }
-        if( $user->getGlobalOption()->getDomainType() == 'medicine' ) {
-            $detect = new MobileDetect();
-            if( $detect->isMobile() or  $detect->isTablet() ) {
-                $theme = 'medicine/mobile';
-            }else{
-                $theme = 'medicine';
-            }
+        $detect = new MobileDetect();
+        if( $detect->isMobile() or  $detect->isTablet() ) {
+            $theme = 'Mobile';
         }else{
-            $theme = 'ecommerce';
+            $theme = 'Desktop';
         }
-
-        return $this->render("FrontendBundle:Order:Ecommerce/show.html.twig", array(
+        $cart = new Cart($request->getSession());
+        return $this->render("FrontendBundle:Order:{$theme}/show.html.twig", array(
             'globalOption' => $user->getGlobalOption(),
             'menu' => $menu,
             'entity' => $entity,
+            'cart' => $cart,
+            'searchForm' => array(),
         ));
     }
 

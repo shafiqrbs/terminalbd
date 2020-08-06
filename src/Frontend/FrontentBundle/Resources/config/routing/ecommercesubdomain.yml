@@ -78,14 +78,14 @@ webservice_member_signup:
 
 webservice_ecommerce_signup:
     path:     /{subdomain}/customer-ecommerce-insert
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:insertEcommerce }
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:insertEcommerceCustomer }
     methods:  POST
     options:
             expose: true
 
 webservice_ecommerce_customer_update:
     path:     /{subdomain}/customer-ecommerce-update
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:updateEcommerce }
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:updateEcommerceCustomer }
     methods:  POST
     options:
             expose: true

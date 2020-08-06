@@ -1013,10 +1013,10 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
 }
 select {
     outline: none;
-    font-size: 15px!important;
+    font-size: 15px;
     background: url(../images/arrow1.png) no-repeat 97% center #ffffff;
     width: 99%;
-    padding: 11px 20px 12px 10px !important;
+    padding: 11px 20px 12px 10px;
     color: #777!important;
     -webkit-appearance: none;
     font-family: 'Open Sans', sans-serif;

@@ -11,6 +11,7 @@ function cartInfo(response,quantity) {
     $('.cartQuantity').html(obj['totalQuantity']);
     $('.totalAmount').html(obj['cartTotal']);
     $('.cartTotal').html(obj['cartTotal']);
+    $('.grandTotal').html(obj['grandTotal']);
     $('.vsidebar .cart-amount .txt').html(obj['cartResult']).show().fadeOut(3000);
 }
 
@@ -258,8 +259,15 @@ $("#stockItemForm").validate({
             processData: false,
             contentType: false,
             success: function (response) {
+                obj = JSON.parse(response);
                 $('form#stockItemForm')[0].reset();
-                $("#stockCart").html(response);
+                $('.totalItem').html(obj['totalItems']);
+                $('.cartQuantity').html(obj['totalQuantity']);
+                $('.totalAmount').html(obj['cartTotal']);
+                $('.cartTotal').html(obj['cartTotal']);
+                $('.grandTotal').html(obj['grandTotal']);
+                $('.vsidebar .cart-amount .txt').html(obj['cartResult']).show().fadeOut(3000);
+                $("#stockCart").html(obj['cartItems']);
             }
         });
     }

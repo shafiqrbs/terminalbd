@@ -776,8 +776,16 @@ class WebServiceProductController extends Controller
     private function returnCartSummaryAjaxData($cart)
     {
         $amount = number_format($cart->total(), 2, '.', '');
+        if(!empty($this->getUser())){
+            $shippingCharge = $this->getUser()->getGlobalOption()->getEcommerceConfig()->getShippingCharge();
+            $grandTotal = number_format(($cart->total() + $shippingCharge), 2, '.', '');
+
+        }else{
+            $grandTotal = $amount;
+        }
         $data = array(
             'cartTotal' =>  (string)$amount,
+            'grandTotal' =>  (string)$grandTotal,
             'totalItems' => count($cart->contents()),
             'totalQuantity' => (string)$cart->total_items(),
             'cartResult' => count($cart->contents())." | ৳ ".(string)$amount,
@@ -1110,7 +1118,20 @@ class WebServiceProductController extends Controller
                 'globalOption' => $globalOption
             )
         );
-        return new Response($html);
+        $shippingCharge = $globalOption->getEcommerceConfig()->getShippingCharge();
+        $amount = number_format($cart->total(), 2, '.', '');
+        $grandTotal = number_format(($cart->total() + $shippingCharge), 2, '.', '');
+        $data = array(
+            'cartTotal' =>  (string)$amount,
+            'grandTotal' =>  (string)$grandTotal,
+            'totalItems' => count($cart->contents()),
+            'totalQuantity' => (string)$cart->total_items(),
+            'cartResult' => count($cart->contents())." | ৳ ".(string)$amount,
+            'process' => "success",
+            'cartItems' => $html
+        );
+        $array =(json_encode($data));
+        return new Response($array);
 
     }
 
@@ -1222,7 +1243,6 @@ class WebServiceProductController extends Controller
             'rowid' => $cartid,
             'quantity' => $quantity,
         );
-
         $cart->update($data);
         $array = $this->returnCartSummaryAjaxData($cart);
         return new Response($array);
@@ -1282,14 +1302,15 @@ class WebServiceProductController extends Controller
         }else{
             $theme = "Template/Desktop/{$themeName}";
         }
-
+        $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
         return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
             array(
                 'globalOption'      => $globalOption,
-                'menu'             => $menu,
-                'cart' => $cart,
-                'locations' => $locations,
-                'timePeriods' => $timePeriods,
+                'menu'              => $menu,
+                'cart'              => $cart,
+                'locations'         => $locations,
+                'timePeriods'       => $timePeriods,
+                'searchForm'        => $searchForm,
             )
         );
     }

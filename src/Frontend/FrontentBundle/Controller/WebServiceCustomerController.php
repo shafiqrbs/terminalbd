@@ -322,7 +322,7 @@ class WebServiceCustomerController extends Controller
     }
 
 
-    public function insertEcommerceAction($subdomain, Request $request)
+    public function insertEcommerceCustomerAction($subdomain, Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -367,7 +367,7 @@ class WebServiceCustomerController extends Controller
 
     }
 
-    public function updateEcommerceAction($subdomain, Request $request)
+    public function updateEcommerceCustomerAction($subdomain, Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
