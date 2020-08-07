@@ -147,7 +147,7 @@
                                                     </tr>
                                                 {% if entity.process == "created" %}
                                                     <tr>
-                                                        <td class="no-line text-right" colspan="5">Would you like to cancel this order? <a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_delete',{'invoice':entity.invoice}) }}" class="btn btn-danger"><i class="icon-remove"></i>&nbsp;Cancel Order</a></td>
+                                                        <td class="no-line text-right" colspan="5">Would you like to cancel this order? <a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_delete',{'invoice':entity.invoice}) }}" >Cancel Order</a> <a href="{{ path(globalOption.subDomain ~ '_webservice_product') }}" class="btn btn-info"><i class="fa fa-shopping-cart"></i>&nbsp;Continue Shopping</a></td>
                                                     </tr>
                                                 {% endif %}
                                                 </tbody>
