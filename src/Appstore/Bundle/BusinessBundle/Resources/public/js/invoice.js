@@ -108,7 +108,6 @@ $(".addCustomer").click(function(){
 var form = $("#customInvoice").validate({
 
     rules: {
-
         "customParticular": {required: true},
         "price": {required: true},
         "quantity": {required: false},
@@ -230,6 +229,9 @@ $(document).on("click", ".particularDelete", function() {
 });
 
 
+
+
+
 $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
@@ -258,6 +260,8 @@ $(document).on('change', '#particular', function() {
             obj = JSON.parse(response);
             $('#unit').html(obj['unit']);
             $('#salesPrice').val(obj['salesPrice']);
+            $('#remainQnt').html(obj['remainQnt']);
+            $('#unitPrice').html(obj['salesPrice']);
             $('#subTotal').html(obj['salesPrice']);
         }
     })
@@ -298,7 +302,7 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
 
 });
 
-var stockInvoice = $("#stockInvoice").validate({
+var stockInvoice = $("#stockInvoicex").validate({
 
     rules: {
 
@@ -341,6 +345,61 @@ var stockInvoice = $("#stockInvoice").validate({
                 $('#subQuantity').html('0');
                 $('#unit').html('Unit');
                 $("#particular").select2().select2("val","");
+                $('#stockInvoice')[0].reset();
+            }
+        });
+    }
+});
+
+$("#stockInvoice").validate({
+
+    rules: {
+
+        "particular": {required: true},
+        "quantity": {required: true},
+        "salesPrice": {required: true}
+    },
+
+    messages: {
+
+        "particular":"Enter particular name",
+        "salesPrice":"Enter sales price",
+        "quantity":"Enter sales quantity"
+    },
+
+    tooltip_options: {
+        "particular": {placement:'top',html:true},
+        "salesPrice": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true}
+    },
+
+    submitHandler: function(stockInvoice) {
+
+        $.ajax({
+            url         : $('form#stockInvoice').attr( 'action' ),
+            type        : $('form#stockInvoice').attr( 'method' ),
+            data        : new FormData($('form#stockInvoice')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+                $('#subQuantity').html('0');
+                $('#unit').html('Unit');
+                $("#particular").select2().select2("val","");
+                $('.salesQnt').html(obj['salesQnt']);
+                $('.returnQnt').html(obj['returnQnt']);
+                $('.damageQnt').html(obj['damageQnt']);
+                $('.spoilQnt').html(obj['spoilQnt']);
+                $('.totalQnt').html(obj['totalQnt']);
+                $('.bonusQnt').html(obj['bonusQnt']);
                 $('#stockInvoice')[0].reset();
             }
         });
@@ -456,17 +515,17 @@ $(document).on('change', '#vendor', function() {
 });
 
 
+
 $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity', function() {
 
     var id = $(this).attr('data-id');
-
     var price = parseFloat($('#salesPrice-'+id).val());
     var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
     var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
     var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
     var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
     var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
-    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity- spoilQuantity);
+    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity - spoilQuantity);
     subTotal  = (totalQuantity * price);
   //  toPrecision = subTotal.toPrecision(2)''
     $("#totalQuantity-"+id).html(totalQuantity);
@@ -492,5 +551,36 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
             $('.bonusQnt').html(obj['bonusQnt']);
         },
     })
+});
+
+$(document).on("click", ".distributionDelete", function() {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( response ) {
+                obj = JSON.parse(response);
+                $('#remove-'+id).remove();
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#due').val(obj['due']);
+                $('.due').html(obj['due']);
+                $('.payment').html(obj['payment']);
+                $('.discount').html(obj['discount']);
+                $('.salesQnt').html(obj['salesQnt']);
+                $('.returnQnt').html(obj['returnQnt']);
+                $('.damageQnt').html(obj['damageQnt']);
+                $('.spoilQnt').html(obj['spoilQnt']);
+                $('.totalQnt').html(obj['totalQnt']);
+                $('.bonusQnt').html(obj['bonusQnt']);
+
+
+            });
+        }
+    });
 });
 

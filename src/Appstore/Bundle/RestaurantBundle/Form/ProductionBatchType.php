@@ -53,8 +53,6 @@ class ProductionBatchType extends AbstractType
                          ->where("e.status = 1")
                          ->andWhere("e.restaurantConfig = {$this->config}")
                          ->andWhere("e.productionType = 'pre-production'")
-                         ->andWhere('s.slug IN (:slugs)')
-                         ->setParameter('slugs',array('product'))
                          ->orderBy("e.sorting","ASC");
                 }
             ))

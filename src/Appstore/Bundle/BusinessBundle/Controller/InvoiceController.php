@@ -77,8 +77,8 @@ class InvoiceController extends Controller
         $em->persist($entity);
         $em->flush();
         if($config->getBusinessModel() == "distribution"){
-            $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertDistributionItem($entity,$particulars);
+           // $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
+         //   $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertDistributionItem($entity,$particulars);
         }
         return $this->redirect($this->generateUrl('business_invoice_edit', array('id' => $entity->getId())));
 
@@ -348,7 +348,7 @@ class InvoiceController extends Controller
     public function particularSearchAction(BusinessParticular $particular)
     {
 	    $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
-        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit)));
+        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'remainQnt'=> $particular->getRemainingQuantity(),'quantity'=> 1,'unit' => $unit)));
     }
 
     public function returnResultData(BusinessInvoice $entity, $msg=''){
@@ -406,6 +406,8 @@ class InvoiceController extends Controller
 
     }
 
+
+
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
@@ -445,6 +447,8 @@ class InvoiceController extends Controller
         return new Response(json_encode($result));
 
     }
+
+
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
@@ -654,6 +658,30 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+    public function addDistributionAction(Request $request, BusinessInvoice $invoice)
+    {
+        $data = $request->request->all();
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceDistributionItems($invoice,$data);
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getDistributionItems($invoice);
+        $arrary = array(
+            'subTotal' => $result['subTotal'] ,
+            'salesQnt' => $result['salesQnt'] ,
+            'returnQnt' => $result['returnQnt'] ,
+            'damageQnt' => $result['damageQnt'] ,
+            'spoilQnt' => $result['spoilQnt'] ,
+            'totalQnt' => $result['totalQnt'] ,
+            'bonusQnt' => $result['bonusQnt'] ,
+            'invoiceParticulars' => $invoiceParticulars
+
+        );
+        return new Response(json_encode($arrary));
+    }
+
     public function invoiceDistributionItemUpdateAction(Request $request)
     {
 
@@ -661,6 +689,26 @@ class InvoiceController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->updateInvoiceDistributionItems($data);
         $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
         return new Response(json_encode($result));
+    }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+    public function invoiceDistributionDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        if($particular->getBusinessParticular()){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->deletePurchaseReturnItem($particular);
+        }
+        $em->remove($particular);
+        $em->flush();
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        return new Response(json_encode($result));
+
     }
 
     public function getBarcode($value)

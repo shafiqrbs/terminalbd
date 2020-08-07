@@ -39,6 +39,18 @@ business_invoice_event:
     options:
             expose: true
 
+business_invoice_distribution:
+    path:     /{id}/add-distribution
+    defaults: { _controller: "BusinessBundle:Invoice:addDistribution" }
+    methods:  POST
+    options:
+            expose: true
+
+business_invoice_distribution_delete:
+    path:     /{invoice}/{id}/distribution-delete
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceDistributionDelete" }
+
+
 business_invoice_particular_add:
     path:     /{invoice}/particular-add
     defaults: { _controller: "BusinessBundle:Invoice:addParticular" }

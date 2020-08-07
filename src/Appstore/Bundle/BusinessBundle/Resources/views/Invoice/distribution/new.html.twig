@@ -41,10 +41,93 @@
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
+                        <div class="clearfix"></div>
+                        {% if entity.businessConfig.showStock == 1 %}
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="form-actions portlet box yellow">
+                                        <div class="portlet-title">
+                                            <div class="caption"><i class="icon-reorder"></i>Stock Product</div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">&nbsp;</div>
+                                    <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_distribution',{'id':entity.id}) }}" method="post">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <table class="table table-bordered table-striped table-condensed table-fixed">                                      <thead class="flip-content ">
+
+                                                    <tr class="head-green">
+                                                        <th style="width: 30%">Particular</th>
+                                                        <th>Remain</th>
+                                                        <th>Unit</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Ret.Qnt</th>
+                                                        <th>Dmg.Qnt</th>
+                                                        <th>Spoil.Qnt</th>
+                                                        <th>Sales</th>
+                                                        <th>Sub-total</th>
+                                                        <th>Bonus Qnt</th>
+                                                        <th>&nbsp;</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="">
+                                                            <select id="particular" name="particular" class="span12 m-wrap select2">
+                                                                <option value="">--- Select Stock Product ---- </option>
+                                                                {% for particular in particulars %}
+                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </td>
+                                                        <td id="remainQnt"></td>
+                                                        <td id="unit"></td>
+                                                        <td id="unitPrice">
+
+                                                        </td>
+                                                        <td class="">
+                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="0" placeholder="0">
+                                                        </td>
+                                                        <td class="">
+                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"   name="returnQuantity" id="returnQuantity" value="0" placeholder="0">
+                                                        </td>
+                                                        <td class="">
+                                                            <input type="number" class="numeric td-inline-input-qnt" id="damageQuantity" name="damageQuantity" value="0" placeholder="0">
+                                                        </td>
+                                                        <td class="">
+                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"  id="spoilQuantity" name="spoilQuantity" value="0" placeholder="0">
+                                                        </td>
+                                                        <td class="">
+                                                            <strong id="totalQuantity">0</strong>
+                                                        </td>
+                                                        <td class="">
+                                                            <strong id="subTotal">0.00</strong>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" class="numeric td-inline-input-qnt"   id="bonusQuantity" name="bonusQuantity" value="" placeholder="0">
+                                                        </td>
+                                                        <td class="">
+                                                            <div class="input-group">
+                                                                <input type="hidden" id="salesPrice" name="salesPrice" value="0" >
+                                                                <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="clearfix">&nbsp;</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                        {% endif %}
+                        <div class="clearfix"></div>
                         <!-- BEGIN FORM-->
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
-                        <div class="clearfix"></div>
 
                         <div class="clearfix"></div>
 
@@ -65,6 +148,7 @@
                                         <th>Sales</th>
                                         <th>Sub-total</th>
                                         <th>Bonus Qnt</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceParticulars">
@@ -114,12 +198,15 @@
                                             <td class="">
                                                 <input type="number" class="remove-value numeric td-inline-input-qnt bonusQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="bonusQuantity-{{ item.id }}" name="quantity[]" value="{{ item.bonusQnt }}" placeholder="{{ item.bonusQnt }}">
                                             </td>
+                                            <td>
+                                                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="12" class="" style="border: 1px double #000"></td>
+                                        <td colspan="13" class="" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
@@ -130,6 +217,7 @@
                                         <td class=""><strong class="totalQnt">{{ totalQnt }}</strong></td>
                                         <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
                                         <td class=""><strong class="bonusQnt">{{ bonusQnt }}</strong></td>
+                                        <td class=""></td>
                                     </tr>
                                     </tfoot>
                                 </table>

@@ -478,6 +478,76 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function insertInvoiceDistributionItems(BusinessInvoice $invoice , $data)
+    {
+
+        $em = $this->_em;
+
+        $item = $data['particular'];
+
+        $particular = $em->getRepository('BusinessBundle:BusinessParticular')->find($item);
+
+        /* @var $entity BusinessInvoiceParticular */
+
+        $totalQuantity = ($data['quantity'] -  (float)$data['returnQuantity'] -  (float)$data['damageQuantity'] - (float)$data['spoilQuantity']);
+        $entity = new BusinessInvoiceParticular();
+        $entity->setBusinessInvoice($invoice);
+        $entity->setBusinessParticular($particular );
+        if($particular->getUnit()){
+            $entity->setUnit($particular->getUnit()->getName());
+        }
+        $entity->setParticular($particular->getName());
+        $entity->setQuantity( $data['quantity'] );
+        $entity->setReturnQnt( $data['returnQuantity'] );
+        $entity->setDamageQnt( $data['damageQuantity'] );
+        $entity->setSpoilQnt( $data['spoilQuantity'] );
+        $entity->setBonusQnt( $data['bonusQuantity'] );
+        $entity->setPrice( $data['salesPrice'] );
+        $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
+        $entity->setTotalQuantity((float)$totalQuantity);
+        $subTotal = round(($entity->getPrice() * $entity->getTotalQuantity()),2);
+        $entity->setSubTotal($subTotal);
+        $em->persist($entity);
+        $em->flush();
+        return $entity->getBusinessInvoice();
+
+    }
+
+    public function getDistributionItems(BusinessInvoice $sales)
+    {
+        $entities = $sales->getBusinessInvoiceParticulars();
+        $data = '';
+        $i = 1;
+
+        /* @var $entity BusinessInvoiceParticular */
+
+        foreach ($entities as $entity) {
+
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            $data .= "<td>{$i}.</td>";
+            $data .= "<td>{$entity->getParticular()}</td>";
+            $data .= "<td>{$entity->getBusinessParticular()->getRemainingQuantity()}</td>";
+            $data .= "<td>{$entity->getUnit()}</td>";
+            $data .= "<td>{$entity->getPrice()}</td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt salesQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='{$entity->getQuantity()}'></td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt returnQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='returnQuantity-{$entity->getId()}' name='returnQuantity[]' value='{$entity->getReturnQnt()}' placeholder='{$entity->getReturnQnt()}'></td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt damageQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='damageQuantity-{$entity->getId()}' name='damageQuantity[]' value='{$entity->getDamageQnt()}' placeholder='{$entity->getDamageQnt()}'></td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt spoilQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='spoilQuantity-{$entity->getId()}' name='spoilQuantity[]' value='{$entity->getSpoilQnt()}' placeholder='{$entity->getSpoilQnt()}'></td>";
+            $data .= "<td id='totalQuantity-{$entity->getId()}'>{$entity->getTotalQuantity()}</td>";
+            $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt bonusQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='bonusQuantity-{$entity->getId()}' name='bonusQuantity[]' value='{$entity->getBonusQnt()}' placeholder='{$entity->getBonusQnt()}'></td>";
+            $data .= "<td>";
+            $data .= "<input type='hidden' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
+            $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/distribution-delete' href='javascript:' class='btn red mini distributionDelete' ><i class='icon-trash'></i></a>";
+            $data .= "</td>";
+            $data .= '</tr>';
+            $i++;
+        }
+        return $data;
+    }
+
+
+
     public function updateInvoiceDistributionItems($data)
     {
 

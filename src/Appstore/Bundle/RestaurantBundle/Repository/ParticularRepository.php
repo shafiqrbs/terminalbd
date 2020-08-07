@@ -548,7 +548,7 @@ inner join (
   group by ele.item_id
 ) as pa on stock.id = pa.item_id
 set stock.productionElementAmount = pa.productionElementAmount,
-stock.purchasePrice = COALESCE((stock.productionElementAmount + COALESCE(stock.valueAddedAmount,0)),0)
+stock.purchasePrice = COALESCE((COALESCE(stock.productionElementAmount,0) + COALESCE(stock.valueAddedAmount,0)),0)
 WHERE stock.restaurantConfig_id =:config";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('config', $config);
