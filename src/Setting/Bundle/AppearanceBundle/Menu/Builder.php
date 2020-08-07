@@ -1018,6 +1018,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-shopping-cart')
                 ->setAttribute('dropdown', true);
             $menu['E-commerce']['Master Data']->addChild('Product Import', array('route' => 'ecommerce_itemimporter'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Master Data']->addChild('Delivery Location', array('route' => 'ecommerce_location'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Master Data']->addChild('Delivery Time', array('route' => 'ecommerce_delivertime'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'))->setAttribute('icon', 'icon-th-list');
         }
 

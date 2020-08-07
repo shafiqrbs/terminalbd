@@ -122,14 +122,14 @@ class Particular
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $productionQuantity;
+    private $productionQuantity = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="minQuantity", type="float", nullable=true)
      */
-    private $minQuantity;
+    private $minQuantity= 0;
 
 
     /**
@@ -137,77 +137,49 @@ class Particular
      *
      * @ORM\Column(name="purchaseQuantity", type="float", nullable=true)
      */
-    private $purchaseQuantity;
+    private $purchaseQuantity= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="salesQuantity", type="float", nullable=true)
      */
-    private $salesQuantity;
+    private $salesQuantity= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="damageQuantity", type="float", nullable=true)
      */
-    private $damageQuantity;
+    private $damageQuantity= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="purchaseReturnQuantity", type="float", nullable=true)
      */
-    private $purchaseReturnQuantity;
+    private $purchaseReturnQuantity= 0;
 
      /**
      * @var float
      *
      * @ORM\Column(name="remainingQuantity", type="float", nullable=true)
      */
-    private $remainingQuantity;
+    private $remainingQuantity= 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
      */
-    private $purchaseAverage;
+    private $purchaseAverage= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
-    private $purchasePrice;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="overHead", type="float", nullable=true)
-     */
-    private $overHead;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="packaging", type="float", nullable=true)
-     */
-    private $packaging;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="utility", type="float", nullable=true)
-     */
-    private $utility;
-
- /**
-     * @var float
-     *
-     * @ORM\Column(name="marketing", type="float", nullable=true)
-     */
-    private $marketing;
+    private $purchasePrice= 0;
 
 
     /**
@@ -238,42 +210,42 @@ class Particular
      *
      * @ORM\Column(name="price", type="float", nullable=true)
      */
-    private $price;
+    private $price= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="discountPrice", type="float", nullable=true)
      */
-    private $discountPrice;
+    private $discountPrice= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="valueAddedAmount", type="float", nullable=true)
      */
-    private $valueAddedAmount;
+    private $valueAddedAmount= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="productionElementAmount", type="float", nullable=true)
      */
-    private $productionElementAmount;
+    private $productionElementAmount= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="minimumPrice", type="float", nullable=true)
      */
-    private $minimumPrice;
+    private $minimumPrice= 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="commission", type="float" , nullable=true)
      */
-    private $commission;
+    private $commission= 0;
 
     /**
      * @var string

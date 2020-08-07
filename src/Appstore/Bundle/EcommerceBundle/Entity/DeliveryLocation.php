@@ -176,6 +176,14 @@ class DeliveryLocation
         return $this->orders;
     }
 
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
 
 }
 

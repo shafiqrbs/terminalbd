@@ -26,6 +26,14 @@ ecommerce_item_category:
     resource: "@EcommerceBundle/Resources/config/routing/itemcategory.yml"
     prefix:   /item-category
 
+ecommerce_delivery_location:
+    resource: "@EcommerceBundle/Resources/config/routing/location.yml"
+    prefix:   /delivery-location
+
+ecommerce_time_period:
+    resource: "@EcommerceBundle/Resources/config/routing/deliverytime.yml"
+    prefix:   /delivery-time
+
 ecommerce_config:
     resource: "@EcommerceBundle/Resources/config/routing/ecommerceconfig.yml"
     prefix:   /config

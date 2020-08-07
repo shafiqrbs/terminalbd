@@ -156,7 +156,7 @@ class ProductionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $productionPrice = $entity->getValueAddedAmount() + $entity->getProductionElementAmount();
+        $productionPrice = (floatval($entity->getValueAddedAmount()) + floatval($entity->getProductionElementAmount()));
         $entity->setPurchasePrice($productionPrice);
         $em->flush();
         return $this->redirect($this->generateUrl('restaurant_production_edit',array('id' => $id)));
