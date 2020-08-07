@@ -56,8 +56,12 @@ class ProductionBatchType extends AbstractType
                          ->orderBy("e.sorting","ASC");
                 }
             ))
-            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter initiate quantity')))
-            ->add('issueQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter issue quantity')))
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter initiate quantity','constraints' =>array(
+        new NotBlank(array('message'=>'Please select required'))
+    ))))
+            ->add('issueQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter issue quantity','constraints' =>array(
+                new NotBlank(array('message'=>'Please select required'))
+            ))))
             ->add('damageQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter damage quantity')))
 
         ;

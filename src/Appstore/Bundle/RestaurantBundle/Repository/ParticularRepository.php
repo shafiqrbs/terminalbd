@@ -391,14 +391,17 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function insertAccessories(Invoice  $invoice){
+    public function insertAccessories(Invoice $invoice){
 
         $em = $this->_em;
+
+        $invoiceParticulars = $em->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice'=> $invoice ->getId()));
+
         /** @var InvoiceParticular $item */
 
-        if($invoice){
+        if($invoiceParticulars){
 
-            foreach($invoice->getInvoiceParticulars() as $item ){
+            foreach($invoiceParticulars as $item ){
 
                 /** @var Particular  $particular */
                 $particular = $item->getParticular();
