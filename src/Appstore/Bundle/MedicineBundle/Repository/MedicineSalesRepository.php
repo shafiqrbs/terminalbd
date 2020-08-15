@@ -951,7 +951,7 @@ class MedicineSalesRepository extends EntityRepository
             $entity->setDeviceApproved(true);
             $em->flush();
             $em->getRepository('MedicineBundle:MedicineStock')->getSalesUpdateQnt($entity);
-            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+            $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
         }
     }
 

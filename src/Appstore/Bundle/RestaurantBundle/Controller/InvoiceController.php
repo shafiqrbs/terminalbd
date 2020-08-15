@@ -591,6 +591,15 @@ class InvoiceController extends Controller
         ));
     }
 
+    public function androidSalesProcessAction($device)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->androidDeviceSalesProcess($device);
+        exit;
+    }
+
+
     public function insertGroupApiSalesImportAction(RestaurantAndroidProcess $android)
     {
         $msg = "invalid";

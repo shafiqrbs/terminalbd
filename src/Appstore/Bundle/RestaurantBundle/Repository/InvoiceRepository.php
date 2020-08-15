@@ -36,6 +36,7 @@ class InvoiceRepository extends EntityRepository
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+        $device = isset($data['device'])? $data['device'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -57,6 +58,9 @@ class InvoiceRepository extends EntityRepository
         }
         if(!empty($process)){
             $qb->andWhere("e.process = :process")->setParameter('process', $process);
+        }
+        if(!empty($device)){
+            $qb->andWhere("e.androidProcess = :android")->setParameter('android', $device);
         }
         if(!empty($transactionMethod)){
             $qb->andWhere("e.transactionMethod = :transactionMethod")->setParameter('transactionMethod', $transactionMethod);

@@ -63,7 +63,7 @@
                                 <td class="numeric" >{% if entity.status == 1 %}<span class="btn mini purple">Success</span>{% else %}<span class="btn mini red">Waiting</span>{% endif %}</td>
                                  <td class="numeric" >
                                      {% if entity.status == 1 %}
-                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('medicine_sales',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>
+                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('restaurant_invoice',{'device':entity.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i> View</a>
                                     {% else %}
                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('restaurant_device_sales_import',{'android':entity.id}) }}" href="javascript:" class="btn green mini androidProcess" ><i class="icon-retweet"></i> Process</a>
                                      {% endif %}

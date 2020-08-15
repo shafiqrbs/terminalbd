@@ -524,6 +524,7 @@ class SalesController extends Controller
             'sales' => $sales,
         ));
     }
+
     public function androidSalesProcessAction($device)
     {
         set_time_limit(0);

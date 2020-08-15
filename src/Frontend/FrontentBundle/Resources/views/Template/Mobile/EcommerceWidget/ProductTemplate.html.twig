@@ -89,18 +89,19 @@
                     </div>
                     <div class="card-price">
                         <div class="input-group">
-              <span class="input-group-btn input-group-btn-custom">
-                  <button type="button" class="btn btn-transparent danger-font btn-new-cart-item input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                  </button>
-              </span>
-                            <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
+                                             <span class="input-group-btn input-group-btn-custom">
+                                                      <button type="button" class="btn btn-transparent danger-font btn-new-cart-item input-group-btn-left" id="btn-left-{{ product.id }}" data-id="{{ product.id }}"  data-type="minus" data-field="quant-{{ product.id }}" data-url="{{ path('ajax_product_medicine_cart', {'subdomain':globalOption.subDomain,'product' : product.id }) }}">
+                                                        <span class="glyphicon glyphicon-chevron-left"></span>
+                                                      </button>
+                                                  </span>
+                            <input type="text" id="quant-{{ product.id }}" name="quant-{{ product.id }}" class="form-control cart-input input-number" value="" data-id="{{ product.id }}" min="1" max="100" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path('ajax_product_medicine_cart', {'subdomain':globalOption.subDomain,'product' : product.id }) }}">
                             <span class="input-group-btn">
-                  <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-new-cart-item" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_medicine_cart',{'product':product.id }) }}">
-                      <span class="glyphicon glyphicon-chevron-right"></span>
-                  </button>
-
-              </span></div></div>
+                                      <button type="button" data-id="{{ product.id }}" class="btn btn-transparent cyan-font btn-new-cart-item" data-type="plus" data-field="quant-{{ product.id }}" data-url="{{ path('ajax_product_medicine_cart', {'subdomain':globalOption.subDomain,'product' : product.id }) }}">
+                                          <span class="glyphicon glyphicon-chevron-right"></span>
+                                      </button>
+                                </span>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% if product.discount is not empty %}

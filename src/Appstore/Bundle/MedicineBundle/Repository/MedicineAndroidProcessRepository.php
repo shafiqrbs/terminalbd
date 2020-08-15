@@ -33,6 +33,8 @@ class MedicineAndroidProcessRepository extends EntityRepository
         $result = $qb->getQuery();
         return $result;
     }
+
+
     public function insertAndroidProcess(GlobalOption $option,$device,$process,$data)
     {
         $em =  $this->_em;

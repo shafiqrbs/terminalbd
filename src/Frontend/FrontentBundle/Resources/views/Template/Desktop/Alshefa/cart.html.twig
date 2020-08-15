@@ -59,7 +59,7 @@
         <div class="clearfix">  <br/></div>
         <section>
             <div class="container bodyColor" >
-                {% if globalOption.ecommerceConfig.cartSearch != 1 %}
+                {% if globalOption.ecommerceConfig.cartSearch == 1 %}
                 <div class="row" id="stock-product-box">
                     <div class="modal-header" style="position: relative">
                         <h4 class="modal-title">Add Product</h4>
@@ -128,7 +128,7 @@
                                                                         <img style="height: 80px; width: 80px" src="{{ asset('assets/img/product-icon.png') }}">
                                                                     {% endif %}
                                                                 </div>
-                                                                <div class="col-xs-9 col-md-9" data-match-height="item-product">
+                                                                <div class="col-xs-9 col-md-9 item-product" data-match-height="item-product" >
                                                                     <div class="row">
                                                                         <div class="col-xs-6 col-md-6 list-group-product">
                                                                             <span class="cart-product-title">{{ product.name }}</span><br>
@@ -442,7 +442,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="col-xs-12 col-md-12 text-center">
-                                                        <button  type="submit" class="btn btn-success">Place Order <span class="glyphicon glyphicon-play"></span></button>
+                                                        <button  type="submit" class="btn btn-success col-xs-12 col-md-12">Place Order <i class="fa fa-play"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -457,6 +457,13 @@
                 </div>
             </div>
         </section>
+        <style>
+        .item-product{
+            display: flex;
+            align-items: center;
+            float: left!important;
+        }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
