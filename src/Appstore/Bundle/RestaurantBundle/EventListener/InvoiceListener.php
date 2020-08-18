@@ -44,7 +44,7 @@ class InvoiceListener
         $qb
             ->select('MAX(s.code)')
             ->where('s.restaurantConfig = :config')
-            ->setParameter('config', $entity->getRestaurantConfig())
+            ->setParameter('config', $entity->getRestaurantConfig()->getId())
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
             ->setParameter('today_startdatetime', $today_startdatetime)

@@ -1,30 +1,33 @@
- {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
-     {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
- {% endif %}
+{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+    {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
+{% endif %}
 {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
     {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
 {% endif %}
 <section class="footer-menu">
-    <div class="container social-payment" >
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="bs-callout" >
-                    <h4>PAYMENT METHOD</h4>
-                    <p><img src="{{ asset('assets/img/credit-card.png') }}" ></p>
+    {% if globalOption.ecommerceConfig.footerCategory == 1 %}
+        <div class="container social-payment" >
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5><strong>ALL CATEGORIES -</strong></h5>
+                    {% render controller("FrontendBundle:EcommerceWidget:footerProductCategory",{'globalOption':globalOption.id}) %}
                 </div>
             </div>
-            <div class="col-sm-4">
-                <h4>NEWS LETTER</h4>
-                <div class="social-tooltip">
-                    <form name="newsLetter" method="post" id="newsLetter" action="{{ path(globalOption.subDomain ~ '_webservice_news_letter_receive') }}">
-                        <div class="input-group">
-                            <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
-                            <div class="input-group-btn"> <button type="button" class="btn btn-info" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
-                            <button type="submit" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
-                            </div>
-                        </div>
-                    </form>
+        </div>
+    {% endif %}
+    <div class="container social-payment" id="footer-menu" style="border-bottom:none; margin-bottom: 0; padding-bottom: 0" >
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="bs-callout" >
+                    <h4>About</h4>
+                    <p>
+                        {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
+                    </p>
                 </div>
+            </div>
+            <div class="col-sm-3">
+                <h4>{{ globalOption.name }}</h4>
+                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
             </div>
             <div class="col-sm-3 text-center">
                 <h4>KEEP IN TOUCH</h4>
@@ -34,29 +37,16 @@
                     <a data-toggle="tooltip" id="instagram" title="Follow on Instagram" target="_blank" href="http://{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram fa-fw  "></i></a>
                     <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
                 </div>
+                {% if globalOption.templateCustomize.playStore %}
+                    <div style="margin-top:15px">
+                        <a href="https://play.google.com/store/apps/details?id={{ globalOption.templateCustomize.playStore }}"><img style="height: 50px;" src="{{ asset('assets/img/android.png') }}"></a>
+                    </div>
+                {% endif %}
             </div>
-        </div>
-
-    </div>
-    <div class="container" id="footer-menu" >
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="bs-callout" >
-                    <h4>About</h4>
-                    <p>
-                        {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <h4>{{ globalOption.name }}</h4>
-                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
-            </div>
-            <div class="col-sm-3 text-center">
-                <h4>CONTACT US</h4>
-                <address class="text-center">
+            <div class="col-sm-3">
+                <h4>Contact Us</h4>
+                <address>
                     {% if globalOption.contactPage.address1 is not empty %}
-
                         <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
                             {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
                                 {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
@@ -78,12 +68,14 @@
                     </strong>
                     {% endif %}
                     <br>
-                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.hotline }}" class="contact-call">{{ globalOption.hotline }}</a>
+                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.templateCustomize.contactNo }}" class="contact-call">{{ globalOption.templateCustomize.contactNo }}</a>
                     {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
-                    <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr={{ globalOption.contactPage.latitude }},{{ globalOption.contactPage.longitude }}">Direction</a>
+                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr={{ globalOption.contactPage.latitude }},{{ globalOption.contactPage.longitude }}">Direction</a>
                     {% endif %}
+
                 </address>
             </div>
+
         </div>
     </div>
 </section>

@@ -1,19 +1,19 @@
- {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
-     {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
- {% endif %}
+{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+    {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
+{% endif %}
 {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
     {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
 {% endif %}
 <section class="footer-menu">
     {% if globalOption.ecommerceConfig.footerCategory == 1 %}
-    <div class="container social-payment" >
-        <div class="row">
-            <div class="col-sm-12">
-                <h5><strong>ALL CATEGORIES -</strong></h5>
-                {% render controller("FrontendBundle:EcommerceWidget:footerProductCategory",{'globalOption':globalOption.id}) %}
+        <div class="container social-payment" >
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5><strong>ALL CATEGORIES -</strong></h5>
+                    {% render controller("FrontendBundle:EcommerceWidget:footerProductCategory",{'globalOption':globalOption.id}) %}
+                </div>
             </div>
         </div>
-    </div>
     {% endif %}
     <div class="container social-payment" id="footer-menu" style="border-bottom:none; margin-bottom: 0; padding-bottom: 0" >
         <div class="row">
@@ -38,9 +38,9 @@
                     <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
                 </div>
                 {% if globalOption.templateCustomize.playStore %}
-                <div style="margin-top:15px">
-                <a href="https://play.google.com/store/apps/details?id={{ globalOption.templateCustomize.playStore }}"><img style="height: 50px;" src="{{ asset('assets/img/android.png') }}"></a>
-                </div>
+                    <div style="margin-top:15px">
+                        <a href="https://play.google.com/store/apps/details?id={{ globalOption.templateCustomize.playStore }}"><img style="height: 50px;" src="{{ asset('assets/img/android.png') }}"></a>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-sm-3">
@@ -68,9 +68,9 @@
                     </strong>
                     {% endif %}
                     <br>
-                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.hotline }}" class="contact-call">{{ globalOption.hotline }}</a>
+                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.templateCustomize.contactNo }}" class="contact-call">{{ globalOption.templateCustomize.contactNo }}</a>
                     {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
-                    <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr={{ globalOption.contactPage.latitude }},{{ globalOption.contactPage.longitude }}">Direction</a>
+                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr={{ globalOption.contactPage.latitude }},{{ globalOption.contactPage.longitude }}">Direction</a>
                     {% endif %}
 
                 </address>

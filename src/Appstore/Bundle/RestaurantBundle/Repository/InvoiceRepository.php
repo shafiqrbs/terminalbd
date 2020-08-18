@@ -563,6 +563,7 @@ class InvoiceRepository extends EntityRepository
         $items = json_decode($process->getJsonItem(),true);
         if($items){
             foreach ($items as $item):
+
                 $sales = new Invoice();
                 $sales->setRestaurantConfig($option->getRestaurantConfig());
                 $sales->setAndroidProcess($process);

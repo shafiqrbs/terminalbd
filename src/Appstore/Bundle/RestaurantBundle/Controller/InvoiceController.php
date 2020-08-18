@@ -476,7 +476,7 @@ class InvoiceController extends Controller
     public function approvedOrderAction(Invoice $entity)
     {
         $globalOption = $entity->getRestaurantConfig()->getGlobalOption();
-        $em =  $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $payment = !empty($data['payment']) ? $data['payment'] :0;
         if($entity->getPayment() >= $entity->getTotal()){
             $entity->setPayment($entity->getTotal());
@@ -586,8 +586,8 @@ class InvoiceController extends Controller
         $pagination = $this->paginate($entities);
         $sales = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findAndroidDeviceSales($pagination);
         return $this->render('RestaurantBundle:Invoice:salesAndroid.html.twig', array(
-            'entities' => $pagination,
-            'sales' => $sales,
+            'entities'  => $pagination,
+            'sales'     => $sales,
         ));
     }
 
@@ -620,12 +620,15 @@ class InvoiceController extends Controller
 
         foreach ($salses as $sales){
             if($sales->getProcess() == "Device"){
+
                 $sales->setProcess('Done');
+                $sales->setInvoice($sales->getDeviceSalesId());
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($sales);
                 $msg = "valid";
+
             }
         }
 
@@ -641,6 +644,7 @@ class InvoiceController extends Controller
         }else{
             return new Response('failed');
         }
+
     }
 
 

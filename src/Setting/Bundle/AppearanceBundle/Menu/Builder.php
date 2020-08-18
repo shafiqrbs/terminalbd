@@ -1022,7 +1022,6 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Master Data']->addChild('Delivery Time', array('route' => 'ecommerce_delivertime'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'))->setAttribute('icon', 'icon-th-list');
         }
-
         return $menu;
     }
 
@@ -1489,6 +1488,8 @@ class Builder extends ContainerAware
         $menu['Restaurant']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
             ->setAttribute('icon', 'icon-th-large');
         $menu['Restaurant']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
+            ->setAttribute('icon', 'icon-list');
+        $menu['Restaurant']->addChild('Android Sales', array('route' => 'restaurant_invoice_android'))
             ->setAttribute('icon', 'icon-list');
         $menu['Restaurant']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
