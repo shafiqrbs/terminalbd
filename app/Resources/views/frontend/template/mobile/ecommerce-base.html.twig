@@ -191,7 +191,6 @@
         <a href="javascript:" class="logout" title="Logout" data-action="/logout"> <i class="fa fa-sign-out"></i></a>
     {% else %}
         <h2 class="text-center">{{ globalOption.name }}</h2>
-        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart') }}" title="Upload Order"  ><i class="fa fa-camera"></i></a>
         <a href="javascript:" title="Login" class="showCartItem" ><i class="fa fa-user"></i></a>
     {% endif %}
     {% if globalOption.ecommerceConfig.uploadFile == 1 %}
