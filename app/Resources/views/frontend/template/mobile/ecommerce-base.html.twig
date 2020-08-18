@@ -71,7 +71,7 @@
     <div class="masthead pdng-stn1">
         <div class="phone-box wrap push" id="home">
             <div class="menu-notify sticky">
-                <div class="bar-left">
+{#                <div class="bar-left">
                     <a href="#mm-menu" class="main-menu"><i class="fa fa-navicon"></i></a>
                 </div>
                 <div class="bar-mid">
@@ -79,9 +79,9 @@
 
                 </div>
                 <div class="bar-right">
-                   {# <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
+                   #}{# <a href="javascript:" style="position: relative"  class="showCartItem bar-icon"><i class="fa fa-shopping-bag"></i>
                     <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
-                    </a>#}
+                    </a>#}{#
                     <div class="input-group">
                     <span id="logged-in">
                          {% if app.user is not empty %}
@@ -97,7 +97,7 @@
                     <a href="javascript:" class="bar-icon bar-search" ><i class="fa fa-search"></i></a>
                     </div>
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix"></div>#}
                 <div id="search-box" style="display: block">
                     <form  action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" >
                         <div class="input-group" style="margin-top: 6px">
@@ -108,13 +108,8 @@
                             <input type="text" name="webName" required="required" id="webName" class="form-control" value="{{ searchForm['webName'] is defined ? searchForm['webName'] :'' }}" placeholder="Find a desired products">
                             </div>
                             <span class="input-group-btn">
-                            {% if globalOption.ecommerceConfig.mobileFilter == 1 %}
-                                <button type="button" class="btn btn-transparent" id="filter"><span class="fa fa-filter"></span></button>
-                            {% endif %}
-                            {% if globalOption.ecommerceConfig.uploadFile == 1 %}
-                                <button type="button" class="btn btn-transparent showCartItem" ><i class="fa fa-camera"></i></button>
-                            {% endif %}
-                                <button type="button"  id="sideMenu" class="btn btn-transparent sideviewtoggle" ><i class="fa fa-ellipsis-v"></i></button>
+
+                             <button type="button"  id="sideMenu" class="btn btn-transparent sideviewtoggle" ><i class="fa fa-ellipsis-v"></i></button>
                             </span>
                         </div>
                     </form>
@@ -196,8 +191,13 @@
         <a href="javascript:" class="logout" title="Logout" data-action="/logout"> <i class="fa fa-sign-out"></i></a>
     {% else %}
         <h2 class="text-center">{{ globalOption.name }}</h2>
+        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart') }}" title="Upload Order"  ><i class="fa fa-camera"></i></a>
         <a href="javascript:" title="Login" class="showCartItem" ><i class="fa fa-user"></i></a>
     {% endif %}
+    {% if globalOption.ecommerceConfig.uploadFile == 1 %}
+    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" title="Upload Order"  ><i class="fa fa-camera"></i></a>
+    {% endif %}
+    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" title="Checkout"  ><i class="fa fa-shopping-cart"></i></a>
 </div>
 <div id="email-confirm" style="display:none; text-align: left!important;">Thank you for your interest in {{ globalOption.domain }}. Your email has been sent successfully to our customer service department.</div>
 <div id="email-invalid" style="display:none; text-align: left!important;">Dear Customer, All ready your email/mobile has been send. Thank you for your interest in {{ globalOption.domain }}.</div>

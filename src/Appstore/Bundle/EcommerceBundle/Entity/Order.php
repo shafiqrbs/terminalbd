@@ -1052,7 +1052,7 @@ class Order
 
     public function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/prescription';
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/order';
     }
 
     public function upload()

@@ -502,9 +502,10 @@ class WebOrderController extends Controller
 
     }
 
-    public function downloadAttachFileAction(Order $order)
+    public function downloadAttachFileAction($invoice)
     {
 
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $file = $order->getWebPath();
         if (file_exists($file))
         {

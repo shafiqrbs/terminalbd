@@ -14,7 +14,7 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                                        <h3 class="panel-title"><strong>ORDER DETAILS</strong></h3>
                                     </div>
                                     <div class="panel-body">
                                         <div class="invoice-title">
@@ -39,6 +39,7 @@
                                                     <li><strong>Shipping</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                                     <li><strong>Delivery</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                                     <li><strong>Process</strong>:&nbsp;{{ entity.process|capitalize }}</li>
+                                                    <li>{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</li>
 
 
                                                 </ul>

@@ -32,6 +32,10 @@ webservice_buyer_order_delete:
     path:     /{invoice}/shop/order/delete
     defaults: { _controller: FrontendBundle:WebOrder:delete }
 
+webservice_buyer_order_download:
+    path:     /{invoice}/shop/order/download
+    defaults: { _controller: FrontendBundle:WebOrder:downloadAttachFile }
+
 webservice_buyer_order:
     path:     /shop/order
     defaults: { _controller: FrontendBundle:WebOrder:order }

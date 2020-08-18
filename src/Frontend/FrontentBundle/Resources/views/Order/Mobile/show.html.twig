@@ -6,6 +6,8 @@
             <div class="row" id="showCartItem"></div>
         </div>
         <div class="clearfix"></div>
+        <div class="col-xs-12 col-md-12 col-sm-12 title-head" >ORDER DETAILS : {{ entity.invoice }} </div>
+        <div class="clearfix"></div>
         <div>
             <div style="background: #f5f5f5; padding-bottom: 15px; padding-top: 15px; margin-bottom: 15px">
                 <div class="col-xs-12 col-md-12 col-sm-12">
@@ -24,6 +26,7 @@
                         <li>Delivery</li>
                         <li>Time Period</li>
                         <li><strong>Process</strong></li>
+                        <li></li>
                     </ul>
                 </div>
                 <div class="col-xs-8 col-md-8 col-sm-8">
@@ -33,6 +36,7 @@
                         <li>{{ entity.deliveryDate|date('d-m-Y') }}</li>
                         <li>{% if entity.timePeriod is not empty %}{{ entity.timePeriod.name }}{% endif %}</li>
                         <li>{{ entity.process|capitalize }}</li>
+                        <li>{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>

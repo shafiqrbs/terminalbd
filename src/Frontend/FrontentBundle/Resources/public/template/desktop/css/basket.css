@@ -1,3 +1,12 @@
+.title-head{
+    font-size: 16px;
+    line-height: 30px;
+    border-bottom: 1px solid #DDDDDD;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    background: #d0d0d0;
+}
+
 #stock-product-box{
     padding-top: 15px;
     background: #e2cebb;
