@@ -57,7 +57,7 @@
 {% elseif globalOption.ecommerceConfig.productTheme is empty or globalOption.ecommerceConfig.productTheme == 'alshefa' %}
     {% for product in products %}
         <div  class="product-item product-grid-default" data-match-height="product-item-height">
-            <div class="thumbnail">
+            <div class="thumb-box">
                 <div class="product-preview group list-group-image">
                     <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumb-product-img">
                         {% if  product.webPath is not empty %}
