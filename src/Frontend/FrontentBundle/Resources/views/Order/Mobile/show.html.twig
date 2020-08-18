@@ -78,7 +78,7 @@
                                     <div class="product-quantity">
                                     {{ orderItem.quantity }}  {% if orderItem.UnitName is not empty %}
                                         {{ orderItem.UnitName }}
-                                    {% endif %} x  {{ orderItem.price }}
+                                    {% endif %} x {{ orderItem.price }}
                                     </div>
                                 </div>
                                 <div class="col-xs-3 col-md-3 col-sm-3"><span class="product-price">{{ orderItem.subTotal|number_format(2) }}</span></div>
