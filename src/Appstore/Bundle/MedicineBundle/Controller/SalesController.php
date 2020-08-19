@@ -4,15 +4,13 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,9 +37,9 @@ class SalesController extends Controller
 
 
     /**
-     * Lists all Vendor entities.
-     *
+     * @Secure(roles="ROLE_MEDICINE_SALES")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -79,6 +77,10 @@ class SalesController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_MEDICINE_SALES")
+     */
+
     public function newAction()
     {
 
@@ -96,6 +98,10 @@ class SalesController extends Controller
         return $this->redirect($this->generateUrl('medicine_sales_edit', array('id' => $entity->getId())));
 
     }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE_SALES")
+     */
 
     public function editAction($id)
     {
@@ -222,7 +228,7 @@ class SalesController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function instantPurchaseSalesAction(MedicineSales $sales , MedicinePurchaseItem $item)
@@ -248,7 +254,7 @@ class SalesController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -273,7 +279,7 @@ class SalesController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
 
@@ -311,7 +317,7 @@ class SalesController extends Controller
         $msg = 'Discount successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function updateAction(Request $request, MedicineSales $entity)
@@ -410,9 +416,9 @@ class SalesController extends Controller
     }
 
     /**
-     * Deletes a Vendor entity.
-     *
+     * @Secure(roles="ROLE_MEDICINE_SALES")
      */
+
     public function deleteAction(MedicineSales $entity)
     {
 

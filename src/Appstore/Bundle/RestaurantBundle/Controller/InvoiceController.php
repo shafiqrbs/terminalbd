@@ -619,6 +619,7 @@ class InvoiceController extends Controller
         $salses = $this->getDoctrine()->getRepository("RestaurantBundle:Invoice")->findBy(array('androidProcess' => $android));
 
         foreach ($salses as $sales){
+
             if($sales->getProcess() == "Device"){
 
                 $sales->setProcess('Done');
@@ -626,6 +627,10 @@ class InvoiceController extends Controller
                 $sales->setUpdated($sales->getCreated());
                 $sales->setApprovedBy($this->getUser());
                 $em->flush();
+                $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($sales);
+                if($sales->getRestaurantConfig()->isStockHistory() == 1 ) {
+                    $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($sales);
+                }
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($sales);
                 $msg = "valid";
 
@@ -633,7 +638,6 @@ class InvoiceController extends Controller
         }
 
         if($msg == "valid"){
-
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
