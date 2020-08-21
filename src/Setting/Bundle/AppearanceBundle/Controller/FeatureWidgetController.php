@@ -17,7 +17,7 @@ class FeatureWidgetController extends Controller
 {
 
     /**
-     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_WEDGET,ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -121,8 +121,9 @@ class FeatureWidgetController extends Controller
     }
 
     /**
-     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_WEDGET,ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
+    
 
     public function newAction()
     {
@@ -158,7 +159,7 @@ class FeatureWidgetController extends Controller
     }
 
     /**
-     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_WEDGET,ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
 
     public function editAction($id)
@@ -246,7 +247,7 @@ class FeatureWidgetController extends Controller
     }
 
     /**
-     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_SETTING,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_WEDGET,ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
 
     public function deleteAction($id)

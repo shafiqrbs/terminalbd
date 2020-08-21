@@ -175,22 +175,7 @@ class UserRepository extends EntityRepository
             );
         }
 
-        $ecommerce = array('e-commerce');
-        $result = array_intersect($arrSlugs, $ecommerce);
-        if (!empty($result)) {
 
-            $array['E-commerce'] = array(
-                'ROLE_ECOMMERCE'                             => 'E-commerce',
-                'ROLE_DOMAIN_ECOMMERCE_PRODUCT'             => 'E-commerce Product',
-                'ROLE_DOMAIN_ECOMMERCE_ORDER'               => 'E-commerce Order',
-                'ROLE_DOMAIN_ECOMMERCE_MANAGER'             => 'E-commerce Manager',
-                'ROLE_DOMAIN_ECOMMERCE_SETTING'             => 'E-commerce Admin',
-                'ROLE_DOMAIN_ECOMMERCE_VENDOR'              => 'E-commerce Vendor',
-                'ROLE_DOMAIN_ECOMMERCE_REPORT'              => 'E-commerce Report',
-                'ROLE_DOMAIN_ECOMMERCE_ADMIN'               => 'E-commerce Admin',
-                'ROLE_DOMAIN_ECOMMERCE_MENU'                => 'E-commerce Menu',
-            );
-        }
 
         $business = array('business');
         $result = array_intersect($arrSlugs, $business);
@@ -322,11 +307,42 @@ class UserRepository extends EntityRepository
 		    $array['Website'] = array(
 			    'ROLE_WEBSITE'                  => 'Website',
 			    'ROLE_DOMAIN_WEBSITE_MANAGER'   => 'Website Manager',
-			    'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
 			    'ROLE_DOMAIN_WEBSITE'           => 'Website Admin',
 
 		    );
 	    }
+
+        $ecommerce = array('e-commerce');
+        $result = array_intersect($arrSlugs, $ecommerce);
+        if (!empty($result)) {
+
+            $array['E-commerce'] = array(
+                'ROLE_ECOMMERCE'                            => 'E-commerce',
+                'ROLE_DOMAIN_ECOMMERCE_PRODUCT'             => 'E-commerce Product',
+                'ROLE_DOMAIN_ECOMMERCE_ORDER'               => 'E-commerce Order',
+                'ROLE_DOMAIN_ECOMMERCE_MANAGER'             => 'E-commerce Manager',
+                'ROLE_DOMAIN_ECOMMERCE_VENDOR'              => 'E-commerce Vendor',
+                'ROLE_DOMAIN_ECOMMERCE_REPORT'              => 'E-commerce Report',
+                'ROLE_DOMAIN_ECOMMERCE_CONFIG'              => 'E-commerce Admin',
+            );
+        }
+
+        $appearance = array('website','e-commerce');
+        $result = array_intersect($arrSlugs, $appearance);
+        if (!empty($result)) {
+
+            $array['Appearance'] = array(
+
+                'ROLE_APPEARANCE'               => 'Appearance',
+                'ROLE_DOMAIN_ECOMMERCE_MENU'    => 'E-commerce Menu',
+                'ROLE_DOMAIN_ECOMMERCE_SETTING' => 'E-commerce Setting',
+                'ROLE_DOMAIN_ECOMMERCE_WEDGET'  => 'E-commerce Wedget',
+                'ROLE_DOMAIN_WEBSITE_WEDGET'    => 'Website Wedget',
+                'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
+
+            );
+        }
+
 	    $array['SMS'] = array(
             'ROLE_SMS'                                          => 'Sms/E-mail',
             'ROLE_SMS_MANAGER'                                  => 'Sms/E-mail Manager',

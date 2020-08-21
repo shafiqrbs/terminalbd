@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -72,9 +73,9 @@ class EcommerceConfigController extends Controller
         ));
     }
     /**
-     * Displays a form to edit an existing EcommerceConfig entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_CONFIG,ROLE_DOMAIN")
      */
+
     public function modifyAction()
     {
 
