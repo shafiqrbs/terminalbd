@@ -173,6 +173,7 @@
                                             <span>
                                                 <label>Receive Account</label>
                                                 <select id="accountMobile" name="accountMobile" class="select-cart">
+                                                     <option value="">--Select Mobile Account--</option>
                                                     {% for mobile in globalOption.accountMobileBank %}
                                                         {% if mobile.status == 1 %}
                                                             <option value="{{ mobile.id }}">{{ mobile.name }}</option>
@@ -194,9 +195,9 @@
                                 </li>
                                 {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                                     <li>
-                                        <div class="accordion-control">Upload Order</div>
-                                        <div class="accordion-panel">
-                                            <div style="height:32px; overflow: hidden">
+                                        <div class="accordion-control {% if globalOption.ecommerceConfig.uploadFile == 1 %} upload-file {% endif %}">Upload Order</div>
+                                        <div class="accordion-panel" {% if globalOption.ecommerceConfig.uploadFile == 1 %} style="display: block" {% endif %}>
+                                            <div style="height:48px; overflow: hidden; margin-top: 15px">
                                                 <input type="file" id="uploadFile" name="uploadFile" class="dropzone"/>
                                             </div>
                                             <p style="font-size:10px; color: red; line-height: 14px; height: 24px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 5MB</p>

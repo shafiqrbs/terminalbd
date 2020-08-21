@@ -40,7 +40,7 @@
                     </ul>
                 </div>
                 <div class="clearfix"></div>
-
+                {% if entity.accountMobileBank is not empty %}
                 <div class="col-xs-4 col-md-4 col-sm-4">
                     <ul class="unstyled" >
                         <li>Receive Mob.</li>
@@ -57,6 +57,7 @@
                         <li>{{ entity.transaction }}</li>
                     </ul>
                 </div>
+                {% endif %}
                 <div class="clearfix"></div>
             </div>
             <div>
