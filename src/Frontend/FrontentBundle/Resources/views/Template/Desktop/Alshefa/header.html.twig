@@ -194,9 +194,7 @@
                         <div class="category-box">
                             <div class="home-category widget_product_categories">
                                 <h3 class="widget-title">Top Categories</h3>
-                                <ul class="product-categories toggle-block sidebar-category-inner">
-                                    {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id,'menu':menu.id}) %}
-                                </ul>
+                                {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id,'menu':menu.id}) %}
                             </div>
                         </div>
                     </div>
@@ -213,5 +211,20 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header'}) %}
     {% endif %}
 </nav>
-
+<style>
+    .box-category-heading:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 30px;
+        right: auto;
+        top: auto;
+        bottom: -10px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 10px 10px 0 10px;
+        border-color: #E12454 transparent transparent transparent;
+    }
+</style>
 

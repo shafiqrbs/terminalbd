@@ -120,7 +120,7 @@ class EcommerceWidgetController extends Controller
         }else{
             $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig'=>$config));
         }
-        $data = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategoryMenu($category,'product-categories');
+        $data = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategoryMenu($category,'product-categories toggle-block sidebar-category-inner');
         return new Response($data);
 
     }
