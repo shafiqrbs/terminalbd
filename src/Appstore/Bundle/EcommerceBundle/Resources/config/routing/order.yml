@@ -119,6 +119,6 @@ customer_medicine_item_delete:
     defaults: { _controller: "EcommerceBundle:Order:itemDelete" }
 
 customer_order_attach_download:
-    path:      /{id}/attach-download
+    path:      /{invoice}/attach-download
     defaults: { _controller: "EcommerceBundle:Order:downloadAttachFile" }
 

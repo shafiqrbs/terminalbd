@@ -57,6 +57,7 @@
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Shipping</th>
                                     <th class="numeric" >Total</th>
+                                    <th class="numeric" >File</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -75,6 +76,7 @@
                                         <td class="numeric" >{{ entity.totalAmount }}</td>
                                         <td class="numeric" >{{ entity.shippingCharge }}</td>
                                         <td class="numeric" >{{ entity.grandTotalAmount }}</td>
+                                        <td class="numeric" >{% if entity.path is not empty %}<a href="{{ path('customer_order_attach_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</td>
                                         <td class="numeric" >
                                             {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
                                             {% if entity.process in  postCondition|keys %}
