@@ -101,14 +101,15 @@ class OrderController extends Controller
         }else{
             $theme = 'ecommerce';
         }
+        $config = $order->getEcommerceConfig();
         $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$order);
-        $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $order->getEcommerceConfig(),'status'=>1),array('name'=>'ASC'));
-        $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $order->getEcommerceConfig(),'status'=>1),array('name'=>'ASC'));
+        $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
+        $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
         return $this->render("EcommerceBundle:Order/{$theme}:new.html.twig", array(
             'globalOption' => $order->getGlobalOption(),
             'entity'                => $order,
-            'locations'             => $locations,
-            'timePeriods'           => $timePeriods,
+            'locations'                => $locations,
+            'timePeriods'                => $timePeriods,
             'orderForm'             => $orderForm->createView(),
             'salesItem'             => $salesItemForm->createView(),
             'paymentForm'           => $payment->createView(),
@@ -500,7 +501,7 @@ class OrderController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return new Response('success');
+        return new Response('su');
     }
 
     /**
@@ -718,10 +719,9 @@ class OrderController extends Controller
 
     }
 
-    public function downloadAttachFileAction($invoice)
+    public function downloadAttachFileAction(Order $order)
     {
 
-        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $file = $order->getWebPath();
         if (file_exists($file))
         {

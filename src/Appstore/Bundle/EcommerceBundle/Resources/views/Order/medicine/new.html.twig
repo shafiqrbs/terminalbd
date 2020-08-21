@@ -91,7 +91,7 @@
                                                 </span>
                                             </li>
                                             <li>
-                                                <strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span>
+                                                <strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path('customer_order_attach_download',{'id':entity.id}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span>
                                             </li>
                                         </ul>
                                     </div>

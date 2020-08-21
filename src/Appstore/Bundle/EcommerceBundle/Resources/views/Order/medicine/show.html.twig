@@ -35,7 +35,7 @@
                                 <li><strong class="span4">Delivery Date</strong><span class="span8">{{ entity.deliveryDate|date('d-m-Y') }}</span></li>
                                 <li><strong class="span4">Time Period</strong><span class="span8">{% if entity.timePeriod is not empty %}{{ entity.timePeriod.name }}{% endif %}</span></li>
                                 <li><strong class="span4">Process</strong><span class="span8">{{ entity.process|capitalize }}</span></li>
- <li><strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path('customer_order_attach_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span></li>
+ <li><strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path('customer_order_attach_download',{'id':entity.id}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span></li>
 
 
                             </ul>
