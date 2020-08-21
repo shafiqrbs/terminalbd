@@ -102,9 +102,13 @@ class OrderController extends Controller
             $theme = 'ecommerce';
         }
         $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$order);
+        $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $order->getEcommerceConfig(),'status'=>1),array('name'=>'ASC'));
+        $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $order->getEcommerceConfig(),'status'=>1),array('name'=>'ASC'));
         return $this->render("EcommerceBundle:Order/{$theme}:new.html.twig", array(
             'globalOption' => $order->getGlobalOption(),
             'entity'                => $order,
+            'locations'             => $locations,
+            'timePeriods'           => $timePeriods,
             'orderForm'             => $orderForm->createView(),
             'salesItem'             => $salesItemForm->createView(),
             'paymentForm'           => $payment->createView(),
@@ -496,7 +500,7 @@ class OrderController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return new Response($msg);
+        return new Response('success');
     }
 
     /**
@@ -712,6 +716,27 @@ class OrderController extends Controller
             'print' => ''
         ));
 
+    }
+
+    public function downloadAttachFileAction($invoice)
+    {
+
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
+        $file = $order->getWebPath();
+        if (file_exists($file))
+        {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            ob_clean();
+            flush();
+            readfile($file);
+            exit;
+        }
     }
 
 

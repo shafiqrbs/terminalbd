@@ -468,6 +468,30 @@ class CategoryRepository extends MaterializedPathRepository
     }
 
 
+    public function getFeatureCategoryMenu($categories , $addCalss=""){
+
+        $value ='';
+        $value .="<ul class='{$addCalss}'>";
+
+        foreach ($categories as $val) {
+
+            $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
+            if($subIcon == 1){
+                $value .= "<li class='cat-item  cat-parent' ><a href='/product/category/{$val->getSlug() }'>{$val->getName()}</a>";
+                $value .= $this->getFeatureCategoryMenu($val->getChildren(),$addCalss ='children');
+            }else{
+                $value .= "<li class='cat-item' ><a href='/product/category/{$val->getSlug() }'>{$val->getName()}</a>";
+            }
+            $value .= '</li>';
+
+        }
+        $value .='</ul>';
+
+        return $value;
+
+    }
+
+
     public function setFeatureOrdering($data)
     {
         $i = 1;

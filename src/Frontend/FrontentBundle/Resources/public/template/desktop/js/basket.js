@@ -111,30 +111,6 @@ $('#itemName').click(function() {
 });
 
 
-$('.dropzone').inputFileZone({
-    message: 'UPLOAD YOUR SHOPPING IMAGE',
-    previewImages: false,
-});
-
-jQuery.validator.addMethod("maxFileSize", function(value, element, param) {
-
-    var isOptional = this.optional(element),
-        file;
-    if(isOptional) {
-        return isOptional;
-    }
-
-    if ($(element).attr("type") === "file") {
-
-        if (element.files && element.files.length) {
-
-            file = element.files[0];
-            return ( file.size && file.size <= param );
-        }
-    }
-    return false;
-}, "File size is too large.");
-
 var searchRequest = null;
 var minlength = 1;
 
@@ -214,12 +190,67 @@ $(document).on( "change", "#couponCode", function( e ) {
         });
 });
 
+
+$('.dropzone').inputFileZone({
+    message: 'UPLOAD YOUR SHOPPING IMAGE',
+    previewImages: false
+});
+
+var _validFileExtensions = [".jpg", ".jpeg", ".gif", ".png", ".pdf"];
+function Validate(oForm) {
+    var arrInputs = oForm.getElementsByTagName("input");
+    for (var i = 0; i < arrInputs.length; i++) {
+        var oInput = arrInputs[i];
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validFileExtensions.length; j++) {
+                    var sCurExtension = _validFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }
+
+                if (!blnValid) {
+                    alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+
+jQuery.validator.addMethod("maxFileSize", function(value, element, param) {
+
+    var isOptional = this.optional(element),
+        file;
+    if(isOptional) {
+        return isOptional;
+    }
+
+    if ($(element).attr("type") === "file") {
+
+        if (element.files && element.files.length) {
+
+            file = element.files[0];
+            return ( file.size && file.size <= param );
+        }
+    }
+    return false;
+}, "File size is too large.");
+
+
 $("#cartForm").validate({
+
     rules: {
         "cashOnDelivery": {required: false},
         uploadFile: {
             required: false,
-            extension:'jpe?g,png,pdf',
+            extension:'jpe?g,png,gif,pdf',
             maxFileSize:5242880
         }
     },messages: {

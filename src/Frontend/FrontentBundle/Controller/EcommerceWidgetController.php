@@ -66,7 +66,6 @@ class EcommerceWidgetController extends Controller
 
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
-        //    'form'                  => $searchForm->createView(),
             'categoryTree'          => $categoryTree,
             'brandTree'             => $brandTree,
             'menu'                  => $menu,
@@ -114,14 +113,14 @@ class EcommerceWidgetController extends Controller
         return new Response($categoryMegaMenu);
     }
 
-    public function returnProductFeatureCategoryAction(GlobalOption $globalOption){
-
+    public function returnProductFeatureCategoryAction(GlobalOption $globalOption, Menu $menu){
         $config = $globalOption->getEcommerceConfig();
-        $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig'=>$config));
-        $data = '';
-        foreach ($category as $row){
-          $data .="<li class='cat-item'><a href='/product/category/{$row->getSlug() }'>{$row->getName()}</a></li>";
+        if($menu->getSlug() == "home"){
+            $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig'=>$config,'homeFeature'=>1));
+        }else{
+            $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->findBy(array('ecommerceConfig'=>$config));
         }
+        $data = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getFeatureCategoryMenu($category,'product-categories');
         return new Response($data);
 
     }

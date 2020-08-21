@@ -56,7 +56,7 @@
                                     <span style="position: relative;display: inline-block">
                                           {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                                           <span id="item-qnt" class="totalItem">{{ cart.contents|length }}</span>
-                              <a  href="javascript:" id="btnUploadFile" data-toggle="tooltip" data-original-title="View Shopping Items"  class="btn btn-upload cartUpload"> <span  class="fa fa-upload"></span> Upload</a></span>
+                              <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="btn btn-upload"> <i  class="fa fa-upload"></i> Upload</a></span>
                                         {% endif %}
                                     </span>
                                 </div>
@@ -195,7 +195,7 @@
                             <div class="home-category widget_product_categories">
                                 <h3 class="widget-title">Top Categories</h3>
                                 <ul class="product-categories toggle-block sidebar-category-inner">
-                                    {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id}) %}
+                                    {% render controller("FrontendBundle:EcommerceWidget:returnProductFeatureCategory",{'globalOption':globalOption.id,'menu':menu.id}) %}
                                 </ul>
                             </div>
                         </div>
@@ -213,4 +213,5 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header'}) %}
     {% endif %}
 </nav>
+
 

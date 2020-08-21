@@ -50,6 +50,12 @@
                                             <li><strong class="span2">Name</strong><input type="text" name="ecommerce_payment[customerName]" id="customerName" class="m-wrap-custom span6 input-update" value="{{ entity.customerName }}"></li>
                                             <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="m-wrap-custom span6 input-update" value="{{ entity.customerMobile }}"></li>
                                             <li><strong class="span2">Address</strong><input type="text" name="ecommerce_payment[customerAddress]" id="customerAddress" value="{{ entity.address }}" class="m-wrap-custom span10 input-update" ></li>
+                                            <li><strong class="span2">Location</strong>
+                                                <select  class="m-wrap-custom input-update span6" id="location" name="ecommerce_payment[location]" >
+                                                    {% for location in locations %}
+                                                        <option {% if entity.location is not empty and   entity.location.id == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                                                    {% endfor %}
+                                                </select></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -64,26 +70,29 @@
                                                 <input type="date" name="ecommerce_payment[deliveryDate]" id="deliveryDate" value="{{ entity.deliveryDate|date('Y-m-d') }}" class="m-wrap-custom span12 input-update">
                                                 </span>
                                             </li>
-                                             <li><strong class="span4">Delivery Slot</strong>
+                                             <li><strong class="span4">Time Period</strong>
                                                  <span class="span8">
                                                  {% set slots = ["Morning 10-12","Evening 03-06","Night 06-10"] %}
-                                                 <select  class="m-wrap-custom input-update span12" id="deliverySlot" name="ecommerce_payment[deliverySlot]" >            {% for slot in slots %}
-                                                     <option {% if slot == entity.deliverySlot %} selected="selected" {% endif %} value="{{ slot }}">{{ slot }}</option>
-                                                     {% endfor %}
+                                                 <select  class="m-wrap-custom input-update span12" id="timePeriod" name="ecommerce_payment[timePeriod]" >
+                                                      {% for period in timePeriods %}
+                                                          <option {% if entity.timePeriod is not empty and   entity.timePeriod.id == period.id %} selected="selected" {% endif %} value="{{ period.id }}">{{ period.name }}</option>
+                                                      {% endfor %}
                                                  </select>
                                                  </span>
                                              </li>
-                                            <li><strong class="span4">Process Status</strong><span class="span8">
+                                            <li><strong class="span4">Process Status</strong>
+                                                <span class="span8">
                                                     {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm',delivered:'Delivered',returned:'Returned',cancel:'Cancel'} %}
                                                     <select  class="m-wrap-custom input-update span12" id="process" name="ecommerce_payment[process]" >            {% for key,process in processes %}
                                                             <option {% if key == entity.process %} selected="selected" {% endif %} value="{{ key }}">{{ process }}</option>
                                                         {% endfor %}
-
-                                                 </select>
+                                                    </select>
 
                                                 </span>
                                             </li>
-
+                                            <li>
+                                                <strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -184,7 +193,7 @@
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
-                                    <td class="numeric">=&nbsp;<input type="text" name="ecommerce_payment[shippingCharge]" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
+                                    <td class="numeric"><input type="text" name="ecommerce_payment[shippingCharge]" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
                                     <td></td>
                                 </tr>
 
@@ -197,7 +206,7 @@
                                 {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Discount</span></td>
-                                    <td class="numeric">=&nbsp;<input type="text" name="ecommerce_payment[discountAmount]" id="discountAmount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discountAmount }}"></td>
+                                    <td class="numeric"><input type="text" name="ecommerce_payment[discountAmount]" id="discountAmount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discountAmount }}"></td>
                                     <td></td>
                                 </tr>
 

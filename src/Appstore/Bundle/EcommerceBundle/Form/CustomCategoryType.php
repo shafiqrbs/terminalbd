@@ -51,6 +51,7 @@ class CustomCategoryType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
             ->add('feature')
+            ->add('homeFeature')
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Category description')))
             ->add('file', 'file',array(
                 'required' => true,

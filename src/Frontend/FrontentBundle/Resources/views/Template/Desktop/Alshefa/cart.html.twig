@@ -283,7 +283,7 @@
         </div>
         <div class="modal-body">
             <div class="cart-box" >
-                <form class="register" name="registerFormCreate" id="registerFormCreate" action="{{ path(globalOption.subDomain ~ '_webservice_ecommerce_customer_update') }}" method="post" novalidate="novalidate" style="display: block">
+                <form class="register" name="registerFormCreate" id="registerFormCreate" action="{{ path(globalOption.subDomain ~ '_webservice_ecommerce_customer_update') }}" method="post" novalidate="novalidate" style="display: block" >
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="input-group">
@@ -321,7 +321,7 @@
                                 <h4 class="modal-title">Manage Order</h4>
                             </div>
                             <div class="modal-body">
-                                <form class="cart-form" id="cartForm" name="cartForm" action="{{ path(globalOption.subDomain ~ '_webservice_buyer_checkout') }}" method="post" enctype="multipart/form-data">
+                                <form class="cart-form" id="cartForm" name="cartForm" action="{{ path(globalOption.subDomain ~ '_webservice_buyer_checkout') }}" method="post" enctype="multipart/form-data" {% if globalOption.ecommerceConfig.uploadFile == 1 %} onsubmit="return Validate(this);" {% endif %} >
                                     <ul class="accordion row">
                                         <li>
                                             <div class="accordion-control">Delivery Information</div>
@@ -347,7 +347,7 @@
                                         <li>
                                             <div class="accordion-control active">Preferred Date & Time</div>
                                             <div class="accordion-panel" style="display: block">
-                                                <p> <label>Delivery Date</label><input type="date" class="form-cart" name="deliveryDate" id="deliveryDate"></p>
+                                                <p> <label>Delivery Date</label><input type="date" class="form-cart" name="deliveryDate" data-date-format="dd-mm-yy" id="deliveryDate" placeholder="{{ "now"|date('m/d/Y') }}" value="{{ "now"|date('m/d/Y') }}"></p>
                                                 <p><label>Time Period</label>
                                                     <select id="timePeriod" name="timePeriod" class="form-cart select-cart" >
                                                         {% for period in timePeriods %}
@@ -373,6 +373,7 @@
                                                     <p>
                                                         <label>Receive Account</label>
                                                         <select id="accountMobile" name="accountMobile" class="form-cart select-cart">
+                                                             <option value="">--Select Mobile Account--</option>
                                                             {% for mobile in globalOption.accountMobileBank %}
                                                                 {% if mobile.status == 1 %}
                                                                     <option value="{{ mobile.id }}">{{ mobile.name }}</option>
@@ -394,12 +395,12 @@
                                         </li>
                                         {% if globalOption.ecommerceConfig.uploadFile == 1 %}
                                             <li>
-                                                <div class="accordion-control">Upload Order</div>
-                                                <div class="accordion-panel">
-                                                    <div style="height:32px; overflow: hidden">
+                                                <div class="accordion-control {% if globalOption.ecommerceConfig.uploadFile == 1 %} upload-file {% endif %}" >Upload File</div>
+                                                <div class="accordion-panel"  {% if globalOption.ecommerceConfig.uploadFile == 1 %} style="display: block" {% endif %}>
+                                                    <div style="height:48px; overflow: hidden; margin-top: 15px">
                                                         <input type="file" id="uploadFile" name="uploadFile" class="dropzone"/>
                                                     </div>
-                                                    <p style="font-size:10px; color: red; line-height: 14px; height: 24px; margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 5MB</p>
+                                                    <p style="font-size:10px; color: red; line-height: 48px; height:48px;margin-bottom: 0">*JPG/GIF/PDF/PNG, less than 5MB</p>
                                                 </div>
                                             </li>
                                         {% endif %}
@@ -457,13 +458,6 @@
                 </div>
             </div>
         </section>
-        <style>
-        .item-product{
-            display: flex;
-            align-items: center;
-            float: left!important;
-        }
-</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

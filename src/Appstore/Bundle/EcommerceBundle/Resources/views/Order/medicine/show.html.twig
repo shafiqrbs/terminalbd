@@ -18,7 +18,7 @@
                                 <li><strong class="span4">Invoice</strong><span class="span8">{{ entity.invoice }}</span></li>
                                 <li><strong class="span4">Name</strong><span class="span8">{{ entity.customerName }}</span></li>
                                 <li><strong class="span4">Mobile</strong><span class="span8">{{ entity.customerMobile }}</span></li>
-                                <li><strong class="span4">Address</strong><span class="span8">{{ entity.address }}</span></li>
+                                <li><strong class="span4">Address</strong><span class="span8">{{ entity.address }}</span></li><li><strong class="span4">Location</strong><span class="span8">{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</span></li>
 
                             </ul>
                         </div>
@@ -32,10 +32,10 @@
                                 {% if entity.cashOnDelivery == 1 %}
                                     <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
                                 {% endif %}
-                                <li><strong class="span4">Shipping Method</strong><span class="span8">{{ entity.delivery|capitalize }}</span></li>
                                 <li><strong class="span4">Delivery Date</strong><span class="span8">{{ entity.deliveryDate|date('d-m-Y') }}</span></li>
-                                <li><strong class="span4">Delivery Slot</strong><span class="span8">{{ entity.deliverySlot }}</span></li>
+                                <li><strong class="span4">Time Period</strong><span class="span8">{% if entity.timePeriod is not empty %}{{ entity.timePeriod.name }}{% endif %}</span></li>
                                 <li><strong class="span4">Process</strong><span class="span8">{{ entity.process|capitalize }}</span></li>
+ <li><strong class="span4">Upload</strong><span class="span8">{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</span></li>
 
 
                             </ul>
@@ -207,7 +207,5 @@
         </table>
         <div class="clearfix"> </div>
         <!--/span-->
-
-
     </div>
 </div>

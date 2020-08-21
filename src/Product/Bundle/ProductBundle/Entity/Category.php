@@ -216,6 +216,13 @@ class Category
      */
     private $feature = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="homeFeature", type="boolean")
+     */
+    private $homeFeature = false;
+
     /**
      * @var boolean
      *
@@ -656,6 +663,22 @@ class Category
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHomeFeature()
+    {
+        return $this->homeFeature;
+    }
+
+    /**
+     * @param bool $homeFeature
+     */
+    public function setHomeFeature($homeFeature)
+    {
+        $this->homeFeature = $homeFeature;
     }
 
 

@@ -180,9 +180,12 @@ class OrderRepository extends EntityRepository
         if($accountMobile){
             $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($accountMobile);
             $order->setAccountMobileBank($account);
+            $order->setPaymentMobile($paymentMobile);
+            $order->setTransaction($transactionId);
+            $order->setCashOnDelivery(false);
+        }else{
+            $order->setCashOnDelivery(true);
         }
-        $order->setPaymentMobile($paymentMobile);
-        $order->setTransaction($transactionId);
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($shippingCharge);
         $vat = $this->getCulculationVat($globalOption, $cart->total());

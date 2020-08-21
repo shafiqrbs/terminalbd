@@ -28,6 +28,7 @@
                                                     <li>{{ entity.customerName }}</li>
                                                     <li>{{ entity.customerMobile }}</li>
                                                     <li>{{ entity.address|raw }}</li>
+                                                    <li>{% if entity.location is not empty %}{{ entity.location.name }}{% endif %}</li>
                                                 </ul>
                                             </div>
                                             <div class="col-md-4">
@@ -38,10 +39,9 @@
                                                     {% endif %}
                                                     <li><strong>Shipping</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                                     <li><strong>Delivery</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
+                                                    <li><strong>Time Period</strong>:&nbsp;{% if entity.timePeriod is not empty %}{{ entity.timePeriod.name }}{% endif %}</li>
                                                     <li><strong>Process</strong>:&nbsp;{{ entity.process|capitalize }}</li>
                                                     <li>{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</li>
-
-
                                                 </ul>
                                             </div>
                                             <div class="col-md-4">

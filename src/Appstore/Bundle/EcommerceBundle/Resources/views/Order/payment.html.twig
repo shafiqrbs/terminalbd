@@ -88,7 +88,7 @@
                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                             <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
-
+                                            <li><strong>Upload</strong>:&nbsp;{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</li>
 
                                         </ul>
                                     </div>
