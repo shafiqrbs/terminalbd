@@ -116,6 +116,145 @@
                         {% endif %}
                     </div>
                 </div>
+                {% if app.user is empty %}
+                    <div class="login-area" id="login-modal">
+                        <div class="modal-header" style="position: relative">
+                            <h4 class="modal-title">Login & Singup</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="cart-box">
+                                <form name="customerOtpLogin" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_otp') }}"  id="customerOtpLogin" class="" novalidate="novalidate">
+                                    <div class="clearfix"></div>
+                                    <div class="" >
+                                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 text-center">
+                                            <h4 class="modal-title">Enter Your Mobile Number</h4>
+                                        </div>
+                                        <div class="clearfix"><br/></div>
+                                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12">
+                                            <div class="input-group">
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-transparent" aria-label="Bold"><img src="{{ asset('assets/img/flags/bd.png') }}"></button></div>
+                                                <input type="text" class="form-control text-center input-number mobile" style="width: 100%" id="mobile" name="mobile" >
+                                            </div><!-- /.input-group -->
+                                            <span class="help-inline-otp">e.g 01710000000</span>
+                                        </div>
+                                        <div class="clearfix"><br/></div>
+                                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12">
+                                            <div class="input-group">
+                                                <div class="input-group-btn text-center">
+                                                    <button type="submit" class="btn btn-warning "> SEND OTP CODE </button>
+                                                </div>
+                                            </div><!-- /.input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </form>
+                                <form name="customerOtp" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_otp_confirm') }}"  id="customerOtp" class="" novalidate="novalidate">
+                                    <div class="clearfix"></div>
+                                    <div class="" >
+                                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12 text-center">
+                                            <h4 class="modal-title">We've sent a 4-digit one time PIN in your mobile. <b id="sender-mobile"></b></h4>
+                                        </div>
+                                        <div class="clearfix"><br/></div>
+                                        <div class="col-lg-4 col-xs-4 col-md-4 col-sm-4 col-sm-offset-3">
+                                            <input type="text" class="form-control text-center" maxlength="4" id="otp" name="otp" placeholder="Please enter 4 digit on time pin code" >
+                                            <input type="hidden" id="otpCode" name="otpCode" value="">
+                                            <input type="hidden" id="resendMobile" name="resendMobile" value="">
+                                        </div>
+                                        <div class="clearfix"><br/></div>
+                                        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 col-sm-cus-12">
+                                            <div class="text-center">
+                                                <input type="hidden" name="token" value="{{ csrf_token('valid') }}"/>
+                                                <button type="submit" class="btn btn-warning "> Submit </button>
+                                                <a href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_otp') }}" data-content="" id="resendPin">Re-send Pin</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="login-area" id="user-modal" style="display: none">
+                        <div class="modal-header" style="position: relative">
+                            <h4 class="modal-title">Delivery Information</h4>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="cart-box" >
+                                <form class="register" name="registerFormCreate" id="registerFormCreate" action="{{ path(globalOption.subDomain ~ '_webservice_ecommerce_customer_update') }}" method="post" novalidate="novalidate" style="display: block">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                                <input type="text" id="registration_name" name="registration_name" required="required" class=" form-control" placeholder="Enter your full name" value="{% if app.user is not empty %}{{ app.user.profile.name }}{% endif %}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-map-marker"></span></span>
+                                                <select id="registration_location" name="registration_location" class="form-control" >
+                                                    {% for location in locations %}
+                                                        <option {% if app.user is not empty and app.user.profile.deliveryLocation is not empty and app.user.profile.deliveryLocation.id == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea id="address" name="registration_address" required="required" class="form-control" placeholder="Enter your address" >{% if app.user is not empty %}{{ app.user.profile.address }}{% endif %}</textarea>
+                                        </div>
+                                        <div class="checkbox"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="hidden" name="token" value="{{ csrf_token('valid') }}"/>
+                                        <button type="submit"  class="btn btn-sm btn-info pull-right" role="button">Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if app.user is not empty and app.user.profile is defined  and app.user.profile.name is empty %}
+                    <div class="login-area">
+                        <div class="modal-header" style="position: relative">
+                            <h4 class="modal-title">Delivery Information</h4>
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="cart-box" >
+                                <form class="register" name="registerFormCreate" id="registerFormCreate" action="{{ path(globalOption.subDomain ~ '_webservice_ecommerce_customer_update') }}" method="post" novalidate="novalidate" style="display: block" >
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                                <input type="text" id="registration_name" name="registration_name" required="required" class=" form-control" placeholder="Enter your full name" value="{% if app.user is not empty %}{{ app.user.profile.name }}{% endif %}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-map-marker"></span></span>
+                                                <select id="registration_location" name="registration_location" class="form-control" >
+                                                    {% for location in locations %}
+                                                        <option {% if app.user is not empty and app.user.profile.deliveryLocation is not empty and app.user.profile.deliveryLocation.id == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea id="address" name="registration_address" required="required" class="form-control" placeholder="Enter your address" >{% if app.user is not empty %}{{ app.user.profile.address }}{% endif %}</textarea>
+                                        </div>
+                                        <div class="checkbox"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="hidden" name="token" value="{{ csrf_token('valid') }}"/>
+                                        <button type="submit"  class="btn btn-sm btn-info pull-right" role="button">Save </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if app.user is not empty and app.user.profile is defined  and app.user.profile.name is not empty %}
                 <div class="login-area">
                     <div class="modal-header" style="position: relative;">
                         <h4 class="modal-title">Manage Order</h4>
@@ -253,6 +392,7 @@
                         </form>
                     </div>
                 </div>
+                {% endif %}
             </section>
             <div class="clearfix"></div>
         </div><!-- end container -->
