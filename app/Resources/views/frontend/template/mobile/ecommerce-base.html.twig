@@ -155,7 +155,7 @@
                 {% elseif globalOption.templateCustomize.mobileFooter == 'cart' %}
                     <div class="footer-bg" id="mobile-footer">
                         <div class="sidebar-footer">
-                            <a class="btn btn-warning text-center col-xs-6 col-md-6 mobile-order" href="tel:+{{ globalOption.templateCustomize.contactNo }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
+                            <a class="btn btn-warning text-center col-xs-6 col-md-6 mobile-order" href="tel:+88{{ globalOption.templateCustomize.contactNo }}"><i class="fa fa-phone"></i> ORDER BY PHONE</a>
                             <a href="javascript:" class="btn cart-info col-xs-4 col-md-4 showCartItem"><span class="totalItem footer-item">{{ cart.contents|length }}</span> | {{ globalOption.ecommerceConfig.currency }} <span class="totalAmount footer-item-tk">{{ cart.total|number_format(2) }}</span></a>
                             <a href="javascript:"  class="btn btn-info col-xs-2 col-md-2 showCartItem btn-shopping-cart">
                                 <span class="fa fa-shopping-bag" aria-hidden="true"></span>
