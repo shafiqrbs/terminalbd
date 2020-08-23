@@ -134,7 +134,7 @@
                                             <div class="input-group">
                                                 <div class="input-group-btn">
                                                     <button type="button" class="btn btn-transparent" aria-label="Bold"><img src="{{ asset('assets/img/flags/bd.png') }}"></button></div>
-                                                <input type="text" class="form-control text-center input-number mobile" style="width: 100%" id="mobile" name="mobile" >
+                                                <input type="text" class="form-cart text-center input-number mobile" style="width: 100%; height: 32px" id="mobile" name="mobile" >
                                             </div><!-- /.input-group -->
                                             <span class="help-inline-otp">e.g 01710000000</span>
                                         </div>
@@ -156,8 +156,8 @@
                                             <h4 class="modal-title">We've sent a 4-digit one time PIN in your mobile. <b id="sender-mobile"></b></h4>
                                         </div>
                                         <div class="clearfix"><br/></div>
-                                        <div class="col-lg-4 col-xs-4 col-md-4 col-sm-4 col-sm-offset-3">
-                                            <input type="text" class="form-control text-center" maxlength="4" id="otp" name="otp" placeholder="Please enter 4 digit on time pin code" >
+                                        <div class="" style="width: 100%; display: block;text-align: center">
+                                            <input type="text" class="form-cart text-center" maxlength="4" style="height: 32px" id="otp" name="otp" placeholder="Please enter 4 digit on time pin code" >
                                             <input type="hidden" id="otpCode" name="otpCode" value="">
                                             <input type="hidden" id="resendMobile" name="resendMobile" value="">
                                         </div>
@@ -187,7 +187,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                                <input type="text" id="registration_name" name="registration_name" required="required" class=" form-control" placeholder="Enter your full name" value="{% if app.user is not empty %}{{ app.user.profile.name }}{% endif %}">
+                                                <input type="text" id="registration_name" name="registration_name" required="required" class="form-control" placeholder="Enter your full name" value="{% if app.user is not empty %}{{ app.user.profile.name }}{% endif %}">
                                             </div>
                                         </div>
                                         <div class="form-group">
