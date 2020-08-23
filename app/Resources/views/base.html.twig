@@ -87,7 +87,7 @@
     {% block cssBlock %}
     {% endblock %}
  </head>
-<body class="page-header-fixed  page-footer-fixed  {% if is_granted('ROLE_CUSTOMER') is empty %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+<body class="page-header-fixed  page-footer-fixed  {% if app.user.globaloption.isSidebar != 1 %} page-sidebar-closed {% endif %} {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
 <!-- BEGIN HEADER -->
 <div class="header navbar navbar-inverse navbar-fixed-top">
 <!-- BEGIN TOP NAVIGATION BAR -->

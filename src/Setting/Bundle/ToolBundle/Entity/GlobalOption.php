@@ -518,6 +518,13 @@ class GlobalOption
      */
     private $isBranch = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isSidebar", type="boolean" , nullable=true)
+     */
+    private $isSidebar = true;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption")
      **/
@@ -2182,6 +2189,22 @@ class GlobalOption
     public function setHotline($hotline)
     {
         $this->hotline = $hotline;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSidebar()
+    {
+        return $this->isSidebar;
+    }
+
+    /**
+     * @param bool $isSidebar
+     */
+    public function setIsSidebar($isSidebar)
+    {
+        $this->isSidebar = $isSidebar;
     }
 
 

@@ -68,14 +68,13 @@
                     </strong>
                     {% endif %}
                     <br>
-                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.templateCustomize.contactNo }}" class="contact-call">{{ globalOption.templateCustomize.contactNo }}</a>
+                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+088{{ globalOption.templateCustomize.contactNo }}" class="contact-call">{{ globalOption.templateCustomize.contactNo }}</a>
                     {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
                     <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr={{ globalOption.contactPage.latitude }},{{ globalOption.contactPage.longitude }}">Direction</a>
                     {% endif %}
 
                 </address>
             </div>
-
         </div>
     </div>
 </section>
