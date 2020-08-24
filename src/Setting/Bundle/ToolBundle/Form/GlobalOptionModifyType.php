@@ -123,6 +123,7 @@ class GlobalOptionModifyType extends AbstractType
                 ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
 
                 /*
+
                 ->add('facebookPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('instagramPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('customizeDesign')
