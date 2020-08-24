@@ -118,7 +118,6 @@ class GlobalOptionModifyType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
-                ->add('isSidebar')
                 ->add('email','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
 
@@ -137,18 +136,20 @@ class GlobalOptionModifyType extends AbstractType
                 ->add('googleAds')
 
                 */
-
+                ->add('isSidebar')
                 ->add('primaryNumber')
                 ->add('isBranch')
                 ->add('status', 'choice', array(
                     'attr'=>array('class'=>'selectbox span12'),
                     'choices' => array(1 => 'Active','2' => 'In-active'),
                 ))
-                /*->add('callBackEmail')
+                /*
+                 * ->add('callBackEmail')
                 ->add('callBackContent','textarea', array('attr'=>array('class'=>' m-wrap span12','rows'=>4)))
                 ->add('callBackNotify')
                 ->add('leaveEmail')
-                ->add('leaveContent','textarea', array('attr'=>array('class'=>' m-wrap span12','rows'=>4)))*/
+                ->add('leaveContent','textarea', array('attr'=>array('class'=>' m-wrap span12','rows'=>4)))
+                */
 
 
             ;
