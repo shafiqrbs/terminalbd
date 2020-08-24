@@ -134,7 +134,9 @@ class GlobalOptionModifyType extends AbstractType
                 ->add('facebookApps')
                 ->add('promotion')
                 ->add('googleAds')
+
                 */
+
                 ->add('primaryNumber')
                 ->add('isBranch')
                 ->add('status', 'choice', array(
