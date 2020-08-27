@@ -142,6 +142,13 @@ class RestaurantStockHistoryRepository extends EntityRepository
         }
     }
 
+    public function processInsertDamageItem(RestaurantDamage $entity){
+
+        $em = $this->_em;
+        $em->createQuery("DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.damage = '{$entity->getId()}'")->execute();
+        $this->processStockQuantity($entity,"damage");
+    }
+
     public function processReversePurchaseItem(Purchase $entity){
 
         $em = $this->_em;
@@ -225,22 +232,7 @@ class RestaurantStockHistoryRepository extends EntityRepository
         }*/
     }
 
-    public function processInsertDamageItem(BusinessInvoice $entity){
 
-        $em = $this->_em;
-
-        /** @var $item BusinessDamage  */
-
-       /* if($entity->getBusinessInvoiceParticulars()){
-
-            foreach($entity->getBusinessInvoiceParticulars() as $item ){
-                $em->createQuery("DELETE BusinessBundle:RestaurantStockHistory e WHERE e.damage = '{$item->getId()}'")->execute();
-                if($item->getQuantity() > 0){
-                    $this->processStockQuantity($item,"damage");
-                }
-            }
-        }*/
-    }
 
     public function openingDailyQuantity(RestaurantConfig $config,$data)
     {

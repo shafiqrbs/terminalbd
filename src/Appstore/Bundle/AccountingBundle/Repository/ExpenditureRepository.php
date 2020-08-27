@@ -398,8 +398,10 @@ class ExpenditureRepository extends EntityRepository
                     if($mobile){ $sales->setAccountMobileBank($mobile); }
                 }
                 $category = $em->getRepository('AccountingBundle:ExpenseCategory')->find($item['expenseCategory']);
-                $sales->setExpenseCategory($category);
-                $sales->setAccountHead($sales->getExpenseCategory()->getAccountHead());
+                if(!empty($category)){
+                    $sales->setExpenseCategory($category);
+                    $sales->setAccountHead($sales->getExpenseCategory()->getAccountHead());
+                }
                 if(($item['toUser'])){
                     $createdBy = $em->getRepository('UserBundle:User')->find($item['toUser']);
                     $sales->setCreatedBy($createdBy);

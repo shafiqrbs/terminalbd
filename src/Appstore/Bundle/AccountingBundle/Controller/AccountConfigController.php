@@ -44,7 +44,7 @@ class AccountConfigController extends Controller
      */
     private function createEditForm(AccountingConfig $entity)
     {
-        $config = $this->getUser()->getGlobalOption()->getAccountingConfig();
+        $config = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountConfigType($config), $entity, array(
             'action' => $this->generateUrl('account_config_update'),
             'method' => 'PUT',

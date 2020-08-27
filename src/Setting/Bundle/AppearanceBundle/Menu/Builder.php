@@ -470,6 +470,7 @@ class Builder extends ContainerAware
 		                       ->setAttribute('icon', 'fa  icon-table')
 		                       ->setAttribute('dropdown', true);
 		    $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'));
+            $menu['Accounting']['Bill & Expenditure']->addChild('Android Process', array('route' => 'account_expenditure_android'));
             $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'));
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
                 $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'));
@@ -1504,7 +1505,8 @@ class Builder extends ContainerAware
             $menu['Restaurant']->addChild('Manage Stock')
             ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
-            $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))
+            $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))  ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Manage Stock']->addChild('Item Damage', array('route' => 'restaurant_damage'))
             ->setAttribute('icon', 'icon-th-list');
             $menu['Restaurant']['Manage Stock']->addChild('Pre-production', array('route' => 'restaurant_production'))
                 ->setAttribute('icon', 'icon-th-list');

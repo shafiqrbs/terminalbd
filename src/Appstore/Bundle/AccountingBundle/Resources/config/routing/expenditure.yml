@@ -39,5 +39,6 @@ account_expenditure_android:
     defaults: { _controller: "AccountingBundle:Expenditure:androidExpense" }
 
 account_expenditure_expense_import:
-    path:      /device-expense-delete-import/{android}
-    defaults: { _controller: "AccountingBundle:Expenditure:insertGroupApiSalesImport" }
+    path:      /device-expense-process/{android}
+    defaults: { _controller: "AccountingBundle:Expenditure:insertAndroidExpense" }
+

@@ -29,6 +29,12 @@ class AccountingConfig
     private $globalOption;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead")
+     **/
+    private  $capitalInvestor;
+
+
+    /**
      * @var text
      *
      * @ORM\Column(name="address", type="text", length=255, nullable=true)
@@ -395,6 +401,22 @@ class AccountingConfig
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getCapitalInvestor()
+    {
+        return $this->capitalInvestor;
+    }
+
+    /**
+     * @param AccountHead $capitalInvestor
+     */
+    public function setCapitalInvestor($capitalInvestor)
+    {
+        $this->capitalInvestor = $capitalInvestor;
     }
 
 

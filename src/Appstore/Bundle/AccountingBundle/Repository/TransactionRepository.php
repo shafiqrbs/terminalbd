@@ -3404,6 +3404,9 @@ class TransactionRepository extends EntityRepository
         $transaction->setUpdated($entity->getCreated());
         $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'capital-investment'));
         $transaction->setAccountHead($head);
+        if(!empty($entity->getGlobalOption()->getAccountingConfig()->getCapitalInvestor())){
+            $transaction->setSubAccountHead($entity->getGlobalOption()->getAccountingConfig()->getCapitalInvestor());
+        }
         $transaction->setAmount("-{$total}");
         $transaction->setCredit($total);
         $em->persist($transaction);

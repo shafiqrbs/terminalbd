@@ -229,7 +229,7 @@ class ExpenditureController extends Controller
         ));
     }
 
-    public function insertGroupApiSalesImportAction(ExpenseAndroidProcess $android)
+    public function insertAndroidExpenseAction(ExpenseAndroidProcess $android)
     {
         $msg = "invalid";
         set_time_limit(0);
@@ -258,11 +258,9 @@ class ExpenditureController extends Controller
         }
 
         if($msg == "valid"){
-
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
-            $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateApiSalesPurchasePrice($android->getId());
         }
         if($msg == "valid"){
             return new Response('success');

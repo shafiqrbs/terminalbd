@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * RestaurantDamage
+ * RestaurantStockAdjustment
  *
- * @ORM\Table("restaurant_damage")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\RestaurantDamageRepository")
+ * @ORM\Table("restaurant_stock_adjustment")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\RestaurantBundle\Repository\RestaurantStockAdjustmentRepository")
  */
-class RestaurantDamage
+class RestaurantStockAdjustment
 {
     /**
      * @var integer
@@ -49,14 +49,6 @@ class RestaurantDamage
      */
     private $quantity;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notes", type="text")
-     */
-    private $notes;
-
     /**
      * @var float
      *
@@ -86,12 +78,12 @@ class RestaurantDamage
     private $updated;
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="process", type="string", nullable=true)
-     */
-    private $process = "Created";
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="process", type="string", nullable=true)
+	 */
+	private $process = "Created";
 
 
     /**
@@ -218,23 +210,23 @@ class RestaurantDamage
     }
 
 
-    /**
-     * @return string
-     */
-    public function getProcess(){
-        return $this->process;
-    }
+	/**
+	 * @return string
+	 */
+	public function getProcess(){
+		return $this->process;
+	}
+
+	/**
+	 * @param string $process
+	 */
+	public function setProcess( string $process ) {
+		$this->process = $process;
+	}
+
 
     /**
-     * @param string $process
-     */
-    public function setProcess( string $process ) {
-        $this->process = $process;
-    }
-
-
-    /**
-     * @return Particular
+     * @return mixed
      */
     public function getParticular()
     {
@@ -242,27 +234,11 @@ class RestaurantDamage
     }
 
     /**
-     * @param Particular $particular
+     * @param mixed $particular
      */
     public function setParticular($particular)
     {
         $this->particular = $particular;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
-
-    /**
-     * @param string $notes
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
     }
 
 

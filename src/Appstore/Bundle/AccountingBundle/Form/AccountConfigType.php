@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -12,6 +13,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class AccountConfigType extends AbstractType
 {
 
+    /* @var $global GlobalOption */
+
+    public  $global;
+
+    public function __construct(GlobalOption $global)
+    {
+        $this->global = $global;
+
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,6 +30,21 @@ class AccountConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('capitalInvestor', 'entity', [
+                'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'property'  => 'name',
+                'empty_value' => '---Choose a capital investor---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'choice_translation_domain' => true,
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.parent",'c')
+                        ->where("e.status = 1")
+                        ->andWhere("c.slug ='capital-investment'")
+                        ->andWhere("e.globalOption =".$this->global->getId())
+                        ->orderBy("e.name", "ASC");
+                }
+            ])
             ->add('accountClose')
             ->add('purchase')
             ->add('borderColor','text', array('attr'=>array(

@@ -39,6 +39,10 @@ restaurant_stock:
     resource: "@RestaurantBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
 
+restaurant_damage:
+    resource: "@RestaurantBundle/Resources/config/routing/damage.yml"
+    prefix:   /damage
+
 restaurant_config:
     resource: "@RestaurantBundle/Resources/config/routing/config.yml"
     prefix:   /config

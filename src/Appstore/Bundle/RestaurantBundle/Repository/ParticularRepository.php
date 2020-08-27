@@ -10,6 +10,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\ProductionExpense;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantDamage;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -341,7 +342,7 @@ class ParticularRepository extends EntityRepository
            // $qnt = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->purchaseReturnStockUpdate($stock);
           // $stock->setPurchaseReturnQuantity($qnt);
         }elseif($fieldName == 'damage'){
-             $quantity = $em->getRepository('BusinessBundle:BusinessDamage')->damageStockItemUpdate($stock);
+             $quantity = $em->getRepository('RestaurantBundle:RestaurantDamage')->damageStockItemUpdate($stock);
             $stock->setDamageQuantity($quantity);
         }elseif($fieldName == 'production'){
             $quantity = $em->getRepository('RestaurantBundle:ProductionExpense')->productionExpenseStockItemUpdate($stock);
@@ -390,6 +391,20 @@ class ParticularRepository extends EntityRepository
             $this->updateProductionPrice($purchase->getRestaurantConfig()->getId());
         }
     }
+
+    public function getDamageQnt(RestaurantDamage $damage){
+
+        $em = $this->_em;
+
+        /** @var Particular  $particular */
+
+        $particular = $damage->getParticular();
+        $this->updateRemoveStockQuantity($particular,'damage');
+        $em->persist($particular);
+        $em->flush();
+
+    }
+
 
     public function insertAccessories(Invoice $invoice){
 
