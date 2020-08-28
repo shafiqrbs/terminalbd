@@ -46,6 +46,16 @@ class MedicineSalesItemRepository extends EntityRepository
         return $result;
     }
 
+    public function getInvoicePurchasePrice($entity)
+    {
+        $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total FROM medicine_sales_item as salesItem
+                WHERE salesItem.medicineSales_id = :invoice";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('invoice', $entity);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result['total'];
+    }
 
     public function salesStockItemUpdate(MedicineStock $stockItem)
     {

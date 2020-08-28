@@ -96,34 +96,6 @@ class HotelInvoiceParticular
      */
     private $price;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="height", type="float", nullable=true)
-     */
-    private $height;
-
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="width", type="float", nullable=true)
-     */
-    private $width;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="subQuantity", type="float", nullable=true)
-     */
-    private $subQuantity;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="totalQuantity", type="float", nullable=true)
-     */
-    private $totalQuantity;
 
     /**
      * @var float

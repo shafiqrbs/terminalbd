@@ -49,11 +49,11 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span6">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Name</label>
+                                                <label class="control-label" for="firstName">Name<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-user"></i>
@@ -67,7 +67,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="mobile">Mobile</label>
+                                                <label class="control-label" for="mobile">Mobile<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-phone"></i>
@@ -107,12 +107,13 @@
                                         </div>
                                     </div>
 
+
                                 </div>
-                                <div class="span4">
+                                <div class="span6">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="location">Location</label>
+                                                <label class="control-label" for="location">Location<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.location) }}
                                                     {{ form_errors(form.location) }}
@@ -121,45 +122,11 @@
                                         </div>
                                     </div>
                                     <div class="clearfix"><br/></div>
+
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="gender">Gender</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.gender) }}
-                                                    {{ form_errors(form.gender) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="ageGroup">Age Group</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.ageGroup) }}
-                                                    {{ form_errors(form.ageGroup) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="ageGroup">Age</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.age) }}
-                                                    {{ form_errors(form.age) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span4">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="firstName">Address</label>
+                                                <label class="control-label" for="firstName">Address<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.address) }}
                                                     {{ form_errors(form.address) }}
@@ -167,6 +134,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                 </div>
 

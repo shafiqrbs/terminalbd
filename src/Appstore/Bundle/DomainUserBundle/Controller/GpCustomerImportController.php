@@ -92,7 +92,7 @@ class GpCustomerImportController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $importer = $this->get('appstore_gp_customer_import');
-      //  $importer->setGlobalOption($GpCustomerImport->getGlobalOption());
+        $importer->setGlobalOption($GpCustomerImport->getGlobalOption());
         $reader = $this->get('appstore.importer.customer_excel_reader');
         $file =  realpath($GpCustomerImport->getAbsolutePath());
         $importer->import($reader->getData($file));

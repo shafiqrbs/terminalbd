@@ -45,6 +45,17 @@ class HotelInvoiceParticularRepository extends EntityRepository
         }
     }
 
+    public function getInvoicePurchasePrice($entity)
+    {
+        $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total FROM hotel_invoice_particular as salesItem
+                WHERE salesItem.hotelInvoice_id = :invoice";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('invoice', $entity);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result['total'];
+    }
+
 
     public function insertStockItem(HotelInvoice $invoice, $data)
     {

@@ -24,7 +24,10 @@ class BusinessConfigRepository extends EntityRepository
 	    $em = $this->_em;
 	    $config = $option->getBusinessConfig()->getId();
 
-	    $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
+	    $sales = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
+	    $sales->execute();
+
+	     $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
 	    $sales->execute();
 
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);

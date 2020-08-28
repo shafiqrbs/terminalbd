@@ -289,6 +289,17 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function getInvoicePurchasePrice($entity)
+    {
+        $sql = "SELECT COALESCE(SUM(salesItem.totalQuantity * salesItem.purchasePrice),0) as total FROM business_invoice_particular as salesItem
+                WHERE salesItem.businessInvoice_id = :invoice";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('invoice', $entity);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result['total'];
+    }
+
     public function getSalesItems(BusinessInvoice $sales)
     {
         $entities = $sales->getBusinessInvoiceParticulars();

@@ -838,13 +838,7 @@ class InvoiceController extends Controller
             if(($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0) or ($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['spoilQnt'] > 0) ){
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
             }
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            $serviceModels = array('association','general','event');
-            if(in_array($entity->getBusinessConfig()->getBusinessModel(),$serviceModels)){
-              //  $em->getRepository('AccountingBundle:Transaction')->serviceTransaction($accountSales);
-            }else{
-               // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
-            }
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess("Done");
             $entity->setApprovedBy($this->getUser());

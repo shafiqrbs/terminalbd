@@ -638,6 +638,7 @@ class AccountSalesRepository extends EntityRepository
     public function insertAccountSales(Sales $entity) {
 
 	    $em = $this->_em;
+        $purchasePrice = $em->getRepository('InventoryBundle:SalesItem')->getInvoicePurchasePrice($entity->getId());
 	    $accountSales = new AccountSales();
 	    $accountSales->setAccountBank( $entity->getAccountBank() );
 	    $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
@@ -646,6 +647,7 @@ class AccountSalesRepository extends EntityRepository
 	    $accountSales->setSourceInvoice( $entity->getInvoice() );
 	    $accountSales->setCustomer( $entity->getCustomer() );
 	    $accountSales->setTotalAmount( $entity->getTotal() );
+	    $accountSales->setPurchasePrice($purchasePrice);
         if ($entity->getPayment() > 0){
             $accountSales->setAmount($entity->getPayment());
         }else{
@@ -775,6 +777,7 @@ class AccountSalesRepository extends EntityRepository
 
     public function insertHospitalFinalAccountInvoice(\Appstore\Bundle\HospitalBundle\Entity\Invoice $entity)
     {
+
         $em = $this->_em;
         $accountSales = new AccountSales();
         $accountSales->setAccountBank($entity->getAccountBank());
@@ -841,6 +844,7 @@ class AccountSalesRepository extends EntityRepository
 	public function insertMedicineAccountInvoice(MedicineSales $entity)
     {
         $em = $this->_em;
+        //$purchasePrice = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->getInvoicePurchasePrice($entity->getId());
         $accountSales = new AccountSales();
         $accountSales->setAccountBank($entity->getAccountBank());
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
@@ -945,12 +949,14 @@ class AccountSalesRepository extends EntityRepository
     public function insertBusinessAccountInvoice(BusinessInvoice $entity)
     {
         $em = $this->_em;
+        $purchasePrice = $this->_em->getRepository('BusinessBundle:BusinessInvoiceParticular')->getInvoicePurchasePrice($entity->getId());
         $accountSales = new AccountSales();
         $accountSales->setAccountBank($entity->getAccountBank());
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getBusinessConfig()->getGlobalOption());
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTotalAmount($entity->getTotal());
+        $accountSales->setPurchasePrice($purchasePrice);
         if ($entity->getReceived() > 0){
             $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setAmount($entity->getReceived());
@@ -1019,6 +1025,7 @@ class AccountSalesRepository extends EntityRepository
 		 * */
 
 		$em = $this->_em;
+        $purchasePrice = $em->getRepository('HotelBundle:HotelInvoiceParticular')->getInvoicePurchasePrice($entity->getId());
 		$accountSales = new AccountSales();
 		$accountSales->setAccountBank($entity->getAccountBank());
 		$accountSales->setAccountMobileBank($entity->getAccountMobileBank());
@@ -1032,12 +1039,15 @@ class AccountSalesRepository extends EntityRepository
 			$accountSales->setAmount($entity->getReceived());
 			$accountSales->setProcessType('Advance');
 		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getHotelInvoice()->getProcess() == 'check-out' ){
+
 			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
 			$accountSales->setAmount($entity->getReceived());
+			$accountSales->setPurchasePrice($purchasePrice);
 			$accountSales->setProcessType('Sales');
 		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'restaurant'){
 			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
 			$accountSales->setAmount($entity->getReceived());
+            $accountSales->setPurchasePrice($purchasePrice);
 			$accountSales->setProcessType('Sales');
 		}
 		$accountSales->setApprovedBy($entity->getCreatedBy());

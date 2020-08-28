@@ -40,7 +40,6 @@ class CustomerType extends AbstractType
                     ))
             )
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
-            ->add('age','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Customer age')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address'),
              'constraints' =>array( new NotBlank(array('message'=>'Please customer address')))
                 )
@@ -57,22 +56,7 @@ class CustomerType extends AbstractType
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
-            ->add('ageGroup', 'choice', array(
-            'attr'=>array('class'=>'span12 m-wrap'),
-            'choices' => array(
-                'Adult' => 'Adult',
-                'Kids' => 'Kids',
-            ),
-            'required'    => true,
-            'empty_data'  => null,
-            ))
-            ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'choices' => array(
-                    'Male' => 'Male',
-                    'Female' => 'Female'
-                ),
-            ));
+           ;
     }
     
     /**

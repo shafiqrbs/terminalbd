@@ -70,17 +70,8 @@ class AccountProfitRepository extends EntityRepository
         $journalAccountSalesAdjustment = $this->monthlySalesAdjustmentJournal($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
-        if($profit->getGlobalOption()->getMainApp()->getSlug() == "miss"){
-            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
-        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "business"){
-            $salesPurchasePrice = $this->reportBusinessSalesItemPurchaseSalesOverview($profit, $data);
-        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "hms"){
-            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
-        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "inventory"){
-            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
-        }elseif($profit->getGlobalOption()->getMainApp()->getSlug() == "restaurant"){
-            $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
-        }
+
+        $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
 
         if($journalAccountPurchase) {
 
@@ -210,18 +201,17 @@ class AccountProfitRepository extends EntityRepository
 
     public  function reportSalesItemPurchaseSalesOverview(AccountProfit $profit, $data){
 
-        $config =  $profit->getGlobalOption()->getMedicineConfig()->getId();
+        $config =  $profit->getGlobalOption()->getId();
 
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
-        $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total
-                FROM medicine_sales_item as salesItem
-                JOIN medicine_sales as sales ON salesItem.medicineSales_id = sales.id
-                WHERE sales.medicineConfig_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
+        $sql = "SELECT COALESCE(SUM(sales.purchasePrice),0) as total
+                FROM account_sales as sales
+                WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'approved');
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
         $stmt->execute();

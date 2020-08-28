@@ -14,7 +14,7 @@ class GpCustomerExcel
 {
     use ContainerAwareTrait;
 
-    protected $gpCustomerImport;
+    protected $option;
 
     private $data = array();
 
@@ -23,69 +23,15 @@ class GpCustomerExcel
         $this->data = $data;
         foreach($this->data as $key => $item) {
 
-            $user = "0{$item['mobile']}";
-            $existUser = $this->getDoctrain()->getRepository('UserBundle:User')->findOneBy(array('username' => $user));
+            $user = "{$this->clean($item['mobile'])}";
+            $option = $this->option;
+            $existUser = $this->getDoctrain()->getRepository('UserBundle:User')->findOneBy(array('username' => $user,'globalOption' => $option));
             if(empty($existUser)){
-
-                $option = $this->getDoctrain()->getRepository('SettingToolBundle:GlobalOption')->find(139);
-                $entity = new User();
-                $entity->setPlainPassword('123456');
-                $entity->setGlobalOption($option);
-                $entity->setEnabled(true);
-                $entity->setUsername(strtolower($user));
-                $entity->setEmail($item['email']);
-                $entity->setEnabled(true);
-                $entity->setRoles(array('ROLE_CUSTOMER'));
-                $entity->setUserGroup("member");
                 $em = $this->getDoctrain()->getManager();
-                $em->persist($entity);
-                $em->flush();
-
-                $pro = new Profile();
-                $pro->setUser($entity);
-                $pro->setAddress($item['address']);
-                $pro->setName($item['name']);
-                $pro->setMobile('0'.$item['mobile']);
-                $em->persist($pro);
-                $em->flush();
-
                 $profile = new Customer();
-                $profile->setUser($entity->getId());
                 $profile->setGlobalOption($option);
-                $profile->setAddress($item['address']);
-                $profile->setCustomerType('member');
+                $profile->setCustomerType('customer');
                 $profile->setName($item['name']);
-                $profile->setProcess("pending");
-                $profile->setBatchYear($item['studyDuration']);
-                $profile->setHsc($item['hsc']);
-                $profile->setSsc($item['ssc']);
-                $profile->setGender("Female");
-                $profile->setBloodGroup($item['blood']);
-                $profile->setProcess("Pending");
-                $profile->setAdditionalPhone($item['altPhone']);
-                if($item['photo']){
-                    $profile->setPath($item['photo']);
-                }
-                if($item['dob']){
-                    $stetoTime = strtotime($item['dob']);
-                    $date = date('Y-m-d',$stetoTime);
-                    $dob = new \DateTime($date);
-                    $profile->setDob($dob);
-                }
-                $at = strtotime($item['created_at']);
-                $created = date('Y-m-d',$at);
-                $created_at = new \DateTime($created);
-                $profile->setCreated($created_at);
-               // $profile->setProfession($item['occupation']);
-              //  $profile->setMemberDesignation($item['designation']);
-               /* if($item['guardianType'] == "Father"){
-                    $profile->setFatherDesignation($item['guardianOccupation']);
-                    $profile->setFatherName($item['guardianName']);
-                }else{
-                    $profile->setSpouseOccupation($item['guardianOccupation']);
-                    $profile->setSpouseName($item['guardianName']);
-                    $profile->setSpouseDesignation($item['guardianDesignation']);
-                }*/
                 $profile->setMobile($user);
                 $em->persist($profile);
                 $em->flush();
@@ -95,9 +41,15 @@ class GpCustomerExcel
 
     }
 
-    public function setGpCustomerImport($gpCustomerImport)
+    function clean($string) {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    public function setGlobalOption($option)
     {
-        $this->gpCustomerImport = $gpCustomerImport;
+        $this->option = $option;
     }
 
     /**

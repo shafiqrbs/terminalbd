@@ -41,6 +41,17 @@ class SalesItemRepository extends EntityRepository
 
     }
 
+    public function getInvoicePurchasePrice($entity)
+    {
+        $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total FROM SalesItem as salesItem
+                WHERE salesItem.sales_id = :invoice";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('invoice', $entity);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result['total'];
+    }
+
     public function inventorySalesDaily(User $user , $data =array())
     {
 

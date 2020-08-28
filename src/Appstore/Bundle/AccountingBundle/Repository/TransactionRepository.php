@@ -3402,10 +3402,13 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountProfit($entity);
         $transaction->setCreated($entity->getCreated());
         $transaction->setUpdated($entity->getCreated());
-        $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'capital-investment'));
-        $transaction->setAccountHead($head);
         if(!empty($entity->getGlobalOption()->getAccountingConfig()->getCapitalInvestor())){
+            $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'capital-investment'));
+            $transaction->setAccountHead($head);
             $transaction->setSubAccountHead($entity->getGlobalOption()->getAccountingConfig()->getCapitalInvestor());
+        }else{
+            $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'inventory'));
+            $transaction->setAccountHead($head);
         }
         $transaction->setAmount("-{$total}");
         $transaction->setCredit($total);
