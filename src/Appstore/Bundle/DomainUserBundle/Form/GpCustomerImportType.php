@@ -45,9 +45,5 @@ class GpCustomerImportType extends AbstractType
         return 'import';
     }
 
-    protected function LocationChoiceList()
-    {
-        return $syndicateTree = $this->location->getFlatDropdownTree();
 
-    }
 }
