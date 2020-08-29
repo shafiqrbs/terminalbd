@@ -26,7 +26,7 @@ class GpCustomerImportController extends Controller
         $entity = new GpCustomerImport();
         $form   = $this->createCreateForm($entity);
         $option = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('DomainUserBundle:GpCustomerImport')->findAll(array('globalOption' => $option),array('updated'=>'DESC'));
+        $entities = $em->getRepository('DomainUserBundle:GpCustomerImport')->findBy(array('globalOption' => $option),array('updated'=>'DESC'));
         return $this->render('DomainUserBundle:GpCustomerImport:index.html.twig', array(
             'entities' => $entities,
             'entity' => $entity,

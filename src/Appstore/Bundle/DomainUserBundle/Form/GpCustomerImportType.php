@@ -42,7 +42,7 @@ class GpCustomerImportType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_bundle_gp_customer_import';
+        return 'import';
     }
 
     protected function LocationChoiceList()
