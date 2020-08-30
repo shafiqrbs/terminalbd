@@ -127,7 +127,7 @@ ul.page-sidebar-menu > li.current_ancestor > a {
 }
 
 ul.page-sidebar-menu > li.current_ancestor > ul.menu_level_1 {
-    display: none!important;
+
 }
 
 ul.page-sidebar-menu > li.current_ancestor > a .selected {
