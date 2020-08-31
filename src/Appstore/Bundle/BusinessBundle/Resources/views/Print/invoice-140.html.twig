@@ -89,7 +89,7 @@
                                         <td>{% if item.subQuantity is not empty %}{{ item.subQuantity }}{% endif %}</td>
                                         <td>{% if item.quantity > 0  %}{{ item.quantity|number_format() }}{% endif %}</td>
                                         <td>{% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
-                                        <td>{{ item.price|number_format() }}</td>
+                                        <td>{{ item.price|number_format(2) }}</td>
                                         <td ><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                                     </tr>
                                 {% endfor %}
@@ -114,11 +114,11 @@
                                         </td>
                                         <td colspan="3" style="width: 33%; border-left: 1px solid #999999">
                                             <table style="width: 100%">
-                                                <tr><td ><span class="pull-left" >SUB TOTAL</span></td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
-                                                <tr><td ><span class="pull-left" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
-                                                <tr><td ><strong class="pull-left" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
+                                                <tr><td ><span class="pull-left" >SUB TOTAL</span></td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>
+                                                <tr><td ><span class="pull-left" >DISCOUNT</span></td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
+                                                <tr><td ><strong class="pull-left" >GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format(2) }}</strong></td></tr>
                                                 <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 2px; "></td></tr>
-                                                <tr><td><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
+                                                <tr><td><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format(2) }}</strong></td></tr>
 
                                             </table>
                                         </td>

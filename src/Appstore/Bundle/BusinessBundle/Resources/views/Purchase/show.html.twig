@@ -118,11 +118,11 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                                            <td {% if entity.businessConfig.businessModel == 'sign' %} colspan="8" {% else %} colspan="7" {% endif %} class="span12" style="border: 1px double #000"></td>
                                         </tr>
-                                        <tr><td colspan="5"><strong class="pull-right">Total</strong></td><th>{{ entity.netTotal|number_format(2) }}</th></tr>
-                                        <tr><td colspan="5" class="text-right"><strong class="pull-right">Payment</strong></td><th>{{ entity.payment|number_format(2) }}</th></tr>
-                                        <tr><td colspan="5" class="text-right"><strong class="pull-right">Due</strong></td><th>{{ entity.due|number_format(2) }}</th></tr>
+                                        <tr><td {% if entity.businessConfig.businessModel == 'sign' %} colspan="7" {% else %} colspan="6" {% endif %}><strong class="pull-right">Total</strong></td><th>{{ entity.netTotal|number_format(2) }}</th></tr>
+                                        <tr><td {% if entity.businessConfig.businessModel == 'sign' %} colspan="7" {% else %} colspan="6" {% endif %} class="text-right"><strong class="pull-right">Payment</strong></td><th>{{ entity.payment|number_format(2) }}</th></tr>
+                                        <tr><td {% if entity.businessConfig.businessModel == 'sign' %} colspan="7" {% else %} colspan="6" {% endif %} class="text-right"><strong class="pull-right">Due</strong></td><th>{{ entity.due|number_format(2) }}</th></tr>
                                         </tfoot>
                                     </table>
                                 {% endif %}
