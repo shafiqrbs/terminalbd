@@ -257,7 +257,6 @@ class BusinessPurchaseItemRepository extends EntityRepository
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getName()}</td>";
-            $data .= "<td>{$entity->getSalesPrice()}</td>";
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
             if ($sales->getBusinessConfig()->getBusinessModel() == 'sign'){
                 $data .= "<td>{$entity->getHeight()}x{$entity->getWidth()}</td>";
