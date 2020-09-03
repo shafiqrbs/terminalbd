@@ -423,7 +423,6 @@ class AccountSalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.totalAmount),0) AS salesAmount','COALESCE(SUM(e.purchasePrice),0) AS purchaseAmount','COALESCE(SUM(e.vat),0) AS vatAmount');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
-        $qb->andWhere('e.processHead IN(:process)');
         $qb->andWhere('e.processType = :type')->setParameter('type', 'Sales');
         $this->handleSearchBetween($qb,$data);
         $result  = $qb->getQuery()->getOneOrNullResult();
