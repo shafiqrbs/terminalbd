@@ -404,16 +404,31 @@ class AccountSalesRepository extends EntityRepository
 			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
 		}
 
-		$salesPrice             = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
-		$purchasePrice          = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
-		$salesVat               = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
+		//$salesPrice             = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesOverview($user,$data);
+		//$purchasePrice          = $this->_em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseSalesOverview($user,$data);
+
+		$accountSales = $this->monthlySalesPurchase($user,$data);
 		$expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
 		$revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
 		$administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
-		$data =  array('salesAmount' => $salesPrice['total'] ,'purchasePrice' => $purchasePrice['purchasePrice'],'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
-		return $data;
+		$array =  array('salesAmount' => $accountSales['salesAmount'] ,'purchasePrice' => $accountSales['purchaseAmount'],'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $accountSales['vatAmount']);
+		return $array;
+
 
 	}
+
+	private function monthlySalesPurchase(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) AS salesAmount','COALESCE(SUM(e.purchasePrice),0) AS purchaseAmount','COALESCE(SUM(e.vat),0) AS vatAmount');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere('e.processHead IN(:process)');
+        $qb->setParameter('process',array_values(array('medicine','business','inventory','restaurant','hotel')));
+        $this->handleSearchBetween($qb,$data);
+        $result  = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
 
 	public function reportHmsMonthlyIncome(User $user,$data)
 	{

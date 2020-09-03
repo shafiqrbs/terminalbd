@@ -82,6 +82,7 @@ class ReportController extends Controller
 
     public function monthlyIncomeAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome( $this->getUser(),$data);

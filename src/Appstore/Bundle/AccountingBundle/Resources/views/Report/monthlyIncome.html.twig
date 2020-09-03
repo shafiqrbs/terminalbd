@@ -55,14 +55,14 @@
                                             {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
                                             <select class="span12 m-wrap" name="startMonth" id='startMonth'>
                                                 {% for key,month in months %}
-                                                    <option value='{{ key }}' {% if (searchForm.startMonth is defined and searchForm.startMonth == key) or (key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
+                                                    <option value='{{ key }}' {% if (searchForm.startMonth is defined and searchForm.startMonth == key) or (searchForm.startMonth is defined and searchForm.startMonth is empty and key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
                                         <div class="span4">
                                             <select class="span12 m-wrap" name="endMonth" id='endMonth'>
                                                 {% for key,month in months %}
-                                                    <option value='{{ key }}' {% if (searchForm.endMonth is defined and searchForm.endMonth == key) or (key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
+                                                    <option value='{{ key }}' {% if (searchForm.endMonth is defined and searchForm.endMonth == key) or ( searchForm.startMonth is defined and searchForm.startMonth is empty and key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -72,7 +72,7 @@
                                                 <div class="input-append span11">
                                                     <select class="span11 m-wrap" name="year" id='year'>
                                                         {% for year in years %}
-                                                            <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) or (year == currentYear) %} selected="selected" {% endif %} >{{ year }}</option>
+                                                            <option value='{{ year }}' {% if (searchForm.year is defined and searchForm.year == year) or (searchForm.year is defined and searchForm.year is empty and year == currentYear) %} selected="selected" {% endif %} >{{ year }}</option>
                                                         {% endfor %}
                                                     </select>
                                                     <div class="btn-group">
