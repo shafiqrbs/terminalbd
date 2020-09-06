@@ -604,56 +604,56 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
 
-            $menu['Accounting']->addChild('Final Report', array('route' => 'account_transaction'))
+            $menu['Accounting']->addChild('Financial Report', array('route' => 'account_transaction'))
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
             $accounting = array('inventory');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
             }
             $accounting = array('e-commerce');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-                /* $menu['Accounting']['Final Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
+                /* $menu['Accounting']['Financial Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
             }
             $restaurant = array('restaurant');
             $result = array_intersect($arrSlugs, $restaurant);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Daily Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income', array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Daily Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income', array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
             }
 
             $accounting = array('hms');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'hms_report_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income',array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'hms_report_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income',array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
             }
             $accounting = array('miss');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'account_medicine_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income', array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'account_medicine_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income', array('route' => 'account_medicine_income_monthly'))->setAttribute('icon', 'icon-th-list');
             }
             $accounting = array('business');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
 
             }
             $accounting = array('hotel');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Final Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
-                $menu['Accounting']['Final Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Income', array('route' => 'account_business_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Financial Report']->addChild('Monthly Income',        array('route' => 'account_business_income_monthly'))->setAttribute('icon', 'icon-th-list');
 
             }
-            $menu['Accounting']['Final Report']->addChild('Trail Balance', array('route' => 'account_trail_balance'))->setAttribute('icon', 'icon-th-list');
-            $menu['Accounting']['Final Report']->addChild('Balance Sheet', array('route' => 'account_balance_sheet'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Financial Report']->addChild('Trail Balance', array('route' => 'account_trail_balance'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']['Financial Report']->addChild('Balance Sheet', array('route' => 'account_balance_sheet'))->setAttribute('icon', 'icon-th-list');
 
         }
 
