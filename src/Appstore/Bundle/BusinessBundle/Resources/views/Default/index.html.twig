@@ -13,7 +13,7 @@
                 <div class="span4">
                     <div class="btn-group">
                         {% if (app.user.granted("ROLE_BUSINESS_INVOICE"))  %}
-                        <a href="{{ path('business_invoice_new') }}" class="btn green big"><i class="icon-plus-sign"></i> Add Invoice </a>
+                        <a href="{{ path('business_invoice_new') }}" class="btn green big"><i class="icon-plus-sign"></i> Add Sales </a>
                         {% endif %}
                         {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES"))  %}
                             <a href="{{ path('account_sales_new') }}" class="btn yellow big"><i class="icon-money"></i> Due Receive</a>

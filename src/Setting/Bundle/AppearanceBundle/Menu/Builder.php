@@ -220,23 +220,24 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
 
         if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE') and $config->getBusinessModel() != "association") {
-	        $menu[$business]->addChild('Sales')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-            $menu[$business]['Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
-                ->setAttribute('icon', 'icon-plus-sign');
-            $menu[$business]['Sales']->addChild('Invoice', array('route' => 'business_invoice'))
+	        $menu[$business]->addChild('Manage Sales')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+
+            $menu[$business]['Manage Sales']->addChild('Sales', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
+                ->setAttribute('icon', 'icon-plus-sign');
 	        if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')){
-		        $menu[$business]['Sales']->addChild( 'Reports' )
+		        $menu[$business]['Manage Sales']->addChild( 'Reports' )
 		                                             ->setAttribute( 'icon', 'icon icon-bar-chart' )
 		                                             ->setAttribute( 'dropdown', true );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Sales']['Reports']->addChild( 'Sales SR', array( 'route' => 'business_report_sales_sr' ) )->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Sales']['Reports']->addChild( 'Sales DSR', array( 'route' => 'business_report_sales_dsr' ) )->setAttribute( 'icon', 'icon-th-list' );
-                 $menu[$business]['Sales']['Reports']->addChild( 'Sales AREA', array( 'route' => 'business_report_sales_area' ) )->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales SR', array( 'route' => 'business_report_sales_sr' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales DSR', array( 'route' => 'business_report_sales_dsr' ) )->setAttribute( 'icon', 'icon-th-list' );
+                 $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales AREA', array( 'route' => 'business_report_sales_area' ) )->setAttribute( 'icon', 'icon-th-list' );
+                $menu[$business]['Manage Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }
 	    }
         $menu[$business]->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
@@ -265,20 +266,20 @@ class Builder extends ContainerAware
 
 	    if($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
 
-		    $menu[$business]->addChild('Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
-		    $menu[$business]['Purchase']->addChild('Purchase', array('route' => 'business_purchase'));
-		    $menu[$business]['Purchase']->addChild('Purchase Return', array('route' => 'business_purchase_return'));
-		    $menu[$business]['Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'));
-		    $menu[$business]['Purchase']->addChild('Vendor', array('route' => 'business_vendor'));
+		    $menu[$business]->addChild('Manage Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
+		    $menu[$business]['Manage Purchase']->addChild('Purchase', array('route' => 'business_purchase'));
+		    $menu[$business]['Manage Purchase']->addChild('Purchase Return', array('route' => 'business_purchase_return'));
+		    $menu[$business]['Manage Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'));
+		    $menu[$business]['Manage Purchase']->addChild('Vendor', array('route' => 'business_vendor'));
 		    if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')) {
-			    $menu[$business]['Purchase']->addChild( 'Reports' )
+			    $menu[$business]['Manage Purchase']->addChild( 'Reports' )
 			                                            ->setAttribute( 'dropdown', true );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Purchase Summary', array( 'route' => 'business_report_purchase_summary' ) );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Vendor Ledger', array( 'route' => 'business_report_purchase_ledger' ) );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Vendor Details', array( 'route' => 'business_report_purchase_vendor_details' ) );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Stock Price', array( 'route' => 'business_report_purchase_stock_price' ) );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Stock Item Price', array( 'route' => 'business_report_item_stock_price' ) );
-			    $menu[$business]['Purchase']['Reports']->addChild( 'Stock Item', array( 'route' => 'business_report_item_stock' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Purchase Summary', array( 'route' => 'business_report_purchase_summary' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Vendor Ledger', array( 'route' => 'business_report_purchase_ledger' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Vendor Details', array( 'route' => 'business_report_purchase_vendor_details' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Stock Price', array( 'route' => 'business_report_purchase_stock_price' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Stock Item Price', array( 'route' => 'business_report_item_stock_price' ) );
+			    $menu[$business]['Manage Purchase']['Reports']->addChild( 'Stock Item', array( 'route' => 'business_report_item_stock' ) );
 		    }
 	    }
 
@@ -358,24 +359,29 @@ class Builder extends ContainerAware
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_MANAGER')) {
 
             $menu
-                ->addChild('Manage Content')
+                ->addChild('Manage Website')
                 ->setAttribute('icon', 'fa fa-book')
                 ->setAttribute('dropdown', true);
 
-            $menu['Manage Content']->addChild('Page', array('route' => 'page'));
+            $menu['Manage Website']->addChild('Page', array('route' => 'page'));
             if ($option->getSiteSetting()) {
                 $syndicateModules = $option->getSiteSetting()->getSyndicateModules();
                 if (!empty($syndicateModules)) {
                     foreach ($option->getSiteSetting()->getSyndicateModules() as $syndmod) {
-                        $menu['Manage Content']->addChild($syndmod->getName(), array('route' => strtolower($syndmod->getModuleClass())));
+                        $menu['Manage Website']->addChild($syndmod->getName(), array('route' => strtolower($syndmod->getModuleClass())));
                     }
                 }
 
                 $modules = $option->getSiteSetting()->getModules();
                 if (!empty($modules)) {
                     foreach ($option->getSiteSetting()->getModules() as $mod) {
-                        $menu['Manage Content']->addChild($mod->getName(), array('route' => strtolower($mod->getModuleClass())));
+                        $menu['Manage Website']->addChild($mod->getName(), array('route' => strtolower($mod->getModuleClass())));
                     }
+                }
+                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_WEBSITE')){
+                    $menu['Manage Website']->addChild('Page Feature')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+                    $menu['Manage Website']['Page Feature']->addChild('Widget', array('route' => 'appearancewebsitewidget'))->setAttribute('icon', 'icon-th-list');
+                    $menu['Manage Website']['Page Feature']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
                 }
             }
             $menu
@@ -383,7 +389,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-picture-o')
                 ->setAttribute('dropdown', true);
 
-            $menu['Manage Content']->addChild('Contact', array('route' => 'contactpage_modify'));
+            $menu['Manage Website']->addChild('Contact', array('route' => 'contactpage_modify'));
             $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
         }
 
