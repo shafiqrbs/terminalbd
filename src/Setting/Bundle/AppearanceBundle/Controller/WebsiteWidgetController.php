@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\AppearanceBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Form\FeatureWidgetType;
 use Setting\Bundle\AppearanceBundle\Form\WebsiteWidgetType;
@@ -17,9 +18,9 @@ class WebsiteWidgetController extends Controller
 {
 
     /**
-     * Lists all FeatureWidget entities.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -31,8 +32,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Lists all FeatureWidget entities.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function sortingAction()
     {
@@ -45,8 +45,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Lists all FeatureWidget entities.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function sortedListAction(Request $request)
     {
@@ -57,8 +56,7 @@ class WebsiteWidgetController extends Controller
 
 
     /**
-     * Creates a new FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function createAction(Request $request)
     {
@@ -121,8 +119,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Displays a form to create a new FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function newAction()
     {
@@ -139,8 +136,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Finds and displays a FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function showAction($id)
     {
@@ -161,8 +157,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function editAction($id)
     {
@@ -252,8 +247,7 @@ class WebsiteWidgetController extends Controller
 
 
     /**
-     * Deletes a FeatureWidget entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function deleteAction($id)
     {
@@ -292,8 +286,7 @@ class WebsiteWidgetController extends Controller
     }
 
     /**
-     * Status a news entity.
-     *
+     * @Secure(roles = "ROLE_DOMAIN_WEBSITE_WEDGET,ROLE_DOMAIN")
      */
     public function statusAction(Request $request, $id)
     {
