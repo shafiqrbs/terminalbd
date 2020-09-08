@@ -148,6 +148,12 @@ class RestaurantConfig
 
     /**
      * @var boolean
+     * @ORM\Column(type="boolean",  nullable=true)
+     */
+    private $autoPayment = false;
+
+    /**
+     * @var boolean
      *
      * @ORM\Column(name="isCustomer", type="boolean",  nullable=true)
      */
@@ -1292,6 +1298,22 @@ class RestaurantConfig
     public function setPosPrint($posPrint)
     {
         $this->posPrint = $posPrint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoPayment()
+    {
+        return $this->autoPayment;
+    }
+
+    /**
+     * @param bool $autoPayment
+     */
+    public function setAutoPayment($autoPayment)
+    {
+        $this->autoPayment = $autoPayment;
     }
 
 

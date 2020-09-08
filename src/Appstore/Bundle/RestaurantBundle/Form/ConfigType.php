@@ -25,6 +25,7 @@ class ConfigType extends AbstractType
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span11','rows'=>5,'placeholder'=> "Enter office/store address")))
              ->add('invoiceNote','textarea',array('attr'=>array('class'=>'m-wrap span11','rows' => 3,'placeholder'=> "Enter invoice notes")))
+            ->add('autoPayment')
             ->add('isCustomer')
             ->add('vatEnable')
             ->add('tablePlan')

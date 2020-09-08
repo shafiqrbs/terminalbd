@@ -143,8 +143,7 @@ class RestaurantTemporaryController extends Controller
                 $entity->setReturnAmount($amount);
             }
 
-        }else{
-
+        }else if(($entity->getTotal() > 0 and !empty($entity->getPayment()) and $entity->isHold() != 1)){
             $payment = floatval($data['payment']);
             $entity->setPayment($payment);
             $entity->setPaymentStatus("Due");
@@ -154,14 +153,22 @@ class RestaurantTemporaryController extends Controller
             }else{
                 $entity->setReturnAmount(abs($amount));
             }
+        }elseif($entity->getRestaurantConfig()->isAutoPayment() == 1 and empty($entity->getPayment()) and $entity->isHold() != 1){
+            $entity->setPayment($entity->getTotal());
+            $entity->setPaymentStatus("Paid");
+            $entity->setDue(0);
         }
         if($entity->isHold() == 1){
             $entity->setProcess('Hold');
         }
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords(round($entity->getTotal()));
         $entity->setPaymentInWord($amountInWords);
-        $em->persist($entity);
-        $em->flush();
+        if($entity->getSubTotal()){
+            $em->persist($entity);
+            $em->flush();
+        }else{
+            return new Response("failed");
+        }
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         if($entity->isHold() != 1){
