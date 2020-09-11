@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
@@ -11,6 +14,7 @@ use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -186,7 +190,8 @@ class PurchaseReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $purchase = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
-	    if (!empty($purchase) and $purchase->getProcess() == "Done") {
+	    $arrs = array('created','sales','commission');
+	    if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
 		    $em->flush();
@@ -218,6 +223,36 @@ class PurchaseReturnController extends Controller
         $em->remove($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('business_purchase_return'));
+    }
+
+    public function vendorSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(
+            array('globalOption' => $config,'status'=>1)
+        );
+        $items = array();
+        $items[]=array('value' => '','text'=> '-Select Vendor-');
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+    }
+
+    public function vendorUpdateAction(Request $request,$id)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find BusinessInvoiceReturn entity.');
+        }
+        $setValue = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->find($data['value']);
+        $entity->setVendor($setValue);
+        $em->persist($entity);
+        $em->flush();
+        exit;
     }
 
 

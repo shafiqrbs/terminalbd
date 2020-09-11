@@ -96,11 +96,12 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done' and entity.subTotal > 0) %}
+                                    {% set approveProcess = ['created','commission','sales'] %}
+                                    {% if  entity.process in approveProcess and entity.subTotal > 0 %}
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_return_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                    <a target="_blank" href="{{ path('business_purchase_print_invoice',{'id':entity.id}) }}"  class="btn purple"><i class=" icon-print"></i>&nbsp;Print</a>
-                                    <span  class="btn green"><i class="icon-ok"></i>&nbsp;{{ entity.process }}</span>
+                                   {# <a target="_blank" href="{{ path('business_purchase_print_invoice',{'id':entity.id}) }}"  class="btn purple"><i class=" icon-print"></i>&nbsp;Print</a>#}
+                                    <span  class="btn green"><i class="icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
                                 </div>
                            </div>
                         </div>
@@ -114,7 +115,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DmsBundle/Resources/public/js/purchase.js'
+    '@BusinessBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

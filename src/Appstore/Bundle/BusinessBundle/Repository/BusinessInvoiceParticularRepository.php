@@ -270,6 +270,16 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
 	}
 
+    public function salesDamageProductAmount(BusinessInvoice $invoice)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.damageQnt * e.purchasePrice),0) AS totalDamage','COALESCE(SUM(e.spoilQnt * e.purchasePrice),0) AS totalSpoil');
+        $qb->where('e.businessInvoice = :invoice')->setParameter('invoice', $invoice->getId());
+        $res = $qb->getQuery()->getOneOrNullResult();
+        $totalAmount = ($res['totalDamage'] + $res['totalSpoil']);
+        return $totalAmount;
+    }
+
 
 	public function salesStockItemUpdate(BusinessParticular $stockItem)
     {
@@ -508,12 +518,18 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setUnit($particular->getUnit()->getName());
         }
         $entity->setParticular($particular->getName());
+        $entity->setTloPrice( $data['tloPrice'] );
+        /*if($entity->getTloPrice()){
+            $entity->setPrice($data['salesPrice']-$entity->getTloPrice());
+        }else{
+            $entity->setPrice($data['salesPrice']);
+        }*/
+        $entity->setPrice($data['salesPrice']);
         $entity->setQuantity( $data['quantity'] );
         $entity->setReturnQnt( $data['returnQuantity'] );
         $entity->setDamageQnt( $data['damageQuantity'] );
         $entity->setSpoilQnt( $data['spoilQuantity'] );
         $entity->setBonusQnt( $data['bonusQuantity'] );
-        $entity->setPrice( $data['salesPrice'] );
         $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
         $entity->setTotalQuantity((float)$totalQuantity);
         $subTotal = round(($entity->getPrice() * $entity->getTotalQuantity()),2);
@@ -534,18 +550,23 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
+            $subTlo = empty($entity->getTloPrice()) ? 0 : ($entity->getTloPrice() * $entity->getTotalQuantity());
+
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getRemainingQuantity()}</td>";
             $data .= "<td>{$entity->getUnit()}</td>";
             $data .= "<td>{$entity->getPrice()}</td>";
-            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt salesQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='quantity-{$entity->getId()}' name='quantity[]' value='{$entity->getQuantity()}' placeholder='{$entity->getQuantity()}'></td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt salesQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='salesQuantity-{$entity->getId()}' name='salesQuantity[]' value='{$entity->getQuantity()}' placeholder='{$entity->getQuantity()}'></td>";
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt returnQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='returnQuantity-{$entity->getId()}' name='returnQuantity[]' value='{$entity->getReturnQnt()}' placeholder='{$entity->getReturnQnt()}'></td>";
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt damageQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='damageQuantity-{$entity->getId()}' name='damageQuantity[]' value='{$entity->getDamageQnt()}' placeholder='{$entity->getDamageQnt()}'></td>";
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt spoilQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='spoilQuantity-{$entity->getId()}' name='spoilQuantity[]' value='{$entity->getSpoilQnt()}' placeholder='{$entity->getSpoilQnt()}'></td>";
             $data .= "<td id='totalQuantity-{$entity->getId()}'>{$entity->getTotalQuantity()}</td>";
             $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
+            $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt tloPrice' data-id='{$entity->getId()}' autocomplete='off' min=1  id='tloPrice-{$entity->getId()}' name='tloPrice[]' value='{$entity->getTloPrice()}' placeholder='{$entity->getTloPrice()}'></td>";
+            $data .= "<td class='tloPrice-{$entity->getId()}'>{$subTlo}</td>";
+
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt bonusQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='bonusQuantity-{$entity->getId()}' name='bonusQuantity[]' value='{$entity->getBonusQnt()}' placeholder='{$entity->getBonusQnt()}'></td>";
             $data .= "<td>";
             $data .= "<input type='hidden' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getPrice()}'>";
@@ -573,6 +594,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setDamageQnt( $data['damageQuantity'] );
             $entity->setSpoilQnt( $data['spoilQuantity'] );
             $entity->setBonusQnt( $data['bonusQuantity'] );
+            $entity->setTloPrice( $data['tloPrice'] );
             $entity->setPrice( $data['salesPrice'] );
             $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
             $entity->setTotalQuantity((int)$data['totalQuantity']);

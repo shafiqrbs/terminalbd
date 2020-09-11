@@ -384,23 +384,10 @@ $("#stockInvoice").validate({
             success: function(response){
                 obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['netTotal']);
-                $('#due').val(obj['due']);
-                $('.due').html(obj['due']);
-                $('.payment').html(obj['payment']);
-                $('.discount').html(obj['discount']);
-                $('#subQuantity').html('0');
                 $('#unit').html('Unit');
                 $("#particular").select2().select2("val","");
-                $('.salesQnt').html(obj['salesQnt']);
-                $('.returnQnt').html(obj['returnQnt']);
-                $('.damageQnt').html(obj['damageQnt']);
-                $('.spoilQnt').html(obj['spoilQnt']);
-                $('.totalQnt').html(obj['totalQnt']);
-                $('.bonusQnt').html(obj['bonusQnt']);
                 $('#stockInvoice')[0].reset();
+                returnData(response);
             }
         });
     }
@@ -516,7 +503,7 @@ $(document).on('change', '#vendor', function() {
 
 
 
-$(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity', function() {
+$(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity, .tloPrice', function() {
 
     var id = $(this).attr('data-id');
     var price = parseFloat($('#salesPrice-'+id).val());
@@ -525,33 +512,44 @@ $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .d
     var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
     var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
     var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
-    totalQuantity  = (salesQuantity - returnQuantity - damageQuantity - spoilQuantity);
-    subTotal  = (totalQuantity * price);
+    var tloPrice = parseFloat($('#tloPrice-'+id).val());
+
+    var totalQuantity  = (salesQuantity - returnQuantity - damageQuantity - spoilQuantity);
+    var subTotal  = (totalQuantity * price);
   //  toPrecision = subTotal.toPrecision(2)''
     $("#totalQuantity-"+id).html(totalQuantity);
+    var subTlo = (tloPrice * totalQuantity);
+    $(".tloPrice-"+id).html(financial(subTlo));
     $("#subTotal-"+id).html(financial(subTotal));
     $.ajax({
         url: Routing.generate('business_invoice_distribution_item_update'),
         type: 'POST',
-        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity,
+        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity +'&tloPrice='+ tloPrice,
         success: function(response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(financial(obj['subTotal']));
-            $('.netTotal').html(financial(obj['subTotal']));
-            $('#paymentTotal').val(financial(obj['subTotal']));
-            $('#due').val(financial(obj['subTotal']));
-            $('.due').html(financial(obj['subTotal']));
-            $('.payment').html(financial(obj['subTotal']));
-            $('.discount').html(0);
-            $('.salesQnt').html(obj['salesQnt']);
-            $('.returnQnt').html(obj['returnQnt']);
-            $('.damageQnt').html(obj['damageQnt']);
-            $('.spoilQnt').html(obj['spoilQnt']);
-            $('.totalQnt').html(obj['totalQnt']);
-            $('.bonusQnt').html(obj['bonusQnt']);
-        },
+            returnData(response);
+        }
     })
 });
+
+function returnData(response)
+{
+    obj = JSON.parse(response);
+    $('.subTotal').html(financial(obj['subTotal']));
+    $('.netTotal').html(financial(obj['subTotal']));
+    var due = (obj['subTotal'] - obj['tloPrice']);
+    $('#paymentTotal').val(financial(due));
+    $('#due').val(financial(due));
+    $('.due').html(financial(due));
+    $('.payment').html(financial(due));
+    $('.discount').html(0);
+    $('.salesQnt').html(obj['salesQnt']);
+    $('.returnQnt').html(obj['returnQnt']);
+    $('.damageQnt').html(obj['damageQnt']);
+    $('.spoilQnt').html(obj['spoilQnt']);
+    $('.totalQnt').html(obj['totalQnt']);
+    $('.tloPrice').html(obj['tloPrice']);
+    $('.bonusQnt').html(obj['bonusQnt']);
+}
 
 $(document).on("click", ".distributionDelete", function() {
 
@@ -562,23 +560,8 @@ $(document).on("click", ".distributionDelete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
-                obj = JSON.parse(response);
                 $('#remove-'+id).remove();
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['netTotal']);
-                $('#due').val(obj['due']);
-                $('.due').html(obj['due']);
-                $('.payment').html(obj['payment']);
-                $('.discount').html(obj['discount']);
-                $('.salesQnt').html(obj['salesQnt']);
-                $('.returnQnt').html(obj['returnQnt']);
-                $('.damageQnt').html(obj['damageQnt']);
-                $('.spoilQnt').html(obj['spoilQnt']);
-                $('.totalQnt').html(obj['totalQnt']);
-                $('.bonusQnt').html(obj['bonusQnt']);
-
-
+                returnData(response);
             });
         }
     });

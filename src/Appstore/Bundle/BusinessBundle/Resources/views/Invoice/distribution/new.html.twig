@@ -67,6 +67,7 @@
                                                         <th>Spoil.Qnt</th>
                                                         <th>Sales</th>
                                                         <th>Sub-total</th>
+                                                        <th>TLO Price</th>
                                                         <th>Bonus Qnt</th>
                                                         <th>&nbsp;</th>
                                                     </tr>
@@ -83,9 +84,8 @@
                                                         </td>
                                                         <td id="remainQnt"></td>
                                                         <td id="unit"></td>
-                                                        <td id="unitPrice">
+                                                        <td id="unitPrice"></td>
 
-                                                        </td>
                                                         <td class="">
                                                             <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="0" placeholder="0">
                                                         </td>
@@ -104,6 +104,7 @@
                                                         <td class="">
                                                             <strong id="subTotal">0.00</strong>
                                                         </td>
+                                                        <td id="tloPrice"> <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="tloPrice" name="tloPrice" value="0" placeholder="0"></td>
                                                         <td>
                                                             <input type="number" class="numeric td-inline-input-qnt"   id="bonusQuantity" name="bonusQuantity" value="" placeholder="0">
                                                         </td>
@@ -147,6 +148,8 @@
                                         <th>Spoil.Qnt</th>
                                         <th>Sales</th>
                                         <th>Sub-total</th>
+                                        <th>TLO</th>
+                                        <th>Sub-TLO</th>
                                         <th>Bonus Qnt</th>
                                         <th></th>
                                     </tr>
@@ -177,9 +180,10 @@
                                             <td class="">{{ item.businessParticular.remainingQuantity }}</td>
                                             <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                             <td class="">{{ item.businessParticular.salesPrice }}</td>
+
                                             <td class="">
-                                                <input type="number" class="remove-value numeric td-inline-input-qnt salesQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="salesQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
-                                            </td>
+                                                <input type="number" class="remove-value numeric td-inline-input-qnt salesQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="salesQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"></td>
+
                                              <td class="">
                                                 <input type="number" class="remove-value numeric td-inline-input-qnt returnQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="returnQuantity-{{ item.id }}" name="quantity[]" value="{{ item.returnQnt }}" placeholder="{{ item.returnQnt }}">
                                             </td>
@@ -196,6 +200,10 @@
                                                 <strong id="subTotal-{{ item.id }}">{{ item.subTotal |number_format(2)}}</strong>
                                             </td>
                                             <td class="">
+                                                <input type="number" class="remove-value numeric td-inline-input-qnt tloPrice" data-id="{{ item.id }}"  autocomplete = "off"   id="tloPrice-{{ item.id }}" name="tloPrice[]" value="{{ item.tloPrice }}" placeholder="{{ item.tloPrice }}">
+                                            </td>
+                                            <td class="tloPrice-{{ item.id }}">{{ item.tloPrice * item.totalQuantity }}</td>
+                                            <td class="">
                                                 <input type="number" class="remove-value numeric td-inline-input-qnt bonusQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="bonusQuantity-{{ item.id }}" name="quantity[]" value="{{ item.bonusQnt }}" placeholder="{{ item.bonusQnt }}">
                                             </td>
                                             <td>
@@ -206,16 +214,19 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="13" class="" style="border: 1px double #000"></td>
+                                        <td colspan="15" class="" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
                                         <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+
                                         <td class=""><strong class="salesQnt">{{ salesQnt }}</strong></td>
                                         <td class=""><strong class="returnQnt">{{ returnQnt }}</strong></td>
                                         <td class=""><strong class="damageQnt">{{ damageQnt }}</strong></td>
                                         <td class=""><strong class="spoilQnt">{{ spoilQnt }}</strong></td>
                                         <td class=""><strong class="totalQnt">{{ totalQnt }}</strong></td>
                                         <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
+                                        <td class=""></td>
+                                        <td class=""><strong class="tloPrice">{{ entity.tloPrice|number_format(2) }}</strong></td>
                                         <td class=""><strong class="bonusQnt">{{ bonusQnt }}</strong></td>
                                         <td class=""></td>
                                     </tr>
@@ -226,6 +237,16 @@
                             <div class="span3 payment-info">
                                 <div class="row-fluid">
                                     <div class="span12" >
+                                        <select name="vendor" id="vendor" class="span12 m-wrap">
+                                            <option value="">--Select TLO Vendor</option>
+                                            {% for vendor in vendors %}
+                                                <option {% if entity.vendor is not empty and entity.vendor.id ==  marketing.id %} selected="selected" {% endif %} value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12" >
                                     <select name="marketing" id="marketing" class="span12 m-wrap">
                                         <option>--Select one Marketing Executive</option>
                                         {% for marketing in marketings %}
@@ -234,6 +255,7 @@
                                     </select>
                                     </div>
                                 </div>
+
                                 <div class="row-fluid">
                                     <div class="span12" >
                                         <select name="area" id="area" class="span12 m-wrap">
@@ -271,6 +293,15 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
+                                            <label class="control-label" for="firstName"><span class="label">TLO TK.</span> <span class="pull-right sales-right tloPrice" style="text-align:right;width:110px">{{ entity.tloPrice|number_format(2) }}</span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
                                             <label class="control-label" for="firstName"><span class="label">Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.received) }}</span></label>
                                             <div class="controls">
                                                 {{ form_errors(form.received) }}
@@ -280,10 +311,11 @@
                                     <!--/span-->
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="row-fluid">
+
+                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:left;width:110px">{{ entity.due|number_format(2) }}</span></label>
+                                            <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:right;width:110px">{{ (entity.due-entity.tloPrice) |number_format(2) }}</span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -362,9 +394,9 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box black">
                             <div class="pull-right">
-                                <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
+                                <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due - entity.tloPrice }}">
                                 <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
-                                <input type="hidden" class="netTotal" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+                                <input type="hidden" class="netTotal" name="paymentTotal" id="paymentTotal" value="{{ entity.total - entity.tloPrice }}">
                                 <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
                                 <div class="action"> <strong>Invoice For: </strong>
                                     {{ form_widget(form.process) }}

@@ -135,6 +135,10 @@
                                         <td colspan="10" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
                                    </tr>
+                                   <tr>
+                                        <td colspan="10" class="span9"><span class="pull-right"><strong>TLO Amount TK.</strong> =</span></td>
+                                        <td class="span1"><strong class="subTotal">{{ entity.tloPrice|number_format(2) }}</strong></td>
+                                   </tr>
                                     <tr>
                                         <td colspan="10" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                         <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
@@ -142,6 +146,10 @@
                                     <tr>
                                         <td colspan="10" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                         <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="10" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                                        <td class="span1"><strong class="discount">{{ (entity.total - entity.tloPrice) |number_format(2) }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="10" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>

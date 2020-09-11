@@ -58,7 +58,7 @@ class AccountJournalItemRepository extends EntityRepository
 
             if (!empty($startDate) ) {
                 $datetime = new \DateTime($data['startDate']);
-                $startDate = $datetime->format('Y-m-d 00:00:00');
+                 $startDate = $datetime->format('Y-m-d 00:00:00');
                 $qb->andWhere("j.created >= :startDate");
                 $qb->setParameter('startDate', $startDate);
             }
@@ -69,6 +69,7 @@ class AccountJournalItemRepository extends EntityRepository
                 $qb->andWhere("j.created <= :endDate");
                 $qb->setParameter('endDate', $date);
             }
+
         }
     }
 

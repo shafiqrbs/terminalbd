@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
 use Appstore\Bundle\AccountingBundle\Form\DoubleEntryType;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -61,16 +62,34 @@ class DoubleEntryController extends Controller
 
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
          $accountSubHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('globalOption' => $option),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
 
         $entities = $em->getRepository('AccountingBundle:AccountJournalItem')->findDoubleEntrySearch( $this->getUser(),$data);
-        $pagination = $this->paginate($entities);
+        if(empty($data['pdf'])){
 
-        return $this->render('AccountingBundle:DoubleEntry:journalItem.html.twig', array(
-            'accountHead' => $accountHead,
-            'accountSubHeads' => $accountSubHeads,
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
+            $pagination = $this->paginate($entities);
+            return $this->render('AccountingBundle:DoubleEntry:journalItem.html.twig', array(
+                'accountHead' => $accountHead,
+                'accountSubHeads' => $accountSubHeads,
+                'heads' => $heads,
+                'entities' => $pagination,
+                'searchForm' => $data,
+            ));
+
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:DoubleEntry:journalItemPdf.html.twig', array(
+                    'globalOption' => $option,
+                    'accountHead' => $accountHead,
+                    'accountSubHeads' => $accountSubHeads,
+                    'entities' => $entities->getResult(),
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'journal-item.pdf');
+        }
+
+
     }
 
     /**
@@ -438,6 +457,17 @@ class DoubleEntryController extends Controller
         }
         return $this->redirect($this->generateUrl('account_double_entry'));
 
+    }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
     }
 
 }

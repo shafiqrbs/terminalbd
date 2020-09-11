@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
@@ -457,6 +458,29 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = {$entity->getGlobalOption()->getId()} AND e.accountRefNo ={$entity->getAccountRefNo()} AND e.accountPurchase ={$entity->getId()} AND e.processHead = 'Purchase'");
         $accountCash->execute();
 	}
+
+    public function insertTloAdjustment(BusinessInvoice $invoice)
+    {
+        $em = $this->_em;
+        $entity =  new  AccountPurchase();
+        $entity->setGlobalOption($invoice->getBusinessConfig()->getGlobalOption());
+        $entity->setAccountVendor($invoice->getVendor());
+        $entity->setCompanyName($invoice->getVendor()->getCompanyName());
+        $entity->setProcess('approved');
+        $entity->setProcessHead('business');
+        $entity->setProcessType('TLO');
+        $entity->setPayment($invoice->getTloPrice());
+        $entity->setProcess('approved');
+        $entity->setUpdated($invoice->getCreated());
+        $entity->setApprovedBy($invoice->getApprovedBy());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank() );
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $em->persist($entity);
+        $em->flush();
+        $this->updateVendorBalance($entity);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
+    }
 
 	public function insertAccountPurchase(Purchase $entity)
     {

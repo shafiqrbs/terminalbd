@@ -971,9 +971,13 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setPurchasePrice($purchasePrice);
-        if ($entity->getReceived() > 0){
+        if ($entity->getReceived() > 0 and $entity->getTloPrice() > 0){
             $accountSales->setTransactionMethod($entity->getTransactionMethod());
-            $accountSales->setAmount($entity->getReceived());
+            $amount = ($entity->getReceived() + $entity->getTloPrice());
+            $accountSales->setAmount($amount);
+        }elseif (empty($entity->getReceived()) and $entity->getTloPrice() > 0){
+            $accountSales->setTransactionMethod($entity->getTransactionMethod());
+            $accountSales->setAmount($entity->getTloPrice());
         }else{
             $accountSales->setAmount(0);
         }

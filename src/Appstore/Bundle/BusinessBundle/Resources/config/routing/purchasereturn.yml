@@ -35,3 +35,17 @@ business_purchase_return_approved:
 business_purchase_return_delete:
     path:     /{id}/delete
     defaults: { _controller: "BusinessBundle:PurchaseReturn:delete" }
+
+business_purchase_vendor_select:
+    path:     /vendor-selection
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:vendorSelect" }
+    options:
+           expose: true
+
+business_purchase_vendor_update:
+    path:     /{id}/vendor-purchase-return-update
+    defaults: { _controller: "BusinessBundle:PurchaseReturn:vendorUpdate" }
+    methods:  POST
+    options:
+            expose: true
+

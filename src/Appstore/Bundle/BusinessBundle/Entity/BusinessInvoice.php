@@ -5,6 +5,7 @@ namespace Appstore\Bundle\BusinessBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -59,6 +60,11 @@ class BusinessInvoice
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="businessInvoices" ,cascade={"persist"} )
      **/
     private  $customer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="businessInvoices" ,cascade={"persist"} )
+     **/
+    private  $vendor;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -223,6 +229,13 @@ class BusinessInvoice
      * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tloPrice", type="float", nullable=true)
+     */
+    private $tloPrice;
 
     /**
      * @var float
@@ -996,6 +1009,38 @@ class BusinessInvoice
     public function setMarketing($marketing)
     {
         $this->marketing = $marketing;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTloPrice()
+    {
+        return $this->tloPrice;
+    }
+
+    /**
+     * @param float $tloPrice
+     */
+    public function setTloPrice($tloPrice)
+    {
+        $this->tloPrice = $tloPrice;
+    }
+
+    /**
+     * @return AccountVendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param AccountVendor $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
     }
 
 }

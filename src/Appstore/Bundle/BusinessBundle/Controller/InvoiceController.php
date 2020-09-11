@@ -116,7 +116,8 @@ class InvoiceController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getBusinessConfig();
         $entity = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->findOneBy(array( 'businessConfig' => $config , 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -178,6 +179,11 @@ class InvoiceController extends Controller
              $marketingExist =$this->getDoctrine()->getRepository('BusinessBundle:Marketing')->find($marketing);
              if($marketingExist){ $entity->setMarketing($marketingExist);}
             }
+            if(isset($data['vendor']) and !empty($data['vendor'])){
+                $vendor = $data['vendor'];
+                $vendorExist =$this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->find($vendor);
+                if($vendorExist){ $entity->setVendor($vendorExist);}
+            }
             if (in_array($entity->getProcess(), $done)) {
                 $entity->setApprovedBy($this->getUser());
             }
@@ -206,6 +212,9 @@ class InvoiceController extends Controller
                 if(in_array($entity->getProcess(),$done)){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                     $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+                    if($entity->getTloPrice() > 0 and !empty($entity->getVendor())){
+                        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->insertTloAdjustment($entity);
+                    }
                     if($entity->getBusinessConfig()->isStockHistory() == 1 ){
                         $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesItem($entity);
                     }
@@ -355,6 +364,7 @@ class InvoiceController extends Controller
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->getSalesItems($entity);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $tloPrice = $entity->getTloPrice() > 0 ? $entity->getTloPrice() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
         $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
@@ -362,7 +372,8 @@ class InvoiceController extends Controller
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
         $data = array(
            'subTotal' => $subTotal,
-           'netTotal' => $netTotal,
+           'tloPrice' => $tloPrice,
+           'netTotal' => ($netTotal-$tloPrice),
            'payment' => $payment ,
            'due' => $due,
            'vat' => $vat,
@@ -676,6 +687,7 @@ class InvoiceController extends Controller
             'spoilQnt' => $result['spoilQnt'] ,
             'totalQnt' => $result['totalQnt'] ,
             'bonusQnt' => $result['bonusQnt'] ,
+            'tloPrice' => $result['tloPrice'] ,
             'invoiceParticulars' => $invoiceParticulars
 
         );
@@ -837,6 +849,9 @@ class InvoiceController extends Controller
             $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
             if(($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['damageQnt'] > 0) or ($entity->getBusinessConfig()->getBusinessModel() == 'distribution' and $result['spoilQnt'] > 0) ){
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($entity) ;
+            }
+            if($entity->getTloPrice() > 0 and !empty($entity->getVendor())){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->insertTloAdjustment($entity);
             }
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $em = $this->getDoctrine()->getManager();

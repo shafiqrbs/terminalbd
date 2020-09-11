@@ -143,14 +143,19 @@ class BusinessPurchaseReturnRepository extends EntityRepository
             }elseif($returnItemCount['damageQnt'] > 0 or $returnItemCount['spoilQnt'] > 0){
                 $entity = new BusinessPurchaseReturn();
                 $entity->setBusinessConfig($invoice->getBusinessConfig());
+                if($invoice->getVendor()){
+                    $entity->setVendor($invoice->getVendor());
+                }
                 $entity->setSalesInvoice($invoice->getInvoice());
                 $entity->setCreatedBy($invoice->getCreatedBy());
+                $amount = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesDamageProductAmount($invoice);
+                $entity->setSubTotal($amount);
+                $entity->setProcess('sales');
                 $em->persist($entity);
                 $em->flush();
                 $this->insertUpdatePurchaseReturnItem($entity,$invoice);
             }
-
-  }
+    }
 
     public function insertUpdatePurchaseReturnItem(BusinessPurchaseReturn $entity, BusinessInvoice $invoice)
     {

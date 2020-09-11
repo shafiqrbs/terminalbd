@@ -493,7 +493,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
         $qb->from('BusinessBundle:BusinessInvoiceParticular','si')
-        ->select("sum(si.subTotal) as subTotal","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+        ->select("sum(si.subTotal) as subTotal","sum(si.tloPrice * si.totalQuantity) as tloPrice","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
         ->where('si.businessInvoice = :invoice')
         ->setParameter('invoice', $invoice ->getId());
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -509,6 +509,7 @@ class BusinessInvoiceRepository extends EntityRepository
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
             $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setTotal($total);
+            $invoice->setTloPrice($result['tloPrice']);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
         }else{
