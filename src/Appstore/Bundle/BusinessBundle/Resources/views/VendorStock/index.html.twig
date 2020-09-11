@@ -111,6 +111,9 @@
                                             <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_vendor_stock_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                         {% endif %}
                                         <a href="{{ path('business_vendor_stock_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                        {% if  entity.process in 'Approved' and ((entity.stockIn - entity.stockOut) == 0) %}
+                                            <a href="javascript:" data-url="{{ path('business_vendor_stock_purchase_process', { 'id': entity.id }) }}" class="btn blue mini approve" ><i class="icon-refresh"></i> Purchase</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

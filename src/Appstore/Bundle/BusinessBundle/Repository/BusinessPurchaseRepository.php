@@ -8,6 +8,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStockItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -243,7 +244,8 @@ class BusinessPurchaseRepository extends EntityRepository
 
         foreach ($invoice->getBusinessInvoiceParticulars() as $rows){
             if($rows->getVendor()){
-                $exist = $this->checkInstantPurchaseToday($rows->getVendor());
+                $em->getRepository('BusinessBundle:BusinessVendorStockItem')->insertStockSalesItems($rows);
+                /*$exist = $this->checkInstantPurchaseToday($rows->getVendor());
                 if($exist['status'] == 'valid'){
                     $purchase = $em->getRepository('BusinessBundle:BusinessPurchase')->find($exist['purchase']);
                 }else{
@@ -257,10 +259,47 @@ class BusinessPurchaseRepository extends EntityRepository
                     $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($purchase,$invoiceItems);
                     $em->getRepository('BusinessBundle:BusinessVendorStockItem')->insertStockSalesItems($rows);
                 }
-                $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchase);
+                $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchase);*/
             }
 
         }
+
+    }
+
+    public function insertVendorStockLotPurchase(BusinessVendorStock $vendorStock)
+    {
+
+        $em = $this->_em;
+        $config = $vendorStock->getBusinessConfig();
+
+        /* @var $rows BusinessInvoiceParticular */
+
+        $em = $this->_em;
+        $entity = new BusinessPurchase();
+        $entity->setBusinessConfig($config);
+        $entity->setVendor($vendorStock->getVendor());
+        $entity->setProcess('Commission');
+        $entity->setCommissionInvoice(true);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+
+        /* @var $item BusinessVendorStockItem */
+        /* @var $row BusinessInvoiceParticular */
+
+        foreach ($vendorStock->getBusinessVendorStockItems() as $item){
+            foreach ($item->getBusinessInvoiceParticulars() as $row){
+
+                if($row->getVendor()){
+
+                    $invoiceItems = array('particularId' => $row->getBusinessParticular()->getId() , 'quantity' => $row->getQuantity(),'price' => $row->getPrice());
+                    $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($entity,$invoiceItems);
+
+                }
+            }
+        }
+        $em->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($entity);
 
     }
 

@@ -876,14 +876,16 @@ class InvoiceController extends Controller
         ignore_user_abort(true);
 
         $em = $this->getDoctrine()->getManager();
-        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
+        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process' => "Revised"];
         $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->invoiceLists( $this->getUser() , $data);
         $pagination = $entities->getQuery()->getResult();
+
         /* @var $entity BusinessInvoice */
+
         foreach ($pagination as $entity):
-            $accountSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-           // $em->getRepository('AccountingBundle:Transaction')->salesGlobalTransaction($accountSales);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
         endforeach;
+
         exit;
     }
 

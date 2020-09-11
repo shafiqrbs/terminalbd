@@ -267,7 +267,24 @@ class VendorStockController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
+    }
+
+    public function purchaseProcessAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $vendorStock = $em->getRepository('BusinessBundle:BusinessVendorStock')->findOneBy(array('businessConfig' => $config , 'id' => $id));
+        if (!empty($vendorStock)) {
+            $em = $this->getDoctrine()->getManager();
+            $vendorStock->setProcess('Purchase');
+            $em->flush();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertVendorStockLotPurchase($vendorStock);
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+
     }
 
     /**

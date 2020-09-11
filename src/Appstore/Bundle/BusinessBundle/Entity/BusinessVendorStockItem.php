@@ -182,6 +182,14 @@ class BusinessVendorStockItem
         $this->salesQuantity = $salesQuantity;
     }
 
+    /**
+     * @return BusinessInvoiceParticular
+     */
+    public function getBusinessInvoiceParticulars()
+    {
+        return $this->businessInvoiceParticulars;
+    }
+
 
 }
 
