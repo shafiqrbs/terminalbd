@@ -61,6 +61,11 @@ class AccountCash
      **/
     private  $accountMobileBank;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoan", inversedBy="accountCashes" )
+     **/
+    private  $accountLoan;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountCashes" )
@@ -720,6 +725,22 @@ class AccountCash
     public function getAccountSalesAdjustment()
     {
         return $this->accountSalesAdjustment;
+    }
+
+    /**
+     * @return AccountLoan
+     */
+    public function getAccountLoan()
+    {
+        return $this->accountLoan;
+    }
+
+    /**
+     * @param AccountLoan $accountLoan
+     */
+    public function setAccountLoan($accountLoan)
+    {
+        $this->accountLoan = $accountLoan;
     }
 
 

@@ -332,6 +332,7 @@ class AccountLoanController extends Controller
             }
 		    $em->flush();
 		    $em->getRepository('AccountingBundle:AccountLoan')->updateCustomerBalance($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertLoanCash($entity);
 		    return new Response('success');
 
         } else {

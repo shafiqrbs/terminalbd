@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
+use Appstore\Bundle\AccountingBundle\Entity\AccountLoan;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseCommission;
@@ -593,6 +594,47 @@ class AccountCashRepository extends EntityRepository
         $em->flush();
 
     }
+
+    public function insertLoanCash(AccountLoan $entity , $processHead ='Loan')
+    {
+
+        $balance = $this->lastInsertCash($entity,$processHead);
+        $em = $this->_em;
+        $cash = new AccountCash();
+
+        /* Cash - Cash various */
+        if($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "bank" and $entity->getAccountBank() ){
+            /* Current Asset Bank Cash Debit */
+            $cash->setAccountBank($entity->getAccountBank());
+        }elseif($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "mobile" and $entity->getAccountMobileBank()){
+            /* Current Asset Mobile Account Debit */
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+            $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
+            $cash->setAccountHead($account);
+
+        }else{
+
+            /* Cash - Cash Debit */
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+        }
+        $cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setAccountLoan($entity);
+        if(!empty($entity->getTransactionMethod())){
+            $cash->setTransactionMethod($entity->getTransactionMethod());
+        }else{
+            $method = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $cash->setTransactionMethod($method);
+        }
+        $cash->setProcessHead($processHead);
+        $cash->setUpdated($entity->getUpdated());
+        $cash->setBalance($balance + $entity->getAmount());
+        $cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getCreated());
+        $em->persist($cash);
+        $em->flush();
+    }
+
 
     public function insertSalesCash(AccountSales $entity , $processHead ='Sales')
     {
