@@ -39,7 +39,6 @@ class AccountLoanController extends Controller
     public function indexAction()
     {
 
-
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $option = $this->getUser()->getGlobalOption();
@@ -47,9 +46,11 @@ class AccountLoanController extends Controller
         $pagination = $this->paginate($entities);
         //$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->receiveModeOverview($option,$data);
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($option);
         return $this->render('AccountingBundle:AccountLoan:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
+            'employees' => $employees,
             'searchForm' => $data,
             'overview' => '',
         ));
@@ -103,8 +104,16 @@ class AccountLoanController extends Controller
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-
-        if($form->isValid() && empty($method)){
+        $balance =  $em->getRepository('AccountingBundle:AccountLoan')->getLastBalance($option);
+        if($entity->getTransactionType() == "Credit" and $entity->getAmount() > $balance ){
+            $this->get('session')->getFlashBag()->add(
+                'error',"This {$entity->getAmount()} amount must be went to equal or less then credit {$balance} amount"
+            );
+            return $this->render('AccountingBundle:AccountLoan:new.html.twig', array(
+                'entity' => $entity,
+                'form'   => $form->createView(),
+            ));
+        }elseif($form->isValid() && empty($method)){
             $entity->setGlobalOption($option);
             if($entity->getTransactionType() == 'Credit') {
                 $entity->setAmount("-{$entity->getAmount()}");

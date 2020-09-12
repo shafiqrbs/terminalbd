@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="account_loan-title">
-                    Manage Loan
+                    Account of Loan
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_loan') }}">Manage Loan</a>
+                        <a href="{{ path('account_loan') }}">Account of Loan</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Loan New</a></li>
+                    <li><a href="#">Account of Loan New</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Loan Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account of Loan Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="{{ path('account_loan') }}"><i class="icon-th-list"></i>&nbsp;Account Loan</a>
@@ -149,7 +149,7 @@
                                     <div class="controls">
                                         {{ form_widget(form.amount) }}
                                         {{ form_errors(form.amount) }}
-                                        <p><strong>Balance</strong> : <strong id="outstanding"></strong></p>
+                                        {#<p><strong>Balance</strong> : <strong id="outstanding"></strong></p>#}
                                     </div>
                                 </div>
                             </div>

@@ -5,7 +5,7 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title"> Account of Sales </h3>
+                <h3 class="page-title"> Account of Loan </h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
@@ -13,10 +13,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_loan') }}">Account of sales</a>
+                        <a href="{{ path('account_loan') }}">Account of Loan</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="javascript:">Account of sales lists</a></li>
+                    <li><a href="javascript:">Account of Loan lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -30,10 +30,10 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Account sales</div>
+                        <div class="caption"><i class="icon-reorder"></i>Account Loan</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_loan_new') }}"><i class="icon-plus-sign"></i>&nbsp; New Receive</a>
+                                <a class="btn red" href="{{ path('account_loan_new') }}"><i class="icon-plus-sign"></i>&nbsp; Loan Receive/Payment</a>
                             </div>
                         </div>
                     </div>
@@ -41,48 +41,13 @@
                     <div class="portlet-body">
                         <div class="portlet-body">
                             {% include('flash-message.html.twig') %}
-                            {#<table class="table table-bordered table-striped table-condensed flip-content ">
-                                <thead class="flip-content">
-                                <tr class="head-red">
-                                    <th class="numeric" ><strong>Received Mode</strong></th>
-                                    <th class="numeric" ><strong>Count</strong></th>
-                                    <th class="numeric" ><strong>Total</strong></th>
-                                    <th class="numeric" ><strong>Received</strong></th>
-                                    <th class="numeric" ><strong>Balance</strong></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% set countInvoice = 0 %}
-                                {% set netTotal = 0 %}
-                                {% set netReceive = 0 %}
-                                {% for overview in overview %}
-                                    {% set countInvoice = countInvoice + overview.totalCount  %}
-                                    {% set netTotal = netTotal+ overview.total  %}
-                                    {% set netReceive = netReceive+ overview.receive  %}
-                                <tr>
-                                    <td class="numeric" ><strong>{{ overview.processHead|capitalize }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.totalCount }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.total|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.receive|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{% if overview.total > 0  %}{{ (overview.total-overview.receive)|number_format }}{% endif %}</strong></td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                                <tr><th>Summary</th><th>{{ countInvoice }}</th><th>{{ netTotal|number_format }}</th><th>{{ netReceive|number_format }}</th><th>{{ (netTotal-netReceive)|number_format }}</th></tr>
-                            </table>#}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span2">
-                                        <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
-                                    </div>
-                                    <div class="span2">
-                                        <input type="text" id="invoice" name="invoice"  class="leftMargin span12  m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Invoice no">
-                                    </div>
-                                    <div class="span2">
-                                        <select name="transactionMethod" id="transactionMethod" class="leftMargin span12 m-wrap">
-                                            <option value="" >--Transaction--</option>
-                                            {% for method in transactionMethods %}
-                                                <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                        <select class="search-input span12 m-wrap" id="employee" name="employee">
+                                            <option value="">--Select Loan User--</option>
+                                            {% for employee in employees %}
+                                                <option {% if searchForm.employee is defined and searchForm.employee == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

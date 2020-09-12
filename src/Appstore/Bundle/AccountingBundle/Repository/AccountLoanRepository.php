@@ -51,19 +51,17 @@ class AccountLoanRepository extends EntityRepository
         return  $result;
     }
 
-    public function getLastId(GlobalOption $global)
+    public function getLastBalance(GlobalOption $global)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('count(e.id)');
-        $qb->from('AccountingBundle:Vendor','e');
-        $qb->andWhere("e.globalOption = :global");
-        $qb->setParameter('global', $global->getId());
-        $count = $qb->getQuery()->getSingleScalarResult();
-        if($count > 0 ){
-            return $count+1;
-        }else{
-            return 1;
-        }
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('(COALESCE(SUM(e.amount),0)) AS balance');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $global->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $result = $qb->getQuery()->getSingleResult();
+        $balance = $result['balance'];
+        return $balance;
 
     }
 
