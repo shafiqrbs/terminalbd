@@ -593,6 +593,14 @@ class Builder extends ContainerAware
        */
 
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
+            $menu['Accounting']->addChild('Manage Loan', array('route' => 'account_loan'))
+                ->setAttribute('icon', 'fa fa-money')
+                ->setAttribute('dropdown', true);
+            $menu['Accounting']['Manage Loan']->addChild('Loan', array('route' => 'account_loan'));
+            $menu['Accounting']['Manage Loan']->addChild('Loan New', array('route' => 'account_loan_new'));
+        }
+
+        if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Journal', array('route' => 'account_transaction'))
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);

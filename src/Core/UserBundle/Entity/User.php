@@ -1095,7 +1095,7 @@ class User extends BaseUser
 		return $this->username;
 	}
 
-	public function userFullName(){
+	public function getUserFullName(){
 
 		return $this->profile->getName();
 	}

@@ -7,6 +7,14 @@ function AccountingApproveProcess(){}
         return true;
     });
 
+    $(".addCustomer").click(function(){
+        $( ".customer" ).slideToggle( "slow" );
+    }).toggle( function() {
+        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+    }, function() {
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+    });
+
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",
         changeMonth: true,

@@ -1,0 +1,61 @@
+account_loan:
+    path:     /
+    defaults: { _controller: "AccountingBundle:AccountLoan:index" }
+
+account_loan_outstanding:
+    path:     /customer-outstanding
+    defaults: { _controller: "AccountingBundle:AccountLoan:customerOutstanding" }
+
+account_loan_new:
+    path:     /new
+    defaults: { _controller: "AccountingBundle:AccountLoan:new" }
+
+account_loan_create:
+    path:     /create
+    defaults: { _controller: "AccountingBundle:AccountLoan:create" }
+    methods:  POST
+
+account_loan_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AccountingBundle:AccountLoan:edit" }
+
+account_loan_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "AccountingBundle:AccountLoan:loanReverse" }
+
+account_loan_due:
+    path:     /{loan}/due-payment
+    defaults: { _controller: "AccountingBundle:AccountLoan:duePayment" }
+
+account_loan_print:
+    path:     /{id}/print-payment
+    defaults: { _controller: "AccountingBundle:AccountLoan:print" }
+
+account_loan_update:
+    path:     /{id}/update
+    defaults: { _controller: "AccountingBundle:AccountLoan:update" }
+    methods:  [POST, PUT]
+
+account_loan_approve:
+    path:     /{id}/loan-approve
+    defaults: { _controller: "AccountingBundle:AccountLoan:approve" }
+    options:
+           expose: true
+
+account_loan_inline:
+    path:     /inline-update
+    defaults: { _controller: "AccountingBundle:AccountLoan:inlineUpdate" }
+
+account_loan_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:AccountLoan:delete" }
+    options:
+           expose: true
+
+business_receive_print:
+    path:     /{id}/loan-receive-print
+    defaults: { _controller: "AccountingBundle:AccountLoan:loanPrint" }
+
+business_payment_print:
+    path:     /{id}/loan-payment-print
+    defaults: { _controller: "AccountingBundle:AccountLoan:purchasePrint" }

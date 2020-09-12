@@ -74,6 +74,10 @@ accounting_journal:
     resource: "@AccountingBundle/Resources/config/routing/accountjournal.yml"
     prefix:   /journal
 
+accounting_loan:
+    resource: "@AccountingBundle/Resources/config/routing/accountloan.yml"
+    prefix:   /loan
+
 accounting_balancetransfer:
     resource: "@AccountingBundle/Resources/config/routing/accountbalancetransfer.yml"
     prefix:   /balance-transfer
