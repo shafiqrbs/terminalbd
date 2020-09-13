@@ -62,7 +62,8 @@ class AccountCash
     private  $accountMobileBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoan", inversedBy="accountCashes" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoan", inversedBy="accountCash" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $accountLoan;
 
