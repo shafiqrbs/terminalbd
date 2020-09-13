@@ -154,6 +154,22 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function dailySalesReceive(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
+        $qb->select("c.id","c.name","COALESCE(SUM(e.amount),0) AS amount");
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy("c.id");
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
     public function findWithSearch(User $user,$data = '',$process = '')
     {
         $globalOption = $user->getGlobalOption()->getId();

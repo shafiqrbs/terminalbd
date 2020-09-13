@@ -87,7 +87,23 @@ class AccountLoan
      */
     private $amount;
 
-     /**
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="debit", type="float",  nullable = true)
+     */
+    private $debit;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="credit", type="float",  nullable = true)
+     */
+    private $credit;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="balance", type="float",  nullable = true)
@@ -464,6 +480,38 @@ class AccountLoan
     public function setBalance($balance)
     {
         $this->balance = $balance;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCredit()
+    {
+        return $this->credit;
+    }
+
+    /**
+     * @param float $credit
+     */
+    public function setCredit($credit)
+    {
+        $this->credit = $credit;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDebit()
+    {
+        return $this->debit;
+    }
+
+    /**
+     * @param float $debit
+     */
+    public function setDebit($debit)
+    {
+        $this->debit = $debit;
     }
 
 

@@ -268,6 +268,7 @@ class Builder extends ContainerAware
 
 		    $menu[$business]->addChild('Manage Purchase')->setAttribute('icon', 'icon icon-truck')->setAttribute('dropdown', true);
 		    $menu[$business]['Manage Purchase']->addChild('Purchase', array('route' => 'business_purchase'));
+		    $menu[$business]['Manage Purchase']->addChild('Add Purchase', array('route' => 'business_purchase_new'));
 		    $menu[$business]['Manage Purchase']->addChild('Purchase Return', array('route' => 'business_purchase_return'));
 		    $menu[$business]['Manage Purchase']->addChild('Purchase Item', array('route' => 'business_purchase_item'));
 		    $menu[$business]['Manage Purchase']->addChild('Vendor', array('route' => 'business_vendor'));
@@ -501,6 +502,7 @@ class Builder extends ContainerAware
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_RECONCILIATION')) {
                 $menu['Accounting']['Cash']->addChild('Cash Reconciliation', array('route' => 'account_cashreconciliation'));
             }
+            $menu['Accounting']['Cash']->addChild('Collection & Payment', array('route' => 'account_transaction_cash_summary'));
             $menu['Accounting']['Cash']->addChild('All Cash Flow', array('route' => 'account_transaction_accountcash'));
             $menu['Accounting']['Cash']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'));
             $menu['Accounting']['Cash']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'));

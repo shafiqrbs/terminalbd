@@ -128,4 +128,21 @@ class AccountJournalItemRepository extends EntityRepository
         $result = $qb->getQuery();
         return $result;
     }
+
+    public function dailyJournal($user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('h.name as name','SUM(e.debit) as debit','SUM(e.credit) as credit','SUM(e.debit) - SUM(e.credit) as amount');
+        $qb->join('e.accountJournal','j');
+        $qb->join('e.accountHead','h');
+        $qb->where("j.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere("h.slug IN (:slug)")->setParameter('slug', array_values(array('cash-in-hand','mobile-account','bank-account')));
+        $qb->andWhere("j.process = 'approved'");
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('h.name');
+        $qb->orderBy('h.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
 }

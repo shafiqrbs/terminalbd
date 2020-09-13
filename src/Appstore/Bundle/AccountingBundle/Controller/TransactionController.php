@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Transaction controller.
@@ -140,6 +141,72 @@ class TransactionController extends Controller
             'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
             'searchForm' => $data,
         ));
+
+    }
+
+    /**
+     * Lists all Transaction entities.
+     *
+     */
+    public function transactionSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        if(empty($data)){
+            $date = new \DateTime("now");
+            $start = $date->format('d-m-Y');
+            $end = $date->format('d-m-Y');
+            $data = array('startDate'=> $start , 'endDate' => $end);
+        }
+        $todayCustomerSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->dailySalesReceive($this->getUser(),$data);
+        $todayVendorSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->dailyPurchasePayment($this->getUser(),$data);
+        $todayExpense = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->dailyPurchasePayment($this->getUser(),$data);
+        $todayJournal = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournalItem')->dailyJournal($this->getUser(),$data);
+         $todayLoan = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->dailyLoan($this->getUser(),$data);
+
+        $transactionMethods = array(1,4);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
+        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
+
+        if(empty($data['pdf'])){
+
+            return $this->render('AccountingBundle:Transaction:todayCashSummary.html.twig', array(
+                'transactionCashOverviews'                  => $transactionCashOverview,
+                'transactionBankCashOverviews'              => $transactionBankCashOverviews,
+                'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
+                'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
+                'todayCustomerSales'       => $todayCustomerSales,
+                'todayVendorSales'       => $todayVendorSales,
+                'todayExpense'       => $todayExpense,
+                'todayJournal'       => $todayJournal,
+                'todayLoan'       => $todayLoan,
+                'searchForm' => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'AccountingBundle:Transaction:todayCashSummaryPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'transactionCashOverviews'                  => $transactionCashOverview,
+                    'transactionBankCashOverviews'              => $transactionBankCashOverviews,
+                    'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
+                    'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
+                    'todayCustomerSales'       => $todayCustomerSales,
+                    'todayVendorSales'       => $todayVendorSales,
+                    'todayExpense'       => $todayExpense,
+                    'todayJournal'       => $todayJournal,
+                    'todayLoan'       => $todayLoan,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'dailyCashPdf.pdf');
+        }
+
+
 
     }
 

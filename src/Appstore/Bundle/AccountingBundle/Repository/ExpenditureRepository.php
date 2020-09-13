@@ -112,6 +112,22 @@ class ExpenditureRepository extends EntityRepository
 
     }
 
+    public function dailyPurchasePayment(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.expenseCategory','c');
+        $qb->select("c.id","c.name","COALESCE(SUM(e.amount),0) AS amount");
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy("e.id");
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
     public function androidDeviceExpenditureOverview(GlobalOption $option, $data)
     {
 

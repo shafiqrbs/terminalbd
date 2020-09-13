@@ -25,6 +25,8 @@ class AccountLoanRepository extends EntityRepository
 
         if(!empty($data))
         {
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $name =    isset($data['name'])? $data['name'] :'';
             $companyName =    isset($data['companyName'])? $data['companyName'] :'';
@@ -36,6 +38,16 @@ class AccountLoanRepository extends EntityRepository
             }
             if (!empty($companyName)) {
                 $qb->andWhere($qb->expr()->like("s.companyName", "'%$companyName%'"  ));
+            }
+            if (!empty($startDate) ) {
+                $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+                $qb->andWhere("e.updated >= :startDate");
+                $qb->setParameter('startDate', $start);
+            }
+            if (!empty($endDate)) {
+                $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+                $qb->andWhere("e.updated <= :endDate");
+                $qb->setParameter('endDate',$end);
             }
         }
 
@@ -175,6 +187,22 @@ class AccountLoanRepository extends EntityRepository
         $em->flush();
         return $accountSales;
 
+    }
+
+    public function dailyLoan($user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('p.name as name','SUM(e.debit) as debit','SUM(e.credit) as credit');
+        $qb->join('e.employee','u');
+        $qb->join('u.profile','p');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('p.name');
+        $qb->orderBy('p.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
     }
 
 

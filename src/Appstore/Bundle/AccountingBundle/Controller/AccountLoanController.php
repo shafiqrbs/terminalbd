@@ -141,6 +141,9 @@ class AccountLoanController extends Controller
             $entity->setGlobalOption($option);
 	        if($entity->getTransactionType() == 'Credit') {
                 $entity->setAmount("-{$entity->getAmount()}");
+                $entity->setCredit($entity->getAmount());
+            }else{
+                $entity->setDebit($entity->getAmount());
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){

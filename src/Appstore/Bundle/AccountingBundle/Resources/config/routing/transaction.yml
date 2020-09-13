@@ -10,6 +10,10 @@ account_transaction_cash_overview:
     path:     /cash-overview
     defaults: { _controller: "AccountingBundle:Transaction:transactionCashOverview" }
 
+account_transaction_cash_summary:
+    path:     /cash-summary
+    defaults: { _controller: "AccountingBundle:Transaction:transactionSummary" }
+
 account_transaction_cash_overview_pdf:
     path:     /cash-overview-pdf
     defaults: { _controller: "AccountingBundle:Transaction:transactionCashOverviewPdf" }

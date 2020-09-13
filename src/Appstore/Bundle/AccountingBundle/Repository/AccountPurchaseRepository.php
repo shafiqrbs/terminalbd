@@ -91,6 +91,22 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+    public function dailyPurchasePayment(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select("e.companyName as name","COALESCE(SUM(e.payment),0) AS amount");
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy("e.companyName");
+        $this->handleSearchBetween($qb,$globalOption,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
     public function vendorLedgerOutstanding(GlobalOption $globalOption,$data = array())
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
