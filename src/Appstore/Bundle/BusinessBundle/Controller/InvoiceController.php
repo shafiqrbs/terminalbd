@@ -158,7 +158,7 @@ class InvoiceController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
             $done = array('Done','Delivered');
-            $distribution = array('Done','Delivered','In-progress','Challan');
+            $distribution = array('Done','Delivered','Challan');
             if (!empty($data['customerMobile'])){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);

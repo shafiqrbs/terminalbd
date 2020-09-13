@@ -186,10 +186,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-purple">
-                                    <th class="numeric span6">Account Head</th>
-                                    <th class="numeric span1" >Receipts(TK)</th>
+                                    <th class="numeric span9">Process Mode</th>
+                                    <th class="numeric span1">Receipts(TK)</th>
                                     <th class="numeric span1" >Payment(TK)</th>
-                                    <th class="numeric span2" >Balance</th>
+                                    <th class="numeric span1" >Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -198,7 +198,7 @@
                                     <td class="numeric" >{{ (totalOpen)|number_format(2) }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="numeric" colspan="4"><strong>Collection From Customer</strong></th>
+                                    <th class="numeric" colspan="4"><strong>Receive From Customer</strong></th>
                                 </tr>
                                 {% set sumTotal = 0 %}
                                 {% set closingBlc = 0 %}
