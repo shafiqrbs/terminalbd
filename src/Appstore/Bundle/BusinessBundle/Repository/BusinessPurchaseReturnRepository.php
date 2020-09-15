@@ -133,70 +133,50 @@ class BusinessPurchaseReturnRepository extends EntityRepository
     }
 
 
-    public function insertInvoiceDamageItem(BusinessInvoice $invoice)
+    public function insertInvoiceDamageItem(User $user, $data)
     {
             $em = $this->_em;
-            $exist = $this->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'salesInvoice'=> $invoice->getInvoice()));
-             $returnItemCount = $this->_em->getRepository('BusinessBundle:BusinessInvoice')->updateInvoiceDistributionTotalPrice($invoice);
-            if($exist){
-                $this->insertUpdatePurchaseReturnItem($exist,$invoice);
-            }elseif($returnItemCount['damageQnt'] > 0 or $returnItemCount['spoilQnt'] > 0){
+            $config = $user->getGlobalOption()->getBusinessConfig();
+            if(!empty($data['vendor']) and !empty($data['grandTotal'])){
+                $vendor = $em->getRepository('AccountingBundle:AccountVendor')->find($data['vendor']);
                 $entity = new BusinessPurchaseReturn();
-                $entity->setBusinessConfig($invoice->getBusinessConfig());
-                if($invoice->getVendor()){
-                    $entity->setVendor($invoice->getVendor());
-                }
-                $entity->setSalesInvoice($invoice->getInvoice());
-                $entity->setCreatedBy($invoice->getCreatedBy());
-                $amount = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesDamageProductAmount($invoice);
-                $entity->setSubTotal($amount);
+                $entity->setBusinessConfig($config);
+                $entity->setVendor($vendor);
+                $entity->setCreatedBy($user);
+                $entity->setSubTotal($data['grandTotal']);
                 $entity->setProcess('sales');
                 $em->persist($entity);
                 $em->flush();
-                $this->insertUpdatePurchaseReturnItem($entity,$invoice);
+                $this->insertUpdatePurchaseReturnItem($entity,$data);
+
             }
+
     }
 
-    public function insertUpdatePurchaseReturnItem(BusinessPurchaseReturn $entity, BusinessInvoice $invoice)
+    public function insertUpdatePurchaseReturnItem(BusinessPurchaseReturn $entity, $data)
     {
         $em = $this->_em;
         /* @var $item BusinessInvoiceParticular */
 
-        foreach ($invoice->getBusinessInvoiceParticulars() as $item):
+        foreach ($data['itemId'] as $key => $item):
 
-                $item->getId();
-                $exist = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->findOneBy(array('businessPurchaseReturn' => $entity,'salesInvoiceItem' => $item->getId()));
-
-                /* @var $purchaseItem BusinessPurchaseReturnItem */
-
-                if($exist){
-                    $purchaseItem = $exist;
-                    $purchaseItem->setBusinessPurchaseReturn($entity);
-                    $purchaseItem->setSalesInvoiceItem($item->getId());
-                    $purchaseItem->setBusinessParticular($item->getBusinessParticular());
-                    $purchaseItem->setDamageQnt($item->getDamageQnt());
-                    $purchaseItem->setSpoilQnt($item->getSpoilQnt());
-                    $purchaseItem->setQuantity($item->getDamageQnt() + $item->getSpoilQnt());
-                    $purchaseItem->setPurchasePrice($item->getBusinessParticular()->getPurchasePrice());
-                    $purchaseItem->setSubTotal($item->getBusinessParticular()->getPurchasePrice() * $purchaseItem->getQuantity());
-                    $em->persist($purchaseItem);
-                    $em->flush();
-                    $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(),"purchase-return");
-                }elseif($item->getDamageQnt() > 0 or $item->getSpoilQnt() ) {
-                    $purchaseItem = new BusinessPurchaseReturnItem();
-                    $purchaseItem->setBusinessPurchaseReturn($entity);
-                    $purchaseItem->setSalesInvoiceItem($item->getId());
-                    $purchaseItem->setBusinessParticular($item->getBusinessParticular());
-                    $purchaseItem->setDamageQnt($item->getDamageQnt());
-                    $purchaseItem->setSpoilQnt($item->getSpoilQnt());
-                    $purchaseItem->setQuantity($item->getDamageQnt() + $item->getSpoilQnt());
-                    $purchaseItem->setPurchasePrice($item->getBusinessParticular()->getPurchasePrice());
-                    $purchaseItem->setSubTotal($item->getBusinessParticular()->getPurchasePrice() * $purchaseItem->getQuantity());
-                    $em->persist($purchaseItem);
-                    $em->flush();
-                    $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($item->getBusinessParticular(), "purchase-return");
-                }
+            $distribution = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->find($item);
+            /* @var $purchaseItem BusinessPurchaseReturnItem */
+            $quantity = $data['quantity'][$key];
+            $purchaseItem = new BusinessPurchaseReturnItem();
+            $purchaseItem->setBusinessPurchaseReturn($entity);
+            $purchaseItem->setDistributionReturnItem($distribution);
+            $purchaseItem->setBusinessParticular($distribution->getBusinessParticular());
+            $purchaseItem->setQuantity($data['quantity'][$key]);
+            $purchaseItem->setPurchasePrice($distribution->getBusinessParticular()->getPurchasePrice());
+            $purchaseItem->setSubTotal($quantity * $distribution->getBusinessParticular()->getPurchasePrice());
+            $em->persist($purchaseItem);
+            $em->flush();
+            $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($distribution->getBusinessParticular(), "purchase-return");
+            $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->updatReturnQuantity($distribution);
         endforeach;
     }
+
+
 
 }

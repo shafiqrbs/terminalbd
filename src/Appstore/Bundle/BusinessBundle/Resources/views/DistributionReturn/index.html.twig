@@ -1,0 +1,117 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Distribution Return
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="{{ path('medicine_purchase_return') }}">Manage Product Distribution Return</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Product Distribution Return Information</div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="clearfix"><br/></div>
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <!-- BEGIN FORM-->
+                            <form class="" id="purchaseReturn" name="purchaseReturn" method="post" action="{{ path('business_distribution_return_create') }}"  >
+                            {% if entities is not empty %}
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content ">
+                                <tr class="head-blue">
+                                    <th class="numeric span8" >Product Name </th>
+                                    <th class="numeric span1" >Price</th>
+                                    <th class="numeric span1" >Quantity</th>
+                                    <th class="numeric span1" >Remaining Qnt</th>
+                                    <th class="numeric span1" >Return Qnt</th>
+                                    <th class="numeric span1" >SubTotal</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr><th colspan="5">Total </th><th id="total"></th></tr>
+                                </tfoot>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td class="numeric" >  {{ entity.businessParticular.name }}
+                                            <input type="hidden" name="subTotal[]" id="sub-{{  entity.id }}" class="subTotal" value="0">
+                                            <input type="hidden" name="itemId[]" value="{{ entity.id }}">
+                                            <input type="hidden" name="particularId[]" value="{{ entity.businessParticular.id }}">
+                                            <input type="hidden" name="price[]" value="{{ entity.purchasePrice }}">
+                                        </td>
+                                        <td class="numeric" > {{ entity.purchasePrice }}</td>
+                                        <td class="numeric" > {{ entity.quantity }}</td>
+                                        <td class="numeric" > {{ entity.remainingQnt }}</td>
+                                        <td class="numeric" ><input class="m-wrap span12 form-control input-number" type="text" name="quantity[]" data-id="{{ entity.id }}" data-content="{{ entity.remainingQnt }}"  data-value="{{ entity.purchasePrice }}" id="quantity-{{  entity.id }}" value="" placeholder="Input quantity"></td>
+                                        <td class="numeric span2" id="subTotal-{{  entity.id }}" ></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
+                            <div class="clearfix"><br/></div>
+                            <!--/span-->
+
+                                <div class="form-actions portlet box black">
+                                    <div class="pull-right">
+                                        <div class="action"> <strong>Vendor For: </strong>
+                                            <select style="margin-bottom: 0" name="vendor" id="vendor" class="m-wrap">
+                                                <option value="">--Select Vendor</option>
+                                                {% for vendor in vendors %}
+                                                    <option  value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <div class="btn-group">
+                                                <input type="hidden" id="grandTotal" name="grandTotal" value="" >
+                                                <button type="submit" class="btn blue" id="receiveBtn" ><i class="icon-save"></i>&nbsp; Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@BusinessBundle/Resources/public/js/purchase-return.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
+
+

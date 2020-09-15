@@ -26,6 +26,10 @@ business_vendor:
     resource: "@BusinessBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor
 
+business_distribution_return:
+    resource: "@BusinessBundle/Resources/config/routing/distributionreturn.yml"
+    prefix:   /distribution-return
+
 business_invoice:
     resource: "@BusinessBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice

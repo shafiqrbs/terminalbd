@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * BusinessPurchaseReturnItem
  *
- * @ORM\Table(name ="business_purchase_return_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessPurchaseReturnItemRepository")
+ * @ORM\Table(name ="business_distribution_return_item")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessDistributionReturnItemRepository")
  */
-class BusinessPurchaseReturnItem
+class BusinessDistributionReturnItem
 {
     /**
      * @var integer
@@ -23,32 +23,26 @@ class BusinessPurchaseReturnItem
      */
     private $id;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn", inversedBy="businessPurchaseReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessPurchasesReturns" , cascade={"detach","merge"} )
      **/
-    private  $businessPurchaseReturn;
+    private  $businessConfig;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessPurchaseReturnItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessDistributionReturnItem" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessParticular;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", inversedBy="businessPurchaseReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $businessPurchaseItem;
+     * @var int
+     *
+     * @ORM\Column(name="salesInvoice", type="integer", nullable=true)
+     */
+    private $salesInvoice;
 
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem", inversedBy="businessPurchaseReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $distributionReturnItem;
 
 
     /**
@@ -201,37 +195,7 @@ class BusinessPurchaseReturnItem
         $this->businessParticular = $businessParticular;
     }
 
-    /**
-     * @return BusinessPurchaseReturn
-     */
-    public function getBusinessPurchaseReturn()
-    {
-        return $this->businessPurchaseReturn;
-    }
 
-    /**
-     * @param BusinessPurchaseReturn $businessPurchaseReturn
-     */
-    public function setBusinessPurchaseReturn($businessPurchaseReturn)
-    {
-        $this->businessPurchaseReturn = $businessPurchaseReturn;
-    }
-
-    /**
-     * @return BusinessPurchaseItem
-     */
-    public function getBusinessPurchaseItem()
-    {
-        return $this->businessPurchaseItem;
-    }
-
-    /**
-     * @param BusinessPurchaseItem $businessPurchaseItem
-     */
-    public function setBusinessPurchaseItem($businessPurchaseItem)
-    {
-        $this->businessPurchaseItem = $businessPurchaseItem;
-    }
 
     /**
      * @return int
@@ -314,19 +278,35 @@ class BusinessPurchaseReturnItem
     }
 
     /**
-     * @return BusinessDistributionReturnItem
+     * @return BusinessConfig
      */
-    public function getDistributionReturnItem()
+    public function getBusinessConfig()
     {
-        return $this->distributionReturnItem;
+        return $this->businessConfig;
     }
 
     /**
-     * @param BusinessDistributionReturnItem $distributionReturnItem
+     * @param BusinessConfig $businessConfig
      */
-    public function setDistributionReturnItem($distributionReturnItem)
+    public function setBusinessConfig($businessConfig)
     {
-        $this->distributionReturnItem = $distributionReturnItem;
+        $this->businessConfig = $businessConfig;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesInvoice()
+    {
+        return $this->salesInvoice;
+    }
+
+    /**
+     * @param int $salesInvoice
+     */
+    public function setSalesInvoice($salesInvoice)
+    {
+        $this->salesInvoice = $salesInvoice;
     }
 
 

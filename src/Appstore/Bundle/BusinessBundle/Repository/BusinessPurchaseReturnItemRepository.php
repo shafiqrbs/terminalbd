@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
@@ -75,4 +76,19 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
             $em->flush();
         }
     }
+
+    public function updatReturnQuantity(BusinessDistributionReturnItem $item)
+    {
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.distributionReturnItem = :businessParticular')->setParameter('businessParticular', $item->getId());
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        $remain = $item->getQuantity() -> $qnt['quantity'];
+        $item->setRemainingQnt($remain);
+        $em->persist($item);
+        $em->flush();
+
+    }
+
 }

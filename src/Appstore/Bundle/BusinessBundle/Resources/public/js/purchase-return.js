@@ -3,7 +3,15 @@ $(document).on("keyup", ".input-number", function() {
     var sum = 0;
     var dataId = $(this).attr("data-id");
     var price = $(this).attr("data-value");
-    var quantity = $(this).val();
+    var remainingQnt = parseInt($(this).attr("data-content"));
+    var quantity = parseInt($(this).val());
+    if(quantity > remainingQnt ){
+        alert('Return quantity must be remaining quantity equal or less');
+        $(this).val(0);
+        $("#subTotal-"+dataId).html(0);
+        $("#sub-"+dataId).val(0);
+        return false;
+    }
     var amount = (price * quantity);
     $("#subTotal-"+dataId).html(amount);
     $("#sub-"+dataId).val(amount);
