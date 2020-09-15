@@ -84,7 +84,7 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->where('e.distributionReturnItem = :businessParticular')->setParameter('businessParticular', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
-        $remain = $item->getQuantity() -> $qnt['quantity'];
+        $remain = $item->getQuantity() - $qnt['quantity'];
         $item->setRemainingQnt($remain);
         $em->persist($item);
         $em->flush();

@@ -74,6 +74,7 @@ class InvoiceController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setBusinessConfig($config);
         $entity->setPaymentStatus('Pending');
+        $entity->setComment($config->getInvoiceComment());
         $em->persist($entity);
         $em->flush();
         if($config->getBusinessModel() == "distribution"){

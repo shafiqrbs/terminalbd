@@ -115,6 +115,13 @@ class BusinessConfig
     private $address;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceComment", type="text", nullable = true)
+     */
+    private $invoiceComment;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="vatPercentage", type="smallint",  nullable=true)
@@ -1338,6 +1345,22 @@ class BusinessConfig
     public function setIsStockHistory($isStockHistory)
     {
         $this->isStockHistory = $isStockHistory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceComment()
+    {
+        return $this->invoiceComment;
+    }
+
+    /**
+     * @param string $invoiceComment
+     */
+    public function setInvoiceComment($invoiceComment)
+    {
+        $this->invoiceComment = $invoiceComment;
     }
 
 
