@@ -324,14 +324,8 @@ class Builder extends ContainerAware
                 $menu[$business]['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
                 if($config->getBusinessModel() == 'distribution') {
-                    $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'))->setAttribute(
-                        'icon',
-                        'icon-th-list'
-                    );
-                    $menu[$business]['Master Data']->addChild(
-                        'Marketing',
-                        array('route' => 'business_marketing')
-                    )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'))->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Master Data']->addChild('Marketing', array('route' => 'business_marketing'))->setAttribute('icon', 'icon-th-list');
                 }
 
             }
