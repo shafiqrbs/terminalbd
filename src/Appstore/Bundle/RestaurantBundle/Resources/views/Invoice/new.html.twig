@@ -13,36 +13,23 @@
                 </div>
             </div>
             <div class="portlet-body">
+
+                <div class="row-fluid">
+                    <div class="contentWrapper">
+                        <div class="tabsWrapper">
+                            <ul class="tabs table-tab">
+                                {% for table in tables  %}
+                                    <li {% if loop.index == 1 %} class="active" {% endif %} data-id="{{ table.name }}">{{ table.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <span class="next">&gt;&gt;</span>
+                        <span class="previous">&lt;&lt;</span>
+                    </div>
+                </div>
                 <div class="row-fluid">
                     <div class="span9">
                         <div class="row-fluid">
-                            <div class="contentWrapper">
-                                <div class="tabsWrapper">
-                                    <ul class="tabs">
-                                        {% for table in tables  %}
-                                            <li {% if loop.index == 1 %} class="active" {% endif %} data-id="{{ table.name }}">{{ table.name }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                <span class="next">&gt;&gt;</span>
-                                <span class="previous">&lt;&lt;</span>
-
-                                <div class="tabContent">
-                                    {% for table in tables  %}
-                                    <div class="{{ table.name }}">
-                                        <p>{{ table.name }}: this is the CSS tab Content</p> <a href="">next</a>
-                                    </div>
-                                    {% endfor %}
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-
-                    </div>
-                <div class="row-fluid">
-                    <div class="span9">
                         <div class="tabbable tabbable-custom" style="float: left; width: 80%">
                             <!-- Only required for left/right tabs -->
 
@@ -122,14 +109,48 @@
                                 <li><a href="#{{ category.slug }}" data-toggle="tab" class="saveButton" aria-expanded="false">{{ category.name }}</a></li>
                             {% endfor %}
                         </ul>
+                        </div>
                     </div>
                     <div class="span3">
+                        <div class="row-fluid">
                         <div class="portlet box yellow">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>TRANSACTION INFORMATION</div>
                             </div>
-
                             <div class="portlet-body">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label group-label">Order By</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        {{ form_widget(form.salesBy) }}
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div id="accordion" class="accordion-container">
+                                    <h4 class="accordion-title js-accordion-title">Select Additional Table</h4>
+                                    <div class="accordion-content">
+                                        <p>
+                                        {% for table in tables  %}
+                                            <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.name }}" name="tableNos[]" > {{ table.name }}</label>
+                                        {% endfor %}
+                                        </p>
+                                    </div><!--/.accordion-content-->
+
+                                    <h4 class="accordion-title js-accordion-title">Select Serve By</h4>
+                                    <div class="accordion-content">
+                                        {% for serving in servings  %}
+                                            <label style="line-height:20px!important;" for="{{ serving.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ serving.id }}" type="checkbox" value="{{ serving.id }}" name="servingIds[]" > {{ serving.profile.name }}</label>
+                                        {% endfor %}
+                                    </div><!--/.accordion-content-->
+                                </div><!--/#accordion-->
+                                <div class="clearfix"></div>
+
                                 <table class="table table-bordered">
 
                                     <thead class="flip-content ">
@@ -182,28 +203,6 @@
                                 {{ form_start(form) }}
                                 {{ form_row(form._token) }}
                                 <div class="payment-info">
-                                    {% if tables is not empty and config.tablePlan == 1 %}
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label" style="text-align: center"  for="firstName">Select Table No</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12" style="padding: 7px">
-                                                <ul class="unstyled">
-                                                    {% for table in tables  %}
-                                                        <li style="width: 33%; float: left">
-                                                            <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.name }}" name="tableNos[]" > {{ table.name }}</label>
-                                                        </li>
-                                                    {% endfor %}
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    {% endif %}
                                     <div class="clearfix"></div>
                                     {% if config.isCustomer == 1 %}
                                         <div class="row-fluid">
@@ -438,7 +437,7 @@
                                 </div>
                                 {{ form_end(form) }}
                             </div>
-
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -453,7 +452,10 @@
                         height: 60px;
                         overflow: hidden;
                         position: relative;
-                        margin-left: 36px;
+                        margin-left: 30px;
+                    }
+                    .table-tab{
+                        margin-right: 36px!important;
                     }
                     .tabs {
                         margin: 0;
@@ -468,20 +470,23 @@
                     }
                     .tabs li {
                         display: inline-block;
-                        background-color: #337ab7;
+                        background-color: #26a69a;
                         padding: 15px 15px;
                         cursor: pointer;
                         font-size: 18px;
                         font-weight: 600;
+                        color: #ffffff;
+                        min-width: 80px;
+                        text-align: center;
                     }
-                    .tabs li.active {
-                        background-color: white;
+                    .table-tab li.active {
+                        background-color: #00584F;
                     }
                     .next, .previous {
                         position: absolute;
                         padding: 15px 30px;
                         top: 0;
-                        background-color: #0088cc;
+                        background-color: #c49f47;
                         font-size: 30px;
                         color: #ffffff;
                     }
@@ -491,20 +496,9 @@
                     .previous {
                         left: 0px;
                     }
-                    .tabContent {
-                        width: 100%;
-                        background-color: white;
-                        padding: 15px;
-                    }
-                    #calBorder, .select2-drop , .select2-drop-mask{
-                        z-index: 999999!important;
-                    }
-                    .scrtabs-tabs-movable-container{
-                        width: 100%!important;
-                    }
-                    .bar-tabs {
-                        border-bottom: 2px solid #ddd;
-                        display: flex;
+                    .group-label{
+                        font-weight: bold;
+                        border-bottom: 1px solid #337ab7
                     }
                     .bar-tabs>li{
                         float: left;
@@ -618,6 +612,82 @@
                         overflow-y: scroll;
 
                     }
+                    .label-custom {
+                        width: 150px;
+                    }
+                    .accordion-container {
+                        position: relative;
+                        width: 100%;
+                        border: 1px solid #0079c1;
+                        border-top: none;
+                        outline: 0;
+                        cursor: pointer
+                    }
+
+                    .accordion-container .accordion-title {
+                        display: block;
+                        position: relative;
+                        margin: 0;
+                        padding: 0.625em 0.625em 0.625em 2em;
+                        font-size: 1.25em;
+                        font-weight: normal;
+                        color: #fff;
+                        background: #000;
+                        cursor: pointer;
+                    }
+
+                    .accordion-container .accordion-title:hover,
+                    .accordion-container .accordion-title:active,
+                    .accordion-container .content-entry.open .accordion-title {
+                        background-color: #00aaa7;
+                        color: white;
+                    }
+
+                    .accordion-container .accordion-title:hover i:before,
+                    .accordion-container .accordion-title:hover i:active,
+                    .accordion-container .content-entry.open i {
+                        color: white;
+                    }
+                    .accordion-container .accordion-title {
+                        background: #00584F;
+                        cursor: pointer;
+                        border-top: 1px solid #fff;
+                        padding: 0.625em 0.625em 0.625em 8px;
+                    }
+                    .accordion-title{
+                        position: relative;
+                    }
+
+                    .accordion-title:after {
+                        content: "";
+                        position: absolute;
+                        right: 25px;
+                        top: 38%;
+                        transition: all 0.2s ease-in-out;
+                        display: block;
+                        width: 8px;
+                        height: 8px;
+                        border-top: solid 2px #fff;
+                        border-right: solid 2px #fff;
+                        -webkit-transform: rotate(135deg);
+                        transform: rotate(135deg);
+                    }
+
+                    .accordion-title.open:after {
+                        -webkit-transform: rotate(-45deg);
+                        transform: rotate(-45deg);
+                        top: 45%;
+                    }
+
+                    .accordion-content {
+                        display: none;
+                        padding:15px;
+                    }
+
+                    /* CSS for CodePen */
+                    .accordion-container {
+                        margin-bottom:7px;
+                    }
 
                 </style>
             </div>
@@ -648,9 +718,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@RestaurantBundle/Resources/public/js/temporary.js'
     '@RestaurantBundle/Resources/public/js/approveProcess.js'
     '@RestaurantBundle/Resources/public/js/posprint.js'
+    '@RestaurantBundle/Resources/public/js/tablepos.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -659,8 +729,8 @@
     {{ parent() }}
     var height = $('#category-nav').height();
     $('.all-product-box').height(height);
-    $('.bar-tabs').scrollingTabs();
-
-
-
+    $('.js-accordion-title').on('click', function () {
+    $(this).next().slideToggle(200);
+    $(this).toggleClass('open', 200);
+    });
 {% endblock %}

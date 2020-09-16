@@ -81,6 +81,7 @@ class InvoiceController extends Controller
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
+        $servings = $em->getRepository('UserBundle:User')->getEmployeeEntities($user->getGlobalOption());
         $initialTotal = ($subTotal + $vat);
         return $this->render('RestaurantBundle:Invoice:new.html.twig', array(
             'config'     => $config,
@@ -91,6 +92,7 @@ class InvoiceController extends Controller
             'user'                  => $user,
             'categories'            => $categories,
             'tables'                => $tables,
+            'servings'                => $servings,
             'entity'                => $entity,
             'form'                  => $form->createView(),
             'itemForm'              => $itemForm->createView(),
