@@ -7,8 +7,11 @@ use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantParticularType;
+use Appstore\Bundle\RestaurantBundle\Form\RestaurantTemporaryParticularType;
+use Appstore\Bundle\RestaurantBundle\Form\TemporaryType;
 use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -67,21 +70,62 @@ class InvoiceController extends Controller
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getRestaurantConfig();
         $entity = new Invoice();
-        $option = $this->getUser()->getGlobalOption();
-        $config = $option->getRestaurantConfig();
-        $entity->setRestaurantConfig($config);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $entity->setPaymentStatus('Pending');
-        $entity->setCreatedBy($this->getUser());
-        $entity->setSalesBy($this->getUser());
-        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
-        $entity->setCustomer($customer);
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('restaurant_invoice_edit', array('id' => $entity->getId())));
+        $form = $this->createTemporaryForm($entity);
+        $itemForm = $this->createInvoiceParticularForm(new RestaurantTemporary());
+        $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
+        $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
+        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
+        $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
+        $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
+        $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
+        $initialTotal = ($subTotal + $vat);
+        return $this->render('RestaurantBundle:Invoice:new.html.twig', array(
+            'config'     => $config,
+            'temporarySubTotal'     => $subTotal,
+            'initialVat'            => $vat,
+            'initialTotal'          => $initialTotal,
+            'initialDiscount'       => 0,
+            'user'                  => $user,
+            'categories'            => $categories,
+            'tables'                => $tables,
+            'entity'                => $entity,
+            'form'                  => $form->createView(),
+            'itemForm'              => $itemForm->createView(),
+        ));
 
+    }
+
+    private function createTemporaryForm(Invoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new TemporaryType($globalOption), $entity, array(
+            'action' => $this->generateUrl('restaurant_temporary_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    private function createInvoiceParticularForm(RestaurantTemporary $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $form = $this->createForm(new RestaurantTemporaryParticularType($config), $entity, array(
+            'action' => $this->generateUrl('restaurant_temporary_particular_add'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'particularForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     public function editAction($id)
@@ -383,20 +427,6 @@ class InvoiceController extends Controller
         return $form;
     }
 
-    private function createInvoiceParticularForm(InvoiceParticular $entity , Invoice $invoice)
-    {
-        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $particular = $this->getDoctrine()->getRepository('RestaurantBundle:Particular');
-        $form = $this->createForm(new RestaurantParticularType($config,$particular), $entity, array(
-            'method' => 'POST',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'id' => 'particularForm',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
 
 
     public function deleteAction($id)
