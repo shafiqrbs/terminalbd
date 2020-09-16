@@ -292,8 +292,8 @@ class BusinessPurchaseRepository extends EntityRepository
             foreach ($item->getBusinessInvoiceParticulars() as $row){
 
                 if($row->getVendor()){
-
-                    $invoiceItems = array('particularId' => $row->getBusinessParticular()->getId() , 'quantity' => $row->getQuantity(),'price' => $row->getPrice());
+                    $price = ($row->getPrice() - $vendorStock->getCommission());
+                    $invoiceItems = array('particularId' => $row->getBusinessParticular()->getId() , 'quantity' => $row->getQuantity(),'price' => $price);
                     $em->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($entity,$invoiceItems);
 
                 }

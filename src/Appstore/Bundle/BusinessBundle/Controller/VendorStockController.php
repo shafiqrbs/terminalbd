@@ -177,7 +177,7 @@ class VendorStockController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStock')->updateVendorStockTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceParticularDeleteAction(BusinessVendorStock $invoice, BusinessVendorStockItem $particular){
@@ -191,7 +191,7 @@ class VendorStockController extends Controller
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessVendorStock')->updateVendorStockTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function selectGrnAction(AccountVendor $vendor)

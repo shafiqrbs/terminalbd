@@ -78,6 +78,13 @@ class BusinessVendorStock
     private $grn;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="commission", type="float", nullable=true)
+     */
+    private $commission = 50;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="remark", type="text", nullable=true)
@@ -303,6 +310,22 @@ class BusinessVendorStock
     public function setStockIn($stockIn)
     {
         $this->stockIn = $stockIn;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCommission()
+    {
+        return $this->commission;
+    }
+
+    /**
+     * @param float $commission
+     */
+    public function setCommission($commission)
+    {
+        $this->commission = $commission;
     }
 
 }
