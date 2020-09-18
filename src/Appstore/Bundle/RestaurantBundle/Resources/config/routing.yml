@@ -22,6 +22,9 @@ restaurant_temporary:
     resource: "@RestaurantBundle/Resources/config/routing/temporary.yml"
     prefix:   /temporary
 
+restaurant_table_invoice:
+    resource: "@RestaurantBundle/Resources/config/routing/tableinvoice.yml"
+    prefix:   /table-invoice
 
 restaurant_particular:
     resource: "@RestaurantBundle/Resources/config/routing/particular.yml"

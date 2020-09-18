@@ -40,7 +40,7 @@ class RestaurantTemporaryRepository extends EntityRepository
 
     }
 
-    public function insertInvoiceItems(User $user, $data)
+    public function insertInvoiceItems($invoice, $data)
     {
         $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
@@ -72,7 +72,6 @@ class RestaurantTemporaryRepository extends EntityRepository
         $em->flush();
 
     }
-
 
     public function getSalesSearchItems(User $user)
     {

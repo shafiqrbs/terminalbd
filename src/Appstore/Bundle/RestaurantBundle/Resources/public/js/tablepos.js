@@ -5,6 +5,7 @@ $('.tabContent div:not(:first)').toggle();
 $('.previous').hide();
 
 $('.table-tab li').click(function () {
+
     var id = $(this).data("id");
     if ($(this).is(':last-child')) {
         $('.next').hide();
@@ -20,7 +21,7 @@ $('.table-tab li').click(function () {
 
     var position = $(this).position();
     var corresponding = $(this).data("id");
-
+    var url = $(this).attr("data-action");
     // scroll to clicked tab with a little gap left to show previous tabs
     scroll = $('.tabs').scrollLeft();
     $('.tabs').animate({
@@ -32,9 +33,11 @@ $('.table-tab li').click(function () {
 
     // show content of corresponding tab
     $('div.' + corresponding).toggle(
-        function(e){
-          alert(id);
-        }
+        $.get(url)
+            .done(function( response ) {
+                $('#tableInvoice').val(corresponding);
+                $('#transaction-box').html(response);
+            })
     );
 
     // remove active class from currently not active tabs
@@ -54,34 +57,34 @@ $('.previous').click(function(e){
     $('ul.table-tab li.active').prev('li').trigger('click');
 });
 
-$(document).on('click', '#temporaryParticular', function() {
+function jsonResult(response) {
 
-    var particularId = $('#particularId').val();
-    var quantity = parseInt($('#quantity').val());
-    var price = parseInt($('#price').val());
-    var url = $('#temporaryParticular').attr('data-url');
-    if(particularId == ''){
-        $("#restaurant_particular_particular").select2('open');
-        return false;
+    obj = JSON.parse(response);
+    $('#invoiceParticulars').html(obj['invoiceParticulars']).show();
+    $('#subTotal').html(obj['subTotal']);
+    $('.total').html(obj['total']);
+    $('#total').val(obj['total']);
+    $('.vat').html(obj['vat']);
+    $('.due').html(obj['total']);
+    $('#process-'+obj['entity']).removeClass().addClass(obj['process']).html(obj['process']);
+    $('#restaurant_invoice_discount').val(obj['discount']);
+    if(obj['total'] > 0 ){
+        $('.receiveBtn').attr("disabled", false);
+    }else{
+        $('.receiveBtn').attr("disabled", true);
     }
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
-        success: function (response) {
-            setTimeout(jsonResult(response),100);
-        }
-    })
-});
+}
+
 
 $(document).on('click', '.addProduct', function() {
 
+    var invoice = $('#tableInvoice').val();
     var url = $(this).attr('data-action');
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( response ) {
+            $.get(url,{'invoice':invoice}, function( response ) {
                 setTimeout(jsonResult(response),100);
             });
         }
@@ -136,4 +139,82 @@ $(document).on("click", ".initialParticularDelete , .particularDelete", function
         }
     });
 });
+
+$(document).on('click', '.invoice-input', function(e) {
+
+    $.ajax({
+        url         : Routing.generate('restaurant_tableinvoice_update'),
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        success     : function(response){
+            setTimeout(jsonResult(response),100);
+        }
+    });
+    e.preventDefault();
+});
+
+$(document).on('click', '#posKitchen', function(e) {
+    url = $(this).attr('data-action');
+    var atLeastOneIsChecked =$('input[name="isPrint[]"]:checked').length > 0;
+    var searchIDs = $('input[name="isPrint[]"]:checked').map(function(){
+        return $(this).val();
+    }).get();
+    if(atLeastOneIsChecked === true){
+        $.get(url,{'isPrint':searchIDs});
+    }
+    e.preventDefault();
+
+});
+
+$(document).on('click', '#saveButton', function() {
+    $('#buttonType').val('saveBtn');
+    $.ajax({
+        url         : $('form#invoiceForm').attr( 'action' ),
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        beforeSend  : function() {
+            $('#saveButton').html("Please Wait...").attr('disabled', 'disabled');
+        },
+        success     : function(response){
+            $('form#invoiceForm')[0].reset();
+            $('.initialVat').html('');
+            $('#subTotal').html('');
+            $('#restaurant_invoice_vat').val(0);
+            $('#restaurant_invoice_payment').val('');
+            $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+            $('#invoiceParticulars').hide();
+        }
+    });
+});
+
+$(document).on('click', '#posButton', function() {
+    $('#buttonType').val('posBtn');
+    $.ajax({
+        url         : $('form#invoiceForm').attr( 'action' ),
+        type        : $('form#invoiceForm').attr( 'method' ),
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        beforeSend  : function() {
+            $('#posButton').html("Please Wait...").attr('disabled', 'disabled');
+        },
+        success     : function(response){
+            $('form#invoiceForm')[0].reset();
+            $('.initialVat').html('');
+            $('#subTotal').html('');
+            $('#restaurant_invoice_vat').val(0);
+            $('#restaurant_invoice_payment').val(0);
+            $('#posButton').html("<i class='icon-print'></i> POS Print").attr('disabled','disabled');
+            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+            $('#invoiceParticulars').hide();
+            jsPostPrint(response);
+        }
+    });
+});
+
 

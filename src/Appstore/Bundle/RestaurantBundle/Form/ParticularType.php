@@ -35,13 +35,13 @@ class ParticularType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
                 ),
-                'empty_value' => '---Choose a service ---',
+                'empty_value' => '---Choose a particular type ---',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
                     ->andWhere('e.slug IN (:slugs)')
-                    ->setParameter('slugs',array('token','value-added'))
+                    ->setParameter('slugs',array('token','value-added','invoice-mode'))
                     ->orderBy("e.sorting","ASC");
                 }
             ))

@@ -1,6 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoiceItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -15,6 +18,125 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 class RestaurantTableInvoiceRepository extends EntityRepository
 {
+
+    public function fastTableInvoice(RestaurantConfig $config){
+
+        $id = $config->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $id);
+        $qb->setMaxResults(1);
+        $qb->orderBy('e.id','ASC');
+        $table = $qb->getQuery()->getOneOrNullResult()['id'];
+        $entity = $this->find($table);
+        return $entity;
+    }
+
+    public function generateTableInvoice(RestaurantConfig $config,$tables)
+    {
+        $em = $this->_em;
+        foreach ($tables as $table):
+            $exist = $this->findOneBy(array('restaurantConfig'=>$config,'table'=>$table));
+            if(empty($exist)){
+                $entity = new RestaurantTableInvoice();
+                $entity->setRestaurantConfig($config);
+                $entity->setTable($table);
+                $em->persist($entity);
+                $em->flush();
+            }
+        endforeach;
+    }
+
+    public function updateKitchenPrint(RestaurantTableInvoice $invoice,$tables)
+    {
+        $em = $this->_em;
+
+        /* @var $entity RestaurantTableInvoiceItem */
+
+        $i = 0;
+        foreach ($invoice->getInvoiceItems() as $key => $entity):
+            if(empty(isset($tables[$i]))){
+                $entity->setIsPrint(false);
+            }else{
+                $entity->setIsPrint(true);
+            }
+            $em->persist($entity);
+            $em->flush();
+            $i++;
+
+        endforeach;
+    }
+
+    public function updateInvoiceTotalPrice(RestaurantTableInvoice $invoice)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('RestaurantBundle:RestaurantTableInvoiceItem','si')
+            ->select('sum(si.subTotal) as subTotal')
+            ->where('si.tableInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->getQuery()->getOneOrNullResult();
+        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        if($subTotal > 0){
+            if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
+                $vat = $this->getCalculationVat($invoice,$subTotal);
+                $invoice->setVat($vat);
+            }
+            $invoice->setSubTotal($subTotal);
+            if($invoice->getDiscountCalculation()){
+                $discount = $this->discountCalculation($invoice);
+                $invoice->setDiscount($discount);
+            }
+            if($invoice->getDiscountCoupon()){
+                $discount = $this->couponDiscount($invoice);
+                $invoice->setDiscount($discount);
+            }
+            $total = ($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($total);
+
+        }else{
+
+            $invoice->setSubTotal(0);
+            $invoice->setTotal(0);
+            $invoice->setDiscount(0);
+            $invoice->setVat(0);
+        }
+        $em->persist($invoice);
+        $em->flush();
+        return $invoice;
+
+    }
+
+    public function getCalculationVat(RestaurantTableInvoice $sales,$totalAmount)
+    {
+        $vat = ( ($totalAmount * (int)$sales->getRestaurantConfig()->getVatPercentage())/100 );
+        return round($vat);
+    }
+
+
+    public function discountCalculation(RestaurantTableInvoice $sales)
+    {
+        $discount = 0;
+        if($sales->getDiscountType() == 'flat' and !empty($sales->getDiscountCalculation())){
+            $discount = ($sales->getSubTotal()  - $sales->getDiscountCalculation());
+        }elseif($sales->getDiscountType() == 'percentage' and !empty($sales->getDiscountCalculation())){
+            $discount = ($sales->getSubTotal() * $sales->getDiscountCalculation())/100;
+        }
+        return $discount;
+    }
+
+    public function couponDiscount(RestaurantTableInvoice $sales)
+    {
+        $config = $sales->getRestaurantConfig();
+        $discount = 0;
+        if($config->getDiscountType() == 'flat' and !empty($discount)){
+            $discount = ($sales->getSubTotal()  - $config->getDiscountPercentage());
+        }elseif($config->getDiscountType() == 'percentage' and !empty($discount)){
+            $discount = ($sales->getSubTotal() * $config->getDiscountPercentage())/100;
+        }
+        return $discount;
+    }
+
 
     public function getSubTotalAmount(User $user)
     {
@@ -40,13 +162,12 @@ class RestaurantTableInvoiceRepository extends EntityRepository
 
     }
 
-    public function insertInvoiceItems(User $user, $data)
+    public function insertInvoiceItems(RestaurantTableInvoice $invoice, $data)
     {
         $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
-
-        $entity = new RestaurantTemporary();
-        $invoiceParticular = $this->findOneBy(array('user' => $user ,'particular' => $particular));
+        $entity = new RestaurantTableInvoiceItem();
+        $invoiceParticular = $em->getRepository('RestaurantBundle:RestaurantTableInvoiceItem')->findOneBy(array('tableInvoice' => $invoice ,'particular' => $particular));
         if(!empty($invoiceParticular) and $data['process'] == 'update') {
             $entity = $invoiceParticular;
             $entity->setQuantity((float)$data['quantity']);
@@ -65,8 +186,7 @@ class RestaurantTableInvoiceRepository extends EntityRepository
         }else{
             $entity->setPurchasePrice($particular->getPurchasePrice());
         }
-        $entity->setUser($user);
-        $entity->setRestaurantConfig($particular->getRestaurantConfig());
+        $entity->setTableInvoice($invoice);
         $entity->setParticular($particular);
         $em->persist($entity);
         $em->flush();
@@ -74,80 +194,26 @@ class RestaurantTableInvoiceRepository extends EntityRepository
     }
 
 
-    public function getSalesSearchItems(User $user)
+    public function getSalesGridItems(RestaurantTableInvoice $invoice)
     {
-        $entities = $user->getRestaurantTemps();
+        $entities = $invoice->getInvoiceItems();
         $data = '';
         $i = 1;
+        /* @var $entity RestaurantTableInvoiceItem */
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class=""><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
-            $data .= '<td class="" >' . $i . '</td>';
-            $data .= '<td class="" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'"  data-url="/restaurant/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
-            $i++;
-        }
-        return $data;
-    }
-
-    public function getSalesGridItems(User $user)
-    {
-        $entities = $user->getRestaurantTemps();
-        $data = '';
-        $i = 1;
-        foreach ($entities as $entity) {
+            $checked = ($entity->isPrint() == 1) ? 'checked="checked"' : '';
             $data .= "<tr id='remove-{$entity->getId()}'>";
-            $data .= "<td>{$i}. {$entity->getParticular()->getName()}</td>";
+            $data .= " <td><input type='checkbox' value='{$entity->getId()}' class='checkbox' id='isPrint-{$entity->getId()}' name='isPrint[]' {$checked} ></td>";
+            $data .= "<td>{$entity->getParticular()->getName()}</td>";
             $data .= "<td>{$entity->getSalesPrice()}</td>";
-            $data .= "<td><div class='input-append' style='margin-bottom: 0!important;'>
-                                                    <span class='input-group-btn'>
-  <a href='javascript:' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' class='btn yellow btn-number mini' data-type='minus' data-id='{$entity->getId()}'  data-text='{$entity->getId()}' data-title='{{ item.salesPrice }}'  data-field='quantity'>
-                                                            <span class='fa fa-minus'></span>
-                                                   </a>
-                                                                     <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' id='quantity-{$entity->getId()}' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}' data-action='' min='1' max='1000'>
-                                                      <a href='javascript:' data-action='/restaurant/temporary/{$entity->getParticular()->getId()}/product-update' class='btn green btn-number mini'  data-type='plus' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-text='{$entity->getId()}' data-field='quantity'>
-                                                          <span class='fa fa-plus'></span>
-                                                  </a>
-                                                        </span>
-
-                                            </div></td>";
+            $data .= "<td><div class='input-append' style='margin-bottom: 0!important;'> <span class='input-group-btn'> <a href='javascript:' data-action='/restaurant/table-invoice/{$entity->getParticular()->getId()}/product-update' class='btn yellow btn-number mini' data-type='minus' data-id='{$entity->getId()}'  data-text='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-field='quantity'> <span class='fa fa-minus'></span> </a> <input type='text' class='form-control inline-m-wrap updateProduct btn-qnt-particular' data-action='/restaurant/table-invoice/{$entity->getParticular()->getId()}/product-update' id='quantity-{$entity->getId()}' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}' name='quantity-{$entity->getId()}' value='{$entity->getQuantity()}'  min='1' max='1000'> <a href='javascript:' data-action='/restaurant/table-invoice/{$entity->getParticular()->getId()}/product-update' class='btn green btn-number mini'  data-type='plus' data-id='{$entity->getId()}' data-title='{$entity->getSalesPrice()}'  data-text='{$entity->getId()}' data-field='quantity'><span class='fa fa-plus'></span></a> </span></div></td>";
             $data .= "<td>{$entity->getSubTotal()}</td>";
-            $data .= '<td class="" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" data-url="/restaurant/temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
+            $data .= "<td> <a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/restaurant/table-invoice/{$invoice->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a></td></tr>";
             $i++;
         }
         return $data;
     }
 
-    public function getSalesListItems(User $user)
-    {
-        $entities = $user->getRestaurantTemps();
-        $data = '';
-        $i = 1;
-        foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class=""><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
-            $data .= '<td class="" >' . $i . '</td>';
-            $data .= '<td class="" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="" >' . $entity->getQuantity() . '</td>';
-            $data .= '<td class="" >' . $entity->getSalesPrice() . '</td>';
-            $data .= '<td class="" >' . $entity->getSubTotal() . '</td>';
-            $data .= '<td class="" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice-temporary/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
-            </td>';
-            $data .= '</tr>';
-            $i++;
-        }
-        return $data;
-    }
 
     public function removeInitialParticular(User $user)
     {

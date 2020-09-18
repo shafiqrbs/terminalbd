@@ -11,6 +11,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantParticularType;
 use Appstore\Bundle\RestaurantBundle\Form\RestaurantTemporaryParticularType;
+use Appstore\Bundle\RestaurantBundle\Form\TableInvoiceType;
 use Appstore\Bundle\RestaurantBundle\Form\TemporaryType;
 use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -77,12 +78,12 @@ class InvoiceController extends Controller
         $itemForm = $this->createInvoiceParticularForm(new RestaurantTemporary());
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
-        $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;
         $vat = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->generateVat($user,$subTotal);
         $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
         $servings = $em->getRepository('UserBundle:User')->getEmployeeEntities($user->getGlobalOption());
         $initialTotal = ($subTotal + $vat);
+
         return $this->render('RestaurantBundle:Invoice:new.html.twig', array(
             'config'     => $config,
             'temporarySubTotal'     => $subTotal,
@@ -103,7 +104,7 @@ class InvoiceController extends Controller
     private function createTemporaryForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new TemporaryType($globalOption), $entity, array(
+        $form = $this->createForm(new TableInvoiceType($globalOption), $entity, array(
             'action' => $this->generateUrl('restaurant_temporary_create'),
             'method' => 'POST',
             'attr' => array(

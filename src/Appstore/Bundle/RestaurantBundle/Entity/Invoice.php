@@ -37,12 +37,6 @@ class Invoice
     private $restaurantConfig;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Service", inversedBy="restaurantInvoice")
-     **/
-    private $service;
-
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantAndroidProcess", inversedBy="sales")
      **/
@@ -78,6 +72,11 @@ class Invoice
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTokenNo", cascade={"persist","remove"}  )
      **/
     private  $tokenNo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTokenNo", cascade={"persist","remove"}  )
+     **/
+    private  $invoiceMode;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -233,6 +232,21 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="discount", type="decimal", nullable=true)
+     */
+    private $discount;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="percentage", type="smallint" , length=3 , nullable=true)
+     */
+    private $percentage;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="slipNo", type="string", length=10, nullable=true)
      */
     private $slipNo;
@@ -246,19 +260,6 @@ class Invoice
     private $subTotal;
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="discount", type="decimal", nullable=true)
-     */
-    private $discount;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="percentage", type="smallint" , length=3 , nullable=true)
-     */
-    private $percentage;
 
 
     /**
@@ -1125,6 +1126,22 @@ class Invoice
     public function setDeviceSalesId($deviceSalesId)
     {
         $this->deviceSalesId = $deviceSalesId;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getInvoiceMode()
+    {
+        return $this->invoiceMode;
+    }
+
+    /**
+     * @param Particular $invoiceMode
+     */
+    public function setInvoiceMode($invoiceMode)
+    {
+        $this->invoiceMode = $invoiceMode;
     }
 
 

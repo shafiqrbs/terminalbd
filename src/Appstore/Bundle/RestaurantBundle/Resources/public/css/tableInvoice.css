@@ -1,0 +1,325 @@
+
+.contentWrapper {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.tabsWrapper {
+    width: 100%;
+    height: 90px;
+    overflow: hidden;
+    position: relative;
+    margin-left: 30px;
+}
+.table-tab{
+    margin-right: 36px!important;
+}
+.tabs {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    bottom: -25px;
+    left: 60px;
+    right: 0;
+    white-space: nowrap;
+    overflow: auto;
+}
+.tabs li {
+    display: inline-block;
+    background-color: #26a69a;
+    padding: 15px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    min-width: 80px;
+    text-align: center;
+}
+.table-tab li.active {
+    background-color: #00584F;
+}
+.next, .previous {
+    position: absolute;
+    padding: 27px 30px;
+    top: 0;
+    background-color: #c49f47;
+    font-size: 30px;
+    color: #ffffff;
+}
+.next {
+    right: 0px;
+}
+.previous {
+    left: 0px;
+}
+.group-label{
+    font-weight: bold;
+    border-bottom: 1px solid #337ab7
+}
+.bar-tabs>li{
+    float: left;
+    list-style: none;
+}
+.bar-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    width: 150px
+}
+
+.bar-tabs>.active>a, .bar-tabs>.active>a:hover, .bar-tabs>.active>a:focus {
+    color: #337ab7 !important;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav-tabs>li{
+    width: 100%;
+}
+.nav-tabs>li>a {
+    line-height: 32px;
+    font-size: 20px;
+    font-weight: 600;
+    border-bottom: 1px #ddddff solid;
+    color: #ffffff!important;
+}
+
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+    color: #337ab7 !important;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    font-size: 24px;
+}
+
+.select2-container .select2-choice {
+    height: 35px!important;
+    z-index: 99999!important;
+}
+
+.table-tab .process{
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.table-tab .Created{
+    background: #248034;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-tab .Kitchen{
+    background: #ffeb33;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-tab .Hold{
+    background: #ff2515;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-tab .In-progress{
+    background: #807e5a;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.table-tab .Reserved{
+    background: #248034;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.table-tab .Delivered , .table-tab .Done{
+    background: #248034;
+    font-size: 10px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sales-right {
+    width: 250px;
+}
+
+input[type="text"].inline-m-wrap {
+    width: 50px;
+    font-size: 12px;
+    border: 1px solid #c49f47;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+    height: 11px;
+}
+
+div.checker {
+    border: 3px solid #c49f47;
+    margin-top: 2px;
+    margin-bottom: 3px;
+}
+
+input[class*="span"].m-wrap-bg{
+    height: 50px!important;
+    background: #ffffff;
+    font-size: 30px;
+}
+
+input.m-wrap , select.m-wrap , textarea.m-wrap{
+    border: 2px solid #1e7b85!important;
+}
+table.table {
+    clear: both;
+    margin-bottom: 0 !important;
+    max-width: none !important;
+    font-size: 11px;
+}
+
+.table th, .table td{
+    padding: 0;
+    margin: 0;
+    padding-left: 5px;
+}
+
+select.m-wrap{
+    height: 30px!important;
+}
+
+.product-content{
+    width: 33%;
+    margin-bottom: 13px;
+    text-align: center;
+    float: left;
+    font-size: 12px!important;
+    cursor: pointer;
+}
+.payment-info{
+    border: transparent;
+}
+.form-horizontal .payment-info .control-group {
+    margin-bottom: 0!important;
+    border-bottom:transparent;
+}
+
+.sales-right input[class*="span"].payment, .sales-right input[class*="span"].discount, .sales-right input[class*="span"].discountCoupon{
+    border: 1px solid #1e7b85!important;
+    font-size: 15px;
+}
+
+.sales-right input[class*="span"].payment{
+    border: 2px solid #ff2515 !important;
+    font-size: 20px;
+    height: 42px!important;
+}
+
+.bankHide , .mobileBankHide , .customer{
+    display: none;
+}
+.all-product-box{
+    overflow-y: scroll;
+
+}
+.label-custom {
+    width: 150px;
+}
+.accordion-container {
+    position: relative;
+    width: 100%;
+    border: 1px solid #0079c1;
+    border-top: none;
+    outline: 0;
+    cursor: pointer
+}
+
+.accordion-container .accordion-title {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0.625em 0.625em 0.625em 2em;
+    font-size: 1.25em;
+    font-weight: normal;
+    color: #fff;
+    background: #000;
+    cursor: pointer;
+}
+
+.accordion-container .accordion-title:hover,
+.accordion-container .accordion-title:active,
+.accordion-container .content-entry.open .accordion-title {
+    background-color: #00aaa7;
+    color: white;
+}
+
+.accordion-container .accordion-title:hover i:before,
+.accordion-container .accordion-title:hover i:active,
+.accordion-container .content-entry.open i {
+    color: white;
+}
+.accordion-container .accordion-title {
+    background: #00584F;
+    cursor: pointer;
+    border-top: 1px solid #fff;
+    padding: 0.625em 0.625em 0.625em 8px;
+}
+.accordion-title{
+    position: relative;
+}
+
+.accordion-title:after {
+    content: "";
+    position: absolute;
+    right: 25px;
+    top: 38%;
+    transition: all 0.2s ease-in-out;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-top: solid 2px #fff;
+    border-right: solid 2px #fff;
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.accordion-title.open:after {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    top: 45%;
+}
+
+.accordion-content {
+    display: none;
+    padding:15px;
+}
+
+/* CSS for CodePen */
+.accordion-container {
+    margin-bottom:7px;
+}
+#restaurant_invoice_payment{
+    width: 50%;
+    height: 46px !important;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+}
+.receiveBtn{
+    width: 49%!important;
+}
+

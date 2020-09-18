@@ -30,7 +30,7 @@ class RestaurantTableInvoiceItem
     private $particular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice", inversedBy="restaurantTemps")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice", inversedBy="invoiceItems")
      **/
     private $tableInvoice;
 
