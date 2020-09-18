@@ -44,7 +44,7 @@ class TableInvoiceController extends Controller
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1));
-        $entities = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->generateTableInvoice( $config,$tables);
+        $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->generateTableInvoice( $config,$tables);
         return $this->redirect($this->generateUrl('restaurant_tableinvoice_new'));
     }
 
