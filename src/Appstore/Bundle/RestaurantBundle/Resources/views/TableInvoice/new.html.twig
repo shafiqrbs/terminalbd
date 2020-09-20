@@ -1,6 +1,6 @@
-{% extends '::base.html.twig' %}
+{% extends '::pos-base.html.twig' %}
 {% block body %}
-    <div class="row-fluid">
+    <div class="row-fluid" id="pos-area">
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption"><i class="icon-reorder"></i> Invoice  Information</div>
@@ -41,7 +41,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row-fluid all-product-box" >
+                                    <div class="row-fluid productBox" >
                                         <div class="span12">
                                             <ul class="unstyled">
                                                 {% if categories is not empty %}
@@ -102,7 +102,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        <ul  class="nav nav-tabs tabs-left" id="category-nav" style="width: 20%; float:left; background-color:#444d58">
+                        <ul  class="nav nav-tabs tabs-left categoryBox" id="category-nav" style="width: 20%; float:left; background-color:#444d58">
                             <li class="active span12"><a href="#all-product" data-toggle="tab" class="saveButton" aria-expanded="false">All Products</a></li>
                             {% for category in categories %}
                                 <li><a href="#{{ category.slug }}" data-toggle="tab" class="saveButton" aria-expanded="false">{{ category.name }}</a></li>
@@ -120,7 +120,7 @@
                                     <div class="portlet-body" id="transaction-box">
                                         {{ form_start(form) }}
                                         {{ form_row(form._token) }}
-                                        <div class="payment-info">
+                                        <div class="payment-info transactionBox">
                                             <div class="row-fluid">
                                                 <div class="control-group">
                                                     <label class="control-label" >
@@ -130,16 +130,15 @@
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label" >
-
-                                                            <span><strong>Process</strong></span>
-                                                            <span class="pull-right sales-right"> {{ form_widget(form.process) }} </span>
-                                                        </label>
-                                                    </div>
+                                                <div class="switch-field">
+                                                    {% set process = ['Kitchen','Payment','Hold','Reserved'] %}
+                                                    {% for pro in process %}
+                                                    <input type="radio" id="{{ pro }}" name="process" value="{{ pro }}"/>
+                                                    <label for="{{ pro }}">{{ pro }}</label>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
+
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="control-group">
@@ -229,6 +228,90 @@
                                                 </tfoot>
                                             </table>
                                             <br/>
+                                            <div class="clearfix"></div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="switch-method">
+                                                        {% set methods = ['Cash','Mobile','Bank'] %}
+                                                        {% for method in methods %}
+                                                            <input type="radio" id="{{ method }}" name="method" value="{{ method }}"/>
+                                                            <label for="{{ method }}">{{ method }}</label>
+                                                        {% endfor %}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div id="cartMethod" class="bankHide">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.cardNo) }}
+                                                                {{ form_errors(form.cardNo) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.paymentCard) }}
+                                                                {{ form_errors(form.paymentCard) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.accountBank) }}
+                                                                {{ form_errors(form.accountBank) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                            </div>
+                                            <div id="bkashMethod" class="mobileBankHide">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.accountMobileBank) }}
+                                                                {{ form_errors(form.accountMobileBank) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.paymentMobile) }}
+                                                                {{ form_errors(form.paymentMobile) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(form.transactionId) }}
+                                                                {{ form_errors(form.transactionId) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
+                                            </div>
                                             <div class="clearfix"></div>
                                             {% if config.isCustomer == 1 %}
                                                 <div class="row-fluid">
@@ -324,89 +407,6 @@
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="control-group">
-                                                        <label class="control-label" >
-                                                            <span><strong>Method</strong></span>
-                                                            <span class="pull-right sales-right">
-                                                                 {{ form_widget(form.transactionMethod) }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <!--/span-->
-                                            </div>
-                                            <div id="cartMethod" class="bankHide">
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.cardNo) }}
-                                                                {{ form_errors(form.cardNo) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.paymentCard) }}
-                                                                {{ form_errors(form.paymentCard) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.accountBank) }}
-                                                                {{ form_errors(form.accountBank) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                            </div>
-                                            <div id="bkashMethod" class="mobileBankHide">
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.accountMobileBank) }}
-                                                                {{ form_errors(form.accountMobileBank) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.paymentMobile) }}
-                                                                {{ form_errors(form.paymentMobile) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.transactionId) }}
-                                                                {{ form_errors(form.transactionId) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
                                                         <label class="control-label pull-center" style="height: 50px; line-height: 50px!important;background:#444d58">
                                                             {{ form_widget(form.payment) }}
                                                             {{ form_errors(form.payment) }}
@@ -476,10 +476,8 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    var height = $('#category-nav').height();
-    $('.all-product-box').height(height);
     $('.js-accordion-title').on('click', function () {
-    $(this).next().slideToggle(200);
-    $(this).toggleClass('open', 200);
+        $(this).next().slideToggle(200);
+        $(this).toggleClass('open', 200);
     });
 {% endblock %}

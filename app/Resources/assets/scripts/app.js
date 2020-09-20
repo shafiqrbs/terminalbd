@@ -474,7 +474,7 @@ var App = function () {
         if (!jQuery().uniform) {
             return;
         }
-        var test = $("input[type=checkbox]:not(.toggle), input[type=radio]:not(.toggle, .star)");
+        var test = $("input[type=checkbox]:not(.toggle)");
         if (test.size() > 0) {
             test.each(function () {
                 if ($(this).parents(".checker").size() == 0) {

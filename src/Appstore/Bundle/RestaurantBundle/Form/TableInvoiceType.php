@@ -53,22 +53,6 @@ class TableInvoiceType extends AbstractType
             ))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap invoice-input ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon invoice-input','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
-            ->add('process', 'choice', array(
-                'attr'=>array('class'=>'span12 m-wrap invoice-input'),
-                'choices'   => array('Created' => 'Created','In-progress' => 'In-progress','Kitchen' => 'Kitchen','Delivered' => 'Delivered','Hold' => 'Hold','Reserved' => 'Reserved'),
-                'required'  => true,
-            ))
-            ->add('transactionMethod', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
             ->add('paymentCard', 'entity', array(
                 'required'    => false,
                 'property' => 'name',
