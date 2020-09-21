@@ -213,6 +213,9 @@ select.m-wrap{
 .payment-info{
     border: transparent;
 }
+.form-horizontal .payment-info .control-label{
+    height: 30px!important;
+}
 .form-horizontal .payment-info .control-group {
     margin-bottom: 0!important;
     border-bottom:transparent;
@@ -325,8 +328,6 @@ select.m-wrap{
 
 .switch-field {
     display: flex;
-    margin-bottom: 36px;
-    overflow: hidden;
 }
 
 .switch-field input {
@@ -339,8 +340,8 @@ select.m-wrap{
 }
 
 .switch-field label {
-    background-color: #e4e4e4;
-    color: rgba(0, 0, 0, 0.6);
+    background-color: #444d58;
+    color:#ffffff;
     font-size: 14px;
     line-height: 1;
     text-align: center;
@@ -350,6 +351,7 @@ select.m-wrap{
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.1s ease-in-out;
     width: calc(100% /4);
+    font-weight: bold;
 }
 
 .switch-field label:hover {
@@ -357,8 +359,9 @@ select.m-wrap{
 }
 
 .switch-field input:checked + label {
-    background-color: #a5dc86;
+    background-color:#c49f47;
     box-shadow: none;
+    color: #ffffff;
 }
 
 .switch-field label:first-of-type {
@@ -371,8 +374,6 @@ select.m-wrap{
 
 .switch-method {
     display: flex;
-    margin-bottom: 36px;
-    overflow: hidden;
 }
 
 .switch-method input {
@@ -385,8 +386,8 @@ select.m-wrap{
 }
 
 .switch-method label {
-    background-color: #e4e4e4;
-    color: rgba(0, 0, 0, 0.6);
+    background-color: #337ab7;
+    color: #ffffff;
     font-size: 14px;
     line-height: 1;
     text-align: center;
@@ -396,6 +397,7 @@ select.m-wrap{
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.1s ease-in-out;
     width: calc(100% /3);
+    font-weight: bold;
 }
 
 .switch-method label:hover {
@@ -403,8 +405,9 @@ select.m-wrap{
 }
 
 .switch-method input:checked + label {
-    background-color: #a5dc86;
+    background-color:#cb5a5e;
     box-shadow: none;
+    color: #ffffff;
 }
 
 .switch-method label:first-of-type {

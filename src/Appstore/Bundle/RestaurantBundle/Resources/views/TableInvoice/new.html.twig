@@ -133,7 +133,7 @@
                                                 <div class="switch-field">
                                                     {% set process = ['Kitchen','Payment','Hold','Reserved'] %}
                                                     {% for pro in process %}
-                                                    <input type="radio" id="{{ pro }}" name="process" value="{{ pro }}"/>
+                                                    <input type="radio" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} name="process" value="{{ pro }}"/>
                                                     <label for="{{ pro }}">{{ pro }}</label>
                                                     {% endfor %}
                                                 </div>
@@ -234,7 +234,7 @@
                                                     <div class="switch-method">
                                                         {% set methods = ['Cash','Mobile','Bank'] %}
                                                         {% for method in methods %}
-                                                            <input type="radio" id="{{ method }}" name="method" value="{{ method }}"/>
+                                                            <input {% if method == "Cash" %} checked="checked" {% endif %} type="radio" id="{{ method }}" name="method" value="{{ method }}"/>
                                                             <label for="{{ method }}">{{ method }}</label>
                                                         {% endfor %}
 

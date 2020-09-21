@@ -77,8 +77,6 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Stock In</th>
                                     <th class="numeric" >Stock Out</th>
-                                    <th class="numeric" >Purchase Qnt</th>
-                                    <th class="numeric" >Sales Qnt</th>
                                     <th class="numeric" >Remaining Qnt</th>
                                 </tr>
                                 </thead>
@@ -86,14 +84,10 @@
                                 {% set purchase = 0 %}
                                 {% set sales = 0 %}
                                 {% for entity in pagination %}
-                                    {% set purchase =  purchaseItems[entity.id] is defined and purchaseItems[entity.id] is not empty ? purchaseItems[entity.id].quantity : 0  %}
-                                    {% set sales = salesItems[entity.id] is defined and salesItems[entity.id] is not empty ? salesItems[entity.id].quantity : 0  %}
                                     <tr>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>
-                                        <td class="numeric" >{{ purchase }}</td>
-                                        <td class="numeric" >{{ sales }}</td>
                                         <td class="numeric" >{{ (entity.remin)|default(0) }}</td>
                                     </tr>
                                 {% endfor %}

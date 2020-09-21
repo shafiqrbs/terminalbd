@@ -95,6 +95,13 @@ class RestaurantConfig
     /**
      * @var smallint
      *
+     * @ORM\Column(name="sdPercentage", type="smallint",  nullable=true)
+     */
+    private $sdPercentage;
+
+    /**
+     * @var smallint
+     *
      * @ORM\Column(name="fontSizeLabel", type="smallint",  nullable=true)
      */
     private $fontSizeLabel;
@@ -1314,6 +1321,22 @@ class RestaurantConfig
     public function setAutoPayment($autoPayment)
     {
         $this->autoPayment = $autoPayment;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getSdPercentage()
+    {
+        return $this->sdPercentage;
+    }
+
+    /**
+     * @param smallint $sdPercentage
+     */
+    public function setSdPercentage($sdPercentage)
+    {
+        $this->sdPercentage = $sdPercentage;
     }
 
 

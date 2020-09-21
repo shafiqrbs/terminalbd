@@ -10,6 +10,10 @@ business_report_purchase_vendor_details:
     path:     /purchase-vendor-details
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorDetails" }
 
+business_report_commission_stock:
+    path:     /commission-stock-item
+    defaults: { _controller: "BusinessBundle:Report:salesCommissionStockItem" }
+
 business_report_purchase_stock_price:
     path:     /purchase-stock-price
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }

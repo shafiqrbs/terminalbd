@@ -234,9 +234,27 @@ class Builder extends ContainerAware
 		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
 		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );
 		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales SR', array( 'route' => 'business_report_sales_sr' ) )->setAttribute( 'icon', 'icon-th-list' );
-                $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales DSR', array( 'route' => 'business_report_sales_dsr' ) )->setAttribute( 'icon', 'icon-th-list' );
-                 $menu[$business]['Manage Sales']['Reports']->addChild( 'Sales AREA', array( 'route' => 'business_report_sales_area' ) )->setAttribute( 'icon', 'icon-th-list' );
+                if($config->getBusinessModel() == 'commission') {
+                    $menu[$business]['Manage Sales']['Reports']->addChild(
+                        'Sales Item Details',
+                        array('route' => 'business_report_commission_stock')
+                    )->setAttribute('icon', 'icon-th-list');
+                }
+                if($config->getBusinessModel() == 'distribution') {
+
+                    $menu[$business]['Manage Sales']['Reports']->addChild(
+                        'Sales SR',
+                        array('route' => 'business_report_sales_sr')
+                    )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Manage Sales']['Reports']->addChild(
+                        'Sales DSR',
+                        array('route' => 'business_report_sales_dsr')
+                    )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Manage Sales']['Reports']->addChild(
+                        'Sales AREA',
+                        array('route' => 'business_report_sales_area')
+                    )->setAttribute('icon', 'icon-th-list');
+                }
                 $menu[$business]['Manage Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }
 	    }

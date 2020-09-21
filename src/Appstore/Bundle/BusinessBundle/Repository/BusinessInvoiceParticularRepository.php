@@ -369,7 +369,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
 		if (!empty($customer)) {
 			$qb->join('e.customer','c');
-			$qb->andWhere($qb->expr()->like("c.name", "'%$customer%'"  ));
+			$qb->andWhere($qb->expr()->like("c.mobile", "'%$customer%'"  ));
 		}
 
 		if (!empty($name)) {
@@ -432,6 +432,45 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		$qb->orderBy('mds.name','ASC');
 		return $qb->getQuery()->getArrayResult();
 	}
+
+    public  function reportCommissionSalesStockItem(User $user, $data =''){
+
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.businessInvoice','e');
+        $qb->join('e.customer','customer');
+        $qb->join('si.businessParticular','mds');
+        $qb->leftJoin('si.vendorStockItem','vsi');
+        $qb->leftJoin('vsi.businessVendorStock','bvs');
+        $qb->leftJoin('bvs.vendor','vendor');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
+        $qb->addSelect('si.price AS price');
+        $qb->addSelect('SUM(si.subTotal) AS salesPrice');
+        $qb->addSelect('mds.name AS name');
+        $qb->addSelect('mds.particularCode AS sku');
+        $qb->addSelect('vsi.quantity AS purchaseQuantity');
+        $qb->addSelect('bvs.grn AS grn');
+        $qb->addSelect('customer.name AS customerName');
+        $qb->addSelect('e.invoice AS invoice');
+        $qb->addSelect('e.created AS created');
+        $qb->addSelect('vendor.companyName AS companyName');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','Chalan'));
+        $this->handleSearchStockBetween($qb,$data);
+        if(!empty($vendor)){
+            $qb->andWhere("vendor.id = :type");
+            $qb->setParameter('type', $vendor);
+        }
+        $qb->groupBy('si.businessParticular');
+        $qb->orderBy('mds.name','ASC');
+        return $qb->getQuery()->getArrayResult();
+    }
 
     public  function reportCustomerSalesItem(User $user, $data=''){
 

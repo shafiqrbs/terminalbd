@@ -39,9 +39,11 @@ class VendorStockType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.globalOption =".$this->option->getId());
+                        ->andWhere("e.globalOption =".$this->option->getId())
+                        ->orderBy("e.companyName",'ASC');
                 },
             ))
+            ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Commission amount','autocomplete'=>'off')))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>4,'placeholder'=>'Enter narration')))
 
         ;

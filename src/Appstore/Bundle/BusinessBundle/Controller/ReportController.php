@@ -139,6 +139,37 @@ class ReportController extends Controller
 		));
 	}
 
+    public function salesCommissionStockItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCommissionSalesStockItem($user,$data);
+        $pagination = $this->paginate($entities);
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption'=>$user->getGlobalOption(),'status'=>1),array('companyName'=>'ASC'));
+
+        if(empty($data['pdf'])){
+            return $this->render('BusinessBundle:Report:sales/commissionSalesStock.html.twig', array(
+                'option'  => $user->getGlobalOption() ,
+                'entities' => $pagination,
+                'vendors' => $vendors,
+                'searchForm' => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/commissionSalesStockPdf.html.twig', array(
+                    'option'  => $user->getGlobalOption() ,
+                    'entities' => $pagination,
+                    'vendors' => $vendors,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'salesSummaryPdf.pdf');
+        }
+    }
+
 	public function productLedgerAction()
 	{
 		$em = $this->getDoctrine()->getManager();
