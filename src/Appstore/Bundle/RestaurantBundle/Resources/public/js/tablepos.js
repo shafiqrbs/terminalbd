@@ -47,14 +47,46 @@ $('.table-tab li').click(function () {
     $(this).addClass('active');
 });
 
+$(document).on('click', '.js-accordion-title', function() {
+    $(this).next().slideToggle(200);
+    $(this).toggleClass('open', 200);
+});
 
 $('.next').click(function(e){
     e.preventDefault();
     $('ul.table-tab li.active').next('li').trigger('click');
 });
+
 $('.previous').click(function(e){
     e.preventDefault();
     $('ul.table-tab li.active').prev('li').trigger('click');
+});
+
+$('#btn-refresh').click(function(e){
+    $('.payment').val('');
+    e.preventDefault();
+});
+
+$(document).on('click', '.invoice-process', function() {
+    var process = $(this).val();
+    var url = $(this).attr('data-action');
+    $.get(url,{'process':process}, function( response ) {
+        setTimeout(jsonResult(response),100);
+    });
+});
+
+$(document).on('click', '.method-process', function() {
+    var method = $(this).val();
+    if(method === 'Bank' ){
+        $('.bankHide').show(500);
+        $('.mobileBankHide').hide(500);
+    }else if(method === 'Mobile'){
+        $('.bankHide').hide(500);
+        $('.mobileBankHide').show(500);
+    }else{
+        $('.bankHide').hide(500);
+        $('.mobileBankHide').hide(500);
+    }
 });
 
 function jsonResult(response) {
@@ -80,14 +112,8 @@ $(document).on('click', '.addProduct', function() {
 
     var invoice = $('#tableInvoice').val();
     var url = $(this).attr('data-action');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url,{'invoice':invoice}, function( response ) {
-                setTimeout(jsonResult(response),100);
-            });
-        }
+    $.get(url,{'invoice':invoice}, function( response ) {
+        setTimeout(jsonResult(response),100);
     });
 });
 
@@ -218,3 +244,7 @@ $(document).on('click', '#posButton', function() {
 });
 
 
+function calcNumbers(result){
+    restaurant_invoice.restaurant_invoice_payment.value=restaurant_invoice.restaurant_invoice_payment.value+result;
+
+}

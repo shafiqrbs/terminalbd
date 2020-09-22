@@ -178,6 +178,13 @@ class RestaurantTableInvoice
      */
     private $vat;
 
+      /**
+     * @var float
+     *
+     * @ORM\Column(name="sd", type="float", nullable=true)
+     */
+    private $sd;
+
      /**
      * @var float
      *
@@ -715,6 +722,22 @@ class RestaurantTableInvoice
     public function setInvoiceMode($invoiceMode)
     {
         $this->invoiceMode = $invoiceMode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSd()
+    {
+        return $this->sd;
+    }
+
+    /**
+     * @param float $sd
+     */
+    public function setSd($sd)
+    {
+        $this->sd = $sd;
     }
 }
 

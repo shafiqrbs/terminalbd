@@ -73,9 +73,9 @@
 }
 
 .bar-tabs>.active>a, .bar-tabs>.active>a:hover, .bar-tabs>.active>a:focus {
-    color: #337ab7 !important;
+    color: #ffffff !important;
     cursor: default;
-    background-color: #fff;
+    background-color: #c49f47;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }
@@ -91,10 +91,11 @@
     color: #ffffff!important;
 }
 
-.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
-    color: #337ab7 !important;
-    cursor: default;
-    background-color: #fff;
+
+.nav-tabs>.active>a, .nav-tabs>li>a:hover, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+    color: #ffffff !important;
+    cursor: hand!important;
+    background-color: #c49f47;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
     font-size: 24px;
@@ -113,7 +114,7 @@
 }
 
 .table-tab .Created{
-    background: #248034;
+    background: #333333;
     font-size: 10px;
     color: #ffffff;
     padding-left: 10px;
@@ -133,8 +134,8 @@
     padding-left: 10px;
     padding-right: 10px;
 }
-.table-tab .In-progress{
-    background: #807e5a;
+.table-tab .Payment{
+    background: #248034;
     font-size: 10px;
     color: #ffffff;
     padding-left: 10px;
@@ -157,7 +158,7 @@
 }
 
 .sales-right {
-    width: 250px;
+    width: 50%;
 }
 
 input[type="text"].inline-m-wrap {
@@ -212,9 +213,6 @@ select.m-wrap{
 }
 .payment-info{
     border: transparent;
-}
-.form-horizontal .payment-info .control-label{
-    height: 30px!important;
 }
 .form-horizontal .payment-info .control-group {
     margin-bottom: 0!important;
@@ -340,7 +338,7 @@ select.m-wrap{
 }
 
 .switch-field label {
-    background-color: #444d58;
+    background-color:#444d58;
     color:#ffffff;
     font-size: 14px;
     line-height: 1;
@@ -359,9 +357,8 @@ select.m-wrap{
 }
 
 .switch-field input:checked + label {
-    background-color:#c49f47;
+    background-color: #724c82;
     box-shadow: none;
-    color: #ffffff;
 }
 
 .switch-field label:first-of-type {
@@ -386,8 +383,7 @@ select.m-wrap{
 }
 
 .switch-method label {
-    background-color: #337ab7;
-    color: #ffffff;
+    background-color: #444d58;
     font-size: 14px;
     line-height: 1;
     text-align: center;
@@ -396,7 +392,8 @@ select.m-wrap{
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.1s ease-in-out;
-    width: calc(100% /3);
+    width: calc(100% /4);
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -405,9 +402,8 @@ select.m-wrap{
 }
 
 .switch-method input:checked + label {
-    background-color:#cb5a5e;
+    background-color: #337ab7;
     box-shadow: none;
-    color: #ffffff;
 }
 
 .switch-method label:first-of-type {
@@ -416,6 +412,55 @@ select.m-wrap{
 
 .switch-method label:last-of-type {
     border-radius: 0 4px 4px 0;
+}
+
+.display {
+    width: 100%;
+    height: 60px;
+    padding: 40px 0;
+    background: #FF0509;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+.cal-button {
+    width: calc(100% /10)!important;
+    height: 60px;
+    float: left;
+    padding: 0;
+    box-sizing: border-box;
+    background: #ecedef;
+    border: 1px solid #333333;
+    font-size: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    font-weight: 700;
+    color: #5E5858;
+    cursor: pointer;
+
+}
+
+.cal-button-lg {
+    width: calc(100% /5)!important;
+    height: 60px;
+    float: left;
+    padding: 0;
+    box-sizing: border-box;
+    background:#724c82;
+    border: 1px solid #333333;
+    font-size: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+
+}
+
+.red {
+    background: #FF0509 !important;
+    color: #ffffff !important;
+
 }
 
 

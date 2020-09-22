@@ -117,305 +117,333 @@
                                     <div class="portlet-title">
                                         <div class="caption"><i class="icon-reorder"></i>TRANSACTION INFORMATION</div>
                                     </div>
-                                    <div class="portlet-body" id="transaction-box">
+                                    <div class="portlet-body">
                                         {{ form_start(form) }}
                                         {{ form_row(form._token) }}
-                                        <div class="payment-info transactionBox">
-                                            <div class="row-fluid">
-                                                <div class="control-group">
-                                                    <label class="control-label" >
-                                                        <span><strong>Order Time</strong></span>
-                                                        <span class="pull-right sales-right">   {% if entity.process != "Created" %}  {{ entity.created|date('h:m:s a') }}{% endif %} </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="row-fluid">
-                                                <div class="switch-field">
-                                                    {% set process = ['Kitchen','Payment','Hold','Reserved'] %}
-                                                    {% for pro in process %}
-                                                    <input type="radio" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} name="process" value="{{ pro }}"/>
-                                                    <label for="{{ pro }}">{{ pro }}</label>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-
-                                            <div class="row-fluid">
-                                                <div class="span12">
+                                        <div class="transactionBox" id="transaction-box">
+                                            <div class="payment-info">
+                                                <div class="row-fluid">
                                                     <div class="control-group">
                                                         <label class="control-label" >
-                                                            <span class="" ><strong>Invoice Mode</strong></span>
-                                                            <span class="pull-right sales-right">{{ form_widget(form.invoiceMode) }}</span>
+                                                            <span><strong>Order Time</strong></span>
+                                                            <span class="pull-right sales-right">   {% if entity.process != "Created" %}  {{ entity.created|date('h:m:s a') }}{% endif %} </span>
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label" >
-                                                            <span class="" ><strong>Order By</strong></span>
-                                                            <span class="pull-right sales-right">{{ form_widget(form.salesBy) }}</span>
-                                                        </label>
+                                                <div class="row-fluid">
+                                                    <div class="switch-field">
+                                                        {% set process = ['Kitchen','Payment','Hold','Reserved'] %}
+                                                        {% for pro in process %}
+                                                            <input type="radio" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} data-action="{{ path('restaurant_tableinvoice_process',{'id':entity.id,'process':pro}) }}"   class="invoice-process"  name="process" value="{{ pro }}"/>
+                                                            <label for="{{ pro }}">{{ pro }}</label>
+                                                        {% endfor %}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div id="accordion" class="accordion-container">
-                                                <h4 class="accordion-title js-accordion-title">Select Additional Table</h4>
-                                                <div class="accordion-content">
-                                                    <p>
-                                                    {% for table in tables  %}
-                                                        <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.id }}" name="tableNos[]" > {{ table.name }}</label>
-                                                    {% endfor %}
-                                                    </p>
-                                                </div><!--/.accordion-content-->
 
-                                                <h4 class="accordion-title js-accordion-title">Select Serve By</h4>
-                                                <div class="accordion-content">
-                                                    {% for serving in servings  %}
-                                                        <label style="line-height:20px!important;" for="{{ serving.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ serving.id }}" type="checkbox" value="{{ serving.id }}" name="servingIds[]" > {{ serving.profile.name }}</label>
-                                                    {% endfor %}
-                                                </div><!--/.accordion-content-->
-                                            </div><!--/#accordion-->
-                                            <div class="clearfix"></div>
-                                            <table class="table table-bordered">
-                                                <thead class="flip-content ">
-                                                <tr class="head-blue">
-                                                    <th class="numeric">#</th>
-                                                    <th class="numeric span8">Product</th>
-                                                    <th class="numeric">Price</th>
-                                                    <th class="numeric span2">Qnt</th>
-                                                    <th class="numeric">Total</th>
-                                                    <th class="numeric"></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="invoiceParticulars">
-                                                {% if entity.invoiceItems is not empty  %}
-                                                    {% for item in entity.invoiceItems %}
-                                                        <tr id="remove-{{ item.id }}">
-                                                            <td><input type="checkbox"  id="isPrint-{{ item.id }}" name="isPrint[]" value="{{ item.id }}" {% if item.isPrint == 1 %} checked="checked" {% endif %}></td>
-                                                            <td class="numeric">{{ item.particular.name }}</td>
-                                                            <td class="numeric">{{ item.salesPrice }}</td>
-                                                            <td class="">
-                                                                <div class="input-append" style="margin-bottom: 0!important;">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="control-label" >
+                                                                <span class="" ><strong>Invoice Mode</strong></span>
+                                                                <span class="pull-right sales-right">{{ form_widget(form.invoiceMode) }}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="control-label" >
+                                                                <span class="" ><strong>Order By</strong></span>
+                                                                <span class="pull-right sales-right">{{ form_widget(form.salesBy) }}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div id="accordion" class="accordion-container">
+                                                    <h4 class="accordion-title js-accordion-title">Select Additional Table</h4>
+                                                    <div class="accordion-content">
+                                                        <p>
+                                                            {% for table in tables  %}
+                                                                <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.id }}" name="tableNos[]" > {{ table.name }}</label>
+                                                            {% endfor %}
+                                                        </p>
+                                                    </div><!--/.accordion-content-->
+
+                                                    <h4 class="accordion-title js-accordion-title">Select Serve By</h4>
+                                                    <div class="accordion-content">
+                                                        {% for serving in servings  %}
+                                                            <label style="line-height:20px!important;" for="{{ serving.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ serving.id }}" type="checkbox" value="{{ serving.id }}" name="servingIds[]" > {{ serving.profile.name }}</label>
+                                                        {% endfor %}
+                                                    </div><!--/.accordion-content-->
+                                                </div><!--/#accordion-->
+                                                <div class="clearfix"></div>
+                                                <table class="table table-bordered">
+                                                    <thead class="flip-content ">
+                                                    <tr class="head-blue">
+                                                        <th class="numeric">#</th>
+                                                        <th class="numeric span8">Product</th>
+                                                        <th class="numeric">Price</th>
+                                                        <th class="numeric span2">Qnt</th>
+                                                        <th class="numeric">Total</th>
+                                                        <th class="numeric"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="invoiceParticulars">
+                                                    {% if entity.invoiceItems is not empty  %}
+                                                        {% for item in entity.invoiceItems %}
+                                                            <tr id="remove-{{ item.id }}">
+                                                                <td><input type="checkbox"  id="isPrint-{{ item.id }}" name="isPrint[]" value="{{ item.id }}" {% if item.isPrint == 1 %} checked="checked" {% endif %}></td>
+                                                                <td class="numeric">{{ item.particular.name }}</td>
+                                                                <td class="numeric">{{ item.salesPrice }}</td>
+                                                                <td class="">
+                                                                    <div class="input-append" style="margin-bottom: 0!important;">
                                                                 <span class="input-group-btn">
               <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
                                                                    <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.id }}"  id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-title="{{ item.salesPrice }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" min="1" max="100">
                                                                   <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="numeric"><strong id="subTotal-{{ item.id }}">{{ item.subTotal }}</strong></td>
-                                                            <td class="numeric">
-                                                                <a id="{{ item.id }}" data-id="{{ item.id }}" data-url="{{ path('restaurant_tableinvoice_particular_delete',{'invoice':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                </tbody>
-                                                <tfoot>
-                                                <tr>
-                                                    <th colspan="4">Total</th>
-                                                    <th id="subTotal">{{ entity.subTotal|number_format(2) }}</th>
-                                                    <td></td>
-                                                </tr>
-                                                <tr><td colspan="6">
-                                                        <div class="row-fluid">
-                                                            <button type="button" class="btn span12 purple big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} data-action="{{ path('restaurant_tableinvoice_kitchen_print',{'id':entity.id}) }}" id="posKitchen" style="width:100%!important;" >
-                                                                <i class="icon-print"></i> KITCHEN PRINT</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tfoot>
-                                            </table>
-                                            <br/>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="switch-method">
-                                                        {% set methods = ['Cash','Mobile','Bank'] %}
-                                                        {% for method in methods %}
-                                                            <input {% if method == "Cash" %} checked="checked" {% endif %} type="radio" id="{{ method }}" name="method" value="{{ method }}"/>
-                                                            <label for="{{ method }}">{{ method }}</label>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="numeric"><strong id="subTotal-{{ item.id }}">{{ item.subTotal }}</strong></td>
+                                                                <td class="numeric">
+                                                                    <a id="{{ item.id }}" data-id="{{ item.id }}" data-url="{{ path('restaurant_tableinvoice_particular_delete',{'invoice':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
+                                                                </td>
+                                                            </tr>
                                                         {% endfor %}
+                                                    {% endif %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th colspan="4">Total</th>
+                                                        <th id="subTotal">{{ entity.subTotal|number_format(2) }}</th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr><td colspan="6">
+                                                            <div class="row-fluid">
+                                                                <button type="button" class="btn span12 purple big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} data-action="{{ path('restaurant_tableinvoice_kitchen_print',{'id':entity.id}) }}" id="posKitchen" style="width:100%!important;" >
+                                                                    <i class="icon-print"></i> KITCHEN PRINT</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <br/>
+                                                <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="switch-method">
+                                                            {% set methods = ['Cash','Mobile','Bank'] %}
+                                                            {% for method in methods %}
+                                                                <input {% if method == "Cash" %} checked="checked" {% endif %} type="radio" id="{{ method }}" class="method-process" name="method" value="{{ method }}"/>
+                                                                <label  for="{{ method }}">{{ method }}</label>
+                                                            {% endfor %}
 
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div id="cartMethod" class="bankHide">
+                                                <div class="clearfix"></div>
+                                                <div id="cartMethod" class="bankHide">
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Card No</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.cardNo) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Payment Card</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.paymentCard) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Account Bank</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.accountBank) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="bkashMethod" class="mobileBankHide">
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Mobile Account</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.accountMobileBank) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Payment Mobile</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.paymentMobile) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <div class="control-group">
+                                                                <label class="control-label" >
+                                                                    <span class="" ><strong>Transaction ID</strong></span>
+                                                                    <span class="pull-right sales-right">{{ form_widget(form.transactionId) }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                {% if config.isCustomer == 1 %}
+                                                    <div class="row-fluid">
+                                                        <div class="span12">
+                                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile no">
+                                                            <button type="button" class="pull-right btn btn-large blue addCustomer"><i class="icon-user"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid customer" id="">
+                                                        <div class="span12 input-append-border">
+                                                            <div class="row-fluid">
+                                                                <div class="input-icon left input-height">
+                                                                    <i class="icon-user"></i>
+                                                                    <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid customer">
+                                                        <div class="span12 input-append-border">
+                                                            <div class="row-fluid">
+                                                                <div class="input-icon left input-height">
+                                                                    <i class="icon-phone"></i>
+                                                                    <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid customer">
+                                                        <div class="span12 input-append-border">
+                                                            <div class="row-fluid">
+                                                                <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="clearfix"></div>
                                                 <div class="row-fluid">
                                                     <div class="span12">
                                                         <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.cardNo) }}
-                                                                {{ form_errors(form.cardNo) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.paymentCard) }}
-                                                                {{ form_errors(form.paymentCard) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.accountBank) }}
-                                                                {{ form_errors(form.accountBank) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                            </div>
-                                            <div id="bkashMethod" class="mobileBankHide">
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.accountMobileBank) }}
-                                                                {{ form_errors(form.accountMobileBank) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.paymentMobile) }}
-                                                                {{ form_errors(form.paymentMobile) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <div class="control-group">
-                                                            <div class="controls">
-                                                                {{ form_widget(form.transactionId) }}
-                                                                {{ form_errors(form.transactionId) }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            {% if config.isCustomer == 1 %}
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile no">
-                                                        <button type="button" class="pull-right btn btn-large blue addCustomer"><i class="icon-user"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid customer" id="">
-                                                    <div class="span12 input-append-border">
-                                                        <div class="row-fluid">
-                                                            <div class="input-icon left input-height">
-                                                                <i class="icon-user"></i>
-                                                                <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid customer">
-                                                    <div class="span12 input-append-border">
-                                                        <div class="row-fluid">
-                                                            <div class="input-icon left input-height">
-                                                                <i class="icon-phone"></i>
-                                                                <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid customer">
-                                                    <div class="span12 input-append-border">
-                                                        <div class="row-fluid">
-                                                            <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label" >
-                                                            <span><strong>Discount Type</strong></span>
-                                                            <span class="pull-right sales-right">
+                                                            <label class="control-label" >
+                                                                <span><strong>Discount Type</strong></span>
+                                                                <span class="pull-right sales-right">
                                         {{ form_widget(form.discountType) }}
                                     </span>
-                                                        </label>
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label" >
-                                                            <span><strong>Discount TK.</strong></span>
-                                                            <span class="pull-right sales-right">{{ form_widget(form.discountCalculation) }}</span></label>
+                                                <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="control-label" >
+                                                                <span><strong>Discount TK.</strong></span>
+                                                                <span class="pull-right sales-right">{{ form_widget(form.discountCalculation) }}</span></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label"  >
-                                                            <span><strong>Discount Coupon</strong></span>
-                                                            <span class="pull-right sales-right">{{ form_widget(form.discountCoupon) }}</span></label>
+                                                <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="control-label"  >
+                                                                <span><strong>Discount Coupon</strong></span>
+                                                                <span class="pull-right sales-right">{{ form_widget(form.discountCoupon) }}</span></label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label"  >
-                                                            <span><strong>VAT TK.</strong></span>
-                                                            <span class="pull-right sales-right vat">{{ entity.vat }}</span>
-                                                        </label>
+                                                <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class=""  >
+                                                                <span><strong>VAT TK.</strong></span>
+                                                                <span class="pull-right sales-right"><strong class="vat">{{ entity.vat }}</strong></span>
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label" >
-                                                            <span><strong>Due TK.</strong></span>
-                                                            <span class="pull-right sales-right due" style="text-align: right; width: 110px"  id="dueable" >{{ entity.total }}</span></label>
+                                                <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="" >
+                                                                <span><strong>SD TK.</strong></span>
+                                                                <span class="pull-right sales-right"><strong class="sd">{{ entity.sd }}</strong></span></label>
+                                                        </div>
                                                     </div>
+                                                    <!--/span-->
                                                 </div>
-                                                <!--/span-->
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="control-group">
-                                                        <label class="control-label pull-center" style="height: 50px; line-height: 50px!important;background:#444d58">
-                                                            {{ form_widget(form.payment) }}
-                                                            {{ form_errors(form.payment) }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <!--/span-->
-                                            </div>
+                                                <div class="row-fluid">
+                                                    <div class="buttons">
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
 
+                                                                <input type="button" class="btn cal-button" name="b1" value="1" onClick="calcNumbers(b1.value)">
+                                                                <input type="button" class="btn cal-button" name="b2" value="2" onClick="calcNumbers(b2.value)">
+                                                                <input type="button" class="btn cal-button" name="b3" value="3" onClick="calcNumbers(b3.value)">
+                                                                <input type="button" class="btn cal-button" name="b4" value="4" onClick="calcNumbers(b4.value)">
+                                                                <input type="button" class="btn cal-button" name="b5" value="5" onClick="calcNumbers(b5.value)">
+                                                                <input type="button" class="btn cal-button" name="b6" value="6" onClick="calcNumbers(b6.value)">
+                                                                <input type="button" class="btn cal-button" name="b7" value="7" onClick="calcNumbers(b7.value)">
+                                                                <input type="button" class="btn cal-button" name="b8" value="8" onClick="calcNumbers(b8.value)">
+                                                                <input type="button" class="btn cal-button" name="b9" value="9" onClick="calcNumbers(b9.value)">
+                                                                <input type="button" class="btn cal-button" name="b0" value="0" onClick="calcNumbers(b0.value)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <input type="button" class="btn cal-button-lg" name="b1000" value="1000" onClick="calcNumbers(b1000.value)">
+                                                                <input type="button" class="btn cal-button-lg" name="b500" value="500" onClick="calcNumbers(b500.value)">
+                                                                <input type="button" class="btn cal-button-lg" name="b300" value="300" onClick="calcNumbers(b300.value)">
+                                                                <input type="button" class="btn cal-button-lg" name="b200" value="200" onClick="calcNumbers(b200.value)">
+                                                                <input type="button" class="btn cal-button-lg" name="b100" value="100" onClick="calcNumbers(b100.value)">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="row-fluid">
+                                            <label class="control-label pull-center" style="height: 50px; line-height: 50px!important;background:#444d58; width: 100%">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn green"><strong>BDT {{ entity.total|number_format(2) }}</strong></button>
+                                                {{ form_widget(form.payment) }}
+                                                {{ form_errors(form.payment) }}
+                                                    <button type="button" class="btn red " id="btn-refresh"><strong>C</strong></button>
+                                                </div>
+                                            </label>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="pull-center">
@@ -476,8 +504,4 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('.js-accordion-title').on('click', function () {
-        $(this).next().slideToggle(200);
-        $(this).toggleClass('open', 200);
-    });
 {% endblock %}

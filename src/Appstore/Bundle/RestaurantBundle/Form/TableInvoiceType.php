@@ -85,7 +85,7 @@ class TableInvoiceType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose receive bank account---',
+                'empty_value' => '---Choose Bank Account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -115,7 +115,7 @@ class TableInvoiceType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose receive mobile bank account---',
+                'empty_value' => '---Choose Mobile Account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")

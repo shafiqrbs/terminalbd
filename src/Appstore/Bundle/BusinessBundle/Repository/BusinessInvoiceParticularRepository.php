@@ -396,14 +396,14 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		if (!empty($createdStart)) {
 			$compareTo = new \DateTime($createdStart);
 			$created =  $compareTo->format('Y-m-d 00:00:00');
-			$qb->andWhere("s.created >= :createdStart");
+			$qb->andWhere("e.created >= :createdStart");
 			$qb->setParameter('createdStart', $created);
 		}
 
 		if (!empty($createdEnd)) {
 			$compareTo = new \DateTime($createdEnd);
 			$createdEnd =  $compareTo->format('Y-m-d 23:59:59');
-			$qb->andWhere("s.created <= :createdEnd");
+			$qb->andWhere("e.created <= :createdEnd");
 			$qb->setParameter('createdEnd', $createdEnd);
 		}
 

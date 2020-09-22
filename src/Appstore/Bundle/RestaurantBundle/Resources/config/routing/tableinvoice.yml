@@ -44,6 +44,14 @@ restaurant_tableinvoice_kitchen_print:
             expose: true
 
 
+restaurant_tableinvoice_process:
+    path:     /{id}/invoice-prcess
+    defaults: { _controller: "RestaurantBundle:TableInvoice:invoiceProcess" }
+    methods:  GET
+    options:
+            expose: true
+
+
 restaurant_tableinvoice_product_add:
     path:     /{product}/product-add
     defaults: { _controller: "RestaurantBundle:TableInvoice:addProduct" }

@@ -166,7 +166,7 @@ class ReportController extends Controller
                     'searchForm' => $data,
                 )
             );
-            $this->downloadPdf($html,'salesSummaryPdf.pdf');
+            $this->downloadPdf($html,'commissionSalesStock.pdf');
         }
     }
 

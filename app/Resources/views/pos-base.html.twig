@@ -205,21 +205,6 @@
             App.init();
         $('.mobileBankHide').hide();
         $('.bankHide').hide();
-        $(document).on('change', '.transactionMethod', function() {
-
-            var transactionMethod = $(this).val();
-            if(transactionMethod == 2 ){
-                $('.bankHide').show(500);
-                $('.mobileBankHide').hide(500);
-            }else if(transactionMethod == 3 ){
-                $('.bankHide').hide(500);
-                $('.mobileBankHide').show(500);
-            }else{
-                $('.bankHide').hide(500);
-                $('.mobileBankHide').hide(500);
-            }
-
-        });
         var winHeight = $(window).height();
         var docHeight = $(document).height();
         if(docHeight > winHeight){
@@ -227,7 +212,7 @@
         }
         var productBox      = (winHeight-280);
         var categoryBox     = (winHeight-210);
-        var transactionBox  = (winHeight-310);
+        var transactionBox  = (winHeight-360);
         $('.productBox').slimScroll({
             height: productBox+'px'
         });

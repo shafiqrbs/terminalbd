@@ -123,11 +123,16 @@ class TableInvoiceController extends Controller
         $id = $data['invoiceEntity'];
         $form = $data['restaurant_invoice'];
         $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->find($id);
-        $entity->setProcess($form['process']);
+        $entity->setProcess($data['process']);
         if($form['invoiceMode']){
             $m = $form['invoiceMode'];
             $mode = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->find($m);
             $entity->setInvoiceMode($mode);
+        }
+        if($data['method']){
+            $m = $data['method'];
+            $mode = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('name'=>$m));
+            $entity->setTransactionMethod($mode);
         }
         if($form['salesBy']){
             $salesBy = $this->getDoctrine()->getRepository('UserBundle:User')->find($form['salesBy']);
@@ -292,6 +297,18 @@ class TableInvoiceController extends Controller
         );
         return $data;
 
+    }
+
+    public function invoiceProcessAction(RestaurantTableInvoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $process = $_REQUEST['process'];
+        $invoice->setProcess($process);
+        $em->flush();
+        $result = $this->returnResultData($invoice);
+        var_dump($result);
+        exit;
+        return new Response(json_encode($result));
     }
 
     public function addProductAction($product)
