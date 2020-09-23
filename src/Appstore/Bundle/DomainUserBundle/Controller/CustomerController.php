@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Form\CustomerEditType;
+use Core\UserBundle\Form\CustomerEditProfileType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,18 +78,20 @@ class CustomerController extends Controller
         $entity = new Customer();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+        $exist = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption, 'mobile'=>$mobile));
+        if ($form->isValid() and empty($mobile)) {
             $em = $this->getDoctrine()->getManager();
-            $globalOption = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($globalOption);
-	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('domain_customer'));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are using existing mobile no"
+        );
         return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -198,7 +202,7 @@ class CustomerController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -214,7 +218,7 @@ class CustomerController extends Controller
     private function createEditForm(Customer $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerType($location), $entity, array(
+        $form = $this->createForm(new CustomerEditType($location), $entity, array(
             'action' => $this->generateUrl('domain_customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

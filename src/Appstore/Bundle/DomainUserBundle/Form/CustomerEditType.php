@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CustomerType extends AbstractType
+class CustomerEditType extends AbstractType
 {
 
     /** @var  LocationRepository */
@@ -33,11 +33,6 @@ class CustomerType extends AbstractType
                     ))
             )
             ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Customer facebook ID'))
-            )
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter mobile no'))
-                    ))
             )
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address'))
