@@ -1060,4 +1060,33 @@ class GlobalOptionRepository extends EntityRepository
         return $_SERVER['HTTP_HOST'].$path;
     }
 
+    public function androidDataClean()
+    {
+
+        $firstMonth = date("Y-m-d 00:00:00", strtotime("first day of previous month"));
+        $lastMonth = date("Y-m-t 23:59:59", strtotime("first day of previous month"));
+
+        $medicine = "UPDATE medicine_android_process SET jsonItem = '',jsonSubItem = '' WHERE  created >=:startDate AND  created <=:endDate";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($medicine);
+        $qb1->bindValue('startDate', $firstMonth);
+        $qb1->bindValue('endDate', $lastMonth);
+        $qb1->execute();
+
+
+        $restaurant = "UPDATE restaurant_android_process SET jsonItem = '',jsonSubItem = '' WHERE  created >=:startDate AND  created <=:endDate";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($restaurant);
+        $qb1->bindValue('startDate', $firstMonth);
+        $qb1->bindValue('endDate', $lastMonth);
+        $qb1->execute();
+
+        $expense = "UPDATE expense_android_process SET jsonItem = '',jsonSubItem = '' WHERE  created >=:startDate AND  created <=:endDate";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($expense);
+        $qb1->bindValue('startDate', $firstMonth);
+        $qb1->bindValue('endDate', $lastMonth);
+        $qb1->execute();
+
+
+
+    }
+
 }

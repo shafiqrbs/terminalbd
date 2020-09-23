@@ -383,7 +383,11 @@ class CustomerRepository extends EntityRepository
             $bloodGroup =    isset($data['bloodGroup'])? $data['bloodGroup'] :'';
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-
+            if(!empty($data['keyword'])){
+                $keyword = $data['keyword'];
+                $qb->andWhere('customer.name LIKE :searchTerm OR customer.mobile LIKE :searchTerm');
+                $qb->setParameter('searchTerm', '%'.strtolower($keyword).'%');
+            }
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile LIKE :mobile");
                 $qb->setParameter('mobile','%'. $mobile.'%');

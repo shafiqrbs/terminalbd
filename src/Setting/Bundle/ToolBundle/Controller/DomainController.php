@@ -179,8 +179,6 @@ class DomainController extends Controller
             $a = '*148148#';
             $entity->setPlainPassword($a);
             $this->get('fos_user.user_manager')->updateUser($entity);
-           // $dispatcher = $this->container->get('event_dispatcher');
-          //  $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
             $this->get('session')->getFlashBag()->add(
                 'success',"Change password successfully"
             );
@@ -287,6 +285,15 @@ class DomainController extends Controller
         );
         return $this->redirect($this->generateUrl('tools_domain'));
 
+    }
+
+    public function androidDataCleanAction()
+    {
+        $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->androidDataClean();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Successfully reset data"
+        );
+        return $this->redirect($this->generateUrl('tools_domain'));
     }
 
 }

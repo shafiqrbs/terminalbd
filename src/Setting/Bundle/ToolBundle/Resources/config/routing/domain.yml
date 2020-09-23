@@ -35,3 +35,7 @@ tools_option_delete:
     path:     /{id}/option-delete
     defaults: { _controller: "SettingToolBundle:Domain:domainDelete" }
 
+tools_option_androoid_clean:
+    path:     /android-data-clean
+    defaults: { _controller: "SettingToolBundle:Domain:androidDataClean" }
+
