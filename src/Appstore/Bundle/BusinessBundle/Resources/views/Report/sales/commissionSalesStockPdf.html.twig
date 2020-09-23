@@ -65,7 +65,11 @@
 </style>
 {% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
 {% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
-
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
 <table class="table">
     <thead>
     <tr>
@@ -114,4 +118,5 @@
 
     </tbody>
 </table>
-
+</body>
+</html>
