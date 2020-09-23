@@ -57,6 +57,7 @@ class AccountPurchaseType extends AbstractType
 			        'Due' => 'Due',
 			        'Discount' => 'Discount',
 			        'Outstanding' => 'Outstanding',
+			        'Advance' => 'Advance',
 			        'Opening' => 'Opening',
 		        ),
 	        ))

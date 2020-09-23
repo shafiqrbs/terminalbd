@@ -89,6 +89,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Vendor Name</th>
+                                    <th class="numeric" >Memo & Date</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -103,6 +104,7 @@
                                         <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.memo }}|{{ entity.receiveDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
