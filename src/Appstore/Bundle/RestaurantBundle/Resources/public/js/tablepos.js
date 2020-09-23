@@ -35,8 +35,11 @@ $('.table-tab li').click(function () {
     $('div.' + corresponding).toggle(
         $.get(url)
             .done(function( response ) {
+                obj = JSON.parse(response);
                 $('#tableInvoice').val(corresponding);
-                $('#transaction-box').html(response);
+                $('#invoiceEntity').val(corresponding);
+                $('#transaction-box').html(obj['body']);
+                $('.due').html(obj['total']);
             })
     );
 
@@ -45,6 +48,24 @@ $('.table-tab li').click(function () {
 
     // add active class to clicked tab
     $(this).addClass('active');
+});
+
+$('#search').keyup(function(){
+
+    // Search text
+    var text = $(this).val();
+
+    // Hide all content class element
+    $('.product-content').hide();
+
+    // Search
+    $('.product-content .cta-title').each(function(){
+
+        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+            $(this).closest('.product-content').show();
+        }
+    });
+
 });
 
 $(document).on('click', '.js-accordion-title', function() {
@@ -69,9 +90,16 @@ $('#btn-refresh').click(function(e){
 
 $(document).on('click', '.invoice-process', function() {
     var process = $(this).val();
+    var entity = $(this).attr('data-id');
     var url = $(this).attr('data-action');
+    if(process ===  "Payment"){
+        $('.hide-payment').hide();
+    }else{
+        $('.hide-payment').show();
+    }
     $.get(url,{'process':process}, function( response ) {
-        setTimeout(jsonResult(response),100);
+        $('#process-'+entity).removeClass().addClass(process).html(process);
+
     });
 });
 
@@ -93,11 +121,12 @@ function jsonResult(response) {
 
     obj = JSON.parse(response);
     $('#invoiceParticulars').html(obj['invoiceParticulars']).show();
-    $('#subTotal').html(obj['subTotal']);
-    $('.total').html(obj['total']);
+    $('#subTotal').html(financial(obj['subTotal']));
+    $('.total').html(financial(obj['total']));
     $('#total').val(obj['total']);
     $('.vat').html(obj['vat']);
-    $('.due').html(obj['total']);
+    $('.due').html(financial(obj['total']));
+    $('#due').val(obj['total']);
     $('#process-'+obj['entity']).removeClass().addClass(obj['process']).html(obj['process']);
     $('#restaurant_invoice_discount').val(obj['discount']);
     if(obj['total'] > 0 ){
@@ -112,42 +141,15 @@ $(document).on('click', '.addProduct', function() {
 
     var invoice = $('#tableInvoice').val();
     var url = $(this).attr('data-action');
-    $.get(url,{'invoice':invoice}, function( response ) {
-        setTimeout(jsonResult(response),100);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url,{'invoice':invoice}, function( response ) {
+                setTimeout(jsonResult(response),100);
+            });
+        }
     });
-});
-
-$(document).on('change', '#restaurant_invoice_discountType , #restaurant_invoice_discountCalculation', function() {
-
-    var discountType = $('#restaurant_invoice_discountType').val();
-    var discount = parseInt($('#restaurant_invoice_discountCalculation').val());
-    if(discount === "NaN"){
-        return false;
-    }
-    $.ajax({
-        url: Routing.generate('restaurant_temporary_discount_update'),
-        type: 'POST',
-        data:'discount=' + discount +'&discountType='+ discountType,
-        success: function(response) {
-            setTimeout(jsonResult(response),100);
-        }
-    })
-});
-
-$(document).on('change', '#restaurant_invoice_discountCoupon', function() {
-
-    var discount = $('#restaurant_invoice_discountCoupon').val();
-    if(discount === "NaN"){
-        return false;
-    }
-    $.ajax({
-        url: Routing.generate('restaurant_temporary_discount_coupon'),
-        type: 'POST',
-        data:'discount=' + discount,
-        success: function(response) {
-            setTimeout(jsonResult(response),100);
-        }
-    })
 });
 
 $(document).on("click", ".initialParticularDelete , .particularDelete", function() {
@@ -181,6 +183,8 @@ $(document).on('click', '.invoice-input', function(e) {
     e.preventDefault();
 });
 
+
+
 $(document).on('click', '#posKitchen', function(e) {
     url = $(this).attr('data-action');
     var atLeastOneIsChecked =$('input[name="isPrint[]"]:checked').length > 0;
@@ -191,6 +195,25 @@ $(document).on('click', '#posKitchen', function(e) {
         $.get(url,{'isPrint':searchIDs});
     }
     e.preventDefault();
+
+});
+
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
+
+
+$(document).on('keyup', '.payment', function() {
+
+    var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
+    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
+    var dueAmount = (due - payment);
+    if(dueAmount > 0){
+        $('#balance').html('Due '+financial(dueAmount));
+    }else{
+        var balance =  payment - due ;
+        $('#balance').html('Return '+financial(balance));
+    }
 
 });
 
@@ -246,5 +269,16 @@ $(document).on('click', '#posButton', function() {
 
 function calcNumbers(result){
     restaurant_invoice.restaurant_invoice_payment.value=restaurant_invoice.restaurant_invoice_payment.value+result;
-
+    paymentBalance();
+}
+function paymentBalance() {
+    var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
+    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
+    var dueAmount = (due - payment);
+    if(dueAmount > 0){
+        $('#balance').html('Due '+financial(dueAmount));
+    }else{
+        var balance =  payment - due ;
+        $('#balance').html('Return '+financial(balance));
+    }
 }

@@ -54,16 +54,20 @@ class RestaurantTableInvoiceRepository extends EntityRepository
         /* @var $entity RestaurantTableInvoiceItem */
 
         $i = 0;
-        foreach ($invoice->getInvoiceItems() as $key => $entity):
-            if(empty(isset($tables[$i]))){
-                $entity->setIsPrint(false);
-            }else{
-                $entity->setIsPrint(true);
-            }
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->update('RestaurantBundle:RestaurantTableInvoiceItem', 'mg')
+            ->set('mg.isPrint',0)
+            ->where('mg.tableInvoice = :id')
+            ->setParameter('id', $invoice->getId())
+            ->getQuery()
+            ->execute();
+
+        foreach ($tables as $key => $value):
+            $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoiceItem')->find($value);
+            $entity->setIsPrint(true);
             $em->persist($entity);
             $em->flush();
-            $i++;
-
         endforeach;
     }
 
@@ -118,7 +122,7 @@ class RestaurantTableInvoiceRepository extends EntityRepository
     {
         $discount = 0;
         if($sales->getDiscountType() == 'flat' and !empty($sales->getDiscountCalculation())){
-            $discount = ($sales->getSubTotal()  - $sales->getDiscountCalculation());
+            $discount =  $sales->getDiscountCalculation();
         }elseif($sales->getDiscountType() == 'percentage' and !empty($sales->getDiscountCalculation())){
             $discount = ($sales->getSubTotal() * $sales->getDiscountCalculation())/100;
         }
@@ -130,7 +134,7 @@ class RestaurantTableInvoiceRepository extends EntityRepository
         $config = $sales->getRestaurantConfig();
         $discount = 0;
         if($config->getDiscountType() == 'flat' and !empty($discount)){
-            $discount = ($sales->getSubTotal()  - $config->getDiscountPercentage());
+            $discount = $config->getDiscountPercentage();
         }elseif($config->getDiscountType() == 'percentage' and !empty($discount)){
             $discount = ($sales->getSubTotal() * $config->getDiscountPercentage())/100;
         }

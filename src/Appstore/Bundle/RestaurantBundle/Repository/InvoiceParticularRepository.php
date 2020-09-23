@@ -6,6 +6,8 @@ use Appstore\Bundle\RestaurantBundle\Controller\InvoiceController;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoiceItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -100,6 +102,29 @@ class InvoiceParticularRepository extends EntityRepository
         $entities = $user->getRestaurantTemps();
         /* @var $temp RestaurantTemporary */
         foreach ($entities as $temp) {
+            $entity = new InvoiceParticular();
+            $entity->setQuantity($temp->getQuantity());
+            $entity->setSalesPrice($temp->getSalesPrice());
+            if($invoice->getRestaurantConfig()->isProduction() == 1 and $temp->getParticular()->getService()->getSlug() == 'product'){
+                $entity->setPurchasePrice($temp->getParticular()->getProductionElementAmount());
+            }else{
+                $entity->setPurchasePrice($temp->getParticular()->getPurchasePrice());
+            }
+            $entity->setSubTotal($temp->getSubTotal());
+            $entity->setInvoice($invoice);
+            $entity->setParticular($temp->getParticular());
+            $em->persist($entity);
+            $em->flush();
+            $this->insertSalesAccessories($entity);
+        }
+        return $invoice;
+    }
+
+    public function tableInvoiceItems(Invoice $invoice,RestaurantTableInvoice $tableInvoice)
+    {
+        $em = $this->_em;
+        /* @var $temp RestaurantTableInvoiceItem */
+        foreach ($tableInvoice->getInvoiceItems() as $temp) {
             $entity = new InvoiceParticular();
             $entity->setQuantity($temp->getQuantity());
             $entity->setSalesPrice($temp->getSalesPrice());

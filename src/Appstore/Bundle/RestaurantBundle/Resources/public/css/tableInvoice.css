@@ -27,7 +27,7 @@
 }
 .tabs li {
     display: inline-block;
-    background-color: #26a69a;
+    background-color:#33b8e5;
     padding: 15px 15px;
     cursor: pointer;
     font-size: 18px;
@@ -37,7 +37,7 @@
     text-align: center;
 }
 .table-tab li.active {
-    background-color: #00584F;
+    background-color:#4cae4c;
 }
 .next, .previous {
     position: absolute;
@@ -107,54 +107,61 @@
 }
 
 .table-tab .process{
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 
 .table-tab .Created{
     background: #333333;
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 .table-tab .Kitchen{
-    background: #ffeb33;
-    font-size: 10px;
+    background:#6a621d;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 .table-tab .Hold{
     background: #ff2515;
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 .table-tab .Payment{
     background: #248034;
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 .table-tab .Reserved{
     background: #248034;
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 
 .table-tab .Delivered , .table-tab .Done{
     background: #248034;
-    font-size: 10px;
+    font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: bold;
 }
 
 .sales-right {
@@ -162,7 +169,7 @@
 }
 
 input[type="text"].inline-m-wrap {
-    width: 50px;
+    width: 30px;
     font-size: 12px;
     border: 1px solid #c49f47;
     margin-bottom: 0;
@@ -303,6 +310,51 @@ select.m-wrap{
     transform: rotate(-45deg);
     top: 45%;
 }
+.table-list{
+    width: 33%;
+    float: left;
+    line-height: 20px;
+    display: flex;
+}
+.table-list .checkbox{
+    width: 24px;
+    float: left;
+    display: flex;
+}
+.table-list span{
+    padding-left: 3px;
+}
+
+.user-list{
+    width: 50%;
+    float: left;
+    line-height: 20px;
+    display: flex;
+}
+.user-list .checkbox{
+    width: 24px;
+    float: left;
+    display: flex;
+}
+.user-list span{
+    padding-left: 3px;
+}
+
+.table th.product-title {
+    font-size: 16px;
+    font-weight: bold;
+    height: 36px;
+}
+
+.table td.product-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #FF0509;
+}
+
+.table td .checkbox{
+    width: 24px;
+}
 
 .accordion-content {
     display: none;
@@ -314,12 +366,17 @@ select.m-wrap{
     margin-bottom:7px;
 }
 #restaurant_invoice_payment{
-    width: 50%;
+    width: 35%;
     height: 46px !important;
     font-size: 25px;
     font-weight: bold;
     text-align: center;
 }
+
+.process-payment{
+    display: none;
+}
+
 .receiveBtn{
     width: 49%!important;
 }

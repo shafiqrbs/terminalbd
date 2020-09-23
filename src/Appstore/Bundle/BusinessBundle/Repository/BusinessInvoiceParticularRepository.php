@@ -446,10 +446,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->leftJoin('si.vendorStockItem','vsi');
         $qb->leftJoin('vsi.businessVendorStock','bvs');
         $qb->leftJoin('bvs.vendor','vendor');
-        $qb->select('SUM(si.quantity) AS quantity');
-        $qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
+        $qb->select('si.quantity AS quantity');
+        $qb->addSelect('(si.totalQuantity * si.purchasePrice) AS purchasePrice');
         $qb->addSelect('si.price AS price');
-        $qb->addSelect('SUM(si.subTotal) AS salesPrice');
+        $qb->addSelect('si.subTotal AS salesPrice');
         $qb->addSelect('mds.name AS name');
         $qb->addSelect('mds.particularCode AS sku');
         $qb->addSelect('vsi.quantity AS purchaseQuantity');
@@ -467,7 +467,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $qb->andWhere("vendor.id = :type");
             $qb->setParameter('type', $vendor);
         }
-        $qb->groupBy('si.businessParticular');
+     //   $qb->groupBy('si.businessParticular');
         $qb->orderBy('mds.name','ASC');
         return $qb->getQuery()->getArrayResult();
     }

@@ -260,14 +260,20 @@ class Invoice
     private $subTotal;
 
 
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="vat", type="decimal", nullable=true)
      */
     private $vat;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sd", type="decimal", nullable=true)
+     */
+    private $sd;
 
     /**
      * @var string
@@ -1142,6 +1148,22 @@ class Invoice
     public function setInvoiceMode($invoiceMode)
     {
         $this->invoiceMode = $invoiceMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSd()
+    {
+        return $this->sd;
+    }
+
+    /**
+     * @param string $sd
+     */
+    public function setSd($sd)
+    {
+        $this->sd = $sd;
     }
 
 

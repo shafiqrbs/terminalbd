@@ -15,7 +15,7 @@ restaurant_invoice_load:
             expose: true
 
 restaurant_tableinvoice_create:
-    path:    /{id}/create
+    path:    /create
     defaults: { _controller: "RestaurantBundle:TableInvoice:create" }
     methods:  POST
     options:

@@ -16,6 +16,7 @@
                         <div class="tabsWrapper">
                             <ul class="tabs table-tab">
                                 {% for table in tableEntities  %}
+
                                     <li id="{{ table.id }}" data-action="{{ path('restaurant_invoice_load',{'id':table.id}) }}" {% if loop.index == 1 %}  class="active" {% endif %} data-id="{{ table.id }}">
                                         {{ table.table.name }}<br/>
                                         <span id="process-{{ table.id }}" class="process {{ table.process }}">{{ table.process }}</span>
@@ -134,13 +135,65 @@
                                                     <div class="switch-field">
                                                         {% set process = ['Kitchen','Payment','Hold','Reserved'] %}
                                                         {% for pro in process %}
-                                                            <input type="radio" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} data-action="{{ path('restaurant_tableinvoice_process',{'id':entity.id,'process':pro}) }}"   class="invoice-process"  name="process" value="{{ pro }}"/>
+                                                            <input type="radio" data-id="{{ entity.id }}" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} data-action="{{ path('restaurant_tableinvoice_process',{'id':entity.id,'process':pro}) }}"   class="invoice-process"  name="process" value="{{ pro }}"/>
                                                             <label for="{{ pro }}">{{ pro }}</label>
                                                         {% endfor %}
                                                     </div>
                                                 </div>
 
-                                                <div class="row-fluid">
+                                                <div class="clearfix"></div>
+                                                <table class="table table-bordered">
+                                                    <thead class="flip-content ">
+                                                    <tr class="head-blue">
+                                                        <th class="numeric">#</th>
+                                                        <th class="numeric span8 product-title">Product</th>
+                                                        <th class="numeric product-title">Price</th>
+                                                        <th class="numeric span2 product-title">Qnt</th>
+                                                        <th class="numeric product-title">Total</th>
+                                                        <th class="numeric"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="invoiceParticulars">
+                                                    {% if entity.invoiceItems is not empty  %}
+                                                        {% for item in entity.invoiceItems %}
+                                                            <tr id="remove-{{ item.id }}">
+                                                                <td><input type="checkbox" class="checkbox"  id="isPrint-{{ item.id }}" name="isPrint[]" value="{{ item.id }}" {% if item.isPrint == 1 %} checked="checked" {% endif %}></td>
+                                                                <td class="numeric product-title">{{ item.particular.name }}</td>
+                                                                <td class="numeric">{{ item.salesPrice }}</td>
+                                                                <td class="">
+                                                                    <div class="input-append" style="margin-bottom: 0!important;">
+                                                                <span class="input-group-btn">
+              <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
+                                                                   <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.id }}"  id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-title="{{ item.salesPrice }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" min="1" max="100">
+                                                                  <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="numeric product-title"><strong id="subTotal-{{ item.id }}">{{ item.subTotal }}</strong></td>
+                                                                <td class="numeric">
+                                                                    <a id="{{ item.id }}" data-id="{{ item.id }}" data-url="{{ path('restaurant_tableinvoice_particular_delete',{'invoice':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    <tr>
+                                                        <th colspan="4" class="product-title">Sub-Total</th>
+                                                        <th id="subTotal" class="product-title">{{ entity.subTotal|number_format(2) }}</th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr><td colspan="6" class="{% if entity.process == 'Payment' %} process-payment {% endif %} hide-payment">
+                                                            <div class="row-fluid">
+                                                                <button type="button" class="btn span12 purple big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} data-action="{{ path('restaurant_tableinvoice_kitchen_print',{'id':entity.id}) }}" id="posKitchen" style="width:100%!important;" >
+                                                                    <i class="icon-print"></i> KITCHEN PRINT</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <div class="clearfix"></div>
+
+                                                <div class="row-fluid hide-payment {% if entity.process == 'Payment' %} process-payment {% endif %}">
                                                     <div class="span12">
                                                         <div class="control-group">
                                                             <label class="control-label" >
@@ -161,75 +214,26 @@
                                                     </div>
                                                 </div>
                                                 <div class="clearfix"></div>
-                                                <div id="accordion" class="accordion-container">
+                                                <div id="accordion" class="accordion-container hide-payment {% if entity.process == 'Payment' %} process-payment {% endif %}">
                                                     <h4 class="accordion-title js-accordion-title">Select Additional Table</h4>
                                                     <div class="accordion-content">
-                                                        <p>
+                                                        <div style="display:flow-root">
                                                             {% for table in tables  %}
-                                                                <label style="line-height:20px!important;" for="{{ table.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.id }}" name="tableNos[]" > {{ table.name }}</label>
+                                                                <label class="table-list" for="{{ table.id }}"> <input  class="checkbox" id="{{ table.id }}" type="checkbox" value="{{ table.id }}" name="tableNos[]" > <span>{{ table.name }}</span></label>
                                                             {% endfor %}
-                                                        </p>
+                                                        </div>
                                                     </div><!--/.accordion-content-->
 
                                                     <h4 class="accordion-title js-accordion-title">Select Serve By</h4>
                                                     <div class="accordion-content">
-                                                        {% for serving in servings  %}
-                                                            <label style="line-height:20px!important;" for="{{ serving.id }}"> <input style="margin-top: 0!important;" class="checkbox" id="{{ serving.id }}" type="checkbox" value="{{ serving.id }}" name="servingIds[]" > {{ serving.profile.name }}</label>
-                                                        {% endfor %}
+                                                        <div style="display: flow-root">
+                                                            {% for serving in servings  %}
+                                                                <label class="user-list"  for="{{ serving.id }}"> <input  class="checkbox" id="{{ serving.id }}" type="checkbox" value="{{ serving.id }}" name="servingIds[]" ><span> {{ serving.profile.name }}</span></label>
+                                                            {% endfor %}
+                                                        </div>
+
                                                     </div><!--/.accordion-content-->
-                                                </div><!--/#accordion-->
-                                                <div class="clearfix"></div>
-                                                <table class="table table-bordered">
-                                                    <thead class="flip-content ">
-                                                    <tr class="head-blue">
-                                                        <th class="numeric">#</th>
-                                                        <th class="numeric span8">Product</th>
-                                                        <th class="numeric">Price</th>
-                                                        <th class="numeric span2">Qnt</th>
-                                                        <th class="numeric">Total</th>
-                                                        <th class="numeric"></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="invoiceParticulars">
-                                                    {% if entity.invoiceItems is not empty  %}
-                                                        {% for item in entity.invoiceItems %}
-                                                            <tr id="remove-{{ item.id }}">
-                                                                <td><input type="checkbox"  id="isPrint-{{ item.id }}" name="isPrint[]" value="{{ item.id }}" {% if item.isPrint == 1 %} checked="checked" {% endif %}></td>
-                                                                <td class="numeric">{{ item.particular.name }}</td>
-                                                                <td class="numeric">{{ item.salesPrice }}</td>
-                                                                <td class="">
-                                                                    <div class="input-append" style="margin-bottom: 0!important;">
-                                                                <span class="input-group-btn">
-              <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn yellow btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
-                                                                   <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.id }}"  id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-title="{{ item.salesPrice }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" min="1" max="100">
-                                                                  <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn green btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="numeric"><strong id="subTotal-{{ item.id }}">{{ item.subTotal }}</strong></td>
-                                                                <td class="numeric">
-                                                                    <a id="{{ item.id }}" data-id="{{ item.id }}" data-url="{{ path('restaurant_tableinvoice_particular_delete',{'invoice':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                    </tbody>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <th colspan="4">Total</th>
-                                                        <th id="subTotal">{{ entity.subTotal|number_format(2) }}</th>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr><td colspan="6">
-                                                            <div class="row-fluid">
-                                                                <button type="button" class="btn span12 purple big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} data-action="{{ path('restaurant_tableinvoice_kitchen_print',{'id':entity.id}) }}" id="posKitchen" style="width:100%!important;" >
-                                                                    <i class="icon-print"></i> KITCHEN PRINT</button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tfoot>
-                                                </table>
-                                                <br/>
-                                                <div class="clearfix"></div>
+                                                </div>
                                                 <div class="row-fluid">
                                                     <div class="span12">
                                                         <div class="switch-method">
@@ -438,9 +442,10 @@
                                         <div class="row-fluid">
                                             <label class="control-label pull-center" style="height: 50px; line-height: 50px!important;background:#444d58; width: 100%">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn green"><strong>BDT {{ entity.total|number_format(2) }}</strong></button>
+                                                    <button type="button" class="btn green">BDT <strong class="total">{{ entity.total|number_format(2) }}</strong></button>
                                                 {{ form_widget(form.payment) }}
                                                 {{ form_errors(form.payment) }}
+                                                    <button type="button" class="btn yellow"><strong id="balance">Due {{ entity.total|number_format(2) }}</strong></button>
                                                     <button type="button" class="btn red " id="btn-refresh"><strong>C</strong></button>
                                                 </div>
                                             </label>
@@ -449,7 +454,8 @@
                                             <div class="pull-center">
                                                 {{ form_widget(form.discount) }}
                                                 <input type="hidden" class="" name="invoiceEntity" id="invoiceEntity" value="{{ entity.id }}" >
-                                                <input type="hidden" class="grandTotal" name="grandTotal" id="grandTotal" value="{{ entity.total }}" >
+                                                <input type="hidden" class="total due" name="total" id="total" value="{{ entity.total }}" >
+                                                <input type="hidden" class="due" name="due" id="due" value="{{ entity.total }}" >
                                                 <input type="hidden" name="discount" id="discount" value="">
                                                 <input type="hidden" name="buttonType" id="buttonType" value="">
                                                 <button type="button" class="btn blue big  receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
