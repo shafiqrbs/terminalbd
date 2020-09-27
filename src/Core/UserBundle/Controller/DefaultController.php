@@ -56,8 +56,6 @@ class DefaultController extends Controller
             }
         }
         $mainApp =  $globalOption->getMainApp()->getSlug();
-
-
 	    if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('tools_domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
@@ -70,7 +68,7 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('dps_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 &&  $mainApp == 'hms' ) {
             return $this->redirect($this->generateUrl('hospital_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && $mainApp == 'mss' ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && $mainApp == 'miss' ) {
             return $this->redirect($this->generateUrl('medicine_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && $mainApp == 'business' ) {
             return $this->redirect($this->generateUrl('business_homepage'));
