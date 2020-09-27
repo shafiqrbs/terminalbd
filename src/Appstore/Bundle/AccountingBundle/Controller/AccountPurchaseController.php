@@ -97,7 +97,7 @@ class AccountPurchaseController extends Controller
         $entity = new AccountPurchase();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $data = $request->request->all();
         /* @var $global GlobalOption */
 	    $global = $this->getUser()->getGlobalOption();
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
@@ -129,6 +129,11 @@ class AccountPurchaseController extends Controller
 	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
 	            $entity->setAccountVendor($entity->getAccountVendor());
             }elseif($global->getMainApp()->getSlug() == 'business'){
+                if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                    $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                    $entity->setAccountVendor($customer);
+                }
 	            $entity->setProcessHead('business');
 	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
 	            $entity->setAccountVendor($entity->getAccountVendor());
@@ -136,7 +141,17 @@ class AccountPurchaseController extends Controller
 	            $entity->setProcessHead('dms');
 	            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
 	            $entity->setAccountVendor($entity->getAccountVendor());
+            }else{
+                if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                    $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                    $entity->setAccountVendor($customer);
+                }
+                $entity->setAccountVendor($entity->getAccountVendor());
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setProcessHead('accounting');
             }
+
             if($entity->getPayment() < 0 or $entity->getProcessType() == "Outstanding"){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
@@ -162,6 +177,7 @@ class AccountPurchaseController extends Controller
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
             $em = $this->getDoctrine()->getManager();
+
             $entity->setGlobalOption($global);
             if($global->getMainApp()->getSlug() == 'miss'){
                 $entity->setProcessHead('medicine');
@@ -188,15 +204,29 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setAccountVendor($entity->getAccountVendor());
             }elseif($global->getMainApp()->getSlug() == 'business'){
-                $entity->setProcessHead('business');
-                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+
+                if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                    $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                    $entity->setAccountVendor($customer);
+                }
                 $entity->setAccountVendor($entity->getAccountVendor());
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setProcessHead('business');
             }elseif($global->getMainApp()->getSlug() == 'dms'){
                 $entity->setProcessHead('dms');
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setAccountVendor($entity->getAccountVendor());
+            }else{
+                if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                    $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                    $entity->setAccountVendor($customer);
+                }
+                $entity->setAccountVendor($entity->getAccountVendor());
+                $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+                $entity->setProcessHead('accounting');
             }
-
             if( in_array($entity->getProcessType(),array("Outstanding","Opening"))  or $entity->getPayment() < 0 ){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
@@ -243,7 +273,7 @@ class AccountPurchaseController extends Controller
             'action' => $this->generateUrl('account_purchase_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal purchase',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -400,7 +430,7 @@ class AccountPurchaseController extends Controller
             }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
-	        if($entity->getPayment() > 0 ){
+	        if($entity->getPayment() > 0 and in_array($entity->getProcessType(),array( 'Due','Advance'))){
 		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
 	        }
             return new Response('success');

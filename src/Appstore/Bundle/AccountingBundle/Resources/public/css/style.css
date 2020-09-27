@@ -5,6 +5,9 @@
 .cashPayment{
     display: none;
 }
+.customer{
+    display: none;
+}
 
 .bankHide, .mobileHide {
     display: none;

@@ -102,16 +102,24 @@ class AccountSalesController extends Controller
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-
+        $data = $request->request->all();
         if($form->isValid() && empty($method)){
             $entity->setGlobalOption($option);
             if(!empty($this->getUser()->getProfile()->getBranches())){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
             $customer = $form["customer"]->getData();
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile' => $mobile));
-            $entity->setCustomer($customer);
+            if (empty($customer) and !empty($data['customerMobile'])){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option, $mobile, $data);
+                $entity->setCustomer($customer);
+
+            }elseif (!empty($customer)){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile' => $mobile));
+                $entity->setCustomer($customer);
+            }
+
             if($entity->getProcessHead() == 'Outstanding'){
                 $entity->setTotalAmount(abs($entity->getAmount()));
                 $entity->setAmount(0);
@@ -142,9 +150,16 @@ class AccountSalesController extends Controller
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
             $customer = $form["customer"]->getData();
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $mobile));
-            $entity->setCustomer($customer);
+            if (empty($customer) and !empty($data['customerMobile'])){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option, $mobile, $data);
+                $entity->setCustomer($customer);
+
+            }elseif (!empty($customer)){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile' => $mobile));
+                $entity->setCustomer($customer);
+            }
 	        if($entity->getProcessHead() == 'Outstanding'){
 		        $entity->setTotalAmount(abs($entity->getAmount()));
 		        $entity->setAmount(0);
@@ -191,7 +206,7 @@ class AccountSalesController extends Controller
             'action' => $this->generateUrl('account_sales_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -373,14 +388,8 @@ class AccountSalesController extends Controller
 		    	$this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
 		    }
 		    $em->getRepository('AccountingBundle:AccountSales')->updateCustomerBalance($entity);
-
-		    if($entity->getProcessHead() == 'Outstanding'){
-			  //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')-> insertCustomerOutstandingTransaction($entity);
-		    }elseif($entity->getProcessHead() == 'Discount'){
-			  //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertCustomerDiscountTransaction($entity);
-		    }elseif($entity->getAmount() > 0 ){
+		    if($entity->getAmount() > 0 and in_array($entity->getProcessHead(),array( 'Due','Advance')) ){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
-              //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
 		    }
 		    return new Response('success');
 
@@ -388,7 +397,7 @@ class AccountSalesController extends Controller
 
             return new Response('failed');
         }
-        exit;
+
     }
 
     /**

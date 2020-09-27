@@ -55,35 +55,37 @@ class DefaultController extends Controller
                 }
             }
         }
+        $mainApp =  $globalOption->getMainApp()->getSlug();
+
 
 	    if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('tools_domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1 and in_array('restaurant',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1 and $mainApp == 'restaurant') {
             return $this->redirect($this->generateUrl('restaurant_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1 && in_array('dms',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1 &&  $mainApp == 'dms') {
             return $this->redirect($this->generateUrl('dms_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DPS') && $enable == 1 && in_array('dps',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DPS') && $enable == 1 &&  $mainApp == 'dps') {
             return $this->redirect($this->generateUrl('dps_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 && in_array('hms',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 &&  $mainApp == 'hms' ) {
             return $this->redirect($this->generateUrl('hospital_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && in_array('miss',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') && $enable == 1 && $mainApp == 'mss' ) {
             return $this->redirect($this->generateUrl('medicine_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && in_array('business',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') && $enable == 1 && $mainApp == 'business' ) {
             return $this->redirect($this->generateUrl('business_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && in_array('hotel',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOTEL') && $enable == 1 && $mainApp == 'hotel') {
             return $this->redirect( $this->generateUrl('hotel_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_EDUCATION') && $enable == 1 && in_array('institute',$apps) ) {
-            return $this->redirect( $this->generateUrl('education_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ELECTION') && $enable == 1 && in_array('election',$apps) ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ELECTION') && $enable == 1 && $mainApp == 'election' ) {
         	return $this->redirect($this->generateUrl('election_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 && in_array('inventory',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 && $mainApp == 'inventory') {
         	return $this->redirect($this->generateUrl('inventory_homepage'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE') && $enable == 1 && in_array('e-commerce',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ECOMMERCE') && $enable == 1 && $mainApp == 'e-commerce') {
 	        return $this->redirect($this->generateUrl('ecommerce_dashboard'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && in_array('website',$apps)) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && $mainApp == 'website') {
             return $this->redirect($this->generateUrl('website'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1 && $mainApp == 'accounting') {
+            return $this->redirect($this->generateUrl('account_transaction_cash_summary'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
 	        return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AGENT')) {

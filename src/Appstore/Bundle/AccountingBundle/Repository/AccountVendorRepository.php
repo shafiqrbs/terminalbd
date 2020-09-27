@@ -66,6 +66,30 @@ class AccountVendorRepository extends EntityRepository
 
     }
 
+    public function newExistingCustomerForSales($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $companyName = $data['companyName'];
+        $name = $data['customerName'];
+        $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
+        $entity = $this->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+        if($entity){
+            return $entity;
+        }else{
+            $entity = new AccountVendor();
+            $entity->setMobile($mobile);
+            $entity->setCompanyName($companyName);
+            $entity->setName($name);
+            $entity->setAddress($address);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+        var_dump($data);
+        exit;
+    }
+
     public function searchAutoComplete($q, GlobalOption $global)
     {
         $qb = $this->createQueryBuilder('e');

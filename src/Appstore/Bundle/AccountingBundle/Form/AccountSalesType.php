@@ -28,7 +28,7 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Received Amount'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric removeZero','placeholder'=>'Received Amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
@@ -46,10 +46,8 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span12 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Search the customer name/mobile'))
-            )))
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span11 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
+                ))
             ->add('accountBank', 'entity', array(
                'required'    => true,
                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -68,6 +66,7 @@ class AccountSalesType extends AbstractType
 		        'multiple'      =>false,
 		        'choices' => array(
 			        'Due' => 'Due',
+			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
 			        'Outstanding' => 'Outstanding',
 		        ),

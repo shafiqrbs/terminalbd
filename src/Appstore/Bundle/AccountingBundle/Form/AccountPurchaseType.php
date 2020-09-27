@@ -31,7 +31,7 @@ class AccountPurchaseType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount'),
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount removeZero'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount'))
 
@@ -132,10 +132,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2 vendor-ledger-business'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
+                'attr'=>array('class'=>'span11 select2 vendor-ledger-business'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
