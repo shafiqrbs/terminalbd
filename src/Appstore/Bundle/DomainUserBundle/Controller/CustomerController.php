@@ -81,7 +81,7 @@ class CustomerController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
         $exist = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption, 'mobile'=>$mobile));
-        if ($form->isValid() and empty($mobile)) {
+        if ($form->isValid() and empty($exist)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($globalOption);
 	        $entity->setMobile($mobile);

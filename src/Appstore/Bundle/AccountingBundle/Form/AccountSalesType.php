@@ -46,7 +46,7 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span11 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span10 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
                 ))
             ->add('accountBank', 'entity', array(
                'required'    => true,
