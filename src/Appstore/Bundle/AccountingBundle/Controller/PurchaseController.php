@@ -242,13 +242,13 @@ class PurchaseController extends Controller
             }
 		    $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
-          //  $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
+            if($purchase->getPayment() > 0){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
+            }
             return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
     /**
