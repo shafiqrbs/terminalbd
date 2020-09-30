@@ -116,7 +116,7 @@ class AccountSalesController extends Controller
 
             }elseif (!empty($customer)){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile' => $mobile));
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
 
@@ -157,7 +157,7 @@ class AccountSalesController extends Controller
 
             }elseif (!empty($customer)){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($customer);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile' => $mobile));
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
 	        if($entity->getProcessHead() == 'Outstanding'){

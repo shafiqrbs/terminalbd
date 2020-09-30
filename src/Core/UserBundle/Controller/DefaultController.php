@@ -56,7 +56,8 @@ class DefaultController extends Controller
             }
         }
 
-        $mainApp =  $globalOption->getMainApp()->getSlug();
+        $mainApp = !empty($globalOption->getMainApp()) ? $globalOption->getMainApp()->getSlug() : "";
+
 	    if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('tools_domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {

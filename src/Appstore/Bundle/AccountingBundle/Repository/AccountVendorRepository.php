@@ -86,8 +86,6 @@ class AccountVendorRepository extends EntityRepository
             $em->flush($entity);
             return $entity;
         }
-        var_dump($data);
-        exit;
     }
 
     public function searchAutoComplete($q, GlobalOption $global)
