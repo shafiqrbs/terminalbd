@@ -96,7 +96,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% set approveProcess = ['created','commission','sales'] %}
+                                    {% set approveProcess = ['created','commission','sales','Done'] %}
                                     {% if  entity.process in approveProcess and entity.subTotal > 0 %}
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_return_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}

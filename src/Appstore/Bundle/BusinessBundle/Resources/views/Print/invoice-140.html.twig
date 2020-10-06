@@ -1,11 +1,11 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <script type="text/javascript">
-        window.print();
+       /* window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
-        }, 2000);
+        }, 2000);*/
     </script>
     <div id="invoice">
         <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
@@ -123,41 +123,10 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr><td colspan="8" style="border-top:1px solid #999999;padding-left: 5px!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
+                                    <tr><td colspan="8" style="border-top:3px solid #333333;padding-left: 5px!important;"><strong>In words: {{ entity.paymentInWord }} </strong></td></tr>
                                     </tbody>
                                 {% endif %}
 
-                            </table>
-                        {% endif %}
-                    {% else %}
-                        {% if entity.businessInvoiceParticulars is defined and  entity.businessInvoiceParticulars is not empty  %}
-                            <table class="table table-body" style="border: 1px solid #999999!important; margin-top: 20px">
-                                <thead class="table-head">
-                                <tr class="table-header" style="">
-                                    <th>S/N</th>
-                                    <th><strong>Description</strong></th>
-                                    <th>Size</th>
-                                    <th>S.ft</th>
-                                    <th>Qnt</th>
-                                    <th>Unit</th>
-                                </tr>
-                                </thead>
-                                <tbody class="table-body">
-                                {% for index,item in entity.businessInvoiceParticulars %}
-                                    <tr>
-                                        <td>{{ loop.index }}.</td>
-                                        <td><strong>{{ item.particular }}</strong></td>
-                                        <td>
-                                            {% if item.subQuantity is not empty %}
-                                                {{ item.height }}x{{ item.width }}
-                                            {% endif %}
-                                        </td>
-                                        <td>{% if item.subQuantity is not empty %}={{ item.subQuantity }}{% endif %}</td>
-                                        <td>{% if item.quantity > 0  %}{{ item.quantity|number_format() }}{% endif %}</td>
-                                        <td>{% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
                             </table>
                         {% endif %}
                     {% endif %}
@@ -168,13 +137,8 @@
                         <div class="notice">{{ entity.comment }}</div>
                     </div>
                 </main>
-                <footer>
-                    <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
-                    <span class="right">Developed by: {{ portal_design_development }}</span>
-                </footer>
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
-            <div></div>
         </div>
     </div>
     <style>
@@ -193,6 +157,16 @@
         .table-body tr.table-header th{
             background: #DDDDDD;
             font-weight: bold;
+        }
+        .invoice table td, .invoice table th {
+            padding: 5px;
+            background:#ffffff;
+        }
+        .invoice table thead.table-head th{
+            border-bottom: 2px solid #333333;
+        }
+        .invoice table tbody.table-body td{
+            border-bottom: 1px solid #333333;
         }
         .invoice table .total {
             background:transparent;

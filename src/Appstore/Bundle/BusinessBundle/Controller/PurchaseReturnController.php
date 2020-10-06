@@ -190,7 +190,7 @@ class PurchaseReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
 		$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $purchase = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
-	    $arrs = array('created','sales','commission');
+	    $arrs = array('created','sales','commission','Done');
 	    if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
