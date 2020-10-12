@@ -119,10 +119,10 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done') %}
+                                    {% if ( entity.process == 'Expense') %}
                                     <a  href="javascript:"  data-url="{{ path('account_expense_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                    <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
+                                    <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
                                 </div>
                            </div>
                         </div>

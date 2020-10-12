@@ -296,4 +296,18 @@ class DomainController extends Controller
         return $this->redirect($this->generateUrl('tools_domain'));
     }
 
+    public function cacheClearAction()
+    {
+
+        exec("rm -rf app/cache/*");
+        exec("rm -rf app/logs/*");
+        $kernel = $this->get('kernel');
+        $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
+        $application->setAutoExit(false);
+        $options = array('command' => 'cache:clear',"--env" => 'prod', '--no-warmup' => true);
+        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+        return $this->redirect($this->generateUrl('tools_domain'));
+
+    }
+
 }

@@ -62,6 +62,7 @@ class PurchaseController extends Controller
         $entity->setCreatedBy($this->getUser());
         $entity->setProcessHead('Expense');
         $entity->setProcessType('Expense');
+        $entity->setProcess('Expense');
         $entity->setUpdated($entity->getCreated());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);

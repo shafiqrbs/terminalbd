@@ -59,17 +59,6 @@ class PurchaseType extends AbstractType
                 ),
                 'choices'=> $this->ExpenseAccountChoiceList()
             ))
-            ->add('process', 'choice', array(
-                'attr'=>array('class'=>'span6 m-wrap'),
-                'expanded'      =>false,
-                'required'    => true,
-                'multiple'      =>false,
-                'choices' => array(
-                    'Done' => 'Done',
-                    'Approved' => 'Approved',
-                ),
-            ))
-
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

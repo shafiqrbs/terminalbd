@@ -418,7 +418,7 @@ class AccountPurchaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
-	        if(empty($entity->getTransactionMethod()) and in_array($entity->getProcessType(),array( 'Due','Advance'))){
+	        if(empty($entity->getTransactionMethod()) and in_array($entity->getProcessType(),array( 'Due','Advance','Expense'))){
 		        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 		        $entity->setTransactionMethod($method);
 	        }
@@ -430,7 +430,7 @@ class AccountPurchaseController extends Controller
             }
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($entity);
-	        if($entity->getPayment() > 0 and in_array($entity->getProcessType(),array( 'Due','Advance'))){
+	        if($entity->getPayment() > 0 and in_array($entity->getProcessType(),array( 'Due','Advance','Expense'))){
 		        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
 	        }
             return new Response('success');

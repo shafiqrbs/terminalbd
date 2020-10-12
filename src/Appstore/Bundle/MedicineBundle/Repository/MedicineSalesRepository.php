@@ -956,7 +956,7 @@ class MedicineSalesRepository extends EntityRepository
     }
 
     public function deleteSalesRecords(MedicineConfig $config){
-        $this->_em->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
+      //  $this->_em->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReverse($sales);
     }
 
     public function getCalculationBankServiceCharge(MedicineSales $entity){
@@ -976,7 +976,15 @@ class MedicineSalesRepository extends EntityRepository
         }
     }
 
-
-
+    public function androidDuplicateSalesDelete(MedicineConfig $config , MedicineAndroidProcess $android)
+    {
+        $sql = "DELETE sales FROM medicine_sales_item as salesItem
+RIGHT JOIN medicine_sales as sales ON salesItem.`medicineSales_id` = sales.id
+WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:android AND sales.medicineConfig_id =:config";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('config', $config->getId());
+        $qb->bindValue('android', $android->getId());
+        $qb->execute();
+    }
 
 }

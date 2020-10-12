@@ -47,7 +47,7 @@ class TemporaryType extends AbstractType
             ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
             ->add('isHold')
-          /*  ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Enter narration','data-original-title'=>'Enter discount narration','autocomplete'=>'off')))*/
+            ->add('remark','text', array('attr'=>array('class'=>'tooltips remark span12 m-wrap input2','data-trigger' => 'hover','placeholder'=>'Enter narration','data-original-title'=>'Enter discount narration','autocomplete'=>'off')))
             ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCalculation','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('discountType', 'choice', array(

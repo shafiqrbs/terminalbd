@@ -39,3 +39,7 @@ tools_option_androoid_clean:
     path:     /android-data-clean
     defaults: { _controller: "SettingToolBundle:Domain:androidDataClean" }
 
+tools_option_cache_clean:
+    path:     /system-cache-clean
+    defaults: { _controller: "SettingToolBundle:Domain:cacheClear" }
+

@@ -390,6 +390,7 @@ function formSubmit() {
         $('.initialGrandTotal').html(obj['initialGrandTotal']);
         $('#initialDue').val(obj['initialGrandTotal']);
         $('.initialVat').html(obj['initialVat']);
+        $('.initialDiscount').html(obj['initialDiscount']);
        // $('.payment').val(obj['initialGrandTotal']);
         $('.due').html(obj['initialGrandTotal']);
         $('#restaurant_invoice_discount').val(obj['initialDiscount']);

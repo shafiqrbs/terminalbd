@@ -67,6 +67,9 @@
                                     {% else %}
                                         <a  id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_device_sales_import',{'android':entity.id}) }}" href="javascript:" class="btn green mini androidProcess" ><i class="icon-retweet"></i> Process</a>
                                      {% endif %}
+                                     {% if (app.user.granted("ROLE_DOMAIN")) %}
+                                     <a  id="{{ entity.id }}" data-id="{{ entity.id }}"  href="{{ path('medicine_sales_android_duplicate_delete',{'android':entity.id}) }}" class="btn red mini" ><i class="icon-trash"></i> Remove</a>
+                                     {% endif %}
                                  </td>
                             </tr>
                         {% endfor %}

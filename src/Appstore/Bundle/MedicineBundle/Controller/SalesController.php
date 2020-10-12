@@ -597,6 +597,7 @@ class SalesController extends Controller
         exit;
         return $this->redirect($this->generateUrl('medicine_sales'));
     }
+
     public function groupApprovedAction()
     {
         set_time_limit(0);
@@ -618,6 +619,15 @@ class SalesController extends Controller
         exit;
 
     }
+
+    public function androidDuplicateSalesDeleteAction(MedicineAndroidProcess $android)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDuplicateSalesDelete($config,$android);
+        return $this->redirect($this->generateUrl('medicine_sales_android'));
+
+    }
+
 
 
 }

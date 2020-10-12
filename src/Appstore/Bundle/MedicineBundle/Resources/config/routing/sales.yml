@@ -6,6 +6,10 @@ medicine_sales_android:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }
 
+medicine_sales_android_duplicate_delete:
+    path:     /{android}/android-duplicate-delete
+    defaults: { _controller: "MedicineBundle:Sales:androidDuplicateSalesDelete" }
+
 medicine_sales_android_view:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }
