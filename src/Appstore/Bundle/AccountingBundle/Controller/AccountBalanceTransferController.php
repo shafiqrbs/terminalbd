@@ -99,7 +99,7 @@ class AccountBalanceTransferController extends Controller
             'action' => $this->generateUrl('account_balancetransfer_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal purchase',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -192,7 +192,6 @@ class AccountBalanceTransferController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 
@@ -203,10 +202,9 @@ class AccountBalanceTransferController extends Controller
 	public function journalReverseAction(AccountBalanceTransfer $entity){
 
 		$em = $this->getDoctrine()->getManager();
-		$this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+		$this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashReverse($entity,'BalanceTransfer');
 		$entity->setProcess(null);
 		$entity->setApprovedBy(null);
-		$entity->setAmount(0);
 		$em->flush();
 		return $this->redirect($this->generateUrl('account_balancetransfer'));
 

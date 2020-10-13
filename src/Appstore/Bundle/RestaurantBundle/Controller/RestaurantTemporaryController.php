@@ -488,7 +488,6 @@ class RestaurantTemporaryController extends Controller
             $printer -> text("------------------------------------------------------------\n");
             $printer -> setEmphasis(true);
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer -> setFont(Printer::FONT_B);
             $printer -> text("{$entity->getRemark()}\n");
             $printer -> setEmphasis(true);
         }

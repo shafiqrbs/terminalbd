@@ -737,6 +737,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $name = isset($data['name'])? $data['name'] :'';
         $customer = isset($data['customer'])? $data['customer'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $grn = isset($data['grn'])? $data['grn'] :'';
 
         if (!empty($customer)) {
             $qb->andWhere($qb->expr()->like("c.name", "'%$customer%'"  ));
@@ -747,17 +748,20 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("mds.name", "'%$name%'"  ));
         }
+        if (!empty($grn)) {
+            $qb->andWhere($qb->expr()->like("vs.grn", "'%$grn%'"  ));
+        }
         if (!empty($createdStart)) {
             $compareTo = new \DateTime($createdStart);
             $created =  $compareTo->format('Y-m-d 00:00:00');
-            $qb->andWhere("s.created >= :createdStart");
+            $qb->andWhere("e.created >= :createdStart");
             $qb->setParameter('createdStart', $created);
         }
 
         if (!empty($createdEnd)) {
             $compareTo = new \DateTime($createdEnd);
             $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
-            $qb->andWhere("s.created <= :createdEnd");
+            $qb->andWhere("e.created <= :createdEnd");
             $qb->setParameter('createdEnd', $createdEnd);
         }
 

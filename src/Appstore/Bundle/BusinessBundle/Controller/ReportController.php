@@ -486,12 +486,31 @@ class ReportController extends Controller
         $pagination = $this->paginate($entities);
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption()],['companyName'=>'ASC']);
 
-        return $this->render('BusinessBundle:Report:sales/vendorCommissionSalesItem.html.twig', array(
-            'option'  => $user->getGlobalOption() ,
-            'entities' => $pagination,
-            'vendors' => $vendors,
-            'searchForm' => $data,
-        ));
+
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/vendorCommissionSalesItem.html.twig', array(
+                'option'  => $user->getGlobalOption() ,
+                'entities' => $pagination,
+                'vendors' => $vendors,
+                'searchForm' => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/vendorCommissionSalesItemPdf.html.twig', array(
+                    'option'  => $user->getGlobalOption() ,
+                    'entities' => $pagination,
+                    'vendors' => $vendors,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'vendor-commission-sales-item.pdf');
+
+        }
+
     }
 
     public function customerCommissionBaseSalesAction()

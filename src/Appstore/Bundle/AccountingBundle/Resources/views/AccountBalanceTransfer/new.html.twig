@@ -55,7 +55,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="transactionMethod">From Transaction</label>
+                                                <label class="control-label" for="transactionMethod">From Transaction<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.fromTransactionMethod) }}
                                                     {{ form_errors(form.fromTransactionMethod) }}
@@ -90,7 +90,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">To Transaction</label>
+                                                <label class="control-label" for="firstName">To Transaction<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.toTransactionMethod) }}
                                                     {{ form_errors(form.toTransactionMethod) }}
@@ -126,7 +126,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Amount</label>
+                                                <label class="control-label" for="firstName">Amount<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.amount) }}
                                                     {{ form_errors(form.amount) }}
