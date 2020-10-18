@@ -41,23 +41,23 @@ class TableInvoiceType extends AbstractType
         $builder
 
             ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 payment tooltips','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile invoice-change','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
 
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
             ->add('discountType', 'choice', array(
-                'attr'=>array('class'=>'span12 m-wrap invoice-input'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'choices'   => array('flat' => 'Flat', 'percentage' => 'Percentage'),
                 'required'  => true,
             ))
-            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap invoice-input ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
-            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon invoice-input','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap invoice-change ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon invoice-change','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('paymentCard', 'entity', array(
                 'required'    => false,
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'empty_value' => '---Choose payment card---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -70,7 +70,7 @@ class TableInvoiceType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap invoice-input'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.service","s")
@@ -84,7 +84,7 @@ class TableInvoiceType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'empty_value' => '---Choose Bank Account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -98,7 +98,7 @@ class TableInvoiceType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 m-wrap invoice-input'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'empty_value' => '---Order By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
@@ -114,7 +114,7 @@ class TableInvoiceType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap invoice-change'),
                 'empty_value' => '---Choose Mobile Account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')

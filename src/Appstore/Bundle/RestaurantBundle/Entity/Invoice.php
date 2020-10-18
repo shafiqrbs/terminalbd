@@ -74,7 +74,12 @@ class Invoice
     private  $tokenNo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTokenNo", cascade={"persist","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTable", cascade={"persist","remove"}  )
+     **/
+    private  $table;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceModes", cascade={"persist","remove"}  )
      **/
     private  $invoiceMode;
 
@@ -969,7 +974,7 @@ class Invoice
     /**
      * @param string $discountType
      */
-    public function setDiscountType(string $discountType)
+    public function setDiscountType($discountType)
     {
         $this->discountType = $discountType;
     }
@@ -985,7 +990,7 @@ class Invoice
     /**
      * @param float $payment
      */
-    public function setPayment(float $payment)
+    public function setPayment($payment)
     {
         $this->payment = $payment;
     }
@@ -1001,7 +1006,7 @@ class Invoice
     /**
      * @param string $remark
      */
-    public function setRemark(string $remark)
+    public function setRemark($remark)
     {
         $this->remark = $remark;
     }
@@ -1017,7 +1022,7 @@ class Invoice
     /**
      * @param string $discountCoupon
      */
-    public function setDiscountCoupon(string $discountCoupon)
+    public function setDiscountCoupon($discountCoupon)
     {
         $this->discountCoupon = $discountCoupon;
     }
@@ -1164,6 +1169,22 @@ class Invoice
     public function setSd($sd)
     {
         $this->sd = $sd;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @param Particular $table
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
     }
 
 

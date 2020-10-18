@@ -481,7 +481,7 @@ class AccountPurchaseController extends Controller
     public function purchaseReverseAction(AccountPurchase $entity){
 
         $em = $this->getDoctrine()->getManager();
-        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountReverse($entity);
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashReverse($entity,'Purchase');
         $entity->setProcess(null);
         $entity->setApprovedBy(null);
         $entity->setPayment(0);

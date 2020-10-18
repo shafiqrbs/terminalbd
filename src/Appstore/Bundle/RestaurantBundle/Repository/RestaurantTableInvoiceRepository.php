@@ -19,6 +19,32 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class RestaurantTableInvoiceRepository extends EntityRepository
 {
 
+    public function resetData(RestaurantTableInvoice $invoice)
+    {
+        $em = $this->_em;
+        $invoice->setProcess('Created');
+        $invoice->setVat(0);
+        $invoice->setSd(0);
+        $invoice->setDiscount(0);
+        $invoice->setDiscountCalculation(0);
+        $invoice->setDiscountType(NULL);
+        $invoice->setDiscountCoupon(0);
+        $invoice->setSubTotal(0);
+        $invoice->setTotal(0);
+        $invoice->setPayment(0);
+        $invoice->setTransactionMethod(NULL);
+        $invoice->setAccountMobileBank(NULL);
+        $invoice->setAccountBank(NULL);
+        $invoice->setSalesBy(NULL);
+        $invoice->setServeBy(array());
+        $invoice->setSubTable(array());
+        $em->persist($invoice);
+        $em->flush();
+        $history = $em->createQuery("DELETE RestaurantBundle:RestaurantTableInvoiceItem e WHERE e.tableInvoice ={$invoice->getId()}");
+        $history->execute();
+
+    }
+
     public function fastTableInvoice(RestaurantConfig $config){
 
         $id = $config->getId();

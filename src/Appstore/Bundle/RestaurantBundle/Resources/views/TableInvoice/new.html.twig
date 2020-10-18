@@ -404,6 +404,17 @@
                                                     </div>
                                                     <!--/span-->
                                                 </div>
+                                                 <div class="clearfix"></div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            <label class="" >
+                                                                <span><strong>Discount TK.</strong></span>
+                                                                <span class="pull-right sales-right"><strong class="discount">{{ entity.discount }}</strong></span></label>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                </div>
                                                 <div class="row-fluid">
                                                     <div class="buttons">
                                                         <div class="row-fluid">
@@ -475,19 +486,18 @@
             </div>
         </div>
     </div>
-    <div id="cabinInvalid" style="display: none">This token already booked for another customer.</div>
+    {% if config.posPrint == 1 %}
+        <script>
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, "script", "xiidea-epp-sdk"));
+        </script>
+    {% endif %}
 
-    <script>
-
-       /* (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, "script", "xiidea-epp-sdk"));*/
-
-    </script>
 {% endblock %}
 
 {% block cssBlock %}
@@ -502,7 +512,6 @@
     {{ parent() }}
     {% javascripts
     '@RestaurantBundle/Resources/public/js/approveProcess.js'
-    '@RestaurantBundle/Resources/public/js/posprint.js'
     '@RestaurantBundle/Resources/public/js/tablepos.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

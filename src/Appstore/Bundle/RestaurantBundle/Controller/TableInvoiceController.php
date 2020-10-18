@@ -157,7 +157,7 @@ class TableInvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $masterData = $request->request->all();
-        $id = $masterData['entity'];
+        $id = $masterData['invoiceEntity'];
         $entity = new Invoice();
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->find($id);
         $user = $this->getUser();
@@ -182,7 +182,7 @@ class TableInvoiceController extends Controller
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'mobile' => $mobile));
             $entity->setCustomer($customer);
         }else{
-            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($option);
+            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($user->getGlobalOption());
             $entity->setCustomer($customer);
         }
         $entity->setSubTotal($invoice->getSubTotal());
@@ -194,6 +194,7 @@ class TableInvoiceController extends Controller
         $entity->setInvoiceMode($invoice->getInvoiceMode());
         $entity->setTransactionMethod($invoice->getTransactionMethod());
         $entity->setTotal($invoice->getTotal());
+        $entity->setTable($invoice->getTable());
         if ($entity->getTotal() > 0) {
             $entity->setProcess('Done');
         }
@@ -233,9 +234,11 @@ class TableInvoiceController extends Controller
         if($entity->getSubTotal()){
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->resetData($invoice);
         }else{
             return new Response("failed");
         }
+
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->tableInvoiceItems($entity,$invoice);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         if($entity->isHold() != 1){
@@ -350,7 +353,7 @@ class TableInvoiceController extends Controller
 
         $salesBy    = $entity->getSalesBy();
         $tableNo    = $entity->getTable()->getName();
-        $table = "Table no. {$tableNo}";
+        $table = "Table No. {$tableNo}";
         /** ===================Invoice Sales Item Information========================= */
 
 
@@ -366,16 +369,7 @@ class TableInvoiceController extends Controller
         $printer -> setFont(Printer::FONT_B);
         $printer -> text($address."\n");
         $printer -> feed();
-        /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        if($entity->getRestaurantConfig()->isPrintToken() == 1){
-            $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> text("Token No-{$token}\n\n");
-            $printer -> selectPrintMode();
-            $printer -> feed();
-        }
+
 
         /* Title of receipt */
         $printer->setFont(Printer::FONT_A);
@@ -383,15 +377,6 @@ class TableInvoiceController extends Controller
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> text("KITCHEN PRINT");
         $printer -> text("\n");
-        if($entity->getRestaurantConfig()->isPrintToken() == 1){
-            $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> text("Token No-{$token}\n\n");
-            $printer -> selectPrintMode();
-            $printer -> feed();
-        }
-        $printer -> text("Invoice no. {$entity->getInvoice()}\n");
         $printer -> selectPrintMode();
         $printer -> setEmphasis(true);
         $printer -> text("{$table}\n");
@@ -446,6 +431,7 @@ class TableInvoiceController extends Controller
         $returnBdt          = $entity->getReturnAmount();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy();
+        $table              = $entity->getTable()->getName();
 
         $slipNo ='';
         $tableNo ='';

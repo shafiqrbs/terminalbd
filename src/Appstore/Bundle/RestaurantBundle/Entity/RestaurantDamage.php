@@ -53,21 +53,21 @@ class RestaurantDamage
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="text")
+     * @ORM\Column(name="notes", type="text", nullable = true)
      */
     private $notes;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="float",nullable=true)
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
     private $purchasePrice;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="subTotal", type="float",nullable=true)
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
 
