@@ -120,11 +120,11 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done' ) %}
+                                    {% if ( entity.process == 'Done'  ) %}
                                     <a  href="javascript:"  data-url="{{ path('restaurant_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                    {% if  app.user.granted("ROLE_DOMAIN") %}
-                                        <a  href="{{ path('restaurant_purchase_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                    {% if ( ("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process == 'Approved' and app.user.granted("ROLE_RESTAURANT_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
+                                        <a  href="{{ path('restaurant_purchase_reverse',{'id':entity.id}) }}"  class="btn yellow" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>

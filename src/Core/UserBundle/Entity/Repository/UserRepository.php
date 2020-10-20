@@ -238,6 +238,7 @@ class UserRepository extends EntityRepository
                 'ROLE_RESTAURANT'                           => 'Restaurant',
                 'ROLE_DOMAIN_RESTAURANT'                    => 'Restaurant Operator',
                 'ROLE_DOMAIN_RESTAURANT_MANAGER'            => 'Restaurant Manager',
+                'ROLE_RESTAURANT_REVERSE'                   => 'Restaurant Reverse',
                 'ROLE_DOMAIN_RESTAURANT_ADMIN'              => 'Restaurant Admin',
             );
         }

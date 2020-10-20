@@ -1,74 +1,76 @@
-<link rel="stylesheet" href="{{ asset('assets/css/print.css') }}"/>
-<style>
-    .table{
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-        font-family:tahoma, geneva, sans-serif;
-    }
-    .table tr.head th, .table tr.head td{
-        font-size: 15px;
-        background: #333;
-        color: #fff;
-        height: 40px;
-    }
-
-    .table tr td{
-        font-size: 12px;
-        height: 15px;
-        vertical-align: middle;
-    }
-
-    .table th, .table td{
-        border: 1px solid #e5e5e5;
-        text-align: left;
-        padding-left: 20px;
-        height: 30px;
-        line-height: 30px;
-
-    }
-    h2 {
-        font-size: 24px;
-        display: block;
-        padding: 0;
-        margin: 0;
-        line-height: 45px;
-        height: 45px;
-    }
-    h3 {
-        font-size: 20px;
-        display: block;
-        padding: 0;
-        margin: 0;
-        line-height: 45px;
-        height: 45px;
-    }
-    .pull-center{
-        background: #e5e5e5;
-        text-align: center!important;
-
-    }
-    .pull-left{
-        text-align: left!important;
-        display: block;
-        padding-right: 20px;
-    }
-    .pull-right{
-        text-align: right!important;
-        display: block;
-        padding-right: 20px;
-    }
-    .numeric{
-        width: 80%;
-    }
-
-</style>
-{% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
-{% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
 <html>
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}"/>
+    <style>
+        .table{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            font-family:tahoma, geneva, sans-serif;
+        }
+        .table tr.head th, .table tr.head td{
+            font-size: 15px;
+            background: #333;
+            color: #fff;
+            height: 40px;
+        }
+
+        .table tr td{
+            font-size: 12px;
+            height: 15px;
+            vertical-align: middle;
+        }
+
+        .table th, .table td{
+            border: 1px solid #e5e5e5;
+            text-align: left;
+            padding-left: 20px;
+            height: 30px;
+            line-height: 30px;
+
+        }
+        h2 {
+            font-size: 24px;
+            display: block;
+            padding: 0;
+            margin: 0;
+            line-height: 45px;
+            height: 45px;
+        }
+        h3 {
+            font-size: 20px;
+            display: block;
+            padding: 0;
+            margin: 0;
+            line-height: 45px;
+            height: 45px;
+        }
+        .pull-center{
+            background: #e5e5e5;
+            text-align: center!important;
+
+        }
+        .pull-left{
+            text-align: left!important;
+            display: block;
+            padding-right: 20px;
+        }
+        .pull-right{
+            text-align: right!important;
+            display: block;
+            padding-right: 20px;
+        }
+        .numeric{
+            width: 80%;
+        }
+
+    </style>
 </head>
+
+{% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
+{% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
+
 <body>
 <table class="table">
     <thead>

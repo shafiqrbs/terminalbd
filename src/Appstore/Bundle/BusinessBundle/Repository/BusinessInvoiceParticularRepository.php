@@ -716,6 +716,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->addSelect('v.companyName AS companyName');
         $qb->addSelect('vs.grn AS grn');
         $qb->addSelect('si.subTotal AS salesPrice');
+        $qb->addSelect('si.price AS price');
         $qb->addSelect('e.invoice AS invoice');
         $qb->addSelect('e.created AS created');
         $qb->addSelect('mds.name AS name');

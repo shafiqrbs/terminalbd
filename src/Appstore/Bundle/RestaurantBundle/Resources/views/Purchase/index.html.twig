@@ -95,7 +95,8 @@
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'created' or entity.process == 'pending' %}
+                                            {% set processIntArr = ['Created','Revised'] %}
+                                            {% if  entity.process in processIntArr %}
                                             <a href="{{ path('restaurant_purchase_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('restaurant_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}

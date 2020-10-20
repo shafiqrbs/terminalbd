@@ -311,11 +311,13 @@ class PurchaseController extends Controller
         $em->getRepository('RestaurantBundle:Purchase')->reversePurchaseParticularUpdate($entity);
         $em = $this->getDoctrine()->getManager();
         $entity->setProcess('Revised');
+        $entity->setReceiveDate(NULL);
         $entity->setDue($entity->getNetTotal() - $entity->getPayment());
         $em->flush();
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processReversePurchaseItem($entity);
         }
+        return $this->redirect($this->generateUrl('restaurant_purchase_edit',array('id' => $entity->getId())));
 
     }
 
