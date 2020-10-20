@@ -1,7 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
+use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -44,5 +46,32 @@ class PurchaseRepository extends EntityRepository
         return $entity;
 
     }
+
+    public function purchaseTransactionReverse(Purchase $entity){
+
+        $em = $this->_em;
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountPurchase e WHERE e.restaurantPurchase = {$entity->getId()}");
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+
+    }
+
+    public function reversePurchaseParticularUpdate(Purchase $invoice)
+    {
+        $em = $this->_em;
+
+        /** @var PurchaseItem $item */
+        foreach($invoice->getPurchaseItems() as $item ){
+            /** @var Particular  $particular */
+            $particular = $item->getParticular();
+            $qnt = ($particular->getPurchaseQuantity() - $item->getQuantity());
+            $particular->setPurchaseQuantity($qnt);
+            $em->persist($particular);
+            $em->flush();
+            $em->getRepository('RestaurantBundle:Particular')->remainingQnt($particular);
+        }
+    }
+
 
 }

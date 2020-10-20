@@ -28,6 +28,10 @@ restaurant_purchase_approve:
     path:     /{id}/approve
     defaults: { _controller: "RestaurantBundle:Purchase:approve" }
 
+restaurant_purchase_reverse:
+    path:     /{id}/reverse
+    defaults: { _controller: "RestaurantBundle:Purchase:reverse" }
+
 restaurant_purchase_delete:
     path:     /{id}/delete
     defaults: { _controller: "RestaurantBundle:Purchase:delete" }

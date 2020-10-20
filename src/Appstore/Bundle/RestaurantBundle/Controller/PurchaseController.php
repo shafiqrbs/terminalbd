@@ -304,5 +304,20 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('restaurant_purchase'));
     }
 
+    public function reverseAction(Purchase $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getRepository('RestaurantBundle:Purchase')->purchaseTransactionReverse($entity);
+        $em->getRepository('RestaurantBundle:Purchase')->reversePurchaseParticularUpdate($entity);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setProcess('Revised');
+        $entity->setDue($entity->getNetTotal() - $entity->getPayment());
+        $em->flush();
+        if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processReversePurchaseItem($entity);
+        }
+
+    }
+
 
 }

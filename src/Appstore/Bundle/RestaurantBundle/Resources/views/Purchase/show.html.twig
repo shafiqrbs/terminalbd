@@ -123,6 +123,9 @@
                                     {% if ( entity.process == 'Done' ) %}
                                     <a  href="javascript:"  data-url="{{ path('restaurant_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
+                                    {% if  app.user.granted("ROLE_DOMAIN") %}
+                                        <a  href="{{ path('restaurant_purchase_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                    {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>

@@ -6,6 +6,7 @@ use Appstore\Bundle\RestaurantBundle\Controller\InvoiceController;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoiceItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
@@ -369,9 +370,11 @@ class InvoiceParticularRepository extends EntityRepository
                 $particular->setSalesQuantity($qnt);
                 $em->persist($particular);
                 $em->flush();
+                $em->getRepository('RestaurantBundle:Particular')->remainingQnt($particular);
             }
         }
     }
+
 
 
 }
