@@ -20,6 +20,17 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="email">Present Country<span class="required">*</span></label>
+                                <select class="form-control select2" name="registration_country" id="registration_country">
+                                    <option value="">Present Country</option>
+                                    {% render controller("FrontendBundle:TemplateWidget:country") %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label for="registration_mobile">Mobile No <span class="required">*</span></label>
                                 <input type="number" class="form-control" id="registration_mobile" name="registration_mobile" placeholder="Enter mobile no" />
                                 <span style="font-size: 9px;

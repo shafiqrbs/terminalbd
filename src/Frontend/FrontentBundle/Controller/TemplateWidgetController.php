@@ -41,8 +41,6 @@ class TemplateWidgetController extends Controller
         $em = $this->getDoctrine()->getManager();
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=> $globalOption,'parent' => NULL ,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption);
-   //     $siteEntity = $globalOption->getSiteSetting();
-    //    $themeName = $siteEntity->getTheme()->getFolderName();
         $countries = $this->getDoctrine()->getRepository('SettingLocationBundle:Country')->findBy(array(),array('name'=>'asc'));
         return $this->render('@Frontend/Template/Desktop/WebsiteWidget/header.html.twig', array(
             'menuTree'              => $menuTree,
@@ -200,6 +198,18 @@ class TemplateWidgetController extends Controller
             return new Response('');
         }
 
+    }
+
+    public function countryAction()
+    {
+
+        $countries = $this->getDoctrine()->getRepository('SettingLocationBundle:Country')->findBy(array(),array('name'=>'asc'));
+        $data = "";
+        foreach ($countries as $country ):
+            $selected = $country->getCode() == "BD" ? 'selected=selected' : "";
+            $data .="<option {$selected}  '{$country->getId()}'>{$country->getName()}</option>";
+        endforeach;
+        return new Response($data);
     }
 
     public function aboutAction(GlobalOption $globalOption,$wordlimit)
