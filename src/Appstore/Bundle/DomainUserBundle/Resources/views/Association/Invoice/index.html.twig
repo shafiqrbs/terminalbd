@@ -126,7 +126,7 @@
                                             <tr><td>Bank name</td><td>{{ entity.accountBank.name }}</td></tr>
                                             <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
                                             <tr><td>Card No.</td><td>{{ entity.cardNo }}</td></tr>
-                                            <tr><td>Payment Card.</td><td>{{ entity.paymentCard }}</td></tr>
+                                            <tr><td>Payment Card.</td><td>{% if entity.paymentCard is not empty %}{{ entity.paymentCard.name }}{% endif %}</td></tr>
                                         {% endif %}
                                         {% if entity.accountMobileBank is not empty %}
                                             <tr><td>Receive Mobile</td><td>{{ entity.accountMobileBank.name }}</td></tr>

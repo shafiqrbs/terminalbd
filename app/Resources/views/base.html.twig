@@ -99,6 +99,7 @@
     {{ app.user.globaloption.name }}
 {% endif %}
 </a>
+<div class='mobile-nav'><i class="fa fa-bars"></i></div>
 <!-- END LOGO -->
 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
 {% if is_granted('ROLE_CUSTOMER') %}
@@ -322,6 +323,8 @@
             $('#messenger-block').hide();
         });
 
+
+
         $( ".select2GenericMedicine" ).autocomplete({
 
             source: function( request, response ) {
@@ -340,6 +343,10 @@
                 $("#medicineId").val(ui.item.id); // save selected id to hidden input
 
             }
+        });
+
+        $('.mobile-nav').click(function(){
+            $('.nav-collapse').toggleClass("mob-nav-collapse");
         });
 
         {% endblock %}
@@ -399,6 +406,16 @@
     .confirmModal .confirmModal_body{
         border: 1px solid #0362fd;
     }
+    .mobile-nav{
+        display: none;
+        font-weight: bold;
+        position: absolute;
+        z-index: 999;
+        font-size: 20px;
+        color: #fff;
+        top: 25%;
+        left: 5%;
+    }
     @media (max-width: 979px) {
         .navbar .brand {
             display: none !important;
@@ -417,6 +434,9 @@
         }
         .pagination ul>li>a, .pagination ul>li>span{
             padding: 4px 23px;
+        }
+        .mobile-nav{
+            display: block;
         }
     }
 
@@ -438,6 +458,9 @@
     .select2-results .select2-highlighted {
         background: #217ebd !important;
         color: #ffffff;
+    }
+    .mob-nav-collapse{
+        height: auto!important;
     }
 
 </style>

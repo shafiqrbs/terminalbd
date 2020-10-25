@@ -46,6 +46,9 @@ class BusinessController extends Controller
             $Exinvoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoice')->getLastInvoice($globalOption->getBusinessConfig(),$customer);
             $invoiceCheck = empty($Exinvoice) ? 'false' : "true";
             $template =  "Member";
+            $this->get('session')->getFlashBag()->add(
+                'success', "Data has been inserted successfully"
+            );
             return $this->render("CustomerBundle:{$template}:dashboard.html.twig", array(
                 'user'         => $user,
                 'globalOption' => $globalOption,

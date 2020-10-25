@@ -27,7 +27,6 @@
     </div>
     {% set process = ["Pending","In-progress","Checked"] %}
     {% if customer.process in  process %}
-        {{ invoiceCheck }}
         <div class="modale opened" aria-hidden="true">
             <div class="modal-dialog modal-dialog-lg">
                 <div class="modal-content">
