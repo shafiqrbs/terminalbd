@@ -36,12 +36,8 @@ class AssociationSmsListener extends BaseSmsAwareListener
 
         $post = $event->getCustomer();
         $msg = $event->getMemberMsg();
-        if($post->getCountry()->getName() == "Bangladesh"){
-            $mobile = "88".$post->getMobile();
-            $status = $this->gateway->send($msg, $mobile);
-            $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
-        }elseif($post->getCountry() and $post->getCountry()->getName() != "Bangladesh"){
-            $mobile = $post->getMobile();
+        if(!empty($post->getCountry())){
+            $mobile = $post->getCountry()->getPhonecode().$post->getMobile();
             $status = $this->gateway->send($msg, $mobile);
             $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
         }
@@ -57,12 +53,8 @@ class AssociationSmsListener extends BaseSmsAwareListener
 
         $post = $event->getCustomer();
         $msg = $event->getMemberMsg();
-        if($post->getCountry()->getName() == "Bangladesh"){
-            $mobile = "+88".$post->getMobile();
-            $status = $this->gateway->send($msg, $mobile);
-            $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
-        }elseif($post->getCountry() and $post->getCountry()->getName() != "Bangladesh"){
-            $mobile = $post->getMobile();
+        if(!empty($post->getCountry())){
+            $mobile = $post->getCountry()->getPhonecode().$post->getMobile();
             $status = $this->gateway->send($msg, $mobile);
             $this->em->getRepository('SettingToolBundle:SmsSender')->insertCustomerSenderSms($post,$msg, $status);
         }

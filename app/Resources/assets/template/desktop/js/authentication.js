@@ -197,6 +197,7 @@ $("#signup").validate({
     }
 });
 
+
 $("#registrationForm").validate({
 
     rules: {
@@ -210,6 +211,7 @@ $("#registrationForm").validate({
             required: true,
             remote:'/checking-member'
         },
+        "registration_country": {required: true},
         "registration_facebookId": {required: false},
         "registration_address": {required: false}
     },
@@ -217,6 +219,7 @@ $("#registrationForm").validate({
     messages: {
 
         "registration_name":"Enter your full name",
+        "registration_country":"Enter present country",
         "registration_mobile":{
             required: "Enter valid mobile no",
             remote: "This mobile no is already registered. Please try to another no."
@@ -249,6 +252,10 @@ $("#registrationForm").validate({
         });
     }
 });
+
+/* End This Registration form using for BHAWS Association */
+
+
 
 $("#newsLetter").validate({
 

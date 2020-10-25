@@ -475,8 +475,9 @@ class CustomerRepository extends EntityRepository
         $em = $this->_em;
         $exist = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'user' => $user->getId()));
         if(empty($exist)){
+            $code = $data['country'];
             $entity = new Customer();
-            $country = $this->_em->getRepository("SettingLocationBundle:Country")->findOneBy(array("code"=>"BD"));
+            $country = $this->_em->getRepository("SettingLocationBundle:Country")->find($code);
             $entity->setMobile($user->getUsername());
             $entity->setCountry($country);
             if(isset($data['name']) && $data['name'] !=""){

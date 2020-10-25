@@ -96,13 +96,21 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label for="email">Present Country<span class="required">*</span></label>
+                                        <select class="form-control select2" name="registration_country" id="registration_country">
+                                           <option value="">Present Country</option>
+                                            {% for country in countries %}
+                                            <option {% if country.code == "BD" %} selected {% endif %} value="{{ country.id }}">{{ country.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label for="email">Mobile No <span class="required">*</span></label>
                                         <input type="number" class="form-control" id="registration_mobile" name="registration_mobile" placeholder="Enter mobile no" />
-                                        <span style="font-size: 10px;
-    color: #000;
-    padding: 0!important;
-    display: inherit;
-    margin-left: -30px;">Mobile no (BD):01812345678 , Others country code with mobile no.</span>
                                     </div>
                                 </div>
                             </div>

@@ -75,7 +75,7 @@ class Country
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=25)
+     * @ORM\Column(name="countryCode", type="string", length=25)
      */
     private $countryCode;
 
@@ -106,6 +106,14 @@ class Country
      * @ORM\Column(name="iso3", type="string", length=25)
      */
     private $iso3;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=25)
+     */
+    private $code;
 
 
     /**
@@ -269,6 +277,22 @@ class Country
     public function setNicename($nicename)
     {
         $this->nicename = $nicename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 }
 

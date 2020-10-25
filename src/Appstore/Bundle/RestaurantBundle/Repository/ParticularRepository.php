@@ -38,7 +38,8 @@ class ParticularRepository extends EntityRepository
         $category = isset($data['category']) ? $data['category'] :'';
 
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"));
+            $qb->andWhere('e.name LIKE :searchTerm OR e.particularCode LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($name).'%');
         }
         if(!empty($category)){
             $qb->andWhere("c.id = :category")->setParameter('category', $category);

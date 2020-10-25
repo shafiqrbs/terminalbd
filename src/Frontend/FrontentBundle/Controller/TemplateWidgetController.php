@@ -43,9 +43,11 @@ class TemplateWidgetController extends Controller
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption);
    //     $siteEntity = $globalOption->getSiteSetting();
     //    $themeName = $siteEntity->getTheme()->getFolderName();
+        $countries = $this->getDoctrine()->getRepository('SettingLocationBundle:Country')->findBy(array(),array('name'=>'asc'));
         return $this->render('@Frontend/Template/Desktop/WebsiteWidget/header.html.twig', array(
             'menuTree'              => $menuTree,
             'globalOption'          => $globalOption,
+            'countries'             => $countries,
             'menu'                  => $menu,
 
         ));
@@ -107,6 +109,29 @@ class TemplateWidgetController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+    public function modalWebLoginAction(GlobalOption $globalOption)
+    {
+
+        $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+        $user = new User();
+        $form   = $this->createCreateForm($globalOption->getSubDomain(),$user);
+
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() || $detect->isTablet()) {
+            $template = "Template/Mobile/Widget";
+        }else{
+            $template = "Template/Desktop/Widget";
+        }
+        return $this->render('@Frontend/'.$template.'/modalLogin.html.twig', array(
+            'globalOption'             => $globalOption,
+            'csrfToken'   => $csrfToken,
+            'form'   => $form->createView(),
+        ));
+    }
+
 
     public function memberRegistrationAction(GlobalOption $globalOption)
     {

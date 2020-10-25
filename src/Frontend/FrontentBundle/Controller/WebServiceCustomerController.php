@@ -2,6 +2,7 @@
 
 namespace Frontend\FrontentBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Event\AssociationSmsEvent;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Core\UserBundle\Form\SignupType;
@@ -308,13 +309,15 @@ class WebServiceCustomerController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('UserBundle:Profile')->insertNewMember($entity, $data);
-            $data = array('name' => $data['registration_name'],'email' => $data['registration_email'],'address' => $data['registration_address'],'facebookId' => $data['registration_facebookId']);
+            $data = array('name' => $data['registration_name'],'email' => $data['registration_email'],'address' => $data['registration_address'],'facebookId' => $data['registration_facebookId'],'country' => $data['registration_country']);
              $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
             $this->get('security.context')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
             $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);
+            $msg = "Your account has been created, User name:{$this->getUser()}. Thank you. Be with www.{$this->getUser()->getGlobalOption()->getDomain()}";
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'user'=>$entity->getId()));
+            $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($customer, $msg));
             $redirect = $this->generateUrl('domain_customer_homepage',array('shop' => $globalOption->getSlug()));
             return new Response($redirect);
         }

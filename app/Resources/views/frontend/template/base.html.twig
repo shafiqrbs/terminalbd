@@ -62,10 +62,6 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
       <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     {% block cssBlock %}{% endblock %}
 </head>
 <body data-spy="scroll">
@@ -74,7 +70,7 @@
 {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption, 'menu':menu.id}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
-{% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
+{% render controller("FrontendBundle:TemplateWidget:modalWebLogin",{'globalOption':globalOption.id}) %}
 {% if globalOption.templateCustomize.footerBlock == 1 %}
 {{ include('@Frontend/Template/Desktop/WebsiteWidget/footer.html.twig') }}
 {% endif %}
@@ -138,6 +134,7 @@
 'assets/template/plugin/side.toolbar/sidebar.panel.js'
 'assets/template/plugin/js/cookies.js'
 'assets/template/desktop/js/scripts.js'
+'assets/template/desktop/js/authentication.js'
 
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
