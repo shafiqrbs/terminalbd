@@ -318,7 +318,6 @@ $(document).on("click", "#kitchenBtn", function() {
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
                 jsPostPrint(response);
-                setTimeout(pageRedirect(),3000);
             });
         }
     });

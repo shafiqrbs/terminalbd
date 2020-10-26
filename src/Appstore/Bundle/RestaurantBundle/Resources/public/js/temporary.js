@@ -286,7 +286,7 @@ function formSubmit() {
                 $('#subTotal').html('');
                 $('#restaurant_invoice_vat').val(0);
                 $('#restaurant_invoice_payment').val(0);
-                $('#posButton').html("<i class='icon-print'></i> POS Print").attr('disabled','disabled');
+                $('#posButton').html("<i class='icon-print'></i> POS PRINT").attr('disabled','disabled');
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#invoiceParticulars').hide();
                 jsPostPrint(response);
