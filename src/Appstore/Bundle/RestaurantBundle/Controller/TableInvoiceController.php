@@ -268,15 +268,15 @@ class TableInvoiceController extends Controller
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->getSalesGridItems($invoice);
         $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateInvoiceTotalPrice($invoice);
-
+        $process = empty($entity->getProcess()) ? "New" : $entity->getProcess();
         $data = array(
             'subTotal'           => $entity->getSubTotal(),
             'discount'           => $entity->getDiscount(),
             'invoiceParticulars' => $invoiceParticulars ,
             'vat'                => $entity->getVat() ,
             'total'              => $entity->getTotal() ,
-            'process'            => $entity->getProcess() ,
-            'entity'            => $entity->getId() ,
+            'process'            => $process ,
+            'entity'             => $entity->getId() ,
             'success'            => 'success'
         );
         return $data;

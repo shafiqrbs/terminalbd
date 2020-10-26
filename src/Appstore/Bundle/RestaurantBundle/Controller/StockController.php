@@ -121,8 +121,8 @@ class StockController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('RestaurantBundle:Particular')->find($id);
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Particular')->findOneBy(array('restaurantConfig'=>$config,'id'=>$id));
         $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getAccessoriesParticular($config);
         $pagination = $this->paginate($entities);
         if (!$entity) {
@@ -205,9 +205,11 @@ class StockController extends Controller
      * Deletes a Particular entity.
      *
      */
-    public function deleteAction(Particular $entity)
+    public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Particular')->findOneBy(array('restaurantConfig' => $config,'id'=>$id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }

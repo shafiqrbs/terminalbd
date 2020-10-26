@@ -236,6 +236,7 @@ $(document).on('keyup', '.payment', function() {
 $(document).on('click', '#saveButton', function() {
 
     $('#buttonType').val('saveBtn');
+    var table = $('#invoiceEntity').val();
     $.ajax({
         url         : $('form#invoiceForm').attr( 'action' ),
         type        : 'POST',
@@ -254,8 +255,9 @@ $(document).on('click', '#saveButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val('');
+            $('#table-'+table).val('');
             $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
-            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
         }
     });
@@ -282,8 +284,9 @@ $(document).on('click', '#posButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val(0);
-            $('#posButton').html("<i class='icon-print'></i> POS Print").attr('disabled','disabled');
-            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
+            $('#table-'+table).val('');
+            $('#posButton').html("<i class='icon-print'></i> POS PRINT").attr('disabled','disabled');
+            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
             jsPostPrint(response);
         }

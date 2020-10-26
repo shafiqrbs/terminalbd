@@ -122,6 +122,14 @@
     padding-right: 10px;
     font-weight: bold;
 }
+.table-tab .New{
+    background: #5f39d7;
+    font-size: 13px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+}
 .table-tab .Kitchen{
     background:#6a621d;
     font-size: 13px;

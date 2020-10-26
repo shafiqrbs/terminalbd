@@ -211,7 +211,7 @@ class Invoice
      *
      * @ORM\Column(name="discountCalculation", type="smallint", length = 2,  nullable=true)
      */
-    private $discountCalculation;
+    private $discountCalculation = 0;
 
     /**
      * @var string
@@ -958,7 +958,7 @@ class Invoice
     /**
      * @param int $discountCalculation
      */
-    public function setDiscountCalculation(int $discountCalculation)
+    public function setDiscountCalculation($discountCalculation)
     {
         $this->discountCalculation = $discountCalculation;
     }

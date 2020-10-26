@@ -60,7 +60,7 @@ class RestaurantTableInvoice
      *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
-    private $process;
+    private $process = "New";
 
     /**
      * @var array

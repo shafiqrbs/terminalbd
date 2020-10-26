@@ -133,10 +133,14 @@ class ProductionController extends Controller
     }
 
 
-    public function productionAction(Particular $entity)
+    public function productionAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Particular')->findOneBy(array('restaurantConfig'=>$config, 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Particular entity.');
+        }
         $editForm = $this->createProductionCostingForm($entity);
         $particulars = $em->getRepository('RestaurantBundle:Particular')->getProductionParticular($config->getId());
         $productionValues = $this->getDoctrine()->getRepository('RestaurantBundle:ProductionValueAdded')->getProductionAdded($entity);

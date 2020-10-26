@@ -67,7 +67,7 @@ class TableInvoiceType extends AbstractType
             ))
 
             ->add('invoiceMode', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap invoice-change'),
@@ -76,6 +76,7 @@ class TableInvoiceType extends AbstractType
                         ->join("e.service","s")
                         ->where("e.status = 1")
                         ->andWhere("s.slug = 'invoice-mode'")
+                        ->andWhere("e.restaurantConfig ={$this->config}")
                         ->orderBy("e.id","ASC");
                 }
             ))
