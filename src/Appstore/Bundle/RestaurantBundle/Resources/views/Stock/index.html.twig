@@ -230,6 +230,7 @@
                                     <th class="numeric" >Stock Qnt</th>
                                     <th class="numeric" >Min. Qnt</th>
                                     <th class="numeric" >Unit</th>
+                                    <th class="numeric" >Prod. Type</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -265,12 +266,14 @@
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
+
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('restaurant_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">{% if  entity.unit is not empty %}{{ entity.unit }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.productionType|capitalize }}</td>
                                         <td class="numeric" >
                                             <div class="actions">
                                                 <div class="btn-group">

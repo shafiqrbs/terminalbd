@@ -338,13 +338,6 @@ class TableInvoiceController extends Controller
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
-       // $connector = new FilePrintConnector("php://stdout");
-        $printer -> text("Hello World!\n");
-        $printer -> cut();
-        $response =  base64_encode($connector->getData());
-        $printer -> close();
-        return $response;
-        exit;
 
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
@@ -610,6 +603,4 @@ class TableInvoiceController extends Controller
         return $response;
     }
 
-
 }
-

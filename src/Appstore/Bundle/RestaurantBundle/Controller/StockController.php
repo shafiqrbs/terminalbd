@@ -190,6 +190,8 @@ class StockController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionElementPrice($entity,$entity->getPurchasePrice());
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config->getId());
             return $this->redirect($this->generateUrl('restaurant_stock'));
         }
         $categories = $this->getDoctrine()->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig'=>$config,'status'=>1),array('name'=>"ASC"));
@@ -268,14 +270,15 @@ class StockController extends Controller
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
         $setField = 'set'.$data['name'];
-        $entity->$setField(abs($data['value']));
-        $em->flush();
+        $price = abs($data['value']);
+        $entity->$setField($price);
+
         if($data['name'] == "PurchasePrice"){
-            $price = abs($data['value']);
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionElementPrice($entity,$price);
             $config = $entity->getRestaurantConfig()->getId();
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config);
         }
+        $em->flush();
         exit;
 
     }

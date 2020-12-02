@@ -150,7 +150,8 @@
                                                 {% if entity.process == 'approved' or entity.processHead in modes  %}
                                                     {{ entity.amount|number_format }}
                                                 {% else %}
-                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>               {% endif %}
+                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                                                {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.balance|number_format }}</td>
                                         <td class="numeric" >

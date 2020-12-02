@@ -191,7 +191,6 @@ class MenuGroupingController extends Controller
     public function sortedAction(Request $request)
     {
         $data = $request ->request->get('menuItem');
-        var_dump($data);
         $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->setMenuOrdering($data);
         exit;
 

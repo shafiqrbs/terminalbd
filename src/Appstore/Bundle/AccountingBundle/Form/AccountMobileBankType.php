@@ -47,6 +47,7 @@ class AccountMobileBankType extends AbstractType
                     'iPay' => 'iPay',
                     'Nagad' => 'Nagad',
                     'Ucash' => 'Ucash',
+                    'City Touch' => 'City Touch',
                 ),
             ))
             ->add('accountOwner','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add account ownership'),

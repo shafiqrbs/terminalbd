@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -31,6 +32,48 @@ class RestaurantConfigRepository extends EntityRepository
 
         $purchase = $em->createQuery('DELETE RestaurantBundle:Purchase e WHERE e.restaurantConfig = '.$config);
         $purchase->execute();
+
+        $elem = "UPDATE `restaurant_particular` as sub
+                 SET sub.openingQuantity = '', sub.quantity = '', sub.productionQuantity = '', sub.purchaseQuantity = '', sub.purchaseQuantity = '', sub.salesQuantity = '', sub.damageQuantity = '', sub.purchaseReturnQuantity = '', sub.remainingQuantity = ''
+                 WHERE sub.restaurantConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $config);
+        $qb1->execute();
+
+    }
+
+    public function resetPurchaseSalesProduction(GlobalOption $option)
+    {
+
+        $em = $this->_em;
+        $config = $option->getRestaurantConfig ()->getId();
+
+        $history = $em->createQuery('DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.restaurantConfig = '.$config);
+        $history->execute();
+
+        $batch = $em->createQuery('DELETE RestaurantBundle:ProductionBatch e WHERE e.restaurantConfig = '.$config);
+        $batch->execute();
+
+        $invoice = $em->createQuery('DELETE RestaurantBundle:Invoice e WHERE e.restaurantConfig = '.$config);
+        $invoice->execute();
+
+        $purchase = $em->createQuery('DELETE RestaurantBundle:Purchase e WHERE e.restaurantConfig = '.$config);
+        $purchase->execute();
+
+        $ids = $this->createQueryBuilder('')
+            ->from('RestaurantBundle::Invoice','e')
+            ->where("e.restaurantConfig={$config}")
+            ->select('e.id')
+            ->getQuery()->getResult();
+
+        $this->createQueryBuilder('product')
+            ->from('RestaurantBundle::InvoiceItem','product')
+            ->where('product.id in (:ids)')
+            ->setParameter('ids', $ids)
+            ->delete()
+            ->getQuery()
+            ->execute();
+
 
         $elem = "UPDATE `restaurant_particular` as sub
                  SET sub.openingQuantity = '', sub.quantity = '', sub.productionQuantity = '', sub.purchaseQuantity = '', sub.purchaseQuantity = '', sub.salesQuantity = '', sub.damageQuantity = '', sub.purchaseReturnQuantity = '', sub.remainingQuantity = ''
