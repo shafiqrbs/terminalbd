@@ -41,13 +41,13 @@ class AccountMobileBankType extends AbstractType
             ->add('serviceName', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'choices' => array(
-                    'Bkash' => 'Bkash',
-                    'Rocket' => 'Rocket',
-                    'Nexus' => 'Nexus',
-                    'iPay' => 'iPay',
-                    'Nagad' => 'Nagad',
-                    'Ucash' => 'Ucash',
-                    'City Touch' => 'City Touch',
+                    'Bkash'         => 'Bkash',
+                    'Rocket'        => 'Rocket',
+                    'Nexus'         => 'Nexus',
+                    'iPay'          => 'iPay',
+                    'Nagad'         => 'Nagad',
+                    'Ucash'         => 'Ucash',
+                    'City Touch'    => 'City Touch',
                 ),
             ))
             ->add('accountOwner','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add account ownership'),
