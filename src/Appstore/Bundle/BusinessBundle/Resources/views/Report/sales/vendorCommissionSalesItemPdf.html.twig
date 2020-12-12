@@ -101,6 +101,7 @@
     <tbody>
     {%  set totalSales = 0 %}
     {% for entity in entities %}
+        {% set totalSales = totalSales + entity.salesPrice %}
         <tr>
             <td>{{ loop.index }}.</td>
             <td>{{ entity.name }}</td>
@@ -112,9 +113,10 @@
             <td>{{ entity.quantity }}</td>
             <td>{{ entity.unit }}</td>
             <td>{{ entity.price }}</td>
-            <td>{{ entity.salesPrice|number_format }}</td>
+            <td>{{ entity.salesPrice|number_format(2) }}</td>
         </tr>
     {% endfor %}
+    <tr><th colspan="10" class="text-right">Grand Total</th><th><strong>{{ totalSales|number_format(2) }}</strong></th></tr>
     </tbody>
 </table>
 </body>

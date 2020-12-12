@@ -486,8 +486,6 @@ class ReportController extends Controller
         $pagination = $this->paginate($entities);
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption()],['companyName'=>'ASC']);
 
-
-
         if(empty($data['pdf'])){
 
             return $this->render('BusinessBundle:Report:sales/vendorCommissionSalesItem.html.twig', array(
