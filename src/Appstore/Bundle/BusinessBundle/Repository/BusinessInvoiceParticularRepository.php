@@ -727,7 +727,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->andWhere('e.process IN (:process)');
         $qb->setParameter('process', array('Done','Delivered','Chalan'));
         $this->handleSearchCommissionBetween($qb,$data);
-        $qb->orderBy('mds.name','ASC');
+        $qb->orderBy('created','ASC');
         return $qb->getQuery()->getArrayResult();
     }
 

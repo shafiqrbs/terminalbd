@@ -71,7 +71,7 @@
 </head>
 {% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
 {% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
-<body>
+<body >
 <table class="table">
     <thead>
     <tr>
@@ -99,8 +99,10 @@
     </tr>
     </thead>
     <tbody>
+    {%  set totalItem = 0 %}
     {%  set totalSales = 0 %}
     {% for entity in entities %}
+        {% set totalItem = totalItem + entity.quantity %}
         {% set totalSales = totalSales + entity.salesPrice %}
         <tr>
             <td>{{ loop.index }}.</td>
@@ -116,7 +118,7 @@
             <td>{{ entity.salesPrice|number_format(2) }}</td>
         </tr>
     {% endfor %}
-    <tr><th colspan="10" class="text-right">Grand Total</th><th><strong>{{ totalSales|number_format(2) }}</strong></th></tr>
+    <tr><th colspan="7" class="text-right">Grand Total</th><th>{{ totalItem }}</th><td></td><td></td><th><strong>{{ totalSales|number_format(2) }}</strong></th></tr>
     </tbody>
 </table>
 </body>

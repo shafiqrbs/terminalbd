@@ -52,7 +52,7 @@
                                         <select name="vendor" id="vendor" class="m-wrap span12">
                                             <option value="" >--Select Vendor--</option>
                                             {% for vendor in vendors %}
-                                                <option value="{{ vendor.id }}" {% if searchForm.vendorId is defined and searchForm.vendorId == vendor.id %} selected="selected" {% endif %} >{{ vendor.companyName }}</option>
+                                                <option value="{{ vendor.id }}" {% if searchForm.vendor is defined and searchForm.vendor == vendor.id %} selected="selected" {% endif %} >{{ vendor.companyName }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -69,8 +69,8 @@
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span12">
-                                                <input type="text" id="startDate" name="startDate" autocomplete="off"  class="span5 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  placeholder="">
-                                                <input type="text" id="endDate" name="endDate" autocomplete="off" class="span5 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}" placeholder="">
+                                                <input type="text" id="startDate" name="startDate" autocomplete="off"  class="span5 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  placeholder="Start date">
+                                                <input type="text" id="endDate" name="endDate" autocomplete="off" class="span5 m-wrap dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}" placeholder="End Date">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
