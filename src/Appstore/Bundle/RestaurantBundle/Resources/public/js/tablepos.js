@@ -284,7 +284,7 @@ $(document).on('click', '#posButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val(0);
-            $('#table-'+table).val('');
+           // $('#table-'+table).val('');
             $('#posButton').html("<i class='icon-print'></i> POS PRINT").attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
