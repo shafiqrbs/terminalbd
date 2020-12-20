@@ -429,7 +429,7 @@ class TableInvoiceController extends Controller
         $dueBdt             = $entity->getDue();
         $payment            = $entity->getPayment();
         $returnBdt          = $entity->getReturnAmount();
-        $transaction        = $entity->getTransactionMethod()->getName();
+        $transaction        = empty($entity->getTransactionMethod()) ? "Cash" : $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy();
         $table              = $entity->getTable()->getName();
 
@@ -483,7 +483,7 @@ class TableInvoiceController extends Controller
         }
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer->setFont(Printer::FONT_B);
+        $printer -> setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
