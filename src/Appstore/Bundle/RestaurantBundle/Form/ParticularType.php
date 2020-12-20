@@ -28,6 +28,7 @@ class ParticularType extends AbstractType
                     new NotBlank(array('message'=>'Please enter particular name'))
                 ))
             )
+
             ->add('service', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Service',
@@ -41,7 +42,7 @@ class ParticularType extends AbstractType
                     return $er->createQueryBuilder('e')
                     ->where("e.status = 1")
                     ->andWhere('e.slug IN (:slugs)')
-                    ->setParameter('slugs',array('token','value-added','invoice-mode'))
+                    ->setParameter('slugs',array('token','value-added','invoice-mode','product-group'))
                     ->orderBy("e.sorting","ASC");
                 }
             ))

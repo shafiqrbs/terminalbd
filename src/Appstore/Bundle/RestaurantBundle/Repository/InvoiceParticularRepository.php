@@ -76,6 +76,28 @@ class InvoiceParticularRepository extends EntityRepository
         return $result;
     }
 
+    public function findWithProductGroupOverview(User $user, $data)
+    {
+
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoice','i');
+        $qb->leftJoin('e.particular','p');
+        $qb->leftJoin('p.category','c');
+        $qb->leftJoin('c.productGroup','pg');
+        $qb->select('sum(e.subTotal) as amount');
+        $qb->addSelect('SUM(e.quantity) as quantity');
+        $qb->addSelect('pg.name as name');
+        $qb->where('i.restaurantConfig = :config')->setParameter('config', $config);
+        $qb->andWhere("i.process IN (:process)");
+        $qb->setParameter('process', array('Done','Delivered'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('pg.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
     public function findWithProductOverview(User $user, $data)
     {
 

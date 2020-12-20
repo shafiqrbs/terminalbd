@@ -14,6 +14,10 @@ restaurant_report_sales_category:
     path:     /category-wise-sales
     defaults: { _controller: "RestaurantBundle:Report:categoryBaseSalesSummary" }
 
+restaurant_report_sales_group:
+    path:     /group-wise-sales
+    defaults: { _controller: "RestaurantBundle:Report:productGroupBaseSalesSummary" }
+
 restaurant_report_sales_product:
     path:     /product-wise-sales
     defaults: { _controller: "RestaurantBundle:Report:productBaseSalesSummary" }

@@ -39,6 +39,26 @@ class CategoryType extends AbstractType
                         ->orderBy("e.sorting","ASC");
                 }
             ))
+
+            ->add('productGroup', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
+                'property' => 'name',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'empty_value' => '---Choose product group ---',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.service",'s')
+                        ->where("e.status = 1")
+                        ->andWhere('s.slug IN (:slugs)')
+                        ->setParameter('slugs',array('product-group'))
+                        ->orderBy("e.sorting","ASC");
+                }
+            ))
+
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter category name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter category name'))
@@ -61,7 +81,7 @@ class CategoryType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_particular';
+        return 'category';
     }
 
 

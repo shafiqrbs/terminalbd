@@ -47,7 +47,9 @@ class ReportController extends Controller
         $transactionOverview = $em->getRepository('RestaurantBundle:Invoice')->transactionBaseOverview($user,$data);
         $userSalesOverview = $em->getRepository('RestaurantBundle:Invoice')->userSalesOverview($user,$data);
         $categoryOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithCategoryOverview($user,$data);
+        $productGroupOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductGroupOverview($user,$data);
         $productOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductOverview($user,$data);
+
 
         if(empty($data['pdf'])){
 
@@ -60,6 +62,7 @@ class ReportController extends Controller
                 'userSalesOverview'            => $userSalesOverview,
                 'categoryOverview'            => $categoryOverview,
                 'productOverview'             => $productOverview,
+                'productGroupOverview'             => $productGroupOverview,
                 'searchForm'                    => $data,
 
             ));
@@ -75,6 +78,7 @@ class ReportController extends Controller
                     'transactionOverview' => $transactionOverview,
                     'categoryOverview'            => $categoryOverview,
                     'productOverview'             => $productOverview,
+                    'productGroupOverview'             => $productGroupOverview,
                     'searchForm'                    => $data,
                 )
             );
@@ -110,7 +114,7 @@ class ReportController extends Controller
 
     }
 
-     public function categoryBaseSalesSummaryAction()
+    public function categoryBaseSalesSummaryAction()
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -130,6 +134,30 @@ class ReportController extends Controller
                 )
             );
             $this->downloadPdf($html,'category-sales-summary.pdf');
+        }
+
+    }
+
+    public function productGroupBaseSalesSummaryAction()
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $categoryOverview = $em->getRepository('RestaurantBundle:InvoiceParticular')->findWithProductGroupOverview($user,$data);
+        if(empty($data['pdf'])){
+            return $this->render('RestaurantBundle:Report:ProductGroupSummaryPdf.html.twig', array(
+                'categoryOverview'          => $categoryOverview,
+                'searchForm'            => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'RestaurantBundle:Report:ProductGroupSummaryPdf.html.twig', array(
+                    'option' => $user->getGlobalOption(),
+                    'categoryOverview'          => $categoryOverview,
+                    'searchForm'            => $data,
+                )
+            );
+            $this->downloadPdf($html,'group-sales-summary.pdf');
         }
 
     }
