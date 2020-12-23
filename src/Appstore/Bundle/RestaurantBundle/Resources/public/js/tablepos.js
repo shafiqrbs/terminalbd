@@ -115,6 +115,16 @@ $(document).on('click', '.method-process', function() {
         $('.bankHide').hide(500);
         $('.mobileBankHide').hide(500);
     }
+    $.ajax({
+        url         : Routing.generate('restaurant_tableinvoice_update'),
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        success     : function(response){
+
+        }
+    });
 });
 
 function jsonResult(response) {
@@ -255,7 +265,6 @@ $(document).on('click', '#saveButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val('');
-            $('#table-'+table).val('');
             $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
@@ -265,7 +274,6 @@ $(document).on('click', '#saveButton', function() {
 
 $(document).on('click', '#posButton', function() {
 
-    $('#buttonType').val('posBtn');
     $.ajax({
         url         : $('form#invoiceForm').attr( 'action' ),
         type        : $('form#invoiceForm').attr( 'method' ),
@@ -284,7 +292,6 @@ $(document).on('click', '#posButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val(0);
-           // $('#table-'+table).val('');
             $('#posButton').html("<i class='icon-print'></i> POS PRINT").attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();

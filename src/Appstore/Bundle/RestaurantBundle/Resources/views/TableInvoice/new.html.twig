@@ -239,7 +239,7 @@
                                                         <div class="switch-method">
                                                             {% set methods = ['Cash','Mobile','Bank'] %}
                                                             {% for method in methods %}
-                                                                <input {% if method == "Cash" %} checked="checked" {% endif %} type="radio" id="{{ method }}" class="method-process" name="method" value="{{ method }}"/>
+                                                                <input {% if entity.transactionMethod is not empty and entity.transactionMethod.name == method %} checked="checked" {% endif %} type="radio" id="{{ method }}" class="method-process" name="method" value="{{ method }}"/>
                                                                 <label  for="{{ method }}">{{ method }}</label>
                                                             {% endfor %}
 
@@ -468,7 +468,6 @@
                                                 <input type="hidden" class="total due" name="total" id="total" value="{{ entity.total }}" >
                                                 <input type="hidden" class="due" name="due" id="due" value="{{ entity.total }}" >
                                                 <input type="hidden" name="discount" id="discount" value="">
-                                                <input type="hidden" name="buttonType" id="buttonType" value="">
                                                 <button type="button" class="btn blue big  receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
                                                 {% if config.posPrint == 1 %}
                                                     <button type="button" class="btn yellow big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>

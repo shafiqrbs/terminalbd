@@ -249,8 +249,7 @@ class TableInvoiceController extends Controller
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
         }
         if($btn == "posBtn" and $entity->isHold() != 1 ){
-            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
-            $pos = $this->posPrint($entity,$invoiceParticulars);
+            $pos = $this->posPrint($entity);
             return new Response($pos);
         }
         return new Response("success");
@@ -386,16 +385,18 @@ class TableInvoiceController extends Controller
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("------------------------------------------------------------\n");
         $i=1;
+
         /* @var $row RestaurantTableInvoiceItem */
+
         foreach ( $entity->getInvoiceItems() as $row){
-            if($row->isPrint() == 1){
-                $productName = "{$i}. {$row->getParticular()->getName()}";
-                $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
-                $i++;
-            }
+            $productName = "{$i}. {$row->getParticular()->getName()}";
+            $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
 
         }
         $printer -> text("------------------------------------------------------------\n");
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($date."\n");
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
         $response =  base64_encode($connector->getData());
@@ -403,8 +404,13 @@ class TableInvoiceController extends Controller
         return $response;
     }
 
-    private function posPrint(Invoice $entity,$invoiceParticulars)
+    private function posPrint(Invoice $entity)
     {
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
+        foreach ( $invoiceParticulars as $row){
+            echo $productName = "{$row->getParticular()->getName()}";
+        }
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
@@ -441,7 +447,7 @@ class TableInvoiceController extends Controller
         if($entity->getTableNos()){
             $tableNo = implode(",",$entity->getTableNos());
         }
-        $table = "Table no. {$slipNo}{$tableNo}";
+        $table = "Table no. {$table}";
 
         $transaction    = new PosItemManager('Pay Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('SubTotal: ','Tk.',number_format($subTotal));
@@ -532,39 +538,7 @@ class TableInvoiceController extends Controller
         }
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
 
-        if($config->isKitchenPrint() == 1 ){
-            $printer->cut();
-            $printer->setFont(Printer::FONT_A);
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer -> text("KITCHEN PRINT");
-            $printer -> text("\n");
-            if($entity->getRestaurantConfig()->isPrintToken() == 1){
-                $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
-                $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-                $printer -> setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> text("Token No-{$token}\n\n");
-                $printer -> selectPrintMode();
-                $printer -> feed();
-            }
-            $printer -> text("Invoice no. {$entity->getInvoice()}\n");
-            $printer -> selectPrintMode();
-            $printer -> setEmphasis(true);
-            $printer -> text("{$table}\n");
-            $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer->setFont(Printer::FONT_B);
-            $printer -> setEmphasis(true);
-            $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
-            $printer -> text("------------------------------------------------------------\n");
-            $i=1;
-            /* @var $row InvoiceParticular */
-            foreach ( $invoiceParticulars as $row){
-                $productName = "{$i}. {$row->getParticular()->getName()}";
-                $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
-                $i++;
-            }
-            $printer -> text("------------------------------------------------------------\n");
-        }
+
         if($config->isDeliveryPrint() == 1 ){
             $printer->cut();
             $printer->setFont(Printer::FONT_A);

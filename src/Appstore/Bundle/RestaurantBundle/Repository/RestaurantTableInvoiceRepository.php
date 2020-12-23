@@ -67,6 +67,8 @@ class RestaurantTableInvoiceRepository extends EntityRepository
                 $entity = new RestaurantTableInvoice();
                 $entity->setRestaurantConfig($config);
                 $entity->setTable($table);
+                $mode = $em->getRepository("SettingToolBundle:TransactionMethod")->findOneBy(array('name'=>"Cash"));
+                $entity->setTransactionMethod($mode);
                 $em->persist($entity);
                 $em->flush();
             }
