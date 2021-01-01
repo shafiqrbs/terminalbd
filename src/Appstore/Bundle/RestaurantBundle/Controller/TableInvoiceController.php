@@ -331,7 +331,6 @@ class TableInvoiceController extends Controller
 
         $isPrints = $_REQUEST['isPrint'];
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateKitchenPrint($entity,$isPrints);
-    //    $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->find($entity);
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
@@ -343,15 +342,14 @@ class TableInvoiceController extends Controller
         $address        = $config->getAddress();
         $companyName    = $option->getName();
 
-
         /** ===================Customer Information=================================== */
 
 
         $salesBy    = $entity->getSalesBy();
         $tableNo    = $entity->getTable()->getName();
         $table = "Table No. {$tableNo}";
-        /** ===================Invoice Sales Item Information========================= */
 
+        /** ===================Invoice Sales Item Information========================= */
 
         /* Date is kept the same for testing */
         $date = date('d-m-Y h:i:s A');
@@ -380,7 +378,7 @@ class TableInvoiceController extends Controller
         $printer -> setEmphasis(true);
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("------------------------------------------------------------\n");
-        $i=1;
+        $i = 1;
         $invoiceItems = $this->getDoctrine()->getRepository("RestaurantBundle:RestaurantTableInvoiceItem")->findBy(array('tableInvoice'=>$entity,'isPrint' => 1));
         /* @var $row RestaurantTableInvoiceItem */
 
@@ -394,9 +392,10 @@ class TableInvoiceController extends Controller
         $printer -> text($date."\n");
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
+        $printer->cut();
         $response =  base64_encode($connector->getData());
         $printer -> close();
-        return $response;
+        return new Response($response) ;
     }
 
     private function posPrint(Invoice $entity)

@@ -218,7 +218,9 @@ $(document).on('click', '#posKitchen', function(e) {
         return $(this).val();
     }).get();
     if(atLeastOneIsChecked === true){
-        $.get(url,{'isPrint':searchIDs});
+        $.get(url,{'isPrint':searchIDs}, function(response) {
+            jsPostPrint(response);
+        });
     }
     e.preventDefault();
 
@@ -323,15 +325,14 @@ $(document).on("click", "#kitchenBtn", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( response ) {
-                jsPostPrint(response);
+            $.get(url, function(response) {
+                //jsPostPrint(response);
             });
         }
     });
 });
 
 function jsPostPrint(data) {
-
     if(typeof EasyPOSPrinter == 'undefined') {
         alert("Printer library not found");
         return;
