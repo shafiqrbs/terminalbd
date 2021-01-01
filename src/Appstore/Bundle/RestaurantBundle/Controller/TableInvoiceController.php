@@ -392,7 +392,6 @@ class TableInvoiceController extends Controller
         $printer -> text($date."\n");
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Served By: ".$salesBy."\n");
-        $printer->cut();
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response) ;
