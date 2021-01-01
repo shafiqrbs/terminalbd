@@ -381,10 +381,10 @@ class TableInvoiceController extends Controller
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("------------------------------------------------------------\n");
         $i=1;
-
+        $invoiceItems = $this->getDoctrine()->getRepository("RestaurantBundle:RestaurantTableInvoiceItem")->findBy(array('tableInvoice'=>$entity,'isPrint' => 1));
         /* @var $row RestaurantTableInvoiceItem */
 
-        foreach ( $entity->getInvoiceItems() as $row){
+        foreach ( $invoiceItems as $row){
             $productName = "{$i}. {$row->getParticular()->getName()}";
             $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
