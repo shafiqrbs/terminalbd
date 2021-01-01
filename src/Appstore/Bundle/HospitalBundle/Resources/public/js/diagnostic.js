@@ -203,7 +203,6 @@ function formSubmit() {
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
                     obj = JSON.parse(data);
-                    alert(obj['subTotal']);
                     $('.subTotal').html(obj['subTotal']);
                     $('.initialGrandTotal').html(obj['initialGrandTotal']);
                     $('#initialDue').val(obj['initialGrandTotal']);
