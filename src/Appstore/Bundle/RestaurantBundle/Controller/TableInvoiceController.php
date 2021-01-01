@@ -234,12 +234,11 @@ class TableInvoiceController extends Controller
         if($entity->getSubTotal()){
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->tableInvoiceItems($entity,$invoice);
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->resetData($invoice);
         }else{
             return new Response("failed");
         }
-
-        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->tableInvoiceItems($entity,$invoice);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         if($entity->isHold() != 1){
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
@@ -314,7 +313,6 @@ class TableInvoiceController extends Controller
         return new Response(json_encode($result));
     }
 
-
     public function invoiceParticularDeleteAction(RestaurantTableInvoice $invoice,RestaurantTableInvoiceItem $particular){
 
         $em = $this->getDoctrine()->getManager();
@@ -328,12 +326,12 @@ class TableInvoiceController extends Controller
 
     }
 
-    public function kitchenPrintAction(RestaurantTableInvoice $invoice)
+    public function kitchenPrintAction(RestaurantTableInvoice $entity)
     {
 
         $isPrints = $_REQUEST['isPrint'];
-        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateKitchenPrint($invoice,$isPrints);
-        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->find($invoice);
+        $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateKitchenPrint($entity,$isPrints);
+    //    $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->find($entity);
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
@@ -344,7 +342,6 @@ class TableInvoiceController extends Controller
 
         $address        = $config->getAddress();
         $companyName    = $option->getName();
-
 
 
         /** ===================Customer Information=================================== */
@@ -369,7 +366,6 @@ class TableInvoiceController extends Controller
         $printer -> text($address."\n");
         $printer -> feed();
 
-
         /* Title of receipt */
         $printer->setFont(Printer::FONT_A);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -392,7 +388,6 @@ class TableInvoiceController extends Controller
             $productName = "{$i}. {$row->getParticular()->getName()}";
             $printer -> text(new PosItemManager($productName,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
-
         }
         $printer -> text("------------------------------------------------------------\n");
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -408,9 +403,6 @@ class TableInvoiceController extends Controller
     {
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
-        foreach ( $invoiceParticulars as $row){
-            echo $productName = "{$row->getParticular()->getName()}";
-        }
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
@@ -537,8 +529,6 @@ class TableInvoiceController extends Controller
             $printer -> text("** Visit www.".$website."**\n");
         }
         $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
-
-
         if($config->isDeliveryPrint() == 1 ){
             $printer->cut();
             $printer->setFont(Printer::FONT_A);

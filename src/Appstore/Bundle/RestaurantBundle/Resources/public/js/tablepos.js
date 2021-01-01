@@ -273,7 +273,7 @@ $(document).on('click', '#saveButton', function() {
 });
 
 $(document).on('click', '#posButton', function() {
-
+    $('#buttonType').val('posBtn');
     $.ajax({
         url         : $('form#invoiceForm').attr( 'action' ),
         type        : $('form#invoiceForm').attr( 'method' ),
