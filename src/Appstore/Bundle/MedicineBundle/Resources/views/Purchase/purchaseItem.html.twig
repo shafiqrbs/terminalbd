@@ -111,7 +111,11 @@
                                     <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.medicinePurchase.grn }}</td>
                                     <td class="numeric" >{% if entity.medicinePurchase.medicineVendor is defined and entity.medicinePurchase.medicineVendor is not empty %}{{ entity.medicinePurchase.medicineVendor.companyName }}{% endif %}</td>
-                                    <td class="numeric" >{{ entity.purchasePrice }}</td>
+                                    <td class="numeric" >
+                                        {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_purchaseitem_inline_update_purchase_price',{'id':entity.id}) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase price">{{ entity.purchasePrice }}</a>
+                                        {% endif %}
+                                    </td>
                                     <td class="numeric" >{{ entity.salesPrice }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
                                     {#
@@ -151,7 +155,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithLoadInit();
 {% endblock %}
 
 

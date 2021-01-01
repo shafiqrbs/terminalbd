@@ -602,7 +602,6 @@ class MedicineStockController extends Controller
 		    $item->setPurchasePrice($purchasePrice);
 		    $em->persist($item);
 		    $em->flush();
-
 	    }
 	    return $this->redirect($this->generateUrl('medicine_stock'));
     }
@@ -639,7 +638,6 @@ class MedicineStockController extends Controller
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'purchase-return');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'damage');
 		}
-		exit;
 		return $this->redirect($this->generateUrl('medicine_stock'));
 	}
 

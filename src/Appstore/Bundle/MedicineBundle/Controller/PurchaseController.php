@@ -296,6 +296,28 @@ class PurchaseController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function inlineUpdatePurchasePriceAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find particular entity.');
+        }
+        $entity->setPurchasePrice(abs($data['value']));
+        $em->flush();
+
+        $stock = $entity->getMedicineStock();
+        $updatePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseSalesAvg($stock);
+        if(!empty($updatePrice['purchase'])){
+            $stock->setAveragePurchasePrice($updatePrice['purchase']);
+        }
+        $em->persist($stock);
+        $em->flush();
+        exit;
+
+    }
+
     public function returnResultData(MedicinePurchase $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($entity);

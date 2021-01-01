@@ -95,6 +95,13 @@ medicine_purchaseitem_inline_update:
     options:
             expose: true
 
+medicine_purchaseitem_inline_update_purchase_price:
+    path:     /purchase-item-inline-update-purchase-price
+    defaults: { _controller: "MedicineBundle:Purchase:inlineUpdatePurchasePrice" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_expiration_inline:
     path:     /purchase-item-inline-update
     defaults: { _controller: "MedicineBundle:Purchase:inlineExpirationUpdate" }

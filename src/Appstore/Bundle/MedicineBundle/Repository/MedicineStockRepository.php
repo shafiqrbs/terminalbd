@@ -370,6 +370,7 @@ class MedicineStockRepository extends EntityRepository
         $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
+        $query->andWhere('e.status = 1');
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
@@ -485,6 +486,7 @@ class MedicineStockRepository extends EntityRepository
         $qb->addSelect('brand.name as brandName','brand.strength as strength');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        $qb->andWhere('e.status = 1');
         $qb->orderBy('e.sku','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
