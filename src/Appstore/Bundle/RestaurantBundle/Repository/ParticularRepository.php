@@ -420,12 +420,14 @@ class ParticularRepository extends EntityRepository
             foreach($invoiceParticulars as $item ){
 
                 /** @var Particular  $particular */
+
                 $particular = $item->getParticular();
-                if( $particular->getService()->getSlug() == 'stockable' ){
+
+                if(!empty($particular) and !empty($particular->getService()) and  $particular->getService()->getSlug() == 'stockable' ){
                     $this->updateRemoveStockQuantity($particular,'sales');
-                }elseif ($particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "pre-production"){
+                }elseif (!empty($particular) and !empty($particular->getService()) and $particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "pre-production"){
                     $this->updateRemoveStockQuantity($particular,'sales');
-                }elseif ($particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "post-production"){
+                }elseif (!empty($particular) and !empty($particular->getService()) and $particular->getService()->getSlug() == 'product' and $particular->getProductionType() == "post-production"){
                     $em->getRepository('RestaurantBundle:ProductionExpense')->salesProductionElementExpense($item);
                 }
             }

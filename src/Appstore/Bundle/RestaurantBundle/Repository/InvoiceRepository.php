@@ -677,7 +677,8 @@ class InvoiceRepository extends EntityRepository
                     $stockId = $em->getRepository('RestaurantBundle:Particular')->find($item['stockId']);
                     if ($stockId) {
                         $salesItem->setParticular($stockId);
-                        if($stockId->getRestaurantConfig()->isProduction() == 1 and $stockId->getService()->getSlug() == 'product'){
+                        $salesItem->setPurchasePrice($stockId->getPurchasePrice());
+                        if($stockId->getRestaurantConfig()->isProduction() == 1 and  !empty($stockId->getService()) and $stockId->getService()->getSlug() == 'product'){
                             $salesItem->setPurchasePrice($stockId->getProductionElementAmount());
                         }else{
                             $salesItem->setPurchasePrice($stockId->getPurchasePrice());

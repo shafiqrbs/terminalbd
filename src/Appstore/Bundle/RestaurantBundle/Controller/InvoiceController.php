@@ -591,11 +591,8 @@ class InvoiceController extends Controller
         /* @var $sales Invoice */
 
         $salses = $this->getDoctrine()->getRepository("RestaurantBundle:Invoice")->findBy(array('androidProcess' => $android));
-
         foreach ($salses as $sales){
-
             if($sales->getProcess() == "Device"){
-
                 $sales->setProcess('Done');
                 $sales->setInvoice($sales->getDeviceSalesId());
                 $sales->setUpdated($sales->getCreated());
@@ -607,10 +604,8 @@ class InvoiceController extends Controller
                 }
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertRestaurantAccountInvoice($sales);
                 $msg = "valid";
-
             }
         }
-
         if($msg == "valid"){
             $android->setStatus(true);
             $em->persist($android);
