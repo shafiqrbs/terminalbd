@@ -1,12 +1,64 @@
+.portlet.box.royal-blue{
+    margin-bottom: 0!important;
+    padding-bottom: 0!important;
+}
+#invoiceForm{
+    margin-bottom: 0!important;
+}
+.btn.receiveBtn{
+    background-color: #055bff !important;
+    color: #fff !important;
+}
+.btn.royal-blue,.btn.royal-blue:focus{
+    background-color: #004de0 !important;
+    color: #fff !important;
+}
+
+.btn.royal-blue:hover,.btn.royal-blue:focus,
+.btn.royal-blue:active,
+.btn.royal-blue.active,
+.btn.royal-blue.disabled,
+.btn.royal-blue[disabled] {
+    background-color: #004de0 !important;
+    color: #fff !important;
+}
+
+.portlet.box.royal-blue {
+    border: 1px solid #125de9;
+    border-top: 0;
+}
+
+.portlet.box.royal-blue > .portlet-title {
+    background-color: #004de0;
+}
+
+.head-royal-blue {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #125de9;
+    background-color: #055bff;
+}
+
+select.m-wrap.sales-by{
+   border: 5px solid #055bff!important;
+    height: 54px!important;
+}
+
 
 .contentWrapper {
     width: 100%;
     margin: 0 auto;
     position: relative;
+    border-bottom: 10px solid #ff5a00;
 }
+
 .tabsWrapper {
     width: 100%;
-    height: 90px;
+    height: 110px;
     overflow: hidden;
     position: relative;
     margin-left: 30px;
@@ -27,23 +79,24 @@
 }
 .tabs li {
     display: inline-block;
-    background-color:#33b8e5;
+    background-color:#004acb;
     padding: 15px 15px;
     cursor: pointer;
     font-size: 18px;
     font-weight: 600;
     color: #ffffff;
-    min-width: 80px;
+    min-width: 90px;
     text-align: center;
+    height: 80px;
 }
 .table-tab li.active {
-    background-color:#4cae4c;
+    background-color:#ff5a00;
 }
 .next, .previous {
     position: absolute;
-    padding: 27px 30px;
+    padding: 45px 30px;
     top: 0;
-    background-color: #c49f47;
+    background-color:#444d58;
     font-size: 30px;
     color: #ffffff;
 }
@@ -53,6 +106,20 @@
 .previous {
     left: 0px;
 }
+.next:hover, .previous:hover {
+    background-color: #333333;
+    cursor:move;
+}
+
+.table-sales-time{
+    background: #dddddd;
+    display: inline-flex;
+    padding: 5px;
+    font-size: 12px;
+    color: #ff5a00;
+    margin-top: 1px;
+}
+
 .group-label{
     font-weight: bold;
     border-bottom: 1px solid #337ab7
@@ -95,10 +162,9 @@
 .nav-tabs>.active>a, .nav-tabs>li>a:hover, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
     color: #ffffff !important;
     cursor: hand!important;
-    background-color: #c49f47;
+    background-color: #055bff;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
-    font-size: 24px;
 }
 
 .select2-container .select2-choice {
@@ -131,7 +197,7 @@
     font-weight: bold;
 }
 .table-tab .Kitchen{
-    background:#6a621d;
+    background:#5f39d7;
     font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
@@ -139,6 +205,15 @@
     font-weight: bold;
 }
 .table-tab .Hold{
+    background: #dbac14;
+    font-size: 13px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+.table-tab .Cancel{
     background: #ff2515;
     font-size: 13px;
     color: #ffffff;
@@ -146,8 +221,9 @@
     padding-right: 10px;
     font-weight: bold;
 }
-.table-tab .Payment{
-    background: #248034;
+
+.table-tab .Order{
+    background: #0e6d1f;
     font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
@@ -155,7 +231,7 @@
     font-weight: bold;
 }
 .table-tab .Reserved{
-    background: #248034;
+    background: #925d4e;
     font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
@@ -164,7 +240,7 @@
 }
 
 .table-tab .Delivered , .table-tab .Done{
-    background: #248034;
+    background: #0a7265;
     font-size: 13px;
     color: #ffffff;
     padding-left: 10px;
@@ -199,7 +275,7 @@ input[class*="span"].m-wrap-bg{
 }
 
 input.m-wrap , select.m-wrap , textarea.m-wrap{
-    border: 2px solid #1e7b85!important;
+    border: 1px solid #004de0!important;
 }
 table.table {
     clear: both;
@@ -211,11 +287,11 @@ table.table {
 .table th, .table td{
     padding: 0;
     margin: 0;
-    padding-left: 5px;
+    padding-left: 0px;
 }
 
-select.m-wrap{
-    height: 30px!important;
+select.m-wrap {
+    height: 34px!important;
 }
 
 .product-content{
@@ -235,7 +311,7 @@ select.m-wrap{
 }
 
 .sales-right input[class*="span"].payment, .sales-right input[class*="span"].discount, .sales-right input[class*="span"].discountCoupon{
-    border: 1px solid #1e7b85!important;
+    border: 1px solid #004de0!important;
     font-size: 15px;
 }
 
@@ -348,20 +424,38 @@ select.m-wrap{
     padding-left: 3px;
 }
 
+.calltoaction-royal-blue {
+    color: #fff;
+    background-color: #055bff;
+    border-color: #e9ecef;
+}
+
 .table th.product-title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     height: 36px;
+    text-align: right;
+    padding-right: 5px;
 }
 
 .table td.product-title {
     font-size: 14px;
-    font-weight: bold;
-    color: #FF0509;
+    height: 36px;
+    line-height: 36px;
+    color: #000;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-.table td .checkbox{
+.table-bordered th, .table-bordered td {
+    border-left: none!important;
+    border-top:none!important;
+}
+
+.table td .checkbox {
     width: 24px;
+    margin-top: -5px;
 }
 
 .accordion-content {
@@ -389,6 +483,24 @@ select.m-wrap{
     width: 49%!important;
 }
 
+.transaction-box{
+    background: #dddddd;
+    padding: 15px;
+    height: 110px;
+    margin-bottom: 15px;
+    margin-top: -7px;
+    border: 5px solid #055bff;
+}
+
+.payment-box{
+    background: #dddddd;
+    padding: 15px;
+    height: 35px;
+    margin-bottom:0;
+    margin-top: -5px;
+    border: 5px solid#337ab7;
+}
+
 .switch-field {
     display: flex;
 }
@@ -408,12 +520,12 @@ select.m-wrap{
     font-size: 14px;
     line-height: 1;
     text-align: center;
-    padding: 8px 16px;
+    padding: 11px 16px;
     margin-right: -1px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.1s ease-in-out;
-    width: calc(100% /4);
+    width: calc(100% /5);
     font-weight: bold;
 }
 
@@ -422,7 +534,7 @@ select.m-wrap{
 }
 
 .switch-field input:checked + label {
-    background-color: #724c82;
+    background-color:#ff5a00;
     box-shadow: none;
 }
 
@@ -457,7 +569,7 @@ select.m-wrap{
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.1s ease-in-out;
-    width: calc(100% /4);
+    width: calc(100% /3);
     color: #ffffff;
     font-weight: bold;
 }
@@ -511,8 +623,8 @@ select.m-wrap{
     float: left;
     padding: 0;
     box-sizing: border-box;
-    background:#724c82;
-    border: 1px solid #333333;
+    background:#055bff;
+    border: 1px solid #055bff;
     font-size: 30px;
     line-height: 30px;
     border-radius: 50%;

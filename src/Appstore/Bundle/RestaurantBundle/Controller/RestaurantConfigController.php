@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 class RestaurantConfigController extends Controller
 {
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
+     */
 
     public function manageAction()
     {
@@ -57,9 +61,10 @@ class RestaurantConfigController extends Controller
     }
 
     /**
-     * Edits an existing Particular entity.
-     *
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
      */
+
     public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();

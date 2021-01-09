@@ -39,6 +39,7 @@ $('.table-tab li').click(function () {
                 $('#tableInvoice').val(corresponding);
                 $('#invoiceEntity').val(corresponding);
                 $('#transaction-box').html(obj['body']);
+                $('#process-box').html(obj['htmlProcess']);
                 $('.due').html(obj['total']);
             })
     );
@@ -85,6 +86,7 @@ $('.previous').click(function(e){
 
 $('#btn-refresh').click(function(e){
     $('.payment').val('');
+    $('#balance').html(0);
     e.preventDefault();
 });
 
@@ -98,7 +100,9 @@ $(document).on('click', '.invoice-process', function() {
         $('.hide-payment').show();
     }
     $.get(url,{'process':process}, function( response ) {
-        $('#process-'+entity).removeClass().addClass(process).html(process);
+        obj = JSON.parse(response);
+        $('#process-'+entity).removeClass().addClass(obj['process']).html(obj['process']);
+        $('#orderTime-'+entity).html( obj['orderTime']);
 
     });
 });
@@ -304,9 +308,15 @@ $(document).on('click', '#posButton', function() {
 
 
 function calcNumbers(result){
-    restaurant_invoice.restaurant_invoice_payment.value=restaurant_invoice.restaurant_invoice_payment.value+result;
+    restaurant_invoice.restaurant_invoice_payment.value = restaurant_invoice.restaurant_invoice_payment.value+result;
     paymentBalance();
 }
+
+function calcGroupNumbers(result){
+    restaurant_invoice.restaurant_invoice_payment.value = result;
+    paymentBalance();
+}
+
 function paymentBalance() {
     var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );

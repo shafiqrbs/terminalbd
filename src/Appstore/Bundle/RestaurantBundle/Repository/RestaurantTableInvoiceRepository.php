@@ -61,17 +61,22 @@ class RestaurantTableInvoiceRepository extends EntityRepository
     public function generateTableInvoice(RestaurantConfig $config,$tables)
     {
         $em = $this->_em;
+        $i = 0;
         foreach ($tables as $table):
-            $exist = $this->findOneBy(array('restaurantConfig'=>$config,'table'=>$table));
+            $exist = $this->findOneBy(array('restaurantConfig' => $config,'table'=>$table));
             if(empty($exist)){
                 $entity = new RestaurantTableInvoice();
                 $entity->setRestaurantConfig($config);
                 $entity->setTable($table);
                 $mode = $em->getRepository("SettingToolBundle:TransactionMethod")->findOneBy(array('name'=>"Cash"));
                 $entity->setTransactionMethod($mode);
+                if($i == 0 ){
+                    $entity->setIsActive(1);
+                }
                 $em->persist($entity);
                 $em->flush();
             }
+            $i++;
         endforeach;
     }
 
@@ -254,5 +259,20 @@ class RestaurantTableInvoiceRepository extends EntityRepository
         $entity = $em->createQuery('DELETE RestaurantBundle:RestaurantTemporary e WHERE e.restaurantConfig = '.$config.' and e.user = '.$user->getId());
         $entity->execute();
     }
+
+    public function updateInvoiceActive(RestaurantTableInvoice $tableInvoice)
+    {
+
+        $em = $this->_em;
+        $qb = "UPDATE restaurant_table_invoice SET isActive = null  WHERE  restaurantConfig_id =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($qb);
+        $qb1->bindValue('config', $tableInvoice->getRestaurantConfig()->getId());
+        $qb1->execute();
+        $tableInvoice->setIsActive(1);
+        $em->persist($tableInvoice);
+        $em->flush();
+        return $tableInvoice;
+    }
+
 
 }

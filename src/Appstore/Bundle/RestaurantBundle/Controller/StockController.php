@@ -6,6 +6,7 @@ use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Form\AccessoriesType;
 use Appstore\Bundle\RestaurantBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +31,9 @@ class StockController extends Controller
 
     /**
      * Lists all Particular entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
 
@@ -115,9 +117,10 @@ class StockController extends Controller
 
 
     /**
-     * Displays a form to edit an existing Particular entity.
-     *
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -162,8 +165,8 @@ class StockController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Particular entity.
-     *
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
      */
     public function updateAction(Request $request, $id)
     {

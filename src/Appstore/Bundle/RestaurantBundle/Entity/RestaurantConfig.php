@@ -397,7 +397,35 @@ class RestaurantConfig
      */
     private $invoiceNote;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="templateCss", type="text", nullable = true)
+     */
+    private $templateCss;
+
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="productImage", type="boolean",  nullable=true)
+     */
+    private $productImage = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="additionalServe", type="boolean",  nullable=true)
+     */
+    private $additionalServe = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="additionalTable", type="boolean",  nullable=true)
+     */
+    private $additionalTable = false;
+
+     /**
      * @var boolean
      *
      * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
@@ -1338,6 +1366,72 @@ class RestaurantConfig
     {
         $this->sdPercentage = $sdPercentage;
     }
+
+    /**
+     * @return string
+     */
+    public function getTemplateCss()
+    {
+        return $this->templateCss;
+    }
+
+    /**
+     * @param string $templateCss
+     */
+    public function setTemplateCss($templateCss)
+    {
+        $this->templateCss = $templateCss;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProductImage()
+    {
+        return $this->productImage;
+    }
+
+    /**
+     * @param bool $productImage
+     */
+    public function setProductImage($productImage)
+    {
+        $this->productImage = $productImage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalServe()
+    {
+        return $this->additionalServe;
+    }
+
+    /**
+     * @param bool $additionalServe
+     */
+    public function setAdditionalServe($additionalServe)
+    {
+        $this->additionalServe = $additionalServe;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalTable()
+    {
+        return $this->additionalTable;
+    }
+
+    /**
+     * @param bool $additionalTable
+     */
+    public function setAdditionalTable($additionalTable)
+    {
+        $this->additionalTable = $additionalTable;
+    }
+
+
 
 
 }

@@ -559,7 +559,6 @@ class ItemController extends Controller
 
 	public function updateSubProductAction(Request $request, ItemSub $entity)
 	{
-
 		$data = $request->request->all();
 		$this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->updateSubProduct($entity,$data);
 		return new Response('success');

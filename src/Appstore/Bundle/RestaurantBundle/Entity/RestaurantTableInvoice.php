@@ -60,7 +60,14 @@ class RestaurantTableInvoice
      *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
-    private $process = "New";
+    private $process = "Free";
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActive", type="boolean", nullable=true)
+     */
+    private $isActive = false;
 
     /**
      * @var array
@@ -68,6 +75,12 @@ class RestaurantTableInvoice
      * @ORM\Column(name="serveBy", type="json_array", length=50, nullable=true)
      */
     private $serveBy;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="orderDate", type="datetime", nullable=true)
+     */
+    private $orderDate;
 
 
     /**
@@ -739,5 +752,39 @@ class RestaurantTableInvoice
     {
         $this->sd = $sd;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getOrderDate()
+    {
+        return $this->orderDate;
+    }
+
+    /**
+     * @param \DateTime $orderDate
+     */
+    public function setOrderDate($orderDate)
+    {
+        $this->orderDate = $orderDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    }
+
+
 }
 

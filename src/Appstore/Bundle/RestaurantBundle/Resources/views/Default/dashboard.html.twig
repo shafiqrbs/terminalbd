@@ -7,8 +7,12 @@
                 <div class="span3">
                     <div class="btn-group" style="width:88%!important">
                         {% if ((app.user.granted("ROLE_DOMAIN_RESTAURANT")) or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="javascript:"  style="width: 100%" class="btn yellow big addInvoice"><i class="fa fa-shopping-cart"></i> POS</a>
-                        {% endif %}
+                           {%  if config.salesMode == "table" %}
+                                <a href="{{ path('restaurant_tableinvoice') }}"  style="width: 100%" class="btn yellow big"><i class="fa fa-shopping-cart"></i> POS</a>
+                           {% else %}
+                               <a href="javascript:"  style="width: 100%" class="btn yellow big addInvoice"><i class="fa fa-shopping-cart"></i> POS</a>
+                           {% endif %}
+                           {% endif %}
                     </div>
                 </div>
                 <div class="span5">

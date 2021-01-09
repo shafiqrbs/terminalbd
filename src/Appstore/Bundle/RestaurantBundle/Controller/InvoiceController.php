@@ -42,12 +42,16 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN,ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_RESTAURANT,ROLE_DOMAIN_RESTAURANT")
+     */
+
     public function indexAction()
     {
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
         $entities = $em->getRepository('RestaurantBundle:Invoice')->invoiceLists( $user,$data);
@@ -83,6 +87,11 @@ class InvoiceController extends Controller
         return $this->redirect($this->generateUrl('restaurant_invoice_edit', array('id' => $entity->getId())));
 
     }
+
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_RESTAURANT")
+     */
 
     public function editAction($id)
     {

@@ -31,6 +31,7 @@ class RestaurantTableInvoiceItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice", inversedBy="invoiceItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $tableInvoice;
 

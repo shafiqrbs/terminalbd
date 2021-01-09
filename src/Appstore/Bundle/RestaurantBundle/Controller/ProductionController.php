@@ -11,6 +11,7 @@ use Appstore\Bundle\RestaurantBundle\Form\ProductionBatchType;
 use Appstore\Bundle\RestaurantBundle\Form\ProductionType;
 use Appstore\Bundle\RestaurantBundle\Form\ProductType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,9 @@ class ProductionController extends Controller
 
     /**
      * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
 
@@ -132,6 +135,10 @@ class ProductionController extends Controller
         return $form;
     }
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
+     */
 
     public function productionAction($id)
     {
@@ -151,6 +158,11 @@ class ProductionController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
+
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
+     */
 
     public function productionUpdateAction(Request $request, $id)
     {

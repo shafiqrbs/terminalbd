@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
+use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1039,7 +1040,7 @@ class BusinessConfig
     /**
      * Sets file.
      *
-     * @param Page $file
+     * @param Profile $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -1049,7 +1050,7 @@ class BusinessConfig
     /**
      * Get file.
      *
-     * @return Page
+     * @return Profile
      */
     public function getFile()
     {

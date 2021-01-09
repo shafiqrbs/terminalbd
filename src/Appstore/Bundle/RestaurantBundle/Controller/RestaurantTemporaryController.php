@@ -247,14 +247,7 @@ class RestaurantTemporaryController extends Controller
     public function returnResultData(User $user,$msg=''){
 
         $config = $user->getGlobalOption()->getRestaurantConfig();
-        if($config->getSalesMode() == "grid" ){
-            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesGridItems($user);
-        }elseif($config->getSalesMode() == "search" ){
-            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesSearchItems($user);
-        }elseif($config->getSalesMode() == "list" ){
-            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesListItems($user);
-        }
-
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSalesGridItems($user);
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
         $purchasePrice = !empty($tempTotal['purchasePrice']) ? $tempTotal['purchasePrice'] :0;

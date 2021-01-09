@@ -53,7 +53,8 @@ class TableInvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
-        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->fastTableInvoice( $config);
+     //   $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->fastTableInvoice( $config);
+        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->findOneBy(array('isActive'=>1));
         $form = $this->createTemporaryForm($entity);
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
@@ -80,6 +81,7 @@ class TableInvoiceController extends Controller
 
     public function invoiceLoadAction(RestaurantTableInvoice $entity)
     {
+
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
@@ -87,18 +89,25 @@ class TableInvoiceController extends Controller
         $categories = $em->getRepository('RestaurantBundle:Category')->findBy(array('restaurantConfig' => $config , 'status' => 1));
         $tables = $em->getRepository('RestaurantBundle:Particular')->findBy(array('restaurantConfig' => $config , 'service' => 1),array('id'=>'ASC'));
         $servings = $em->getRepository('UserBundle:User')->getEmployeeEntities($user->getGlobalOption());
+        $invoice = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateInvoiceActive($entity);
         $html = $this->renderView(
             'RestaurantBundle:TableInvoice:ajaxTransaction.html.twig', array(
                 'config'                => $config,
                 'categories'            => $categories,
                 'tables'                => $tables,
                 'servings'              => $servings,
-                'entity'                => $entity,
+                'entity'                => $invoice,
                 'form'                  => $form->createView(),
             )
         );
+        $htmlProcess = $this->renderView(
+            'RestaurantBundle:TableInvoice:ajaxProcess.html.twig', array(
+                'config'                => $config,
+                'entity'                => $invoice
+            )
+        );
         $array = array(
-            'body' => $html,'total' => $entity->getTotal()
+            'body' => $html,'htmlProcess' => $htmlProcess,'total' => $entity->getTotal()
         );
         return new Response(json_encode($array));
     }
@@ -264,13 +273,18 @@ class TableInvoiceController extends Controller
     public function returnResultData(RestaurantTableInvoice $invoice){
 
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->getSalesGridItems($invoice);
+      //  $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->getSalesGridItems($invoice);
         $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->updateInvoiceTotalPrice($invoice);
         $process = empty($entity->getProcess()) ? "New" : $entity->getProcess();
+        $htmlProcess = $this->renderView(
+            'RestaurantBundle:TableInvoice:ajaxTableItem.html.twig', array(
+                'entity'                => $entity
+            )
+        );
         $data = array(
             'subTotal'           => $entity->getSubTotal(),
             'discount'           => $entity->getDiscount(),
-            'invoiceParticulars' => $invoiceParticulars ,
+            'invoiceParticulars' => $htmlProcess ,
             'vat'                => $entity->getVat() ,
             'total'              => $entity->getTotal() ,
             'process'            => $process ,
@@ -285,9 +299,15 @@ class TableInvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $process = $_REQUEST['process'];
+        if(empty($invoice->getOrderDate())){
+            $now = new \DateTime("now");
+            $invoice->setOrderDate($now);
+        }
         $invoice->setProcess($process);
         $em->flush();
-        return new Response($process);
+        $time = $invoice->getOrderDate()->format('h:m:s a');
+        $result = array('process'=>$process,'orderTime' => $time);
+        return new Response(json_encode($result));
     }
 
     public function addProductAction($product)

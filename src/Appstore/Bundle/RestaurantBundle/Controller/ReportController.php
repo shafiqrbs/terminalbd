@@ -35,6 +35,11 @@ class ReportController extends Controller
         return $pagination;
     }
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN")
+     */
+
     public function salesSummaryAction()
     {
 

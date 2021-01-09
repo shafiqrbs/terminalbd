@@ -97,9 +97,27 @@
 </a>
 <!-- END LOGO -->
 <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-{% if is_granted('ROLE_CUSTOMER') %}
-    {{ include('SettingToolBundle:Widget:common.html.twig')}}
-{% endif %}
+        <ul class="nav pull-right">
+
+            <li class="" id="header_notification_bar">
+                <a href="{{ path('restaurant_homepage') }}" class="btn blue mini"><i class="icon-th-large"></i> Dashboard</a>
+            </li>
+            <li class="" id="header_notification_bar">
+                <a  href="{{ path('restaurant_invoice') }}" class="btn purple mini"><i class="icon-shopping-cart"></i> Sales</a>
+            </li>
+            <li class="dropdown user">
+                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                   data-close-others="true">
+                    <span class="username">{{ app.user }}</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ path('domain_edit_profile') }}"><i class="icon-user"></i> My Profile</a></li>
+                    <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-key"></i> Logout</a></li>
+                </ul>
+            </li>
+            <!-- END USER LOGIN DROPDOWN -->
+        </ul>
 <!-- END RESPONSIVE MENU TOGGLER -->
 </div>
 </div>
@@ -157,9 +175,9 @@
         if(docHeight > winHeight){
             $(".page-container").height(winHeight-30).css({'overflow':'hidden'});
         }
-        var productBox      = (winHeight-250);
-        var categoryBox     = (winHeight-180);
-        var transactionBox  = (winHeight-340);
+        var productBox      = (winHeight-290);
+        var categoryBox     = (winHeight-220);
+        var transactionBox  = (winHeight-300);
         $('.productBox').slimScroll({
             height: productBox+'px'
         });

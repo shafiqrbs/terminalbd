@@ -29,6 +29,9 @@ class ConfigType extends AbstractType
             ->add('isCustomer')
             ->add('vatEnable')
             ->add('tablePlan')
+            ->add('productImage')
+            ->add('additionalTable')
+            ->add('additionalServe')
             ->add('posPrint')
             ->add('deliveryPrint')
             ->add('invoicePrintLogo')
@@ -55,9 +58,8 @@ class ConfigType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '---Sales Mode---',
                 'choices' => array(
-                    'grid' => 'Grid',
-                    'search' => 'Search',
-                    'list' => 'List',
+                    'category' => 'Category',
+                    'table' => 'Table',
                 ),
             ))
             ->add('payFor', 'choice', array(
@@ -72,6 +74,7 @@ class ConfigType extends AbstractType
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('templateCss','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>10)))
 
         ;
     }
