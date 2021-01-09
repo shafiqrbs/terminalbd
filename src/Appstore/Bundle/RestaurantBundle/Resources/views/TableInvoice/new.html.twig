@@ -1,5 +1,8 @@
 {% extends '::pos-base.html.twig' %}
 {% block body %}
+    {% if config.templateCss is not empty %}
+    <style>{{ config.templateCss|raw }}</style>
+    {% endif %}
     <div class="row-fluid" id="pos-area">
         <div class="portlet box green">
             <div class="portlet-body">
