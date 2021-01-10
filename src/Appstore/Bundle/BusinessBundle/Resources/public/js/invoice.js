@@ -546,8 +546,7 @@ function returnData(response)
     $('.returnQnt').html(obj['returnQnt']);
     $('.damageQnt').html(obj['damageQnt']);
     $('.spoilQnt').html(obj['spoilQnt']);
-    $('.totalQnt').html(obj['totalQnt']);
-    $('.tloPrice').html(obj['tloPrice']);
+    $('.totalQnt').html(obj['totalQnt']);;
     $('.bonusQnt').html(obj['bonusQnt']);
 }
 

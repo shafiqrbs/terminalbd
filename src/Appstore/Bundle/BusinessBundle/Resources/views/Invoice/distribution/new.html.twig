@@ -239,9 +239,11 @@
                                     <div class="span12" >
                                         <select name="vendor" id="vendor" class="span12 m-wrap">
                                             <option value="">--Select TLO Vendor</option>
-                                            {% for vendor in vendors %}
-                                                <option {% if entity.vendor is not empty and entity.vendor.id ==  marketing.id %} selected="selected" {% endif %} value="{{ vendor.id }}">{{ vendor.name }}</option>
-                                            {% endfor %}
+                                            {% if vendors is not empty %}
+                                                {% for vendor in vendors %}
+                                                    <option {% if entity.vendor is not empty and entity.vendor.id ==  vendor.id %} selected="selected" {% endif %} value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                                {% endfor %}
+                                            {% endif %}
                                         </select>
                                     </div>
                                 </div>
@@ -249,9 +251,11 @@
                                     <div class="span12" >
                                     <select name="marketing" id="marketing" class="span12 m-wrap">
                                         <option>--Select one Marketing Executive</option>
-                                        {% for marketing in marketings %}
-                                            <option {% if entity.marketing is not empty and entity.marketing.id ==  marketing.id %} selected="selected" {% endif %} value="{{ marketing.id }}">{{ marketing.name }}</option>
-                                        {% endfor %}
+                                        {% if marketings is not empty %}
+                                            {% for marketing in marketings %}
+                                                <option {% if entity.marketing is not empty and entity.marketing.id ==  marketing.id %} selected="selected" {% endif %} value="{{ marketing.id }}">{{ marketing.name }}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                     </div>
                                 </div>
@@ -260,9 +264,11 @@
                                     <div class="span12" >
                                         <select name="area" id="area" class="span12 m-wrap">
                                             <option>--Select one Marketing area</option>
-                                            {% for area in areas %}
-                                                <option  {% if entity.area is not empty and entity.area.id ==  area.id %} selected="selected" {% endif %} value="{{ area.id }}">{{ area.name }}</option>
-                                            {% endfor %}
+                                            {% if areas is not empty %}
+                                                {% for area in areas %}
+                                                    <option  {% if entity.area is not empty and entity.area.id ==  area.id %} selected="selected" {% endif %} value="{{ area.id }}">{{ area.name }}</option>
+                                                {% endfor %}
+                                            {% endif %}
                                         </select>
                                     </div>
                                 </div>

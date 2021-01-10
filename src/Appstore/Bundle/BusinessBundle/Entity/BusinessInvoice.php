@@ -268,7 +268,7 @@ class BusinessInvoice
 
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="due", type="float", nullable=true)
      */
@@ -602,22 +602,6 @@ class BusinessInvoice
     public function setComment($comment)
     {
         $this->comment = $comment;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDue()
-    {
-        return $this->due;
-    }
-
-    /**
-     * @param string $due
-     */
-    public function setDue($due)
-    {
-        $this->due = $due;
     }
 
 
@@ -1041,6 +1025,22 @@ class BusinessInvoice
     public function setVendor($vendor)
     {
         $this->vendor = $vendor;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDue()
+    {
+        return $this->due;
+    }
+
+    /**
+     * @param float $due
+     */
+    public function setDue($due)
+    {
+        $this->due = $due;
     }
 
 }

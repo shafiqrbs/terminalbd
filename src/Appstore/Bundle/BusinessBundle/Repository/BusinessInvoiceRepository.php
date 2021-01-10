@@ -487,6 +487,18 @@ class BusinessInvoiceRepository extends EntityRepository
         return $invoice;
 
     }
+    public function invoiceDistributionTotalPrice(BusinessInvoice $invoice)
+    {
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->from('BusinessBundle:BusinessInvoiceParticular','si')
+            ->select("sum(si.subTotal) as subTotal","sum(si.tloPrice * si.totalQuantity) as tloPrice","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+            ->where('si.businessInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId());
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
+    }
 
     public function updateInvoiceDistributionTotalPrice(BusinessInvoice $invoice)
     {
@@ -516,6 +528,7 @@ class BusinessInvoiceRepository extends EntityRepository
 
             $invoice->setSubTotal(0);
             $invoice->setTotal(0);
+            $invoice->setTloPrice(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);

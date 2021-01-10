@@ -195,8 +195,8 @@ class InvoiceController extends Controller
                 $entity->setPaymentStatus('Paid');
             }else{
                 $entity->setPaymentStatus('Due');
-                $due = round($entity->getTotal() - $entity->getReceived());
-                $entity->setDue($due - $entity->getTloPrice());
+                $due = round($entity->getTotal() - $entity->getReceived()- $entity->getTloPrice());
+                $entity->setDue($due);
             }
             if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
@@ -204,10 +204,9 @@ class InvoiceController extends Controller
             }
 	        $em->flush();
             if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
-                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($entity);
+                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceDistributionTotalPrice($entity);
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 if($result['damageQnt'] > 0 or $result['spoilQnt'] > 0) {
-
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->insertUpdateDistributionReturnItem($entity);
                 }
                 if(in_array($entity->getProcess(),$done)){
