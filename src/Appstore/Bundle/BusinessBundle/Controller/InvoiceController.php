@@ -196,7 +196,7 @@ class InvoiceController extends Controller
             }else{
                 $entity->setPaymentStatus('Due');
                 $due = round($entity->getTotal() - $entity->getReceived());
-                $entity->setDue($due);
+                $entity->setDue($due - $entity->getTloPrice());
             }
             if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
