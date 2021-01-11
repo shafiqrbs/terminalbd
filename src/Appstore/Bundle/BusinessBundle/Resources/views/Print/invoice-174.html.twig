@@ -115,7 +115,7 @@
                                     <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                                     <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                                     <tr><td>Sales Amount</td><td><strong  class="pull-right">{{ entity.total|number_format(0) }}</strong></td></tr>
-                                    <tr><td>Current Due</td><td><strong  class="pull-right">{{ (entity.due - entity.tloPrice)|number_format(0) }}</strong></td></tr>
+                                    <tr><td>Current Due</td><td><strong  class="pull-right">{{ (entity.due)|number_format(0) }}</strong></td></tr>
                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
                                     <tr><td>Outstanding</td><td><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% endif %}</strong></td></tr>
                                 </table>
@@ -125,7 +125,7 @@
                                     <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>
                                     <tr><td >DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
                                     <tr><td>TLO Amount</td><td><strong  class="pull-right">{{ entity.tloPrice|number_format(0) }}</strong></td></tr>
-                                    <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format }}</strong></td></tr>
+                                    <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right" >{{ (entity.total-entity.tloPrice)|number_format }}</strong></td></tr>
                                     <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
                                     <tr><td style="text-align: left!important;"><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format }}</strong></td></tr>
                                     <tr><td colspan="2"  style="height: 5px"></td></tr>
