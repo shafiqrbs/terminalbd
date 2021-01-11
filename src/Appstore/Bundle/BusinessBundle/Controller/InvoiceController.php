@@ -116,6 +116,7 @@ class InvoiceController extends Controller
 
     public function editAction($id)
     {
+
         $em = $this->getDoctrine()->getManager();
         $global = $this->getUser()->getGlobalOption();
         $config = $global->getBusinessConfig();
