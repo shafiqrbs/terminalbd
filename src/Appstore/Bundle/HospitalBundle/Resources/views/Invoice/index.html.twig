@@ -189,11 +189,14 @@
                                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
                                                 {% endif %}
                                                 <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
-                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y')) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                <a data-url="{{ path('hms_invoice_commission_regenerate',{'id':entity.id}) }}" class="btn yellow mini approve tooltips" data-trigger = "hover" data-original-title = "Commission Regenerate" ><i class="icon-cog"></i></a>
+                                                {% endif %}
+                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
                                                     <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Revised" ><i class="icon-retweet"></i> Reverse</a>
                                                 {% endif %}
-                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') != "now"|date('d-m-Y')) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a href="{{ path('hms_invoicereturn_create', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
+                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                    <a href="{{ path('hms_invoicereturn_create', { 'invoice': entity.invoice }) }}" class="btn gray mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
                                                 {% endif %}
                                             </div>
                                         </td>

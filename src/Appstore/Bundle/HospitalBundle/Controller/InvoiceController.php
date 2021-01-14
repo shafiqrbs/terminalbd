@@ -141,6 +141,36 @@ class InvoiceController extends Controller
         ));
     }
 
+    public function readyReportAction(Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /* @var $particular InvoiceParticular */
+
+        foreach ($entity->getInvoiceParticulars() as $particular){
+            $particular->setParticularDeliveredBy($this->getUser());
+            $particular->setParticularPreparedBy($this->getUser());
+            $particular->setProcess('Done');
+            $em->persist($particular);
+            $em->flush();
+        }
+        if($entity->getPaymentStatus() == "Paid"){
+            $entity->setProcess('Done');
+            $em->persist($entity);
+            $em->flush();
+        }
+        return new Response('done');
+    }
+
+    public function commissionRegenerateAction(Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity->setCommissionApproved(false);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('done');
+    }
+
     public function particularSearchAction(Particular $particular)
     {
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));

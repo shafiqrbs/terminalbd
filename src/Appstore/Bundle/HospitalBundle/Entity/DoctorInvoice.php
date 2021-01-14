@@ -32,7 +32,7 @@ class DoctorInvoice
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="doctorInvoices" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="doctorInvoices")
      **/
     private $hospitalConfig;
 

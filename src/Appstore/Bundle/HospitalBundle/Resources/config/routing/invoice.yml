@@ -52,6 +52,14 @@ hms_invoice_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "HospitalBundle:Invoice:invoiceApprove" }
 
+hms_invoice_ready:
+    path:     /{id}/invoice-ready-report
+    defaults: { _controller: "HospitalBundle:Invoice:readyReport" }
+
+hms_invoice_commission_regenerate:
+    path:     /{id}/invoice-commission-regenerate
+    defaults: { _controller: "HospitalBundle:Invoice:commissionRegenerate" }
+
 
 hms_invoice_update:
     path:     /{id}/update
