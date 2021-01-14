@@ -486,16 +486,15 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $entity->setProcessHead('business');
         $entity->setProcessType('TLO');
         $entity->setPayment($invoice->getTloPrice());
-        $entity->setProcess('approved');
         $entity->setUpdated($invoice->getCreated());
         $entity->setApprovedBy($invoice->getApprovedBy());
-        $entity->setAccountBank($invoice->getAccountBank());
-        $entity->setAccountMobileBank($invoice->getAccountMobileBank() );
-        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank(null);
+        $entity->setAccountMobileBank(null);
+        $entity->setTransactionMethod(null);
         $em->persist($entity);
         $em->flush();
         $this->updateVendorBalance($entity);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
+       // $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
     }
 
 	public function insertAccountPurchase(Purchase $entity)
