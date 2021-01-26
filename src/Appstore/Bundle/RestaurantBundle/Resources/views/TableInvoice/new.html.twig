@@ -16,7 +16,7 @@
                                         {{ table.table.name }}<br/>
                                         <span id="process-{{ table.id }}" class="process {{ table.process }}">{{ table.process }}</span>
                                         <br/>
-                                        {% if table.orderDate is not empty %} <span class="table-sales-time" id="orderTime-{{ table.id }}">{{ table.orderDate|date('h:m:s a') }}</span> {% else%} <span class="table-sales-time" id="orderTime-{{ table.id }}">Time</span> {% endif %}
+                                        {% if table.orderDate is not empty %} <span class="table-sales-time" id="orderTime-{{ table.id }}">{{ table.updated|date('h:m:s A') }}</span> {% else%} <span class="table-sales-time" id="orderTime-{{ table.id }}">Time</span> {% endif %}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -162,9 +162,9 @@
                                                                 <td class="">
                                                                     <div class="input-append" style="margin-bottom: 0!important;">
                                                                 <span class="input-group-btn">
-              <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn black btn-number mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
+              <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.id}) }}" class="btn black btn-number-pos mini" data-type="minus" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
                                                                    <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.id }}"  id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-title="{{ item.salesPrice }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" min="1" max="100">
-                                                                  <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.particular.id}) }}" class="btn black btn-number mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
+                                                                  <a href="javascript:" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.id}) }}" class="btn black btn-number-pos mini"  data-type="plus" data-id="{{ item.id }}" data-title="{{ item.salesPrice }}"  data-text="{{ item.id }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="numeric product-title"><strong id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</strong></td>
@@ -253,7 +253,7 @@
                                                         <div class="span6">
                                                             <div class="row-fluid">
                                                                 <div class="span6"><span>Total</span></div>
-                                                                <div class="span6"><strong class="grandTotal">{{ entity.total|number_format(2) }}</strong></div>
+                                                                <div class="span6"><strong class="total">{{ entity.total|number_format(2) }}</strong></div>
                                                             </div>
                                                         </div>
                                                     </div>

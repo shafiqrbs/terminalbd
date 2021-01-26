@@ -75,9 +75,7 @@ class TransactionController extends Controller
 		$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
 		$globalOption = $this->getUser()->getGlobalOption();
 		$globalOption->getId();
-
         if(empty($data['pdf'])){
-
             return $this->render('AccountingBundle:Transaction:accountcash.html.twig', array(
                 'entities' => $pagination,
                 'overview' => $overview,
@@ -85,10 +83,11 @@ class TransactionController extends Controller
             ));
 
         }else{
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data)->getResult();
             $html = $this->renderView(
-                'AccountingBundle:Transaction/Report:monthlyPdf.html.twig', array(
+                'AccountingBundle:Transaction/Report:allsCashDetailsPdf.html.twig', array(
                     'globalOption'                  => $this->getUser()->getGlobalOption(),
-                    'entities'                      => $pagination,
+                    'entities'                      => $entities,
                     'overview'                      => $overview,
                     'searchForm'                    => $data,
                 )

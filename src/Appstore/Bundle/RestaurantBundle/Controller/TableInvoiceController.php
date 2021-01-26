@@ -112,7 +112,6 @@ class TableInvoiceController extends Controller
         return new Response(json_encode($array));
     }
 
-
     private function createTemporaryForm(RestaurantTableInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
@@ -300,8 +299,7 @@ class TableInvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $process = $_REQUEST['process'];
         if(empty($invoice->getOrderDate())){
-            $now = new \DateTime("now");
-            $invoice->setOrderDate($now);
+            $invoice->setOrderDate($invoice->getUpdated());
         }
         $invoice->setProcess($process);
         $em->flush();
@@ -326,8 +324,9 @@ class TableInvoiceController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $quantity = $_REQUEST['quantity'];
+        /* @var $entity RestaurantTableInvoiceItem */
         $entity = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoiceItem')->find($product);
-        $invoiceItems = array('particularId' => $product , 'quantity' => $quantity,'price' => $entity->getPrice(),'process' => 'update');
+        $invoiceItems = array('particularId' => $entity->getParticular()->getId() , 'quantity' => $quantity,'price' => $entity->getSalesPrice(),'process' => 'update');
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->insertInvoiceItems($entity->getTableInvoice(), $invoiceItems);
         $result = $this->returnResultData($entity->getTableInvoice());
         return new Response(json_encode($result));

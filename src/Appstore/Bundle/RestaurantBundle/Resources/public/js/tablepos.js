@@ -90,6 +90,54 @@ $('#btn-refresh').click(function(e){
     e.preventDefault();
 });
 
+$(document).on( "click", ".btn-number-pos", function(e){
+
+    e.preventDefault();
+    url = $(this).attr('data-action');
+    var price = $(this).attr('data-title');
+    fieldId = $(this).attr('data-id');
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $('#quantity-'+fieldId);
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function( response ) {
+                        subTotal = (existVal * parseInt(price));
+                        $('#subTotal-'+fieldId).html(subTotal);
+                        setTimeout(jsonResult(response),100);
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal})
+                    .done(function( response ) {
+                        subTotal = (existVal * parseInt(price));
+                        $('#subTotal-'+fieldId).html(subTotal);
+                        setTimeout(jsonResult(response),100);
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(1);
+    }
+});
+
 $(document).on('click', '.invoice-process', function() {
     var process = $(this).val();
     var entity = $(this).attr('data-id');
