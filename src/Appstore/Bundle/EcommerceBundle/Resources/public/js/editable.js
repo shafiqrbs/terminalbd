@@ -14,6 +14,4 @@ var EditableInit = function () {
     function pageReload() {
         /*location.reload();*/
     }
-
-
 }

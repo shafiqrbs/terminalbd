@@ -299,11 +299,14 @@ class TableInvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $process = $_REQUEST['process'];
         if(empty($invoice->getOrderDate())){
-            $invoice->setOrderDate($invoice->getUpdated());
+            $now = new \DateTime("now");
+            $invoice->setOrderDate($now);
         }
         $invoice->setProcess($process);
         $em->flush();
-        $time = $invoice->getOrderDate()->format('h:m:s a');
+        $d = strtotime($invoice->getOrderDate()->format('d-m-Y h:i:A'));
+        $date = new \DateTime($d, new \DateTimeZone('Asia/Dhaka'));
+        $time = $date->format('h:i A');
         $result = array('process'=>$process,'orderTime' => $time);
         return new Response(json_encode($result));
     }
