@@ -146,8 +146,8 @@
                                     <th class="numeric" >{{ entity.total|number_format  }}</th>
                                     <th class="numeric" >{{ entity.payment|number_format }}</th>
                                     <td class="numeric" >{{ entity.due|number_format }}</td>
-                                    <td class="numeric" >{{ purchasePrice[entity.id]|number_format }}</td>
-                                    <th class="numeric" >{{ (entity.total - purchasePrice[entity.id])|number_format }}</th>
+                                    <td class="numeric" >{% if purchasePrice[entity.id] is defined and purchasePrice[entity.id] is not empty %}{{ purchasePrice[entity.id]|number_format }}{% endif %}</td>
+                                    <th class="numeric" >{% if purchasePrice[entity.id] is defined and purchasePrice[entity.id] is not empty %} {{ (entity.total - purchasePrice[entity.id])|number_format }} {% else %} {{ (entity.total)|number_format }} {% endif %}</th>
                                 </tr>
                             {% endfor %}
                             </tbody>

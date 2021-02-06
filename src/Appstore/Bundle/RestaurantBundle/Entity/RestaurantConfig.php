@@ -137,6 +137,14 @@ class RestaurantConfig
      /**
      * @var string
      *
+     * @ORM\Column(name="vatMode", type="string",  nullable=true)
+     */
+    private $vatMode;
+
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="payFor", type="string",  nullable=true)
      */
     private $payFor;
@@ -1431,7 +1439,21 @@ class RestaurantConfig
         $this->additionalTable = $additionalTable;
     }
 
+    /**
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
 
+    /**
+     * @param string $vatMode
+     */
+    public function setVatMode($vatMode)
+    {
+        $this->vatMode = $vatMode;
+    }
 
 
 }

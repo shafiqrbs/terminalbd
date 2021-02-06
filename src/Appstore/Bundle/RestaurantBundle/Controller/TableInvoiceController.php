@@ -54,7 +54,7 @@ class TableInvoiceController extends Controller
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
      //   $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->fastTableInvoice( $config);
-        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->findOneBy(array('isActive'=>1));
+        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->findOneBy(array('config'=>$config,'isActive'=>1));
         $form = $this->createTemporaryForm($entity);
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
@@ -218,7 +218,6 @@ class TableInvoiceController extends Controller
                 $amount = $data['payment'] - $entity->getTotal();
                 $entity->setReturnAmount($amount);
             }
-
         }else if(($entity->getTotal() > 0 and !empty($entity->getPayment()) and $entity->isHold() != 1)){
             $payment = floatval($data['payment']);
             $entity->setPayment($payment);
@@ -519,7 +518,7 @@ class TableInvoiceController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-        if($vat){
+        if($vat and $config->getVatMode() == "excluding"){
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
@@ -538,6 +537,10 @@ class TableInvoiceController extends Controller
             $printer -> text($returnTk);
         }
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        if($config->getVatMode() == "including"){
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> text("{$vat}% VAT Including\n");
+        }
         if($config->getInvoiceNote()){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
             $printer -> text($config->getInvoiceNote()."\n");

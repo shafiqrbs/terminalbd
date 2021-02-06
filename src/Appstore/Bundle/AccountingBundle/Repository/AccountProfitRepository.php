@@ -167,7 +167,7 @@ class AccountProfitRepository extends EntityRepository
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
-        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE(SUM(sales.totalAmount),0) as total, COALESCE(SUM(sales.amount),0) as amount
+        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE(SUM(sales.totalAmount),0) as total, COALESCE(SUM(sales.amount),0) as amount, COALESCE(SUM(sales.tloPrice),0) as tloPrice
                 FROM account_sales as sales
                 WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year GROUP BY transactionMethod_id,processHead,accountBank_id,accountMobileBank_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);

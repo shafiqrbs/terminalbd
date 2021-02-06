@@ -44,6 +44,15 @@ class ConfigType extends AbstractType
             ->add('kitchenPrint')
             ->add('printToken')
             ->add('isProduction')
+            ->add('vatMode', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '---VAT Mode---',
+                'choices' => array(
+                    'including' => 'Including',
+                    'excluding' => 'Excluding',
+                ),
+            ))
             ->add('discountType', 'choice', array(
                 'required'    => false,
                 'attr'=>array('class'=>'m-wrap span12'),

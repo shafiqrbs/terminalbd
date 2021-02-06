@@ -163,6 +163,13 @@ class AccountSales
      */
     private $totalAmount = 0;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tloPrice", type="float", nullable=true)
+     */
+    private $tloPrice = 0;
+
 
     /**
      * @var float
@@ -830,6 +837,23 @@ class AccountSales
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getTloPrice()
+    {
+        return $this->tloPrice;
+    }
+
+    /**
+     * @param float $tloPrice
+     */
+    public function setTloPrice($tloPrice)
+    {
+        $this->tloPrice = $tloPrice;
     }
 
 

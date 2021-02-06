@@ -33,7 +33,7 @@ class RestaurantTemporaryRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getRestaurantConfig();
         $vat = 0;
-        if($config->getVatEnable() == 1){
+        if($config->getVatEnable() == 1 and $config->getVatMode() == "excluding"){
             $vat = (($total * $config->getVatPercentage())/100);
         }
         return $vat;

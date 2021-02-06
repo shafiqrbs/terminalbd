@@ -3382,7 +3382,7 @@ class TransactionRepository extends EntityRepository
     public function insertSalesMonthlyOpeningTransaction(AccountProfit $entity,$data)
     {
         $em = $this->_em;
-        $total = round($data['total']);
+        $total = round($data['total'] + $data['tloPrice']);
         $transaction = new Transaction();
         $transaction->setProcess("sales-outstanding");
         $transaction->setGlobalOption($entity->getGlobalOption());

@@ -386,7 +386,7 @@ class RestaurantTemporaryController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if(!empty($vatRegNo)){
-            $printer -> text("BIN No - ".$vatRegNo."\n\n");
+            $printer -> text("BIN No - ".$vatRegNo." Mushak - 6.3\n\n");
         }
         if($entity->getRestaurantConfig()->isPrintToken() == 1){
             $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
@@ -416,7 +416,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-        if($vat){
+        if($vat and $config->getVatMode() == "excluding"){
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
@@ -435,6 +435,10 @@ class RestaurantTemporaryController extends Controller
             $printer -> text($returnTk);
         }
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        if($config->getVatMode() == "including"){
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> text("{$vat}% VAT Including\n");
+        }
         if($config->getInvoiceNote()){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
             $printer -> text($config->getInvoiceNote()."\n");

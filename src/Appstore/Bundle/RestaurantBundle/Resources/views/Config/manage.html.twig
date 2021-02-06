@@ -53,6 +53,15 @@
                                 </div>
                                 <div class="span2">
                                     <div class="control-group">
+                                        <label class="control-label " for="vatPercentage">Pay For &nbsp;</label>
+                                        <div class="control">
+                                            {{ form_widget(form.payFor) }}
+                                            {{ form_errors(form.payFor) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
                                         <label class="control-label " >&nbsp;</label>
                                         <div class="control">
                                              {{ form_widget(form.isStockHistory) }}  Is Stock History
@@ -134,10 +143,10 @@
                                 <div class="row-fluid">
                                     <div class="span2">
                                         <div class="control-group">
-                                            <label class="control-label " for="vatPercentage">Pay For &nbsp;</label>
+                                            <label class="control-label " for="vatPercentage">VAT Mode</label>
                                             <div class="control">
-                                                {{ form_widget(form.payFor) }}
-                                                {{ form_errors(form.payFor) }}
+                                                {{ form_widget(form.vatMode) }}
+                                                {{ form_errors(form.vatMode) }}
                                             </div>
                                         </div>
                                     </div>

@@ -231,8 +231,8 @@ class Builder extends ContainerAware
 		                                             ->setAttribute( 'icon', 'icon icon-bar-chart' )
 		                                             ->setAttribute( 'dropdown', true );
 		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Invoice Details', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
-		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_sales_details' ) )->setAttribute( 'icon', 'icon-th-list' );
+		        /*$menu[$business]['Manage Sales']['Reports']->addChild( 'Customer Invoice', array( 'route' => 'business_report_customer_sales_item' ) )->setAttribute( 'icon', 'icon-th-list' );*/
 		        $menu[$business]['Manage Sales']['Reports']->addChild( 'Product Wise Invoice', array( 'route' => 'business_report_sales_stock' ) )->setAttribute( 'icon', 'icon-th-list' );
                 if($config->getBusinessModel() == 'commission') {
                     $menu[$business]['Manage Sales']['Reports']->addChild(

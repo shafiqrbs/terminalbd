@@ -382,8 +382,6 @@ class AccountSalesRepository extends EntityRepository
         $qb->andWhere('e.process = :process')->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);
         return $qb->getQuery()->getOneOrNullResult();
-
-
     }
 
     /* =============  Sales Reports Module ======================= */
@@ -992,10 +990,13 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTotalAmount($entity->getTotal() -  $entity->getTloPrice());
             $amount = $entity->getReceived();
             $accountSales->setAmount($amount);
+            $accountSales->setTloPrice($entity->getTloPrice());
         }elseif (empty($entity->getReceived()) and $entity->getTloPrice() > 0){
             $accountSales->setTotalAmount($entity->getTotal() -  $entity->getTloPrice());
             $accountSales->setTransactionMethod($entity->getTransactionMethod());
+            $accountSales->setTloPrice($entity->getTloPrice());
         }
+
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setBusinessInvoice($entity);
