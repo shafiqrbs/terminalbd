@@ -70,13 +70,10 @@ class AccountProfitRepository extends EntityRepository
         $journalAccountSalesAdjustment = $this->monthlySalesAdjustmentJournal($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
-
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
 
         if($journalAccountPurchase) {
-
             foreach ($journalAccountPurchase as $row):
-
                 if (in_array($row['processType'], array('Outstanding', 'Opening'))) {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyOpeningTransaction($profit, $row);
                 } elseif ($row['amount'] > 0 and $row['processType'] == 'Discount') {
@@ -88,8 +85,6 @@ class AccountProfitRepository extends EntityRepository
                 } elseif ($row['amount'] > 0 and $row['processType'] == 'Advance') {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseAdvanceMonthlyTransaction($profit, $row);
                 }
-
-
             endforeach;
         }
 
@@ -168,7 +163,7 @@ class AccountProfitRepository extends EntityRepository
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
-        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE(SUM(sales.totalAmount),0) as total, COALESCE(SUM(sales.amount),0) as amount, COALESCE(SUM(sales.tloPrice),0) as tloPrice
+        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE((SUM(sales.totalAmount) + SUM(sales.tloPrice)),0) as total, COALESCE(SUM(sales.amount),0) as amount
                 FROM account_sales as sales
                 WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year GROUP BY transactionMethod_id,processHead,accountBank_id,accountMobileBank_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);

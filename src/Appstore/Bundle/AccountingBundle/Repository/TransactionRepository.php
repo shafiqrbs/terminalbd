@@ -3231,8 +3231,7 @@ class TransactionRepository extends EntityRepository
 
         $em = $this->_em;
 
-        /* Cash */
-        $amount = round($data['total'] + $data['tloPrice']);
+        $amount = round($data['amount']);
         if($amount > 0){
             $transaction = new Transaction();
             $transaction->setProcess("sales");
