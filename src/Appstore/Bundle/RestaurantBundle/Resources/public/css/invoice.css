@@ -1,7 +1,9 @@
 .btn-ajax-loading {
     position:inherit;
 }
-
+.big {
+    font-size: 16px!important;
+}
 .tabbable-custom .nav-tabs > li{
     height: 34px!important;
 }
