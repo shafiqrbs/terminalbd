@@ -3232,9 +3232,8 @@ class TransactionRepository extends EntityRepository
         $em = $this->_em;
 
         /* Cash */
-
-        if($data['amount'] > 0){
-
+        $amount = round($data['total'] + $data['tloPrice']);
+        if($amount > 0){
             $transaction = new Transaction();
             $transaction->setProcess("sales");
             $transaction->setGlobalOption($entity->getGlobalOption());
@@ -3253,7 +3252,6 @@ class TransactionRepository extends EntityRepository
             } elseif ($data['method'] == 1) {
                 $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'cash-in-hand')));
             }
-            $amount = round($data['amount']);
             $transaction->setAmount($amount);
             $transaction->setDebit($amount);
             $em->persist($transaction);
@@ -3382,7 +3380,7 @@ class TransactionRepository extends EntityRepository
     public function insertSalesMonthlyOpeningTransaction(AccountProfit $entity,$data)
     {
         $em = $this->_em;
-        $total = round($data['total'] + $data['tloPrice']);
+        $total = round($data['total']);
         $transaction = new Transaction();
         $transaction->setProcess("sales-outstanding");
         $transaction->setGlobalOption($entity->getGlobalOption());

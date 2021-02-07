@@ -93,6 +93,7 @@ class AccountProfitRepository extends EntityRepository
             endforeach;
         }
 
+
         if($journalAccountSales){
 
             foreach ($journalAccountSales as $row):
@@ -136,7 +137,7 @@ class AccountProfitRepository extends EntityRepository
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(37,23),$date);
         $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(20),$date);
 
-        $data =  array('sales' => $salesReconcialtion['debit'] ,'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
+        $data =  array('sales' => $salesReconcialtion['debit'] , 'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;
 
     }
