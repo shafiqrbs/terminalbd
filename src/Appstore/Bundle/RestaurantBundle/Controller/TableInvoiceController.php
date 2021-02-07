@@ -54,7 +54,7 @@ class TableInvoiceController extends Controller
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getRestaurantConfig();
      //   $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->fastTableInvoice( $config);
-        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->findOneBy(array('config'=>$config,'isActive'=>1));
+        $entity = $em->getRepository('RestaurantBundle:RestaurantTableInvoice')->findOneBy(array('restaurantConfig'=>$config,'isActive'=>1));
         $form = $this->createTemporaryForm($entity);
         $tempTotal = $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->getSubTotalAmount($user);
         $subTotal = !empty($tempTotal['subTotal']) ? $tempTotal['subTotal'] :0;
