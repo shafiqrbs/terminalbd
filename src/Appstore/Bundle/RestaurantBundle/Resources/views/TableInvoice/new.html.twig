@@ -16,7 +16,7 @@
                                         {{ table.table.name }}<br/>
                                         <span id="process-{{ table.id }}" class="process {{ table.process }}">{{ table.process }}</span>
                                         <br/>
-                                        {% if table.orderTime is not empty %} <span class="table-sales-time" id="orderTime-{{ table.id }}">{{ table.orderTime|date('h:m:s A') }}</span> {% else%} <span class="table-sales-time" id="orderTime-{{ table.id }}">Time</span> {% endif %}
+                                        {% if table.orderDate is not empty %} <span class="table-sales-time" id="orderTime-{{ table.id }}">{{ table.orderDate|date('h:m:s A') }}</span> {% else%} <span class="table-sales-time" id="orderTime-{{ table.id }}">Time</span> {% endif %}
                                     </li>
                                 {% endfor %}
                             </ul>

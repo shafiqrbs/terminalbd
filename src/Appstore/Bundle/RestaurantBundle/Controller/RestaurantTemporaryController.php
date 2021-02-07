@@ -416,7 +416,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-        if($vat and $config->getVatMode() == "excluding"){
+        if($config->getVatEnable() and $config->getVatMode() == "excluding"){
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
@@ -437,7 +437,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         if($config->getVatMode() == "including"){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer -> text("{$vat}% VAT Including\n");
+            $printer -> text("{$config->getVatPercentage()}% VAT Including\n");
         }
         if($config->getInvoiceNote()){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);

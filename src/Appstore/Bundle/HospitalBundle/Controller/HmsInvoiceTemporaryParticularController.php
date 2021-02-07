@@ -104,8 +104,10 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $deliveryDateTime = $request->request->get('deliveryDateTime');
         $datetime = (new \DateTime("now"))->format('d-m-Y 7:30 A');
         $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
+        if($deliveryDateTime){
+            $entity->setDeliveryDateTime($datetime);
+        }
         $entity->setDiscountType($discountType);
-        $entity->setDeliveryDateTime($datetime);
         if($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() ){
 	        $entity->setPayment($entity->getTotal());
 	        $entity->setPaymentStatus("Paid");
