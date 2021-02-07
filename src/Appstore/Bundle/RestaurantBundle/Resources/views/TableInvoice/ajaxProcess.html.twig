@@ -1,6 +1,6 @@
 <div class="span8">
     <div class="switch-field">
-        {% set process = ['Order','Kitchen','Hold','Reserved','Cancle'] %}
+        {% set process = ['Order','Kitchen','Hold','Reserved','Free'] %}
         {% for pro in process %}
             <input type="radio" data-id="{{ entity.id }}" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} data-action="{{ path('restaurant_tableinvoice_process',{'id':entity.id,'process':pro}) }}"   class="invoice-process"  name="process" value="{{ pro }}"/>
             <label for="{{ pro }}">{{ pro }}</label>

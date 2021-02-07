@@ -144,7 +144,7 @@
                                                 <table class="table table-bordered">
                                                     <thead class="flip-content ">
                                                     <tr class="head-royal-blue">
-                                                        <th class="numeric"></th>
+                                                        <th class="numeric">&nbsp;</th>
                                                         <th class="numeric span8 product-title-name">Product</th>
                                                         <th class="numeric product-title">Price</th>
                                                         <td class="numeric span2">&nbsp;</td>
@@ -399,7 +399,7 @@
            <div class="row-fluid" id="process-box">
                <div class="span8">
                    <div class="switch-field">
-                       {% set process = ['Order','Kitchen','Hold','Reserved','Cancle'] %}
+                       {% set process = ['Order','Kitchen','Hold','Reserved','Free'] %}
                        {% for pro in process %}
                            <input type="radio" data-id="{{ entity.id }}" id="{{ pro }}" {% if pro == entity.process  %} checked="checked" {% endif %} data-action="{{ path('restaurant_tableinvoice_process',{'id':entity.id,'process':pro}) }}"   class="invoice-process"  name="process" value="{{ pro }}"/>
                            <label for="{{ pro }}">{{ pro }}</label>
@@ -409,10 +409,14 @@
                <div class="span4">
                    <div class="row-fluid">
                        <div class="pull-center">
-                           <button type="button" class="btn blue big  receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
-                           {% if config.posPrint == 1 %}
-                               <button type="button" class="btn yellow big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> POS PRINT</button>
+                          {% if config.posPrint == 1 and config.payFor == "pre-pay" %}
+                               <button type="button" class="btn red big payBtn receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> BILL PAY</button>
+                          {% endif %}
+                           {% if config.posPrint == 1 and config.payFor == "post-pay" %}
+                               <button type="button" class="btn red big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> POS</button>
                            {% endif %}
+                           <button type="button" class="btn blue big  receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
+
                        </div>
                    </div>
                </div>

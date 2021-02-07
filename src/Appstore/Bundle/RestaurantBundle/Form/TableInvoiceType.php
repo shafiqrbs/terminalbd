@@ -40,7 +40,7 @@ class TableInvoiceType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 payment tooltips','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 input-number payment tooltips','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Payment ID','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile invoice-change','placeholder'=>'Payment Mobile','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -51,8 +51,8 @@ class TableInvoiceType extends AbstractType
                 'choices'   => array('flat' => 'Flat', 'percentage' => 'Percentage'),
                 'required'  => true,
             ))
-            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap invoice-change ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
-            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap discountCoupon invoice-change','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input-number invoice-change ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('discountCoupon','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input-number discountCoupon invoice-change','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('paymentCard', 'entity', array(
                 'required'    => false,
                 'property' => 'name',

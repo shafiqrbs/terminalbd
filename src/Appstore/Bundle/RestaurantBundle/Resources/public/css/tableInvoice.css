@@ -6,7 +6,6 @@
     margin-bottom: 0!important;
 }
 .btn.receiveBtn{
-    background-color: #055bff !important;
     color: #fff !important;
 }
 .btn.royal-blue,.btn.royal-blue:focus{
@@ -198,6 +197,14 @@ select.m-wrap.sales-by{
 }
 .table-tab .Kitchen{
     background:#5f39d7;
+    font-size: 13px;
+    color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+}
+.table-tab .Free{
+    background:red;
     font-size: 13px;
     color: #ffffff;
     padding-left: 10px;

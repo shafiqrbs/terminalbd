@@ -151,6 +151,9 @@ $(document).on('click', '.invoice-process', function() {
         obj = JSON.parse(response);
         $('#process-'+entity).removeClass().addClass(obj['process']).html(obj['process']);
         $('#orderTime-'+entity).html( obj['orderTime']);
+        if(obj['process'] === "Free"){
+            jsonResult(response);
+        }
 
     });
 });
@@ -282,8 +285,16 @@ function financial(val) {
     return Number.parseFloat(val).toFixed(2);
 }
 
+// Install input filters.
+$(".input-number").inputFilter(function(value) {
+    return /^-?\d*$/.test(value); });
 
 $(document).on('keyup', '.payment', function() {
+
+    if($(this).val() === 0){
+        $(this).val("Your");
+        slert("okay");
+    }
 
     var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );

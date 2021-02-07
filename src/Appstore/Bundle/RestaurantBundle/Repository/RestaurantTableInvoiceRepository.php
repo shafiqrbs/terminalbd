@@ -22,7 +22,7 @@ class RestaurantTableInvoiceRepository extends EntityRepository
     public function resetData(RestaurantTableInvoice $invoice)
     {
         $em = $this->_em;
-        $invoice->setProcess('Created');
+        $invoice->setProcess('Free');
         $invoice->setVat(0);
         $invoice->setSd(0);
         $invoice->setDiscount(0);
