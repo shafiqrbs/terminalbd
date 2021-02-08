@@ -489,7 +489,7 @@ class TableInvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         if(!empty($vatRegNo)){
-            $printer -> text("BIN No - ".$vatRegNo."\n\n");
+            $printer -> text("BIN No - ".$vatRegNo." Mushak - 6.3\n\n");
         }
         if($entity->getRestaurantConfig()->isPrintToken() == 1){
             $token = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->getLastCode($entity);
