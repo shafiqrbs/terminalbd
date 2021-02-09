@@ -1,12 +1,12 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
 <div id="invoice">
-        <div class="toolbar hidden-print">
-            <div class="text-right">
-                <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
-            </div>
-            <hr>
+    <div class="toolbar hidden-print">
+        <div class="text-right">
+            <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
         </div>
+        <hr>
+    </div>
     <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
             <div style="min-width: 600px">
                 {% if config.isPrintHeader == 1 %}
@@ -104,14 +104,7 @@
                         <div class="notice">{{ entity.comment }}</div>
                     </div>
                 </main>
-                <footer>
-                  <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
-                    <span class="right">Developed by: {{ portal_design_development }}</span>
-                </footer>
             </div>
-            <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
-            <div></div>
-        </div>
     </div>
 <style>
     .clearfix{
