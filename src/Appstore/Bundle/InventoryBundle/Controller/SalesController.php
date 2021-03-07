@@ -814,15 +814,14 @@ class SalesController extends Controller
         $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
-        $printer -> text("Invoice no. {$entity->getInvoice()}");
+        $printer -> text("Invoice no. {$entity->getInvoice()}\n");
         $printer -> setEmphasis(false);
         $printer->setFont(Printer::FONT_B);
-        $printer -> text("Date: {$date}          {$transaction}\n");
+        $printer -> text("Date: {$date}\n");
         $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
         foreach ( $entity->getSalesItems() as $row){
-
             $printer -> setUnderline(Printer::UNDERLINE_NONE);
             $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
@@ -832,22 +831,19 @@ class SalesController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> setEmphasis(false);
         $printer -> text ( "\n" );
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         if($vat){
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
         if($discount){
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($discount);
             $printer -> setEmphasis(false);
             $printer -> text ( "\n" );
         }
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
