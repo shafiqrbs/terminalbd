@@ -755,27 +755,11 @@ class SalesController extends Controller
         $this->approvedOrder($entity);
 
         /** ===================Company Information=================================== */
-        if(!empty($entity->getBranches())){
 
-            $branch = $entity->getBranches();
-            $branchName     = $branch->getName();
-            $address1       = $branch->getAddress();
-            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
-            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }else{
-
-            $address1       = $option->getContactPage()->getAddress1();
-            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }
-
+        $address        = $inventory->getAddress();
         $vatRegNo       = $inventory->getVatRegNo();
         $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
+        $mobile         = $option->getHotline();
         $website        = $option->getDomain();
 
 
@@ -812,39 +796,30 @@ class SalesController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text($companyName."\n");
         $printer -> selectPrintMode();
-        if(!empty($entity->getBranches())) {
-            $printer->text($branchName . "\n");
-        }else{
-            $printer -> text($address."\n");
-        }
-
+        $printer -> text($address."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($mobile."\n");
         $printer -> feed();
 
         /* Title of receipt */
         if(!empty($vatRegNo)){
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> setEmphasis(false);
-            $printer -> selectPrintMode();
-            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
-            $printer -> setEmphasis(false);
+            if(!empty($vatRegNo)){
+                $printer -> text("BIN No - ".$vatRegNo." Mushak - 6.3\n\n");
+            }
         }
 
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n\n");
-        $printer -> setEmphasis(false);
-
-        $printer -> selectPrintMode();
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer->setFont(Printer::FONT_B);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Product', 'Qnt', 'Amount'));
+        $printer -> text("Invoice no. {$entity->getInvoice()}");
         $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
-        $printer -> setEmphasis(false);
-        $printer -> feed();
+        $printer->setFont(Printer::FONT_B);
+        $printer -> text("Date: {$date}          {$transaction}\n");
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> text("---------------------------------------------------------------\n");
         $i=1;
         foreach ( $entity->getSalesItems() as $row){
 
@@ -854,8 +829,8 @@ class SalesController extends Controller
             $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> setEmphasis(true);
+        $printer -> text("---------------------------------------------------------------\n");
+        $printer -> setEmphasis(false);
         $printer -> text ( "\n" );
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($subTotal);
