@@ -880,25 +880,6 @@ class SalesController extends Controller
         $printer->setEmphasis(false);
         $printer->text($transaction);
         $printer->selectPrintMode();
-
-
-        /* Barcode Print */
-        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
-        $printer->text ( "\n" );
-        $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
-        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
-        $printer -> feed();
-        foreach ( $hri as $position => $caption){
-            $printer->selectPrintMode ();
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text ($caption);
-            $printer->setBarcodeTextPosition ( $position );
-            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
-            $printer->feed ();
-        }
-        /* Footer */
-
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
