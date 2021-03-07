@@ -855,7 +855,7 @@ class SalesController extends Controller
         if($website){
             $printer -> text("Please visit www.".$website."\n");
         }
-        $printer -> text($date . "\n");
+        $printer -> text("Powered by - www.terminalbd.com - 01815-308090 \n");
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return new Response($response);
