@@ -1070,7 +1070,7 @@ class SalesController extends Controller
         $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
         $printer->text ( "\n" );
         $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
+        /*$printer->setBarcodeHeight (60);
         $hri = array (Printer::BARCODE_TEXT_BELOW => "");
         $printer -> feed();
         foreach ( $hri as $position => $caption){
@@ -1080,7 +1080,7 @@ class SalesController extends Controller
             $printer->setBarcodeTextPosition ( $position );
             $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
             $printer->feed ();
-        }
+        }*/
         /* Footer */
 
         $printer -> feed();
