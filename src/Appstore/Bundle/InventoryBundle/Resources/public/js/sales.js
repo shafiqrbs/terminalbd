@@ -154,7 +154,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
+                $('#salesItem').html(obj['salesItems']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
                 $('#subTotal').val(obj['salesSubTotal']);
@@ -183,7 +183,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
+                $('#salesItem').html(obj['salesItems']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#subTotal').val(obj['salesSubTotal']);
                 $('#vat').val(obj['salesVat']);
@@ -211,7 +211,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
+                $('#salesItem').html(obj['salesItems']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#subTotal').val(obj['salesSubTotal']);
                 $('#vat').val(obj['salesVat']);
