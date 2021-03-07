@@ -404,7 +404,7 @@ class RestaurantTemporaryController extends Controller
         $printer -> text("Invoice no. {$entity->getInvoice()}                  {$table}\n");
         $printer -> setEmphasis(false);
         $printer -> text("Date: {$date}          {$transaction}\n");
-        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Name', 'Qty', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
         /* @var $row InvoiceParticular */
@@ -449,7 +449,7 @@ class RestaurantTemporaryController extends Controller
         if($website){
             $printer -> text("** Visit www.".$website."**\n");
         }
-        $printer -> text("Powered by - www.terminalbd.com - 01828148148 \n");
+        $printer -> text("Powered by - www.terminalbd.com - 01815-308090 \n");
 
         if($config->isKitchenPrint() == 1 ){
             $printer->cut();

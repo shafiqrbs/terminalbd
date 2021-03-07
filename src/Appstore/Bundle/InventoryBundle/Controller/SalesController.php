@@ -787,7 +787,7 @@ class SalesController extends Controller
 
 
         /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
+        $date = date('d-m-Y h:i:s A');
 
         /* Name of shop */
         /* Name of shop */
@@ -808,47 +808,44 @@ class SalesController extends Controller
                 $printer -> text("BIN No - ".$vatRegNo." Mushak - 6.3\n\n");
             }
         }
-
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer->setFont(Printer::FONT_B);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> text("Invoice no. {$entity->getInvoice()}\n");
         $printer -> setEmphasis(false);
         $printer->setFont(Printer::FONT_B);
         $printer -> text("Date: {$date}\n");
-        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> text(new PosItemManager('Item Name', 'Qty', 'Amount'));
         $printer -> text("---------------------------------------------------------------\n");
         $i=1;
         foreach ( $entity->getSalesItems() as $row){
-            $printer -> setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $product = "{$i}. {$row->getPurchaseItem()->getBarcode()} - {$row->getItem()->getName()}";
+            $printer -> text(new PosItemManager($product,$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
         $printer -> text("---------------------------------------------------------------\n");
-        $printer -> setEmphasis(false);
-        $printer -> text ( "\n" );
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         if($vat){
             $printer->text($vat);
-            $printer->setEmphasis(false);
+            $printer -> setEmphasis(false);
         }
         if($discount){
             $printer->text($discount);
             $printer -> setEmphasis(false);
-            $printer -> text ( "\n" );
         }
-        $printer -> setEmphasis(true);
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($grandTotal);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
+        $printer -> text($payment);
+        $printer -> text("---------------------------------------------------------------\n");
+        if($entity->getDue() > 0){
+            $printer -> text($due);
+        }
         $printer->text("\n");
-        $printer->setEmphasis(false);
         $printer->text($transaction);
         $printer->selectPrintMode();
         $printer -> feed();
