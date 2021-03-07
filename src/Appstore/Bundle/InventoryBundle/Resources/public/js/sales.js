@@ -95,8 +95,6 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
 
 var InventorySales = function(sales) {
 
-
-
     $('input[name=barcode]').focus();
 
     $('#item').select2('open');

@@ -74,12 +74,13 @@ class ApiController extends Controller
                     $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
                     $vatEnable = $entity->getInventoryConfig()->getVatEnable();
                 }
+                $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
                 $data = array(
                     'setupId' => $entity->getId(),
                     'deviceId' => $device,
                     'uniqueCode' => $entity->getUniqueCode(),
                     'name' => $entity->getName(),
-                    'mobile' => $entity->getMobile(),
+                    'mobile' => $mobile,
                     'email' => $entity->getEmail(),
                     'locationId' => $entity->getLocation()->getId(),
                     'address' => $address,

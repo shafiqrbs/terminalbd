@@ -78,6 +78,7 @@ class SalesController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setSalesMode('pos');
         $entity->setPaymentStatus('Pending');
+        $entity->setProcess('In-progress');
         $entity->setInventoryConfig($inventory);
         $entity->setSalesBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){
@@ -87,6 +88,35 @@ class SalesController extends Controller
         $em->flush();
         return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $entity->getInvoice())));
 
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function editAction($code)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Sales entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'pos');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'pos');
+        if ($entity->getProcess() != "In-progress") {
+            return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
+        }
+        return $this->render('InventoryBundle:Sales:pos.html.twig', array(
+            'entity' => $entity,
+            'todaySales' => $todaySales,
+            'todaySalesOverview' => $todaySalesOverview,
+            'form' => $editForm->createView(),
+        ));
     }
 
 
@@ -289,34 +319,7 @@ class SalesController extends Controller
     }
 
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
 
-    public function editAction($code)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Sales entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'pos');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'pos');
-
-        if ($entity->getProcess() != "In-progress") {
-            return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
-        }
-        return $this->render('InventoryBundle:Sales:pos.html.twig', array(
-            'entity' => $entity,
-            'todaySales' => $todaySales,
-            'todaySalesOverview' => $todaySalesOverview,
-            'form' => $editForm->createView(),
-        ));
-    }
 
     public function resetAction(Sales $sales)
     {

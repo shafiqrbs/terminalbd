@@ -371,22 +371,16 @@ class ItemRepository extends EntityRepository
             $entity->setName($copyEntity->getName());
             $entity->setWebName($copyEntity->getName());
             $entity->setQuantity($copyEntity->getRemainingQuantity());
-            $entity->setPurchasePrice($copyEntity->geP());
+            $entity->setPurchasePrice($copyEntity->setPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
             $entity->setItemGroup($copyEntity->getMode());
             if($copyEntity->getBrandName()){
                 $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
                 $entity->setBrand($brand);
             }
-            $entity->setSource('medicine');
-            if($copyEntity->getMedicineBrand()) {
-                $entity->setMedicine($copyEntity->getMedicineBrand());
-            }
             $em->persist($entity);
             $em->flush();
-            if($copyEntity->getMedicineBrand()) {
-                $this->_em->getRepository('EcommerceBundle:ItemKeyValue')->insertMedicineAttribute($entity, $copyEntity);
-            }
+
         }
 
     }

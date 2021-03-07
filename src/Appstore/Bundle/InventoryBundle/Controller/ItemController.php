@@ -484,10 +484,6 @@ class ItemController extends Controller
      * Status a Page entity.
      *
      */
-    /**
-     * Status a Page entity.
-     *
-     */
     public function isWebAction(Request $request,Item $entity)
     {
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -501,7 +497,7 @@ class ItemController extends Controller
             $entity->setIsWeb(0);
         } else{
             $entity->setIsWeb(1);
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyMedicineItem($entity);
+            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyInventoryItem($entity);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
