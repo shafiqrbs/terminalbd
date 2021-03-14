@@ -39,9 +39,6 @@ class InventoryConfigController extends Controller
         //echo $inventoryConfig->getId();
         $em = $this->getDoctrine()->getManager();
         $data = $em->getRepository('InventoryBundle:Item')->findBy(array());
-
-        exit;
-
         $data = $em->getRepository('InventoryBundle:ProductImport')->getMasterItem();
         $variant = $em->getRepository('InventoryBundle:ProductImport')->getColorSizeUnit('unit');
         $color = $em->getRepository('InventoryBundle:ProductImport')->getColor();

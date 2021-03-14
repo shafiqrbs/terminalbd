@@ -275,6 +275,22 @@ class Item
     /**
      * @var float
      *
+     * @ORM\Column(name="price", type="float", nullable=true)
+     */
+    private $price;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountPrice", type="float", nullable=true)
+     */
+    private $discountPrice;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
     private $purchasePrice;
@@ -1069,6 +1085,38 @@ class Item
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param float $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
     }
 
 }

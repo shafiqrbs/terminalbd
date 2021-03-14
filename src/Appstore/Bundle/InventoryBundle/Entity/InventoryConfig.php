@@ -320,6 +320,13 @@ class InventoryConfig
      */
     private $isItem = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cartImage", type="boolean",  nullable=true)
+     */
+    private $cartImage = false;
+
 
     /**
      * @var boolean
@@ -393,14 +400,21 @@ class InventoryConfig
      *
      * @ORM\Column(name="usingBarcode", type="string", length=30,nullable = true)
      */
-    private $usingBarcode='purchase-item';
+    private $usingBarcode='item';
+
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string", length=30,nullable = true)
+     */
+    private $currency;
 
 	/**
      * @var string
      *
      * @ORM\Column(name="usingSalesPrice", type="string", length=100,nullable = true)
      */
-    private $usingSalesPrice = 'purchase-item';
+    private $usingSalesPrice = 'item';
 
 
      /**
@@ -1376,6 +1390,38 @@ class InventoryConfig
     public function setAddress($address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCartImage()
+    {
+        return $this->cartImage;
+    }
+
+    /**
+     * @param bool $cartImage
+     */
+    public function setCartImage($cartImage)
+    {
+        $this->cartImage = $cartImage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
     }
 
 

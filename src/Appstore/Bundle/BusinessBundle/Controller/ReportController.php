@@ -115,6 +115,23 @@ class ReportController extends Controller
         }
 	}
 
+    public function stockItemReportAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $damages = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportDamageStockItem($pagination);
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        return $this->render('BusinessBundle:Report:stock.html.twig', array(
+            'pagination' => $pagination,
+            'damages' => $damages,
+            'categories' => $category,
+            'searchForm' => $data,
+        ));
+    }
+
 	public function salesStockItemAction()
 	{
 		$em = $this->getDoctrine()->getManager();

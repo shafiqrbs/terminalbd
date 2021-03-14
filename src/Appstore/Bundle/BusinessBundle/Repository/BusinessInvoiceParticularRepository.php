@@ -433,6 +433,28 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		return $qb->getQuery()->getArrayResult();
 	}
 
+    public  function reportDamageStockItem($stocks){
+
+        $ids = array();
+        foreach ($stocks as $stock){
+            $ids[] =  $stock->getId();
+        }
+	    $qb = $this->createQueryBuilder('si');
+        $qb->join('si.businessParticular','mds');
+        $qb->select('SUM(si.damageQnt) AS quantity');
+        $qb->addSelect('mds.id AS mdsId');
+        $qb->where('mds.id IN (:mids)');
+        $qb->setParameter('mids', $ids);
+        $qb->groupBy('mds.id');
+        $qb->orderBy('mds.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $arras = array();
+        foreach ($result as $row){
+            $arras[$row['mdsId']] = $row['quantity'];
+        }
+        return $arras;
+    }
+
     public  function reportCommissionSalesStockItem(User $user, $data =''){
 
         $vendor = isset($data['vendor'])? $data['vendor'] :'';

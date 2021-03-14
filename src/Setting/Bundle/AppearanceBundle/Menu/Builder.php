@@ -254,6 +254,7 @@ class Builder extends ContainerAware
                         'Sales AREA',
                         array('route' => 'business_report_sales_area')
                     )->setAttribute('icon', 'icon-th-list');
+
                 }
                 $menu[$business]['Manage Sales']['Reports']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }
@@ -316,6 +317,7 @@ class Builder extends ContainerAware
             if($config->isStockHistory() == 1) {
                 $menu[$business]->addChild('Product Ledger', array('route' => 'business_stock_ledger'))->setAttribute('icon', 'icon-th-list');
             }
+            $menu[$business]->addChild('Stock Report', array('route' => 'business_report_stock_report'))->setAttribute('icon', 'icon-th-list');
 
         if($config->getBusinessModel() == 'commission') {
                 $menu[$business]->addChild( 'Agency Stock' )->setAttribute( 'icon', 'icon icon-bar-chart' )->setAttribute( 'dropdown', true );

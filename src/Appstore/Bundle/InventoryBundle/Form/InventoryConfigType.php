@@ -77,6 +77,7 @@ class InventoryConfigType extends AbstractType
                     'empty_data'  => null,
             ))
             ->add('barcodePriceHide')
+            ->add('cartImage')
             ->add('customPrint')
             ->add('vatEnable')
             ->add('isAttribute')

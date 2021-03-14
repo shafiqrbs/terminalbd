@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
@@ -160,16 +161,20 @@ class BusinessPurchaseReturnRepository extends EntityRepository
 
         foreach ($data['itemId'] as $key => $item):
 
+            /* @var $distribution BusinessDistributionReturnItem */
+
             $distribution = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->find($item);
+
             /* @var $purchaseItem BusinessPurchaseReturnItem */
-            $quantity = $data['quantity'][$key];
+
+            $quantity = floatval($data['quantity'][$key]);
             $purchaseItem = new BusinessPurchaseReturnItem();
             $purchaseItem->setBusinessPurchaseReturn($entity);
             $purchaseItem->setDistributionReturnItem($distribution);
             $purchaseItem->setBusinessParticular($distribution->getBusinessParticular());
             $purchaseItem->setQuantity($data['quantity'][$key]);
             $purchaseItem->setPurchasePrice($distribution->getBusinessParticular()->getPurchasePrice());
-            $purchaseItem->setSubTotal($quantity * $distribution->getBusinessParticular()->getPurchasePrice());
+            $purchaseItem->setSubTotal($quantity * $distribution->getPurchasePrice());
             $em->persist($purchaseItem);
             $em->flush();
             $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($distribution->getBusinessParticular(), "purchase-return");

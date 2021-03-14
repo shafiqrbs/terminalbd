@@ -591,6 +591,24 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function groupByItemCategory(InventoryConfig $config){
+
+        $em = $this->_em;
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'mi');
+        $qb->join('mi.category', 'category');
+        $qb->join('item.inventoryConfig', 'ic');
+        $qb->select('category.id as id');
+        $qb->addSelect('category.name as name','category.slug as slug');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $config->getId());
+        $qb->groupBy('category.id');
+        $qb->orderBy('category.name','ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
+
     public function itemPurchaseDetails($securityContext,$inventory,$id,$customer = '', $device = '')
     {
 

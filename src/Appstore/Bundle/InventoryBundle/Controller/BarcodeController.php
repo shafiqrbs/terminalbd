@@ -63,9 +63,9 @@ class BarcodeController extends Controller
             }
             $sizeColor =  $color.$size;
 
-        } elseif (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getSize()->getName() != 'Default') {
+        } elseif (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getColor()->getName() != 'Default') {
+        } elseif (!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1 and $barcoder->getItem()->getColor()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getColor()->getName();
         }else {
             $sizeColor = '';

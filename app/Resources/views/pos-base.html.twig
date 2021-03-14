@@ -37,28 +37,10 @@
         'assets/css/style-responsive.css'
         'assets/css/style-metro.css'
         'assets/css/themes/darkblue.css'
-        'assets/plugins/uniform/css/uniform.default.css'
-        'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css'
-        'assets/plugins/gritter/css/jquery.gritter.css'
         'assets/plugins/chosen-bootstrap/chosen/chosen.css'
         'assets/plugins/select2/select2_metro.css'
         'assets/plugins/clockface/css/clockface.css'
         'assets/plugins/bootstrap-datepicker/css/datepicker.css'
-        'assets/plugins/data-tables/jquery.dataTables.min.css'
-        'assets/plugins/bootstrap-timepicker/compiled/timepicker.css'
-        'assets/plugins/bootstrap-colorpicker/css/colorpicker.css'
-        'assets/plugins/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css'
-        'assets/plugins/bootstrap-daterangepicker/daterangepicker.css'
-        'assets/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'
-        'assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css'
-        'assets/plugins/jquery-multi-select/css/multi-select.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-metro.css'
-        'assets/plugins/jquery-tags-input/jquery.tagsinput.css'
-        'assets/plugins/jquery-selectbox/css/jquery.selectbox.css'
-        'assets/plugins/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css'
-        'assets/plugins/data-tables/DT_bootstrap.css'
-        'assets/plugins/data-tables/dataTables.bootstrap.min.css'
         'assets/plugins/glyphicons/css/glyphicons.css'
         'assets/plugins/glyphicons_halflings/css/halflings.css'
         'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
@@ -159,6 +141,7 @@
 'assets/js/jquery.cookie-1.4.1.min.js'
 'assets/scripts/ui-jqueryui.js'
 'assets/scripts/input-box.js'
+ 'assets/scripts/app.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -167,8 +150,8 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
-
         {% block documentready %}
+        App.init();
         $('.mobileBankHide').hide();
         $('.bankHide').hide();
         var winHeight = $(window).height();
