@@ -49,6 +49,11 @@ class BarcodeController extends Controller
     public function barCoder(PurchaseItem $barcoder,InventoryConfig $config)
     {
 
+        $symbol = empty($config->getCurrency()->getSymbol()) ? "৳" : $config->getCurrency()->getSymbol();
+        $itemName = "";
+        if($config->isBarcodeItem() == 1){
+            $itemName = $barcoder->getItem()->getMasterItem()->getName();
+        }
         if ((!empty($barcoder->getItem()->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $config->getBarcodeSize() == 1)) {
 
             if ($barcoder->getItem()->getColor()->getName() != 'Default'){
@@ -104,7 +109,8 @@ class BarcodeController extends Controller
         if($config->getBarcodePriceHide() == 1){
             $price ='';
         }else{
-            $price ="TK. {$barcoder->getSalesPrice()} ";
+            $price = number_format($barcoder->getSalesPrice(),2);
+            $price ="MRP- {$symbol} {$price} ";
         }
         $scale = $config->getBarcodeScale();
         $fontsize = $config->getBarcodeFontSize();
@@ -118,7 +124,7 @@ class BarcodeController extends Controller
         $barcode->setFontSize($fontsize);
         $code = $barcode->generate();
         $data = '';
-        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
+        $data .='<div class="barcode-block" style="height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
         $data .='<div class="centered">';
         if($shopName){
             $data .='<p><span class="center">'.$shopName.'</span></p>';
@@ -129,6 +135,9 @@ class BarcodeController extends Controller
         $data .='<div class="clearfix"></div>';
         $data .='<img src="data:image/png;base64,'.$code.'" />';
         $data .='<p><span class="center">'.$price.$config->getBarcodeText().'</span></p>';
+        if($itemName){
+            $data .="<p><span class='center'>{$itemName}</span></p>";
+        }
         $data .='</div>';
         $data .='</div>';
         return $data;
@@ -137,7 +146,12 @@ class BarcodeController extends Controller
 	public function itemBarcoder(Item $barcoder,InventoryConfig $config)
 	{
 
-		if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
+        $symbol = empty($config->getCurrency()->getSymbol()) ? "৳" : $config->getCurrency()->getSymbol();
+        $itemName = "";
+        if($config->isBarcodeItem() == 1){
+            $itemName = $barcoder->getItem()->getMasterItem()->getName();
+        }
+	    if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
 
 			if ($barcoder->getColor()->getName() != 'Default'){
 				$color = $barcoder->getColor()->getName();
@@ -179,12 +193,12 @@ class BarcodeController extends Controller
 			$border = 0;
 		}
 
-		$shopName = $config->getShopName();
-		if($config->getBarcodePriceHide() == 1){
-			$price ='';
-		}else{
-			$price ="TK. {$barcoder->getSalesPrice()} ";
-		}
+        if($config->getBarcodePriceHide() == 1){
+            $price ='';
+        }else{
+            $price = number_format($barcoder->getSalesPrice(),2);
+            $price ="MRP- {$symbol} {$price} ";
+        }
 		$scale = $config->getBarcodeScale();
 		$fontsize = $config->getBarcodeFontSize();
 		$thickness = $config->getBarcodeThickness();
@@ -197,7 +211,7 @@ class BarcodeController extends Controller
 		$barcode->setFontSize($fontsize);
 		$code = $barcode->generate();
 		$data = '';
-		$data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
+		$data .='<div class="barcode-block" style="height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
 		$data .='<div class="centered">';
 		if($shopName){
 			$data .='<p><span class="center">'.$shopName.'</span></p>';
@@ -208,6 +222,9 @@ class BarcodeController extends Controller
 		$data .='<div class="clearfix"></div>';
 		$data .='<img src="data:image/png;base64,'.$code.'" />';
 		$data .='<p><span class="center">'.$price.$config->getBarcodeText().'</span></p>';
+        if($itemName){
+            $data .="<p><span class='center'>{$itemName}</span></p>";
+        }
 		$data .='</div>';
 		$data .='</div>';
 		return $data;
@@ -262,8 +279,6 @@ class BarcodeController extends Controller
             $data[] = $purchaseItem;
         }
 
-
-
     }
 
 
@@ -310,24 +325,10 @@ class BarcodeController extends Controller
     public function printAction()
     {
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $printLeftMargin = $config->getBarcodePageLeftMargin();
-        $printTopMargin = $config->getBarcodePageTopMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
-        if($printLeftMargin == 0){
-            $leftMargin = 0;
-        }else{
-            $leftMargin = $printLeftMargin.'px';
-        }
-        if($printTopMargin == 0){
-            $topMargin = 0;
-        }else{
-            $topMargin = $printTopMargin.'px';
-        }
-
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
-            'barcodePageLeftMargin'       => $leftMargin,
-            'barcodePageTopMargin'        => $topMargin,
-            'barCoder'              => $barCoder
+            'config'        => $config,
+            'barCoder'      => $barCoder
         ));
     }
 

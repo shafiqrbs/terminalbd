@@ -163,7 +163,17 @@ class SalesManualController extends Controller
         if(!empty($item->getMasterItem()->getProductUnit())){
             $unit = $item->getMasterItem()->getProductUnit()->getName();
         }
-        return new Response(json_encode(array('itemId'=> $item->getId() ,'price'=> $item->getSalesPrice(),'purchasePrice'=> $item->getAvgPurchasePrice(), 'quantity'=> $item->getRemainingQuantity(),'unit'=>$unit)));
+        $subItem = "";
+        if($item->getPurchaseItems()){
+            foreach($item->getPurchaseItems() as $purchaseItem  ) {
+                $grn = $purchaseItem->getPurchase()->getGrn();
+                $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d-m-Y');
+                $subItem .= "<option>{$purchaseItem->getBarcode()} - {$received}/{$grn}</option>";
+            }
+        }
+
+        $array = array('itemId'=> $item->getId() ,'subItem'=> $subItem,'price'=> $item->getSalesPrice(),'purchasePrice'=> $item->getAvgPurchasePrice(), 'quantity'=> $item->getRemainingQuantity(),'unit'=>$unit);
+        return new Response(json_encode($array));
     }
 
     private function createItemForm(SalesItem $item , Sales $entity)

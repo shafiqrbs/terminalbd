@@ -57,6 +57,70 @@ class GlobalOptionRepository extends EntityRepository
 	    return $result;
     }
 
+    public function getMasterSetup(GlobalOption $entity){
+        $config = '';
+        $address = '';
+        $vatRegNo = '';
+        $vatPercentage = '';
+        $vatEnable = '';
+        $vatMode = '';
+        $invoiceNote = '';
+
+        if ($entity->getMainApp()->getSlug() == "miss") {
+            $config = $entity->getMedicineConfig()->getId();
+            $address = $entity->getMedicineConfig()->getAddress();
+            $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
+            $vatRegNo = $entity->getMedicineConfig()->getVatRegNo();
+            $vatEnable = $entity->getMedicineConfig()->isVatEnable();
+        } elseif ($entity->getMainApp()->getSlug() == "business") {
+            $config = $entity->getBusinessConfig()->getId();
+            $address = $entity->getBusinessConfig()->getAddress();
+            $vatPercentage = $entity->getBusinessConfig()->getVatPercentage();
+            $vatRegNo = $entity->getBusinessConfig()->getVatRegNo();
+            $vatEnable = $entity->getBusinessConfig()->getVatEnable();
+        } elseif ($entity->getMainApp()->getSlug() == "restaurant") {
+            $config = $entity->getRestaurantConfig()->getId();
+            $address = $entity->getRestaurantConfig()->getAddress();
+            $vatPercentage = $entity->getRestaurantConfig()->getVatPercentage();
+            $vatRegNo = $entity->getRestaurantConfig()->getVatRegNo();
+            $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+        } elseif ($entity->getMainApp()->getSlug() == "inventory") {
+            $config = $entity->getInventoryConfig()->getId();
+            $address = $entity->getInventoryConfig()->getAddress();
+            $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
+            $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
+            $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+            $currency = ($entity->getInventoryConfig()->getCurrency()) ? $entity->getInventoryConfig()->getCurrency()->getSymbol():'৳';
+            $autoPayment = $entity->getInventoryConfig()->isAutoPayment();
+            $vatMode = $entity->getInventoryConfig()->getVatMode();
+            $invoiceNote = $entity->getInventoryConfig()->getInvoiceNote();
+        }
+        $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
+        $data = array(
+            'setupId' => $entity->getId(),
+            'config' => $config,
+            'uniqueCode' => $entity->getUniqueCode(),
+            'name' => $entity->getName(),
+            'mobile' => $mobile,
+            'email' => $entity->getEmail(),
+            'locationId' => $entity->getLocation()->getId(),
+            'address' => $address,
+            'locationName' => $entity->getLocation()->getName(),
+            'main_app' => $entity->getMainApp()->getId(),
+            'main_app_name' => $entity->getMainApp()->getSlug(),
+            'appsManual' => $entity->getMainApp()->getApplicationManual(),
+            'website' => $entity->getDomain(),
+            'vatRegNo' => $vatRegNo,
+            'vatPercentage' => $vatPercentage,
+            'currency' => $currency,
+            'autoPayment' => $autoPayment,
+            'vatEnable' => $vatEnable,
+            'vatMode' => $vatMode,
+            'invoiceNote' => $invoiceNote,
+        );
+        return $data;
+    }
+
     public function searchHandle($qb,$data)
     {
 

@@ -7,9 +7,23 @@
         window.close();
     }, 2000);
 </script>
-<div style="margin-left:{{ barcodePageLeftMargin }}px;margin-top:{{ barcodePageTopMargin }}px">
+<style>
+    .grid-print {
+        width: 100%;
+        display: grid;
+        grid-gap: 0;
+
+    }
+    .grid-print {
+        grid-template-columns: repeat({{ config.barcodePerRow }}, calc(100%/{{ config.barcodePerRow }}));
+    }
+    .item {
+        border: 1px solid rgba(215, 214, 214, 0.71);
+    }
+</style>
+<div class="grid-print">
     {% for barcode in barCoder %}
-        {{ barcode|raw }}
+        <div class="item">{{ barcode|raw }}</div>
     {% endfor %}
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Form;
+namespace Terminalbd\PosBundle\Form;
 
 
 use Doctrine\ORM\EntityRepository;
@@ -32,18 +32,20 @@ class PosType extends AbstractType
     {
         $builder
 
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span4 input-number payment tooltips','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span4 input-number invoice-change payment amount tooltips','data-trigger' => 'hover','placeholder'=>'Amount','data-original-title'=>'Add receive amount','autocomplete'=>'off')))
+            ->add('deliveryCharge','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input-number amount invoice-change','data-trigger' => 'hover','placeholder'=>'Receive BDT','data-original-title'=>'Delivery Charge','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 invoice-change','placeholder'=>'Payment ID','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile invoice-change','placeholder'=>'Payment Mobile','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
 
-            ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
+            ->add('discount','hidden',array('attr'=>array('class'=>'discount amount')))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap invoice-change'),
-                'choices'   => array('flat' => 'Flat', 'percentage' => 'Percent'),
+                'choices'   => array('flat' => 'Flat', 'percent' => 'Percent'),
                 'required'  => true,
             ))
-            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input-number invoice-change ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('isHold','checkbox', array('attr'=>array('class'=>'m-wrap isHold tooltips','data-trigger' => 'hover','placeholder'=>'Hold','data-original-title'=>'Invoice Hold','autocomplete'=>'off')))
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span12 m-wrap input-number amount invoice-change ','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
             ->add('discountCoupon','text', array('mapped'=> false,'attr'=>array('class'=>'tooltips span12 m-wrap input-number discountCoupon invoice-change','data-trigger' => 'hover','placeholder'=>'Coupon No','data-original-title'=>'Enter Discount Coupon No','autocomplete'=>'off')))
             ->add('paymentCard', 'entity', array(
                 'required'    => false,
@@ -76,7 +78,7 @@ class PosType extends AbstractType
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 m-wrap sales-by invoice-change'),
-                'empty_value' => '---Order Taken By---',
+                'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
@@ -108,7 +110,7 @@ class PosType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\InventoryBundle\Entity\Pos'
+            'data_class' => 'Terminalbd\PosBundle\Entity\Pos'
         ));
     }
 

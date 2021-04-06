@@ -51,11 +51,16 @@
                                     <div class="span2">
                                         <input type="text" style="text-align:center; margin-left:15px;height: 42px!important;" class="m-wrap span12 form-control"  id="barcode" name="barcode" data-id="{{ entity.id }}" placeholder="Barcode"  value="" >
                                     </div>
-                                     <div class="span5">
+                                     <div class="span3">
                                         {{ form_widget(itemForm.item) }}
                                         {{ form_errors(itemForm.item) }}
                                     </div>
-                                    <div class="span5">
+                                    <div class="span3">
+                                        <select style="height: 42px!important;" class="m-wrap span12 form-control" name="subItem" id="subItem">
+                                            <option>Select sub-item</option>
+                                        </select>
+                                    </div>
+                                    <div class="span4">
                                         <div class="input-append span12" style="margin-bottom:0!important">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -71,8 +76,8 @@
                                                 <a href="javascript:" class="btn btn-large green btn-qnt-particular"  data-type="plus" data-field="quantity">
                                                     <span class="fa fa-plus"></span>
                                                 </a>
-                                                <a href="javascript:" style="width:55px" class="btn btn-large black unit">-</a>
-                                                <a href="javascript:" class="btn btn-large blue" id="addItem" data-url="{{ path('inventory_salesmanual_insert_item',{'sales':entity.id}) }}" ><i class="icon-shopping-cart"></i> <strong>Add</strong></a>
+                                                    <button type="button" style="width:55px" class="btn btn-large black unit">-</button>
+                                                <button type="button" class="btn btn-large blue" id="addItem" data-url="{{ path('inventory_salesmanual_insert_item',{'sales':entity.id}) }}" ><i class="icon-shopping-cart"></i> <strong>Add</strong></button>
                                                 </span>
                                             </div>
                                         </div>
@@ -154,12 +159,12 @@
                                             <div class="span4"> {{ form_widget(form.discountCalculation) }}</div>
                                         </div>
                                         <div class="row-fluid">
-                                            <div class="span8"><label class="control-label"><strong>Receive TK.</strong></label></div>
-                                            <div class="span4">{{ form_widget(form.payment) }}</div>
-                                        </div>
-                                        <div class="row-fluid">
                                             <div class="span8"><label class="control-label"><strong>Delivery Charge</strong></label></div>
                                             <div class="span4">{{ form_widget(form.deliveryCharge) }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span8"><label class="control-label"><strong>Receive TK.</strong></label></div>
+                                            <div class="span4">{{ form_widget(form.payment) }}</div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12 input-append-border">

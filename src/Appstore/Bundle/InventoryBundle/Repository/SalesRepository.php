@@ -2,10 +2,16 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Terminalbd\PosBundle\Entity\Pos;
 
 /**
  * SalesRepository
@@ -131,6 +137,26 @@ class SalesRepository extends EntityRepository
 
     }
 
+    public function findAndroidDeviceSales($x)
+    {
+        $ids = [];
+        foreach ($x as $y){
+            $ids[]=$y['id'];
+        }
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.androidProcess','a');
+        $qb->select('a.id as androidId');
+        $qb->addSelect('sum(s.subTotal) as subTotal ,sum(s.total) as total ,sum(s.payment) as salesReceive ,sum(s.due) as due ,sum(s.discount) as discount , count(s.id) as voucher');
+        $qb->where("s.androidProcess IN (:salesId)")->setParameter('salesId', $ids);
+        $qb->groupBy('androidId');
+        $result = $qb->getQuery()->getArrayResult();
+        $array= [];
+        foreach ($result as $row ){
+            $array[$row['androidId']]= $row;
+        }
+        return $array;
+    }
+
     public function salesLists( User $user , $mode = '', $data)
     {
 
@@ -150,8 +176,6 @@ class SalesRepository extends EntityRepository
         $qb->leftJoin('s.salesBy', 'u');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $config);
-        $qb->andWhere("s.salesMode = :mode");
-        $qb->setParameter('mode', $mode);
         if ($branch and $mode == 'online'){
             $qb->andWhere("s.branches is NULL OR s.branches =".$branch->getId());
         }elseif($config->getIsBranch() == 1 and empty($branch) and $user->getCheckRoleGlobal(array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) and ! $user->getCheckRoleGlobal($existArray) ){
@@ -753,28 +777,7 @@ class SalesRepository extends EntityRepository
 
     public function findBySalesReturn($saleId = 0)
     {
-
         return $query = $this->findOneBy(array('invoice'=>$saleId));
-        exit;
-        echo $query->getId();
-
-        $qb = $this->_em->createQueryBuilder();
-        $qb->from('InventoryBundle:Sales','sales');
-        $qb->select('sales');
-        $qb->innerJoin('sales.salesItems','salesItems');
-        $qb->innerJoin('salesItems.purchaseItem','purchaseitem');
-        $qb->where("sales.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory->getId());
-        if(!empty($saleId)){
-            $qb->andWhere("sales.salesCode = :code");
-            $qb->setParameter('code',$saleId);
-        }
-        if(!empty($barcode)){
-            $qb->andWhere("purchaseitem.barcode = :barcode");
-            $qb->setParameter('barcode',$barcode);
-        }
-        return $result =   $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);;
-
     }
 
     public function getCulculationVat(Sales $sales,$totalAmount)
@@ -782,5 +785,332 @@ class SalesRepository extends EntityRepository
         $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVatPercentage())/100 );
         return round($vat);
     }
+
+    public function insertPosSales(GlobalOption $option,Pos $pos,$cart)
+    {
+        $em = $this->_em;
+        $sales = new Sales();
+        $sales->setInventoryConfig($option->getInventoryConfig());
+        $sales->setDeviceSalesId($pos->getInvoice());
+        $sales->setSubTotal($pos->getSubTotal());
+        $sales->setDiscount($pos->getDiscount());
+        $sales->setDiscountType($pos->getDiscountType());
+        $sales->setDiscountCalculation($pos->getDiscountCalculation());
+        $sales->setTotal($pos->getTotal());
+        if($pos->getPayment() > $pos->getTotal()){
+            $sales->setPayment($pos->getTotal());
+            $sales->setReceive($pos->getTotal());
+        }else{
+            $sales->setPayment($pos->getReceive());
+            $sales->setReceive($pos->getReceive());
+        }
+        $sales->setVat($pos->getVat());
+        $sales->setVatPercent($pos->getVatPercent());
+        $sales->setSd($pos->getSd());
+        $sales->setSdPercent($pos->getSdPercent());
+        $sales->setDeliveryCharge($pos->getDeliveryCharge());
+        $sales->setDue($pos->getDue());
+        $sales->setTransactionMethod($pos->getTransactionMethod());
+        $sales->setPaymentCard($pos->getPaymentCard());
+        $sales->setTransactionId($pos->getTransactionId());
+        $sales->setCardNo($pos->getCardNo());
+        $sales->setPaymentMobile($pos->getPaymentMobile());
+        if($pos->getBank()){
+            $sales->setAccountBank($pos->getAccountBank());
+        }
+        if($pos->getAccountMobileBank()){
+            $sales->setAccountMobileBank($pos->getAccountMobileBank());
+        }
+        $sales->setCreatedBy($pos->getCreatedBy());
+        $sales->setSalesBy($pos->getSalesBy());
+        $sales->setCustomer($pos->getCustomer());
+        $created = new \DateTime('now');
+        $sales->setCreated($created);
+        $sales->setUpdated($created);
+        $sales->setProcess("POS");
+        $sales->setPaymentStatus($pos->getPaymentStatus());
+        $em->persist($sales);
+        $em->flush();
+        $this->insertPosSalesItem($sales,$cart);
+        return $sales->getId();
+
+    }
+
+    private function insertPosSalesItem($sales,$cart)
+    {
+        $em = $this->_em;
+        if($cart->contents()){
+           foreach ($cart->contents() as $item):
+
+               $salesItem = new SalesItem();
+               $salesItem->setSales($sales);
+               $stockId = $em->getRepository('InventoryBundle:Item')->find($item['id']);
+               if ($stockId) {
+                   /* @var Item $stockId */
+                   $salesItem->setItem($stockId);
+                   $salesItem->setPurchasePrice($stockId->getAvgPurchasePrice());
+               }
+               $salesItem->setQuantity($item['quantity']);
+               if (isset($item['price']) and $item['price']) {
+                   $salesItem->setSalesPrice(floatval($item['price']));
+               }
+               $salesItem->setSubTotal($salesItem->getQuantity() * $salesItem->getSalesPrice());
+               $em->persist($salesItem);
+               $em->flush();
+           endforeach;
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales);
+
+        }
+
+    }
+
+
+    public function insertApiSales(GlobalOption $option,InventoryAndroidProcess $process)
+    {
+        $em = $this->_em;
+
+        $items = json_decode($process->getJsonItem(),true);
+        if($items){
+            foreach ($items as $item):
+                $sales = new Sales();
+                $sales->setInventoryConfig($option->getInventoryConfig());
+                $sales->setAndroidProcess($process);
+                $sales->setInvoice($item['invoiceId']);
+                $sales->setDeviceSalesId($item['invoiceId']);
+                $sales->setSubTotal($item['subTotal']);
+                if(isset($item['discount']) and $item['discount'] > 0){
+                    $sales->setDiscount($item['discount']);
+                    $sales->setDiscountType($item['discountType']);
+                    $sales->setDiscountCalculation($item['discountCalculation']);
+                }
+                $sales->setTotal($item['total']);
+                if($item['total'] < $item['receive']){
+                    $sales->setPayment($item['total']);
+                }else{
+                    $sales->setPayment($item['receive']);
+                    $sales->setDue($item['total'] - $item['receive']);
+                }
+                $sales->setVat($item['vat']);
+                if(isset($item['transactionMethod']) and $item['transactionMethod']){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
+                    if($method){
+                        $sales->setTransactionMethod($method);
+                    }
+                }elseif(isset($item['transactionMethod']) and empty($item['transactionMethod']) and $sales->getReceived() > 0){
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+                    $sales->setTransactionMethod($method);
+                }
+                if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
+                    $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
+                    if($bank){
+                        $sales->setAccountBank($bank);
+                    }
+                    if(isset($item['paymentCard']) and $item['paymentCard']){
+                        $card = $em->getRepository('SettingToolBundle:PaymentCard')->find($item['paymentCard']);
+                        $sales->setPaymentCard($card);
+                    }
+                }
+                if(isset($item['paymentCardNo']) and $item['paymentCardNo']) {
+                    $sales->setCardNo($item['paymentCardNo']);
+                }
+                if(isset($item['transactionId']) and $item['transactionId']) {
+                    $sales->setCardNo($item['transactionId']);
+                }
+                if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0){
+                    $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
+                    if($mobile){
+                        $sales->setAccountMobileBank($mobile);
+                    }
+                }
+                if(isset($item['paymentMobile']) and $item['paymentMobile']) {
+                    $sales->setPaymentMobile($item['paymentMobile']);
+                }
+                if(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item);
+                    $sales->setCustomer($customer);
+                }elseif(($item['customerId']) and $item['customerId'] > 0 ){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'id'=>$item['customerId']));
+                    $sales->setCustomer($customer);
+                }else{
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option, 'mobile' => $option->getMobile()));
+                    $sales->setCustomer($customer);
+                }
+                if(($item['createdBy']) and $item['createdBy'] > 0){
+                    $createdBy = $em->getRepository('UserBundle:User')->find($item['createdBy']);
+                    $sales->setCreatedBy($createdBy);
+                }
+                if(($item['salesBy']) and $item['salesBy'] > 0){
+                    $salesBy = $em->getRepository('UserBundle:User')->find($item['salesBy']);
+                    $sales->setSalesBy($salesBy);
+                }
+                if($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'mobile' and $sales->getAccountMobileBank() and $sales->getAccountMobileBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setTotal($serviceCharge['total']);
+                    $sales->setPayment($serviceCharge['total']);
+                }elseif($sales->getTransactionMethod() and $sales->getTransactionMethod()->getSlug() == 'bank' and $sales->getAccountBank() and $sales->getAccountBank()->getServiceCharge() > 0){
+                    $serviceCharge = $this->getCalculationBankServiceCharge($sales);
+                    $sales->setDiscount($serviceCharge['discount']);
+                    $sales->setTotal($serviceCharge['total']);
+                    $sales->setPayment($serviceCharge['total']);
+                }
+                $created = new \DateTime($item['created']);
+                $sales->setCreated($created);
+                $sales->setUpdated($created);
+                $sales->setProcess("Device");
+                $sales->setPaymentStatus("Paid");
+                $em->persist($sales);
+                $em->flush();
+                $em->getRepository("InventoryBundle:Item")->getItemSalesUpdate($sales);
+
+            endforeach;
+            $this->insertApiSalesItem( $option, $process);
+        }
+    }
+
+    public function insertApiSalesItem(GlobalOption $option,InventoryAndroidProcess $process){
+
+        $em = $this->_em;
+        $conf = $option->getInventoryConfig();
+        $items = json_decode($process->getJsonSubItem(),true);
+        if($items) {
+            foreach ($items as $item):
+                $deviceSalesId = $item['salesId'];
+                $sales = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $conf, 'deviceSalesId' => $deviceSalesId));
+                if ($sales) {
+                    $salesItem = new SalesItem();
+                    $salesItem->setAndroidProcess($process->getId());
+                    $salesItem->setSales($sales);
+                    $stockId = $em->getRepository('InventoryBundle:Item')->find($item['stockId']);
+                    if ($stockId) {
+                        $salesItem->setItem($stockId);
+                        $salesItem->setPurchasePrice($stockId->getAvgPurchasePrice());
+                    }
+                    $salesItem->setQuantity($item['quantity']);
+                    if (isset($item['unitPrice']) and $item['unitPrice']) {
+                        $salesItem->setSalesPrice(floatval($item['unitPrice']));
+                    }
+                    $salesItem->setSubTotal($item['subTotal']);
+                    $em->persist($salesItem);
+                    $em->flush();
+                    /*if ($salesItem->getStockItem()) {
+                        $em->getRepository('InventoryBundle:Item')->updateRemovePurchaseQuantity($salesItem->getStockItem(), 'sales');
+                    }*/
+                }
+            endforeach;
+        }
+
+        /*$countRecords = $this->countNumberSalesSubItem($process->getId());
+        if($process->getItemCount() == $countRecords){
+            $this->insertApiSalesItem( $option, $process);
+        }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
+            $batch = $process->getId();
+            $remove = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess = {$batch}");
+            $remove->execute();
+        }else{
+            return "Failed";
+        }*/
+
+    }
+
+    public function getCalculationBankServiceCharge(Sales $entity){
+
+        if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getTotal() * $serviceCharge)/100);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
+            $total = ( $entity->getSubTotal()- $discount);
+            return $data = array('total'=>$total,'discount' => $discount);
+        }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
+            $serviceCharge = $entity->getAccountBank()->getServiceCharge();
+            $totalServiceCharge = (($entity->getTotal() * $serviceCharge)/100);
+            $discount = round($entity -> getDiscount() + $totalServiceCharge);
+            $total = ( $entity->getSubTotal()- $discount);
+            return $data = array('total' => $total,'discount' => $discount);
+        }
+    }
+    public function updateApiSalesPurchasePrice($android)
+    {
+        $sql = "Update medicine_sales as sales
+            inner join (
+              select ele.sales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
+              from SalesItem as ele
+              where ele.sales_id is not NULL
+              group by ele.sales_id
+            ) as pa on sales.id = pa.sales_id
+            inner JOIN account_sales as aSales ON sales.id = aSales.sales_id
+            set sales.purchasePrice = pa.purchasePrice , aSales.purchasePrice = pa.purchasePrice
+            WHERE sales.androidProcess_id =:android";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->bindValue('android', $android);
+        $qb->execute();
+    }
+
+    public function countNumberSalesItem($batch)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('MedicineBundle:MedicineSales','si')
+            ->select('count(si.id) as totalCount')
+            ->where("si.androidProcess={$batch}")
+            ->getQuery()->getOneOrNullResult();
+        return $total['totalCount'];
+
+    }
+
+    public function countNumberSalesSubItem($batch)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('MedicineBundle:MedicineSalesItem','si')
+            ->select('count(si.id) as totalCount')
+            ->where("si.androidProcess={$batch}")
+            ->getQuery()->getOneOrNullResult();
+        return $total['totalCount'];
+
+    }
+
+    public function androidDeviceSales($config)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.createdBy', 'u');
+        $qb->join('e.androidDevice','a');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('a.id as deviceId','a.device as device');
+        $qb->addSelect('COUNT(e.id) as totalInvoice','SUM(e.subTotal) as subTotal','SUM(e.discount) as discount','SUM(e.netTotal) as total','SUM(e.received) as received','SUM(e.due) as due');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.deviceApproved = :deviceApproved')->setParameter('deviceApproved', 0);
+        $compareTo = new \DateTime("now");
+        $created =  $compareTo->format('Y-m-d 00:00:00');
+        $qb->andWhere("e.created >= :createdStart")->setParameter('createdStart', $created);
+        $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+        $qb->andWhere("e.created <= :createdEnd")->setParameter('createdEnd', $createdEnd);
+        $qb->groupBy('e.androidDevice');
+        $qb->groupBy('e.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function androidDeviceSalesProcess($device)
+    {
+        $em = $this->_em;
+        $entities = $this->findBy(array('androidDevice' => $device,'deviceApproved' => 0));
+
+        /* @var $entity Sales */
+
+        foreach ($entities as $entity){
+
+            $entity->setProcess('Done');
+            $entity->setSalesBy($entity->getCreatedBy());
+            $entity->setApprovedBy($entity->getCreatedBy());
+            $entity->setUpdated($entity->getCreated());
+            $entity->setDeviceApproved(true);
+            $em->flush();
+        }
+    }
+
 
 }

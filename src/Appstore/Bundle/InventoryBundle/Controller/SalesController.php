@@ -111,7 +111,7 @@ class SalesController extends Controller
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
         }
-        return $this->render('InventoryBundle:Sales:pos.html.twig', array(
+        return $this->render('InventoryBundle:SalesGeneral:sales.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
@@ -457,8 +457,8 @@ class SalesController extends Controller
             $entity->setPaymentStatus('Paid');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');

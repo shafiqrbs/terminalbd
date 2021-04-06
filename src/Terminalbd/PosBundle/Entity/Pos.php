@@ -1,7 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\InventoryBundle\Entity;
-
+namespace Terminalbd\PosBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,32 +11,34 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 /**
  * Sales
  *
- * @ORM\Table(name="inventory_pos")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\SalesRepository")
+ * @ORM\Table(name="pos")
+ * @ORM\Entity(repositoryClass="Terminalbd\PosBundle\Repository\PosRepository")
  */
 class Pos
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="guid")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+    protected $id;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="sales" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      **/
-    private $inventoryConfig;
-
+    private $terminal;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="sales" , cascade={"remove"} )
+     * @ORM\ManyToOne(targetEntity="Terminalbd\PosBundle\Entity\PosConfig")
+     **/
+    private $config;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Terminalbd\PosBundle\Entity\PosItem", mappedBy="pos" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private $salesItems;
+    private $posItems;
 
 
     /**
@@ -87,6 +88,13 @@ class Pos
     /**
      * @var string
      *
+     * @ORM\Column(name="invoice", type="string", length=20, nullable=true)
+     */
+    private $invoice;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
      */
     private $cardNo;
@@ -111,6 +119,13 @@ class Pos
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
     private $process = 'Created';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=50, nullable=true)
+     */
+    private $mode;
 
     /**
      * @var string
@@ -172,6 +187,13 @@ class Pos
     private $discount = 0;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="returnAmount", type="float", nullable=true)
+     */
+    private $returnAmount = 0;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="discountType", type="string", length=30, nullable=true)
@@ -195,6 +217,27 @@ class Pos
     /**
      * @var float
      *
+     * @ORM\Column(name="sdPercent", type="float", nullable=true)
+     */
+    private $sdPercent = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="sd", type="float", nullable=true)
+     */
+    private $sd = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="vatPercent", type="float", nullable=true)
+     */
+    private $vatPercent = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total = 0;
@@ -206,6 +249,13 @@ class Pos
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment = 0;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="receive", type="float", nullable=true)
+     */
+    private $receive = 0;
 
     /**
      * @var float
@@ -239,9 +289,9 @@ class Pos
     /**
      * @var boolean
      *
-     * @ORM\Column(name="revised", type="boolean")
+     * @ORM\Column(name="isHold", type="boolean")
      */
-    private $revised = false;
+    private $isHold = false;
 
     /**
      * @var \DateTime
@@ -257,9 +307,8 @@ class Pos
      */
     private $updated;
 
-
     /**
-     * @return int
+     * @return mixed
      */
     public function getId()
     {
@@ -267,34 +316,14 @@ class Pos
     }
 
     /**
-     * @param int $id
+     * @param mixed $id
      */
     public function setId($id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
 
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * Giftcard
-     * Bkash
-     * Payment Card
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     /**
      * @return float
@@ -378,30 +407,6 @@ class Pos
     }
 
 
-    /**
-     * @return salesItem
-     */
-    public function getSalesItems()
-    {
-        return $this->salesItems;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
 
     /**
      * @return string
@@ -556,22 +561,6 @@ class Pos
     /**
      * @return mixed
      */
-    public function getSalesReturn()
-    {
-        return $this->salesReturn;
-    }
-
-    /**
-     * @param mixed $salesReturn
-     */
-    public function setSalesReturn($salesReturn)
-    {
-        $this->salesReturn = $salesReturn;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -601,21 +590,6 @@ class Pos
         $this->code = $code;
     }
 
-    /**
-     * @return string
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param string $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-    }
 
 
     /**
@@ -633,16 +607,6 @@ class Pos
     {
         $this->payment = $payment;
     }
-
-
-    /**
-     * @return mixed
-     */
-    public function getAccountSales()
-    {
-        return $this->accountSales;
-    }
-
 
 
     /**
@@ -741,8 +705,6 @@ class Pos
         $this->cardNo = $cardNo;
     }
 
-
-
     /**
      * @return string
      */
@@ -803,7 +765,7 @@ class Pos
 	/**
 	 * @param string $discountType
 	 */
-	public function setDiscountType( string $discountType ) {
+	public function setDiscountType($discountType ) {
 		$this->discountType = $discountType;
 	}
 
@@ -835,19 +797,7 @@ class Pos
 		$this->remark = $remark;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getPurchasePrice(){
-		return $this->purchasePrice;
-	}
 
-	/**
-	 * @param float $purchasePrice
-	 */
-	public function setPurchasePrice($purchasePrice ) {
-		$this->purchasePrice = $purchasePrice;
-	}
 
 	/**
 	 * @return float
@@ -862,6 +812,192 @@ class Pos
 	public function setProfit( $profit ) {
 		$this->profit = $profit;
 	}
+
+    /**
+     * @return float
+     */
+    public function getReceive()
+    {
+        return $this->receive;
+    }
+
+    /**
+     * @param float $receive
+     */
+    public function setReceive($receive)
+    {
+        $this->receive = $receive;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTerminal()
+    {
+        return $this->terminal;
+    }
+
+    /**
+     * @param mixed $terminal
+     */
+    public function setTerminal($terminal)
+    {
+        $this->terminal = $terminal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param float $vatPercent
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSdPercent()
+    {
+        return $this->sdPercent;
+    }
+
+    /**
+     * @param float $sdPercent
+     */
+    public function setSdPercent($sdPercent)
+    {
+        $this->sdPercent = $sdPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSd()
+    {
+        return $this->sd;
+    }
+
+    /**
+     * @param float $sd
+     */
+    public function setSd($sd)
+    {
+        $this->sd = $sd;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return PosItem
+     */
+    public function getPosItems()
+    {
+        return $this->posItems;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHold()
+    {
+        return $this->isHold;
+    }
+
+    /**
+     * @param bool $isHold
+     */
+    public function setIsHold($isHold)
+    {
+        $this->isHold = $isHold;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param string $invoice
+     */
+    public function setInvoice($invoice)
+    {
+        $this->invoice = $invoice;
+    }
+
+    /**
+     * @return PosConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param PosConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReturnAmount()
+    {
+        return $this->returnAmount;
+    }
+
+    /**
+     * @param float $returnAmount
+     */
+    public function setReturnAmount($returnAmount)
+    {
+        $this->returnAmount = $returnAmount;
+    }
 
 
 }

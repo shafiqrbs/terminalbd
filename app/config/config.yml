@@ -43,7 +43,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [UserBundle,FOSCommentBundle,InventoryBundle,HospitalBundle,AssetsBundle,ServiceBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,DmsBundle,MedicineBundle,RestaurantBundle,OfficeBundle,BusinessBundle,EducationBundle,HotelBundle,DoctorPrescriptionBundle,MedicineBundle,ElectionBundle,TicketBundle]
+    bundles:        [UserBundle,FOSCommentBundle,InventoryBundle,HospitalBundle,AssetsBundle,ServiceBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,DmsBundle,MedicineBundle,RestaurantBundle,OfficeBundle,BusinessBundle,EducationBundle,HotelBundle,DoctorPrescriptionBundle,MedicineBundle,ElectionBundle,TicketBundle,PosBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -101,6 +101,7 @@ fos_comment:
             view: IS_AUTHENTICATED_ANONYMOUSLY
             edit: ROLE_ADMIN
             delete: ROLE_ADMIN
+
 
 guzzle:
     clients:

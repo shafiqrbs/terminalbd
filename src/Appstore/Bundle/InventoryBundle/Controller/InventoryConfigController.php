@@ -84,6 +84,11 @@ class InventoryConfigController extends Controller
                 $entity->setIsVendor(false);
                 $entity->setIsBrand(false);
             }
+            if($entity->getRemoveImage() == 1 ){
+                $entity->removeUpload();
+            }elseif($entity->getRemoveImage() != 1) {
+                $entity->upload();
+            }
             $em->persist($entity);
             $em->flush();
 
@@ -305,8 +310,12 @@ class InventoryConfigController extends Controller
                 $entity->setIsVendor(false);
                 $entity->setIsBrand(false);
             }
+            if($entity->getRemoveImage() == 1 ){
+                $entity->removeUpload();
+            }elseif($entity->getRemoveImage() != 1) {
+                $entity->upload();
+            }
             $em->flush();
-
             return $this->redirect($this->generateUrl('inventoryconfig_edit', array('id' => $id)));
         }
 

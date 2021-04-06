@@ -259,7 +259,6 @@ class MedicineSalesRepository extends EntityRepository
         foreach ($x as $y){
             $ids[]=$y['id'];
         }
-
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.androidProcess','a');
         $qb->select('a.id as androidId');

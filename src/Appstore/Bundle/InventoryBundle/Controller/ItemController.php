@@ -460,11 +460,17 @@ class ItemController extends Controller
         }
 
 	    if($data['name'] == 'Barcode') {
-		    $existBarcode = $this->getDoctrine()->getRepository( 'InventoryBundle:Item' )->findBy( array('inventoryConfig'=>$config, 'barcode' => $data['value'] ) );
+            $barcode = trim($data['value']);
+		    $existBarcode = $this->getDoctrine()->getRepository( 'InventoryBundle:Item' )->findBy( array('inventoryConfig'=>$config, 'barcode' => $barcode) );
 		    if ( empty( $existBarcode ) ) {
-			    $entity->setBarcode( $data['value'] );
+			    $entity->setBarcode($barcode);
 			    $em->flush();
-		    }
+		    }else{
+                $this->get('session')->getFlashBag()->add(
+                    'notice'," $barcode This barcode already used another item"
+                );
+            }
+
 	    }elseif($data['name'] == 'Sku'){
 		    $existSku = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$config,'sku' => $data['value']));
 		    if(empty($existSku)){
@@ -476,7 +482,6 @@ class ItemController extends Controller
 		    $entity->$process($data['value']);
 		    $em->flush();
 	    }
-
         exit;
     }
 

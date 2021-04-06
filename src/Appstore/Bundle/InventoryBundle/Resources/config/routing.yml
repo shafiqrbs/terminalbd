@@ -34,10 +34,6 @@ inventory_salesimport:
     resource: "@InventoryBundle/Resources/config/routing/salesimport.yml"
     prefix:   /sales-improt
 
-inventory_pos:
-    resource: "@InventoryBundle/Resources/config/routing/pos.yml"
-    prefix:   /pos
-
 inventory_food_product:
     resource: "@InventoryBundle/Resources/config/routing/foodproduct.yml"
     prefix:   /food/product

@@ -102,18 +102,14 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on('change', '.select2AllItem', function () {
+    $(document).on('change', '.stockItem', function () {
         var item = $(this).val();
-        if (item == '') {
-            alert('You have to select item from drop down and this not item');
-            return false;
-        }
         $.ajax({
             url: Routing.generate('inventory_salesmanual_item_search'),
             type: 'POST',
             data: 'item=' + item,
             success: function (response) {
-                obj = JSON.parse(response);
+                var obj = JSON.parse(response);
                 $('#itemId').val(obj['itemId']);
                 $('#salesPrice').val(obj['price']);
                 $('#purchasePrice').val(obj['purchasePrice']);

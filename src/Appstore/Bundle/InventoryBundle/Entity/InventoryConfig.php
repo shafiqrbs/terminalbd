@@ -2,10 +2,11 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * InventoryConfig
@@ -194,6 +195,27 @@ class InventoryConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="vatMode", type="string", length=50,nullable = true)
+     */
+    private $vatMode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceNote", type="string", length=50,nullable = true)
+     */
+    private $invoiceNote;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="templateCss", type="text", nullable = true)
+     */
+    private $templateCss;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="onlineSalesPrinter", type="string", length=50,nullable = true)
      */
     private $onlineSalesPrinter;
@@ -241,6 +263,13 @@ class InventoryConfig
      * @ORM\Column(name="barcodePrint", type="boolean",  nullable=true)
      */
     private $barcodePrint = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="autoPayment", type="boolean",  nullable=true)
+     */
+    private $autoPayment = false;
 
     /**
      * @var boolean
@@ -376,6 +405,13 @@ class InventoryConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="barcodeItem", type="boolean",  nullable=true)
+     */
+    private $barcodeItem;
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="barcodeSize", type="boolean",  nullable=true)
      */
     private $barcodeSize;
@@ -402,12 +438,11 @@ class InventoryConfig
      */
     private $usingBarcode='item';
 
-	/**
-     * @var string
-     *
-     * @ORM\Column(name="currency", type="string", length=30,nullable = true)
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Currency")
      */
     private $currency;
+
 
 	/**
      * @var string
@@ -423,6 +458,13 @@ class InventoryConfig
      * @ORM\Column(name="barcodeText", type="string", length=100,nullable = true)
      */
     private $barcodeText;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="salesMode", type="string", length=100,nullable = true)
+     */
+    private $salesMode;
 
     /**
      * @var smallint
@@ -466,6 +508,13 @@ class InventoryConfig
      */
     private $barcodePageLeftMargin = 0;
 
+     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodePerRow", type="smallint", nullable = true)
+     */
+    private $barcodePerRow = 5;
+
     /**
      * @var smallint
      *
@@ -500,6 +549,31 @@ class InventoryConfig
      * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
      */
     private $barcodeScale = 1;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPos", type="boolean")
+     */
+    private $isPos = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="removeImage", type="boolean")
+     */
+    private $removeImage = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
 
 
     /**
@@ -629,13 +703,6 @@ class InventoryConfig
         return $this->excelImporters;
     }
 
-    /**
-     * @return AccountPurchase
-     */
-    public function getAccountPurchase()
-    {
-        return $this->accountPurchase;
-    }
 
 
     /**
@@ -1408,8 +1475,136 @@ class InventoryConfig
         $this->cartImage = $cartImage;
     }
 
+
+    /**
+     * Sets file.
+     *
+     * @param InventoryConfig $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return InventoryConfig
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/' . $this->path;
+    }
+
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/inventory';
+    }
+
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+            $this->path = null ;
+        }
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename ;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRemoveImage()
+    {
+        return $this->removeImage;
+    }
+
+    /**
+     * @param boolean $removeImage
+     */
+    public function setRemoveImage($removeImage)
+    {
+        $this->removeImage = $removeImage;
+    }
+
     /**
      * @return string
+     */
+    public function getSalesMode()
+    {
+        return $this->salesMode;
+    }
+
+    /**
+     * @param string $salesMode
+     */
+    public function setSalesMode($salesMode)
+    {
+        $this->salesMode = $salesMode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPos()
+    {
+        return $this->isPos;
+    }
+
+    /**
+     * @param bool $isPos
+     */
+    public function setIsPos($isPos)
+    {
+        $this->isPos = $isPos;
+    }
+
+    /**
+     * @return mixed
      */
     public function getCurrency()
     {
@@ -1417,11 +1612,107 @@ class InventoryConfig
     }
 
     /**
-     * @param string $currency
+     * @param mixed $currency
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBarcodeItem()
+    {
+        return $this->barcodeItem;
+    }
+
+    /**
+     * @param bool $barcodeItem
+     */
+    public function setBarcodeItem($barcodeItem)
+    {
+        $this->barcodeItem = $barcodeItem;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodePerRow()
+    {
+        return $this->barcodePerRow;
+    }
+
+    /**
+     * @param smallint $barcodePerRow
+     */
+    public function setBarcodePerRow($barcodePerRow)
+    {
+        $this->barcodePerRow = $barcodePerRow;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoPayment()
+    {
+        return $this->autoPayment;
+    }
+
+    /**
+     * @param bool $autoPayment
+     */
+    public function setAutoPayment($autoPayment)
+    {
+        $this->autoPayment = $autoPayment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatMode()
+    {
+        return $this->vatMode;
+    }
+
+    /**
+     * @param string $vatMode
+     */
+    public function setVatMode($vatMode)
+    {
+        $this->vatMode = $vatMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceNote()
+    {
+        return $this->invoiceNote;
+    }
+
+    /**
+     * @param string $invoiceNote
+     */
+    public function setInvoiceNote($invoiceNote)
+    {
+        $this->invoiceNote = $invoiceNote;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplateCss()
+    {
+        return $this->templateCss;
+    }
+
+    /**
+     * @param string $templateCss
+     */
+    public function setTemplateCss($templateCss)
+    {
+        $this->templateCss = $templateCss;
     }
 
 

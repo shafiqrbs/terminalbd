@@ -158,24 +158,24 @@ class ItemRepository extends EntityRepository
     public function getApiCategory(GlobalOption $option)
     {
 
-        $config = $option->getRestaurantConfig()->getId();
-        $qb = $this->_em->createQueryBuilder();
-        $qb->from('InventoryBundle:Product','e');
-        $qb->join('e.category','c');
-        $qb->select('c.id as categoryId','c.name as name','c.slug as slug');
-        $qb->where('e.inventoryConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.status = :status')->setParameter('status',1) ;
-        $qb->groupBy('c.id');
-        $qb->orderBy('c.name','ASC');
-        $result = $qb->getQuery()->getResult();
+        $config = $option->getInventoryConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'mi');
+        $qb->join('mi.category', 'category');
+        $qb->join('item.inventoryConfig', 'ic');
+        $qb->select('category.id as id');
+        $qb->addSelect('category.name as name','category.slug as slug');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $config);
+        $qb->groupBy('category.id');
+        $qb->orderBy('category.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
 
         $data = array();
-
-
         foreach($result as $key => $row) {
 
             $data[$key]['global_id']        = (int) $option->getId();
-            $data[$key]['category_id']      = (int) $row['categoryId'];
+            $data[$key]['category_id']      = (int) $row['id'];
             $data[$key]['name']             = $row['name'];
             $data[$key]['slug']             = $row['slug'];
 
@@ -400,15 +400,16 @@ class ItemRepository extends EntityRepository
         $query->select('i.id as id');
         $query->addSelect('CONCAT(i.sku, \' - \', i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS name');
 	    $query->addSelect('CONCAT(i.sku, \' - \', i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS text');
-	    $query->addSelect('i.sku as sku');
+	    $query->addSelect('i.barcode as sku');
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.name", "'%$search%'"  ));
         $query->orWhere($query->expr()->like("i.skuSlug", "'%$search%'"  ));
+        $query->orWhere($query->expr()->like("i.barcode", "'%$search%'"  ));
         $query->andWhere("i.purchaseQuantity > 0 ");
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');
-        $query->orderBy('i.sku', 'ASC');
+        $query->orderBy('i.name', 'ASC');
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
 
@@ -508,19 +509,24 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function getItemSalesUpdate(Sales $sales){
+    public function getItemSalesUpdate($id){
 
         $em = $this->_em;
-        /** @var $salesItem SalesItem */
-        foreach($sales->getSalesItems() as $salesItem ){
-            /** @var  $entity Item */
-            $entity = $salesItem->getItem();
-            $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity->getId(),'sales');
-            $entity->setSalesQuantity(abs($qnt));
-            $em->persist($entity);
-            $em->flush($entity);
-            $this->updateRemainingQuantity($entity);
+        $sales = $em->getRepository("InventoryBundle:Sales")->find($id);
+        if($sales->getSalesItems()){
+
+            /** @var $salesItem SalesItem */
+            foreach($sales->getSalesItems() as $salesItem ){
+                /** @var  $entity Item */
+                $entity = $salesItem->getItem();
+                $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity->getId(),'sales');
+                $entity->setSalesQuantity(abs($qnt));
+                $em->persist($entity);
+                $em->flush($entity);
+                $this->updateRemainingQuantity($entity);
+            }
         }
+
 
     }
 

@@ -38,15 +38,9 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp;POS</a></li>
-                                    <li><a href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
-                                </ul>
+                                <a class="btn" href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i> Sales</a>
+                                <a class="btn yellow" href="{{ path('inventory_sales') }}"><i class="icon-plus-sign"></i> Invoice</a>
+                                <a class="btn red" href="{{ path('inventory_sales') }}"><i class="icon-plus-sign"></i> POS</a>
                             </div>
                         </div>
 
@@ -73,10 +67,6 @@
                                     <ul class="unstyled">
                                         <li><strong>Total Quantity:</strong>&nbsp;{{ entity.totalItem }}</li>
                                         <li><strong>Total item:</strong>&nbsp;{{ entity.totalItem }}</li>
-                                        <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
-                                        <li><strong>Payment BDT:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
-                                        {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
-                                        {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
                                         <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                                     </ul>
                                 </div>
@@ -114,15 +104,26 @@
                                             <tr>
                                                 <td class="numeric" >{{ loop.index }}</td>
                                                 <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                                <td class="numeric" >{% if salesItem.purchaseItem %}{{ salesItem.purchaseItem.barcode }} {% else %} {{ salesItem.item.barcode }} {% endif %}</td>
                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
+                                                <td class="numeric" >{{ salesItem.subTotal|number_format(2) }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr><th colspan="6"><span class="pull-right">Sub-Total</span></th><td>{{ entity.subTotal|number_format(2) }}</td></tr>
+                                        <tr><th colspan="6" ><span class="pull-right">Discount</span></th><td>{{ entity.discount|number_format(2) }}</td></tr>
+                                        {% if entity.vat > 0 %}
+                                        <tr><th colspan="6" ><span class="pull-right">VAT/TAX</span></th><td>{{ entity.vat|number_format(2) }}</td></tr>
+                                        {% endif %}
+                                        <tr><th colspan="6" ><span class="pull-right">Grand Total</span></th><td>{{ entity.total|number_format(2) }}</td></tr>
+                                        <tr><th colspan="6" ><span class="pull-right">Receive</span></th><th>{{ entity.payment|number_format(2) }}</th></tr>
+                                        {% if entity.due > 0 %}
+                                        <tr><th colspan="6" ><span class="pull-right">Due</span></th><td>{{ entity.due|number_format(2) }}</td></tr>
+                                        {% endif %}
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>

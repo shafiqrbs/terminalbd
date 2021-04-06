@@ -31,7 +31,7 @@ class SalesItemType extends AbstractType
     {
 
         $builder
-        ->add('item','text', array('attr'=>array('class'=>'m-wrap span12 select2AllItem inputs','placeholder'=>'Enter product name or code','data-original-title'=>'Enter payment amount','autocomplete'=>'off')));
+        ->add('item','text', array('attr'=>array('class'=>'m-wrap span12 select2Item stockItem inputs','placeholder'=>'Enter product name or code','data-original-title'=>'Enter payment amount','autocomplete'=>'off')));
 
     }
 

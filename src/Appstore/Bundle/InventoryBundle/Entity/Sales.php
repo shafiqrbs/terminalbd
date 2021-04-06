@@ -31,7 +31,7 @@ class Sales
      **/
     private $inventoryConfig;
 
-     /**
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess", inversedBy="sales" )
      **/
     private $androidProcess;
@@ -184,6 +184,13 @@ class Sales
     /**
      * @var string
      *
+     * @ORM\Column(name="deviceSalesId", type="string", length=100, nullable=true)
+     */
+    private $deviceSalesId;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
      */
     private $invoice;
@@ -264,6 +271,27 @@ class Sales
     /**
      * @var float
      *
+     * @ORM\Column(name="vatPercent", type="float", nullable=true)
+     */
+    private $vatPercent = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="sd", type="float", nullable=true)
+     */
+    private $sd = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="sdPercent", type="float", nullable=true)
+     */
+    private $sdPercent = 0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="total", type="float", nullable=true)
      */
     private $total = 0;
@@ -275,6 +303,13 @@ class Sales
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="receive", type="float", nullable=true)
+     */
+    private $receive = 0;
 
     /**
      * @var float
@@ -311,6 +346,13 @@ class Sales
      * @ORM\Column(name="revised", type="boolean")
      */
     private $revised = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deviceApproved", type="boolean")
+     */
+    private $deviceApproved = false;
 
     /**
      * @var \DateTime
@@ -1053,6 +1095,103 @@ class Sales
     {
         $this->androidProcess = $androidProcess;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDeviceApproved()
+    {
+        return $this->deviceApproved;
+    }
+
+    /**
+     * @param bool $deviceApproved
+     */
+    public function setDeviceApproved($deviceApproved)
+    {
+        $this->deviceApproved = $deviceApproved;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceSalesId()
+    {
+        return $this->deviceSalesId;
+    }
+
+    /**
+     * @param string $deviceSalesId
+     */
+    public function setDeviceSalesId($deviceSalesId)
+    {
+        $this->deviceSalesId = $deviceSalesId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param float $vatPercent
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSd()
+    {
+        return $this->sd;
+    }
+
+    /**
+     * @param float $sd
+     */
+    public function setSd($sd)
+    {
+        $this->sd = $sd;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSdPercent()
+    {
+        return $this->sdPercent;
+    }
+
+    /**
+     * @param float $sdPercent
+     */
+    public function setSdPercent($sdPercent)
+    {
+        $this->sdPercent = $sdPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReceive()
+    {
+        return $this->receive;
+    }
+
+    /**
+     * @param float $receive
+     */
+    public function setReceive($receive)
+    {
+        $this->receive = $receive;
+    }
+
 
 }
 

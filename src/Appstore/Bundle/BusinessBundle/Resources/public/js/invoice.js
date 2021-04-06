@@ -501,8 +501,6 @@ $(document).on('change', '#vendor', function() {
 
 });
 
-
-
 $(document).on('change', '.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity, .tloPrice', function() {
 
     var id = $(this).attr('data-id');

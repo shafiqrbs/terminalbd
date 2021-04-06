@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,45 +24,19 @@ class InventoryConfigType extends AbstractType
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('shopName','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span10')))
+            ->add('removeImage')
+            ->add('file')
             ->add('usingBarcode',
                 'choice', array(
-                'attr'=>array('class'=>'m-wrap  span12'),
+                'attr'=>array('class'=>'m-wrap  inline-radio'),
                 'choices' => array(
-                    '' => 'Using Barcode',
                     'item'  => 'Stock Item',
                     'purchase-item'   => 'Purchase-item',
                 ),
-                'required'    => false,
+                'required'    => true,
                 'multiple'    => false,
-                'expanded'  => false,
-                'empty_data'  => null,
-            ))
-           ->add('usingSalesPrice',
-                'choice', array(
-                'attr'=>array('class'=>'m-wrap  span12'),
-                'choices' => array(
-                    '' => 'Using Sales Price',
-                    'item'  => 'Stock Item',
-                    'purchase-item'   => 'Purchase Item',
-                ),
-                'required'    => false,
-                'multiple'    => false,
-                'expanded'  => false,
-                'empty_data'  => null,
-            ))
-            ->add('deliveryProcess',
-                'choice', array(
-                'attr'=>array('class'=>'m-wrap  span12'),
-                'choices' => array(
-                    '' => '--Select Sales Mode--',
-                    'pos'           => 'Point of Sales(POS)',
-                    'general-sales'  => 'General Sales',
-                    'manual-sales'   => 'Manual Sales',
-                ),
-                'required'    => false,
-                'multiple'    => false,
-                'expanded'  => false,
-                'empty_data'  => null,
+                'expanded'  => true,
+                'empty_data'  => "item",
             ))
             ->add('printer',
                 'choice', array(
@@ -77,11 +52,12 @@ class InventoryConfigType extends AbstractType
                     'empty_data'  => null,
             ))
             ->add('barcodePriceHide')
+            ->add('isPos')
             ->add('cartImage')
             ->add('customPrint')
             ->add('vatEnable')
             ->add('isAttribute')
-            ->add('isBranch')
+            ->add('barcodeItem')
             ->add('isColor')
             ->add('isSize')
             ->add('barcodeColor')
@@ -140,6 +116,18 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  => 8,
             ))
+            ->add('salesMode',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap inline-radio'),
+                    'choices' => array(
+                        'stock' => 'Stock',
+                        'purchase-item' => 'Purchase Item'
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => true,
+                    'empty_data'  =>"stock",
+                ))
             ->add('barcodeScale',
                 'choice', array(
                     'attr'=>array('class'=>'m-wrap span12'),
@@ -154,8 +142,22 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  =>1,
             ))
-            ->add('barcodePageLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
-            ->add('barcodePageTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodePerRow',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'choices' => array(
+                         1 => 1,
+                        '2' => '2',
+                        '3' => '3',
+                        '4' => '4',
+                        '5' => '5',
+                        '6' => '6',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  =>1,
+            ))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))
@@ -173,6 +175,17 @@ class InventoryConfigType extends AbstractType
                     'multiple'    => false,
                     'expanded'  => false,
                     'empty_data'  => null,
+            ))
+            ->add('currency', 'entity', array(
+                'required'    => false,
+                'class' => "Setting\Bundle\ToolBundle\Entity\Currency",
+                'empty_value' => '---Choose a currency ---',
+                'property' => 'nameWithCode',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->orderBy("e.id","ASC");
+                },
             ))
             ->add('barcodeHeight','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('barcodeWidth','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
@@ -197,6 +210,6 @@ class InventoryConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_inventoryconfig';
+        return 'config';
     }
 }

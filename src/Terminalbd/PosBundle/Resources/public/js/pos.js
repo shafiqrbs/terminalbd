@@ -4,8 +4,15 @@ $('.tabContent div:not(:first)').toggle();
 // hide the previous button
 $('.previous').hide();
 
+$(".number , .amount").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
+
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
+
 $.ajax({
-    url: Routing.generate('inventory_pos_stock_item'),
+    url: Routing.generate('pos_stock_item'),
     beforeSend: function(){
         $('.loader-double').fadeIn(1000).addClass('is-active');
     },
@@ -14,72 +21,8 @@ $.ajax({
     },
     success:  function (data) {
         $("#items").html(data);
+        tableSearch();
     }
-});
-
-$('.table-tab li').click(function () {
-
-    var id = $(this).data("id");
-    if ($(this).is(':last-child')) {
-        $('.next').hide();
-    } else {
-        $('.next').show();
-    }
-
-    if ($(this).is(':first-child')) {
-        $('.previous').hide();
-    } else {
-        $('.previous').show();
-    }
-
-    var position = $(this).position();
-    var corresponding = $(this).data("id");
-    var url = $(this).attr("data-action");
-    // scroll to clicked tab with a little gap left to show previous tabs
-    scroll = $('.tabs').scrollLeft();
-    $('.tabs').animate({
-        'scrollLeft': scroll + position.left - 30
-    }, 200);
-
-    // hide all content divs
-    $('.tabContent div').hide();
-
-    // show content of corresponding tab
-    $('div.' + corresponding).toggle(
-        $.get(url)
-            .done(function( response ) {
-                obj = JSON.parse(response);
-                $('#tableInvoice').val(corresponding);
-                $('#invoiceEntity').val(corresponding);
-                $('#transaction-box').html(obj['body']);
-                $('#process-box').html(obj['htmlProcess']);
-                $('.due').html(obj['total']);
-            })
-    );
-
-    // remove active class from currently not active tabs
-    $('.tabs li').removeClass('active');
-
-    // add active class to clicked tab
-    $(this).addClass('active');
-});
-
-$('#search').keyup(function(){
-
-    // Search text
-    var text = $(this).val();
-
-    // Hide all content class element
-    $('.product-content').hide();
-
-    // Search
-    $('.product-content .cta-title').each(function(){
-
-        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
-            $(this).closest('.product-content').show();
-        }
-    });
-
 });
 
 $(document).on('click', '.js-accordion-title', function() {
@@ -95,11 +38,13 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
-$('#btn-refresh').click(function(e){
-    $('.payment').val('');
-    $('#balance').html(0);
+$(document).on( "click", "#btn-refresh", function(e){
+    $('.payment').val(0);
+    var payment  = parseInt($('#total').val());
+    $('#balance').html(financial(payment));
     e.preventDefault();
 });
+
 
 $(document).on( "click", ".btn-number-pos", function(e){
 
@@ -118,7 +63,7 @@ $(document).on( "click", ".btn-number-pos", function(e){
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal})
                     .done(function( response ) {
-                        subTotal = (existVal * parseInt(price));
+                        subTotal = financial(existVal * parseInt(price));
                         $('#subTotal-'+fieldId).html(subTotal);
                         setTimeout(jsonResult(response),100);
                     });
@@ -134,7 +79,7 @@ $(document).on( "click", ".btn-number-pos", function(e){
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal})
                     .done(function( response ) {
-                        subTotal = (existVal * parseInt(price));
+                        subTotal = financial(existVal * parseInt(price));
                         $('#subTotal-'+fieldId).html(subTotal);
                         setTimeout(jsonResult(response),100);
                     });
@@ -187,27 +132,17 @@ $(document).on( "click", ".btn-number-cart", function(e){
 $(document).on('change', '#barcode', function() {
 
     var barcode = $('#barcode').val();
-    if(barcode == ''){
+    if(barcode === ''){
         $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
         return false;
     }
     $.ajax({
-        url: Routing.generate('inventory_sales_item_search'),
+        url: Routing.generate('pos_item_barcode_search'),
         type: 'POST',
-        data:'barcode='+barcode+'&sales='+ sales,
+        data:'barcode='+barcode,
         success: function(response){
             $('#barcode').focus().val('');
-            obj = JSON.parse(response);
-            $('#purchaseItem').html(obj['purchaseItem']);
-            $('#salesItem').html(obj['salesItems']);
-            $('.salesTotal').html(obj['salesTotal']);
-            $('#dueAmount').val(obj['salesTotal']);
-            $('#subTotal').val(obj['salesSubTotal']);
-            $('#vat').val(obj['salesVat']);
-            $('#paymentTotal').val(obj['salesTotal']);
-            $('#paymentSubTotal').val(obj['salesTotal']);
-            $('#wrongBarcode').html(obj['msg']);
-            FormComponents.init();
+            jsonResult(response);
         },
 
     })
@@ -221,24 +156,91 @@ $(document).on('change', '#barcodeNo', function() {
         return false;
     }
     $.ajax({
-        url: Routing.generate('inventory_sales_item_search'),
+        url: Routing.generate('pos_item_barcode_search'),
         type: 'POST',
         data:'barcode='+barcode+'&sales='+ sales,
         success: function(response) {
-            $('#barcode').focus().val('');
-            obj = JSON.parse(response);
-            $('#purchaseItem').html(obj['purchaseItem']);
-            $('#salesItem').html(obj['salesItems']);
-            $('.salesTotal').html(obj['salesTotal']);
-            $('#subTotal').val(obj['salesSubTotal']);
-            $('#vat').val(obj['salesVat']);
-            $('#paymentTotal').val(obj['salesTotal']);
-            $('#paymentSubTotal').val(obj['salesTotal']);
-            $('#dueAmount').val(obj['salesTotal']);
-            $('#wrongBarcode').html(obj['msg']);
-            FormComponents.init();
+            $('#barcodeNo').focus().val('');
+            jsonResult(response);
         },
     })
+});
+
+$('#customize-controls').on('click' , function() {
+    $('#item').select2("close");
+} );
+
+$( "#stockItem" ).submit(function( event ) {
+
+    var stockItem = $('#item').val();
+    if(stockItem === ''){
+        alert('Please try again correct product.');
+        return false;
+    }
+    $.ajax({
+        url         : Routing.generate('pos_item_create'),
+        type        : 'POST',
+        data        : new FormData($('form#stockItem')[0]),
+        processData : false,
+        contentType : false,
+        success     : function(response){
+            $('#quantity').val(1);
+            $('#item').select2('open');
+            jsonResult(response);
+        }
+    });
+    event.preventDefault();
+});
+
+function afterSelect2Submit(){
+
+    $('.select2StockItem').prepend('<option selected></option>').select2({
+
+        placeholder: "Search item,barcode",
+        ajax: {
+            url: Routing.generate('pos_item_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){
+
+            //return item.name +' => '+ (item.remainingQuantity)
+            return item.name
+
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name + '(' + item.sku+')'}, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        allowClear: true,
+        minimumInputLength:1
+    });
+
+}
+
+$(document).on('click', '.addToCart', function() {
+
+    var id = $(this).attr('data-id');
+    var quantity = $("#quantity-"+id).val();
+    var url = $(this).attr('data-action');
+    $.get(url, {quantity: quantity} , function(data){
+        $("#result").html(data);
+    });
 });
 
 $(document).on('click', '.addToCart', function() {
@@ -246,38 +248,71 @@ $(document).on('click', '.addToCart', function() {
     var id = $(this).attr('data-id');
     var quantity = $("#quantity-"+id).val();
     var url = $(this).attr('data-action');
-    alert(quantity);
     $.get(url, {quantity: quantity} , function(data){
         $("#result").html(data);
     });
 
 });
 
-$(document).on('click', '.invoice-process', function() {
-    var process = $(this).val();
-    var entity = $(this).attr('data-id');
-    var url = $(this).attr('data-action');
-    if(process ===  "Payment"){
-        $('.hide-payment').hide();
-    }else{
-        $('.hide-payment').show();
-    }
-    $.get(url,{'process':process}, function( response ) {
-        obj = JSON.parse(response);
-        $('#process-'+entity).removeClass().addClass(obj['process']).html(obj['process']);
-        $('#orderTime-'+entity).html( obj['orderTime']);
-        if(obj['process'] === "Free"){
-            jsonResult(response);
-        }
-
+$(document).on('click', '.invoice-mode', function() {
+    url = $(this).attr('data-action');
+    $.get(url, function( response ) {
+        location.reload();
     });
 });
 
+$(document).on('click', '.invoice-process', function() {
+
+    var process = $(this).val();
+    var url = $(this).attr('data-action');
+    if(process === 'order'){
+        $.get(url, function( response ) {
+            $("#invoice").html(data);
+        });
+    }else if(process === 'cancel'){
+        $.get(url, function( response ) {
+            resetInvoice();
+        });
+    }else if(process === 'hold'){
+        $.get(url, function( response ) {
+            $("#invoice").html(data);
+        });
+    }else{
+        $.ajax({
+            url         : url,
+            type        : 'POST',
+            data        : new FormData($('form#invoiceForm')[0]),
+            processData : false,
+            contentType : false,
+            success     : function(response){
+                if(process === 'print'){
+                    var salesId = response;
+                    window.open('/app-pos/desktop/'+ salesId +'/print', '_blank');
+                }else if(process === 'pos'){
+                    jsPostPrint(response);
+                }
+                resetInvoice();
+            }
+        });
+    }
+});
+
+function resetInvoice(){
+    $('form#invoiceForm')[0].reset();
+    $('#invoiceItems').html('');
+    $('#balance').html('');
+    $('.subTotal').html('');
+    $('.total').html('');
+    $('.vat').html('');
+    $('.due').html('');
+    $('.discount').html('');
+}
+
 $(".select2StockItem").select2({
 
-    placeholder: "Search item, color, size & brand name",
+    placeholder: "Search item,barcode",
     ajax: {
-        url: Routing.generate('item_search'),
+        url: Routing.generate('pos_item_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
@@ -302,7 +337,7 @@ $(".select2StockItem").select2({
         return item.name
 
     }, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
+    formatSelection: function(item){return item.name + '(' + item.sku+')'}, // omitted for brevity, see the source of this page
     initSelection: function(element, callback) {
         var id = $(element).val();
     },
@@ -410,21 +445,17 @@ $(document).on('click', '.method-process', function() {
 function jsonResult(response) {
 
     obj = JSON.parse(response);
-    $('#invoiceParticulars').html(obj['invoiceParticulars']).show();
-    $('#subTotal').html(financial(obj['subTotal']));
+    $('#invoiceItems').html(obj['invoiceItems']).show();
+    $('.subTotal').html(financial(obj['subTotal']));
     $('.total').html(financial(obj['total']));
+    $('#balance').html(financial(obj['total']));
     $('#total').val(obj['total']);
     $('.vat').html(obj['vat']);
     $('.due').html(financial(obj['total']));
     $('#due').val(obj['total']);
     $('.discount').html(obj['discount']);
     $('#process-'+obj['entity']).removeClass().addClass(obj['process']).html(obj['process']);
-    $('#restaurant_invoice_discount').val(obj['discount']);
-    if(obj['total'] > 0 ){
-        $('.receiveBtn').attr("disabled", false);
-    }else{
-        $('.receiveBtn').attr("disabled", true);
-    }
+    $('#post_discount').val(obj['discount']);
 }
 
 
@@ -477,7 +508,7 @@ $(document).on('click', '.invoice-input', function(e) {
 $(document).on('change', '.invoice-change', function(e) {
 
     $.ajax({
-        url         : Routing.generate('inventory_pos_update'),
+        url         : Routing.generate('pos_update'),
         type        : 'POST',
         data        : new FormData($('form#invoiceForm')[0]),
         processData : false,
@@ -488,7 +519,6 @@ $(document).on('change', '.invoice-change', function(e) {
     });
     e.preventDefault();
 });
-
 
 
 $(document).on('click', '#posKitchen', function(e) {
@@ -516,13 +546,8 @@ $(".input-number").inputFilter(function(value) {
 
 $(document).on('keyup', '.payment', function() {
 
-    if($(this).val() === 0){
-        $(this).val("Your");
-        slert("okay");
-    }
-
-    var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
-    var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
+    var payment  = parseInt($('#pos_payment').val()  !== '' ? $('#pos_payment').val() : 0 );
+    var due  = parseInt($('#due').val()  !== '' ? $('#due').val() : 0 );
     var dueAmount = (due - payment);
     if(dueAmount > 0){
         $('#balance').html('Due '+financial(dueAmount));
@@ -533,76 +558,18 @@ $(document).on('keyup', '.payment', function() {
 
 });
 
-$(document).on('click', '#saveButton', function() {
-
-    $('#buttonType').val('saveBtn');
-    var table = $('#invoiceEntity').val();
-    $.ajax({
-        url         : $('form#invoiceForm').attr( 'action' ),
-        type        : 'POST',
-        data        : new FormData($('form#invoiceForm')[0]),
-        processData : false,
-        contentType : false,
-        beforeSend  : function() {
-            $('#saveButton').html("Please Wait...").attr('disabled', 'disabled');
-        },
-        success : function(response){
-            $('form#invoiceForm')[0].reset();
-            $('.initialVat').html('');
-            $('#subTotal').html('');
-            $('.vat').html(0);
-            $('.sd').html(0);
-            $('.discount').html(0);
-            $('#restaurant_invoice_vat').val(0);
-            $('#restaurant_invoice_payment').val('');
-            $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
-            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
-            $('#invoiceParticulars').hide();
-        }
-    });
-});
-
-$(document).on('click', '#posButton', function() {
-    $('#buttonType').val('posBtn');
-    $.ajax({
-        url         : $('form#invoiceForm').attr( 'action' ),
-        type        : $('form#invoiceForm').attr( 'method' ),
-        data        : new FormData($('form#invoiceForm')[0]),
-        processData : false,
-        contentType : false,
-        beforeSend  : function() {
-            $('#posButton').html("Please Wait...").attr('disabled', 'disabled');
-        },
-        success     : function(response){
-            $('form#invoiceForm')[0].reset();
-            $('.initialVat').html('');
-            $('#subTotal').html('');
-            $('.vat').html(0);
-            $('.sd').html(0);
-            $('.discount').html(0);
-            $('#restaurant_invoice_vat').val(0);
-            $('#restaurant_invoice_payment').val(0);
-            $('#posButton').html("<i class='icon-print'></i> BILL PAY").attr('disabled','disabled');
-            $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
-            $('#invoiceParticulars').hide();
-            jsPostPrint(response);
-        }
-    });
-});
-
-
 function calcNumbers(result){
-    restaurant_invoice.restaurant_invoice_payment.value = restaurant_invoice.restaurant_invoice_payment.value+result;
+    invoiceForm.pos_payment.value = invoiceForm.pos_payment.value+result;
     paymentBalance();
 }
 
 function calcGroupNumbers(result){
-    restaurant_invoice.restaurant_invoice_payment.value = result;
+    invoiceForm.pos_payment.value = result;
     paymentBalance();
 }
 
 function paymentBalance() {
-    var payment  = parseInt($('#restaurant_invoice_payment').val()  != '' ? $('#restaurant_invoice_payment').val() : 0 );
+    var payment  = parseInt($('#pos_payment').val()  != '' ? $('#pos_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
     var dueAmount = (due - payment);
     if(dueAmount > 0){
@@ -625,6 +592,27 @@ $(document).on("click", "#kitchenBtn", function() {
         }
     });
 });
+
+function  tableSearch() {
+    $('#dataTableSearch').filterTable({ // apply filterTable to all tables on this page
+        label:'',
+        inputName:'search',
+        containerClass: 'search',
+        placeholder: 'Enter table keywords'
+    });
+
+    $('#search').keyup(function(){
+        var text = $(this).val();
+        $('.product-content').hide();
+        $('.product-content .cta-title').each(function(){
+            if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+                $(this).closest('.product-content').show();
+            }
+        });
+
+    });
+
+}
 
 function jsPostPrint(data) {
     if(typeof EasyPOSPrinter == 'undefined') {

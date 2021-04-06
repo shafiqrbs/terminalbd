@@ -61,6 +61,13 @@ class SalesItem
     /**
      * @var string
      *
+     * @ORM\Column(name="androidProcess", type="string", length=50, nullable = true)
+     */
+    private $androidProcess;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="assuranceType", type="string", length=50, nullable = true)
      */
     private $assuranceType;
@@ -149,55 +156,6 @@ class SalesItem
     public function getId()
     {
         return $this->id;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * @param string $salesPrice
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPurchasePrice()
-    {
-        return $this->purchasePrice;
-    }
-
-    /**
-     * @param string $purchasePrice
-     */
-    public function setPurchasePrice($purchasePrice)
-    {
-        $this->purchasePrice = $purchasePrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEstimatePrice()
-    {
-        return $this->estimatePrice;
-    }
-
-    /**
-     * @param string $estimatePrice
-     */
-    public function setEstimatePrice($estimatePrice)
-    {
-        $this->estimatePrice = $estimatePrice;
     }
 
     /**
@@ -414,6 +372,70 @@ class SalesItem
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAndroidProcess()
+    {
+        return $this->androidProcess;
+    }
+
+    /**
+     * @param string $androidProcess
+     */
+    public function setAndroidProcess($androidProcess)
+    {
+        $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesPrice()
+    {
+        return $this->salesPrice;
+    }
+
+    /**
+     * @param float $salesPrice
+     */
+    public function setSalesPrice($salesPrice)
+    {
+        $this->salesPrice = $salesPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEstimatePrice()
+    {
+        return $this->estimatePrice;
+    }
+
+    /**
+     * @param string $estimatePrice
+     */
+    public function setEstimatePrice($estimatePrice)
+    {
+        $this->estimatePrice = $estimatePrice;
     }
 
 

@@ -1,113 +1,125 @@
-{% extends '::print.html.twig' %}
-{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Invoice : {{ entity.invoice }}</title>
+    <script>
+/*        window.print();*/
+    </script>
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/print-invoice.css') }}" rel="stylesheet">
+    {% endblock %}
 
-    <table class="table">
+</head>
+<body>
+<header class="clearfix">
+    <div id="logo">
+        {% if entity.inventoryConfig.invoicePrintLogo == 1 %}
+            {% if entity.inventoryConfig.webPath is not empty %}   <img style="max-width: 180px; max-height: 60px" src="{{ image(entity.inventoryConfig.webPath).resize(180,60) }}">{% endif %}
+        {% endif %}
+    </div>
+    <div id="company">
+        <h2 class="name">{{ entity.inventoryConfig.globalOption.name }}</h2>
+        <div>{{ entity.inventoryConfig.address|raw }}</div>
+        <div>{{ entity.inventoryConfig.globalOption.hotline }}</div>
+        <div><a href="mailto:{{ entity.inventoryConfig.globalOption.email }}">{{ entity.inventoryConfig.globalOption.email }}</a></div>
+        {% if entity.inventoryConfig.globalOption.domain is not empty %}
+        <div><a href="http://{{ entity.inventoryConfig.globalOption.domain }}">{{ entity.inventoryConfig.globalOption.domain }}</a></div>
+        {% endif %}
+    </div>
+</header>
+<main>
+    <div id="details" class="clearfix">
+        <div id="client">
+            <div class="to">INVOICE TO:</div>
+            <h2 class="name">{{ entity.customer.name }}</h2>
+            <div class="address">{{ entity.customer.address|raw }}</div>
+            <div class="email">{{ entity.customer.mobile }}</div>
+        </div>
+        <div id="invoice">
+            <h1>INVOICE {{ entity.invoice }}</h1>
+            <div class="date">Date of Invoice: {{ entity.updated|date('d-m-Y') }}</div>
+            <div class="email">Payment Mode: {{ entity.paymentMethod }}</div>
+        </div>
+    </div>
+    {% if entity.salesItems is not empty %}
+    <table border="0" cellspacing="0" cellpadding="0">
+        <thead>
         <tr>
-            <td>
-                <div class="span4  pull-left invoice-logo-space">
-                    {% if entity.inventoryConfig.invoicePrintLogo == 1 %}
-                        {% if entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
-                    {% endif %}
-                </div>
-            </td>
-            <td class="pull-right">
-                <div class="span4">
-                    <ul class="unstyled">
-                        <li><strong>{{ entity.inventoryConfig.globalOption.name }}</strong></li>
-                        {% if entity.inventoryConfig.invoicePrintUserMobile == 1 and entity.salesBy.profile.mobile is not empty %}
-                            <li><i class="icon-phone"></i>&nbsp;{{ entity.salesBy.profile.mobile }}</li>
-                        {% else %}
-                            <li><i class="icon-phone"></i>&nbsp;{{ entity.inventoryConfig.globalOption.mobile }}</li>
-                        {% endif %}
-                        {% if  entity.inventoryConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.inventoryConfig.globalOption.email }}</li>{% endif %}
-                        {% if  entity.inventoryConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.inventoryConfig.globalOption.contactPage.address1 }}</li>{% endif %}
-                        {% if entity.inventoryConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.inventoryConfig.globalOption.domain }}</li>{% endif %}
-                    </ul>
-                </div>
-            </td>
+            <th class="no">#</th>
+            <th class="desc">DESCRIPTION</th>
+            <th class="qty">QUANTITY</th>
+            <th class="unit">UNIT PRICE</th>
+            <th class="total">TOTAL</th>
         </tr>
-    </table>
-    <table class="table table-border" >
-        <tr class="print-header">
-            <th colspan="2">
-                <strong class="title">Invoice No:{{ entity.invoice }}</strong>
-                <span class="barcode">{{ barcode|raw }}</span>
-            </th>
+        </thead>
+        <tbody>
+        {% for salesItem in entity.salesItems %}
+        <tr>
+            <td class="no">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}.</td>
+            <td class="desc"><h3>{{ salesItem.item.name }}{% if salesItem.serialNo %}-{{ salesItem.serialNo }}{% endif %}</h3>
+                {{ salesItem.item.sku }}
+                {% if salesItem.serialNo %} - {% if salesItem.purchaseItem %}{{ salesItem.purchaseItem.barcode }} {% else %} {{ salesItem.item.barcode }} {% endif %}
+                    <br>
+                    {{ salesItem.assuranceType }} - {{ salesItem.assuranceToCustomer }}
+                {% endif %}
+            </td>
+            <td class="qty">{{ salesItem.quantity }}</td>
+            <td class="unit">{{ salesItem.salesPrice|number_format(2) }}</td>
+            <td class="total">{{ salesItem.subTotal|number_format(2) }}</td>
         </tr>
-        <tr class="head-black">
-            <th style="padding-left:10px">Bill To</th><th style="padding-right:10px; text-align: right!important;">Transaction</th>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">Sub-Total</td>
+            <td>{{ entity.subTotal|number_format(2) }}</td>
         </tr>
         <tr>
-            <td>
-                <ul class="unstyled">
-                    {% if entity.customer is not empty %}<li><strong><i class="icon-user"></i> </strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
-                    {% if entity.customer is not empty %}<li><strong><i class="icon-phone"></i>&nbsp;</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
-                    {% if entity.customer is not empty %}<li><strong><i class="icon-home"></i>&nbsp;</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
-                    {% if entity.customer is not empty and entity.customer.location is not empty %}<li style="padding-left: 16px!important;">{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
-                </ul>
-            </td>
-            <td class="pull-right">
-                <ul class="unstyled">
-                    <li><strong><i class="icon-calendar"></i>&nbsp;</strong>{{ entity.created|date('d-m-Y') }}</li>
-                    {% if entity.transactionMethod is not empty and entity.payment > 0 %}<li><strong><i class="icon-money"></i>&nbsp;</strong>{{ entity.transactionMethod.name }}</li>{% endif %}
-                    {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
-                    {% if entity.cardNo is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>&nbsp;{{ entity.bank.name  }}/{{ entity.cardNo }}</li>{% endif %}
-                    <li></li>
-                </ul>
-            </td>
+            <td colspan="2"></td>
+            <td colspan="2">Discount</td>
+            <td>{{ entity.discount|number_format(2) }}</td>
         </tr>
+        {% if entity.deliveryCharge > 0 %}
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">Delivery Charge</td>
+            <td>{{ entity.deliveryCharge|number_format(2) }}</td>
+        </tr>
+        {% endif %}
+        {% if entity.vat > 0 %}
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">VAT/Tax {{ entity.inventoryConfig.vatPercentage }}</td>
+            <td>{{ entity.vat|number_format(2) }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">Grand Total</td>
+            <td>{{ entity.total|number_format(2) }}</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="desc">In word TK. ({{ inWard|raw }} only).</td>
+            <td colspan="2">Received</td>
+            <td>{{ entity.payment|number_format(2) }}</td>
+        </tr>
+        {% if entity.due > 0 %}
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2">Receivable</td>
+            <td>{{ entity.due|number_format(2) }}</td>
+        </tr>
+        {% endif %}
+        </tfoot>
     </table>
-    {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-        <table class="table table-bordered table-striped">
-            <thead class="flip-content ">
-            <tr class="head-black">
-                <th class="numeric span1" ><i class="icon-reorder"></i> &nbsp;SKU</th>
-                <th class="numeric span8" >Description</th>
-                <th class="numeric span1" >Quantity</th>
-                <th class="numeric span1" >Unit Price</th>
-                <th class="numeric span1" >Total</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for salesItem in entity.salesItems %}
-                <tr>
-                    <td class="numeric" >{{ loop.index }}. {{ salesItem.item.sku }}</td>
-                    <td class="numeric" >{{ salesItem.item.name }}{% if salesItem.serialNo %}-{{ salesItem.serialNo }}{% endif %}
-                        {% if salesItem.serialNo %}
-                        <br>
-                        {{ salesItem.assuranceType }} - {{ salesItem.assuranceToCustomer }}
-                        {% endif %}
-                    </td>
-                    <td class="numeric" >{{ salesItem.quantity }}</td>
-                    <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                    <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            <tfoot>
-            <tr><td colspan="4"><strong class="pull-right" >Total Amount</strong></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
-            {% if entity.discount %}<tr><td colspan="4"><strong class="pull-right" >Discount Amount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
-            {% if entity.vat %}<tr><td colspan="4"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
-            {% if entity.deliveryCharge %}<tr><td colspan="4"><strong class="pull-right" >Delivery Charge</strong></td><td><strong>{{ entity.deliveryCharge|number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="4"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
-            <tr><td colspan="4"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
-            {% if entity.due > 0 %}<tr><td colspan="4"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ (entity.due + entity.deliveryCharge) |number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="5" style="text-align:right"><strong>In word TK.</strong>({{ inWard|raw }} only).</td></tr>
-
-            <tr>
-                <td colspan="5">
-                    <div class="approve-box span6">
-                        Checked By
-                    </div>
-                    <div class="approve-box span6">
-                        Approved By
-                    </div>
-                </td>
-            </tr>
-            {% if entity.inventoryConfig.isPrintFooter == 1 %}
-            <tr><td colspan="5" style="text-align:center">{{ portal_power }}</td></tr>
-            {% endif %}
-            </tfoot>
-        </table>
     {% endif %}
-{% endblock %}
+</main>
+<footer>
+    Invoice was created on a computer and is valid without the signature and seal.
+</footer>
+</body>
+</html>
+
+
