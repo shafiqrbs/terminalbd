@@ -264,6 +264,13 @@ class InventoryConfig
      */
     private $barcodePrint = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="androidSales", type="boolean",  nullable=true)
+     */
+    private $androidSales = false;
+
     /**
      * @var boolean
      *
@@ -1713,6 +1720,22 @@ class InventoryConfig
     public function setTemplateCss($templateCss)
     {
         $this->templateCss = $templateCss;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAndroidSales()
+    {
+        return $this->androidSales;
+    }
+
+    /**
+     * @param bool $androidSales
+     */
+    public function setAndroidSales($androidSales)
+    {
+        $this->androidSales = $androidSales;
     }
 
 

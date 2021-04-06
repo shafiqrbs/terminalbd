@@ -62,6 +62,7 @@ class PosController extends Controller
             $invoiceMode = $request->cookies->get('invoiceMode');
         }
         return $this->render('PosBundle:Pos:new.html.twig', array(
+            'globalOption'                => $terminal,
             'config'                => '',
             'invoiceMode'           => $invoiceMode,
             'categories'            => $categories,

@@ -512,11 +512,10 @@ class ItemRepository extends EntityRepository
     public function getItemSalesUpdate($id){
 
         $em = $this->_em;
-        $sales = $em->getRepository("InventoryBundle:Sales")->find($id);
-        if($sales->getSalesItems()){
-
+        $salesItems = $em->getRepository("InventoryBundle:SalesItem")->findBy(array('sales' => $id));
+        if($salesItems){
             /** @var $salesItem SalesItem */
-            foreach($sales->getSalesItems() as $salesItem ){
+            foreach($salesItems as $salesItem ){
                 /** @var  $entity Item */
                 $entity = $salesItem->getItem();
                 $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity->getId(),'sales');
@@ -526,8 +525,6 @@ class ItemRepository extends EntityRepository
                 $this->updateRemainingQuantity($entity);
             }
         }
-
-
     }
 
     public function getSalesItemReverse(Sales $sales){

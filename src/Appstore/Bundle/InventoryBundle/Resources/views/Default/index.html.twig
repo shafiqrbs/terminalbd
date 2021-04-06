@@ -13,9 +13,12 @@
                 <div class="span4">
                     <div class="btn-group">
                         {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a class="btn blue big"  href="{{ path('inventory_salesonline_new') }}"><i class="icon-shopping-cart"></i> Add Sales</a>
+                            {#<a class="btn blue big"  href="{{ path('inventory_salesonline_new') }}"><i class="icon-shopping-cart"></i> Add Sales</a>#}
                             {% if globalOption.inventoryConfig.isPos == 1 %}
                             <a class="btn red big"  href="{{ path('pos_desktop') }}"><i class="icon-shopping-cart"></i> POS</a>
+                            {% endif %}
+                            {% if globalOption.inventoryConfig.androidSales == 1 %}
+                                <a class="btn green big"  href="{{ path('pos_android_sales') }}"><i class="icon-mobile-phone"></i> Android</a>
                             {% endif %}
                         {% endif %}
                         {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}

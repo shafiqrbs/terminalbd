@@ -28,11 +28,13 @@ class PosAndroidController extends Controller
 
     public function indexAction()
     {
+        $globalOption = $this->getUser()->getGlobalOption();
         $conf = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
         $entities = $this->getDoctrine()->getRepository('InventoryBundle:InventoryAndroidProcess')->getAndroidSalesList($conf,"sales");
         $pagination = $this->paginate($entities);
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findAndroidDeviceSales($pagination);
         return $this->render('PosBundle:Android:index.html.twig', array(
+            'globalOption' => $globalOption,
             'entities' => $pagination,
             'sales' => $sales,
         ));

@@ -828,6 +828,7 @@ class SalesRepository extends EntityRepository
         $sales->setCreated($created);
         $sales->setUpdated($created);
         $sales->setProcess("POS");
+        $sales->setPaymentStatus("Paid");
         $sales->setPaymentStatus($pos->getPaymentStatus());
         $em->persist($sales);
         $em->flush();
@@ -858,10 +859,11 @@ class SalesRepository extends EntityRepository
                $em->persist($salesItem);
                $em->flush();
            endforeach;
-            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales);
 
         }
+        $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
+        $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
+
 
     }
 

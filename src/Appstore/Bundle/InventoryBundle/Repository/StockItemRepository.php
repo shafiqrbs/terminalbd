@@ -763,60 +763,61 @@ class StockItemRepository extends EntityRepository
 
         $em = $this->_em;
         /* @var $row SalesItem */
-        foreach ($sales->getSalesItems() as $row ) {
+        $salesItems = $em->getRepository('InventoryBundle:SalesItem')->findBy(array('sales'=>$sales));
+        if($salesItems){
+            foreach ($salesItems as $row ) {
 
-            if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('salesItem' => $row->getId())))){
+                if (empty($this->_em->getRepository('InventoryBundle:StockItem')->findBy(array('salesItem' => $row->getId())))){
 
-                $entity = new StockItem();
-                $entity->setInventoryConfig($sales->getInventoryConfig());
-                $entity->setSalesItem($row);
-                $entity->setPurchaseItem($row->getPurchaseItem());
-                $entity->setItem($row->getItem());
-                $quantity = '-' . $row->getQuantity();
-                $entity->setQuantity($quantity);
-                $entity->setCreatedBy($sales->getCreatedBy());
+                    $entity = new StockItem();
+                    $entity->setInventoryConfig($sales->getInventoryConfig());
+                    $entity->setSalesItem($row);
+                    $entity->setPurchaseItem($row->getPurchaseItem());
+                    $entity->setItem($row->getItem());
+                    $quantity = '-' . $row->getQuantity();
+                    $entity->setQuantity($quantity);
+                    $entity->setCreatedBy($sales->getCreatedBy());
 
-                $item = $row->getItem();
-                $purchaseItem = $row->getPurchaseItem();
+                    $item = $row->getItem();
+                    $purchaseItem = $row->getPurchaseItem();
 
-                $entity->setProduct($item->getMasterItem());
-                $entity->setProductName($item->getMasterItem()->getName());
-                if(!empty($purchaseItem)){
-                    $entity->setVendor($purchaseItem->getPurchase()->getVendor());
-                    $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
+                    $entity->setProduct($item->getMasterItem());
+                    $entity->setProductName($item->getMasterItem()->getName());
+                    if(!empty($purchaseItem)){
+                        $entity->setVendor($purchaseItem->getPurchase()->getVendor());
+                        $entity->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
 
+                    }
+                    if (!empty($item->getMasterItem()->getCategory())) {
+                        $entity->setCategory($item->getMasterItem()->getCategory());
+                        $entity->setCategoryName($item->getMasterItem()->getCategory()->getName());
+                    }
+
+                    if (!empty($item->getMasterItem()->getProductUnit())) {
+                        $entity->setUnit($item->getMasterItem()->getProductUnit());
+                        $entity->setUnitName($item->getMasterItem()->getProductUnit()->getName());
+                    }
+
+                    if (!empty($purchaseItem) and !empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
+                        $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
+                        $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
+                    }
+
+                    if (!empty($item->getSize())) {
+                        $entity->setSize($item->getSize());
+                        $entity->setSizeName($item->getSize()->getName());
+                    }
+
+                    if (!empty($item->getColor())) {
+                        $entity->setColor($item->getColor());
+                        $entity->setColorName($item->getColor()->getName());
+                    }
+                    $entity->setProcess('sales');
+                    $em->persist($entity);
+                    $em->flush();
                 }
-                if (!empty($item->getMasterItem()->getCategory())) {
-                    $entity->setCategory($item->getMasterItem()->getCategory());
-                    $entity->setCategoryName($item->getMasterItem()->getCategory()->getName());
-                }
-
-                if (!empty($item->getMasterItem()->getProductUnit())) {
-                    $entity->setUnit($item->getMasterItem()->getProductUnit());
-                    $entity->setUnitName($item->getMasterItem()->getProductUnit()->getName());
-                }
-
-                if (!empty($purchaseItem) and !empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                    $entity->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                    $entity->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-                }
-
-                if (!empty($item->getSize())) {
-                    $entity->setSize($item->getSize());
-                    $entity->setSizeName($item->getSize()->getName());
-                }
-
-                if (!empty($item->getColor())) {
-                    $entity->setColor($item->getColor());
-                    $entity->setColorName($item->getColor()->getName());
-                }
-                $entity->setProcess('sales');
-                $em->persist($entity);
-                $em->flush();
             }
         }
-
-
 
     }
 

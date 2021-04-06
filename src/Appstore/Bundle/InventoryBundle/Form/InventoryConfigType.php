@@ -23,8 +23,11 @@ class InventoryConfigType extends AbstractType
             ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span10 ','placeholder'=>'Registration no.')))
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('shopName','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
+            ->add('invoiceNote','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span10')))
             ->add('removeImage')
+            ->add('autoPayment')
+            ->add('androidSales')
             ->add('file')
             ->add('usingBarcode',
                 'choice', array(
@@ -37,6 +40,18 @@ class InventoryConfigType extends AbstractType
                 'multiple'    => false,
                 'expanded'  => true,
                 'empty_data'  => "item",
+            ))
+            ->add('vatMode',
+                'choice', array(
+                'attr'=>array('class'=>'m-wrap  inline-radio'),
+                'choices' => array(
+                    'including'  => 'Including',
+                    'excluding'   => 'Excluding',
+                ),
+                'required'    => true,
+                'multiple'    => false,
+                'expanded'  => true,
+                'empty_data'  => "including",
             ))
             ->add('printer',
                 'choice', array(
