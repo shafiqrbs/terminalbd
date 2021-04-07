@@ -39,6 +39,9 @@ class InventoryConfigRepository extends EntityRepository
         $Sales = $em->createQuery('DELETE InventoryBundle:Sales e WHERE e.inventoryConfig = '.$config);
         $Sales->execute();
 
+        $android = $em->createQuery('DELETE InventoryBundle:InventoryAndroidProcess e WHERE e.inventoryConfig = '.$config);
+        $android->execute();
+
         $SalesImport = $em->createQuery('DELETE InventoryBundle:SalesImport e WHERE e.inventoryConfig = '.$config);
         $SalesImport->execute();
 
