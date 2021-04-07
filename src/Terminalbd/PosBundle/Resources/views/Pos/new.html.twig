@@ -374,17 +374,15 @@
            </div>
        </div>
     </div>
-    {% if config.posPrint == 1 %}
-        <script>
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, "script", "xiidea-epp-sdk"));
-        </script>
-    {% endif %}
+    <script>
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, "script", "xiidea-epp-sdk"));
+    </script>
 <style>
     input[type="checkbox"].isHold{
         font-size: 20px;

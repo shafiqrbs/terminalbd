@@ -741,15 +741,16 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'fa fa-shopping-bag')
             ->setAttribute('dropdown', true);
 
+            $menu['Sales']->addChild('Pos', array('route' => 'pos_desktop'))->setAttribute('icon', 'icon icon-shopping-cart');
+            $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', 'icon icon-th-list');
+            $menu['Sales']->addChild('Android Sales', array('route' => 'pos_android_sales'))->setAttribute('icon', 'icon icon-th-list');
+            $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
+            $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
 
-            $deliveryProcess = $inventory->getDeliveryProcess();
+            /*$deliveryProcess = $inventory->getDeliveryProcess();
             if (!empty($deliveryProcess)) {
 
                 if ('pos' == $deliveryProcess) {
-                    $menu['Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon icon-shopping-cart');
-                    $menu['Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', 'icon icon-th-list');
-                    $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
-                    $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
 
                 }
                 if ('general-sales' == $deliveryProcess) {
@@ -784,7 +785,7 @@ class Builder extends ContainerAware
                         }
                     }
                 }
-            }
+            }*/
             if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
                 $menu['Sales']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
             }

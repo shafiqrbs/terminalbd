@@ -863,8 +863,6 @@ class SalesRepository extends EntityRepository
         }
         $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
         $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
-
-
     }
 
 
@@ -996,10 +994,10 @@ class SalesRepository extends EntityRepository
                     $salesItem->setSubTotal($item['subTotal']);
                     $em->persist($salesItem);
                     $em->flush();
-                    /*if ($salesItem->getStockItem()) {
-                        $em->getRepository('InventoryBundle:Item')->updateRemovePurchaseQuantity($salesItem->getStockItem(), 'sales');
-                    }*/
                 }
+                $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
+                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
+
             endforeach;
         }
 
