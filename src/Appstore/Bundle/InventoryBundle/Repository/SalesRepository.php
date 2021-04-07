@@ -1001,17 +1001,6 @@ class SalesRepository extends EntityRepository
             endforeach;
         }
 
-        /*$countRecords = $this->countNumberSalesSubItem($process->getId());
-        if($process->getItemCount() == $countRecords){
-            $this->insertApiSalesItem( $option, $process);
-        }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
-            $batch = $process->getId();
-            $remove = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess = {$batch}");
-            $remove->execute();
-        }else{
-            return "Failed";
-        }*/
-
     }
 
     public function getCalculationBankServiceCharge(Sales $entity){
