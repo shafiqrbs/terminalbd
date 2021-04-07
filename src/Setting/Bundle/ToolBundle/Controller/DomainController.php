@@ -247,7 +247,7 @@ class DomainController extends Controller
         $a = new Filesystem();
         $a->remove($dir);
         $a->mkdir($dir);
-
+        $this->getDoctrine()->getRepository('PosBundle:Pos')->posReset($option);
         if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }

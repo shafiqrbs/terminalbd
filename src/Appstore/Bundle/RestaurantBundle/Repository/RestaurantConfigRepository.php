@@ -19,7 +19,7 @@ class RestaurantConfigRepository extends EntityRepository
     {
 
         $em = $this->_em;
-        $config = $option->getRestaurantConfig ()->getId();
+        $config = $option->getRestaurantConfig()->getId();
 
         $history = $em->createQuery('DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.restaurantConfig = '.$config);
         $history->execute();

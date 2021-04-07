@@ -17,6 +17,14 @@ use Terminalbd\PosBundle\Entity\PosItem;
 class PosRepository extends EntityRepository
 {
 
+    public function posReset($option)
+    {
+        $em = $this->_em;
+        $config = $option->getId();
+        $history = $em->createQuery("DELETE PosBundle:Pos e WHERE e.terminal = {$config}");
+        $history->execute();
+    }
+
     public function insert(User $user){
 
         $em = $this->_em;
