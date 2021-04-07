@@ -19,7 +19,6 @@ function ApproveProcess(){
 
     $(document).on( "click", ".androidProcess", function( e ) {
         var url = $(this).attr('data-url');
-        alert(url);
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
