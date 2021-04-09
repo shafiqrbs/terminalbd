@@ -17,9 +17,6 @@
     .grid-print {
         grid-template-columns: repeat({{ config.barcodePerRow }}, calc(100%/{{ config.barcodePerRow }}));
     }
-    .item {
-        border: 1px solid rgba(215, 214, 214, 0.71);
-    }
 </style>
 <div class="grid-print">
     {% for barcode in barCoder %}

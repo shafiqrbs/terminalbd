@@ -761,7 +761,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name');
+        $qb->select('category.id as id','category.name as name','category.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');
@@ -771,6 +771,12 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['category_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
             }
         }
         return $data;
@@ -782,7 +788,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name');
+        $qb->select('brand.id as id','brand.name as name','brand.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('brand.id');
         $qb->orderBy('brand.id','DESC');
@@ -792,6 +798,12 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['brand_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
             }
         }
         return $data;

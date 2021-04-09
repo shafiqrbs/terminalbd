@@ -192,7 +192,7 @@ class InventoryConfigType extends AbstractType
                     'empty_data'  => null,
             ))
             ->add('currency', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => "Setting\Bundle\ToolBundle\Entity\Currency",
                 'empty_value' => '---Choose a currency ---',
                 'property' => 'nameWithCode',

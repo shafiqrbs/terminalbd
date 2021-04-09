@@ -37,7 +37,8 @@ class ProductExcel
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
                 $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
-                $barcode = empty($item['Barcode']) ? '' : $item['Barcode'];
+                $time = new \DateTime('now');
+                $barcode = empty($item['Barcode']) ? $time : $item['Barcode'];
                 $product = new Item();
                 $product->setInventoryConfig($inventory);
                 $product->setName($name);
@@ -47,6 +48,31 @@ class ProductExcel
                 if ($name) {
                     $master = $this->getMasterItem($name,$unit);
                     $product->setMasterItem($master);
+                }
+                $category = $item['Category'];
+                if ($category) {
+                    $category = $this->getCategory(ucfirst(strtolower($category)));
+                    $product->setCategory($category);
+                }
+                $brand = $item['Brand'];
+                if ($brand) {
+                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
+                    $product->setBrand($brand);
+                }
+                $size = $item['Size'];
+                if ($size) {
+                    $size = $this->getSize(ucfirst(strtolower($size)));
+                    $product->setSize($size);
+                }
+                $unit = $item['ProductUnit'];
+                if ($unit) {
+                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
+                    $product->setProductUnit($unit);
+                }
+                $sizeUnit = $item['SizeUnit'];
+                if ($sizeUnit) {
+                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
+                    $product->setSizeUnit($sizeUnit);
                 }
                 $this->save($product);
             }
