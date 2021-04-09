@@ -54,7 +54,9 @@ class SalesController extends Controller
         $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $user , $mode = 'pos', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        $config = $user->getGlobalOption()->getInventoryConfig();
         return $this->render('InventoryBundle:Sales:index.html.twig', array(
+            'config' => $config,
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
@@ -100,11 +102,9 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'pos');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'pos');
@@ -717,7 +717,7 @@ class SalesController extends Controller
         }else{
             $print = 'invoice';
         }
-        return $this->render('InventoryBundle:SalesPrint:'.$print.'.html.twig', array(
+        return $this->render('InventoryBundle:SalesPrint:invoice.html.twig', array(
             'entity'      => $entity,
             'inventory'   => $inventory,
             'barcode'     => $barcode,

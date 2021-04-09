@@ -54,7 +54,7 @@ class SalesOnlineController extends Controller
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
             'entities' => $pagination,
-            'inventoryConfig' => $inventoryConfig,
+            'config' => $inventoryConfig,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
@@ -69,7 +69,9 @@ class SalesOnlineController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('InventoryBundle:SalesOnline:customer.html.twig', array(
+        $config = $globalOption->getInventoryConfig();
+        return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
+            'config' => $config,
             'entities' => $pagination,
             'inventory' => $globalOption->getInventoryConfig(),
             'searchForm' => $data,
@@ -662,10 +664,21 @@ class SalesOnlineController extends Controller
 
     public function invoicePrintAction(Sales $entity)
     {
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $barcode = $this->getBarcode($entity->getInvoice());
-        return $this->render('InventoryBundle:SalesGeneral:invoice.html.twig', array(
+        $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
+        $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
+        if($inventory->isCustomPrint() == 1){
+            $print = $this->getUser()->getGlobalOption()->getSlug();
+        }else{
+            $print = 'invoice';
+        }
+        return $this->render('InventoryBundle:SalesPrint:'.$print.'.html.twig', array(
             'entity'      => $entity,
+            'inventory'   => $inventory,
             'barcode'     => $barcode,
+            'inWard'      => $inWard,
         ));
     }
 

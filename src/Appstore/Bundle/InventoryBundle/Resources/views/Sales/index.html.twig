@@ -36,8 +36,12 @@
                             <div class="actions">
                                 <div class="btn-group">
                                     <a class="btn" href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i> Sales</a>
-                                    <a class="btn yellow" href="{{ path('inventory_sales_new') }}"><i class="icon-plus-sign"></i> Invoice</a>
-                                    <a class="btn red" href="{{ path('inventory_sales') }}"><i class="icon-plus-sign"></i> POS</a>
+                                    {% if config.isPos == 1 %}
+                                    <a class="btn red" href="{{ path('pos_desktop') }}"><i class="icon-plus-sign"></i> POS</a>
+                                    {% endif %}
+                                    {% if config.isInvoice == 1 %}
+                                    <a class="btn yellow" href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i> Invoice</a>
+                                    {% endif %}
                                     <a class="btn purple" href="{{ path('inventory_sales_empty_delete') }}"><i class="icon-th-list"></i>&nbsp;Delete Empty</a>
                                 </div>
                             </div>

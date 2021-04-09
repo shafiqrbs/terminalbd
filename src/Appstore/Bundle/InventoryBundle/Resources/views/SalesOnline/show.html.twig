@@ -148,7 +148,7 @@
                                     {% if inventoryConfig.onlineSalesPrinter == 'pos'  %}
                                         <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':entity.id}) }}"  class="btn green onlinePosPrintIndividual" ><i class="icon-print"></i> Pos Print</a>
                                     {% else %}
-                                        <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green" ><i class="icon-print"></i> Print</a>
+                                        <a href="{{ path('inventory_salesonline_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green" ><i class="icon-print"></i> Print</a>
                                     {% endif %}
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>

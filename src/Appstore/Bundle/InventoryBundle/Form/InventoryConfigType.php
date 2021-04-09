@@ -23,7 +23,7 @@ class InventoryConfigType extends AbstractType
             ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span10 ','placeholder'=>'Registration no.')))
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('shopName','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
-            ->add('invoiceNote','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
+            ->add('invoiceNote','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'POS print invoice note')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span10')))
             ->add('removeImage')
             ->add('autoPayment')
@@ -73,6 +73,7 @@ class InventoryConfigType extends AbstractType
             ->add('vatEnable')
             ->add('isAttribute')
             ->add('barcodeItem')
+            ->add('isInvoice')
             ->add('isColor')
             ->add('isSize')
             ->add('barcodeColor')
@@ -176,7 +177,7 @@ class InventoryConfigType extends AbstractType
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))
-            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>"Enter shop address")))
+            ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>"Enter shop address"),'required'=>true))
             ->add('barcodeText',
                 'choice', array(
                     'attr'=>array('class'=>'m-wrap span12'),

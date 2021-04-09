@@ -3,8 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Invoice : {{ entity.invoice }}</title>
-    <script>
-/*        window.print();*/
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
     </script>
     {% block stylesheets %}
         <link href="{{ asset('assets/css/print-invoice.css') }}" rel="stylesheet">

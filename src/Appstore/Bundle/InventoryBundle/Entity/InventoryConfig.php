@@ -220,6 +220,7 @@ class InventoryConfig
      */
     private $onlineSalesPrinter;
 
+
     /**
      * @var smallint
      *
@@ -256,6 +257,13 @@ class InventoryConfig
      * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
      */
     private $isBranch = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInvoice", type="boolean",  nullable=true)
+     */
+    private $isInvoice = false;
 
     /**
      * @var boolean
@@ -1736,6 +1744,22 @@ class InventoryConfig
     public function setAndroidSales($androidSales)
     {
         $this->androidSales = $androidSales;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInvoice()
+    {
+        return $this->isInvoice;
+    }
+
+    /**
+     * @param bool $isInvoice
+     */
+    public function setIsInvoice($isInvoice)
+    {
+        $this->isInvoice = $isInvoice;
     }
 
 
