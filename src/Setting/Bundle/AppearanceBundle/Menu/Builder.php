@@ -740,14 +740,14 @@ class Builder extends ContainerAware
             ->addChild('Sales')
             ->setAttribute('icon', 'fa fa-shopping-bag')
             ->setAttribute('dropdown', true);
-            if($inventory->isPos() == 1){
+            if($inventory->isPos() == 1 and $securityContext->isGranted('ROLE_POS')){
                 $menu['Sales']->addChild('Pos', array('route' => 'pos_desktop'))->setAttribute('icon', 'icon icon-shopping-cart');
             }
-            if($inventory->isInvoice() == 1){
-                $menu['Sales']->addChild('Add Invoice', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', 'icon icon-shopping-cart');
-            }
+            $menu['Sales']->addChild('Add Invoice', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', 'icon icon-shopping-cart');
             $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', 'icon icon-th-list');
+            if($inventory->isInvoice() == 1 and $securityContext->isGranted('ROLE_POS_ANDROID')){
             $menu['Sales']->addChild('Android Sales', array('route' => 'pos_android_sales'))->setAttribute('icon', 'icon icon-th-list');
+            }
             $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
             $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
 
