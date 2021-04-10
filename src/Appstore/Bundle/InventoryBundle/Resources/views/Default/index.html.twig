@@ -67,7 +67,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if ( app.user.granted("ROLE_ACCOUNTING") or  app.user.granted("ROLE_DOMAIN") ) %}
                                         <a href="{{ path('account_transaction_cash_overview') }}" class="btn green mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +97,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE") or  app.user.granted("ROLE_DOMAIN") ) %}
                                         <a href="{{ path('account_expenditure') }}" class="btn red mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +130,10 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                    {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
+
                                         <a href="{{ path('inventory_purchasesimple') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                    {% endif %}
                                     </div>
                                 </div>
 
@@ -155,7 +162,9 @@
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
+                                        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                                         <a href="{{ path('inventory_salesonline') }}" class="btn purple mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +176,8 @@
             <div class="span4">
                 <div class="span6" style="margin-top:-10px">
                     <div class="portlet-body">
+                        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or  app.user.granted("ROLE_DOMAIN") ) %}
+
                         <a href="{{ path('account_sales_outstanding') }}" class="icon-btn">
                             <i class="fa fa-group"></i>
                             <div> Customer </div>
@@ -183,12 +194,15 @@
                             <i class="icon-truck"></i>
                             <div> Purchase </div>
                         </a>
+                        {% endif %}
 
                     </div>
 
                 </div>
                 <div class="span6" style="margin-top:-10px">
                     <div class="portlet-body">
+                        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or  app.user.granted("ROLE_DOMAIN") ) %}
+
                         <a href="{{ path('inventory_item') }}" class="icon-btn">
                             <i class="icon-bar-chart"></i>
                             <div> Stock </div>
@@ -207,13 +221,13 @@
                             <i class="icon-th"></i>
                             <div> Stock Details </div>
                         </a>
+                        {% endif %}
                     </div>
-
                 </div>
             </div>
-
         </div>
-        <div class="portlet-body form">
+        {% if ( app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or  app.user.granted("ROLE_DOMAIN") ) %}
+            <div class="portlet-body form">
 
             <div class="portlet box blue">
 
@@ -248,8 +262,8 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
-
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

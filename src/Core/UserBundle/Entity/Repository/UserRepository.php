@@ -280,6 +280,17 @@ class UserRepository extends EntityRepository
             );
         }
 
+         $dms = array('inventory','miss','business','restaurant');
+        $result = array_intersect($arrSlugs, $dms);
+        if (!empty($result)) {
+            $array['DMS'] = array(
+                'ROLE_POS'                                      => 'POS',
+                'ROLE_POS_ANDROID'                              => 'Android',
+                'ROLE_POS_MANAGER'                              => 'POS Manager',
+                'ROLE_POS_ADMIN'                                => 'POS Admin'
+            );
+        }
+
         $dms = array('election');
         $result = array_intersect($arrSlugs, $dms);
         if (!empty($result)) {

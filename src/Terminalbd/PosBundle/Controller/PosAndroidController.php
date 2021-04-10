@@ -7,6 +7,8 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 
 /**
  * InvoiceController controller.
@@ -25,6 +27,10 @@ class PosAndroidController extends Controller
         );
         return $pagination;
     }
+
+    /**
+     * @Secure(roles="ROLE_POS_MANAGER")
+     */
 
     public function indexAction()
     {
@@ -59,6 +65,10 @@ class PosAndroidController extends Controller
         }
         return new Response($msg);
     }
+
+    /**
+     * @Secure(roles="ROLE_POS_MANAGER")
+     */
 
     private function inventorySalesProcess($android){
 

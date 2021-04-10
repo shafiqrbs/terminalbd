@@ -42,6 +42,9 @@ class PosController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
 
     public function indexAction(Request $request)
     {
