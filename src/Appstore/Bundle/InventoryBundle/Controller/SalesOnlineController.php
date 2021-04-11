@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
+use Appstore\Bundle\InventoryBundle\Form\SalesItemType;
 use Appstore\Bundle\InventoryBundle\Form\SalesOnlineType;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -120,28 +121,46 @@ class SalesOnlineController extends Controller
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'general-sales');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
         if(!in_array($entity->getProcess(),array('In-progress','Created'))) {
             return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
         }
-
-        /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $theme = 'm-sales';
+        $editForm = $this->createEditForm($entity);
+        if($inventory->getSalesMode() == 'stock'){
+            $theme = 'stock-item';
+            $createItemForm = $this->createItemForm(New SalesItem(),$entity);
+            return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
+                'entity' => $entity,
+                'todaySales' => $todaySales,
+                'todaySalesOverview' => $todaySalesOverview,
+                'itemForm' => $createItemForm->createView(),
+                'form' => $editForm->createView(),
+            ));
         }else{
-            $theme = 'sales';
+            $editForm = $this->createEditForm($entity);
+            $theme = 'purchase-item';
+            return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
+                'entity' => $entity,
+                'todaySales' => $todaySales,
+                'todaySalesOverview' => $todaySalesOverview,
+                'form' => $editForm->createView(),
+            ));
         }
-        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
-            'entity' => $entity,
-            'todaySales' => $todaySales,
-            'todaySalesOverview' => $todaySalesOverview,
-            'form' => $editForm->createView(),
+    }
+
+    private function createItemForm(SalesItem $item , Sales $entity)
+    {
+        $form = $this->createForm(new SalesItemType($entity->getInventoryConfig()), $item, array(
+            'action' => $this->generateUrl('inventory_salesmanual_insert_item', array('sales' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
+        return $form;
     }
 
     /**
@@ -389,10 +408,6 @@ class SalesOnlineController extends Controller
                 $entity->setPaymentStatus('Due');
             }
             $entity->setApprovedBy($this->getUser());
-            $entity->setProcess('Done');
-            if ($data['process'] == 'In-progress') {
-                $entity->setProcess('In-progress');
-            }
             if($entity->getProcess() =="Done"){
                 $datetime = new \DateTime("now");
                 $entity->setCreated($datetime);
@@ -405,19 +420,14 @@ class SalesOnlineController extends Controller
             $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
             $entity->setProfit($profit);
             $em->flush();
-            if ($data['process'] != 'In-progress'){
+            if (in_array($entity,array('Delivered','Done'))){
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             }
-            if ($data['process'] == 'print') {
-                return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
-            } else {
-                return $this->redirect($this->generateUrl('inventory_salesonline_new'));
-            }
-
+            return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
         }
 
 

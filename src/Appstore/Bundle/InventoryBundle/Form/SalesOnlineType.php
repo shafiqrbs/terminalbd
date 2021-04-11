@@ -120,6 +120,23 @@ class SalesOnlineType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('discount','hidden')
+            ->add('process', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span8 m-wrap inputs'),
+                'empty_value' => '---Choose current process---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select current process'))
+                ),
+                'choices' => array(
+                    'In-progress' => 'In-progress',
+                    'Courier' => 'Courier',
+                    'Delivered' => 'Delivered',
+                    'Cancel' => 'Cancel',
+                    'Returned' => 'Returned',
+                    'Done' => 'Done',
+                ),
+            ))
 	        ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')))
 
         ;

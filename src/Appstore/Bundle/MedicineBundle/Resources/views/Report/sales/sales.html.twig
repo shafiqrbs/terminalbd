@@ -155,7 +155,7 @@
                                     <td class="numeric" >{{ entity.due|number_format }}</td>
                                     <td class="numeric" >{{ purchasePrice[entity.id]|number_format }}</td>
                                     <th class="numeric" >{{ (entity.total - purchasePrice[entity.id])|number_format }}</th>
-                                    <td class="numeric" >{{ (((entity.total|default(0) - purchasePrice[entity.id]|default(0))*100)/entity.total|default(0))|number_format }}</td>
+                                    <td class="numeric" >{{ (((entity.total|default(0) - purchasePrice[entity.id]|default(0))*100)/entity.total|default(0))|number_format }}%</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -761,7 +761,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.path as path');
+        $qb->select('category.id as id','category.name as name','category.imagePath as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');

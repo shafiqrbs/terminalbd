@@ -383,7 +383,7 @@ class ItemBrand  implements CodeAwareEntity
 
 	protected function getUploadDir()
 	{
-		return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/brand/'.$this->getId().'/';
+		return 'uploads/domain/'.$this->getEcommerceConfig()->getGlobalOption()->getId().'/brand/';
 	}
 
 	public function upload()

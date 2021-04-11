@@ -30,6 +30,24 @@
     });
 }*/
 
+$(document).on("click", ".paymentBtn", function (e) {
+
+    var total =  parseInt($('#netTotal').val());
+    if(total === 0 ){
+        alert('Please add sales item');
+        $('#salesitem_item').focus();
+        return false;
+    }
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function (event, el) {
+            $('form').submit();
+        }
+    });
+    e.preventDefault();
+});
 
 $(".select2Customer").select2({
 
