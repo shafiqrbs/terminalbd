@@ -420,12 +420,10 @@ class SalesOnlineController extends Controller
             $profit = ( $entity->getTotal()-($entity->getVat() + $purchaseAmount));
             $entity->setProfit($profit);
             $em->flush();
-            if (in_array($entity,array('Delivered','Done'))){
+            if (in_array($entity->getProcess(),array('Delivered','Done'))){
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-                $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+                $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             }
             return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
         }
@@ -1230,7 +1228,6 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->getRepository('InventoryBundle:StockItem')->saleaItemStockReverse($entity);
         $em->getRepository('InventoryBundle:Item')->getSalesItemReverse($entity);
-        $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
         $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
