@@ -88,8 +88,8 @@ class DpsParticularRepository extends EntityRepository
             ->leftJoin('e.service','s')
             ->where('e.dpsConfig = :config')->setParameter('config', $config)
          /*   ->andWhere('e.status = :status')->setParameter('status', 1)*/
-            ->andWhere('s.serviceFormat IN(:slugs)')
-            ->setParameter('slugs',array_values($services))
+            //->andWhere('s.serviceFormat IN(:slugs)')
+         //   ->setParameter('slugs',array_values($services))
             ->orderBy('s.sorting','ASC')
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();

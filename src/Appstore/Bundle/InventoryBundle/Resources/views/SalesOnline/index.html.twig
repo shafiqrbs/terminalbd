@@ -100,8 +100,9 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Time</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Customer</th>
+                                    <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Device Sales</th>
-                                    <th class="numeric" >Item</th>
                                     <th class="numeric" >Sub-Total</th>
                                     <th class="numeric" >Discount</th>
                                     <th class="numeric" >Net Total</th>
@@ -118,8 +119,9 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.created|date('h:m A') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.customer.name }}</td>
+                                        <td class="numeric" >{{ entity.customer.mobile }}</td>
                                         <td class="numeric" >{{ entity.deviceSalesId }}</td>
-                                        <td class="numeric" >{{ entity.totalItem }}</td>
                                         <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                         <td class="numeric" >{{ entity.discount|number_format  }}</td>
                                         <th class="numeric" >{{ entity.total|number_format  }}</th>

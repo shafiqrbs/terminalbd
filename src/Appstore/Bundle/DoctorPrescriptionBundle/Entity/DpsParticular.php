@@ -678,9 +678,20 @@ class DpsParticular
         return __DIR__ . '/../../../../../web/' . $this->getUploadDir();
     }
 
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+
     protected function getUploadDir()
     {
-        return 'uploads/domain/' . $this->getHospitalConfig()->getGlobalOption()->getId() . '/hms/';
+        return 'uploads/domain/' . $this->getDpsConfig()->getGlobalOption()->getId() . '/dps/';
     }
 
     public function upload()

@@ -47,7 +47,7 @@ class CustomerForDpsType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient weight')),
             )))
-
+            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Enter Blood Pressure')))
             ->add('ageType', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom inputs ageType'),
                 'expanded'      =>false,

@@ -138,6 +138,35 @@
                         </div>
                     </div>
                     <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="control-label" >Doctor Signature</label>
+                            <div class="controls">
+                                <div data-provides="fileupload" class="fileupload fileupload-new">
+                                    <div  class="fileupload-new thumbnail">
+                                        {% if(entity.webPath) %}
+                                            <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                        {% else %}
+                                            <img alt="" src="http://www.placehold.it/220x160/EFEFEF/AAAAAA&amp;text=no+image">
+                                        {% endif %}
+                                    </div>
+                                    <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                    <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        {{ form_widget(form.file) }}
+                                                        {{ form_errors(form.file) }}
+                                                    </span>
+                                        <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row-fluid">
                         <div class="span6">
                             <div class="control-group">
                                 <label class="control-label" for="name">Start Hour</label>

@@ -5,6 +5,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceCustomerType;
 use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceTransactionType;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
@@ -85,11 +86,10 @@ class InvoiceController extends Controller
         $entity = new DpsInvoice();
         $dpsConfig = $this->getUser()->getGlobalOption()->getDpsConfig();
         $lastObject = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->getLastInvoice($dpsConfig);
-        $form = $this->createInvoiceCustomerForm($entity);
+        $form = $this->createInvoiceCustomerForm(new Customer());
         $form->handleRequest($request);
         $data = $request->request->all();
         if ($form->isValid()) {
-
             $entity->setDpsConfig($dpsConfig);
             $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
             $entity->setTransactionMethod($transactionMethod);
@@ -120,7 +120,7 @@ class InvoiceController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerForDmsType($location), $entity, array(
+        $form = $this->createForm(new CustomerForDpsType($location), $entity, array(
             'action' => $this->generateUrl('dps_invoice_create'),
             'method' => 'POST',
             'attr' => array(

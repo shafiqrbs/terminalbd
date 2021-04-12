@@ -1246,7 +1246,7 @@ class Customer
 	/**
 	 * @param string $bloodPressure
 	 */
-	public function setBloodPressure( string $bloodPressure ) {
+	public function setBloodPressure( $bloodPressure ) {
 		$this->bloodPressure = $bloodPressure;
 	}
 

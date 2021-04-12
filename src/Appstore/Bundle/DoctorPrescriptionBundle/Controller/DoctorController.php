@@ -68,6 +68,7 @@ class DoctorController extends Controller
             if(empty($entity->getDesignation())){
                 $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
             }
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -145,7 +146,7 @@ class DoctorController extends Controller
 
         $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
 
-        if (!$entity) {
+        if (!$entity and $this->getUser()->getDpsConfig()->getId() == $entity ->getDpsConfig()->getId()) {
             throw $this->createNotFoundException('Unable to find DpsParticular entity.');
         }
         $globalOption = $this->getUser()->getGlobalOption();
@@ -183,13 +184,10 @@ class DoctorController extends Controller
      * Edits an existing DpsParticular entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, DpsParticular $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DoctorPrescriptionBundle:DpsParticular')->find($id);
-
-        if (!$entity) {
+        if (!$entity and $this->getUser()->getDpsConfig()->getId() == $entity ->getDpsConfig()->getId()) {
             throw $this->createNotFoundException('Unable to find DpsParticular entity.');
         }
 
@@ -202,6 +200,12 @@ class DoctorController extends Controller
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());
             if(empty($entity->getDesignation())){
                 $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
+            }
+            if($entity->upload()){
+                $entity->removeUpload();
+                $entity->upload();
+            }else{
+                $entity->upload();
             }
             $em->flush();
             $this->get('session')->getFlashBag()->add(

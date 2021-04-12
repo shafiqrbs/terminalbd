@@ -36,32 +36,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="row-fluid">
                 <div class="control-group">
                     <label class="control-label" for="price">Gender & Age Group<span class="required">*</span></label>
                     <div class="controls">
-                        <div class="span8">
+                        <div class="span4">
                             {{ form_widget(form.gender) }}
                         </div>
-                        <div class="span4">
-                            {{ form_widget(form.ageGroup) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="price">Age & Weight<span class="required">*</span></label>
-                    <div class="controls">
                         <div class="span4">
                             {{ form_widget(form.age) }}
                         </div>
                         <div class="span4">
                             {{ form_widget(form.ageType) }}
                         </div>
+
+                    </div>
+                </div>
+                </div>
+                <div class="row-fluid">
+                <div class="control-group">
+                    <label class="control-label" for="price">Age & Weight<span class="required">*</span></label>
+                    <div class="controls">
+                        <div class="span4">
+                            {{ form_widget(form.ageGroup) }}
+                        </div>
+                        <div class="span4">
+                            {{ form_widget(form.bloodPressure) }}
+                        </div>
                         <div class="span4">
                             {{ form_widget(form.weight) }}
                         </div>
                     </div>
                 </div>
-
+                </div>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="control-group">
@@ -84,9 +91,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="row-fluid pull-center">
-                    <button type="submit"  class="btn blue span12" id="saveNewPatientButton"><i class="icon-save"></i> Save & Continue</button>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <button type="submit"  class="btn red span12" id="saveNewPatientButton"><i class="icon-save"></i> Save & Continue</button>
+                    </div>
                 </div>
+                <div class="clearfix">&nbsp;</div>
             </div>
         </div>
     {{ form_end(form) }}

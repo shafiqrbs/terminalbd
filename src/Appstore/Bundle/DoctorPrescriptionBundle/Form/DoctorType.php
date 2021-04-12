@@ -41,6 +41,7 @@ class DoctorType extends AbstractType
             ->add('doctorPrescription','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>6,'placeholder'=>'Enter specialist')))
             ->add('startHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A','placeholder'=>'Start hour')))
             ->add('endHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
+            ->add('file')
             ->add('weeklyOffDay', 'choice', array(
                 'attr'=>array('class'=>'check-list span12'),
                 'expanded'      =>true,
