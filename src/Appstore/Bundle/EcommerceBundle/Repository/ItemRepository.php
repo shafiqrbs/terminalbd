@@ -461,6 +461,45 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('discount', $discount);
         }
         if (!empty($name)) {
+            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.$name.'%');
+        }
+        if (!empty($webName)) {
+            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
+        }
+    }
+
+    public function handleApiSearchBetween($qb,$data){
+
+        $webName        = isset($data['name'])? $data['name'] :'';
+        $name           = isset($data['keyword'])? $data['keyword'] :'';
+        $cat            = isset($data['category'])? $data['category'] :'';
+        $brand          = isset($data['brand'])? $data['brand'] :'';
+        $promotion      = isset($data['promotion'])? $data['promotion'] :'';
+        $discount       = isset($data['discount'])? $data['discount'] :'';
+        $tag            = isset($data['tag'])? $data['tag'] :'';
+        if (!empty($cat)) {
+            $qb->andWhere("item.category IN (:category)");
+            $qb->setParameter('category', $cat);
+        }
+        if (!empty($brand)) {
+            $qb->andWhere("item.brand IN (:brand)");
+            $qb->setParameter('brand', $brand);
+        }
+        if (!empty($promotion)) {
+            $qb->andWhere("item.promotion IN (:promotion)");
+            $qb->setParameter('promotion', $promotion);
+        }
+        if (!empty($discount)) {
+            $qb->andWhere("item.discount IN (:discount)");
+            $qb->setParameter('discount', $discount);
+        }
+        if (!empty($tag)) {
+            $qb->andWhere("item.tag IN (:tag)");
+            $qb->setParameter('tag', $tag);
+        }
+        if (!empty($name)) {
            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
                 $qb->setParameter('searchTerm', '%'.$name.'%');
         }
@@ -697,10 +736,9 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
         $qb->addSelect('tag.name as tagName','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
-        $this->handleSearchBetween($qb,$data);
+        $this->handleApiSearchBetween($qb,$data);
         $qb->orderBy('item.webName','DESC');
         $result = $qb->getQuery();
-
         return $result;
     }
 
