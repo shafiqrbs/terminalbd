@@ -34,6 +34,10 @@ api_ecommerce_item_category:
     path:     /feature-category
     defaults: { _controller: BinduBundle:ApiEcommerce:category }
 
+api_ecommerce_feature_item:
+    path:     /feature-product
+    defaults: { _controller: BinduBundle:ApiEcommerce:featureProduct }
+
 api_ecommerce_item_all_category:
     path:     /all-category
     defaults: { _controller: BinduBundle:ApiEcommerce:allCategory }

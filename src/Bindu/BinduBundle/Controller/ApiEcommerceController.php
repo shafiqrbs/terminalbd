@@ -204,12 +204,11 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
             $data = array();
 
-            $menu = $_REQUEST['menu'];
+            $feature = $_REQUEST['feature_id'];
             $module = $_REQUEST['module'];
             $entity = $this->checkApiValidation($request);
-            $feature = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getFeatureWidget($entity,$menu);
-            if($feature){
-                $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureWidgetProduct($feature,$module);
+            if($entity and $feature and $module){
+                $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureWidgetProduct($entity,$feature,$module);
             }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
