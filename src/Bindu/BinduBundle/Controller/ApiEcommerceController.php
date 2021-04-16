@@ -255,8 +255,8 @@ class ApiEcommerceController extends Controller
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                     if($row['path']){
-                        $path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}");
-                        $data[$key]['imagePath']            =  $path;
+                        //$path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}");
+                        $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
                     }else{
                         $data[$key]['imagePath']            = "";
                     }
