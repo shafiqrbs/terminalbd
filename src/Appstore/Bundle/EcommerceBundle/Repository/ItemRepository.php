@@ -821,6 +821,34 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
+    public function getApiFeatureCategory(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.category','category');
+        $qb->select('category.id as id','category.name as name','category.imagePath as path');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("category.feature = 1");
+        $qb->groupBy('category.id');
+        $qb->orderBy('category.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['category_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
     public function getApiAllBrand(GlobalOption $option)
     {
 
@@ -848,6 +876,33 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
+    public function getApiFeatureBrand(GlobalOption $option)
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.brand','brand');
+        $qb->select('brand.id as id','brand.name as name','brand.path as path');
+        $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("brand.feature = 1");
+        $qb->groupBy('brand.id');
+        $qb->orderBy('brand.id','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['brand_id']    = (int) $row['id'];
+                $data[$key]['name']           = $row['name'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
 
     public function resizeFilter($pathToImage, $width = 256, $height = 256)
     {

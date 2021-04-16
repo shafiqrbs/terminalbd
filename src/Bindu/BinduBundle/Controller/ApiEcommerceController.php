@@ -308,7 +308,7 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getApiFeature($entity,10);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiFeatureCategory($entity);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));
@@ -354,7 +354,7 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getApiFeature($entity);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiFeatureBrand($entity);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));
