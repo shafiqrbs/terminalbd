@@ -34,7 +34,7 @@ class ApiEcommerceController extends Controller
         return $pagination;
     }
 
-    public function resizeFilter($pathToImage, $width = 520, $height = 320)
+    public function resizeFilter($pathToImage, $width = 520, $height = 520)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
         return $_SERVER['HTTP_HOST'].$path;
