@@ -480,24 +480,24 @@ class ItemRepository extends EntityRepository
         $discount       = isset($data['discount'])? $data['discount'] :'';
         $tag            = isset($data['tag'])? $data['tag'] :'';
         if (!empty($cat)) {
-            $qb->andWhere("item.category IN (:category)");
-            $qb->setParameter('category', $cat);
+            $qb->andWhere("category.id =:categoryId");
+            $qb->setParameter('categoryId', $cat);
         }
         if (!empty($brand)) {
-            $qb->andWhere("item.brand IN (:brand)");
-            $qb->setParameter('brand', $brand);
+            $qb->andWhere("brand =:brandId");
+            $qb->setParameter('brandId', $brand);
         }
-        if (!empty($promotion)) {
-            $qb->andWhere("item.promotion IN (:promotion)");
-            $qb->setParameter('promotion', $promotion);
+        if (!empty($promotion)){
+            $qb->andWhere("promotion.id =:promotionId");
+            $qb->setParameter('promotionId', $promotion);
         }
         if (!empty($discount)) {
-            $qb->andWhere("item.discount IN (:discount)");
-            $qb->setParameter('discount', $discount);
+            $qb->andWhere("discount.id =:discountId");
+            $qb->setParameter('discountId', $discount);
         }
         if (!empty($tag)) {
-            $qb->andWhere("item.tag IN (:tag)");
-            $qb->setParameter('tag', $tag);
+            $qb->andWhere("tag.id =:tagId");
+            $qb->setParameter('tagId', $tag);
         }
         if (!empty($name)) {
            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
@@ -1087,7 +1087,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                     if($row['path']){
-                        $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
+                        $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
                     }else{
                         $data[$key]['imagePath']            = "";
@@ -1120,7 +1120,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                     if($row['path']){
-                        $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
+                        $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
                     }else{
                         $data[$key]['imagePath']            = "";
@@ -1130,7 +1130,7 @@ class ItemRepository extends EntityRepository
         }
 
 
-        if( $module == "discount" and $feature->getDiscount()){
+        if( $module == "discount" and $feature){
 
             $brd['discount'] = $feature;
             $result = $this->getApiFeatureProduct($globalOption,$module,$brd);
@@ -1154,7 +1154,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                     if($row['path']){
-                        $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
+                        $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
                     }else{
                         $data[$key]['imagePath']            = "";
@@ -1360,6 +1360,7 @@ class ItemRepository extends EntityRepository
 
     public function getApiFeatureProduct(GlobalOption $option, $module , $search = array(), $limit = 18)
     {
+
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('item');
         $qb->leftJoin('item.productUnit','productUnit');
