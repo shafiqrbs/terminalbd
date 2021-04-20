@@ -732,7 +732,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
-        $qb->addSelect('discount.name as discountName','discount.id as discountId');
+        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
         $qb->addSelect('tag.name as tagName','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
@@ -756,7 +756,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('category.name as categoryName');
         $qb->addSelect('brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
-        $qb->addSelect('discount.name as discountName');
+        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
         $row = $qb->getQuery()->getOneOrNullResult();
@@ -769,6 +769,8 @@ class ItemRepository extends EntityRepository
         $data['category']                 = $row['categoryName'];
         $data['brand']                    = $row['brandName'];
         $data['discountName']             = $row['discountName'];
+        $data['discountType']             = $row['discountType'];
+        $data['discountAmount']           = $row['discountAmount'];
         $data['unitName']                 = $row['unitName'];
         $data['quantityApplicable']       = $row['quantityApplicable'];
         $data['content']                  = $row['content'];
@@ -1047,6 +1049,8 @@ class ItemRepository extends EntityRepository
                     $data[$key]['brand']                    = $row['brandName'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['discountType']             = $row['discountType'];
+                    $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
                     $data[$key]['promotion']                = $row['promotionName'];
                     $data[$key]['tagId']                    = $row['tagId'];
@@ -1080,6 +1084,8 @@ class ItemRepository extends EntityRepository
                     $data[$key]['brand']                    = $row['brandName'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['discountType']             = $row['discountType'];
+                    $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
                     $data[$key]['promotion']                = $row['promotionName'];
                     $data[$key]['tagId']                    = $row['tagId'];
@@ -1113,6 +1119,8 @@ class ItemRepository extends EntityRepository
                     $data[$key]['brand']                    = $row['brandName'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['discountType']             = $row['discountType'];
+                    $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
                     $data[$key]['promotion']                = $row['promotionName'];
                     $data[$key]['tagId']                    = $row['tagId'];
@@ -1147,6 +1155,8 @@ class ItemRepository extends EntityRepository
                     $data[$key]['brand']                    = $row['brandName'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['discountType']             = $row['discountType'];
+                    $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
                     $data[$key]['promotion']                = $row['promotionName'];
                     $data[$key]['tagId']                    = $row['tagId'];
@@ -1193,6 +1203,8 @@ class ItemRepository extends EntityRepository
                         $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
                         $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
                         $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
+                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
+                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
                         $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
                         $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
@@ -1230,6 +1242,8 @@ class ItemRepository extends EntityRepository
                         $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
                         $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
                         $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
+                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
+                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
                         $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
                         $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
@@ -1268,6 +1282,8 @@ class ItemRepository extends EntityRepository
                         $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
                         $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
                         $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
+                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
+                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
                         $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
                         $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
@@ -1305,6 +1321,8 @@ class ItemRepository extends EntityRepository
                         $data[$key]['category']                 = $row['categoryName'];
                         $data[$key]['brand']                    = $row['brandName'];
                         $data[$key]['discountName']             = $row['discountName'];
+                        $data[$key]['discountType']             = $row['discountType'];
+                        $data[$key]['discountAmount']           = $row['discountAmount'];
                         $data[$key]['unitName']                 = $row['unitName'];
                         $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
@@ -1342,6 +1360,8 @@ class ItemRepository extends EntityRepository
                         $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
                         $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
                         $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
+                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
+                        $data[$parent->getId()][$key]['discountAmount']             = $row['discountAmount'];
                         $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
                         $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
@@ -1373,7 +1393,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
-        $qb->addSelect('discount.name as discountName','discount.id as discountId');
+        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
         $qb->addSelect('tag.name as tagName','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);

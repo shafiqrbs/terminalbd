@@ -248,6 +248,8 @@ class ApiEcommerceController extends Controller
                     $data[$key]['brand']                    = $row['brandName'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
+                    $data[$key]['discountType']             = $row['discountType'];
+                    $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
                     $data[$key]['promotion']                = $row['promotionName'];
                     $data[$key]['tagId']                    = $row['tagId'];
