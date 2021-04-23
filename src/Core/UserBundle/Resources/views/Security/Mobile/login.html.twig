@@ -26,11 +26,12 @@
     .signupForm {
         width: 100%;
         overflow: hidden!important;
+        background: #ffffff;
+        padding: 30px;
     }
     .signupForm input[type="password"] {
         width: 100%;
         background-color: #FFF;
-        border: 1px solid #D7D9DB;
         padding: 3px 25px;
         height: 35px;
         color: #555;
@@ -42,6 +43,7 @@
     .signupForm input[type="text"],.signupForm input[type="password"] {
         height: 48px!important;
         padding-left: 48px!important;
+        border: 3px solid #D7D9DB!important;
     }
     #remember{
         width: 36px!important;
@@ -49,7 +51,7 @@
     }
     .fa-icon {
         display: inline-block;
-        top: 13px;
+        top: 17px;
         position: absolute;
         left: 24px;
     }
@@ -71,6 +73,15 @@
                 <div>
                     <img style="background-color: #FFFFff" src="{{ asset('assets/frontend/img/logo.png') }}" height="auto" width="100%" alt="">
                 </div>
+                <h3 style="
+    height: 80px;
+    background: #fff;
+    margin-bottom: 30px;
+    line-height: 80px;
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+">SIGN IN</h3>
                 <div class="clear"></div>
                 <div>
                     {% if(error) %}
@@ -90,8 +101,8 @@
                 </div>
                 <div>
                     <div style="float: left"><input type="checkbox" id="remember" name="_remember_me" value="on"/></div>
-                    <div style="width: auto; line-height:48px; float: left; color: #ffffff">&nbsp;&nbsp;Remember me</div>
-                    <div style="float: right"><input id="signup" class="tm-btn dark small" type="submit" value="Login" name="submit"></div>
+                    <div style="width: auto; line-height:48px; float: left;">&nbsp;&nbsp;Remember me</div>
+                    <div style="float: right"><input id="signup" class="tm-btn dark small" type="submit" value="Sign in" name="submit"></div>
                 </div>
             </form>
         </div>
