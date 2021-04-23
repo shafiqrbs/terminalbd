@@ -38,7 +38,6 @@
     }
     .signupForm input[type="text"],.signupForm input[type="password"] {
         height: 48px!important;
-        padding-left: 48px!important;
         border: 3px solid #D7D9DB!important;
     }
     #remember{
@@ -61,6 +60,10 @@
         border: none;
         height: 48px;
         line-height: 48px;
+    }
+    label{
+        text-align: left;
+        font-weight: bold;
     }
 </style>
     <div id="content" style="background:#ffffff; height: 100%; margin-top:0px!important; display: flex" >
@@ -86,12 +89,14 @@
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
                 </div>
                 <div>
-                    <p><span class="fa-icon"><i class="fa  fa-user"></i></span>
+                    <label>Username</label>
+                    <p>
                         <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no">
                     </p>
                 </div>
                 <div>
-                    <p><span class="fa-icon"><i class="fa  fa-lock"></i></span>
+                    <label>Password</label>
+                    <p>
                         <input type="password" id="_password" name="_password" required="required" class="" placeholder="Enter your password">
                     </p>
                 </div>
