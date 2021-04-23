@@ -11,7 +11,8 @@
                     <input type="text" required="required" class="mobile" name="mobile" id="mobile" placeholder="Enter your mobile no ">
                 </p>
                 <p>
-                    <textarea  required="required" name="content"  id="" class="message" placeholder="Message..."></textarea>
+                    <textarea  required="required" maxlength="250" name="content"  id="" class="message" placeholder="Message..."></textarea>
+                    <span id="sms-rchars">250</span> Character(s) Remaining
                 </p>
                 <input type="hidden" name="globalOption" id="globalOption" value="1"  >
             </div>
@@ -35,7 +36,8 @@
                     <input type="text" required="required" class="email" name="email" id="email" placeholder="Enter your email address ">
                 </p>
                 <p>
-                    <textarea id="" required="required" name="content" id="" placeholder="Message..."></textarea>
+                    <textarea id="" required="required" maxlength="512" name="content" id="" class="email-message" placeholder="Message..."></textarea>
+                    <span id="email-rchars">512</span> Character(s) Remaining
                 </p>
                 <input type="hidden" name="globalOption" id="globalOption" value="1"  >
             </div>
@@ -85,5 +87,13 @@
     }
     .tm-btn.blue, .button.blue, input[type="submit"].blue {
         background: #009eca;
+    }
+    .message{
+        height: 120px;
+        resize: none;
+    }
+    .email-message{
+        height: 220px;
+        resize: none;
     }
 </style>

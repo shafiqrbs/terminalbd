@@ -43,6 +43,7 @@
     'assets/frontend/mobile/css/jquery.mmenu.all.css'
     'assets/bindu/3rd/font-awesome/font-awesome.css'
     'assets/bindu/3rd/select2/select2.css'
+    'assets/frontend/mobile/css/foundation.css'
     'assets/frontend/mobile/css/style.css'
     'assets/frontend/mobile/css/camera.css'
     'assets/frontend/common/css/hover-effects.css'
@@ -113,6 +114,18 @@
 
 
         });
+        var maxLengthSms = 250;
+        $( ".message" ).keyup('textarea', function() {
+            var textlen = maxLengthSms - $(this).val().length;
+            $('#sms-rchars').text(textlen);
+        });
+
+        var maxLength = 512;
+        $( ".email-message" ).keyup('textarea', function() {
+            var textlen = maxLength - $(this).val().length;
+            $('#email-rchars').text(textlen);
+        });
+
         //  The second way to initialize:
         $('[data-remodal-id=modal2]').remodal({
             modifier: 'with-red-theme'
