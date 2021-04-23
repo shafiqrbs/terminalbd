@@ -1,51 +1,101 @@
 {% extends ':bindu/mobile:base.html.twig' %}
 {% block body %}
-    <div class="bannerPane bannerPane-webbuilder">
-     <div class="s-banner-content">
-            <div><img width="100" src="{{ asset('assets/frontend/img/logo.png') }}" /></div>
-            <div class="page-title">LOGIN</div>
+<style>
+    #header a, .header a, a.menu-btn{
+        background: none!important;
+    }
+    a.p-link-back {
+        color: #FFF;
+        position: fixed !important;
+        left: 24px;
+        top: 24px;
+    }
+    a.login {
+        color: #FFF;
+        position: fixed !important;
+        right: 24px;
+        top: 24px;
+    }
+    #div-center{
+        vertical-align: bottom;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+    }
+    .signupForm {
+        width: 100%;
+    }
+    .signupForm input[type="password"] {
+        width: 100%;
+        background-color: #FFF;
+        border: 1px solid #D7D9DB;
+        padding: 3px 25px;
+        height: 35px;
+        color: #555;
+        outline: none;
+        font-size: 14px;
+        box-shadow: none;
+        margin-bottom: 5px;
+    }
+    .signupForm input[type="text"],.signupForm input[type="password"] {
+        height: 48px!important;
+        padding-left: 48px!important;
+    }
+    #remember{
+        width: 36px!important;
+        height: 36px!important;
+    }
+    .fa-icon {
+        display: inline-block;
+        top: 13px;
+        position: absolute;
+        left: 24px;
+    }
+    .tm-btn, input[type="submit"] {
+        color: #ffffff;
+        background-image: none;
+        background-color: #ff0800;
+        padding: 0 50px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        height: 48px;
+        line-height: 48px;
+    }
+</style>
+    <div id="content" style="background:#555; height: 100%; margin-top:0px!important; display: flex" >
+        <div id="div-center">
+            <form class="registration signupForm" id="signup" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+                <div>
+                    <img style="background-color: #FFFFff" src="{{ asset('assets/frontend/img/logo.png') }}" height="80" width="100%" alt="">
+                </div>
+                <div class="clear"></div>
+                <div>
+                    {% if(error) %}
+                        <p class="error" style="color: red; text-align: center">{{ error }}</p>
+                    {% endif  %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                </div>
+                <div>
+                    <p><span class="fa-icon"><i class="fa  fa-user"></i></span>
+                        <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no">
+                    </p>
+                </div>
+                <div>
+                    <p><span class="fa-icon"><i class="fa  fa-lock"></i></span>
+                        <input type="password" id="_password" name="_password" required="required" class="" placeholder="Enter your password">
+                    </p>
+                </div>
+                <div>
+                    <div style="float: left"><input type="checkbox" id="remember" name="_remember_me" value="on"/></div>
+                    <div style="width: auto; line-height:48px; float: left; color: #ffffff">&nbsp;&nbsp;Remember me</div>
+                    <div style="float: right"><input id="signup" class="tm-btn dark small" type="submit" value="Login" name="submit"></div>
+                </div>
+            </form>
         </div>
-    </div>
-    <div id="content" style="background:#131e2d" >
-        <form class="registration signupForm" id="signup" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
-        <div>
-            {% if(error) %}
-                <p class="error" style="color: red; text-align: center">{{ error }}</p>
-            {% endif  %}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
-        </div>
-        <div>
-            <p><span class="fa-icon"><i class="fa  fa-user"></i></span>
-                <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no">
-            </p>
-        </div>
-        <div>
-            <p><span class="fa-icon"><i class="fa  fa-lock"></i></span>
-                <input type="password" id="_password" name="_password" required="required" class="" placeholder="Enter your password">
-            </p>
-        </div>
-            <p>
-                <input type="checkbox" id="remember" name="_remember_me" value="on"/><span style="width: auto; line-height: 32px; color: #ffffff">&nbsp;&nbsp;Remember me</span>
-            </p>
-
-        <div><p class="form-suphobmit" style="text-align:center"><input id="signup" class="tm-btn dark small" type="submit" value="Login" name="submit"></p></div>
-        </form>
         <div class="clear"></div>
     </div>
-  <style>
-      .signupForm input[type="password"] {
-          width: 100%;
-          background-color: #FFF;
-          border: 1px solid #D7D9DB;
-          padding: 3px 25px;
-          height: 35px;
-          color: #555;
-          outline: none;
-          font-size: 14px;
-          box-shadow: none;
-          margin-bottom: 5px;
-      }
-  </style>
 {% endblock %}
 
 {% block documentready %}

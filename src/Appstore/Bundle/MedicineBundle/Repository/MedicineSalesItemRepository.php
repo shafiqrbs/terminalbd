@@ -361,6 +361,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$userBranch = $user->getProfile()->getBranches();
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $group = isset($data['group']) ? $data['group'] :'medicineStock';
+
 		$qb = $this->createQueryBuilder('si');
 		$qb->join('si.medicineSales','s');
 		$qb->join('si.medicineStock','mds');
@@ -385,6 +386,29 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb->orderBy("{$sort}",$direction);
 		return $qb->getQuery();
 	}
+
+    /* Sales Medicine item */
+
+    public  function reportSalesStock(User $user, $data=''){
+
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.medicineSales','s');
+        $qb->join('si.medicineStock','mds');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->addSelect('SUM(si.quantity * mds.salesPrice ) AS salesPrice');
+        $qb->addSelect('SUM(si.quantity * mds.purchasePrice ) AS purchasePrice');
+        $qb->addSelect('mds.name AS name','mds.remainingQuantity AS remainingQuantity','mds.brandName AS brandName');
+        $qb->addSelect('mds.sku AS sku');
+        $qb->where('s.medicineConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchStockBetween($qb,$data);
+        $qb->groupBy('mds.id');
+        return $qb->getQuery()->getArrayResult();
+    }
 
 	protected function handleSearchStockBetween($qb,$data)
 	{

@@ -134,7 +134,7 @@ class ReportController extends Controller
         $user = $this->getUser();
         $purchaseSalesPrice = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
         $cashOverview = $em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->reportSalesStockItem($user, $data);
+        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->reportSalesStock($user, $data);
         if(empty($data['pdf'])){
             $pagination = $this->paginate($entities);
             return $this->render('MedicineBundle:Report:sales/salesStock.html.twig', array(
@@ -148,7 +148,7 @@ class ReportController extends Controller
             $html = $this->renderView(
                 'MedicineBundle:Report:sales/salesStockPdf.html.twig', array(
                     'option' => $user->getGlobalOption(),
-                    'entities' => $entities->getArrayResult(),
+                    'entities' => $entities,
                     'cashOverview' => $cashOverview,
                     'purchaseSalesItem' => $purchaseSalesPrice,
                     'searchForm' => $data,

@@ -46,10 +46,10 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
+                                        <input type="text" id="brandName"  name="brandName"  class="span12 m-wrap select2BrandName" value="{% if searchForm.brandName is defined %}{{ searchForm.brandName }}{% endif %}"  autocomplete="off"  placeholder="Product brand name">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="sku"  name="sku"  class="span12 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Enter medicine/accessories sku">
+                                        <input type="text" id="name" name="name"  class="span12 m-wrap select2StockMedicineName" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Enter medicine & others name ">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and  searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
@@ -80,7 +80,7 @@
                                 {% endif %}
 
                             </form>
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                            {#<table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
                                 <tr class="head-red">
                                     <th class="numeric" ><strong>Total Item</strong></th>
@@ -99,7 +99,7 @@
                                     <td class="numeric" ><strong>{{ (cashOverview.total - (cashOverview.totalVat + purchaseSalesItem.totalPurchase))|number_format }}</strong></td>
                                 </tr>
                                 </tbody>
-                            </table>
+                            </table>#}
                         </div>
 
                         <table class="table table-bordered table-striped table-condensed flip-content ">

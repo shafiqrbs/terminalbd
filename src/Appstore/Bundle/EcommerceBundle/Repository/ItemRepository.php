@@ -484,7 +484,7 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('categoryId', $cat);
         }
         if (!empty($brand)) {
-            $qb->andWhere("brand =:brandId");
+            $qb->andWhere("brand.id =:brandId");
             $qb->setParameter('brandId', $brand);
         }
         if (!empty($promotion)){
@@ -1176,199 +1176,274 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
-    public function getFeatureWidgetProductAll(FeatureWidget $feature,$module = "category")
+    public function getFeatureWidgetProductAll(GlobalOption $option , $module = "category")
     {
         $data = array();
 
+        if($module == 'category'){
 
-        if($module == "category" and $feature->getCategory()){
+            $config = $option->getEcommerceConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.category','category');
+            $qb->select('category.id as id','category.name as name','category.imagePath as path');
+            $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+            $qb->andWhere("category.feature = 1");
+            $qb->groupBy('category.id');
+            $qb->orderBy('category.id','DESC');
+            $result = $qb->getQuery()->getArrayResult();
+            $data = array();
 
-            /* @var $parent \Product\Bundle\ProductBundle\Entity\Category */
-            $items = $feature->getCategory();
-            $limit = $feature->getCategoryLimit() ? $feature->getCategoryLimit() : 18 ;
+            foreach ($result as $key => $parent) {
 
-            foreach ($items as $parent) {
-                $cat['category'] = $parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['category'] = $parent->getName();
-                $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$cat,$limit);
-                if($result){
-                    foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
-                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
+                $data[$key]['id']               = (int) $parent['id'];
+                $data[$key]['name']             = $parent['name'];
+                if($parent['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$parent['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+
+                $search = array('category' => $parent['id']);
+                $products = $this->getApiFeatureProduct($option,$module,$search,$limit=18);
+                if($products){
+                    foreach($products as $p => $row) {
+                        $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                        $data[$key]['products'][$p]['name']                     = $row['name'];
+                        $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
+                        $data[$key]['products'][$p]['price']                    = $row['price'];
+                        $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
+                        $data[$key]['products'][$p]['categoryId']               = (int) $row['categoryId'];
+                        $data[$key]['products'][$p]['category']                 = $row['categoryName'];
+                        $data[$key]['products'][$p]['brandId']                  = (int) $row['brandId'];
+                        $data[$key]['products'][$p]['brand']                    = $row['brandName'];
+                        $data[$key]['products'][$p]['discountName']             = $row['discountName'];
+                        $data[$key]['products'][$p]['discountType']             = $row['discountType'];
+                        $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
+                        $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
+                        $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
                         if($row['path']){
-                            $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
+                            $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                            $data[$key]['products'][$p]['imagePath']            =  $path;
                         }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                            $data[$key]['products'][$p]['imagePath']            = "";
                         }
                     }
                 }
             }
+            return  $data;
         }
 
-        if( $module == "brand" and $feature->getBrand()){
+        if( $module == "brand"){
 
-            /* @var $parent ItemBrand */
+            $config =$option->getEcommerceConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.brand','brand');
+            $qb->select('brand.id as id','brand.name as name','brand.path as path');
+            $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+            $qb->andWhere("brand.feature = 1");
+            $qb->groupBy('brand.id');
+            $qb->orderBy('brand.id','DESC');
+            $result = $qb->getQuery()->getArrayResult();
+            $data = array();
+            if($result){
+                foreach($result as $key => $parent) {
+                    $data[$key]['id']    = (int) $parent['id'];
+                    $data[$key]['name']           = $parent['name'];
+                    if($parent['path']){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$parent['path']}");
+                        $data[$key]['imagePath']            =  $path;
+                    }else{
+                        $data[$key]['imagePath']            = "";
+                    }
 
-            $items = $feature->getBrand();
-            $limit = $feature->getBrandLimit() ? $feature->getBrandLimit() : 12 ;
-
-            foreach ($items as $parentKey => $parent) {
-
-                $brd['brand'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['brand'] = $parent->getName();
-                $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$brd,$limit);
-                if($result){
-                    foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
-                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
-                        if($row['path']){
-                            $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
-                        }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+                    $search = array('brand' => $parent['id']);
+                    $products = $this->getApiFeatureProduct($option,$module,$search,$limit=18);
+                    if($products){
+                        foreach($products as $p => $row) {
+                            $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
+                            $data[$key]['products'][$p]['price']                    = $row['price'];
+                            $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
+                            $data[$key]['products'][$p]['categoryId']               = (int) $row['categoryId'];
+                            $data[$key]['products'][$p]['category']                 = $row['categoryName'];
+                            $data[$key]['products'][$p]['brandId']                  = (int) $row['brandId'];
+                            $data[$key]['products'][$p]['brand']                    = $row['brandName'];
+                            $data[$key]['products'][$p]['discountName']             = $row['discountName'];
+                            $data[$key]['products'][$p]['discountType']             = $row['discountType'];
+                            $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
+                            $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
+                            $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            if($row['path']){
+                                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                                $data[$key]['products'][$p]['imagePath']            =  $path;
+                            }else{
+                                $data[$key]['products'][$p]['imagePath']            = "";
+                            }
                         }
                     }
                 }
             }
+            return  $data;
         }
 
-        if( $module == "promotion" and $feature->getPromotion()){
+        if( $module == "promotion"){
 
             /* @var $parent Promotion */
 
-            $items = $feature->getPromotion();
-
-            $limit = $feature->getPromotionLimit() ? $feature->getPromotionLimit() : 12 ;
-
-            foreach ($items as $parent) {
-
-                $prom['promotion'] =$parent->getId();
-                $data[$parent->getId()]['id'] = $parent->getId();
-                $data[$parent->getId()]['promotion'] = $parent->getName();
-                $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$prom,$limit);
-                if($result){
-                    foreach($result as $key => $row) {
-                        $data[$parent->getId()][$key]['product_id']               = (int) $row['id'];
-                        $data[$parent->getId()][$key]['parent_id']                = (int) $parent->getId();
-                        $data[$parent->getId()][$key]['name']                     = $row['name'];
-                        $data[$parent->getId()][$key]['quantity']                 = $row['quantity'];
-                        $data[$parent->getId()][$key]['price']                    = $row['price'];
-                        $data[$parent->getId()][$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
-                        $data[$parent->getId()][$key]['discountAmount']           = $row['discountAmount'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
-                        if($row['path']){
-                            $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
-                        }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+            $config =$option->getEcommerceConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.promotion','promotion');
+            $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+            $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+            $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Promotion"%');
+            $qb->groupBy('promotion.id');
+            $qb->orderBy('promotion.id','DESC');
+            $result = $qb->getQuery()->getArrayResult();
+            $data = array();
+            if($result){
+                foreach($result as $key => $parent) {
+                    $data[$key]['id']               = (int) $parent['id'];
+                    $data[$key]['name']             = $parent['name'];
+                    if($parent['path']){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$parent['path']}");
+                        $data[$key]['imagePath']     =  $path;
+                    }else{
+                        $data[$key]['imagePath']     = "";
+                    }
+                    $search = array('promotion' => $parent['id']);
+                    $products = $this->getApiFeatureProduct($option,$module,$search,$limit=18);
+                    if($products){
+                        foreach($products as $p => $row) {
+                            $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
+                            $data[$key]['products'][$p]['price']                    = $row['price'];
+                            $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
+                            $data[$key]['products'][$p]['categoryId']               = (int) $row['categoryId'];
+                            $data[$key]['products'][$p]['category']                 = $row['categoryName'];
+                            $data[$key]['products'][$p]['brandId']                  = (int) $row['brandId'];
+                            $data[$key]['products'][$p]['brand']                    = $row['brandName'];
+                            $data[$key]['products'][$p]['discountName']             = $row['discountName'];
+                            $data[$key]['products'][$p]['discountType']             = $row['discountType'];
+                            $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
+                            $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
+                            $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            if($row['path']){
+                                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                                $data[$key]['products'][$p]['imagePath']            =  $path;
+                            }else{
+                                $data[$key]['products'][$p]['imagePath']            = "";
+                            }
                         }
                     }
                 }
             }
+            return $data;
         }
 
-        if( $module == "tag" and $feature->getTag()){
+        if( $module == "tag"){
 
             /* @var $parent Promotion */
 
-            $items = $feature->getTag();
-            $limit = $feature->getTagLimit() ? $feature->getTagLimit() : 12 ;
-
-            foreach ($items as $parent) {
-
-                $tag['tag'] =$parent->getId();
-                $data['id'] = $parent->getId();
-                $data['tag'] = $parent->getName();
-                $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$tag,$limit);
-                if($result){
-                    foreach($result as $key => $row) {
-                        $data[$key]['product_id']               = (int) $row['id'];
-                        $data[$key]['parent_id']                = (int) $parent->getId();
-                        $data[$key]['name']                     = $row['name'];
-                        $data[$key]['quantity']                 = $row['quantity'];
-                        $data[$key]['price']                    = $row['price'];
-                        $data[$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$key]['category']                 = $row['categoryName'];
-                        $data[$key]['brand']                    = $row['brandName'];
-                        $data[$key]['discountName']             = $row['discountName'];
-                        $data[$key]['discountType']             = $row['discountType'];
-                        $data[$key]['discountAmount']           = $row['discountAmount'];
-                        $data[$key]['unitName']                 = $row['unitName'];
-                        $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
-                        if($row['path']){
-                            $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
-                            $data[$key]['imagePath']            =  $path;
-                        }else{
-                            $data[$key]['imagePath']            = "";
+            $config =$option->getEcommerceConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.promotion','promotion');
+            $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+            $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+            $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Tag"%');
+            $qb->groupBy('promotion.id');
+            $qb->orderBy('promotion.id','DESC');
+            $result = $qb->getQuery()->getArrayResult();
+            $data = array();
+            if($result){
+                foreach($result as $key => $parent) {
+                    $data[$key]['id']               = (int) $parent['id'];
+                    $data[$key]['name']             = $parent['name'];
+                    if($parent['path']){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$parent['path']}");
+                        $data[$key]['imagePath']     =  $path;
+                    }else{
+                        $data[$key]['imagePath']     = "";
+                    }
+                    $search = array('promotion' => $parent['id']);
+                    $products = $this->getApiFeatureProduct($option,$module,$search,$limit=18);
+                    if($products){
+                        foreach($products as $p => $row) {
+                            $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
+                            $data[$key]['products'][$p]['price']                    = $row['price'];
+                            $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
+                            $data[$key]['products'][$p]['categoryId']               = (int) $row['categoryId'];
+                            $data[$key]['products'][$p]['category']                 = $row['categoryName'];
+                            $data[$key]['products'][$p]['brandId']                  = (int) $row['brandId'];
+                            $data[$key]['products'][$p]['brand']                    = $row['brandName'];
+                            $data[$key]['products'][$p]['discountName']             = $row['discountName'];
+                            $data[$key]['products'][$p]['discountType']             = $row['discountType'];
+                            $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
+                            $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
+                            $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            if($row['path']){
+                                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                                $data[$key]['products'][$p]['imagePath']            =  $path;
+                            }else{
+                                $data[$key]['products'][$p]['imagePath']            = "";
+                            }
                         }
                     }
                 }
             }
         }
 
-        if( $module == "discount" and $feature->getDiscount()){
+        if( $module == "discount"){
 
             /* @var $parent Discount */
 
-            $items = $feature->getDiscount();
-            $limit = $feature->getDiscountLimit() ? $feature->getDiscountLimit() : 12 ;
-
-            foreach ($items as $parent) {
-
-                $dis['discount'] =$parent->getId();
-                $data['id'] = $parent->getId();
-                $data['discount'] = $parent->getName();
-                $result = $this->getApiFeatureProduct($feature->getGlobalOption(),$dis,$limit);
-                if($result){
-                    foreach($result as $key => $row) {
-                        $data[$key]['product_id']               = (int) $row['id'];
-                        $data[$key]['parent_id']                = (int) $parent->getId();
-                        $data[$key]['name']                     = $row['name'];
-                        $data[$key]['quantity']                 = $row['quantity'];
-                        $data[$key]['price']                    = $row['price'];
-                        $data[$key]['discountPrice']            = $row['discountPrice'];
-                        $data[$parent->getId()][$key]['category']                 = $row['categoryName'];
-                        $data[$parent->getId()][$key]['brand']                    = $row['brandName'];
-                        $data[$parent->getId()][$key]['discountName']             = $row['discountName'];
-                        $data[$parent->getId()][$key]['discountType']             = $row['discountType'];
-                        $data[$parent->getId()][$key]['discountAmount']             = $row['discountAmount'];
-                        $data[$parent->getId()][$key]['unitName']                 = $row['unitName'];
-                        $data[$parent->getId()][$key]['quantityApplicable']       = $row['quantityApplicable'];
-                        if($row['path']){
-                            $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/ecommerce/product/{$row['path']}");
-                            $data[$parent->getId()][$key]['imagePath']            =  $path;
-                        }else{
-                            $data[$parent->getId()][$key]['imagePath']            = "";
+            $config =$option->getEcommerceConfig()->getId();
+            $qb = $this->createQueryBuilder('e');
+            $qb->join('e.discount','discount');
+            $qb->select('discount.id as id','discount.name as name','discount.path as path');
+            $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
+            $qb->groupBy('discount.id');
+            $qb->orderBy('discount.id','DESC');
+            $result = $qb->getQuery()->getArrayResult();
+            $data = array();
+            if($result){
+                foreach($result as $key => $parent) {
+                    $data[$key]['id']               = (int) $parent['id'];
+                    $data[$key]['name']             = $parent['name'];
+                    if($parent['path']){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$parent['path']}");
+                        $data[$key]['imagePath']     =  $path;
+                    }else{
+                        $data[$key]['imagePath']     = "";
+                    }
+                    $search = array('discount' => $parent['id']);
+                    $products = $this->getApiFeatureProduct($option,$module,$search,$limit=18);
+                    if($products){
+                        foreach($products as $p => $row) {
+                            $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
+                            $data[$key]['products'][$p]['price']                    = $row['price'];
+                            $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
+                            $data[$key]['products'][$p]['categoryId']               = (int) $row['categoryId'];
+                            $data[$key]['products'][$p]['category']                 = $row['categoryName'];
+                            $data[$key]['products'][$p]['brandId']                  = (int) $row['brandId'];
+                            $data[$key]['products'][$p]['brand']                    = $row['brandName'];
+                            $data[$key]['products'][$p]['discountName']             = $row['discountName'];
+                            $data[$key]['products'][$p]['discountType']             = $row['discountType'];
+                            $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
+                            $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
+                            $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            if($row['path']){
+                                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                                $data[$key]['products'][$p]['imagePath']            =  $path;
+                            }else{
+                                $data[$key]['products'][$p]['imagePath']            = "";
+                            }
                         }
                     }
                 }

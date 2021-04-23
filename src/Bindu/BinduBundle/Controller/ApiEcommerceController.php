@@ -320,6 +320,52 @@ class ApiEcommerceController extends Controller
 
     }
 
+    public function featureProductsAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiFeatureCategory($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function allFeatureProductsAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $module = $_REQUEST['module'];
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureWidgetProductAll($entity,$module);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
     public function allCategoryAction(Request $request)
     {
         set_time_limit(0);
