@@ -18,11 +18,11 @@
         color: #0A0302;
     }
     #div-center{
-        vertical-align: bottom;
-        text-align: center;
+        vertical-align: middle;
         display: inline-flex;
         align-items: center;
         width: 100%;
+        text-align: left;
     }
     .signupForm {
         width: 100%;
@@ -68,22 +68,24 @@
         text-align: left;
         font-weight: bold;
     }
+    h3{
+        height: 80px;
+        background: #fff;
+        margin-bottom: 30px;
+        line-height: 80px;
+        font-size: 30px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-align: center;
+    }
 </style>
     <div id="content" style="background:#ffffff; height: 100%; margin-top:0px!important; display: flex" >
         <div id="div-center">
-            <form class="registration signupForm" id="signup" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+            <form class="registration signupForm" id="signin" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
                 <div>
                     <img style="background-color: #FFFFff" src="{{ asset('assets/frontend/img/logo.png') }}" height="auto" width="100%" alt="">
                 </div>
-                <h3 style="
-    height: 80px;
-    background: #fff;
-    margin-bottom: 30px;
-    line-height: 80px;
-    font-size: 30px;
-    text-transform: uppercase;
-    font-weight: bold;
-">SIGN IN</h3>
+                <h3>SIGN IN</h3>
                 <div class="clear"></div>
                 <div>
                     {% if(error) %}
@@ -93,10 +95,10 @@
                 </div>
                 <div>
                     <label>Username</label>
-                    <p>
-                        <input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your mobile no">
-                    </p>
+                    <div><input type="text" id="_username" name="_username" required="required" class="" placeholder="Enter your user name">
+                    </div>
                 </div>
+                <div class="clear"></div>
                 <div>
                     <label>Password</label>
                     <p>
@@ -116,7 +118,7 @@
 
 {% block documentready %}
 
-    $('#commentform').validate({
+    $('#signin').validate({
 
         rules: {
         _username: {
