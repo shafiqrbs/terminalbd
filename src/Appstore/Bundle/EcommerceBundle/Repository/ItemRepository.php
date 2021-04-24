@@ -1229,6 +1229,8 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['imagePath']            = "";
                         }
                     }
+                }else{
+                    $data[$key]['products'] ="";
                 }
             }
             return  $data;
@@ -1282,6 +1284,8 @@ class ItemRepository extends EntityRepository
                                 $data[$key]['products'][$p]['imagePath']            = "";
                             }
                         }
+                    }else{
+                        $data[$key]['products'] ="";
                     }
                 }
             }
@@ -1337,6 +1341,8 @@ class ItemRepository extends EntityRepository
                                 $data[$key]['products'][$p]['imagePath']            = "";
                             }
                         }
+                    }else{
+                        $data[$key]['products'] ="";
                     }
                 }
             }
@@ -1392,6 +1398,8 @@ class ItemRepository extends EntityRepository
                                 $data[$key]['products'][$p]['imagePath']            = "";
                             }
                         }
+                    }else{
+                        $data[$key]['products'] ="";
                     }
                 }
             }
@@ -1445,6 +1453,8 @@ class ItemRepository extends EntityRepository
                                 $data[$key]['products'][$p]['imagePath']            = "";
                             }
                         }
+                    }else{
+                        $data[$key]['products'] ="";
                     }
                 }
             }
