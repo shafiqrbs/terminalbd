@@ -1454,7 +1454,7 @@ class ItemRepository extends EntityRepository
                             }
                         }
                     }else{
-                        $data[$key]['products'] ="";
+                        $data[$key]['products'] = "";
                     }
                 }
             }
