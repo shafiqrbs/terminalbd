@@ -1188,6 +1188,7 @@ class ItemRepository extends EntityRepository
             $qb->select('category.id as id','category.name as name','category.imagePath as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("category.feature = 1");
+            $qb->andWhere("e.isFeatureCategory = 1");
             $qb->groupBy('category.id');
             $qb->orderBy('category.id','DESC');
             $result = $qb->getQuery()->getArrayResult();
@@ -1244,6 +1245,7 @@ class ItemRepository extends EntityRepository
             $qb->select('brand.id as id','brand.name as name','brand.path as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("brand.feature = 1");
+            $qb->andWhere("e.isFeatureBrand = 1");
             $qb->groupBy('brand.id');
             $qb->orderBy('brand.id','DESC');
             $result = $qb->getQuery()->getArrayResult();
