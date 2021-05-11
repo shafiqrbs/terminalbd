@@ -10,7 +10,7 @@
             {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
             <div class="clearfix"></div>
             <section>
-                {% if globalOption.ecommerceConfig.cartSearch != 1 %}
+                {% if globalOption.ecommerceConfig.cartSearch == 1 %}
                 <div class="row" id="stock-product-box">
                     <div class="modal-header" style="position: relative">
                         <h4 class="modal-title">Add Product</h4>
@@ -77,31 +77,32 @@
                                             </button>
                         </span>
                                         </dt>
-
                                         <dd>
-                                            <div class="col-xs-6 col-md-6">
-                                                <div class="input-group cart-input-group" >
-                                                                              <span class="input-group-btn input-group-btn-custom">
-                                                                                  <button type="button" class="btn btn-sm btn-transparent btn-number-cart"
-                                                                                          data-type="minus" data-field="quantity" data-id="{{ product.rowid }}"
-                                                                                          id="btn-left-{{ product.rowid }}"
-                                                                                          data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}" data-text="{{ product.id }}" data-title="{{ product.price }}">  <span class="fa fa-minus"></span>
-                                                                                  </button>
-                                                                              </span>
-                                                    <input  type="text" readonly="readonly" name="quantity" id="quantity-{{ product.rowid }}"  class="btn-number-cart cart-quantity" value="{{ product.quantity }}" min="1" max="100" >
-                                                    <span class="input-group-btn">
-                                            <button type="button" class="btn btn-transparent btn-sm btn-number-cart"
-                                                    data-type="plus" data-field="quantity"
-                                                    data-id="{{ product.rowid }}"
-                                                    data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
-                                                    data-text="{{ product.id }}" data-title="{{ product.price }}">
-                                                              <span class="fa fa-plus"></span>
-                                                      </button>
-                      </span>
+                                            <div class="row">
+                                                <div class="col-xs-6 col-md-6">
+                                                    <div class="input-group cart-input-group" >
+                                                          <span class="input-group-btn input-group-btn-custom">
+                                                              <button type="button" class="btn btn-sm btn-transparent btn-number-cart"
+                                                                      data-type="minus" data-field="quantity" data-id="{{ product.rowid }}"
+                                                                      id="btn-left-{{ product.rowid }}"
+                                                                      data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}" data-text="{{ product.id }}" data-title="{{ product.price }}">  <span class="fa fa-minus"></span>
+                                                              </button>
+                                                          </span>
+                                                        <input  type="text" readonly="readonly" name="quantity" id="quantity-{{ product.rowid }}"  class="btn-number-cart cart-quantity" value="{{ product.quantity }}" min="1" max="100" >
+                                                        <span class="input-group-btn">
+                                                <button type="button" class="btn btn-transparent btn-sm btn-number-cart"
+                                                        data-type="plus" data-field="quantity"
+                                                        data-id="{{ product.rowid }}"
+                                                        data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid': product.rowid}) }}"
+                                                        data-text="{{ product.id }}" data-title="{{ product.price }}">
+                                                                  <span class="fa fa-plus"></span>
+                                                          </button>
+                          </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-xs-6 col-md-6 text-right">
-                                                {{ globalOption.ecommerceConfig.currency }} <strong id="btn-total-{{ product.rowid }}">{{ product.price * product.quantity }}</strong>
+                                                <div class="col-xs-6 col-md-6 text-right">
+                                                    {{ globalOption.ecommerceConfig.currency }} <strong id="btn-total-{{ product.rowid }}">{{ product.price * product.quantity }}</strong>
+                                                </div>
                                             </div>
                                         </dd>
                                     </dl>
@@ -126,20 +127,24 @@
                                 <li>
                                     <div class="accordion-control">Delivery Information</div>
                                     <div class="accordion-panel">
-                                        <span><label>Name</label>
+                                        <span class="label-group">
+                                            <label>Name</label>
                                             <input type="text" id="customerName" name="customerName" required="required" class="form-cart" placeholder="Enter your full name" value="{{ app.user.profile.name }}">
                                         </span>
-                                        <span><label>Mobile</label>
+                                        <span class="label-group">
+                                            <label>Mobile</label>
                                             <input type="text" id="customerMobile" name="customerMobile" required="required" class="form-cart" placeholder="Enter your pickup mobile no" value="{% if app.user.profile.additionalPhone is not empty %}{{ app.user.profile.additionalPhone }} {% else %}{{ app.user }}{% endif %}" >
                                         </span>
-                                        <span><label>Location</label>
+                                        <span class="label-group">
+                                            <label>Location</label>
                                             <select id="deliveryLocation" name="deliveryLocation" class="select-cart" >
                                                 {% for location in locations %}
                                                     <option {% if app.user.profile.deliveryLocation is not empty and app.user.profile.deliveryLocation.id == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </span>
-                                        <span><label>Address</label>
+                                        <span class="label-group">
+                                            <label>Address</label>
                                             <textarea id="deliveryAddress" name="deliveryAddress" required="required" class="address" rows="2"  placeholder="Enter your address" >{{ app.user.profile.address }}</textarea>
                                         </span>
                                     </div>
@@ -147,8 +152,10 @@
                                 <li>
                                     <div class="accordion-control active">Preferred Date & Time</div>
                                     <div class="accordion-panel" style="display: block">
-                                        <span> <label>Delivery Date</label><input type="date" class="form-cart" name="deliveryDate" id="deliveryDate"></span>
-                                        <span><label>Time Period</label>
+                                        <span class="label-group">
+                                            <label>Delivery Date</label><input type="date" class="form-cart" name="deliveryDate" id="deliveryDate"></span>
+                                        <span class="label-group">
+                                            <label>Time Period</label>
                                             <select id="timePeriod" name="timePeriod" class="select-cart" >
                                                 {% for period in timePeriods %}
                                                     <option value="{{ period.id }}">{{ period.name }}</option>
@@ -170,7 +177,7 @@
                                             </li>
                                         </ul>
                                         <div id="payment-transaction"  class="{% if globalOption.ecommerceConfig.cashOnDelivery == 1 %}payment-hide{% else %}payment-show{% endif %}">
-                                            <span>
+                                            <span class="label-group">
                                                 <label>Receive Account</label>
                                                 <select id="accountMobile" name="accountMobile" class="select-cart">
                                                     {% for mobile in globalOption.accountMobileBank %}
@@ -180,11 +187,11 @@
                                                     {% endfor %}
                                                 </select>
                                             </span>
-                                            <span>
+                                            <span class="label-group">
                                                 <label>Payment Mobile</label>
                                                 <input type="text" class="form-cart" name="paymentMobile" id="paymentMobile">
                                             </span>
-                                            <span>
+                                            <span class="label-group">
                                                 <label>Trx Id</label>
                                                 <input type="text" class="form-cart" name="transactionId" id="transactionId">
                                             </span>

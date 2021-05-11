@@ -97,12 +97,12 @@ input.form-cart, .form-cart:focus {
     color: #000;
     border-radius: 0;
     font-size: 12px;
-    padding: 3px 6px;
-    height: 20px;
+    padding: 0px 6px;
+    height: 28px;
     border: 1px solid transparent!important;
     border-bottom: 1px solid #ddd!important;
     width: 100%;
-    line-height: 20px;
+    line-height: 28px;
 
 }
 input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
@@ -113,7 +113,7 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
     text-align: center;
     height: 24px!important;
     border: 1px solid transparent;
-    padding: 2px 7px;
+    padding: 0px 0px;
     width: 100%;
     border-bottom: 1px solid #ddd;
     font-size: 12px;
@@ -173,9 +173,7 @@ ul.accordion li span{
 
 
 span label{
-    font-size: 11px;
-    line-height: 11px;
-    height: 11px;
+    height: 18px;
     display: block;
     font-weight: normal;
     margin-bottom: 0;
@@ -183,7 +181,6 @@ span label{
 
 }
 p label{
-    font-size: 11px;
     line-height: 11px;
     height: 11px;
     display: block;
@@ -401,4 +398,10 @@ p label{
     border-bottom: 1px solid #E12454;
     background: #E12454;
     color: #ffffff;
+}
+
+.modal-body {
+    padding: 0 !important;
+    padding-top: 15px!important;
+    padding-bottom:50px!important;
 }

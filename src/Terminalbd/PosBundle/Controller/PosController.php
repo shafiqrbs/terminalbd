@@ -198,7 +198,7 @@ class PosController extends Controller
             $entity->setMode($mode);
             if($setup['autoPayment'] == 1 and $entity->getPayment() == 0){
                 $entity->setPayment($entity->getTotal());
-                $entity->setReceive($entity->getReceive());
+                $entity->setReceive($entity->getTotal());
             }
             if($entity->getPayment() > $entity->getTotal()){
                 $entity->setReturnAmount($entity->getPayment() - $entity->getTotal());
@@ -305,7 +305,7 @@ class PosController extends Controller
         $mainApp = !empty($terminal->getMainApp()) ? $terminal->getMainApp()->getSlug() : "";
         if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
             $config = $terminal->getInventoryConfig();
-            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoComplete($item,$config);
+            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoCompleteAllItem($item,$config);
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
             $config = $terminal->getRestaurantConfig();
             $items = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->searchAutoComplete($item,$config);
