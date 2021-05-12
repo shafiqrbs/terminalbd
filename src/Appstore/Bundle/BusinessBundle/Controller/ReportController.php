@@ -513,11 +513,10 @@ class ReportController extends Controller
             ));
 
         }else{
-
             $html = $this->renderView(
                 'BusinessBundle:Report:sales/vendorCommissionSalesItemPdf.html.twig', array(
                     'option'  => $user->getGlobalOption() ,
-                    'entities' => $pagination,
+                    'entities' => $entities,
                     'vendors' => $vendors,
                     'searchForm' => $data,
                 )
