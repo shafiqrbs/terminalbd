@@ -459,7 +459,7 @@ li.active > a {
 }
 
 .portlet.box.royal-blue {
-    border: 1px solid #3598dc;
+    border: 5px solid #e5e5e5;
     border-top: 0;
 }
 
@@ -691,6 +691,8 @@ select.m-wrap.sales-by{
     padding-right: 10px;
     font-weight: bold;
 }
+
+
 
 .table-tab .Cancel{
     background: #ff2515;
@@ -1140,8 +1142,17 @@ input[class*="span"].payment{
     color:#ffffff;
 }
 
+.switch-progress label.save-hold {
+    background: #c49f47;
+    color: #ffffff;
+}
+
 .switch-progress label.hold{
     background-color: #fcd723;
+    color:#ffffff;
+}
+.switch-progress label.save{
+    background-color:#8e5fa2;
     color:#ffffff;
 }
 

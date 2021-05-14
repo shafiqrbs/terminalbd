@@ -120,7 +120,7 @@ class SalesOnlineType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-            ->add('discount','hidden')
+          //  ->add('discount','hidden')
             ->add('process', 'choice', array(
                 'required'    => false,
                 'attr'=>array('class'=>'span8 m-wrap inputs'),

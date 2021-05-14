@@ -234,7 +234,7 @@ class SalesOnlineController extends Controller
         }
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
-        exit;
+
     }
 
     /**
@@ -286,7 +286,7 @@ class SalesOnlineController extends Controller
         $em->flush();
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
-        exit;
+
     }
 
 
@@ -322,7 +322,7 @@ class SalesOnlineController extends Controller
         }
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
-        exit;
+
     }
 
     /**
@@ -502,7 +502,7 @@ class SalesOnlineController extends Controller
         $em->remove($sales);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
+
     }
 
     /**
@@ -670,10 +670,10 @@ class SalesOnlineController extends Controller
         return new JsonResponse($items);
     }
 
-    public function invoicePrintAction(Sales $entity)
+    public function invoicePrintAction($invoice)
     {
-        $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice'=>$invoice));
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);

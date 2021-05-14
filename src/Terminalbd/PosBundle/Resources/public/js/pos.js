@@ -25,6 +25,67 @@ $.ajax({
     }
 });
 
+$(document).on('click', '#allproduct', function() {
+
+    $.ajax({
+        url: Routing.generate('pos_stock_item'),
+        beforeSend: function(){
+            $('.loader-double').fadeIn(1000).addClass('is-active');
+        },
+        complete: function(){
+            $('.loader-double').fadeIn(1000).removeClass('is-active');
+        },
+        success:  function (data) {
+            $("#items").html(data);
+            tableSearch();
+        }
+    });
+});
+
+$(document).on('click', '.category', function() {
+
+    url = $(this).attr('data-action');
+    $.ajax({
+        url: url,
+        beforeSend: function(){
+            $('.loader-double').fadeIn(1000).addClass('is-active');
+        },
+        complete: function(){
+            $('.loader-double').fadeIn(1000).removeClass('is-active');
+        },
+        success:  function (data) {
+            $("#items").html(data);
+            tableSearch();
+        }
+    });
+});
+
+$(document).on('click', '.list-load', function() {
+
+    url = $(this).attr('data-action');
+    $('.dialogModal_header').html('List Information');
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: url,
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                    modalInnerFunction();
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
 $(document).on('click', '.js-accordion-title', function() {
     $(this).next().slideToggle(200);
     $(this).toggleClass('open', 200);
@@ -103,6 +164,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
     type      = $(this).attr('data-type');
     var input = $('#quantity-'+fieldId);
     var currentVal = parseInt(input.val());
+
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
             if(currentVal > input.attr('min')) {
@@ -238,21 +300,11 @@ $(document).on('click', '.addToCart', function() {
     var id = $(this).attr('data-id');
     var quantity = $("#quantity-"+id).val();
     var url = $(this).attr('data-action');
-    $.get(url, {quantity: quantity} , function(data){
-        $("#result").html(data);
+    $.get(url, {quantity: quantity} , function(response){
+        setTimeout(jsonResult(response),100);
     });
 });
 
-$(document).on('click', '.addToCart', function() {
-
-    var id = $(this).attr('data-id');
-    var quantity = $("#quantity-"+id).val();
-    var url = $(this).attr('data-action');
-    $.get(url, {quantity: quantity} , function(data){
-        $("#result").html(data);
-    });
-
-});
 
 $(document).on('click', '.invoice-mode', function() {
     url = $(this).attr('data-action');
@@ -350,7 +402,6 @@ $("#barcodeNo").select2({
     placeholder: "Enter specific barcode",
     allowClear: true,
     ajax: {
-
         url: Routing.generate('inventory_purchaseitem_search'),
         dataType: 'json',
         delay: 250,
@@ -469,6 +520,25 @@ $(document).on('click', '.addProduct', function() {
         onOkBut: function(event, el) {
             $.get(url,{'invoice':invoice}, function( response ) {
                 setTimeout(jsonResult(response),100);
+            });
+        }
+    });
+});
+
+$(document).on('click', '.event', function(event) {
+
+    var url = $(this).attr('data-action');
+    var id = $(this).attr('data-id');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( response ) {
+                obj = JSON.parse(response);
+                $('#remove-'+id).hide();
+                if( obj['success'] === 'success'){
+                    setTimeout(jsonResult(response),100);
+                }
             });
         }
     });
@@ -593,7 +663,19 @@ $(document).on("click", "#kitchenBtn", function() {
     });
 });
 
+function modalInnerFunction() {
+
+    $('.toggle').click(function(){
+        var id = $(this).attr('id');
+        $("#show-"+id).slideToggle(100);
+    }).toggle( function() {
+        $(this).children("span").text("[ - Close ]");
+    }, function() {
+        $(this).children("span").text("[ + Show ]");
+    });
+}
 function  tableSearch() {
+
     $('#dataTableSearch').filterTable({ // apply filterTable to all tables on this page
         label:'',
         inputName:'search',

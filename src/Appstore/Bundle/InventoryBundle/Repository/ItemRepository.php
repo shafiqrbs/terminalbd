@@ -103,8 +103,9 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function getApiStock(GlobalOption $option)
+    public function  getApiStock(GlobalOption $option , $data = '')
     {
+
         $config = $option->getInventoryConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.masterItem','m');
@@ -115,6 +116,11 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
         $qb->where('e.inventoryConfig = :config');
         $qb->setParameter('config',$config);
+        if(isset($data['category']) and !empty($data['category'])){
+            $catid = $data['category'];
+            $qb->andWhere('c.id = :catid');
+            $qb->setParameter('catid',$catid);
+        }
         $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();

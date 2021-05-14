@@ -49,35 +49,38 @@ class PosRepository extends EntityRepository
     public function reset($user)
     {
 
-
         $em = $this->_em;
-
         /* @var $entity Pos */
         $entity = $this->findOneBy(array('createdBy' => $user , 'process' => 'Created'));
-        $entity->setSalesBy(null);
-        $entity->setTransactionMethod(null);
-        $entity->setSubTotal(0);
-        $entity->setInvoice(null);
-        $entity->setVat(0);
-        $entity->setMode(null);
-        $entity->setSd(0);
-        $entity->setDue(0);
-        $entity->setCustomer(null);
-        $entity->setTotal(0);
-        $entity->setPayment(0);
-        $entity->setReturnAmount(0);
-        $entity->setDeliveryCharge(0);
-        $entity->setReceive(0);
-        $entity->setDiscount(0);
-        $entity->setDiscountCalculation(0);
-        $entity->setDiscountType(null);
-        $entity->setAccountBank(null);
-        $entity->setAccountMobileBank(null);
-        $entity->setTransactionId(null);
-        $entity->setSalesBy(null);
-        $em->persist($entity);
-        $em->flush();
-        return $entity;
+        if(empty($entity)){
+            return $this->insert($user);
+        }else{
+            $entity->setSalesBy(null);
+            $entity->setTransactionMethod(null);
+            $entity->setSubTotal(0);
+            $entity->setInvoice(null);
+            $entity->setVat(0);
+            $entity->setMode(null);
+            $entity->setSd(0);
+            $entity->setDue(0);
+            $entity->setCustomer(null);
+            $entity->setTotal(0);
+            $entity->setPayment(0);
+            $entity->setReturnAmount(0);
+            $entity->setDeliveryCharge(0);
+            $entity->setReceive(0);
+            $entity->setDiscount(0);
+            $entity->setDiscountCalculation(0);
+            $entity->setDiscountType(null);
+            $entity->setAccountBank(null);
+            $entity->setAccountMobileBank(null);
+            $entity->setTransactionId(null);
+            $entity->setSalesBy(null);
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
+
 
     }
     public function update($user,$cart)
@@ -120,22 +123,23 @@ class PosRepository extends EntityRepository
 
     }
 
-    public function insertHold($user,$cart)
+    public function insertHold(Pos $pos,$cart)
     {
         $em = $this->_em;
-        /* @var $entity Pos */
-
-        $pos = $this->findOneBy(array('createdBy' => $user , 'process' => 'Created'));
-        foreach ($cart->contents as $product){
+        foreach ($cart->contents() as $product){
             $entity = new PosItem();
             $entity->setPos($pos);
+            $entity->setName($product['name']);
             $entity->setItemId($product['id']);
             $entity->setUnit($product['unit']);
+            $entity->setPrice($product['price']);
             $entity->setQuantity($product['quantity']);
-            $entity->setSubTotal($product['subTotal']);
+            $entity->setSubTotal($product['price'] * $product['quantity']);
             $em->persist($entity);
             $em->flush();
         }
+        $pos->setProcess('Hold');
+        $em->flush();
     }
 
     public function getLastId($inventory)

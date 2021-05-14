@@ -31,7 +31,6 @@ class SalesRepository extends EntityRepository
     {
         if(!empty($data))
         {
-
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
             $invoice =    isset($data['invoice'])? $data['invoice'] :'';
@@ -210,6 +209,7 @@ class SalesRepository extends EntityRepository
 
 	}
 
+
     public function salesReport( User $user , $data)
     {
         $userBranch = $user->getProfile()->getBranches();
@@ -246,6 +246,7 @@ class SalesRepository extends EntityRepository
         return $result;
 
     }
+
 
     public function salesUserReport( User $user , $data)
     {
@@ -1095,6 +1096,45 @@ class SalesRepository extends EntityRepository
             $em->flush();
         }
     }
+
+    public function getApiSales(GlobalOption $terminal, $data = array())
+    {
+        $inventory = $terminal->getInventoryConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->leftJoin('s.transactionMethod', 't');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('t.name as method');
+        $qb->addSelect('s.id as id');
+        $qb->addSelect('s.created as created');
+        $qb->addSelect('s.process as process');
+        $qb->addSelect('s.invoice as invoice');
+        $qb->addSelect('(s.due) as due');
+        $qb->addSelect('(s.subTotal) as subTotal');
+        $qb->addSelect('(s.total) as total');
+        $qb->addSelect('(s.payment) as payment');
+        $qb->addSelect('(s.discount) as discount');
+        $qb->addSelect('(s.vat) as vat');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $inventory);
+        $qb->andWhere('s.process IN(:process)');
+        $qb->setParameter('process', array('Done','POS','Delivered'));
+        if(empty($data)){
+            $compareTo = new \DateTime("now");
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("s.created >= :createdStart")->setParameter('createdStart', $created);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("s.created <= :createdEnd")->setParameter('createdEnd', $createdEnd);
+        }else{
+            $this->handleSearchBetween($qb,$data);
+        }
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
 
 
 }

@@ -28,6 +28,7 @@ pos_hold:
     path:     /hold-order
     defaults: { _controller: "PosBundle:Pos:hold" }
 
+
 pos_hold_reorder:
     path:     /{id}/hold-reorder
     defaults: { _controller: "PosBundle:Pos:holdReorder" }
@@ -40,6 +41,13 @@ pos_print:
 pos_stock_item:
     path:     /pos-stock-item
     defaults: { _controller: "PosBundle:Pos:posItems" }
+    methods:  GET
+    options:
+        expose: true
+
+pos_category_stock_item:
+    path:     /{id}/pos-category-stock-item
+    defaults: { _controller: "PosBundle:Pos:posCategoryItems" }
     methods:  GET
     options:
         expose: true
@@ -108,10 +116,6 @@ pos_new:
 pos_edit:
     path:     /{code}/pos
     defaults: { _controller: "PosBundle:Pos:edit" }
-
-pos_print:
-    path:     /{code}/print
-    defaults: { _controller: "PosBundle:Pos:print" }
 
 pos_print_invoice:
     path:     /{invoice}/invoice

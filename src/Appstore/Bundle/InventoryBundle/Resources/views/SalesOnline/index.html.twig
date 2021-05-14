@@ -119,8 +119,8 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.created|date('h:m A') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{{ entity.customer.name }}</td>
-                                        <td class="numeric" >{{ entity.customer.mobile }}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.deviceSalesId }}</td>
                                         <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                         <td class="numeric" >{{ entity.discount|number_format  }}</td>

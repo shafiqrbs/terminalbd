@@ -64,8 +64,9 @@ class PosController extends Controller
             $response->sendHeaders();
             $invoiceMode = $request->cookies->get('invoiceMode');
         }
+
         return $this->render('PosBundle:Pos:new.html.twig', array(
-            'globalOption'                => $terminal,
+            'globalOption'          => $terminal,
             'config'                => '',
             'invoiceMode'           => $invoiceMode,
             'categories'            => $categories,
@@ -115,6 +116,40 @@ class PosController extends Controller
         return new Response($html);
     }
 
+    public function posCategoryItemsAction(Request $request,$id){
+
+        $response = new Response();
+        $user = $this->getUser();
+        /* @var $terminal GlobalOption */
+        $arrs = array('category'=>$id);
+        $terminal = $user->getGlobalOption();
+        $mainApp = !empty($terminal->getMainApp()) ? $terminal->getMainApp()->getSlug() : "";
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
+            $config = $terminal->getInventoryConfig();
+            $data = $this->getDoctrine()->getRepository("InventoryBundle:Item")->getApiStock($terminal,$arrs);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
+            $config = $terminal->getRestaurantConfig();
+            $data = $this->getDoctrine()->getRepository("RestaurantBundle:Particular")->getApiStock($terminal);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') and $mainApp == 'miss') {
+            $config = $terminal->getMedicineConfig();
+            $data = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->getApiStock($terminal);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
+            $config = $terminal->getBusinessConfig();
+            $data = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->getApiStock($terminal);
+        }
+        $response->headers->set('invoiceMode', 'list', false);
+        $invoiceMode = $request->cookies->get('invoiceMode');
+        $cart = new Cart($request->getSession());
+        $html = $this->renderView(
+            'PosBundle:Pos:item.html.twig', array(
+                'entities' => $data,
+                'invoiceMode' => $invoiceMode,
+                'cart' => $cart,
+                'config' => $config
+            )
+        );
+        return new Response($html);
+    }
 
     public function productCartAction(Request $request,Item $product)
     {
@@ -160,6 +195,8 @@ class PosController extends Controller
 
     public function createAction(Request $request)
     {
+
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         $mode = $_REQUEST['mode'];
@@ -220,7 +257,7 @@ class PosController extends Controller
                 }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
                     $sales = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->getApiStock($terminal);
                 }
-            }elseif ($mode == "hold"){
+            }elseif ($mode == "save-hold"){
                 $this->getDoctrine()->getRepository("PosBundle:Pos")->insertHold($entity,$cart);
             }
 
@@ -344,13 +381,31 @@ class PosController extends Controller
 
     }
 
+    public function deleteAction(Pos $pos)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($pos);
+        $em->flush();
+        return new Response(json_encode(array('success'=>'delete')));
+
+    }
+
     public function orderAction(Request $request)
     {
-        $terminal = $user->getGlobalOption();
-        $this->getDoctrine()->getRepository("PosBundle:Pos")->findBy(array('terminal'=>$terminal,'mode'=>'hold'));
+        $terminal = $this->getUser()->getGlobalOption();
+        $mainApp = !empty($terminal->getMainApp()) ? $terminal->getMainApp()->getSlug() : "";
+        if ($mainApp == 'inventory') {
+            $entities = $this->getDoctrine()->getRepository("InventoryBundle:Sales")->getApiSales($terminal);
+        }elseif ($mainApp == 'restaurant') {
+            $entities = $this->getDoctrine()->getRepository("InventoryBundle:Sales")->getApiSales($terminal);
+        }elseif ($mainApp == 'miss') {
+            $entities = $this->getDoctrine()->getRepository("InventoryBundle:Sales")->getApiSales($terminal);
+        }elseif ($mainApp == 'business') {
+            $entities = $this->getDoctrine()->getRepository("InventoryBundle:Sales")->getApiSales($terminal);
+        }
         $htmlProcess = $this->renderView(
-            'PosBundle:Pos:ajaxTableItem.html.twig', array(
-                'cart' => $cart,
+            'PosBundle:Pos:order.html.twig', array(
+                'entities' => $entities,
             )
         );
         return new Response($htmlProcess);
@@ -359,10 +414,11 @@ class PosController extends Controller
 
     public function holdAction(Request $request)
     {
-        $this->getDoctrine()->getRepository("PosBundle:Pos")->reset($this->getUser());
+        $terminal = $this->getUser()->getGlobalOption();
+        $holds = $this->getDoctrine()->getRepository("PosBundle:Pos")->findBy(array('terminal'=>$terminal,'mode'=>'save-hold'));
         $htmlProcess = $this->renderView(
-            'PosBundle:Pos:ajaxTableItem.html.twig', array(
-                'cart' => $cart,
+            'PosBundle:Pos:hold.html.twig', array(
+                'entities' => $holds,
             )
         );
         return new Response($htmlProcess);
@@ -372,8 +428,10 @@ class PosController extends Controller
     public function holdReorderAction(Request $request,Pos $pos)
     {
         $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
 
         /* @var $product PosItem */
+
         foreach ($pos->getPosItems() as $product):
             $data = array(
                 'id' => $product->getItemId(),
@@ -384,10 +442,12 @@ class PosController extends Controller
             );
             $cart->insert($data);
         endforeach;
+
         $array = $this->returnCartSummaryAjaxData($cart);
         $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
+        $em->remove($pos);
+        $em->flush();
         return new Response(json_encode($array));
-
 
     }
 

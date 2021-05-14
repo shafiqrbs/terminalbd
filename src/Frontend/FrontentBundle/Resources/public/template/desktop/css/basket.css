@@ -119,6 +119,7 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
     font-size: 12px;
     background-color: #fff;
     line-height: 12px;
+    margin-top: 8px;
 }
 
 #couponCode {
@@ -168,7 +169,7 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
 
 ul.accordion li span{
     display: block;
-    min-height: 40px;
+    min-height: 60px;
 }
 
 

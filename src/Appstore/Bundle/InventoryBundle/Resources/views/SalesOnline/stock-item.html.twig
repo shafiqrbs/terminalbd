@@ -244,7 +244,7 @@
                                                 <div class="btn-group">
                                                     {{ form_widget(form.process) }}
                                                     {{ form_errors(form.process) }}
-                                                    {{ form_widget(form.discount) }}
+                                                   {# {{ form_widget(form.discount) }}#}
                                                     <input type="hidden" name="total" id="total" value="{{ entity.total }}">
                                                     <input type="hidden" name="salesId" id="salesId" value="{{ entity.id }}">
                                                     <button rel=""  type="button" class="btn btn-large green paymentBtn" id="submitBtn"><i class="icon-refresh m-icon-white"></i>&nbsp;Process</button>

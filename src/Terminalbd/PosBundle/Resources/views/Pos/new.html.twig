@@ -5,7 +5,7 @@
     <style>{{ config.templateCss|raw }}</style>
     {% endif %}#}
     <div class="row-fluid" id="pos-area">
-        <div class="portlet box green">
+        <div class="portlet box">
             <div class="portlet-body">
                 {% if invoiceMode == 'search' %}
                 <div style="background: #e5e5e5; padding: 15px">
@@ -91,12 +91,13 @@
                                     </div>
                                 </div>
                                 <ul  class="nav nav-tabs tabs-left categoryBox" id="category-nav" style="width: 20%; float:left; background-color:#444d58">
-                                    <li class="active span12"><a href="#all-product" data-toggle="tab" class="saveButton" aria-expanded="false">All Products</a></li>
+                                    <li class="active span12"><a href="#all-product" data-toggle="tab" class="saveButton" id="allproduct" aria-expanded="false">All Products</a></li>
                                     {% for category in categories %}
-                                        <li><a href="#{{ category.slug }}" data-toggle="tab" class="saveButton" aria-expanded="false">{{ category.name }}</a></li>
+                                        <li><a href="#{{ category.slug }}" data-action="{{ path('pos_category_stock_item',{'id':category.category_id}) }}" data-toggle="tab" class="saveButton category" aria-expanded="false">{{ category.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </div>
+
                         </div>
                     {% endif %}
                     <div class="span4">
@@ -352,10 +353,10 @@
                </div>
                <div class="span4">
                    <div class="switch-progress">
-                       <input type="radio" data-id="cancel" id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" class="invoice-process" name="progress" value="order">
+                       <input type="radio" data-id="cancel" id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" class="list-load" name="list" value="order">
                        <label for="Order" class="order"><i class="icon-th-large"></i> Orders</label>
-                       <input type="radio" data-id="hold" id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" class="invoice-process" name="progress" value="hold">
-                       <label for="Hold" class="hold"><i class="icon-hand-up"></i> Hold</label>
+                       <input type="radio" data-id="hold" id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" class="list-load" name="list" value="hold">
+                       <label for="Hold" class="hold"><i class="icon-hand-up"></i> Holds</label>
                        <input type="radio" data-id="order" id="Cancel" data-action="{{ path('pos_cancel',{'mode':'cancel'}) }}" class="invoice-process" name="progress" value="cancel">
                        <label for="Cancel" class="cancel"><i class="icon-trash"></i> Cancel</label>
                    </div>
@@ -368,6 +369,8 @@
                        <label for="POS" class="pos"><i class="icon-print"></i> POS</label>
                        <input type="radio" data-id="save" id="Save" data-action="{{ path('pos_create',{'mode':'save'}) }}" class="invoice-process" name="progress" value="save">
                        <label for="Save" class="save"><i class="icon-save"></i> Save</label>
+                       <input type="radio" data-id="save-hold" id="save-hold" data-action="{{ path('pos_create',{'mode':'save-hold'}) }}" class="invoice-process" name="progress" value="save-hold">
+                       <label for="save-hold" class="save-hold"><i class="icon-pencil"></i> Save & Hold</label>
                    </div>
                </div>
 
@@ -396,6 +399,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@PosBundle/Resources/public/css/pos.css'
+    '@PosBundle/Resources/public/css/table.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

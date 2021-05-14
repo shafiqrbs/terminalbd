@@ -26,7 +26,7 @@ class PosConfig
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      **/
     private $terminal;
 
@@ -43,6 +43,13 @@ class PosConfig
      * @ORM\Column(name="autoPayment", type="boolean",  nullable=true)
      */
     private $autoPayment = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPos", type="boolean",  nullable=true)
+     */
+    private $isPos = false;
 
     /**
      * @var string
@@ -152,6 +159,22 @@ class PosConfig
     public function setTemplateCss($templateCss)
     {
         $this->templateCss = $templateCss;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPos()
+    {
+        return $this->isPos;
+    }
+
+    /**
+     * @param bool $isPos
+     */
+    public function setIsPos($isPos)
+    {
+        $this->isPos = $isPos;
     }
 
 
