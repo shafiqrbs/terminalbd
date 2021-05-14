@@ -97,7 +97,7 @@ input.form-cart, .form-cart:focus {
     color: #000;
     border-radius: 0;
     font-size: 12px;
-    padding: 0px 6px;
+    padding: 0px 0px;
     height: 28px;
     border: 1px solid transparent!important;
     border-bottom: 1px solid #ddd!important;
@@ -111,7 +111,7 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
 
 .select-cart {
     text-align: center;
-    height: 24px!important;
+    height: 32px!important;
     border: 1px solid transparent;
     padding: 0px 0px;
     width: 100%;
@@ -146,11 +146,10 @@ input.form-cart:focus,select.form-cart:focus,textarea.address:focus{
 
 .address {
     width: 100%;
-    padding: 3px 6px;
-    font-size: 11px;
+    padding: 3px 0px;
     resize: none;
-    height: 36px!important;
-    line-height: 12px;
+    height: 48px!important;
+    line-height: 18px;
     border: 1px solid transparent;
     border-bottom: 1px solid #ddd;
 }
