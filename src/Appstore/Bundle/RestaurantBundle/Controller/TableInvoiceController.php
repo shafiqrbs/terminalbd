@@ -256,6 +256,7 @@ class TableInvoiceController extends Controller
             $pos = $this->posPrint($entity);
             return new Response($pos);
         }
+        return new Response('success');
     }
 
 
