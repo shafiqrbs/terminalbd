@@ -162,7 +162,7 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-                                    {% if  app.user.granted("ROLE_DOMAIN") %}
+                                    {% if ( app.user.granted("ROLE_DOMAIN") or (entity.process in ['Done','Delivered'] and app.user.granted("ROLE_RESTAURANT_REVERSE"))) %}
                                         <a  href="{{ path('restaurant_invoice_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                 </div>

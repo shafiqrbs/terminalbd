@@ -130,10 +130,10 @@
                                                     <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" data-id="{{ entity.id }}" class="btn purple mini paymentReceive" ><i class="icon-money"></i> Print </a>
                                                 {% endif %}
                                                 <a href="{{ path('restaurant_invoice_show',{'id':entity.id}) }}"  class="btn blue mini" ><i class="icon-eye"></i> View </a>
-                                                {% if ( entity.process == 'Done' and app.user.granted("ROLE_DOMAIN")) or ( entity.process == 'Done' and app.user.granted("ROLE_RESTAURANT_REVERSE") and "now"|date("d-m-Y") == entity.created|date("d-m-Y")) %}
+                                                {% if ( entity.process == 'Done' and app.user.granted("ROLE_DOMAIN")) or ( entity.process in ['Done','Delivered']  and app.user.granted("ROLE_RESTAURANT_REVERSE")) %}
                                                 <a href="{{ path('restaurant_invoice_reverse',{'invoice':entity.invoice}) }}"  class="btn yellow mini" ><i class="icon-retweet"></i> Reverse </a>
                                                 {% endif %}
-                                                {% if ( (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN")) or entity.process == 'Done' and app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN") ) %}
+                                                {% if (entity.process == 'Done' and app.user.granted("ROLE_DOMAIN")) or (entity.process in ['Done','Delivered'] and app.user.granted("ROLE_DOMAIN_RESTAURANT_ADMIN")) %}
                                                 <a href="{{ path('restaurant_invoice_approve',{'id':entity.id}) }}"  class="btn green mini" ><i class="icon-ok"></i> Approve </a>
                                                 {% endif %}
                                             </div>
