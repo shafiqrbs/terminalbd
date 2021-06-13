@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class TimePeriodRepository extends EntityRepository
 {
-    public function getApiDeliveryLocation($config)
+    public function getApiTimePeriod($config)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.id as id','e.name as name');
