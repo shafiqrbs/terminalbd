@@ -78,7 +78,7 @@ class EcommerceProductEditType extends AbstractType
 					         ->orderBy("p.name","ASC");
 				},
 			))
-            /*->add('itemColors', 'entity', array(
+            ->add('itemColors', 'entity', array(
 				'required'    => true,
 				'class' => 'Setting\Bundle\ToolBundle\Entity\ProductColor',
 				'empty_value' => '-Choose a color-',
@@ -90,7 +90,7 @@ class EcommerceProductEditType extends AbstractType
 					          ->where("p.status = 1")
 					          ->orderBy("p.name","ASC");
 				},
-			))*/
+			))
 			->add('country', 'entity', array(
 				'required'    => true,
 				'class' => 'Setting\Bundle\LocationBundle\Entity\Country',

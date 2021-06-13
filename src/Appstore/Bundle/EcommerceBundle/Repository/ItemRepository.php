@@ -746,17 +746,22 @@ class ItemRepository extends EntityRepository
     public function getApiProductDetails(GlobalOption $option,$id)
     {
 
+
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('item');
         $qb->leftJoin('item.productUnit','productUnit');
         $qb->leftJoin('item.category','category');
         $qb->leftJoin('item.brand','brand');
         $qb->leftJoin('item.discount','discount');
-        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.content as content');
+        $qb->leftJoin('item.itemSubs','subProduct');
+        $qb->leftJoin('subProduct.size','subSize');
+        $qb->leftJoin('subProduct.productUnit','subUnit');
+        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.content as content','item.subProduct as subItemStatus');
         $qb->addSelect('category.name as categoryName');
         $qb->addSelect('brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
         $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect("CASE WHEN (item.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subSize.name,'*#*',subUnit.name,'*#*', subProduct.salesPrice))  ELSE  '' END  as subProducts");
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
         $row = $qb->getQuery()->getOneOrNullResult();
@@ -774,11 +779,52 @@ class ItemRepository extends EntityRepository
         $data['unitName']                 = $row['unitName'];
         $data['quantityApplicable']       = $row['quantityApplicable'];
         $data['content']                  = $row['content'];
+        $data['subItemStatus']            = $row['subItemStatus'];
         if($row['path']){
             $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
             $data['imagePath']            =  $path;
         }else{
             $data['imagePath']            = "";
+        }
+        $subProducts = explode(',', $row['subProducts']);
+        if(!empty($row['subProducts'])){
+            for ($i = 0 ; count($subProducts) > $i ; $i++ ){
+                $subs  = explode("*#*",$subProducts[$i]);
+                $data['measurement'][$i]['subItemId'] = (integer)$subs[0];
+                $data['measurement'][$i]['name'] = (string)$subs[1];
+                $data['measurement'][$i]['unit'] = (string)$subs[2];
+                $data['measurement'][$i]['price'] = (integer)$subs[3];
+            }
+
+        }else{
+            $data['measurement'] = array();
+        }
+        /* @var $item Item */
+
+        $item = $this->find($row['itemId']);
+        if($item->getItemColors()){
+            foreach ($item->getItemColors() as $key => $sub ){
+                $data['color'][$key]['colorId'] = (integer)$sub->getId();
+                $data['color'][$key]['name'] = (string)$sub->getName();
+                $data['color'][$key]['colorPlate'] =  (string)$sub->getColorPlate();
+            }
+
+        }else{
+            $data['color'] = array();
+        }
+
+        if($item->getItemGalleries()){
+            foreach ($item->getItemGalleries() as $key => $sub ){
+                $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
+                if($sub->getPath()){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$item->getId()}/gallery/{$sub->getPath()}");
+                    $data['gallery'][$key]['imagePath']            =  $path;
+                }else{
+                    $data['gallery'][$key]['imagePath']            = "";
+                }
+            }
+        }else{
+            $data['gallery'] = array();
         }
         return $data;
     }

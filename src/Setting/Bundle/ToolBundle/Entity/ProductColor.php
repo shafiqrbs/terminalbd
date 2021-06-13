@@ -39,6 +39,15 @@ class ProductColor
      */
     protected $itemSub;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="colorPlate", type="string", length=50, nullable = true)
+     */
+    private $colorPlate;
+
+
+
 
     /**
      * @var string
@@ -195,6 +204,22 @@ class ProductColor
     public function getOrderItem()
     {
         return $this->orderItem;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorPlate()
+    {
+        return $this->colorPlate;
+    }
+
+    /**
+     * @param string $colorPlate
+     */
+    public function setColorPlate($colorPlate)
+    {
+        $this->colorPlate = $colorPlate;
     }
 
 }

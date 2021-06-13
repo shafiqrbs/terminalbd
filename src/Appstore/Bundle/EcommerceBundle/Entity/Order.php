@@ -105,6 +105,13 @@ class Order
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderId", type="integer",  nullable=true)
+     */
+    private $orderId;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="process", type="string", length=50,  nullable=true)
@@ -236,6 +243,13 @@ class Order
     /**
      * @var float
      *
+     * @ORM\Column(name="apiId", type="integer", nullable = true)
+     */
+    private $apiId;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="shippingCharge", type="float", nullable = true)
      */
     private $shippingCharge;
@@ -246,6 +260,56 @@ class Order
      * @ORM\Column(name="vat", type="float", nullable = true)
      */
     private $vat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float", nullable = true)
+     */
+    private $subTotal;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discount", type="float", nullable = true)
+     */
+    private $discount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total", type="float", nullable = true)
+     */
+    private $total;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="receive", type="float" , nullable = true)
+     */
+    private $receive;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="due", type="float" , nullable = true)
+     */
+    private $due;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="returnAmount", type="float" , nullable = true)
+     */
+    private $returnAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountAmount", type="float" , nullable = true)
+     */
+    private $discountAmount;
+
 
     /**
      * @var float
@@ -281,20 +345,6 @@ class Order
      * @ORM\Column(name="couponAmount", type="float" , nullable = true)
      */
     private $couponAmount;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="returnAmount", type="float" , nullable = true)
-     */
-    private $returnAmount;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="discountAmount", type="float" , nullable = true)
-     */
-    private $discountAmount;
 
 
     /**
@@ -351,8 +401,6 @@ class Order
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
-
-
 
 
 
@@ -1188,6 +1236,118 @@ class Order
     public function setPaymentMobile($paymentMobile)
     {
         $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReceive()
+    {
+        return $this->receive;
+    }
+
+    /**
+     * @param float $receive
+     */
+    public function setReceive($receive)
+    {
+        $this->receive = $receive;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDue()
+    {
+        return $this->due;
+    }
+
+    /**
+     * @param float $due
+     */
+    public function setDue($due)
+    {
+        $this->due = $due;
+    }
+
+    /**
+     * @return float
+     */
+    public function getApiId()
+    {
+        return $this->apiId;
+    }
+
+    /**
+     * @param float $apiId
+     */
+    public function setApiId($apiId)
+    {
+        $this->apiId = $apiId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param int $orderId
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
     }
 
 

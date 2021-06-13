@@ -75,9 +75,17 @@ class ItemColor
     /**
      * @var integer
      *
-     * @ORM\Column(name="code", type="integer", length=255, nullable = true)
+     * @ORM\Column(name="code", type="integer", length=10, nullable = true)
      */
     private $code;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="colorPlate", type="string", length=50, nullable = true)
+     */
+    private $colorPlate;
 
 
     /**
@@ -278,6 +286,22 @@ class ItemColor
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getColorPlate()
+    {
+        return $this->colorPlate;
+    }
+
+    /**
+     * @param int $colorPlate
+     */
+    public function setColorPlate($colorPlate)
+    {
+        $this->colorPlate = $colorPlate;
     }
 }
 

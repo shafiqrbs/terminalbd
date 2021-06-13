@@ -77,6 +77,30 @@ api_ecommerce_login:
     options:
             expose: true
 
+api_ecommerce_order:
+    path:     /order
+    defaults: { _controller: BinduBundle:ApiEcommerce:order }
+    methods:  POST
+    options:
+            expose: true
+
+api_ecommerce_order_list:
+    path:     /order-list
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderList }
+
+api_ecommerce_order_details:
+    path:     /order-details
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderDetails }
+
+api_ecommerce_time_period:
+    path:     /order-time-period
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderTimePeriod }
+
+api_ecommerce_order_location:
+    path:     /order-location
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderDeliveryLocation }
+
+
 api_ecommerce_registration:
     path:     /user-register
     defaults: { _controller: BinduBundle:ApiEcommerce:userRegister }

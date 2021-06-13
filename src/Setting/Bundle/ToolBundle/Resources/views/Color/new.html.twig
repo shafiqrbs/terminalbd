@@ -36,18 +36,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Variant Color Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('color_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('color') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('color_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('color_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn red" href="{{ path('color_new') }}"><i class="icon-signout"></i>&nbsp; Add Color</a>
+                                <a class="btn" href="{{ path('color') }}"><i class="icon-th-list"></i>&nbsp; Color </a>
                             </div>
                         </div>
 
@@ -63,7 +53,7 @@
 
                             <div class="row-fluid">
 
-                                <div class="span6 ">
+                                <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Name</label>
                                         <div class="controls">
@@ -75,7 +65,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Color Plate</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.colorPlate) }}
+                                                {{ form_errors(form.colorPlate) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Status</label>
                                         <div class="controls">

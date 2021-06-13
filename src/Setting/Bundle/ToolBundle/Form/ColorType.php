@@ -20,6 +20,10 @@ class ColorType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  color name'))
             )))
+            ->add('colorPlate','text', array('attr'=>array('class'=>'m-wrap span10 colorpicker-default','placeholder'=>'Add  color plate'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please add  color plate'))
+            )))
             ->add('status');
     }
     

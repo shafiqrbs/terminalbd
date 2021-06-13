@@ -5,6 +5,8 @@ namespace Appstore\Bundle\InventoryBundle\Importer;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
+use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 
@@ -31,14 +33,14 @@ class ProductExcel
         foreach($this->data as $key => $item) {
 
             $name = ucfirst(strtolower($item['ProductName']));
+            $category = ucfirst(strtolower($item['Category']));
           //  $productID = $item['ProductID'];
             $productOld = $this->getDoctrain()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $inventory,'name' => $name));
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
                 $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
-                $time = new \DateTime('now');
-                $barcode = empty($item['Barcode']) ? $time : $item['Barcode'];
+                $barcode = empty($item['Barcode']) ? time() : $item['Barcode'];
                 $product = new Item();
                 $product->setInventoryConfig($inventory);
                 $product->setName($name);
@@ -46,13 +48,8 @@ class ProductExcel
                 $product->setPurchasePrice($purchasePrice);
                 $product->setBarcode($barcode);
                 if ($name) {
-                    $master = $this->getMasterItem($name,$unit);
+                    $master = $this->getMasterItem($name,$category,$unit);
                     $product->setMasterItem($master);
-                }
-                $category = $item['Category'];
-                if ($category) {
-                    $category = $this->getCategory(ucfirst(strtolower($category)));
-                    $product->setCategory($category);
                 }
                 $brand = $item['Brand'];
                 if ($brand) {
@@ -64,16 +61,6 @@ class ProductExcel
                     $size = $this->getSize(ucfirst(strtolower($size)));
                     $product->setSize($size);
                 }
-                $unit = $item['ProductUnit'];
-                if ($unit) {
-                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
-                    $product->setProductUnit($unit);
-                }
-                $sizeUnit = $item['SizeUnit'];
-                if ($sizeUnit) {
-                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
-                    $product->setSizeUnit($sizeUnit);
-                }
                 $this->save($product);
             }
 
@@ -81,7 +68,7 @@ class ProductExcel
 
     }
 
-    private function getMasterItem($item,$unit)
+    private function getMasterItem($item,$category,$unit)
     {
         $inventory = $this->excelImport->getInventoryConfig();
         $masterRepository = $this->getProductRepository();
@@ -100,9 +87,77 @@ class ProductExcel
             if(!empty($unit)){
                 $product->setProductUnit($unit);
             }
+            if ($category) {
+                $category = $this->getCategory(ucfirst(strtolower($category)));
+                $product->setCategory($category);
+            }
             $product = $this->save($product);
             return $product;
         }
+    }
+
+    private function getCategory($item)
+    {
+        $config = $this->excelImport->getInventoryConfig();
+        $categoryRepository = $this->getCategoryRepository();
+
+        $category = $categoryRepository->findOneBy(array(
+            'inventoryConfig'   => $config,
+            'name'              => $item
+        ));
+        if($category){
+            return $category;
+        }else{
+            $category = new Category();
+            $category->setName($item);
+            $category->setinventoryConfig($config);
+            $category = $this->save($category);
+            return $category;
+        }
+
+
+    }
+
+    private function getBrand($item)
+    {
+
+        $config = $this->excelImport->getInventoryConfig();
+        $brandRepository = $this->getBrandRepository();
+
+        $brand = $brandRepository->findOneBy(array(
+            'inventoryConfig'   => $config,
+            'name'              => $item
+        ));
+        if($brand){
+            return $brand;
+        }else{
+            $brand = new \Appstore\Bundle\InventoryBundle\Entity\ItemBrand();
+            $brand->setName($item);
+            $brand->setinventoryConfig($config);
+            $brand = $this->save($brand);
+            return $brand;
+        }
+
+    }
+
+    private function getSize($item)
+    {
+
+        $sizeRepository = $this->getSizeRepository();
+
+        $size = $sizeRepository->findOneBy(array(
+            'name'              => $item
+        ));
+
+        if($size){
+            return $size;
+        }else{
+            $size = new ProductSize();
+            $size->setName($item);
+            $size = $this->save($size);
+            return $size;
+        }
+
     }
 
     private function save($entity){
@@ -149,6 +204,31 @@ class ProductExcel
     private function getProductRepository()
     {
         return $this->getDoctrain()->getRepository('InventoryBundle:Product');
+    }
+
+    /**
+     * @return  @return \Appstore\Bundle\InventoryBundle\Repository\ItemBrandRepository
+     */
+    private function getBrandRepository()
+    {
+        return $this->getDoctrain()->getRepository('InventoryBundle:ItemBrand');
+    }
+    
+
+    /**
+     * @return  @return \Appstore\Bundle\SettingToolBundle\Repository\ProductSizeRepository
+     */
+    private function getSizeRepository()
+    {
+        return $this->getDoctrain()->getRepository('SettingToolBundle:ProductSize');
+    }
+
+    /**
+     * @return  @return \Product\Bundle\ProductProductBundle\Entity\CategoryRepository
+     */
+    private function getCategoryRepository()
+    {
+        return $this->getDoctrain()->getRepository('ProductProductBundle:Category');
     }
 
 

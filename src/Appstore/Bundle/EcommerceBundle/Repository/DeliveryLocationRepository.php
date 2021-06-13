@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeliveryLocationRepository extends EntityRepository
 {
+
+    public function getApiDeliveryLocation($config)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id','e.name as name');
+        $qb->where("e.ecommerceConfig = :option")->setParameter('option', $config->getId());
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
 }

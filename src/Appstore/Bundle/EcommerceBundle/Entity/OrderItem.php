@@ -39,21 +39,6 @@ class OrderItem
      **/
     private  $item;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", inversedBy="orderItems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $itemSub;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="orderItem")
-     **/
-    private  $size;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="orderItem")
-     **/
-    private  $color;
 
     /**
      * @var string
@@ -68,6 +53,13 @@ class OrderItem
      * @ORM\Column(name="itemName", type="string", nullable=true)
      */
     private $itemName;
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="imagePath", type="string", nullable=true)
+     */
+    private $imagePath;
 
      /**
      * @var string
@@ -91,7 +83,37 @@ class OrderItem
     private $unitName;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="size", type="string" , nullable=true)
+     */
+    private $size;
+
+
     /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string" , nullable=true)
+     */
+    private $color;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderId", type="integer" ,nullable=true)
+     */
+    private $orderId;
+
+      /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderItemId", type="integer" ,nullable=true)
+     */
+    private $orderItemId;
+
+     /**
      * @var integer
      *
      * @ORM\Column(name="quantity", type="smallint" ,nullable=true)
@@ -226,41 +248,6 @@ class OrderItem
     }
 
 
-    /**
-     * @return ProductColor
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
-
-    /**
-     * @param ProductColor $color
-     */
-    public function setColor($color)
-    {
-        $this->color = $color;
-    }
-
-
-
-    /**
-     * @return ProductSize
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param ProductSize $size
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
-
-
 
     /**
      * @return int
@@ -278,21 +265,6 @@ class OrderItem
         $this->status = $status;
     }
 
-    /**
-     * @return ItemSub
-     */
-    public function getItemSub()
-    {
-        return $this->itemSub;
-    }
-
-    /**
-     * @param ItemSub $itemSub
-     */
-    public function setItemSub($itemSub)
-    {
-        $this->itemSub = $itemSub;
-    }
 
     /**
      * @return Item
@@ -409,6 +381,86 @@ class OrderItem
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param string $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param int $orderId
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderItemId()
+    {
+        return $this->orderItemId;
+    }
+
+    /**
+     * @param int $orderItemId
+     */
+    public function setOrderItemId($orderItemId)
+    {
+        $this->orderItemId = $orderItemId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagePath()
+    {
+        return $this->imagePath;
+    }
+
+    /**
+     * @param string $imagePath
+     */
+    public function setImagePath($imagePath)
+    {
+        $this->imagePath = $imagePath;
     }
 
 

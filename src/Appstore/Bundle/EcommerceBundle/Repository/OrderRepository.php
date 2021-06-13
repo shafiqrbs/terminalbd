@@ -75,6 +75,8 @@ class OrderRepository extends EntityRepository
     }
 
 
+
+
     public function insertOrder(GlobalOption $globalOption)
     {
         $em = $this->_em;
@@ -343,10 +345,193 @@ class OrderRepository extends EntityRepository
         $em->flush();
     }
 
-    public function insertAndroidOrder(GlobalOption $option,$data= array())
+    public function insertAndroidOrder(GlobalOption $option , $data= array())
     {
+        $jsonUser = json_decode($data['jsonUser'],true);
+        $userJson = $jsonUser[0];
+        $jsonOrder = json_decode($data['jsonOrder'],true);
+        $orderJson = $jsonOrder[0];
+        $em = $this->_em;
+
+        $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
+        $user = $em->getRepository('UserBundle:User')->find($userId);
+        $address        = empty($userJson['address']) ? '' : $userJson['address'];
+        $mobile         = empty($userJson['mobile']) ? '' : $userJson['mobile'];
+        $location       = empty($userJson['location']) ? '' : $userJson['location'];
+
+        $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
+        $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];
+        $comment        = empty($orderJson['comment']) ? '' : $orderJson['comment'];
+        $deliveryDate   = empty($orderJson['deliveryDate']) ? '' : $orderJson['deliveryDate'];
+        $timePeriod     = empty($orderJson['timePeriod']) ? '' : $orderJson['timePeriod'];
+        $accountMobile  = empty($orderJson['bankAccount']) ? '' : $orderJson['bankAccount'];
+        $paymentMobile  = empty($orderJson['paymentMobile']) ? '' : $orderJson['paymentMobile'];
+        $transactionId  = empty($orderJson['transactionId']) ? '' : $orderJson['transactionId'];
+        $subTotal       = empty($orderJson['subTotal']) ? '' : $orderJson['subTotal'];
+        $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
+        $shippingCharge = empty($orderJson['shippingCharge']) ? '' : $orderJson['shippingCharge'];
+        $find = $this->findOneBy(array('globalOption'=>$option,'orderId'=> $orderId));
+        if(!empty($find)){
+            $order = new Order();
+            $order->setGlobalOption($option);
+            $order->setCreatedBy($user);
+            $order->setAddress($address);
+            $order->setCustomerName($user->getProfile()->getName());
+            $order->setCustomerMobile($mobile);
+            $order->setOrderId($orderId);
+            if($location){
+                $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
+                $order->setLocation($loc);
+            }
+            if($timePeriod){
+                $period = $em->getRepository('EcommerceBundle:TimePeriod')->find($timePeriod);
+                $order->setTimePeriod($period);
+            }
+            if(empty($deliveryDate)){
+                $order->setDeliveryDate(new \DateTime("now"));
+            }else{
+                $date =new \DateTime($deliveryDate);
+                $order->setDeliveryDate($date);
+            }
+            if($accountMobile){
+                $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($accountMobile);
+                $order->setAccountMobileBank($account);
+                $order->setPaymentMobile($paymentMobile);
+                $order->setTransaction($transactionId);
+                $order->setCashOnDelivery(false);
+            }else{
+                $order->setCashOnDelivery(true);
+            }
+            $order->setEcommerceConfig($option->getEcommerceConfig());
+            $order->setShippingCharge($shippingCharge);
+            $vat = $this->getCulculationVat($option, $total);
+            $order->setVat($vat);
+            $order->setComment($comment);
+            $order->setSubTotal($subTotal);
+            $order->setTotalAmount($total);
+            $order->setTotal($total);
+            $grandTotal = $total + $shippingCharge + $vat;
+            if (!empty($couponCode)) {
+                $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($option,$couponCode);
+                if (!empty($coupon)){
+                    $couponAmount = $this->getCalculatorCouponAmount($order->getTotalAmount(), $coupon);
+                    $order->setGrandTotalAmount($grandTotal - $couponAmount);
+                    $order->setTotal($grandTotal - $couponAmount);
+                    $order->setCoupon($coupon);
+                    $order->setCouponAmount($couponAmount);
+                }
+            }else{
+                $order->setGrandTotalAmount($grandTotal);
+                $order->setTotal($grandTotal);
+            }
+            $em->persist($order);
+            $em->flush();
+            $this->insertJsonOrderItem($order,$data);
+            return $order;
+        }
+        return false;
+
 
     }
+
+    public function insertJsonOrderItem(Order $order,$data)
+    {
+
+        $em = $this->_em;
+        $orderItem = json_decode($data['jsonOrderItem'],true);
+        foreach ($orderItem as $row){
+            $find = $em->getRepository('EcommerceBundle:OrderItem')->findOneBy(array('order' => $order,'orderItemId'=>$row['id']));
+            if(empty($find)){
+                $item = $em->getRepository('EcommerceBundle:Item')->find($row['itemId']);
+                $orderItem = new OrderItem();
+                $orderItem->setOrder($order);
+                $orderItem->setOrderItemId($row['id']);
+                $orderItem->setOrderId($row['orderId']);
+                if($item){
+                    $orderItem->setItem($item);
+                }
+                $orderItem->setPrice($row['price']);
+                $orderItem->setQuantity($row['quantity']);
+                $orderItem->setItemName($row['name']);
+                $orderItem->setSize($row['size']);
+                $orderItem->setColor($row['color']);
+                $orderItem->setImagePath($row['url']);
+                $orderItem->setSubTotal($row['price'] * $row['quantity']);
+                $em->persist($orderItem);
+                $em->flush();
+            }
+
+        }
+
+    }
+
+    public function getApiOrders($option, $arr)
+    {
+        $user = $arr['user'];
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.location','l');
+        $qb->leftJoin('e.timePeriod','tp');
+        $qb->leftJoin('e.orderItems','subProduct');
+        $qb->select('e.id as id','e.created as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
+            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','e.deliveryDate as deliveryDate');
+        $qb->addSelect("l.name as location");
+        $qb->addSelect("tp.name as timePeriod");
+        $qb->where("e.globalOption = :option")->setParameter('option', $option->getId());
+        $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
+
+    public function getApiOrderDetails($order)
+    {
+
+        //$user = $arr['user'];
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.location','l');
+        $qb->leftJoin('e.timePeriod','tp');
+        $qb->leftJoin('e.orderItems','subProduct');
+        $qb->select('e.id as id','e.created as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
+            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','e.deliveryDate as deliveryDate');
+        $qb->addSelect("l.name as location");
+        $qb->addSelect("tp.name as timePeriod");
+        $qb->addSelect("GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subProduct.itemName,'*#*',subProduct.price,'*#*', subProduct.quantity,'*#*', subProduct.size,'*#*', subProduct.color,'*#*', subProduct.imagePath)) as orderItems");
+        $qb->where("e.id = :id")->setParameter('id', 69);
+        $row = $qb->getQuery()->getOneOrNullResult();
+        $data = array();
+        $data['order_id'] = (int)$row['id'];
+        $data['created'] = $row['created'];
+        $data['total'] = $row['total'];
+        $data['subTotal'] = $row['subTotal'];
+        $data['invoice'] = $row['invoice'];
+        $data['timePeriod'] = $row['timePeriod'];
+        $data['location'] = $row['location'];
+        $data['process'] = $row['process'];
+        $data['deliveryDate'] = $row['deliveryDate'];
+        $data['shippingCharge'] = $row['shippingCharge'];
+        $data['cashOnDelivery'] = $row['cashOnDelivery'];
+        $orderItems = explode(',', $row['orderItems']);
+        if (!empty($row['orderItems'])) {
+            for ($i = 0; count($orderItems) > $i; $i++) {
+                $subs = explode("*#*", $orderItems[$i]);
+                $data['orderItem'][$i]['subItemId'] = (integer)$subs[0];
+                $data['orderItem'][$i]['name'] = (string)$subs[1];
+                $data['orderItem'][$i]['price'] = (integer)$subs[2];
+                $data['orderItem'][$i]['quantity'] = (integer)$subs[3];
+                $data['orderItem'][$i]['size'] = (string)$subs[4];
+                $data['orderItem'][$i]['color'] = (string)$subs[5];
+                $data['orderItem'][$i]['imagePath'] = (string)$subs[6];
+
+            }
+        } else {
+            $data['orderItem'] = array();
+        }
+        return $data;
+
+    }
+
 
 
 
