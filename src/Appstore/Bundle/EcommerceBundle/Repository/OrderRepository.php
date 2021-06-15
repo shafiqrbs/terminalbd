@@ -370,13 +370,12 @@ class OrderRepository extends EntityRepository
         $subTotal       = empty($orderJson['subTotal']) ? '' : $orderJson['subTotal'];
         $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
         $shippingCharge = empty($orderJson['shippingCharge']) ? '' : $orderJson['shippingCharge'];
-        $find = $this->findOneBy(array('globalOption'=>$option,'orderId'=> $orderId));
-        if(!empty($find)){
+        $find = $this->findOneBy(array('globalOption' => $option,'orderId'=> $orderId));
+        if(empty($find)){
             $order = new Order();
             $order->setGlobalOption($option);
             $order->setCreatedBy($user);
             $order->setAddress($address);
-            $order->setCustomerName($user->getProfile()->getName());
             $order->setCustomerMobile($mobile);
             $order->setOrderId($orderId);
             if($location){

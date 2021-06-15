@@ -742,6 +742,61 @@ class ItemRepository extends EntityRepository
         return $result;
     }
 
+    public function getApiRelatedProduct(GlobalOption $option,$data = array())
+    {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.productUnit','productUnit');
+        $qb->leftJoin('item.category','category');
+        $qb->leftJoin('item.brand','brand');
+        $qb->leftJoin('item.discount','discount');
+        $qb->leftJoin('item.promotion','promotion');
+        $qb->leftJoin('item.tag','tag');
+        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->addSelect('category.name as categoryName','category.id as categoryId');
+        $qb->addSelect('brand.name as brandName','brand.id as brandId');
+        $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
+        $qb->addSelect('tag.name as tagName','tag.id as tagId');
+        $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $this->handleApiSearchBetween($qb,$data);
+        $qb->setMaxResults(12);
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['product_id']               = (int) $row['id'];
+                $data[$key]['name']                     = $row['name'];
+                $data[$key]['quantity']                 = $row['quantity'];
+                $data[$key]['price']                    = $row['price'];
+                $data[$key]['discountPrice']            = $row['discountPrice'];
+                $data[$key]['categoryId']               = $row['categoryId'];
+                $data[$key]['category']                 = $row['categoryName'];
+                $data[$key]['brandId']                  = $row['brandId'];
+                $data[$key]['brand']                    = $row['brandName'];
+                $data[$key]['discountId']               = $row['discountId'];
+                $data[$key]['discount']                 = $row['discountName'];
+                $data[$key]['discountType']             = $row['discountType'];
+                $data[$key]['discountAmount']           = $row['discountAmount'];
+                $data[$key]['promotionId']              = $row['promotionId'];
+                $data[$key]['promotion']                = $row['promotionName'];
+                $data[$key]['tagId']                    = $row['tagId'];
+                $data[$key]['tag']                      = $row['tagName'];
+                $data[$key]['unitName']                 = $row['unitName'];
+                $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+        return $data;
+    }
+
 
     public function getApiProductDetails(GlobalOption $option,$id)
     {
@@ -802,6 +857,8 @@ class ItemRepository extends EntityRepository
         /* @var $item Item */
 
         $item = $this->find($row['itemId']);
+
+
         if($item->getItemColors()){
             foreach ($item->getItemColors() as $key => $sub ){
                 $data['color'][$key]['colorId'] = (integer)$sub->getId();
@@ -811,6 +868,17 @@ class ItemRepository extends EntityRepository
 
         }else{
             $data['color'] = array();
+        }
+
+        if($item->getItemKeyValues()){
+            foreach ($item->getItemKeyValues() as $key => $sub ){
+                $data['specification'][$key]['metaId'] = (integer)$sub->getId();
+                $data['specification'][$key]['label'] = (string)$sub->getMetaKey();
+                $data['specification'][$key]['value'] = (string)$sub->getMetavalue();
+            }
+
+        }else{
+            $data['specification'] = array();
         }
 
         if($item->getItemGalleries()){
@@ -823,6 +891,7 @@ class ItemRepository extends EntityRepository
                     $data['gallery'][$key]['imagePath']            = "";
                 }
             }
+            $data['gallery'][100]['imageId'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
         }else{
             $data['gallery'] = array();
         }
