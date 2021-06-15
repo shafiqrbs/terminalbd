@@ -92,6 +92,10 @@ api_ecommerce_order_details:
     path:     /order-details
     defaults: { _controller: BinduBundle:ApiEcommerce:orderDetails }
 
+api_ecommerce_related_product:
+    path:     /related-product
+    defaults: { _controller: BinduBundle:ApiEcommerce:relatedProduct }
+
 api_ecommerce_time_period:
     path:     /order-time-period
     defaults: { _controller: BinduBundle:ApiEcommerce:orderTimePeriod }
@@ -99,7 +103,6 @@ api_ecommerce_time_period:
 api_ecommerce_order_location:
     path:     /order-location
     defaults: { _controller: BinduBundle:ApiEcommerce:orderDeliveryLocation }
-
 
 api_ecommerce_registration:
     path:     /user-register

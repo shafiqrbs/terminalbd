@@ -872,6 +872,37 @@ class CategoryRepository extends MaterializedPathRepository
         return $array == null ? array() : $array;
     }
 
+    public function getFlatInventoryCategoryTree(InventoryConfig $config)
+    {
+
+        $categories = $this->createQueryBuilder("node")
+            ->where('node.inventoryConfig = :config')
+            ->andWhere('node.level = :level')
+            ->setParameter('config', $config)
+            ->setParameter('level', 1)
+            ->orderBy('node.level','ASC')
+            ->getQuery()->getResult();
+
+        $arr =array();
+        $array =array();
+        if(!empty($categories)){
+
+            /* @var $category Category */
+
+            foreach($categories as $category){
+
+                $arr[] = array(
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'level' => $category->getLevel(),
+                    '__children' => $this->childrenHierarchy($category)
+                );
+            }
+            $this->buildFlatCategoryTree($arr , $array);
+        }
+        return $array == null ? array() : $array;
+    }
+
     function categoryTree($config){
 
         $items = array();

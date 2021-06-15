@@ -76,7 +76,7 @@ class CustomCategoryType extends AbstractType
 	protected function categoryChoiceList()
 	{
 
-		return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
+		return $categoryTree = $this->em->getFlatInventoryCategoryTree($this->inventoryConfig);
 
 	}
 

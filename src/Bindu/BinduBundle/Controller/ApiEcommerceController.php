@@ -288,12 +288,33 @@ class ApiEcommerceController extends Controller
             $entity = $this->checkApiValidation($request);
             $productDetails = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$itemId);
             $response = new Response();
-            $item = $this->getDoctrine()->getRepository("EcommerceBundle:Item")->find($itemId);
-            $search = array('category' => $item->getCategory()->getId());
-            $relatedProduct = $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiRelatedProduct($entity,$search);
             $response->headers->set('Content-Type', 'application/json');
-            $final = array('productDetails'=>$productDetails,'relatedProduct' => $relatedProduct);
-            $response->setContent(json_encode($final));
+            $response->setContent(json_encode($productDetails));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function relatedProductAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $itemId = $_REQUEST['category'];
+            $entity = $this->checkApiValidation($request);
+            $search = array('category' => $itemId);
+            $relatedProduct = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiRelatedProduct($entity,$search);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($relatedProduct));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

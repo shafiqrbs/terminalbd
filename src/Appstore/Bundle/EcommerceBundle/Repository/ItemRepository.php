@@ -754,6 +754,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
         $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->addSelect('random() as HIDDEN rand');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
@@ -762,7 +763,8 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('tag.name as tagName','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
-        $qb->setMaxResults(12);
+        $qb->setMaxResults(24);
+        $qb->orderBy('rand');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
         if($result){
@@ -882,7 +884,10 @@ class ItemRepository extends EntityRepository
         }
 
         if($item->getItemGalleries()){
-            foreach ($item->getItemGalleries() as $key => $sub ){
+            $data['gallery'][0]['imageId'] = -100;
+            $data['gallery'][0]['imagePath'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+            $key = 1;
+            foreach ($item->getItemGalleries() as $sub ){
                 $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
                 if($sub->getPath()){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$item->getId()}/gallery/{$sub->getPath()}");
@@ -890,8 +895,8 @@ class ItemRepository extends EntityRepository
                 }else{
                     $data['gallery'][$key]['imagePath']            = "";
                 }
+                $key++;
             }
-            $data['gallery'][100]['imageId'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
         }else{
             $data['gallery'] = array();
         }

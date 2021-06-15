@@ -125,3 +125,4 @@ doctrine:
             string_functions:
                 group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
                 date_format:  Setting\Bundle\ToolBundle\DQL\DateFormat
+                random:  Setting\Bundle\ToolBundle\DQL\Random
