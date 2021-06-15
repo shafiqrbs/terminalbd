@@ -284,12 +284,16 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
-            $item = $_REQUEST['id'];
+            $itemId = $_REQUEST['id'];
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$item);
+            $productDetails = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProductDetails($entity,$itemId);
             $response = new Response();
+            $item = $this->getDoctrine()->getRepository("EcommerceBundle:Item")->find($itemId);
+            $search = array('category' => $item->getCategory()->getId());
+            $relatedProduct = $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiRelatedProduct($entity,$search);
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $final = array('productDetails'=>$productDetails,'relatedProduct' => $relatedProduct);
+            $response->setContent(json_encode($final));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -646,7 +650,7 @@ class ApiEcommerceController extends Controller
             $attachFile = '';
             $jsonUser = '[
                 {
-                "userId":"1538","address":"Dhaka","mobile":"01828148148","email":"shafiq@rightbrainsolution.com","pickupAddress":"Mirpur,Dhaka","location":"Mirpur"
+                "userId":"1538","address":"Dhaka","mobile":"01828148148","location":"Mirpur"
                 }
             ]';
 
@@ -665,7 +669,11 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
-            $returnData = array('order'=>$order->getInvoice());
+            if($order){
+                $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
+            }else{
+                $returnData = array('orderId'=>'','invoice'=>'','status'=>'failed');
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($returnData));
