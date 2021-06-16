@@ -42,7 +42,7 @@ class PurchaseItemSimpleType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->andWhere("p.inventoryConfig ={$this->inventoryConfig->getId()}")
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -52,10 +52,9 @@ class PurchaseItemSimpleType extends AbstractType
                     new NotBlank(array('message'=>'Add item quantity')))))
 
             ->add('salesPrice','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item sales price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Add sales price')))))
+                ))
 
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item purchase price'),
+            ->add('purchaseSubTotal','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item purchase price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add purchase price')))))
             ;

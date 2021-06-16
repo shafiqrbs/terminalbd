@@ -66,20 +66,19 @@ class ItemRepository extends EntityRepository
     public function checkDuplicateSKU(InventoryConfig $inventory,$data)
     {
 
-
-        $masterItem = $data['appstore_bundle_inventorybundle_item']['masterItem'];
-        $vendor = isset($data['appstore_bundle_inventorybundle_item']['vendor']) ? $data['appstore_bundle_inventorybundle_item']['vendor'] :'NULL';
-        $itemColor = isset ($data['appstore_bundle_inventorybundle_item']['color']) ? $data['appstore_bundle_inventorybundle_item']['color']:'NULL';
-        $itemSize = isset($data['appstore_bundle_inventorybundle_item']['size']) ? $data['appstore_bundle_inventorybundle_item']['size'] : 'NULL';
-        $itemBrand = isset($data['appstore_bundle_inventorybundle_item']['brand'])?$data['appstore_bundle_inventorybundle_item']['brand']:'NULL';
+        $product = $this->_em->getRepository("InventoryBundle:Product")->insertMasterItem($inventory,$data);
+        $masterItem = $data['item']['name'];
+        $vendor = isset($data['item']['vendor']) ? $data['item']['vendor'] :'NULL';
+        $itemColor = isset ($data['item']['color']) ? $data['item']['color']:'NULL';
+        $itemSize = isset($data['item']['size']) ? $data['item']['size'] : 'NULL';
+        $itemBrand = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
 
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.masterItem', 'm');
         $qb->select('COUNT(item.id) AS totalNumber');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-
-        $qb->andWhere('item.masterItem = :masterId');
+        $qb->andWhere('item.name= :masterId');
         $qb->setParameter('masterId', $masterItem);
         if($inventory->getIsSize() == 1) {
             $qb->andWhere('item.size = :itemSize');
@@ -98,7 +97,7 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('itemBrand', $itemBrand);
         }
         $count = $qb->getQuery()->getOneOrNullResult();
-        $result = $count['totalNumber'];
+        $result = array('masterItem'=> $product , 'count' => $count['totalNumber']);
         return $result;
 
     }
@@ -454,12 +453,16 @@ class ItemRepository extends EntityRepository
     public function getItemUpdatePriceQnt(Purchase $purchase){
 
         $em = $this->_em;
+        /* @var $purchaseItem PurchaseItem */
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             $entity = $purchaseItem->getItem();
             /** @var Item $entity */
             $qnt = $this->_em->getRepository('InventoryBundle:StockItem')->getItemQuantity($entity->getId(),'purchase');
             $entity->setPurchaseQuantity($qnt);
+            if($purchaseItem->getSalesPrice() > 0 ){
+                $entity->setSalesPrice($purchaseItem->getSalesPrice());
+            }
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
             $em->flush();

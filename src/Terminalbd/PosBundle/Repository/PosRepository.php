@@ -115,7 +115,7 @@ class PosRepository extends EntityRepository
             $vat = (($total * $sdPercentage)/100);
             $entity->setSd($vat);
         }
-        $total = ($entity->getSubTotal() - $entity->getDiscount() + $entity->getVat() + $entity->getSd()+ $entity->getDeliveryCharge());
+        $total = (($entity->getSubTotal() + $entity->getDeliveryCharge() + $entity->getVat() + $entity->getSd())- $entity->getDiscount());
         $entity->setTotal($total);
         $em->persist($entity);
         $em->flush();

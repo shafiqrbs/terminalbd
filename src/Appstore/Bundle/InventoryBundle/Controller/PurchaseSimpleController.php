@@ -390,8 +390,8 @@ class PurchaseSimpleController extends Controller
         if ($purchaseItemForm->isValid()) {
             $purchaseItem->setPurchase($purchase);
             $purchaseItem->setName($purchaseItem->getItem()->getName());
-            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPurchasePrice());
-            $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
+            $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
+            $purchaseItem->setPurchasePrice($purchasePrice);
             $salesSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
             $purchaseItem->setSalesSubTotal($salesSubTotal);
             $em->persist($purchaseItem);

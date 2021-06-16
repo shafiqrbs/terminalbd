@@ -81,7 +81,7 @@ class MasterProductType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_inventorybundle_product';
+        return 'product';
     }
 
     /**
@@ -90,7 +90,7 @@ class MasterProductType extends AbstractType
     protected function categoryChoiceList()
     {
 
-        return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
+        return $categoryTree = $this->em->getFlatInventoryCategoryTree($this->inventoryConfig);
 
     }
 }

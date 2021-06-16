@@ -231,10 +231,11 @@ var InventorySales = function(sales) {
         })
     });*/
 
-    $(document).on('keyup', '#sales_discountCalculation', function() {
+    $(document).on('change', '.salesOperation', function() {
 
         var discountType = $('#sales_discountType').val();
         var discount = parseFloat($('#sales_discountCalculation').val());
+        var deliveryCharge = parseFloat($('#sales_deliveryCharge').val());
         var invoice = $('#salesId').val();
         var total =  parseFloat($('#total').val());
         if( discount >= total ){
@@ -245,7 +246,7 @@ var InventorySales = function(sales) {
         $.ajax({
             url: Routing.generate('inventory_salesmanual_discount_update'),
             type: 'POST',
-            data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
+            data:'discount=' + discount+'&discountType='+discountType+'&deliveryCharge='+deliveryCharge+'&sales='+invoice,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
@@ -262,7 +263,7 @@ var InventorySales = function(sales) {
 
     });
 
-    $(document).on('change', '#sales_discountType', function() {
+    $(document).on('change', '#sales_discountTypexx', function() {
 
         var discountType = $('#sales_discountType').val();
         var discount = parseFloat($('#sales_discountCalculation').val());

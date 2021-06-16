@@ -68,7 +68,7 @@ class ProductRepository extends EntityRepository
         $query->groupBy('e.id');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -83,7 +83,19 @@ class ProductRepository extends EntityRepository
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('e.category');
         $query->orderBy('category.name', 'ASC');
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
+
+    }
+
+    public function getMasterItems(InventoryConfig $inventory)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.inventoryConfig', 'ic');
+        $query->select('e.name as name');
+        $query->andWhere("ic.id = :inventory");
+        $query->setParameter('inventory', $inventory->getId());
+        $query->orderBy('e.name', 'ASC');
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -97,6 +109,38 @@ class ProductRepository extends EntityRepository
         $em->flush($entity);
         return $entity;
     }
+
+    public function insertMasterItem(InventoryConfig $inventory,$data)
+    {
+        $em = $this->_em;
+
+        $masterItem = $data['item']['name'];
+        $find = $this->findOneBy(array('name' => $masterItem));
+        if(empty($find)){
+            $entity = new Product();
+            $entity->setInventoryConfig($inventory);
+            $entity->setName($masterItem);
+            $category = isset($data['item']['category']) ? $data['item']['category'] :'';
+            if($category){
+                $cat = $em->getRepository("ProductProductBundle:Category")->find($category);
+                $entity->setCategory($cat);
+            }
+            $itemUnit = isset($data['item']['itemUnit']) ? $data['item']['itemUnit'] :'';
+            if($itemUnit){
+                $unit = $em->getRepository("SettingToolBundle:ProductUnit")->find($itemUnit);
+                $entity->setProductUnit($unit);
+            }
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }else{
+            return $find;
+        }
+
+
+
+    }
+
 
 
 }

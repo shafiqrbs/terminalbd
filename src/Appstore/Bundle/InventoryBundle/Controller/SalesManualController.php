@@ -221,17 +221,14 @@ class SalesManualController extends Controller
         $purchasePrice = $request->request->get('purchasePrice');
         $data = array('quantity' => $quantity ,'salesPrice' => $salesPrice,'purchasePrice' => $purchasePrice);
         $item = $em->getRepository('InventoryBundle:Item')->find($item);
-        $remainingQuantity = $item->getRemainingQuantity();
-        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($item);
-        $salesItemStock =  $checkQuantity + $quantity;
-        if (!empty($item) && $remainingQuantity >= $salesItemStock) {
-            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($sales, $item ,$data);
-            $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $this->get('session')->getFlashBag()->add('success', 'Product added successfully.');
-        }
+        //$remainingQuantity = $item->getRemainingQuantity();
+        //$checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($item);
+        //$salesItemStock =  $checkQuantity + $quantity;
+        $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($sales, $item ,$data);
+        $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+        $this->get('session')->getFlashBag()->add('success', 'Product added successfully.');
         $result = $this->returnResultData($sales);
         return new Response(json_encode($result));
-        exit;
     }
 
     /**
@@ -257,7 +254,6 @@ class SalesManualController extends Controller
         }
         $result = $this->returnResultData($sales);
         return new Response(json_encode($result));
-        exit;
     }
 
     public function salesItemUpdateAction(Request $request)
@@ -283,13 +279,13 @@ class SalesManualController extends Controller
 
     public function salesDiscountUpdateAction(Request $request)
     {
-
-
 	    $em = $this->getDoctrine()->getManager();
 	    $discountType = $request->request->get('discountType');
 	    $discountCal = (float)$request->request->get('discount');
-	    $sales = $request->request->get('sales');
-	    $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+        $deliveryCharge = (float)$request->request->get('deliveryCharge');
+	    $salesId = $request->request->get('sales');
+	    /* @var $sales Sales */
+	    $sales = $em->getRepository('InventoryBundle:Sales')->find($salesId);
 	    $subTotal = $sales->getSubTotal();
 	    $total = 0;
 	    if($discountType == 'Flat' and $discountCal > 0){
@@ -298,25 +294,29 @@ class SalesManualController extends Controller
 	    }elseif($discountType == 'Percentage' and $discountCal > 0){
 		    $discount = ($subTotal * $discountCal)/100;
 		    $total = ($subTotal  - $discount);
-	    }
+	    }else{
+            $total = $sales->getSubTotal();
+            $discount = $sales->getDiscount();
+            $discountCal = $sales->getDiscountCalculation();
+            $discountType = $sales->getDiscountType();
+        }
 	    $vat = 0;
 	    if($total > 0 ){
-
 		    if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
 			    $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
 			    $sales->setVat($vat);
 		    }
+		    $sales->setDeliveryCharge($deliveryCharge);
 		    $sales->setDiscountType($discountType);
 		    $sales->setDiscountCalculation($discountCal);
 		    $sales->setDiscount(round($discount));
-		    $sales->setTotal(round($total + $vat));
+		    $sales->setTotal(round($total + $vat + $deliveryCharge));
 		    $sales->setDue(round($sales->getTotal()));
 		    $em->persist($sales);
 		    $em->flush();
 	    }
 	    $data = $this->returnResultData($sales);
 	    return new Response(json_encode($data));
-	    exit;
 
     }
 
@@ -498,7 +498,6 @@ class SalesManualController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
 
@@ -520,7 +519,6 @@ class SalesManualController extends Controller
         $em->remove($sales);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
     }
 
     public function itemDeleteAction(Sales $sales, $salesItem)
@@ -536,7 +534,6 @@ class SalesManualController extends Controller
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         $result = $this->returnResultData($sales);
         return new Response(json_encode($result));
-        exit;
     }
 
     public function itemPurchaseDetailsAction(Request $request)
@@ -584,7 +581,7 @@ class SalesManualController extends Controller
         }
         $entity->setCourierInvoice($data['value']);
         $em->flush();
-        exit;
+        new Response('Success');
 
     }
 
@@ -645,7 +642,6 @@ class SalesManualController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
     public function returnCancelOrder(Sales $entity)
@@ -659,7 +655,7 @@ class SalesManualController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
     public function salesSelectAction()

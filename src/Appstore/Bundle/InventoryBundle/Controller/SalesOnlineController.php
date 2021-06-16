@@ -246,6 +246,7 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $discountType = $request->request->get('discountType');
         $discountCal = (float)$request->request->get('discount');
+        $deliveryCharge = (float)$request->request->get('deliveryCharge');
         $salesId = $request->request->get('sales');
 
         /* @var $sales Sales */
@@ -261,26 +262,18 @@ class SalesOnlineController extends Controller
         }
 
         if($total > 0 ){
-
+            $vat =0;
             if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
                 $sales->setVat($vat);
             }
             $sales->setDiscountType($discountType);
+            $sales->setDeliveryCharge($deliveryCharge);
             $sales->setDiscountCalculation($discountCal);
             $sales->setDiscount(round($discount));
-            $sales->setTotal(round($total + $vat));
+            $sales->setTotal(round($total + $vat + $deliveryCharge));
             $sales->setDue(round($total+$vat));
-        }else{
-            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscountType('Flat');
-            $sales->setDiscountCalculation(0);
-            $sales->setDiscount(0);
-            $sales->setTotal(round($subTotal + $vat));
-            $sales->setDue(round($sales->getTotal()));
+
         }
         $em->persist($sales);
         $em->flush();
@@ -334,10 +327,17 @@ class SalesOnlineController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
 
         if ($inventory->getId() == $entity->getInventoryConfig()->getId()) {
-            return $this->render('InventoryBundle:SalesOnline:show.html.twig', array(
-                'entity' => $entity,
-                'inventoryConfig' => $inventory,
-            ));
+            if($inventory->getSalesMode() == 'stock') {
+                return $this->render('InventoryBundle:SalesOnline/stock:show.html.twig', array(
+                    'entity' => $entity,
+                    'inventoryConfig' => $inventory,
+                ));
+            }else{
+                return $this->render('InventoryBundle:SalesOnline/purchase-item:show.html.twig', array(
+                    'entity' => $entity,
+                    'inventoryConfig' => $inventory,
+                ));
+            }
         } else {
             return $this->redirect($this->generateUrl('inventory_salesonline'));
         }

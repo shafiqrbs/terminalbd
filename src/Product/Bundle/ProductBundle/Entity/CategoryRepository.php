@@ -877,9 +877,7 @@ class CategoryRepository extends MaterializedPathRepository
 
         $categories = $this->createQueryBuilder("node")
             ->where('node.inventoryConfig = :config')
-            ->andWhere('node.level = :level')
             ->setParameter('config', $config)
-            ->setParameter('level', 1)
             ->orderBy('node.level','ASC')
             ->getQuery()->getResult();
 

@@ -35,12 +35,13 @@ class CustomCategoryType extends AbstractType
 	{
 		$builder
 
-			->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name'),
-			                           'constraints' =>array(
-				                           new NotBlank(array('message'=>'Please input required')),
-			                           )
+			->add('name','text',
+                array('attr'=>array(
+                    'class'=>'m-wrap span12','placeholder'=>'Enter category name'),
+                    'constraints' =>array(
+                       new NotBlank(array('message'=>'Please input required')),
+                    )
 			))
-
 			->add('parent', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Select parent category---',
@@ -67,7 +68,7 @@ class CustomCategoryType extends AbstractType
 	 */
 	public function getName()
 	{
-		return 'product_bundle_productbundle_category';
+		return 'category';
 	}
 
 	/**

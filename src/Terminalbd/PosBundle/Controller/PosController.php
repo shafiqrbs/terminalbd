@@ -576,6 +576,7 @@ class PosController extends Controller
         $data = array(
             'subTotal'           => $entity->getSubTotal(),
             'discount'           => $entity->getDiscount(),
+            'deliveryCharge'     => $entity->getDeliveryCharge(),
             'invoiceParticulars' => $htmlProcess ,
             'vat'                => $entity->getVat() ,
             'total'              => $entity->getTotal() ,

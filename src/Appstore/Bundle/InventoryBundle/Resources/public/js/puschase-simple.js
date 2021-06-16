@@ -83,24 +83,22 @@ function InventoryPurchasePage(){
         rules: {
 
             "purchaseitem[item]": {required: true},
-            "purchaseitem[purchasePrice]": {required: true},
-            "purchaseitem[salesPrice]": {required: true},
+            "purchaseitem[purchaseSubTotal]": {required: true},
+            "purchaseitem[salesPrice]": {required: false},
             "purchaseitem[quantity]": {required: true},
         },
 
         messages: {
 
             "purchaseitem[item]":"Select purchase item name",
-            "purchaseitem[purchasePrice]":"Enter purchase price",
-            "purchaseitem[salesPrice]":"Enter sales price",
+            "purchaseitem[purchaseSubTotal]":"Enter total purchase price",
             "purchaseitem[quantity]":"Enter product qnt",
         },
 
         tooltip_options: {
 
             "purchaseitem[item]": {placement:'top',html:true},
-            "purchaseitem[purchasePrice]": {placement:'top',html:true},
-            "purchaseitem[salesPrice]": {placement:'top',html:true},
+            "purchaseitem[purchaseSubTotal]": {placement:'top',html:true},
             "purchaseitem[quantity]": {placement:'top',html:true},
 
         },

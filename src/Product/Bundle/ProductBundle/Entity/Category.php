@@ -58,6 +58,11 @@ class Category
      **/
     protected $masterProducts;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\ItemGroup", inversedBy="category" )
+     **/
+    protected $itemGroup;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="category" )
@@ -679,6 +684,22 @@ class Category
     public function setHomeFeature($homeFeature)
     {
         $this->homeFeature = $homeFeature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItemGroup()
+    {
+        return $this->itemGroup;
+    }
+
+    /**
+     * @param mixed $itemGroup
+     */
+    public function setItemGroup($itemGroup)
+    {
+        $this->itemGroup = $itemGroup;
     }
 
 

@@ -87,13 +87,11 @@ class ItemController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
-
         if ($form->isValid()) {
             $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
-            if($checkData == 0 ) {
-
+            if($checkData['count'] == 0 ) {
                 $entity->setInventoryConfig($inventory);
-                $entity->setName($entity->getMasterItem()->getName());
+                $entity->setMasterItem($checkData['masterItem']);
                 $entity->upload();
                 $em->persist($entity);
                 $em->flush();
@@ -107,18 +105,19 @@ class ItemController extends Controller
                 $this->get('session')->getFlashBag()->add(
                     'notice',"Item already exist, Please change add another item name"
                 );
+                $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
                 return $this->render('InventoryBundle:Item:new.html.twig', array(
                     'entity' => $entity,
+                    'items' => $items,
                     'inventory' => $inventory,
                     'form'   => $form->createView(),
                 ));
             }
-
-
         }
-
+        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity' => $entity,
+            'items' => $items,
             'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
@@ -134,13 +133,14 @@ class ItemController extends Controller
      */
     private function createCreateForm(Item $entity)
     {
-        $em = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping');
+        $groupRep = $this->getDoctrine()->getRepository('ProductProductBundle:ItemGroup');
+        $catRep = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new ItemType($inventoryConfig,$em), $entity, array(
+        $form = $this->createForm(new ItemType($inventoryConfig,$groupRep,$catRep), $entity, array(
             'action' => $this->generateUrl('item_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -158,8 +158,10 @@ class ItemController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new Item();
         $form   = $this->createCreateForm($entity);
+        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity' => $entity,
+            'items' => $items,
             'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
@@ -197,9 +199,10 @@ class ItemController extends Controller
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
         $editForm = $this->createEditForm($entity);
+        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
-
             'entity'        => $entity,
+            'items'        => $items,
             'inventory'     => $inventory,
             'form'          => $editForm->createView(),
 
@@ -216,8 +219,10 @@ class ItemController extends Controller
      */
     private function createEditForm(Item $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new ItemType($inventory), $entity, array(
+        $groupRep = $this->getDoctrine()->getRepository('ProductProductBundle:ItemGroup');
+        $catRep = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $form = $this->createForm(new ItemType($inventoryConfig,$groupRep,$catRep), $entity, array(
             'action' => $this->generateUrl('item_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -287,7 +292,6 @@ class ItemController extends Controller
         $editForm->handleRequest($request);
         $erors = $editForm->getErrors();
         if ($editForm->isValid()) {
-
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
@@ -299,9 +303,10 @@ class ItemController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertProductGallery($entity,$data);
             return $this->redirect($this->generateUrl('item'));
         }
-
+        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity'      => $entity,
+            'items'      => $items,
             'inventory'     => $inventory,
             'form'   => $editForm->createView(),
         ));

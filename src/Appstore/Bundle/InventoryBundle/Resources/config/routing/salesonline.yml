@@ -59,3 +59,10 @@ inventory_online_sales_reverse:
 inventory_salesonline_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "InventoryBundle:SalesOnline:deleteEmptyInvoice" }
+
+inventory_salesonline_discount_update:
+    path:     /sales/discount-update
+    defaults: { _controller: "InventoryBundle:SalesOnline:salesDiscountUpdate" }
+    methods:  POST
+    options:
+        expose: true

@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\ItemRepository")
+ * @UniqueEntity(fields={"name","inventoryConfig"}, message="This name must be unique")
  * @ORM\HasLifecycleCallbacks
  */
 
@@ -38,6 +39,21 @@ class Item
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="items" )
      **/
     private  $vendor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\ItemGroup", inversedBy="items" )
+     **/
+    private  $itemGroup;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category")
+     **/
+    private  $category;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit")
+     **/
+    private  $itemUnit;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", mappedBy="item" , cascade={"remove"} )
@@ -125,13 +141,6 @@ class Item
      * @ORM\Column(name="code", type="integer", nullable=true)
      */
     private $code;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="itemUnit", type="string", length=20, nullable=true)
-     */
-    private $itemUnit;
 
     /**
      * @var integer
@@ -408,21 +417,6 @@ class Item
         $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
-    public function getItemUnit()
-    {
-        return $this->itemUnit;
-    }
-
-    /**
-     * @param string $itemUnit
-     */
-    public function setItemUnit($itemUnit)
-    {
-        $this->itemUnit = $itemUnit;
-    }
 
     /**
      * @return int
@@ -1117,6 +1111,54 @@ class Item
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItemGroup()
+    {
+        return $this->itemGroup;
+    }
+
+    /**
+     * @param mixed $itemGroup
+     */
+    public function setItemGroup($itemGroup)
+    {
+        $this->itemGroup = $itemGroup;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItemUnit()
+    {
+        return $this->itemUnit;
+    }
+
+    /**
+     * @param mixed $itemUnit
+     */
+    public function setItemUnit($itemUnit)
+    {
+        $this->itemUnit = $itemUnit;
     }
 
 }
