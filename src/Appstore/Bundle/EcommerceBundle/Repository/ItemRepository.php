@@ -835,7 +835,7 @@ class ItemRepository extends EntityRepository
         $data['discountAmount']           = $row['discountAmount'];
         $data['unitName']                 = $row['unitName'];
         $data['quantityApplicable']       = $row['quantityApplicable'];
-        $data['content']                  = $row['content'];
+        $data['content']                  = (string)$row['shortContent'];
         $data['subItemStatus']            = $row['subItemStatus'];
         if($row['path']){
             $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
