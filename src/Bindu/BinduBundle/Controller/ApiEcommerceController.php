@@ -100,8 +100,8 @@ class ApiEcommerceController extends Controller
         $formData = $request->request->all();
         $key =  $this->getParameter('x-api-key');
         $value =  $this->getParameter('x-api-value');
-        $uniqueCode = $formData['uniqueCode'];
-        $mobile = $formData['mobile'];
+        $uniqueCode = $formData['activeKey'];
+        $mobile = $formData['license'];
         $data = array();
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
         if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
@@ -124,6 +124,7 @@ class ApiEcommerceController extends Controller
             $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
             $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
             $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
+            $path = $entity->getEcommerceConfig()->getWebPath();
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
             $data = array(
@@ -150,6 +151,7 @@ class ApiEcommerceController extends Controller
                     'cashOnDelivery' => $cashOnDelivery,
                     'pickupLocation' => $pickupLocation,
                     'vatEnable' => $vatEnable,
+                    'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
                 );
             }
 
@@ -562,7 +564,7 @@ class ApiEcommerceController extends Controller
 
 
 
-    public function orderAction(Request $request)
+    public function orderCreateAction(Request $request)
     {
 
 
@@ -629,6 +631,33 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
             $returnData = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->getApiOrders($entity,$data);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function processOrderAction(Request $request)
+    {
+
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+
+            $data = $_REQUEST;
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $returnData = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->getApiProcessOrders($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($returnData));

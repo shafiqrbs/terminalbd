@@ -1249,7 +1249,7 @@ class EcommerceConfig
 
     protected function getUploadDir()
     {
-        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/ecommerce/'.$this->getId().'/';
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/ecommerce';
     }
 
     public function upload()

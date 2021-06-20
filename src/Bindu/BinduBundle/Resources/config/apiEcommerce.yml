@@ -76,8 +76,8 @@ api_ecommerce_testimonial:
 
 
 api_ecommerce_order:
-    path:     /order
-    defaults: { _controller: BinduBundle:ApiEcommerce:order }
+    path:     /order-create
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderCreate }
     methods:  POST
     options:
             expose: true
@@ -85,6 +85,10 @@ api_ecommerce_order:
 api_ecommerce_order_list:
     path:     /order-list
     defaults: { _controller: BinduBundle:ApiEcommerce:orderList }
+
+api_ecommerce_process_order:
+    path:     /process-order
+    defaults: { _controller: BinduBundle:ApiEcommerce:processOrder }
 
 api_ecommerce_order_details:
     path:     /order-details

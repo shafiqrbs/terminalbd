@@ -354,7 +354,7 @@ class OrderRepository extends EntityRepository
         $em = $this->_em;
 
         $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
-        $user = $em->getRepository('UserBundle:User')->find($userId);
+        $user           = $em->getRepository('UserBundle:User')->find($userId);
         $address        = empty($userJson['address']) ? '' : $userJson['address'];
         $mobile         = empty($userJson['mobile']) ? '' : $userJson['mobile'];
         $location       = empty($userJson['location']) ? '' : $userJson['location'];
@@ -477,6 +477,25 @@ class OrderRepository extends EntityRepository
         $qb->addSelect("tp.name as timePeriod");
         $qb->where("e.globalOption = :option")->setParameter('option', $option->getId());
         $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function getApiProcessOrders($option, $arr)
+    {
+        $user = $arr['user'];
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.location','l');
+        $qb->leftJoin('e.timePeriod','tp');
+        $qb->leftJoin('e.orderItems','subProduct');
+        $qb->select('e.id as id','e.created as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
+            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','e.deliveryDate as deliveryDate');
+        $qb->addSelect("l.name as location");
+        $qb->addSelect("tp.name as timePeriod");
+        $qb->where("e.globalOption = :option")->setParameter('option', $option->getId());
+        $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
+        $qb->andWhere("e.process IN (:process)")->setParameter('process', array('wfc','confirm','created','courier'));
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
