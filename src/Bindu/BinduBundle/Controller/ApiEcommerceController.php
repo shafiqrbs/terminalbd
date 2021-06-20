@@ -83,8 +83,8 @@ class ApiEcommerceController extends Controller
             if($result) {
                 foreach ($result as $key => $row) {
                     $data[$key]['name'] = $row->getName();
-                    $data[$key]['x-api-key'] = (int)$row->getMobile();
-                    $data[$key]['x-api-value'] = $row->getUniqueCode();
+                    $data[$key]['license'] = (int)$row->getMobile();
+                    $data[$key]['activeKey'] = $row->getUniqueCode();
                 }
             }
             $response->setContent(json_encode($data));
