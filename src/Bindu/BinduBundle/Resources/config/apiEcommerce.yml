@@ -2,6 +2,10 @@ api_ecommerce_setup:
     path:     /setup
     defaults: { _controller: BinduBundle:ApiEcommerce:setup }
 
+api_ecommerce_portal_store:
+    path:     /portal-store
+    defaults: { _controller: BinduBundle:ApiEcommerce:portalStore }
+
 api_ecommerce_sidebar_menu:
     path:     /sidebar-menu
     defaults: { _controller: BinduBundle:ApiEcommerce:menu }

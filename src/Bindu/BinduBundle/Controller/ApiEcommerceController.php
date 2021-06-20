@@ -64,6 +64,36 @@ class ApiEcommerceController extends Controller
         return "invalid";
     }
 
+    public function portalStoreAction(Request $request)
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $result = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('isPortalStore'=>1));
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $data = array();
+            if($result) {
+                foreach ($result as $key => $row) {
+                    $data[$key]['name'] = $row->getName();
+                    $data[$key]['x-api-key'] = (int)$row->getMobile();
+                    $data[$key]['x-api-value'] = $row->getUniqueCode();
+                }
+            }
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -188,6 +218,8 @@ class ApiEcommerceController extends Controller
         }
 
     }
+
+
 
     public function featureProductAction(Request $request)
     {
@@ -752,7 +784,7 @@ class ApiEcommerceController extends Controller
                 $user->setPlainPassword($a);
                 $this->get('fos_user.user_manager')->updateUser($user);
                 $dispatcher = $this->container->get('event_dispatcher');
-              //  $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
 
             $returnData['user_id'] = (int) $user->getId();

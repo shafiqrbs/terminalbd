@@ -665,6 +665,13 @@ class GlobalOption
      */
     private $isIntro;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPortalStore", type="boolean" , nullable=true)
+     */
+    private $isPortalStore;
+
     /**
      * @var string
      *
@@ -2205,6 +2212,23 @@ class GlobalOption
     public function setIsSidebar($isSidebar)
     {
         $this->isSidebar = $isSidebar;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPortalStore()
+    {
+        return $this->isPortalStore;
+    }
+
+    /**
+    /**
+     * @param bool $isPortalStore
+     */
+    public function setIsPortalStore($isPortalStore)
+    {
+        $this->isPortalStore = $isPortalStore;
     }
 
 
