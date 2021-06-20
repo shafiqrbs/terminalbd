@@ -11,7 +11,8 @@ class DateFormat extends FunctionNode
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return "DATE(" . $sqlWalker->walkArithmeticPrimary($this->date) . ")";
+        return "DATE(" . $sqlWalker->walkArithmeticPrimary($this->date).")";
+        //return "DATE_FORMAT(" . $sqlWalker->walkArithmeticPrimary($this->date) . ",)";
     }
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {
