@@ -528,132 +528,7 @@ class ApiEcommerceController extends Controller
 
     }
 
-    public function userLoginAction(Request $request)
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-        if( $this->checkApiWithoutSecretValidation($request) == 'invalid') {
 
-            return new Response('Unauthorized access.', 401);
-
-        }else{
-
-            $data = $request->request->all();
-
-            /* @var $entity GlobalOption */
-
-            $intlMobile =$data['mobile'];
-            $em = $this->getDoctrine()->getManager();
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
-            /* @var $user User */
-            if(empty($user)){
-                $data['msg'] = "invalid";
-            }else{
-                $a = mt_rand(1000,9999);
-                $user->setPlainPassword($a);
-                $this->get('fos_user.user_manager')->updateUser($user);
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
-            }
-
-            $returnData['user_id'] = (int) $user->getId();
-            $returnData['username'] = $user->getUsername();
-            $returnData['name'] = $user->getProfile()->getName();
-            $returnData['address'] = $user->getProfile()->getEmail();
-            $returnData['email'] = $user->getEmail();
-            $returnData['password'] = $a;
-            $returnData['msg'] = "valid";
-
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($returnData));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
-
-        }
-
-    }
-
-    public function userRegisterAction(Request $request)
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-        if( $this->checkApiValidation($request) == 'invalid') {
-
-            return new Response('Unauthorized access.', 401);
-
-        }else{
-
-            $data = $request->request->all();
-
-            /* @var $entity GlobalOption */
-
-            $setup = $this->checkApiValidation($request);
-            $name = $data['name'];
-            $mobile = $data['mobile'];
-            $email = $data['email'];
-            $address = $data['address'];
-            $em = $this->getDoctrine()->getManager();
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
-            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile));
-            $existEmail = $em->getRepository('UserBundle:User')->findOneBy(array('email'=> $email));
-
-            /* @var $user User */
-
-            if(empty($user) and !empty($email) and empty($existEmail)){
-
-                $user = new User();
-                $a = mt_rand(1000,9999);
-                $user->setPlainPassword($a);
-                $user->setEnabled(true);
-                $user->setUsername($mobile);
-                if(empty($data['email'])){
-                    $user->setEmail($mobile.'@gmail.com');
-                }else{
-                    $user->setEmail($email);
-                }
-                $user->setRoles(array('ROLE_CUSTOMER'));
-                $user->setUserGroup('customer');
-                $user->setGlobalOption($setup);
-                $user->setEnabled(1);
-                $em->persist($user);
-                $em->flush();
-
-                $profile = new Profile();
-                $profile->setUser($user);
-                $profile->setName($name);
-                $profile->setMobile($mobile);
-                $profile->setAddress($address);
-                $em->persist($profile);
-                $em->flush();
-                $dispatcher = $this->container->get('event_dispatcher');
-           $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
-
-            }else{
-
-                $a = mt_rand(1000,9999);
-                $user->setPlainPassword($a);
-                $this->get('fos_user.user_manager')->updateUser($user);
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
-
-            }
-
-            $returnData['user_id'] = (int) $user->getId();
-            $returnData['username'] = $user->getUsername();
-            $returnData['password'] = $a;
-            $returnData['name'] = $user->getProfile()->getName();
-            $returnData['address'] = $user->getProfile()->getAddress();
-            $returnData['msg'] = "valid";
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($returnData));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
-        }
-
-    }
 
     public function orderAction(Request $request)
     {
@@ -849,6 +724,198 @@ class ApiEcommerceController extends Controller
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
+    }
+
+    public function userLoginAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiWithoutSecretValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $intlMobile =$data['mobile'];
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
+            /* @var $user User */
+            if(empty($user)){
+                $data['msg'] = "invalid";
+            }else{
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $this->get('fos_user.user_manager')->updateUser($user);
+                $dispatcher = $this->container->get('event_dispatcher');
+              //  $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+            }
+
+            $returnData['user_id'] = (int) $user->getId();
+            $returnData['username'] = $user->getUsername();
+            $returnData['name'] = $user->getProfile()->getName();
+            $returnData['address'] = $user->getProfile()->getAddress();
+            $returnData['email'] = $user->getProfile()->getEmail();
+            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['password'] = $a;
+            $returnData['msg'] = "valid";
+
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+
+        }
+
+    }
+
+    public function userRegisterAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $setup = $this->checkApiValidation($request);
+            $name = $data['name'];
+            $mobile = $data['mobile'];
+            $email = $data['email'];
+            $address = $data['address'];
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile));
+            $existEmail = $em->getRepository('UserBundle:User')->findOneBy(array('email'=> $email));
+
+            /* @var $user User */
+
+            if(empty($user) and !empty($email) and empty($existEmail)){
+
+                $user = new User();
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $user->setEnabled(true);
+                $user->setUsername($mobile);
+                if(empty($data['email'])){
+                    $user->setEmail($mobile.'@gmail.com');
+                }else{
+                    $user->setEmail($email);
+                }
+                $user->setRoles(array('ROLE_CUSTOMER'));
+                $user->setUserGroup('customer');
+                $user->setGlobalOption($setup);
+                $user->setEnabled(1);
+                $em->persist($user);
+                $em->flush();
+
+                $profile = new Profile();
+                $profile->setUser($user);
+                $profile->setName($name);
+                $profile->setMobile($mobile);
+                $profile->setAdditionalPhone($mobile);
+                $profile->setAddress($address);
+                $em->persist($profile);
+                $em->flush();
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
+
+            }else{
+
+                $a = mt_rand(1000,9999);
+                $user->setPlainPassword($a);
+                $this->get('fos_user.user_manager')->updateUser($user);
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+
+            }
+
+            $returnData['user_id'] = (int) $user->getId();
+            $returnData['username'] = $user->getUsername();
+            $returnData['password'] = $a;
+            $returnData['name'] = $user->getProfile()->getName();
+            $returnData['address'] = $user->getProfile()->getAddress();
+            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['msg'] = "valid";
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function userUpdateProfileAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $setup = $this->checkApiValidation($request);
+            $user = $data['user_id'];
+            $name = $data['name'];
+            $mobile = isset($data['phone']) ? $data['phone'] :'';
+            $email = isset($data['email']) ? $data['email'] :'';
+            $address = $data['address'];
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $user = $em->getRepository('UserBundle:User')->find($user);
+
+            /* @var $user User */
+
+            if(($user) and $user->getProfile()){
+                $profile = $user->getProfile();
+                $profile->setName($name);
+                $profile->setAdditionalPhone($mobile);
+                $profile->setAddress($address);
+                $profile->setEmail($email);
+                $em->persist($profile);
+                $em->flush();
+            }else{
+                $profile = new Profile();
+                $profile->setUser($user);
+                $profile->setName($name);
+                $profile->setMobile($user->getUsername());
+                $profile->setAdditionalPhone($mobile);
+                $profile->setAddress($address);
+                $profile->setEmail($email);
+                $em->persist($profile);
+                $em->flush();
+            }
+
+            $returnData['user_id'] = (int) $user->getId();
+            $returnData['username'] = $user->getUsername();
+            $returnData['name'] = $user->getProfile()->getName();
+            $returnData['address'] = $user->getProfile()->getAddress();
+            $returnData['email'] = $user->getProfile()->getEmail();
+            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['msg'] = "valid";
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
     }
 
 

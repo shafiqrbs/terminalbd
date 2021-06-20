@@ -70,12 +70,6 @@ api_ecommerce_testimonial:
     path:     /testimonial
     defaults: { _controller: BinduBundle:ApiEcommerce:testimonial }
 
-api_ecommerce_login:
-    path:     /user-login
-    defaults: { _controller: BinduBundle:ApiEcommerce:userLogin }
-    methods:  POST
-    options:
-            expose: true
 
 api_ecommerce_order:
     path:     /order
@@ -104,9 +98,24 @@ api_ecommerce_order_location:
     path:     /order-location
     defaults: { _controller: BinduBundle:ApiEcommerce:orderDeliveryLocation }
 
+api_ecommerce_login:
+    path:     /user-login
+    defaults: { _controller: BinduBundle:ApiEcommerce:userLogin }
+    methods:  POST
+    options:
+        expose: true
+
+
 api_ecommerce_registration:
     path:     /user-register
     defaults: { _controller: BinduBundle:ApiEcommerce:userRegister }
+    methods:  POST
+    options:
+            expose: true
+
+api_ecommerce_update_registration:
+    path:     /update-register
+    defaults: { _controller: BinduBundle:ApiEcommerce:userUpdateProfile }
     methods:  POST
     options:
             expose: true

@@ -36,7 +36,7 @@ class PasswordChangeSmsListener extends BaseSmsAwareListener
         $user = $event->getUser();
         $password = $event->getPassword();
       //  echo $user->getGlobalOption()->getOrganizationName();
-        $msg = $user->getGlobalOption()->getName().", Login OTP is: ".$password.". Please call for any support ".$user->getGlobalOption()->getHotline().'.';
+        $msg = "Your login OTP code is - ".$password;
         $customer = $this->em->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $user->getId()));
         if( empty($customer) or empty($customer->getCountry()) or ($customer->getCountry() and $customer->getCountry()->getCountryCode() == "BD")){
             $mobile = "88".$user;
