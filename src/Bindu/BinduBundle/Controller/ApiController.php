@@ -671,7 +671,6 @@ class ApiController extends Controller
            // $data = array('deviceId' => 1,'item' => $jsonInput ,'itemCount'=> 1,'subItem'=>$jsonInputItem,'subItemCount'=> 4);
 
             $data = $request->request->all();
-
             if($entity->getMainApp()->getSlug() == 'miss'){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->insertAndroidProcess($entity,$deviceId,'purchase',$data);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){

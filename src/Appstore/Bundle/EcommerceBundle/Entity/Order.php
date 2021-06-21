@@ -105,6 +105,17 @@ class Order
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="orders" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="orders" )
+     **/
+    private  $transactionMethod;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="orderId", type="integer",  nullable=true)
@@ -1348,6 +1359,38 @@ class Order
     public function setOrderId($orderId)
     {
         $this->orderId = $orderId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param mixed $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param mixed $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
     }
 
 

@@ -351,6 +351,7 @@ class OrderRepository extends EntityRepository
         $userJson = $jsonUser[0];
         $jsonOrder = json_decode($data['jsonOrder'],true);
         $orderJson = $jsonOrder[0];
+        $jsonOrderItem = json_decode($data['jsonOrderItem'],true);
         $em = $this->_em;
 
         $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
@@ -364,8 +365,9 @@ class OrderRepository extends EntityRepository
         $comment        = empty($orderJson['comment']) ? '' : $orderJson['comment'];
         $deliveryDate   = empty($orderJson['deliveryDate']) ? '' : $orderJson['deliveryDate'];
         $timePeriod     = empty($orderJson['timePeriod']) ? '' : $orderJson['timePeriod'];
-        $accountMobile  = empty($orderJson['bankAccount']) ? '' : $orderJson['bankAccount'];
+        $receiveAccount  = empty($orderJson['receiveAccount']) ? '' : $orderJson['receiveAccount'];
         $paymentMobile  = empty($orderJson['paymentMobile']) ? '' : $orderJson['paymentMobile'];
+        $transactionMethod = empty($orderJson['transactionMethod']) ? '' : $orderJson['transactionMethod'];
         $transactionId  = empty($orderJson['transactionId']) ? '' : $orderJson['transactionId'];
         $subTotal       = empty($orderJson['subTotal']) ? '' : $orderJson['subTotal'];
         $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
@@ -386,19 +388,32 @@ class OrderRepository extends EntityRepository
                 $period = $em->getRepository('EcommerceBundle:TimePeriod')->find($timePeriod);
                 $order->setTimePeriod($period);
             }
+            if(in_array($transactionMethod,array('mobile','bank'))){
+                $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug' => $transactionMethod));
+                $order->setTransactionMethod($method);
+            }
             if(empty($deliveryDate)){
                 $order->setDeliveryDate(new \DateTime("now"));
             }else{
                 $date =new \DateTime($deliveryDate);
                 $order->setDeliveryDate($date);
             }
-            if($accountMobile){
-                $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($accountMobile);
+            if($receiveAccount and $transactionMethod == "mobile"){
+
+                $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($receiveAccount);
                 $order->setAccountMobileBank($account);
                 $order->setPaymentMobile($paymentMobile);
                 $order->setTransaction($transactionId);
                 $order->setCashOnDelivery(false);
+
+            }elseif($receiveAccount and $transactionMethod == "bank"){
+
+                $account = $em->getRepository('AccountingBundle:AccountBank')->find($receiveAccount);
+                $order->setAccountBank($account);
+                $order->setCashOnDelivery(false);
+
             }else{
+
                 $order->setCashOnDelivery(true);
             }
             $order->setEcommerceConfig($option->getEcommerceConfig());
@@ -511,12 +526,15 @@ class OrderRepository extends EntityRepository
         $qb->leftJoin('e.location','l');
         $qb->leftJoin('e.timePeriod','tp');
         $qb->leftJoin('e.orderItems','subProduct');
-        $qb->select('e.id as id','e.created as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
-            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','e.deliveryDate as deliveryDate');
+        $qb->leftJoin('e.transactionMethod','tm');
+        $qb->select('e.id as id','e.address as address','date_format(e.created) as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
+            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate',
+            'e.transaction as transactionId','e.paymentMobile as paymentMobile');
         $qb->addSelect("l.name as location");
         $qb->addSelect("tp.name as timePeriod");
+        $qb->addSelect("tm.name as method");
         $qb->addSelect("GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subProduct.itemName,'*#*',subProduct.price,'*#*', subProduct.quantity,'*#*', subProduct.size,'*#*', subProduct.color,'*#*', subProduct.imagePath)) as orderItems");
-        $qb->where("e.id = :id")->setParameter('id', 69);
+        $qb->where("e.id = :id")->setParameter('id', $order);
         $row = $qb->getQuery()->getOneOrNullResult();
         $data = array();
         $data['order_id'] = (int)$row['id'];
@@ -527,14 +545,20 @@ class OrderRepository extends EntityRepository
         $data['timePeriod'] = $row['timePeriod'];
         $data['location'] = $row['location'];
         $data['process'] = $row['process'];
+        $data['address'] = $row['address'];
+        $data['transactionId'] = $row['transactionId'];
+        $data['paymentMobile'] = $row['paymentMobile'];
         $data['deliveryDate'] = $row['deliveryDate'];
         $data['shippingCharge'] = $row['shippingCharge'];
+        $data['method'] = $row['method'];
         $data['cashOnDelivery'] = $row['cashOnDelivery'];
         $orderItems = explode(',', $row['orderItems']);
+
         if (!empty($row['orderItems'])) {
+
             for ($i = 0; count($orderItems) > $i; $i++) {
                 $subs = explode("*#*", $orderItems[$i]);
-                $data['orderItem'][$i]['subItemId'] = (integer)$subs[0];
+                $data['orderItem'][$i]['itemId'] = (integer)$subs[0];
                 $data['orderItem'][$i]['name'] = (string)$subs[1];
                 $data['orderItem'][$i]['price'] = (integer)$subs[2];
                 $data['orderItem'][$i]['quantity'] = (integer)$subs[3];

@@ -586,7 +586,7 @@ class ApiEcommerceController extends Controller
 
             $jsonOrder = '[
                 {
-                "id":"051900113","userId":"2","subTotal":"1200","discount":"200","vat":"0","total":"1000","shippingCharge":"100","couponCode":"434234234","timePeriod":"10.30 AM","deliveryDate":"2021-06-01","transactionMethod":"cash","discountCoupon":"123443","bankAccount":"","mobileBankAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","comment":""
+                "id":"051900113","userId":"2","subTotal":"1200","discount":"200","vat":"0","total":"1000","shippingCharge":"100","couponCode":"434234234","timePeriod":"10.30 AM","deliveryDate":"2021-06-01","transactionMethod":"cash","cashOnDelivery":"1","discountCoupon":"123443","receiveAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","comment":""
                 }
             ]';
 
@@ -594,6 +594,7 @@ class ApiEcommerceController extends Controller
             {"id":"051900113","itemId":"051900113","orderId":"051900113","name":"ItemName","price":"120","quantity":"2","size":"XL","color":"Red","quantity":"2","subTotal":"240","url":"http://www.terminalbd.com/uploads/domain/4/ecommerce/product/Teer semolina suji.jpg"},
             {"id":"051900114","itemId":"051900114","orderId":"051900113","name":"ItemName","price":"120","quantity":"2","size":"XL","color":"Red","quantity":"2","subTotal":"240","url":"http://www.terminalbd.com/uploads/domain/4/ecommerce/product/Teer semolina suji.jpg"}
             ]';
+
             $data = $request->request->all();
 
             /* @var $entity GlobalOption */
@@ -973,6 +974,40 @@ class ApiEcommerceController extends Controller
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function mobileAccountAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption'=>$entity));
+            $data = array();
+
+            /* @var $row AccountMobileBank */
+
+            if($result) {
+                foreach ($result as $key => $row) {
+                    $data[$key]['global_id'] = (int)$entity->getId();
+                    $data[$key]['id'] = (int)$row->getId();
+                    $data[$key]['name'] = $row->getName();
+                }
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
