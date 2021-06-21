@@ -151,10 +151,11 @@ class BusinessPurchaseItemRepository extends EntityRepository
         if(!empty($particular->getPrice())){
 	        $entity->setSalesPrice($particular->getPrice());
         }
-        $entity->setPurchasePrice($purchasePrice);
-        $entity->setActualPurchasePrice($purchasePrice);
+        $pp = ($purchasePrice / (int)$data['quantity']);
+        $entity->setPurchasePrice($pp);
+        $entity->setActualPurchasePrice($pp);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $entity->getPurchasePrice());
+        $entity->setPurchaseSubTotal($purchasePrice);
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);
@@ -242,7 +243,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
 	    $em->flush();
     }
 
-    public function getPurchaseItems(BusinessPurchase $sales)
+    public function     getPurchaseItems(BusinessPurchase $sales)
     {
         $entities = $sales->getPurchaseItems();
         $data = '';
@@ -257,6 +258,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
             $data .= "<td>{$i}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getParticularCode()}</td>";
             $data .= "<td>{$entity->getBusinessParticular()->getName()}</td>";
+            $data .= "<td>{$entity->getSalesPrice()}</td>";
             $data .= "<td>{$entity->getPurchasePrice()}</td>";
             if ($sales->getBusinessConfig()->getBusinessModel() == 'sign'){
                 $data .= "<td>{$entity->getHeight()}x{$entity->getWidth()}</td>";

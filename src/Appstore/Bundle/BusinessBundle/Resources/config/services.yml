@@ -34,3 +34,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore_business_item_import:
+        class: Appstore\Bundle\BusinessBundle\Importer\ProductExcel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    appstore.business.item.import.event.listener:
+        class: Appstore\Bundle\BusinessBundle\Importer\ProductDataReader
+        arguments: [ @phpexcel ]

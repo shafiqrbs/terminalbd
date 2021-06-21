@@ -2,6 +2,10 @@ restaurant_report:
     resource: "@RestaurantBundle/Resources/config/routing/report.yml"
     prefix:   /report
 
+restaurant_itemimport:
+    resource: "@RestaurantBundle/Resources/config/routing/itemimporter.yml"
+    prefix:   /item-import
+
 restaurant_purchase:
     resource: "@RestaurantBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase

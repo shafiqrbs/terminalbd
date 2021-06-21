@@ -168,23 +168,29 @@ class PurchaseController extends Controller
         return $form;
     }
 
-    public function returnResultData(BusinessPurchase $invoice,$msg=''){
-
+    public function returnResultData(BusinessPurchase $invoice, $msg=''){
+        $config = $invoice->getBusinessConfig();
         $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
         $due = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
         $discount = $invoice->getDiscount() > 0 ? $invoice->getDiscount() : 0;
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+
+        $html = $this->renderView(
+            "BusinessBundle:Purchase/item:{$view}.html.twig", array(
+                'entity' => $invoice,
+            )
+        );
         $data = array(
             'subTotal' => $subTotal,
             'netTotal' => $netTotal,
             'due' => $due,
             'discount' => $discount,
-            'invoiceParticulars' => $invoiceParticulars ,
+            'invoiceParticulars' => $html ,
             'msg' => $msg ,
             'success' => 'success'
         );
-
         return $data;
 
     }

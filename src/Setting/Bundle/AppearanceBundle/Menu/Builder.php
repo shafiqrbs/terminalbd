@@ -312,6 +312,7 @@ class Builder extends ContainerAware
         if ($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
 
             $menu[$business]->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Stock Import', array('route' => 'business_itemimporter'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]->addChild('Stock Shortlist', array('route' => 'business_stock_shortlist'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]->addChild('Stock History', array('route' => 'business_stock_history'))->setAttribute('icon', 'icon-th-list');
             if($config->isStockHistory() == 1) {
@@ -1473,6 +1474,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
             $menu['Restaurant']['Manage Stock']->addChild('Stock Item', array('route' => 'restaurant_stock'))  ->setAttribute('icon', 'icon-th-list');
+            $menu['Restaurant']['Manage Stock']->addChild('Stock Import', array('route' => 'restaurant_itemimporter'))  ->setAttribute('icon', 'icon-th-list');
             $menu['Restaurant']['Manage Stock']->addChild('Item Damage', array('route' => 'restaurant_damage'))
             ->setAttribute('icon', 'icon-th-list');
             $menu['Restaurant']['Manage Stock']->addChild('Pre-production', array('route' => 'restaurant_production'))

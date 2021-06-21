@@ -130,7 +130,7 @@
                                           <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                         </td>
                                         <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.businessParticularType.name }}</td>
+                                        <td class="numeric" >{% if entity.businessParticularType is not empty %}{{ entity.businessParticularType.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
@@ -141,10 +141,10 @@
                                             {% if entity.purchaseQuantity is empty or entity.salesQuantity is empty %}
                                                 <a  href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.businessParticularType.slug == "post-production" %}
+                                            {% if entity.businessParticularType and entity.businessParticularType.slug == "post-production" %}
                                                 <a href="{{ path('business_post_production', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
                                             {% endif %}
-                                            {% if entity.businessParticularType.slug == "pre-production" %}
+                                            {% if entity.businessParticularType and entity.businessParticularType.slug == "pre-production" %}
                                                 <a href="{{ path('business_pre_production', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
                                             {% endif %}
                                             {% if 'wearhouse' in config.stockFormat %}
