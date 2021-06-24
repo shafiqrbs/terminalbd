@@ -47,8 +47,8 @@
                                     <div class="span12">
                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
                                         <ul class="unstyled" >
+                                            <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="select2EcommerceUser m-wrap-custom span6" value="{{ entity.customerMobile }}"></li>
                                             <li><strong class="span2">Name</strong><input type="text" name="ecommerce_payment[customerName]" id="customerName" class="m-wrap-custom span6 input-update" value="{{ entity.customerName }}"></li>
-                                            <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="m-wrap-custom span6 input-update" value="{{ entity.customerMobile }}"></li>
                                             <li><strong class="span2">Address</strong><input type="text" name="ecommerce_payment[customerAddress]" id="customerAddress" value="{{ entity.address }}" class="m-wrap-custom span10 input-update" ></li>
                                         </ul>
                                     </div>
@@ -75,7 +75,8 @@
                                              </li>
                                             <li><strong class="span4">Process Status</strong><span class="span8">
                                                     {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm',delivered:'Delivered',returned:'Returned',cancel:'Cancel'} %}
-                                                    <select  class="m-wrap-custom input-update span12" id="process" name="ecommerce_payment[process]" >            {% for key,process in processes %}
+                                                    <select  class="m-wrap-custom input-update span12" id="process" name="ecommerce_payment[process]" >
+                                                        {% for key,process in processes %}
                                                             <option {% if key == entity.process %} selected="selected" {% endif %} value="{{ key }}">{{ process }}</option>
                                                         {% endfor %}
 
@@ -380,6 +381,13 @@
 {% endblock %}
 {% block cssBlock %}
     <style>
+        .ui-autocomplete{
+            width: 250px!important;
+        }
+        ul.ui-autocomplete li{
+            width: 250px!important;
+            display: flex;
+        }
         input[class*="span"].m-wrap,select[class*="span"],select{
             border: 1px solid #0b84fe!important;
             height: 34px!important;

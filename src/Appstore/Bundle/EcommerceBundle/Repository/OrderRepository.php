@@ -53,6 +53,23 @@ class OrderRepository extends EntityRepository
 
     }
 
+    public function searchEcommerceCustomer($q)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('UserBundle:User','e');
+        $qb->select('e.id as id');
+        $qb->addSelect('e.username as text');
+        $qb->where($qb->expr()->like("e.username", "'%$q%'"  ));
+        $qb->andWhere("e.userGroup = :group");
+        $qb->setParameter('group', 'customer');
+        $qb->groupBy('e.username');
+        $qb->orderBy('e.username', 'ASC');
+        $qb->setMaxResults( '30' );
+        return $qb->getQuery()->getResult();
+
+    }
+
+
     public function findWithSearch($option, $data)
     {
         if (!empty($data['sortBy'])) {
@@ -525,7 +542,7 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.location','l');
         $qb->leftJoin('e.timePeriod','tp');
-        $qb->leftJoin('e.orderItems','subProduct');
+      //  $qb->leftJoin('e.orderItems','subProduct');
         $qb->leftJoin('e.transactionMethod','tm');
         $qb->select('e.id as id','e.address as address','date_format(e.created) as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
             'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate',
@@ -533,7 +550,7 @@ class OrderRepository extends EntityRepository
         $qb->addSelect("l.name as location");
         $qb->addSelect("tp.name as timePeriod");
         $qb->addSelect("tm.name as method");
-        $qb->addSelect("GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subProduct.itemName,'*#*',subProduct.price,'*#*', subProduct.quantity,'*#*', subProduct.size,'*#*', subProduct.color,'*#*', subProduct.imagePath)) as orderItems");
+     //   $qb->addSelect("GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subProduct.itemName,'*#*',subProduct.price,'*#*', subProduct.quantity,'*#*', subProduct.size,'*#*', subProduct.color,'*#*', subProduct.imagePath)) as orderItems");
         $qb->where("e.id = :id")->setParameter('id', $order);
         $row = $qb->getQuery()->getOneOrNullResult();
         $data = array();
@@ -552,21 +569,18 @@ class OrderRepository extends EntityRepository
         $data['shippingCharge'] = $row['shippingCharge'];
         $data['method'] = $row['method'];
         $data['cashOnDelivery'] = $row['cashOnDelivery'];
-        $orderItems = explode(',', $row['orderItems']);
-
-        if (!empty($row['orderItems'])) {
-
-            for ($i = 0; count($orderItems) > $i; $i++) {
-                $subs = explode("*#*", $orderItems[$i]);
-                $data['orderItem'][$i]['itemId'] = (integer)$subs[0];
-                $data['orderItem'][$i]['name'] = (string)$subs[1];
-                $data['orderItem'][$i]['price'] = (integer)$subs[2];
-                $data['orderItem'][$i]['quantity'] = (integer)$subs[3];
-                $data['orderItem'][$i]['size'] = (string)$subs[4];
-                $data['orderItem'][$i]['color'] = (string)$subs[5];
-                $data['orderItem'][$i]['imagePath'] = (string)$subs[6];
-
-            }
+        $orderItems = $this->_em->getRepository('EcommerceBundle:OrderItem')->findBy(array('order'=>$order));
+        if ($orderItems) {
+            /* @var $subs OrderItem */
+            foreach ($orderItems as $i => $subs):
+                $data['orderItem'][$i]['itemId'] = (integer)$subs->getId();
+                $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
+                $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
+                $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
+                $data['orderItem'][$i]['size'] = (string)$subs->getSize();
+                $data['orderItem'][$i]['color'] = (string)$subs->getColor();
+                $data['orderItem'][$i]['imagePath'] = (string)$subs->getImagePath();
+            endforeach;
         } else {
             $data['orderItem'] = array();
         }

@@ -297,6 +297,17 @@ class OrderController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoCustomerSearchAction(Request $request)
+    {
+        $q = $_REQUEST['term'];
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->searchEcommerceCustomer($q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[] = ['key' => $entity['id'],'value' => $entity['text']];
+        endforeach;
+        return new JsonResponse($items);
+    }
+
     public function inlineOrderUpdateAction(Request $request)
     {
         $data = $request->request->all();
@@ -368,20 +379,12 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         if (!empty($data['customerMobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($order->getGlobalOption(),$mobile,$data);
-            $order->setCustomer($customer);
-            $order->setCustomerName($customer->getName());
-            $order->setCustomerMobile($customer->getMobile());
-            $order->setAddress($customer->getAddress());
-        } elseif(!empty($data['mobile'])) {
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $order->getGlobalOption(), 'mobile' => $mobile ));
-            $order->setCustomer($customer);
-            $order->setCustomerName($customer->getName());
-            $order->setCustomerMobile($customer->getMobile());
-            $order->setAddress($customer->getAddress());
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->newExistingCustomerForSales($order->getGlobalOption(),$mobile,$data);
+            $order->setCreatedBy($user);
+            $order->setCustomerName($user->getProfile()->getName());
+            $order->setCustomerMobile($user->getProfile()->getMobile());
+            $order->setAddress($user->getProfile()->getAddress());
         }
-
         if (isset($data['deliveryDate']) and $data['deliveryDate']) {
             $date = new \DateTime($data['deliveryDate']);
             $order->setDeliveryDate($date);
@@ -401,6 +404,7 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+        return new Response('success');
     }
 
 

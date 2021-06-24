@@ -2,6 +2,7 @@
 
 namespace Core\UserBundle\Entity\Repository;
 
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -52,6 +53,44 @@ class UserRepository extends EntityRepository
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
+    }
+
+    public function newExistingCustomerForSales($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['customerName'];
+        $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
+        $email = isset($data['customerEmail']) ? $data['customerEmail']:'';
+        $entity = $em->getRepository('UserBundle:User')->findOneBy(array('globalOption' => $globalOption ,'username' => $mobile));
+        if($entity){
+            $profile = $entity->getProfile();
+            $profile->setUser($entity);
+            $profile->setMobile($mobile);
+            $profile->setName($name);
+            $profile->setAddress($address);
+            $em->persist($profile);
+            $em->flush();
+            return $entity;
+        }else{
+            $entity = new User();
+            $entity->setUsername($mobile);
+            $email = "{$mobile}@gmail.com";
+            $entity->setEmail($email);
+            $entity->setEnabled(1);
+            $entity->setUserGroup('customer');
+            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush();
+            $profile = new Profile();
+            $profile->setUser($entity);
+            $profile->setMobile($mobile);
+            $profile->setName($name);
+            $profile->setAddress($address);
+            $em->persist($profile);
+            $em->flush();
+            return $entity;
+        }
     }
 
     /**

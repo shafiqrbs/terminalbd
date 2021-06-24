@@ -81,10 +81,48 @@ class ApiEcommerceController extends Controller
             $response->headers->set('Content-Type', 'application/json');
             $data = array();
             if($result) {
-                foreach ($result as $key => $row) {
-                    $data[$key]['name'] = $row->getName();
-                    $data[$key]['license'] = (int)$row->getMobile();
-                    $data[$key]['activeKey'] = $row->getUniqueCode();
+                /* @var $entity GlobalOption */
+                foreach ($result as $key => $entity) {
+
+                    $address = '';
+                    $vatRegNo = '';
+                    $vatPercentage = '';
+                    $vatEnable = '';
+
+                    $productColumn = $entity->getEcommerceConfig()->getMobileProductColumn();
+                    $productFeatureColumn = $entity->getEcommerceConfig()->getMobileFeatureColumn();
+                    $currency = $entity->getEcommerceConfig()->getCurrency();
+                    $address = $entity->getEcommerceConfig()->getAddress();
+                    $preOrder = $entity->getEcommerceConfig()->getIsPreorder();
+                    $cartProcess = $entity->getEcommerceConfig()->getCartProcess();
+                    $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
+                    $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
+                    $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
+                    $path = $entity->getEcommerceConfig()->getWebPath();
+                    $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
+
+                    $data[$key]['name'] = $entity->getName();
+                    $data[$key]['license'] = (int)$entity->getMobile();
+                    $data[$key]['activeKey'] = $entity->getUniqueCode();
+                    $data[$key]['setupId'] = $entity->getId();
+                    $data[$key]['description'] = $entity->getDescription();
+                    $data[$key]['mobile'] = $mobile;
+                    $data[$key]['address'] = $address;
+                    $data[$key]['email'] = $entity->getEmail();
+                    $data[$key]['website'] = $entity->getDomain();
+                    $data[$key]['locationName'] =  $entity->getLocation()->getName();
+                    $data[$key]['vatRegNo'] = $vatRegNo;
+                    $data[$key]['vatPercentage'] = $vatPercentage;
+                    $data[$key]['productColumn'] = $productColumn;
+                    $data[$key]['productFeatureColumn'] = $productFeatureColumn;
+                    $data[$key]['currency'] = $currency;
+                    $data[$key]['preOrder'] = $preOrder;
+                    $data[$key]['cartProcess'] = $cartProcess;
+                    $data[$key]['shippingCharge'] = $shippingCharge;
+                    $data[$key]['cashOnDelivery'] = $cashOnDelivery;
+                    $data[$key]['pickupLocation'] = $pickupLocation;
+                    $data[$key]['vatEnable'] = $vatEnable;
+                    $data[$key]['logo']      =  $_SERVER['HTTP_HOST']."/{$path}";
                 }
             }
             $response->setContent(json_encode($data));

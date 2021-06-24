@@ -473,6 +473,13 @@ class GlobalOption
     /**
      * @var string
      *
+     * @ORM\Column(name="description", type="text", length=255  , nullable=true )
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="mobileName", type="string", length=50  , nullable=true )
      */
     private $mobileName;
@@ -2231,5 +2238,19 @@ class GlobalOption
         $this->isPortalStore = $isPortalStore;
     }
 
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 }

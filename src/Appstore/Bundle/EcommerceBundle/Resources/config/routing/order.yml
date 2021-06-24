@@ -94,6 +94,12 @@ order_stock_item_search:
     options:
             expose: true
 
+ecommerce_customer_search:
+    path:     /customer-search
+    defaults: { _controller: "EcommerceBundle:Order:autoCustomerSearch" }
+    options:
+            expose: true
+
 order_item_stock_details:
     path:     /{id}/order-medicine-item-details
     defaults: { _controller: "EcommerceBundle:Order:stockDetails" }
