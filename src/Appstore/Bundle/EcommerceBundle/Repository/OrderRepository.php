@@ -424,13 +424,10 @@ class OrderRepository extends EntityRepository
                 $order->setCashOnDelivery(false);
 
             }elseif($receiveAccount and $transactionMethod == "bank"){
-
                 $account = $em->getRepository('AccountingBundle:AccountBank')->find($receiveAccount);
                 $order->setAccountBank($account);
                 $order->setCashOnDelivery(false);
-
             }else{
-
                 $order->setCashOnDelivery(true);
             }
             $order->setEcommerceConfig($option->getEcommerceConfig());
@@ -461,8 +458,6 @@ class OrderRepository extends EntityRepository
             return $order;
         }
         return false;
-
-
     }
 
     public function insertJsonOrderItem(Order $order,$data)
