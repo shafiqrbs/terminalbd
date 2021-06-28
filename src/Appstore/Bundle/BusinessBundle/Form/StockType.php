@@ -78,7 +78,6 @@ class StockType extends AbstractType
                         ->orderBy("e.sorting","ASC");
                 }
             ))
-
             ->add('unit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',

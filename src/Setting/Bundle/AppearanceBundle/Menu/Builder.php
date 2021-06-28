@@ -313,6 +313,7 @@ class Builder extends ContainerAware
 
             $menu[$business]->addChild('Manage Stock', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]->addChild('Stock Import', array('route' => 'business_itemimporter'))->setAttribute('icon', 'icon-th-list');
+            $menu[$business]->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]->addChild('Stock Shortlist', array('route' => 'business_stock_shortlist'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]->addChild('Stock History', array('route' => 'business_stock_history'))->setAttribute('icon', 'icon-th-list');
             if($config->isStockHistory() == 1) {
@@ -331,7 +332,7 @@ class Builder extends ContainerAware
 	        if($config->getProductionType() == 'pre-production') {
 		        $menu[$business]->addChild( 'Pre-production', array( 'route' => 'business_production' ) )->setAttribute( 'icon', 'icon-th-list' );
 	        }
-	       // $menu[$business]->addChild('Stock Transfer', array('route' => 'business_stock_transfer'))->setAttribute('icon', 'icon-th-list');
+	        $menu[$business]->addChild('Stock Transfer', array('route' => 'business_stock_transfer'))->setAttribute('icon', 'icon-th-list');
 	        $menu[$business]->addChild('Manage Damage', array('route' => 'business_damage'))->setAttribute('icon', 'icon-trash');
         }
 
@@ -341,7 +342,6 @@ class Builder extends ContainerAware
 		                                ->setAttribute('icon', 'icon icon-cog')
 		                                ->setAttribute('dropdown', true);
 		    if($config->isShowStock() == 1){
-                $menu[$business]['Master Data']->addChild('Category', array('route' => 'business_category'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
                 if($config->getBusinessModel() == 'distribution') {

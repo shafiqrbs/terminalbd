@@ -73,7 +73,7 @@
                                                 <div class="input-append span12">
                                                     <select name="process" id="process" class="m-wrap span5">
                                                         <option value="" >--Process--</option>
-                                                        {% set processes =['Created','Hold','Delivered','Done','Quotation','Canceled'] %}
+                                                        {% set processes =['Created','Done','Delivered','Condition','Quotation','Hold','Canceled'] %}
                                                         {% for pro in processes %}
                                                             <option value="{{ pro }}" {% if searchForm.process is defined and searchForm.process == pro %} selected="selected" {% endif %} >{{ pro }}</option>
                                                         {% endfor %}

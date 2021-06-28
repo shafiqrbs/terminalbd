@@ -59,11 +59,11 @@ class InvoiceType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'constraints' =>array( new NotBlank(array('message'=>'Confirm current process status')) ),
-                'empty_value' => '---Choose process---',
+                'empty_value' => '--- Choose an order process ---',
                 'choices' => array(
                     'Done' => 'Done',
                     'Delivered' => 'Delivered',
-                    'In-progress' => 'In-progress',
+                    'Condition' => 'Condition',
                     'Hold' => 'Hold',
                     'Advance' => 'Advance',
                     'Quotation' => 'Quotation',
