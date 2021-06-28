@@ -735,7 +735,7 @@ class PosController extends Controller
         $printer -> text("---------------------------------------------------------------\n");
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
-        if($vatEnable == 1 and $vatMode == "excluding"){
+        if($config->getVatEnable() and $config->getVatMode() == "excluding"){
             $printer->text($vat);
             $printer->setEmphasis(false);
         }
@@ -754,13 +754,13 @@ class PosController extends Controller
             $printer -> text($returnTk);
         }
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        if($vatMode == "including"){
+        if($config->getVatMode() == "including"){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer -> text("{$setup['vatPercentage']}% VAT Including\n");
+            $printer -> text("{$config->getVatPercentage()}% VAT Including\n");
         }
-        if($invoiceNote){
+        if($config->getInvoiceNote()){
             $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer -> text($invoiceNote."\n");
+            $printer -> text($config->getInvoiceNote()."\n");
         }
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
