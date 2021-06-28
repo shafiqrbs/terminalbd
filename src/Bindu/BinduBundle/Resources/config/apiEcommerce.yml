@@ -94,6 +94,10 @@ api_ecommerce_order_details:
     path:     /order-details
     defaults: { _controller: BinduBundle:ApiEcommerce:orderDetails }
 
+api_ecommerce_order_delete:
+    path:     /order-delete
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderDelete }
+
 api_ecommerce_related_product:
     path:     /related-product
     defaults: { _controller: BinduBundle:ApiEcommerce:relatedProduct }

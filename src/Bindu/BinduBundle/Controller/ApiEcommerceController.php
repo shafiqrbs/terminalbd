@@ -733,6 +733,42 @@ class ApiEcommerceController extends Controller
 
     }
 
+    public function orderDeleteAction(Request $request)
+    {
+
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+
+            $order = $_REQUEST['id'];
+            $user = $_REQUEST['user_id'];
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+            $remove = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('globalOption'=>$entity,'createdBy' => $user ,'id' => $order));
+            $em = $this->getDoctrine()->getManager();
+            if($remove){
+                $em->remove($remove);
+                $em->flush();
+                $msg = "success";
+            }else{
+                $msg = 'Failed';
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($msg));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
     public function orderTimePeriodAction(Request $request)
     {
 

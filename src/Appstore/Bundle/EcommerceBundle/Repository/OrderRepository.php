@@ -319,18 +319,18 @@ class OrderRepository extends EntityRepository
         $orderItem = $em->getRepository('EcommerceBundle:OrderItem')->getItemOverview($order);
         $totalAmount = $orderItem['totalAmount'];
         $totalItem = $orderItem['totalQuantity'];
-        $order->setTotalAmount($totalAmount);
+        $order->setSubTotal($totalAmount);
         $order->setItem($totalItem);
         $vat = $this->getCulculationVat($order->getGlobalOption(),$totalAmount);
         $grandTotal = $totalAmount + $order->getShippingCharge() + $vat - $order->getDiscountAmount();
         $order->setVat($vat);
-        $order->setGrandTotalAmount($grandTotal);
+        $order->setTotal($grandTotal);
         if (!empty($order->getCoupon())) {
             $couponAmount = $this->getCalculatorCouponAmount($totalAmount, $order->getCoupon());
-            $order->setGrandTotalAmount($grandTotal - $couponAmount);
+            $order->setTotal($grandTotal - $couponAmount);
             $order->setCouponAmount($couponAmount);
         }else{
-            $order->setGrandTotalAmount($grandTotal);
+            $order->setTotal($grandTotal);
         }
         if($order->getPaidAmount() > $grandTotal ){
             $order->setReturnAmount($order->getPaidAmount()  - $grandTotal);
@@ -367,8 +367,6 @@ class OrderRepository extends EntityRepository
         $jsonUser = json_decode($data['jsonUser'],true);
         $userJson = $jsonUser[0];
         $jsonOrder = json_decode($data['jsonOrder'],true);
-        $orderJson = $jsonOrder[0];
-        $jsonOrderItem = json_decode($data['jsonOrderItem'],true);
         $em = $this->_em;
 
         $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
@@ -416,7 +414,6 @@ class OrderRepository extends EntityRepository
                 $order->setDeliveryDate($date);
             }
             if($receiveAccount and $transactionMethod == "mobile"){
-
                 $account = $em->getRepository('AccountingBundle:AccountMobileBank')->find($receiveAccount);
                 $order->setAccountMobileBank($account);
                 $order->setPaymentMobile($paymentMobile);
@@ -436,20 +433,17 @@ class OrderRepository extends EntityRepository
             $order->setVat($vat);
             $order->setComment($comment);
             $order->setSubTotal($subTotal);
-            $order->setTotalAmount($total);
             $order->setTotal($total);
             $grandTotal = $total + $shippingCharge + $vat;
             if (!empty($couponCode)) {
                 $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($option,$couponCode);
                 if (!empty($coupon)){
-                    $couponAmount = $this->getCalculatorCouponAmount($order->getTotalAmount(), $coupon);
-                    $order->setGrandTotalAmount($grandTotal - $couponAmount);
+                    $couponAmount = $this->getCalculatorCouponAmount($order->getTotal(), $coupon);
                     $order->setTotal($grandTotal - $couponAmount);
                     $order->setCoupon($coupon);
                     $order->setCouponAmount($couponAmount);
                 }
             }else{
-                $order->setGrandTotalAmount($grandTotal);
                 $order->setTotal($grandTotal);
             }
             $em->persist($order);
@@ -488,6 +482,7 @@ class OrderRepository extends EntityRepository
             }
 
         }
+        $this->updateOrder($order);
 
     }
 
@@ -498,7 +493,7 @@ class OrderRepository extends EntityRepository
         $qb->leftJoin('e.location','l');
         $qb->leftJoin('e.timePeriod','tp');
         $qb->leftJoin('e.orderItems','subProduct');
-        $qb->select('e.id as id','date_format(e.created) as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
+        $qb->select('e.id as id','date_format(e.created) as created','e.created as dateTime','e.updated as updated','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
             'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate');
         $qb->addSelect("l.name as location");
         $qb->addSelect("tp.name as timePeriod");
@@ -506,6 +501,7 @@ class OrderRepository extends EntityRepository
         $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+
 
     }
 
@@ -528,16 +524,12 @@ class OrderRepository extends EntityRepository
 
     }
 
-
-
     public function getApiOrderDetails($order)
     {
 
-        //$user = $arr['user'];
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.location','l');
         $qb->leftJoin('e.timePeriod','tp');
-      //  $qb->leftJoin('e.orderItems','subProduct');
         $qb->leftJoin('e.transactionMethod','tm');
         $qb->select('e.id as id','e.address as address','date_format(e.created) as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
             'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate',
@@ -545,8 +537,7 @@ class OrderRepository extends EntityRepository
         $qb->addSelect("l.name as location");
         $qb->addSelect("tp.name as timePeriod");
         $qb->addSelect("tm.name as method");
-     //   $qb->addSelect("GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subProduct.itemName,'*#*',subProduct.price,'*#*', subProduct.quantity,'*#*', subProduct.size,'*#*', subProduct.color,'*#*', subProduct.imagePath)) as orderItems");
-        $qb->where("e.id = :id")->setParameter('id', $order);
+       $qb->where("e.id = :id")->setParameter('id', $order);
         $row = $qb->getQuery()->getOneOrNullResult();
         $data = array();
         $data['order_id'] = (int)$row['id'];

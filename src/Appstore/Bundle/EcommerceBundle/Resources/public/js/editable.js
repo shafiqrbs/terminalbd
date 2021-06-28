@@ -29,10 +29,10 @@ var EditableInit = function () {
 
         },
         minLength: 2,
-        select: function( event, ui ) {
+            select: function( event, ui ) {
         },
         change: function (event, ui) {
-
+            $("#medicineId").val(ui.item.id); // save selected id to hidden input
             alert("changed!");
         }
     });
