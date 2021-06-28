@@ -123,6 +123,7 @@ class ApiEcommerceController extends Controller
                     $data[$key]['pickupLocation'] = $pickupLocation;
                     $data[$key]['vatEnable'] = $vatEnable;
                     $data[$key]['logo']      =  $_SERVER['HTTP_HOST']."/{$path}";
+                    $data[$key]['backgroundImage']      =  '';
                 }
             }
             $response->setContent(json_encode($data));
