@@ -164,6 +164,13 @@ class EcommerceConfig
      */
      private $relatedProduct;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="productMode", type="text",  length=50, nullable = true)
+     */
+     private $productMode = 'grid';
+
     /**
      * @var string
      *
@@ -1581,6 +1588,22 @@ class EcommerceConfig
     public function setCashOnDelivery($cashOnDelivery)
     {
         $this->cashOnDelivery = $cashOnDelivery;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductMode()
+    {
+        return $this->productMode;
+    }
+
+    /**
+     * @param string $productMode
+     */
+    public function setProductMode($productMode)
+    {
+        $this->productMode = $productMode;
     }
 
 

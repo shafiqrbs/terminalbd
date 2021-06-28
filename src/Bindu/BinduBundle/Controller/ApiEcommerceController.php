@@ -99,7 +99,10 @@ class ApiEcommerceController extends Controller
                     $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
                     $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
                     $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
-                    $path = $entity->getEcommerceConfig()->getWebPath();
+                    $relatedProductMode = $entity->getEcommerceConfig()->getRelatedProductMode();
+                    $productMode = $entity->getEcommerceConfig()->getProductMode();
+                    $logo = $entity->getTemplateCustomize()->getLogoFile();
+                    $bgImage = $entity->getTemplateCustomize()->getBgImage();
                     $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
                     $data[$key]['name'] = $entity->getName();
@@ -123,8 +126,10 @@ class ApiEcommerceController extends Controller
                     $data[$key]['cashOnDelivery'] = $cashOnDelivery;
                     $data[$key]['pickupLocation'] = $pickupLocation;
                     $data[$key]['vatEnable'] = $vatEnable;
-                    $data[$key]['logo']      =  $_SERVER['HTTP_HOST']."/{$path}";
-                    $data[$key]['backgroundImage']      =  '';
+                    $data[$key]['logo']      = empty($logo) ? '' : $_SERVER['HTTP_HOST']."/{$logo}";
+                    $data[$key]['backgroundImage']      = empty($bgImage) ? '' :  $_SERVER['HTTP_HOST']."/{$bgImage}";
+                    $data[$key]['productMode']      = empty($productMode) ? 'grid' : $productMode;
+                    $data[$key]['relatedProductMode']      =  $relatedProductMode;
                 }
             }
             $response->setContent(json_encode($data));
@@ -329,6 +334,7 @@ class ApiEcommerceController extends Controller
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = $row['quantityApplicable'];
                     if($row['path']){
                         //$path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";

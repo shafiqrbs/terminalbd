@@ -33,7 +33,7 @@ class PosItemManager {
         $left = str_pad($this -> name, $leftCols) ;
         $center = $this -> quantity ;
 
-        $sign = ($this -> dollarSign ? 'Tk.' : '');
+        $sign = ($this -> dollarSign ? '৳' : '');
         $right = str_pad($sign . $this -> price, $rightCols, ' ', STR_PAD_LEFT);
         return "$left$center$right\n";
     }

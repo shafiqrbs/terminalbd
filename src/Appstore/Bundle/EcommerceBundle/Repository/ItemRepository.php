@@ -728,7 +728,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
@@ -802,8 +802,6 @@ class ItemRepository extends EntityRepository
 
     public function getApiProductDetails(GlobalOption $option,$id)
     {
-
-
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('item');
         $qb->leftJoin('item.productUnit','productUnit');
@@ -813,7 +811,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemSubs','subProduct');
         $qb->leftJoin('subProduct.size','subSize');
         $qb->leftJoin('subProduct.productUnit','subUnit');
-        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.subProduct as subItemStatus');
+        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName');
         $qb->addSelect('brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
@@ -836,7 +834,9 @@ class ItemRepository extends EntityRepository
         $data['unitName']                 = $row['unitName'];
         $data['quantityApplicable']       = $row['quantityApplicable'];
         $data['content']                  = (string)$row['shortContent'];
+        $data['description']              = (string)$row['description'];
         $data['subItemStatus']            = $row['subItemStatus'];
+        $data['maxQuantity']              = $row['maxQuantity'];
         if($row['path']){
             $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
             $data['imagePath']            =  $path;
