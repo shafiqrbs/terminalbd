@@ -81,6 +81,7 @@ class ApiEcommerceController extends Controller
             $response->headers->set('Content-Type', 'application/json');
             $data = array();
             if($result) {
+
                 /* @var $entity GlobalOption */
                 foreach ($result as $key => $entity) {
 
