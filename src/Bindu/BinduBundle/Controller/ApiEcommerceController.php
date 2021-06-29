@@ -645,6 +645,7 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
+
             $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
             if($order){
                 $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
@@ -929,7 +930,6 @@ class ApiEcommerceController extends Controller
         }else{
 
             $data = $request->request->all();
-
             /* @var $entity GlobalOption */
 
             $setup = $this->checkApiValidation($request);
@@ -969,6 +969,7 @@ class ApiEcommerceController extends Controller
                 $profile->setMobile($mobile);
                 $profile->setAdditionalPhone($mobile);
                 $profile->setAddress($address);
+
                 $em->persist($profile);
                 $em->flush();
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -990,6 +991,7 @@ class ApiEcommerceController extends Controller
             $returnData['name'] = $user->getProfile()->getName();
             $returnData['address'] = $user->getProfile()->getAddress();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
             $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
@@ -1020,6 +1022,7 @@ class ApiEcommerceController extends Controller
             $mobile = isset($data['phone']) ? $data['phone'] :'';
             $email = isset($data['email']) ? $data['email'] :'';
             $address = $data['address'];
+            $location = isset($data['location']) ? $data['location'] : '';
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
             $user = $em->getRepository('UserBundle:User')->find($user);
@@ -1032,6 +1035,10 @@ class ApiEcommerceController extends Controller
                 $profile->setAdditionalPhone($mobile);
                 $profile->setAddress($address);
                 $profile->setEmail($email);
+                if($location){
+                    $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
+                    $profile->setDeliveryLocation($loc);
+                }
                 $em->persist($profile);
                 $em->flush();
             }else{
@@ -1042,6 +1049,10 @@ class ApiEcommerceController extends Controller
                 $profile->setAdditionalPhone($mobile);
                 $profile->setAddress($address);
                 $profile->setEmail($email);
+                if($location){
+                    $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
+                    $profile->setDeliveryLocation($loc);
+                }
                 $em->persist($profile);
                 $em->flush();
             }
@@ -1052,6 +1063,7 @@ class ApiEcommerceController extends Controller
             $returnData['address'] = $user->getProfile()->getAddress();
             $returnData['email'] = $user->getProfile()->getEmail();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
             $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

@@ -367,6 +367,7 @@ class OrderRepository extends EntityRepository
         $jsonUser = json_decode($data['jsonUser'],true);
         $userJson = $jsonUser[0];
         $jsonOrder = json_decode($data['jsonOrder'],true);
+        $orderJson = $jsonOrder[0];
         $em = $this->_em;
 
         $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
@@ -429,7 +430,7 @@ class OrderRepository extends EntityRepository
             }
             $order->setEcommerceConfig($option->getEcommerceConfig());
             $order->setShippingCharge($shippingCharge);
-            $vat = $this->getCulculationVat($option, $total);
+            $vat = $this->getCulculationVat($option, $subTotal);
             $order->setVat($vat);
             $order->setComment($comment);
             $order->setSubTotal($subTotal);
