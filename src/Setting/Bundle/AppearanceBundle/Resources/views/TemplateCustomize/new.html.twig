@@ -1361,12 +1361,12 @@
                         <!--/row-->
                         <div class="row-fluid" >
 
-                            <div class="span12">
+                            <div class="span8">
                                 <div class="control-group">
                                     <div class="controls">
                                         <div data-provides="fileupload" class="fileupload fileupload-new">
                                             <div style="height:250px;" class="fileupload-new  span12">
-                                                {% if(entity.webPath('headerBgImage') is defined ) %}
+                                                {% if(entity.webPath('headerBgImage') is defined and entity.webPath('headerBgImage') is not empty ) %}
                                                     <img class="large-image span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
                                                 {% else %}
                                                     <img alt="" src="http://www.placehold.it/1024x250/EFEFEF/AAAAAA&amp;text=no+image">
@@ -1378,6 +1378,32 @@
                                                         <span class="fileupload-new">Select image</span>
 													    <span class="fileupload-exists">Change</span>
                                                         <input type="file" name="headerBgImage" id="headerBgImage">
+                                                    </span>
+                                                <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                            </div>
+                                        </div>
+                                        <span class="label label-important">NOTE!</span>
+                                        <span> Image size must be use 1024px x 250 px or more</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div style="height:250px;" class="fileupload-new  span12">
+                                                {% if(entity.webPath('bgImage') is defined and entity.webPath('bgImage') is not empty ) %}
+                                                    <img class="large-image span12" alt="" src="/{{ entity.webPath('bgImage') }}">
+                                                {% else %}
+                                                    <img alt="" src="http://www.placehold.it/1024x250/EFEFEF/AAAAAA&amp;text=no+image">
+                                                {% endif %}
+                                            </div>
+                                            <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                            <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="bgImage" id="bgImage">
                                                     </span>
                                                 <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
                                             </div>

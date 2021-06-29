@@ -101,10 +101,10 @@ class ApiEcommerceController extends Controller
                     $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
                     $relatedProductMode = $entity->getEcommerceConfig()->getRelatedProductMode();
                     $productMode = $entity->getEcommerceConfig()->getProductMode();
-                    $logo = $entity->getTemplateCustomize()->getLogoFile();
+
+                    $logo = $entity->getTemplateCustomize()->getLogo();
                     $bgImage = $entity->getTemplateCustomize()->getBgImage();
                     $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
-
                     $data[$key]['name'] = $entity->getName();
                     $data[$key]['license'] = (int)$entity->getMobile();
                     $data[$key]['activeKey'] = $entity->getUniqueCode();
@@ -126,8 +126,8 @@ class ApiEcommerceController extends Controller
                     $data[$key]['cashOnDelivery'] = $cashOnDelivery;
                     $data[$key]['pickupLocation'] = $pickupLocation;
                     $data[$key]['vatEnable'] = $vatEnable;
-                    $data[$key]['logo']      = empty($logo) ? '' : $_SERVER['HTTP_HOST']."/{$logo}";
-                    $data[$key]['backgroundImage']      = empty($bgImage) ? '' :  $_SERVER['HTTP_HOST']."/{$bgImage}";
+                    $data[$key]['logo']      = empty($logo) ? '' : $_SERVER['HTTP_HOST']."/{$entity->getTemplateCustomize()->getUploadDir()}/{$logo}";
+                    $data[$key]['backgroundImage']      = empty($bgImage) ? '' :  $_SERVER['HTTP_HOST']."/{$entity->getTemplateCustomize()->getUploadDir()}/{$bgImage}";
                     $data[$key]['productMode']      = empty($productMode) ? 'grid' : $productMode;
                     $data[$key]['relatedProductMode']      =  $relatedProductMode;
                 }

@@ -103,6 +103,7 @@ class TemplateCustomizeRepository extends EntityRepository {
     public function fileUploader($entity, $file = '')
     {
         $em = $this->_em;
+        /* @var $entity TemplateCustomize */
         if(isset($file['logoFile'])){
 
              $img = $file['logoFile'];
@@ -140,15 +141,14 @@ class TemplateCustomizeRepository extends EntityRepository {
              $entity->setHeaderBgImage($imgName);
         }
 
-        if(isset($file['bgImageFile'])){
+        if(isset($file['bgImage'])){
 
-             $img = $file['bgImageFile'];
+             $img = $file['bgImage'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
              $entity->setBgImage($imgName);
         }
-
         $em->persist($entity);
         $em->flush();
     }
