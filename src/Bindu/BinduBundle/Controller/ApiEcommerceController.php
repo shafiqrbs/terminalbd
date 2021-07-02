@@ -227,8 +227,87 @@ class ApiEcommerceController extends Controller
             $data['brand'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllBrand($entity);
             $data['promotion'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiPromotion($entity);
             $data['tag'] = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiTag($entity);
+            $data['page'] = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->getPages($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+    }
+
+    public function pageMenuAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
 
 
+            $entity = $this->checkApiValidation($request);
+            $data = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->getPages($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+    }
+
+    public function pageAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $id = $_REQUEST['id'];
+            $option = $this->checkApiValidation($request);
+            $entity = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$option,'id'=>$id));
+
+            /* @var $entity Page */
+
+            $path = $_SERVER['HTTP_HOST'].'/'.$entity->getWebPath();
+            $data = array(
+                'id' => $entity->getId(),
+                'name' => $entity->getName(),
+                'menu' => $entity->getMenu(),
+                'shortDescription' => $entity->getShortDescription(),
+                'description' => $entity->getContent(),
+                'image'      => empty($entity->getPath()) ? '' : $path
+            );
+            if($entity->getPageMetas()){
+                foreach ($entity->getPageMetas() as $key => $sub ){
+                    $data['specification'][$key]['metaId'] = (integer)$sub->getId();
+                    $data['specification'][$key]['label'] = (string)$sub->getMetaKey();
+                    $data['specification'][$key]['value'] = (string)$sub->getMetavalue();
+                }
+
+            }else{
+                $data['specification'] = array();
+            }
+
+            if($entity->getPhotoGallery() and $entity->getPhotoGallery()->getGalleryImages()){
+                foreach ($entity->getPhotoGallery()->getGalleryImages() as $key => $sub ){
+                    $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
+                    if($sub->getPath()){
+                        $path = $sub->getWebPath($option->getId(),$entity->getPhotoGallery()->getId());
+                        $data['gallery'][$key]['imagePath'] =  $_SERVER['HTTP_HOST'].'/'.$path;
+                    }else{
+                        $data['gallery'][$key]['imagePath'] = "";
+                    }
+                }
+            }else{
+                $data['gallery'] = array();
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

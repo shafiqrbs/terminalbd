@@ -1343,6 +1343,8 @@ class Builder extends ContainerAware
 
 		    $menu['Medicine']['Manage Purchase']->addChild('Purchase', array('route' => 'medicine_purchase'))
 		                                        ->setAttribute('icon', 'icon-th-list');
+		    $menu['Medicine']['Manage Purchase']->addChild('Android', array('route' => 'medicine_purchase_android'))
+		                                        ->setAttribute('icon', 'icon-th-list');
 		    $menu['Medicine']['Manage Purchase']->addChild('Instant Purchase', array('route' => 'medicine_instantpurchase'))
 		                                        ->setAttribute('icon', 'icon-th-list');
 		    $menu['Medicine']['Manage Purchase']->addChild('Purchase Return', array('route' => 'medicine_purchase_return'))

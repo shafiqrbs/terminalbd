@@ -160,6 +160,21 @@ class PageRepository extends EntityRepository
             return $query;
     }
 
+    public function getPages($globalOption)
+    {
+
+        $em = $this->_em;
+
+        $query = $this->createQueryBuilder('p')
+            ->select('p.id as id','p.menu as menu')
+            ->where('p.status = 1')
+            ->andWhere('p.globalOption = :option')
+            ->setParameter('option', $globalOption->getId())
+            ->orderBy('p.ordering','ASC')
+            ->getQuery()->getArrayResult();
+            return $query;
+    }
+
     public function searchResult($globalOption,$keyword)
     {
         $qb = $this->createQueryBuilder('p')

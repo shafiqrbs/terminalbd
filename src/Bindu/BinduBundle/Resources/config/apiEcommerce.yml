@@ -10,6 +10,14 @@ api_ecommerce_sidebar_menu:
     path:     /sidebar-menu
     defaults: { _controller: BinduBundle:ApiEcommerce:menu }
 
+api_ecommerce_page_menu:
+    path:     /page-menu
+    defaults: { _controller: BinduBundle:ApiEcommerce:pageMenu }
+
+api_ecommerce_page_details:
+    path:     /page
+    defaults: { _controller: BinduBundle:ApiEcommerce:page }
+
 api_ecommerce_home_feature_slider:
     path:     /home-feature-slider
     defaults: { _controller: BinduBundle:ApiEcommerce:homeFeatureSlider }

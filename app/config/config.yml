@@ -31,6 +31,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    date:
+        timezone: Asia/Dhaka
     globals:
             #myGlobaService: "@SettingContentBundle.content_footer_service"  'footer-content'
             portal_domain: 'http://www.terminalbd.com'

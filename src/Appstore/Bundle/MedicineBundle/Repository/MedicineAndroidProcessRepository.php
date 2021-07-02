@@ -40,7 +40,6 @@ class MedicineAndroidProcessRepository extends EntityRepository
         $em =  $this->_em;
 
         $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
-
         $entity = new MedicineAndroidProcess();
         $entity->setMedicineConfig($option->getMedicineConfig());
         $entity->setAndroidDevice($device);

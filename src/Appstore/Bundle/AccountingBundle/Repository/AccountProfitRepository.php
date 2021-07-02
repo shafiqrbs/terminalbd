@@ -71,7 +71,6 @@ class AccountProfitRepository extends EntityRepository
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
-
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
                 if (in_array($row['processType'], array('Outstanding', 'Opening'))) {
@@ -163,7 +162,7 @@ class AccountProfitRepository extends EntityRepository
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');
-        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,COALESCE((SUM(sales.totalAmount) + SUM(sales.tloPrice)),0) as total, COALESCE(SUM(sales.amount),0) as amount
+        $sql = "SELECT processHead,transactionMethod_id as method,accountBank_id as bank ,accountMobileBank_id as mobile ,(COALESCE(SUM(sales.totalAmount),0) + COALESCE(SUM(sales.tloPrice),0)) as total, COALESCE(SUM(sales.amount),0) as amount
                 FROM account_sales as sales
                 WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year GROUP BY transactionMethod_id,processHead,accountBank_id,accountMobileBank_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
@@ -198,7 +197,6 @@ class AccountProfitRepository extends EntityRepository
     public  function reportSalesItemPurchaseSalesOverview(AccountProfit $profit, $data){
 
         $config =  $profit->getGlobalOption()->getId();
-
         $compare = new \DateTime($data);
         $month =  $compare->format('F');
         $year =  $compare->format('Y');

@@ -120,7 +120,7 @@
                                 {% set proceses = ['Created','Pending','Hold'] %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y g:i:s a') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.deviceSalesId }}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
