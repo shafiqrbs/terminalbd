@@ -206,6 +206,21 @@ class PurchaseReturnController extends Controller
         }
     }
 
+    public function approvePurchaseReturn()
+    {
+        if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
+            $em = $this->getDoctrine()->getManager();
+            $purchase->setProcess('Approved');
+            $em->flush();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateReturnQnt($purchase);
+            if($config->isStockHistory() == 1 ){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseReturnItem($purchase);
+            }
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchaseReturn($purchase);
+            return new Response('success');
+        }
+    }
+
     /**
      * Deletes a Vendor entity.
      *

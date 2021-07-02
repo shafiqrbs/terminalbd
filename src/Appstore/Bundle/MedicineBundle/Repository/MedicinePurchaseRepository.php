@@ -712,9 +712,9 @@ class MedicinePurchaseRepository extends EntityRepository
                 $sales->setCreated($created);
                 $sales->setUpdated($created);
                 $sales->setProcess("Complete");
+                $sales->setMode("Android");
                 $em->persist($sales);
                 $em->flush();
-
             endforeach;
             $this->insertApiPurchaseItem( $option, $process);
             return $msg = "valid";
