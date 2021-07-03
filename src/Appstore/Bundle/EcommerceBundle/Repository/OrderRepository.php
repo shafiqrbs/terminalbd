@@ -515,7 +515,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['address'] = $row->getAddress();
             $data[$key]['transactionId'] = $row->getTransaction();
             $data[$key]['paymentMobile'] = $row->getPaymentMobile();
-            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y H:m A');
+            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
             $data[$key]['deliveryTime'] = $row->getDeliveryDate()->format('h:m A');
             $data[$key]['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
             $data[$key]['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
