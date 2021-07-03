@@ -553,9 +553,9 @@ class OrderRepository extends EntityRepository
         $data['order_id'] = (int)$row->getId();
         $data['invoice'] = $row->getInvoice();
         $data['created'] = $row->getCreated()->format('d-m-Y');
-        $data['createdTime'] = $row->getCreated()->format('h:m A');
+        $data['createdTime'] = $row->getCreated()->format('g:i A');
         $data['updated'] = $row->getUpdated()->format('d-m-Y');
-        $data['updatedTime'] = $row->getUpdated()->format('h:m A');
+        $data['updatedTime'] = $row->getUpdated()->format('g:i A');
         $data['subTotal'] = $row->getSubTotal();
         $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
         $data['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
@@ -567,8 +567,8 @@ class OrderRepository extends EntityRepository
         $data['address'] = $row->getAddress();
         $data['transactionId'] = $row->getTransaction();
         $data['paymentMobile'] = $row->getPaymentMobile();
-        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y H:m A');
-        $data['deliveryTime'] = $row->getDeliveryDate()->format('h:m A');
+        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
+        $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
         $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
         $data['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
         $orderItems = $row->getOrderItems();
