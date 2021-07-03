@@ -160,6 +160,9 @@ class PurchaseReturnController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->insertPurchaseReturnItem($entity,$data);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->updatePurchaseTotalPrice($entity);
+        $arrs = array('created','sales','commission','Done');
+        $id = $entity->getId();
+        $this->approvePurchaseReturn($id);
         return $this->redirect($this->generateUrl('business_purchase_return'));
 
     }
@@ -192,33 +195,24 @@ class PurchaseReturnController extends Controller
 	    $purchase = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
 	    $arrs = array('created','sales','commission','Done');
 	    if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
-            $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
-		    $em->flush();
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateReturnQnt($purchase);
-            if($config->isStockHistory() == 1 ){
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseReturnItem($purchase);
-            }
-            $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchaseReturn($purchase);
+            $this->approvePurchaseReturn($id);
             return new Response('success');
         } else {
             return new Response('failed');
         }
     }
 
-    public function approvePurchaseReturn()
+    public function approvePurchaseReturn(BusinessPurchaseReturn $purchase)
     {
-        if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
-            $em = $this->getDoctrine()->getManager();
-            $purchase->setProcess('Approved');
-            $em->flush();
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateReturnQnt($purchase);
-            if($config->isStockHistory() == 1 ){
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseReturnItem($purchase);
-            }
-            $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchaseReturn($purchase);
-            return new Response('success');
+        $em = $this->getDoctrine()->getManager();
+        $purchase->setProcess('Approved');
+        $em->flush();
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getPurchaseUpdateReturnQnt($purchase);
+        if($purchase->getBusinessConfig()->isStockHistory() == 1 ){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertPurchaseReturnItem($purchase);
         }
+        $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchaseReturn($purchase);
+
     }
 
     /**

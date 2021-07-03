@@ -491,19 +491,37 @@ class OrderRepository extends EntityRepository
     {
         $user = $arr['user'];
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.location','l');
-        $qb->leftJoin('e.timePeriod','tp');
-        $qb->select('e.id as id','date_format(e.created) as created','e.created as dateTime','e.updated as updated','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
-            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate');
-        $qb->addSelect("l.name as location");
-        $qb->addSelect("tp.name as timePeriod");
         $qb->where("e.globalOption = :option")->setParameter('option', $option->getId());
         $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
         $qb->orderBy('e.created','DESC');
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
+        $result = $qb->getQuery()->getResult();
+        $data = array();
+        /* @var $row Order */
+        foreach ($result as $key => $row){
+            $data[$key]['order_id'] = (int)$row->getId();
+            $data[$key]['invoice'] = $row->getInvoice();
+            $data[$key]['created'] = $row->getCreated()->format('d-m-Y');
+            $data[$key]['createdTime'] = $row->getCreated()->format('h:m A');
+            $data[$key]['updated'] = $row->getUpdated()->format('d-m-Y');
+            $data[$key]['updatedTime'] = $row->getUpdated()->format('h:m A');
+            $data[$key]['subTotal'] = $row->getSubTotal();
+            $data[$key]['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
+            $data[$key]['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
+            $data[$key]['vat'] = $row->getVat();
+            $data[$key]['total'] = $row->getTotal();
+            $data[$key]['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
+            $data[$key]['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
+            $data[$key]['process'] = $row->getProcess();
+            $data[$key]['address'] = $row->getAddress();
+            $data[$key]['transactionId'] = $row->getTransaction();
+            $data[$key]['paymentMobile'] = $row->getPaymentMobile();
+            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y H:m A');
+            $data[$key]['deliveryTime'] = $row->getDeliveryDate()->format('h:m A');
+            $data[$key]['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
+            $data[$key]['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
 
-
+        }
+        return $data;
     }
 
     public function getApiProcessOrders($option, $arr)
@@ -528,35 +546,32 @@ class OrderRepository extends EntityRepository
     public function getApiOrderDetails($order)
     {
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.location','l');
-        $qb->leftJoin('e.timePeriod','tp');
-        $qb->leftJoin('e.transactionMethod','tm');
-        $qb->select('e.id as id','e.address as address','date_format(e.created) as created','e.total as total','e.subTotal as subTotal','e.invoice as invoice',
-            'e.process as process','e.shippingCharge as shippingCharge','e.cashOnDelivery as cashOnDelivery','date_format(e.deliveryDate) as deliveryDate',
-            'e.transaction as transactionId','e.paymentMobile as paymentMobile');
-        $qb->addSelect("l.name as location");
-        $qb->addSelect("tp.name as timePeriod");
-        $qb->addSelect("tm.name as method");
-       $qb->where("e.id = :id")->setParameter('id', $order);
-        $row = $qb->getQuery()->getOneOrNullResult();
+        /* @var $row Order */
+
+        $row = $this->find($order);
         $data = array();
-        $data['order_id'] = (int)$row['id'];
-        $data['created'] = $row['created'];
-        $data['total'] = $row['total'];
-        $data['subTotal'] = $row['subTotal'];
-        $data['invoice'] = $row['invoice'];
-        $data['timePeriod'] = $row['timePeriod'];
-        $data['location'] = $row['location'];
-        $data['process'] = $row['process'];
-        $data['address'] = $row['address'];
-        $data['transactionId'] = $row['transactionId'];
-        $data['paymentMobile'] = $row['paymentMobile'];
-        $data['deliveryDate'] = $row['deliveryDate'];
-        $data['shippingCharge'] = $row['shippingCharge'];
-        $data['method'] = $row['method'];
-        $data['cashOnDelivery'] = $row['cashOnDelivery'];
-        $orderItems = $this->_em->getRepository('EcommerceBundle:OrderItem')->findBy(array('order'=>$order));
+        $data['order_id'] = (int)$row->getId();
+        $data['invoice'] = $row->getInvoice();
+        $data['created'] = $row->getCreated()->format('d-m-Y');
+        $data['createdTime'] = $row->getCreated()->format('h:m A');
+        $data['updated'] = $row->getUpdated()->format('d-m-Y');
+        $data['updatedTime'] = $row->getUpdated()->format('h:m A');
+        $data['subTotal'] = $row->getSubTotal();
+        $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
+        $data['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
+        $data['vat'] = $row->getVat();
+        $data['total'] = $row->getTotal();
+        $data['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
+        $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
+        $data['process'] = $row->getProcess();
+        $data['address'] = $row->getAddress();
+        $data['transactionId'] = $row->getTransaction();
+        $data['paymentMobile'] = $row->getPaymentMobile();
+        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y H:m A');
+        $data['deliveryTime'] = $row->getDeliveryDate()->format('h:m A');
+        $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
+        $data['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
+        $orderItems = $row->getOrderItems();
         if ($orderItems) {
             /* @var $subs OrderItem */
             foreach ($orderItems as $i => $subs):

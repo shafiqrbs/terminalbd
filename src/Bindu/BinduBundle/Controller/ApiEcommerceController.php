@@ -395,6 +395,7 @@ class ApiEcommerceController extends Controller
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];

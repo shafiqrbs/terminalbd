@@ -1159,6 +1159,7 @@ class ItemRepository extends EntityRepository
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
@@ -1194,6 +1195,7 @@ class ItemRepository extends EntityRepository
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
@@ -1229,6 +1231,7 @@ class ItemRepository extends EntityRepository
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
@@ -1265,6 +1268,7 @@ class ItemRepository extends EntityRepository
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
+                    $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
@@ -1330,6 +1334,7 @@ class ItemRepository extends EntityRepository
                 if($products){
                     foreach($products as $p => $row) {
                         $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                        $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                         $data[$key]['products'][$p]['name']                     = $row['name'];
                         $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                         $data[$key]['products'][$p]['price']                    = $row['price'];
@@ -1386,6 +1391,7 @@ class ItemRepository extends EntityRepository
                     if($products){
                         foreach($products as $p => $row) {
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
@@ -1443,6 +1449,7 @@ class ItemRepository extends EntityRepository
                     if($products){
                         foreach($products as $p => $row) {
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
@@ -1500,6 +1507,7 @@ class ItemRepository extends EntityRepository
                     if($products){
                         foreach($products as $p => $row) {
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
@@ -1555,6 +1563,7 @@ class ItemRepository extends EntityRepository
                     if($products){
                         foreach($products as $p => $row) {
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
+                            $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];

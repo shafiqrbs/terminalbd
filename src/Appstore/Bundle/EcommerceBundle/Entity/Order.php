@@ -284,7 +284,7 @@ class Order
      *
      * @ORM\Column(name="discount", type="float", nullable = true)
      */
-    private $discount;
+    private $discount = 0;
 
     /**
      * @var float
@@ -319,7 +319,7 @@ class Order
      *
      * @ORM\Column(name="discountAmount", type="float" , nullable = true)
      */
-    private $discountAmount;
+    private $discountAmount = 0;
 
 
     /**
