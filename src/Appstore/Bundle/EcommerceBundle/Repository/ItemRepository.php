@@ -821,84 +821,86 @@ class ItemRepository extends EntityRepository
         $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
         $row = $qb->getQuery()->getOneOrNullResult();
         $data = array();
-        $data['product_id']               = (int) $row['itemId'];
-        $data['name']                     = $row['name'];
-        $data['quantity']                 = $row['quantity'];
-        $data['price']                    = $row['price'];
-        $data['discountPrice']            = $row['discountPrice'];
-        $data['category']                 = $row['categoryName'];
-        $data['brand']                    = $row['brandName'];
-        $data['discountName']             = $row['discountName'];
-        $data['discountType']             = $row['discountType'];
-        $data['discountAmount']           = $row['discountAmount'];
-        $data['unitName']                 = $row['unitName'];
-        $data['quantityApplicable']       = $row['quantityApplicable'];
-        $data['content']                  = (string)$row['shortContent'];
-        $data['description']              = (string)$row['description'];
-        $data['subItemStatus']            = $row['subItemStatus'];
-        $data['maxQuantity']              = $row['maxQuantity'];
-        if($row['path']){
-            $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
-            $data['imagePath']            =  $path;
-        }else{
-            $data['imagePath']            = "";
-        }
-        $subProducts = explode(',', $row['subProducts']);
-        if(!empty($row['subProducts'])){
-            for ($i = 0 ; count($subProducts) > $i ; $i++ ){
-                $subs  = explode("*#*",$subProducts[$i]);
-                $data['measurement'][$i]['subItemId'] = (integer)$subs[0];
-                $data['measurement'][$i]['name'] = (string)$subs[1];
-                $data['measurement'][$i]['unit'] = (string)$subs[2];
-                $data['measurement'][$i]['price'] = (integer)$subs[3];
+        if($row){
+            $data['product_id']               = (int) $row['itemId'];
+            $data['name']                     = $row['name'];
+            $data['quantity']                 = $row['quantity'];
+            $data['price']                    = $row['price'];
+            $data['discountPrice']            = $row['discountPrice'];
+            $data['category']                 = $row['categoryName'];
+            $data['brand']                    = $row['brandName'];
+            $data['discountName']             = $row['discountName'];
+            $data['discountType']             = $row['discountType'];
+            $data['discountAmount']           = $row['discountAmount'];
+            $data['unitName']                 = $row['unitName'];
+            $data['quantityApplicable']       = $row['quantityApplicable'];
+            $data['content']                  = (string)$row['shortContent'];
+            $data['description']              = (string)$row['description'];
+            $data['subItemStatus']            = $row['subItemStatus'];
+            $data['maxQuantity']              = $row['maxQuantity'];
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                $data['imagePath']            =  $path;
+            }else{
+                $data['imagePath']            = "";
             }
-
-        }else{
-            $data['measurement'] = array();
-        }
-        /* @var $item Item */
-
-        $item = $this->find($row['itemId']);
-
-
-        if($item->getItemColors()){
-            foreach ($item->getItemColors() as $key => $sub ){
-                $data['color'][$key]['colorId'] = (integer)$sub->getId();
-                $data['color'][$key]['name'] = (string)$sub->getName();
-                $data['color'][$key]['colorPlate'] =  (string)$sub->getColorPlate();
-            }
-
-        }else{
-            $data['color'] = array();
-        }
-
-        if($item->getItemKeyValues()){
-            foreach ($item->getItemKeyValues() as $key => $sub ){
-                $data['specification'][$key]['metaId'] = (integer)$sub->getId();
-                $data['specification'][$key]['label'] = (string)$sub->getMetaKey();
-                $data['specification'][$key]['value'] = (string)$sub->getMetavalue();
-            }
-
-        }else{
-            $data['specification'] = array();
-        }
-
-        if($item->getItemGalleries()){
-            $data['gallery'][0]['imageId'] = -100;
-            $data['gallery'][0]['imagePath'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
-            $key = 1;
-            foreach ($item->getItemGalleries() as $sub ){
-                $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
-                if($sub->getPath()){
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$item->getId()}/gallery/{$sub->getPath()}");
-                    $data['gallery'][$key]['imagePath']            =  $path;
-                }else{
-                    $data['gallery'][$key]['imagePath']            = "";
+            $subProducts = explode(',', $row['subProducts']);
+            if(!empty($row['subProducts'])){
+                for ($i = 0 ; count($subProducts) > $i ; $i++ ){
+                    $subs  = explode("*#*",$subProducts[$i]);
+                    $data['measurement'][$i]['subItemId'] = (integer)$subs[0];
+                    $data['measurement'][$i]['name'] = (string)$subs[1];
+                    $data['measurement'][$i]['unit'] = (string)$subs[2];
+                    $data['measurement'][$i]['price'] = (integer)$subs[3];
                 }
-                $key++;
+
+            }else{
+                $data['measurement'] = array();
             }
-        }else{
-            $data['gallery'] = array();
+            /* @var $item Item */
+
+            $item = $this->find($row['itemId']);
+
+
+            if($item->getItemColors()){
+                foreach ($item->getItemColors() as $key => $sub ){
+                    $data['color'][$key]['colorId'] = (integer)$sub->getId();
+                    $data['color'][$key]['name'] = (string)$sub->getName();
+                    $data['color'][$key]['colorPlate'] =  (string)$sub->getColorPlate();
+                }
+
+            }else{
+                $data['color'] = array();
+            }
+
+            if($item->getItemKeyValues()){
+                foreach ($item->getItemKeyValues() as $key => $sub ){
+                    $data['specification'][$key]['metaId'] = (integer)$sub->getId();
+                    $data['specification'][$key]['label'] = (string)$sub->getMetaKey();
+                    $data['specification'][$key]['value'] = (string)$sub->getMetavalue();
+                }
+
+            }else{
+                $data['specification'] = array();
+            }
+
+            if($item->getItemGalleries()){
+                $data['gallery'][0]['imageId'] = -100;
+                $data['gallery'][0]['imagePath'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                $key = 1;
+                foreach ($item->getItemGalleries() as $sub ){
+                    $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
+                    if($sub->getPath()){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$item->getId()}/gallery/{$sub->getPath()}");
+                        $data['gallery'][$key]['imagePath']            =  $path;
+                    }else{
+                        $data['gallery'][$key]['imagePath']            = "";
+                    }
+                    $key++;
+                }
+            }else{
+                $data['gallery'] = array();
+            }
         }
         return $data;
     }
