@@ -414,7 +414,7 @@ class ApiEcommerceController extends Controller
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
-                    $data[$key]['maxQuantity']              = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         //$path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";

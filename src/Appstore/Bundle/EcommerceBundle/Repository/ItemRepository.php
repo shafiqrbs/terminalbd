@@ -788,6 +788,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['tag']                      = $row['tagName'];
                 $data[$key]['unitName']                 = $row['unitName'];
                 $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1182,6 +1183,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
@@ -1218,6 +1220,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
@@ -1254,6 +1257,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
@@ -1291,6 +1295,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['unitName']                 = $row['unitName'];
                     $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $path = $this->resizeFilter("uploads/domain/{$globalOption->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $path;
@@ -1352,6 +1357,7 @@ class ItemRepository extends EntityRepository
                         $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
                         $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
                         $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                        $data[$key]['products'][$p]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                         if($row['path']){
                             $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                             $data[$key]['products'][$p]['imagePath']            =  $path;
@@ -1609,7 +1615,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
