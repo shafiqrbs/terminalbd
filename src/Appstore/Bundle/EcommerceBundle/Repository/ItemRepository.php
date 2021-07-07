@@ -1415,6 +1415,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
                             $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
                             $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            $data[$key]['products'][$p]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                             if($row['path']){
                                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                                 $data[$key]['products'][$p]['imagePath']            =  $path;
@@ -1473,6 +1474,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
                             $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
                             $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            $data[$key]['products'][$p]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                             if($row['path']){
                                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                                 $data[$key]['products'][$p]['imagePath']            =  $path;
@@ -1531,6 +1533,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
                             $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
                             $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            $data[$key]['products'][$p]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                             if($row['path']){
                                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                                 $data[$key]['products'][$p]['imagePath']            =  $path;
@@ -1587,6 +1590,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['discountAmount']           = $row['discountAmount'];
                             $data[$key]['products'][$p]['unitName']                 = $row['unitName'];
                             $data[$key]['products'][$p]['quantityApplicable']       = $row['quantityApplicable'];
+                            $data[$key]['products'][$p]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                             if($row['path']){
                                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                                 $data[$key]['products'][$p]['imagePath']            =  $path;
