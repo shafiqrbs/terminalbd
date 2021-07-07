@@ -84,10 +84,7 @@ $("#loginForm").validate({
                     $('#loginMsg').addClass('alert-danger');
                     $('.alert-danger').html('There was an error with your Mobile no/Password combination. Please try again.');
                 }else{
-                    $('#loginMsg').removeClass('alert-danger');
-                    $('#loginMsg').addClass('alert-success');
-                    $('.alert-success').html('You have been successfully logged in...');
-                    loginSigninButton();
+                    location.reload();
                 }
             }
         });
@@ -197,7 +194,7 @@ $("#signup").validate({
     }
 });
 
-$("#registration_mobile").inputFilter(function(value) {
+$("#registration_mobile, #_username").inputFilter(function(value) {
     return /^-?\d*[.,]?\d*$/.test(value); });
 
 $("#registrationForm").validate({
