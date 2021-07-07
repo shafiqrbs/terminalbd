@@ -197,6 +197,8 @@ $("#signup").validate({
     }
 });
 
+$("#registration_mobile").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
 
 $("#registrationForm").validate({
 

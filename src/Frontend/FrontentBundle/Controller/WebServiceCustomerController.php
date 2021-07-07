@@ -310,7 +310,7 @@ class WebServiceCustomerController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('UserBundle:Profile')->insertNewMember($entity, $data);
             $data = array('name' => $data['registration_name'],'email' => $data['registration_email'],'address' => $data['registration_address'],'facebookId' => $data['registration_facebookId'],'country' => $data['registration_country']);
-             $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
+            $token = new UsernamePasswordToken($entity, null, 'main', $entity->getRoles());
             $this->get('security.context')->setToken($token);
             $this->get('session')->set('_security_main', serialize($token));
             $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);

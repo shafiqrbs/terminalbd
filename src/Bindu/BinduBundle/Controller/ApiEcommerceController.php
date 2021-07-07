@@ -979,16 +979,18 @@ class ApiEcommerceController extends Controller
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
-
-            $returnData['user_id'] = (int) $user->getId();
-            $returnData['username'] = $user->getUsername();
-            $returnData['name'] = $user->getProfile()->getName();
-            $returnData['address'] = $user->getProfile()->getAddress();
-            $returnData['email'] = $user->getProfile()->getEmail();
-            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
-            $returnData['password'] = $a;
-            $returnData['msg'] = "valid";
-
+            if($user){
+                $returnData['user_id'] = (int) $user->getId();
+                $returnData['username'] = $user->getUsername();
+                $returnData['name'] = $user->getProfile()->getName();
+                $returnData['address'] = $user->getProfile()->getAddress();
+                $returnData['email'] = $user->getProfile()->getEmail();
+                $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+                $returnData['password'] = $a;
+                $returnData['msg'] = "valid";
+            }else{
+                $returnData['msg'] = "invalid";
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($returnData));

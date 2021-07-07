@@ -134,6 +134,7 @@
 'assets/template/plugin/side.toolbar/sidebar.panel.js'
 'assets/template/plugin/js/cookies.js'
 'assets/template/desktop/js/scripts.js'
+'assets/template/desktop/js/numeric.js'
 'assets/template/desktop/js/authentication.js'
 
 %}
@@ -143,7 +144,7 @@
 {% block javascriptBlock %}{% endblock %}
 <script type="text/javascript">
 $(document).ready(function(){
-    {% block documentready %}{% endblock %}
+{% block documentready %}{% endblock %}
 });
 </script>
 {% if globalOption.templateCustomize.fbMessenger is not empty  %}
