@@ -812,8 +812,8 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('subProduct.size','subSize');
         $qb->leftJoin('subProduct.productUnit','subUnit');
         $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
-        $qb->addSelect('category.name as categoryName');
-        $qb->addSelect('brand.name as brandName');
+        $qb->addSelect('category.id as categoryId','category.name as categoryName');
+        $qb->addSelect('brand.id as brandId','brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
         $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->addSelect("CASE WHEN (item.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subSize.name,'*#*',subUnit.name,'*#*', subProduct.salesPrice))  ELSE  '' END  as subProducts");
@@ -824,20 +824,22 @@ class ItemRepository extends EntityRepository
         if($row){
             $data['product_id']               = (int) $row['itemId'];
             $data['name']                     = $row['name'];
-            $data['quantity']                 = $row['quantity'];
+            $data['quantity']                 = ($row['quantity']) ? $row['quantity']:'';
             $data['price']                    = $row['price'];
-            $data['discountPrice']            = $row['discountPrice'];
-            $data['category']                 = $row['categoryName'];
-            $data['brand']                    = $row['brandName'];
-            $data['discountName']             = $row['discountName'];
-            $data['discountType']             = $row['discountType'];
-            $data['discountAmount']           = $row['discountAmount'];
-            $data['unitName']                 = $row['unitName'];
+            $data['discountPrice']            = ($row['discountPrice']) ? $row['discountPrice']:'';
+            $data['category']                 = ($row['categoryName']) ? $row['categoryName'] : '';
+            $data['categoryId']               = ($row['categoryId']) ? $row['categoryId'] : '';
+            $data['brand']                    = ($row['brandName']) ? $row['brandName'] :'';
+            $data['brandId']                  = ($row['brandId']) ? $row['brandId'] :'';
+            $data['discountName']             = ($row['discountName']) ? $row['discountName']:'';
+            $data['discountType']             = ($row['discountType']) ? $row['discountType']:'';
+            $data['discountAmount']           = ($row['discountAmount']) ? $row['discountAmount']: '';
+            $data['unitName']                 = ($row['unitName']) ? $row['unitName'] : '';
             $data['quantityApplicable']       = $row['quantityApplicable'];
             $data['content']                  = (string)$row['shortContent'];
             $data['description']              = (string)$row['description'];
-            $data['subItemStatus']            = $row['subItemStatus'];
-            $data['maxQuantity']              = $row['maxQuantity'];
+            $data['subItemStatus']            = ($row['subItemStatus']) ? $row['subItemStatus'] :'';
+            $data['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
             if($row['path']){
                 $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
                 $data['imagePath']            =  $path;
