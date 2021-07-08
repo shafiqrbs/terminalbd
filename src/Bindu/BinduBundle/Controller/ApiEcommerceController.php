@@ -432,6 +432,29 @@ class ApiEcommerceController extends Controller
 
     }
 
+    public function productKeywordAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $keyword = $_REQUEST['search'];
+            $entity = $this->checkApiValidation($request);
+            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->searchAndroidStock($keyword,$entity->getEcommerceConfig());
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($entities));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
     public function productDetailsAction(Request $request)
     {
         set_time_limit(0);

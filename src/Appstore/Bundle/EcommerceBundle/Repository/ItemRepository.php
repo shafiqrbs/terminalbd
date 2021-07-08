@@ -1805,6 +1805,22 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function searchAndroidStock($q, EcommerceConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.name as id');
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->andWhere("e.ecommerceConfig = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
 
 
 }

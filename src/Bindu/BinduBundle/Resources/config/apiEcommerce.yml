@@ -46,6 +46,10 @@ api_ecommerce_item_search:
     path:     /product-search
     defaults: { _controller: BinduBundle:ApiEcommerce:product }
 
+api_ecommerce_item_keyword_search:
+    path:     /product-keyword-search
+    defaults: { _controller: BinduBundle:ApiEcommerce:productKeyword }
+
 api_ecommerce_item_category:
     path:     /feature-category
     defaults: { _controller: BinduBundle:ApiEcommerce:category }
