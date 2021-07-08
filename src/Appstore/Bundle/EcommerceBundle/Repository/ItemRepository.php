@@ -825,7 +825,7 @@ class ItemRepository extends EntityRepository
         if($row){
             $data['product_id']               = (int) $row['itemId'];
             $data['name']                     = $row['name'];
-            $data['quantity']                 = ($row['quantity']) ? $row['quantity']:'';
+            $data['quantity']                 = $row['quantity'];
             $data['price']                    = $row['price'];
             $data['discountPrice']            = ($row['discountPrice']) ? $row['discountPrice']:'';
             $data['category']                 = ($row['categoryName']) ? $row['categoryName'] : '';
