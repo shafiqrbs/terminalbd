@@ -243,8 +243,8 @@ $("#registrationForm").validate({
             processData : false,
             contentType : false,
             success: function(response){
-                //window.open(response+"#modal","_self");
-                location.reload();
+                window.open(response+"#modal","_self");
+                //location.reload();
             },
             complete: function(response){
 
