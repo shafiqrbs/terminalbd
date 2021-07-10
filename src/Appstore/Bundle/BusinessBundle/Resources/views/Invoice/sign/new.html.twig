@@ -69,13 +69,15 @@
                                                         <tbody>
                                                         <tr>
                                                         <td>
-                                                            <div class="span12" >
-                                                            <select id="particular" name="particular" class="span12 m-wrap select2">
-                                                                <option value="">--- Select Stock Product ---- </option>
-                                                                {% for particular in particulars %}
-                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                                            <div class="row-fluid">
+                                                                <div class="span12" >
+                                                                <select id="particular" name="particular" class="span12 m-wrap select2">
+                                                                    <option value="">--- Select Stock Product ---- </option>
+                                                                    {% for particular in particulars %}
+                                                                        <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -102,6 +104,16 @@
                                                                 </div>
                                                             </div>
                                                         </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <div class="row-fluid">
+                                                                    <div class="span12" >
+                                                                        <input type="text"  class="m-wrap span12 form-control" autocomplete="off" id="description" name="description" placeholder="Description" value=""  >
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -193,6 +205,11 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                {% if item.description %}
+                                                <tr id="remove-{{ item.id }}">
+                                                    <td colspan="7">{{ item.description }}</td>
+                                                </tr>
+                                                {% endif %}
                                             {% endfor %}
                                             </tbody>
                                             <tfoot>

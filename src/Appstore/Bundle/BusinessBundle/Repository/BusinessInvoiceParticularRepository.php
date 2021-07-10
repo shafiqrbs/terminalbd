@@ -227,6 +227,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $salesPrice = !empty($data['salesPrice']) ? $data['salesPrice'] :0;
         $width = !empty($data['width']) ? $data['width'] :'';
         $height = !empty($data['height']) ? $data['height'] :'';
+        $description = !empty($data['description']) ? $data['description'] :'';
         $entity->setQuantity($quantity);
         $particular = $data['particular'];
         $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($particular);
@@ -236,6 +237,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setUnit($stock->getUnit()->getName());
         }
         $entity->setPrice($salesPrice);
+        $entity->setDescription($description);
         $entity->setPurchasePrice($stock->getPurchasePrice());
         if(!empty($width) and !empty($height)){
             $entity->setWidth($width);
@@ -346,6 +348,12 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';
+            $data .= "<tr id='remove-{$entity->getId()}'>";
+            if($entity->getDescription()){
+                $data .= "<td colspan='7'>{$entity->getDescription()}</td>";
+            }
+            $data .= '</tr>';
+
             $i++;
         }
         return $data;

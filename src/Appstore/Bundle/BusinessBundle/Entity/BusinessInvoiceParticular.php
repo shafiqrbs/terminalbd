@@ -68,6 +68,13 @@ class BusinessInvoiceParticular
     private $particular;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="quantity", type="smallint", length = 5, nullable=true)
@@ -527,6 +534,22 @@ class BusinessInvoiceParticular
     public function setTloPrice($tloPrice)
     {
         $this->tloPrice = $tloPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }
 

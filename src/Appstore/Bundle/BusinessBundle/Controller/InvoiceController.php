@@ -649,8 +649,9 @@ class InvoiceController extends Controller
         $salesPrice = $request->request->get('salesPrice');
         $width = $request->request->get('width');
         $height = $request->request->get('height');
+        $description = $request->request->get('description');
         if(!empty($particular)){
-            $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice, 'width'=> $width,'height'=> $height);
+            $invoiceItems = array('particular' => $particular ,'quantity' => $quantity,'salesPrice'=> $salesPrice,'description'=> $description, 'width'=> $width,'height'=> $height);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertBannerSignItem($invoice,$invoiceItems);
 	        $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';
