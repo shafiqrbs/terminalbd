@@ -627,8 +627,13 @@ class AccountCashRepository extends EntityRepository
         }
         $cash->setProcessHead($processHead);
         $cash->setUpdated($entity->getUpdated());
-        $cash->setBalance($balance + $entity->getAmount());
-        $cash->setDebit($entity->getAmount());
+        if($entity->getTransactionType() == 'Debit'){
+            $cash->setDebit($entity->getAmount());
+            $cash->setBalance($balance + $entity->getDebit());
+        }else{
+            $cash->setCredit($entity->getCredit());
+            $cash->setBalance($balance - $entity->getCredit());
+        }
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
         $em->persist($cash);

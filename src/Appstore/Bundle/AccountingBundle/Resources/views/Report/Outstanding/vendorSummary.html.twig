@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Customer Outstanding
+                    Vendor Summary
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,11 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('account_sales_business') }}">Account Sales</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="javascript:">Customer Outstanding lists</a></li>
+                    <li><a href="javascript:">Vendor Summary lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,15 +27,12 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Customer Outstanding</div>
+                        <div class="caption"><i class="icon-reorder"></i>Vendor Summary</div>
                         <div class="actions">
+                            {% set amount = searchForm.amount is defined ? searchForm.amount :'' %}
                             <div class="btn-group">
-                                {% set amount = searchForm.amount is defined ? searchForm.amount :'' %}
-                                <a class="btn blue" href="{{ path('report_customer_ledger') }}"><i class="icon-plus-sign"></i>&nbsp; Customer Ledger</a>
-                                <a class="btn red" href="{{ path('account_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Receive</a>
-                                <a class="btn purple" target="_blank"  href="{{ path("report_customer_outstanding_pdf",{'amount':amount}) }}" >
-                                    <i class=" icon-download"></i>&nbsp;Download PDF
-                                </a>
+                                <a class="btn blue" href="{{ path('report_vendor_outstanding') }}"><i class="icon-th-list"></i>&nbsp; Outstanding</a>
+                                <a class="btn red" href="{{ path('account_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Payment</a>
                             </div>
                         </div>
                     </div>
@@ -59,31 +52,27 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="portlet-body flip-scroll" id="DivIdToPrint">
+                        <div class="portlet-body flip-scroll">
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" ><i class="icon-reorder"></i></th>
-                                    <th class="numeric" >Customer Name</th>
+                                    <th class="numeric" >Company Name</th>
+                                    <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Sales</th>
-                                    <th class="numeric" >Receive</th>
+                                    <th class="numeric" >Purchase</th>
+                                    <th class="numeric" >Payment</th>
                                     <th class="numeric" >Outstanding</th>
-                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for entity in entities %}
                                     <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td class="numeric" >{{ entity.customerName|capitalize }}</td>
-                                        <td class="numeric" >{{ entity.customerMobile }}</td>
-                                        <th class="numeric" >{{ entity.totalAmount|number_format }}</th>
-                                        <th class="numeric" >{{ entity.amount|number_format }}</th>
+                                        <td class="numeric" >{{ entity.companyName }}</td>
+                                        <td class="numeric" >{{ entity.vendorName }}</td>
+                                        <td class="numeric" >{{ entity.vendorMobile }}</td>
+                                        <th class="numeric" >{{ entity.purchaseAmount|number_format }}</th>
+                                        <th class="numeric" >{{ entity.payment|number_format }}</th>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
-                                        <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
-                                            <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
-                                        </th>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -92,7 +81,6 @@
                                 {{ knp_pagination_render(entities) }}
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -105,6 +93,13 @@
         }
     </style>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
@@ -116,12 +111,6 @@
 {% block documentready %}
     {{ parent() }}
     AccountingApproveProcess();
-    $('#printLedger').on('click', function(e)  {
-    $('#DivIdToPrint').printThis({
-    styles: ['{{ asset('assets/css/print.css') }}'],
-    header: "<h1>Customer Outstanding</h1>"
-    });
-    });
 {% endblock %}
 
 

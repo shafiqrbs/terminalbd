@@ -189,8 +189,21 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination pull-center" >
-                                {{ knp_pagination_render(pagination) }}
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="pagination">
+                                        <ul class="pagination">
+                                            <li>
+                                    Total Records: {{ pagination.getTotalItemCount }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="span9">
+                                    <div class="pagination pull-right" >
+                                    {{ knp_pagination_render(pagination) }}
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -204,6 +217,9 @@
         .messagebox{
             max-width: 20%;
             min-width: 250px;
+        }
+        .min td{
+            background-color: #fdf59a45!important;
         }
     </style>
 {% endblock %}

@@ -373,9 +373,9 @@
 
 <table class="table">
     <thead>
-    <tr><td class="pull-center" colspan="8"><h3>{{ globalOption.name }}</h3></td></tr>
+    <tr><td class="pull-center" colspan="10"><h3>{{ globalOption.name }}</h3></td></tr>
     <tr>
-        <th class="pull-center" colspan="8"><h4><strong>VENDOR OUTSTANDING</strong></h4></th>
+        <th class="pull-center" colspan="10"><h4><strong>Customer OUTSTANDING</strong></h4></th>
     </tr>
     <tr>
         <th class="pull-left"  colspan="8">
@@ -393,7 +393,7 @@
         <th class="numeric" >S/N</th>
         <th class="numeric" style="width:70px!important;" >Created</th>
         <th class="numeric" >Invoice</th>
-        <th class="numeric" style="padding: 0!important;border: 0px 0px 1px 0px!important;" >
+        <th class="numeric" style="padding: 0!important;border: 0 0 1px 0!important;" >
             {% if globalOption.mainApp.slug == 'business' %}
                 <table class="inner-table" style="width: 100%; border-collapse: collapse;" border="0">
                     <tr>
@@ -490,10 +490,11 @@
     {% if searchForm['mobile'] is defined and searchForm['mobile'] is not empty  %}
         <tfoot>
         <tr>
-            <td class="numeric" colspan="5" ></td>
+            <td class="numeric pull-right" colspan="6" ><strong>Grand Total</strong></td>
             <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
             <td class="numeric" ><strong>{{ overview.receiveAmount|number_format }}</strong></td>
             <td class="numeric" ><strong>{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</strong></td>
+            <td></td>
         </tr>
         </tfoot>
     {% endif %}

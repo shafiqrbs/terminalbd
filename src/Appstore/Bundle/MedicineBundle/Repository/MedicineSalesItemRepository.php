@@ -57,6 +57,75 @@ class MedicineSalesItemRepository extends EntityRepository
         return $result['total'];
     }
 
+    public function topSalesItem(User $user,$data)
+    {
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime('now');
+        $createdStart = isset($data['startDate'])? $data['startDate'] :$compare->format('Y-m-d');
+        $createdEnd = isset($data['endDate'])? $data['endDate'] :$compare->format('Y-m-t');
+        $brandName = isset($data['brandName'])? $data['brandName'] :'';
+        $topLimit = (isset($data['topLimit']) and $data['topLimit'] > 1) ? $data['topLimit'] :10;
+        $qb = $this->createQueryBuilder('si');
+        $qb->select('SUM(si.quantity) as salesQuantity');
+        $qb->addSelect('ms.id as stockId','ms.name as name','ms.brandName as brandName','ms.remainingQuantity as remain','ms.purchaseQuantity as purchaseQuantity','ms.minQuantity as minQty');
+        $qb->join('si.medicineStock','ms');
+        $qb->join('si.medicineSales','s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        if($brandName){
+            $qb->andWhere($qb->expr()->like("ms.brandName", "'%$brandName%'"  ));
+        }
+        if (!empty($createdStart)) {
+            $compareTo = new \DateTime($createdStart);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("s.created >= :createdStart");
+            $qb->setParameter('createdStart', $created);
+        }
+        if (!empty($createdEnd)) {
+            $compareTo = new \DateTime($createdEnd);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("s.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
+        $qb->groupBy('ms.id');
+        $qb->orderBy('salesQuantity','DESC');
+        $qb->setMaxResults($topLimit);
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function slowSalesItem(User $user,$data)
+    {
+
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+        $compare = new \DateTime('now');
+        $createdStart = isset($data['startDate'])? $data['startDate'] :$compare->format('Y-m-d');
+        $createdEnd = isset($data['endDate'])? $data['endDate'] :$compare->format('Y-m-t');
+        $brandName = isset($data['brandName'])? $data['brandName'] :'';
+        $topLimit = (isset($data['topLimit']) and $data['topLimit'] > 1) ? $data['topLimit'] :10;
+        $brand = "";
+        if($brandName){
+            $brand = "AND stock.brandName = :brandName";
+        }
+        $sql = "SELECT stock.name as name, stock.id as stockId,stock.brandName as brandName,stock.remainingQuantity as remain,stock.purchaseQuantity as purchaseQuantity,stock.salesQuantity as salesQuantity,stock.minQuantity as minQty 
+                FROM medicine_stock as stock
+                WHERE stock.medicineConfig_id = :config {$brand} AND stock.remainingQuantity > {$topLimit}  AND stock.id NOT IN  (SELECT s.id as id FROM medicine_sales_item as salesItem
+             JOIN medicine_sales as sales ON salesItem.medicineSales_id = sales.id 
+             JOIN medicine_stock as s ON salesItem.medicineStock_id = s.id                                                                         
+             WHERE sales.medicineConfig_id = :config AND sales.process = :process AND sales.created >= :startDate AND sales.created <= :endDate
+             GROUP BY medicineStock_id)  ORDER BY remain DESC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('startDate', $createdStart);
+        $stmt->bindValue('endDate', $createdEnd);
+        if($brandName) {
+            $stmt->bindValue('brandName', $brandName);
+        }
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        return  $result;
+    }
+
     public function salesStockItemUpdate(MedicineStock $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
@@ -149,6 +218,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
 		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 		$medicineName = isset($data['medicineName'])? $data['medicineName'] :'';
+		$brandName = isset($data['brandName'])? $data['brandName'] :'';
 		if (!empty($invoice)) {
 			$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
 		}

@@ -487,6 +487,7 @@ class Builder extends ContainerAware
 		    $menu['Accounting']['Manage Sales']->addChild('Add Receive', array('route' => 'account_sales_new'));
             $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
 		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
+		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Summary', array('route' => 'report_customer_summary'));
             $menu['Accounting']['Manage Sales']['Reports']->addChild('Ledger', array('route' => 'report_customer_ledger'));
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
@@ -499,6 +500,7 @@ class Builder extends ContainerAware
             $menu['Accounting']['Manage Purchase']->addChild('Commission', array('route' => 'account_purchasecommission'));
             $menu['Accounting']['Manage Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
             $menu['Accounting']['Manage Purchase']['Reports']->addChild('Outstanding', array('route' => 'report_vendor_outstanding'));
+            $menu['Accounting']['Manage Purchase']['Reports']->addChild('Summary', array('route' => 'report_vendor_summary'));
             $menu['Accounting']['Manage Purchase']['Reports']->addChild('Ledger', array('route' => 'report_vendor_ledger'));
 	    }
 	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
@@ -686,47 +688,6 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']['Master Data']->addChild('Brand', array('route' => 'assetsitembrand'));
         $menu['Fixed Assets']['Master Data']->addChild('Setting Data', array('route' => 'assets_particular'));
 
-        return $menu;
-
-    }
-
-    public function TallyMenu($menu)
-    {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
-        $menu
-            ->addChild('Tally Management')
-            ->setAttribute('icon', 'icon-archive')
-            ->setAttribute('dropdown', true);
-
-        $menu['Tally Management']->addChild('Manage sales')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Manage sales']->addChild("Sales", array('route' => 'tally_itemissue'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Manage sales']->addChild("Add Sales", array('route' => 'tally_itemissue_new'))->setAttribute('icon', 'icon-th-list');
-
-        $menu['Tally Management']->addChild('Purchase')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Purchase']->addChild("Local", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Add Local", array('route' => 'tally_purchase_new'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Foreign", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Add Foreign", array('route' => 'tally_purchase_new'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']['Purchase']->addChild("Service", array('route' => 'tally_purchase'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tally Management']->addChild('Reports')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Reports']->addChild("Mushok 4.3", array('route' => 'tallyreport_mushok_4_3'));
-        $menu['Tally Management']['Reports']->addChild("Mushok 6.1", array('route' => 'tallyreport_mushok_6_1'));
-        $menu['Tally Management']['Reports']->addChild("Mushok 6.2", array('route' => 'tallyreport_mushok_6_2'));
-        $menu['Tally Management']['Reports']->addChild("Mushok 6.2.1", array('route' => 'tallyreport_mushok_6_2_1'));
-        $menu['Tally Management']['Reports']->addChild("Mushok 6.3", array('route' => 'tallyreport_mushok_6_3'));
-
-        $menu['Tally Management']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Manage Stock']->addChild('Stock', array('route' => 'tallyitem'));
-        $menu['Tally Management']['Manage Stock']->addChild('Add Stock', array('route' => 'tallyitem_new'));
-        $menu['Tally Management']['Manage Stock']->addChild('Stock Details', array('route' => 'tallyitem'));
-        $menu['Tally Management']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')->setAttribute('dropdown', true);
-        $menu['Tally Management']['Master Data']->addChild('Category', array('route' => 'tallycategory'));
-        $menu['Tally Management']['Master Data']->addChild('VAT Product', array('route' => 'taxtariff'));
-        $menu['Tally Management']['Master Data']->addChild('Brand', array('route' => 'tallybrand'));
-        $menu['Tally Management']['Master Data']->addChild('Vendor', array('route' => 'account_vendor'));
         return $menu;
 
     }
@@ -1411,10 +1372,16 @@ class Builder extends ContainerAware
                     ->setAttribute('dropdown', true);
 	        $menu['Medicine']['Reports']->addChild('System Overview', array('route' => 'medicine_system_overview'))
 	                                    ->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Top Sales Item', array('route' => 'medicine_report_top_sales_item'))->setAttribute('icon', 'icon-th-list');
+            $menu['Medicine']['Reports']->addChild('Low Sales Item', array('route' => 'medicine_report_low_sales_item'))->setAttribute('icon', 'icon-th-list');
 	        $menu['Medicine']['Reports']->addChild('Sales')
                     ->setAttribute('icon', 'icon icon-bar-chart')
                     ->setAttribute('dropdown', true);
                 $menu['Medicine']['Reports']['Sales']->addChild('Sales Summary', array('route' => 'medicine_report_sales_summary'))
+                    ->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']['Sales']->addChild('Daily Sales Chart', array('route' => 'medicine_report_daily_hourly_sales'))
+                    ->setAttribute('icon', 'icon-th-list');
+	            $menu['Medicine']['Reports']['Sales']->addChild('Monthly Sales Chart', array('route' => 'medicine_report_monthly_sales_purchase'))
                     ->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Sales']->addChild('Sales Details', array('route' => 'medicine_report_sales_details'))
                     ->setAttribute('icon', 'icon-th-list');
@@ -1435,7 +1402,7 @@ class Builder extends ContainerAware
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'))->setAttribute('icon', 'icon-th-list');
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'))->setAttribute('icon', 'icon-th-list');
-		        /*$menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');*/
+		        $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']->addChild('Brand Stock Price', array('route' => 'medicine_report_brand_stock'))->setAttribute('icon', 'icon-th-list');
 	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'))->setAttribute('icon', 'icon-th-list');

@@ -236,43 +236,27 @@ class PurchaseController extends Controller
         }
         if (empty($checkStockMedicine)){
             $entity->setMedicineConfig($config);
-            if(empty($data['medicineId'])){
-                if($entity->getAccessoriesBrand()) {
-                    $brand = $entity->getAccessoriesBrand();
-                    $entity->setBrandName($brand->getName());
-                    $entity->setMode($brand->getParticularType()->getSlug());
-                }
-            }else{
+            if(!empty($data['medicineId'])){
                 $entity->setMedicineBrand($medicine);
                 $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
                 $entity->setName($name);
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }
-            if($entity->getUnit()){
-                $minQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock')->findOneBy(array('medicineConfig' => $config,'unit'=> $entity->getUnit()));
-                if($minQnt){
-                    $entity->setMinQuantity($minQnt->getMinQuantity());
-                }
-            }
             if(empty($entity->getUnit())){
                 $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                 $entity->setUnit($unit);
             }
-            $pack = !empty($data['medicineStock']['pack']) ? $data['medicineStock']['pack'] : 1;
-            $minQuantity = !empty($data['medicineStock']['minQuantity']) ? $data['medicineStock']['minQuantity'] : 0;
-            $entity->setMinQuantity($minQuantity);
-            $quantity = ($pack * $entity->getPurchaseQuantity());
-            $entity->setPack($pack);
-            $entity->getPurchasePrice();
+            $quantity = $entity->getPurchaseQuantity();
+            $entity->setPurchasePrice($entity->getSalesPrice());
             $purchasePrice = round(($entity->getPurchasePrice()/$entity->getPurchaseQuantity()),2);
             $salesPrice = round(($entity->getSalesPrice()/$entity->getPurchaseQuantity()),2);
-            $entity->setPurchaseQuantity($quantity);
+            // $entity->setPurchaseQuantity($quantity);
             $entity->setPurchasePrice($purchasePrice);
             $entity->setAveragePurchasePrice($purchasePrice);
             $entity->setSalesPrice($salesPrice);
             $entity->setAverageSalesPrice($salesPrice);
-            $entity->setRemainingQuantity($entity->getPurchaseQuantity());
+            // $entity->setRemainingQuantity($entity->getPurchaseQuantity());
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);

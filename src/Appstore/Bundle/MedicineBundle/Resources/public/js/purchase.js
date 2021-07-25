@@ -177,25 +177,20 @@ $('form#medicineStock').on('keyup', ' #medicineStock_pack , #medicineStock_purch
 var formStock = $("#medicineStock").validate({
     rules: {
         "medicineStock[name]": {required: true},
-        "medicineStock[accessoriesBrand]": {required: false},
-        "medicineStock[rackNo]": {required: false},
         "medicineStock[purchaseQuantity]": {required: true},
         "medicineStock[unit]": {required: false},
-        "medicineStock[purchasePrice]": {required: true},
-        "medicineStock[salesPrice]": {required: false}
+        "medicineStock[salesPrice]": {required: true}
     },
     messages: {
         "medicineStock[name]": "Enter medicine name",
-        "medicineStock[rackNo]": "Enter medicine rack no",
         "medicineStock[unit]": "Enter medicine unit",
-        "medicineStock[purchasePrice]": "Enter purchase price",
+        "medicineStock[salesPrice]": "Enter mrp price",
         "medicineStock[purchaseQuantity]": "Enter purchase quantity",
     },
     tooltip_options: {
         "medicineStock[name]": {placement: 'top', html: true},
-        "medicineStock[rackNo]": {placement: 'top', html: true},
         "medicineStock[unit]": {placement: 'top', html: true},
-        "medicineStock[purchasePrice]": {placement: 'top', html: true},
+        "medicineStock[salesPrice]": {placement: 'top', html: true},
         "medicineStock[purchaseQuantity]": {placement: 'top', html: true},
     },
 
@@ -234,7 +229,6 @@ var formStock = $("#medicineStock").validate({
 var form = $("#purchaseItemForm").validate({
     rules: {
         "purchaseItem[stockName]": {required: true},
-        "purchaseItem[purchasePrice]": {required: false},
         "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: true},
         "purchaseItem[expirationEndDate]": {required: false}
@@ -242,13 +236,11 @@ var form = $("#purchaseItemForm").validate({
 
     messages: {
         "purchaseItem[stockName]":"Enter medicine name",
-        "purchaseItem[purchasePrice]":"Enter purchase price",
         "purchaseItem[salesPrice]":"Enter sales price",
         "purchaseItem[quantity]":"Enter medicine quantity"
     },
     tooltip_options: {
         "purchaseItem[stockName]": {placement:'top',html:true},
-        "purchaseItem[purchasePrice]": {placement:'top',html:true},
         "purchaseItem[salesPrice]": {placement:'top',html:true},
         "purchaseItem[quantity]": {placement:'top',html:true}
     },
@@ -305,24 +297,23 @@ $('#invoiceParticulars').on("click", ".deleteParticular", function() {
 });
 
 
-$(document).on('change', '.quantity , .purchasePrice ,.salesPrice', function() {
+$(document).on('change', '.quantity ,.salesPrice', function() {
 
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
     var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
-    var purchasePrice = parseFloat($('#purchasePrice-'+id).val());
     var salesPrice = parseFloat($('#salesPrice-'+id).val());
     if(salesQuantity > quantity){
         $('#quantity-'+id).val($('purchaseQuantity-'+id).val());
         alert("Purchase quantity must be more then sales quantity.");
         return false;
     }
-    var subTotal  = (quantity * purchasePrice);
+    var subTotal  = (quantity * salesPrice);
     $("#subTotal-"+id).html(subTotal);
     $.ajax({
         url: Routing.generate('medicine_purchase_item_update'),
         type: 'POST',
-        data:'purchaseItemId='+ id +'&quantity='+ quantity +'&purchasePrice='+ purchasePrice+'&salesPrice='+ salesPrice,
+        data:'purchaseItemId='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);

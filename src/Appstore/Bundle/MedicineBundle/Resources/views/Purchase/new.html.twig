@@ -61,75 +61,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <div class="control-group">
-                                            <label class="control-label" for="name">Pack & Qnt</label>
+                                            <label class="control-label" for="name">Unit</label>
+                                            <div class="controls">
+                                                {{ form_widget(stockItemForm.unit) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="name">QTY & MRP</label>
                                             <div class="controls">
                                                 <div class="input-append">
                                                     <div class="input-group">
-                                                        {{ form_widget(stockItemForm.pack) }}
-                                                        <button class="btn yellow">X</button>
                                                         {{ form_widget(stockItemForm.purchaseQuantity) }}
-                                                        <button class="btn red">=</button>
-                                                        <button class="btn green" id="stockTotalQnt">Total</button>
+                                                        {{ form_widget(stockItemForm.salesPrice) }}
+                                                        <button type="submit" class="btn green" id="stockItemCreate"><i class="icon-save"></i> Add Stock Item</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span3">
-                                        <div class="control-group">
-                                            <label class="control-label" for="name">PP & MRP</label>
-                                            <div class="controls">
-                                                {{ form_widget(stockItemForm.purchasePrice) }}
-                                                {{ form_widget(stockItemForm.salesPrice) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid" >
-                                    <!--/span-->
-                                    <div class="span3">
-                                        <div class="control-group">
-                                            <label class="control-label" for="name">Item Unit</label>
-                                            <div class="controls">
-                                                {{ form_widget(stockItemForm.unit) }}
-                                                {{ form_errors(stockItemForm.unit) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="span3">
-                                        <div class="control-group">
-                                            <label class="control-label" for="name">Rack No</label>
-                                            <div class="controls">
-                                                {{ form_widget(stockItemForm.rackNo) }}
-                                                {{ form_errors(stockItemForm.rackNo) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="span3">
-                                        <div class="control-group">
-                                            <label class="control-label"  for="category" >Brand Name</label>
-                                            <div class="controls">
-                                                {{ form_widget(stockItemForm.accessoriesBrand) }}
-                                                {{ form_errors(stockItemForm.accessoriesBrand) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="span3">
-                                        <div class="control-group">
-                                            <label class="control-label" for="name">Expiry Date</label>
-                                            <div class="controls">
-                                                <input type="text" id="expirationEndDate" name="expirationEndDate" autocomplete="off" class="m-wrap span12 dateCalendar" placeholder="Expiry date">
-                                            </div>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn green" id="stockItemCreate"><i class="icon-save"></i> Add Stock Item</button>
                                     </div>
                                 </div>
                                 {{ form_end(stockItemForm) }}
@@ -138,32 +94,25 @@
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
                             <div class="row-fluid particular-info" >
-                                <div class="span4" style="padding-left:15px">
+                                <div class="span6" style="padding-left:15px">
                                     {{ form_widget(purchaseItem.stockName) }}
                                     {{ form_errors(purchaseItem.stockName) }}
                                 </div>
-                                <div class="span8">
+                                <div class="span6">
                                     <div class="input-append">
                                         <div class="input-group">
-                                            <button class="btn blue">Min Qnt.</button>
-                                            <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input" placeholder="Mini qnt" autocomplete="off" value="" aria-required="true" aria-invalid="false">
-                                            <button class="btn blue">Pack</button>
-                                            <input type="text" id="pack" name="pack" class="m-wrap purchase-input" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
-                                            <button class="btn yellow">X</button>
+                                            <button class="btn">Min Qnt.</button>
+                                            <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input span2" placeholder="Mini qnt" autocomplete="off" value="" aria-required="true" aria-invalid="false">
                                             {{ form_widget(purchaseItem.quantity) }}
-                                            <button class="btn red">=</button>
-                                            <button class="btn green" id="totalQnt">Total</button>
-                                            <button class="btn blue" id="unit">Unit</button>
-                                            {{ form_widget(purchaseItem.purchasePrice) }}
+                                            <button class="btn" id="unit">Unit</button>
                                             {{ form_widget(purchaseItem.salesPrice) }}
                                             {{ form_widget(purchaseItem.expirationEndDate) }}
-                                            <button type="submit" class="btn blue" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                            <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                             <input type="hidden" id="particularId" name="particularId" value="">
                                         </div>
                                     </div>
                                     {{ form_errors(purchaseItem.quantity) }}
-                                    {{ form_errors(purchaseItem.purchasePrice) }}
-                                </div>
+                              </div>
                             </div>
                             {{ form_end(purchaseItem) }}
                             <div class="clearfix">&nbsp;</div>
@@ -177,9 +126,8 @@
                                             <th class="span1">Rack</th>
                                            {# <th class="span1">Expiration</th>#}
                                            {# <th class="span1">AVGPP</th>#}
-                                            <th class="span1">PP</th>
+                                            <th class="span1">Last PP</th>
                                             <th class="span1">MRP</th>
-                                            <th class="span1">Pack</th>
                                             <th class="span1">Qnt</th>
                                             <th class="span1">Total</th>
                                             <th class="span1">Sales Qnt</th>
@@ -197,11 +145,11 @@
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                    {# <td class="span1">{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</td>#}
                                                     {#<td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>#}
-                                                    <td class="span1">
+                                                    {#<td class="span1">
                                                         <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
-                                                    </td>
+                                                    </td>#}
+                                                    <td class="span1">{{ item.medicineStock.purchasePrice }}</td>
                                                     <td class="span1" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
-                                                    <td class="span1">{{ item.pack }}</td>
                                                     <td class="span1">
                                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                                     </td>

@@ -317,7 +317,7 @@ class AccountSalesRepository extends EntityRepository
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
         $qb = $this->createQueryBuilder('e');
-        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
+        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,COALESCE(SUM(e.totalAmount),0) as totalAmount, COALESCE(SUM(e.amount),0) as amount,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
         $qb->join('e.customer','customer');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
@@ -330,10 +330,26 @@ class AccountSalesRepository extends EntityRepository
             $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
             $qb->orderBy('customer.name','ASC');
         }
-
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery();
         return $result;
 
+    }
+
+    public function customerSummary($globalOption, $data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,COALESCE(SUM(e.totalAmount),0) as totalAmount, COALESCE(SUM(e.amount),0) as amount,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
+        $qb->join('e.customer','customer');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('customer.id');
+        if($amount) {
+            $qb->having('totalAmount >= :balance')->setParameter('balance', $amount);
+        }
+        $qb->orderBy('totalAmount', 'DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
     }
 
     public function customerOutstandingOld($globalOption, $data = array())

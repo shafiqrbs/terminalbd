@@ -328,10 +328,10 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $salesQnt = $entity->getSalesQuantity() + $entity->getDamageQuantity() + $entity->getPurchaseReturnQuantity();
         if(!empty($entity) and $salesQnt  <= (float)$data['quantity']) {
             $entity->setQuantity($data['quantity']);
-            $entity->setPurchasePrice($data['purchasePrice']);
-            $entity->setActualPurchasePrice($data['purchasePrice']);
+            $entity->setPurchasePrice($data['salesPrice']);
+            $entity->setActualPurchasePrice($data['salesPrice']);
             $entity->setSalesPrice($data['salesPrice']);
-            $entity->setPurchaseSubTotal($data['purchasePrice'] * $data['quantity']);
+            $entity->setPurchaseSubTotal($data['salesPrice'] * $data['quantity']);
             $entity->setRemainingQuantity($data['quantity']);
         }
         $em->persist($entity);
@@ -480,23 +480,21 @@ class MedicinePurchaseItemRepository extends EntityRepository
             if(!empty($entity->getMedicineStock()->getRackNo())){
                $rack = $entity->getMedicineStock()->getRackNo()->getName();
             }
+            $unit = ($entity->getMedicineStock()->getUnit()) ? $entity->getMedicineStock()->getUnit()->getName():'';
 
             $data .= '<tr id="remove-'. $entity->getId().'">';
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
-            $data .= '<th class="span1" >' .$rack. '</th>';
-            $data .= "<td>";
-            $data .= "<input type='text' class='numeric td-inline-input purchasePrice' data-id='{$entity->getid()}' autocomplete='off' id='purchasePrice-{$entity->getId()}' name='purchasePrice' value='{$entity->getActualPurchasePrice()}'>";
-            $data .= "</td>";
+            $data .= '<td class="span1" >' .$rack. '</td>';
+            $data .= '<td class="span1" >' .$entity->getMedicineStock()->getPurchasePrice(). '</td>';
             $data .= "<td class='span1' >";
             $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";
-            $data .= "<td class='span1'>{$entity->getPack()}</td>";
             $data .= "<td class='span1' >";
             $data .= "<input type='hidden' id='purchaseQuantity-{$entity->getId()}'  value='{$entity->getQuantity()}' >";
             $data .= "<input type='hidden' id='salesQuantity-{$entity->getId()}'  value='{$entity->getSalesQuantity()}' >";
             $data .= "<input type='text' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
-            $data .= "</td>";
+            $data .= "<span>{$unit}</span></td>";
             $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
             $data .= "<td class='span1' >{$entity->getSalesQuantity()}</td>";
             $data .= '<td class="span1" >

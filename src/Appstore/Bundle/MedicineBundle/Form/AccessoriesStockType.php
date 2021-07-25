@@ -38,18 +38,11 @@ class AccessoriesStockType extends AbstractType
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price')))
             ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Minimum')))
             ->add('maxQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Maximum')))
-            ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no')))
             ->add('unit', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Choose a unit ---',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -59,12 +52,11 @@ class AccessoriesStockType extends AbstractType
                 },
             ))
             ->add('rackNo', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
                 'empty_value' => '---Choose a rack position ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'m-wrap span12 inputs'),
-                'constraints' =>array( new NotBlank(array('message'=>'Select rack position')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->join("e.particularType","pt")
@@ -73,8 +65,8 @@ class AccessoriesStockType extends AbstractType
                         ->andWhere("pt.slug = 'medicine-rack'");
                 },
             ))
-            ->add('accessoriesBrand', 'entity', [
-                'required'    => true,
+            ->add('accessoriesBrand', 'entity', array(
+                'required'    => false,
                 'group_by'  => 'particularType.name',
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
                 'empty_value' => '---Select herbal/accessories brand ---',
@@ -88,7 +80,7 @@ class AccessoriesStockType extends AbstractType
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
                         ->andWhere('pt.slug IN (:slugs)')->setParameter('slugs',array('herbal','accessories'));
                 },
-            ])
+            ))
             ->add('noDiscount')
             ->add('file')
         ;

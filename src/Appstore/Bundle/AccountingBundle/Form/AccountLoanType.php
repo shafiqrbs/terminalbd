@@ -36,8 +36,10 @@ class AccountLoanType extends AbstractType
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
-                'empty_value' => '---Choose a Transaction Method---',
                 'property' => 'name',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select Transaction Method'))
+                ),
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

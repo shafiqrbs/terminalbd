@@ -381,6 +381,25 @@ class ReportController extends Controller
 		));
 	}
 
+	/**
+	 * Lists all AccountSales entities.
+	 *
+	 */
+	public function customerSummaryAction()
+	{
+        set_time_limit(0);
+        ignore_user_abort(true);
+	    $em = $this->getDoctrine()->getManager();
+		$data =$_REQUEST;
+		$globalOption = $this->getUser()->getGlobalOption();
+		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
+		$pagination = $this->paginate($entities);
+		return $this->render('AccountingBundle:Report/Outstanding:customerSummary.html.twig', array(
+			'entities' => $pagination,
+			'searchForm' => $data,
+		));
+	}
+
 	public function customerOutstandingPdfAction()
 	{
         set_time_limit(0);
@@ -504,6 +523,23 @@ class ReportController extends Controller
 			'searchForm' => $data,
 		));
 	}
+
+    public function vendorSummaryAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        /* @var $globalOption GlobalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorSummary($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('AccountingBundle:Report/Outstanding:vendorSummary.html.twig', array(
+            'option' => $globalOption,
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
 
     public function vendorOutstandingPdfAction()
     {

@@ -57,42 +57,6 @@ class AccountLoanController extends Controller
     }
 
     /**
-     * Lists all AccountLoan entities.
-     *
-     */
-    public function customerOutstandingAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->customerOutstanding($globalOption,$data);
-        $pagination = $this->paginate($entities);
-        return $this->render('AccountingBundle:AccountLoan:customerOutstanding.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
-    }
-
-
-    /**
-     * Lists all AccountLoanReturn entities.
-     *
-     */
-    public function salesReturnAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $entities = $em->getRepository('AccountingBundle:AccountLoanReturn')->findWithSearch($this->getUser(),$data);
-        $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoanReturn')->salesReturnOverview($this->getUser(),$data);
-        return $this->render('AccountingBundle:AccountLoan:salesReturn.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-            'overview' => $overview,
-        ));
-    }
-
-    /**
      * Creates a new AccountLoan entity.
      *
      */
@@ -117,6 +81,9 @@ class AccountLoanController extends Controller
             $entity->setGlobalOption($option);
             if($entity->getTransactionType() == 'Credit') {
                 $entity->setAmount("-{$entity->getAmount()}");
+                $entity->setCredit(abs($entity->getAmount()));
+            }else{
+                $entity->setDebit($entity->getAmount());
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
@@ -141,7 +108,7 @@ class AccountLoanController extends Controller
             $entity->setGlobalOption($option);
 	        if($entity->getTransactionType() == 'Credit') {
                 $entity->setAmount("-{$entity->getAmount()}");
-                $entity->setCredit($entity->getAmount());
+                $entity->setCredit(abs($entity->getAmount()));
             }else{
                 $entity->setDebit($entity->getAmount());
             }
@@ -211,98 +178,6 @@ class AccountLoanController extends Controller
 
 
     /**
-     * Finds and displays a AccountLoan entity.
-     *
-     */
-    public function printAction(AccountLoan $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        if (!$entity and $entity->getGlobalOption()->getId() != $this->getUser()->getGlobalOption()->getId() ) {
-            throw $this->createNotFoundException('Unable to find AccountLoan entity.');
-        }
-        $amountInWord = $this->get('settong.toolManageRepo')->intToWords($entity->getAmount());
-        return $this->render('AccountingBundle:AccountLoan:print.html.twig', array(
-            'entity'           => $entity,
-            'config'           => $entity->getGlobalOption()->getAccountingConfig(),
-            'amountInWord'     => $amountInWord,
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing AccountLoan entity.
-     *
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('AccountingBundle:AccountLoan')->find($id);
-
-        if (!$entity and $entity->getGlobalOption()->getId() != $this->getUser()->getGlobalOption()->getId() ) {
-            throw $this->createNotFoundException('Unable to find AccountLoan entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        return $this->render('AccountingBundle:AccountLoan:invoice.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
-        ));
-    }
-
-    /**
-    * Creates a form to edit a AccountLoan entity.
-    *
-    * @param AccountLoan $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(AccountLoan $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountLoanInvoiceType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_loan_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'horizontal-form purchase',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
-    /**
-     * Edits an existing AccountLoan entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('AccountingBundle:AccountLoan')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountLoan entity.');
-        }
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-        if ($editForm->isValid()) {
-
-            if ($entity->getSales()->getDue() < $entity->getAmount() ){
-                $this->get('session')->getFlashBag()->add(
-                    'notice',"Payment amount receive must be same or less as due amount"
-                );
-                return $this->redirect($this->generateUrl('account_loan_edit',array('id' => $entity->getId())));
-            }
-            $em->flush();
-            return $this->redirect($this->generateUrl('account_loan'));
-        }
-
-        return $this->render('AccountingBundle:AccountLoan:invoice.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
-        ));
-    }
-
-
-    /**
      * Displays a form to edit an existing Expenditure entity.
      *
      */
@@ -342,7 +217,6 @@ class AccountLoanController extends Controller
 
             return new Response('failed');
         }
-        exit;
     }
 
     /**
@@ -358,7 +232,6 @@ class AccountLoanController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 
@@ -372,7 +245,6 @@ class AccountLoanController extends Controller
         $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->accountReverse($entity);
         $entity->setProcess(null);
         $entity->setApprovedBy(null);
-        $entity->setTotalAmount(0);
         $entity->setAmount(0);
         $entity->setBalance(0);
         $em->flush();

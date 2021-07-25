@@ -6,6 +6,22 @@ medicine_report_purchase_vendor:
     path:     /purchase-vendor-outstanding
     defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
 
+medicine_report_monthly_sales_purchase:
+    path:     /monthly-sales-purchase-chart
+    defaults: { _controller: "MedicineBundle:Report:salesPurchaseChart" }
+
+medicine_report_daily_hourly_sales:
+    path:     /daily-sales-chart
+    defaults: { _controller: "MedicineBundle:Report:dailySalesChart" }
+
+medicine_report_top_sales_item:
+    path:     /top-sales-item
+    defaults: { _controller: "MedicineBundle:Report:topSalesItem" }
+
+medicine_report_low_sales_item:
+    path:     /low-sales-item
+    defaults: { _controller: "MedicineBundle:Report:lowSalesItem" }
+
 medicine_report_purchase_vendor_details:
     path:     /purchase-vendor-details
     defaults: { _controller: "MedicineBundle:Report:purchaseVendorDetails" }

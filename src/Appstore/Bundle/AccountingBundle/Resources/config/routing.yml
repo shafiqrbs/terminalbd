@@ -163,6 +163,10 @@ report_vendor_outstanding:
     path:     /vendor/outstanding
     defaults: { _controller: "AccountingBundle:Report:vendorOutstanding" }
 
+report_vendor_summary:
+    path:     /vendor/summary
+    defaults: { _controller: "AccountingBundle:Report:vendorSummary" }
+
 report_vendor_outstanding_pdf:
     path:     /vendor/outstanding-pdf
     defaults: { _controller: "AccountingBundle:Report:vendorOutstandingPdf" }
@@ -174,6 +178,10 @@ report_vendor_ledger:
 report_customer_outstanding:
     path:     /customer/outstanding
     defaults: { _controller: "AccountingBundle:Report:customerOutstanding" }
+
+report_customer_summary:
+    path:     /customer/summary
+    defaults: { _controller: "AccountingBundle:Report:customerSummary" }
 
 report_customer_outstanding_pdf:
     path:     /customer/outstanding-pdf

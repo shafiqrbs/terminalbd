@@ -486,6 +486,64 @@ class MedicineSalesRepository extends EntityRepository
 
 	}
 
+    public function medicineSalesDaily(User $user , $data = array())
+	{
+
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$compare = new \DateTime('18-06-2021');
+		$year =  $compare->format('Y');
+		$year = isset($data['year'])? $data['year'] :$year;
+        $month = isset($data['month'])? $data['month'] :$compare->format('m');
+		$sql = "SELECT DAY (sales.created) as day,SUM(sales.netTotal) AS total
+                FROM medicine_sales as sales
+                WHERE sales.medicineConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day ORDER BY day ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('year', $year);
+		$stmt->bindValue('month', $month);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+	    $medicineSalesMonthlyArr = array();
+        foreach($result as $row) {
+            $medicineSalesMonthlyArr[$row['day']] = $row['total'];
+        }
+        return $medicineSalesMonthlyArr;
+
+
+	}
+
+    public function medicineSalesHourly(User $user , $data = array())
+	{
+
+		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
+		$compare = new \DateTime('18-06-2021');
+		$year =  $compare->format('Y');
+        $year = isset($data['year'])? $data['year'] :$year;
+        $month = isset($data['month'])? $data['month'] :$compare->format('m');
+        $day = isset($data['day'])? $data['day'] :$compare->format('d');
+		$sql = "SELECT HOUR(sales.created) as hour,SUM(sales.netTotal) AS total
+                FROM medicine_sales as sales
+                WHERE sales.medicineConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH (sales.created) =:month AND DAY(sales.created) =:day
+                GROUP BY hour ORDER BY hour ASC";
+		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+		$stmt->bindValue('config', $config);
+		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('year', $year);
+		$stmt->bindValue('month', $month);
+		$stmt->bindValue('day', $day);
+		$stmt->execute();
+		$result =  $stmt->fetchAll();
+        $medicineSalesMonthlyArr = array();
+        foreach($result as $row) {
+            $medicineSalesMonthlyArr[$row['hour']] = $row['total'];
+        }
+        return $medicineSalesMonthlyArr;
+
+
+	}
+
     public function salesReport( User $user , $data)
     {
 

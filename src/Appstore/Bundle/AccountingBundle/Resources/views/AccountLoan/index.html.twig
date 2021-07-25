@@ -63,6 +63,7 @@
                                                 <input type="text" id="endDate" name="endDate"  class="span10 search-input dateCalendar m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    <button class="btn purple" type="submit"><i class="icon-download"></i> Download</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,10 +82,10 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th {% if entities.isSorted('e.updated') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Created', 'e.updated') }}{% if( direction == 'desc' and sort == 'e.updated') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Method</th>
                                     <th class="numeric" >Transaction</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
-                                    <th class="numeric" >Method</th>
                                     <th class="numeric" >Balance</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -96,12 +97,10 @@
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.employee is not empty %}{{ entity.employee.profile.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.transactionType }}</td>
                                         <td class="numeric" >{% if entity.transactionType == 'Debit' %}{{ entity.amount|number_format(2) }} {% endif %}</td>
                                         <td class="numeric" >{% if entity.transactionType == 'Credit' %}{{ entity.amount|abs|number_format(2) }} {% endif %}</td>
-                                         <td class="numeric" >
-                                             {% if entity.method is defined and entity.method is not empty %}{{ entity.method }}{% endif %}
-                                         </td>
                                         <td class="numeric" >{{ entity.balance|number_format(2) }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved' or app.user.granted("ROLE_DOMAIN") %}

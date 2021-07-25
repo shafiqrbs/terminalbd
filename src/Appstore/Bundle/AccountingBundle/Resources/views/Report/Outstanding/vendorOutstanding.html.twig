@@ -62,6 +62,8 @@
                                     <th class="numeric" >Company Name</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Purchase</th>
+                                    <th class="numeric" >Payment</th>
                                     <th class="numeric" >Outstanding</th>
                                 </tr>
                                 </thead>
@@ -71,6 +73,8 @@
                                         <td class="numeric" >{{ entity.companyName }}</td>
                                         <td class="numeric" >{{ entity.vendorName }}</td>
                                         <td class="numeric" >{{ entity.vendorMobile }}</td>
+                                        <th class="numeric" >{{ entity.purchaseAmount|number_format }}</th>
+                                        <th class="numeric" >{{ entity.payment|number_format }}</th>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
                                     </tr>
                                 {% endfor %}

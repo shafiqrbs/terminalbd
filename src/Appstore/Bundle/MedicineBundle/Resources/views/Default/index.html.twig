@@ -225,20 +225,21 @@
 
                 </div>
         </div>
-            <div class="portlet box blue">
+
+            <div class="portlet box yellow">
                 <div class="portlet-body">
                     <div class="row-fluid" >
                         <div class="span12">
-                            <div id="optionsYearlyMonthlySales" style="height: 330px; width: 100%;"></div>
+                            <div id="optionsYearlyMonthlyDailyHourlySales" style="height: 330px; width: 100%;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="portlet box green">
+            <div class="portlet box blue">
                 <div class="portlet-body">
                     <div class="row-fluid" >
                         <div class="span12">
-                            <div id="optionsYearlyMonthlyPurchase" style="height: 330px; width: 100%;"></div>
+                            <div id="optionsYearlyMonthlyDailySales" style="height: 330px; width: 100%;"></div>
                         </div>
                     </div>
                 </div>
@@ -340,10 +341,10 @@
     };
     $("#userDailySales").CanvasJSChart(userDailySales);
 
-    var optionsYearlyMonthlySales = {
+    var optionsYearlyMonthlyDailySales = {
     animationEnabled: true,
     title: {
-    text: "Monthly Sales - {{ "now"|date("Y") }}"
+    text: "Monthly Day wise Sales : {{ "now"|date("01-m-Y") }} To {{ "now"|date("t-m-Y") }}"
     },
     axisY: {
     title: "",
@@ -351,25 +352,27 @@
     includeZero: false
     },
     axisX: {
-    title: "Monthly Sales - {{ "now"|date("Y") }}"
+    title: "Monthly Day wise Sales : {{ "now"|date("01-m-Y") }} To {{ "now"|date("t-m-Y") }}"
     },
     data: [{
     type: "column",
     yValueFormatString: "#,##0.0#",
     dataPoints: [
-    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
-    {% for key,month in months %}
-        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicineSalesMonthly|keys %}{{ medicineSalesMonthly[key]|number_format }}{% endif %}" },
+    {% set start_date = "now"|date('01-m-Y') %}
+    {% set end_date = "now"|date('t-m-Y') %}
+    {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
+        { label: "{{ x|date('d') }}", y: {% if key in medicineSalesDaily|keys %}{{ medicineSalesDaily[key] }}{% else %}0{% endif %},indexLabel: "{% if key in medicineSalesDaily|keys %}{{ medicineSalesDaily[key]|number_format }}{% endif %}" },
     {% endfor %}
     ]
     }]
     };
-    $("#optionsYearlyMonthlySales").CanvasJSChart(optionsYearlyMonthlySales);
 
-    var optionsYearlyMonthlyPurchase = {
+    $("#optionsYearlyMonthlyDailySales").CanvasJSChart(optionsYearlyMonthlyDailySales);
+
+    var optionsYearlyMonthlyDailyHourlySales = {
     animationEnabled: true,
     title: {
-    text: "Monthly Purchase - {{ "now"|date("Y") }}"
+    text: "Daily Hourly Sales : {{ "now"|date("d-m-Y") }}"
     },
     axisY: {
     title: "",
@@ -377,21 +380,21 @@
     includeZero: false
     },
     axisX: {
-    title: "Monthly Purchase - {{ "now"|date("Y") }} "
+    title: "Daily Hourly Sales : {{ "now"|date("d-m-Y") }}"
     },
     data: [{
     type: "column",
     yValueFormatString: "#,##0.0#",
     dataPoints: [
-    {%  set months = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',7:'July',8:'August',9:'September',10:'October',11:'November',12:'December'} %}
-    {% for key,month in months %}
-        { label: "{{ month }}, {{ "now"|date("y") }}", y: {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key] }}{% else %}0{% endif %},indexLabel: "BDT {% if key in medicinePurchaseMonthly|keys %}{{ medicinePurchaseMonthly[key]|number_format }}{% endif %}" },
-    {% endfor %}
+        {% for key,x in range(0, 24) %}
+            { label: "{{ x }}", y: {% if key in medicineSalesHourly|keys %}{{ medicineSalesHourly[key] }}{% else %}0{% endif %},indexLabel: "{% if key in medicineSalesHourly|keys %}{{ medicineSalesHourly[key]|number_format }}{% endif %}" },
+        {% endfor %}
     ]
     }]
     };
-    $("#optionsYearlyMonthlyPurchase").CanvasJSChart(optionsYearlyMonthlyPurchase);
 
-    }
+    $("#optionsYearlyMonthlyDailyHourlySales").CanvasJSChart(optionsYearlyMonthlyDailyHourlySales);
+}
+
 
 {% endblock %}

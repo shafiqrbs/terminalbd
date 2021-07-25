@@ -275,7 +275,7 @@ class MedicineStockController extends Controller
             'action' => $this->generateUrl('medicine_stock_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -290,7 +290,7 @@ class MedicineStockController extends Controller
             'action' => $this->generateUrl('medicine_stock_accessories_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -349,7 +349,7 @@ class MedicineStockController extends Controller
             'action' => $this->generateUrl('medicine_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -362,7 +362,7 @@ class MedicineStockController extends Controller
             'action' => $this->generateUrl('medicine_stock_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

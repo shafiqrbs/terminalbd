@@ -297,6 +297,86 @@ class ReportController extends Controller
         ));
     }
 
+    public function salesPurchaseChartAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $datetime = new \DateTime("now");
+        $data['startDate'] = $datetime->format('Y-m-d');
+        $data['endDate'] = $datetime->format('Y-m-d');
+        $startMonthDate = $datetime->format('Y-m-01 00:00:00');
+        $endMonthDate = $datetime->format('Y-m-t 23:59:59');
+        $user = $this->getUser();
+        $medicineSalesMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+        $medicinePurchaseMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->medicinePurchaseMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+        $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
+        $salesUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,array('startDate'=>$data['startDate'],'endDate'=>$data['endDate']));
+
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->currentMonthSales($user,$data);
+        $userSalesAmount = array();
+        foreach($entities as $row) {
+            $userSalesAmount[$row['salesBy'].$row['month']] = $row['total'];
+        }
+
+        $medicineSalesMonthlyArr = array();
+        foreach($medicineSalesMonthly as $row) {
+            $medicineSalesMonthlyArr[$row['month']] = $row['total'];
+        }
+        $medicinePurchaseMonthlyArr = array();
+        foreach($medicinePurchaseMonthly as $row) {
+            $medicinePurchaseMonthlyArr[$row['month']] = $row['total'];
+        }
+        return $this->render('MedicineBundle:Report:sales/monthlyChart.html.twig', array(
+            'option'        => $user->getGlobalOption(),
+            'medicineSalesMonthly'      => $medicineSalesMonthlyArr ,
+            'medicinePurchaseMonthly'   => $medicinePurchaseMonthlyArr ,
+            'salesUserReport'           => $salesUserReport ,
+            'userSalesAmount'           => $userSalesAmount ,
+            'employees'                 => $employees ,
+            'searchForm'    => $data,
+        ));
+    }
+
+    public function topSalesItemAction()
+    {
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->topSalesItem($user,$data);
+        return $this->render('MedicineBundle:Report:sales/topSalesItem.html.twig', array(
+            'option'        => $user->getGlobalOption(),
+            'entities'    => $entities,
+            'searchForm'    => $data,
+        ));
+    }
+
+    public function lowSalesItemAction()
+    {
+
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->slowSalesItem($user,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('MedicineBundle:Report:sales/slowSalesItem.html.twig', array(
+            'option'        => $user->getGlobalOption(),
+            'pagination'    => $pagination,
+            'searchForm'    => $data,
+        ));
+    }
+
+
+    public function dailySalesChartAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('MedicineBundle:MedicinePurchase')->purchaseVendorReport($user, $data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseVendor.html.twig', array(
+            'option'        => $user->getGlobalOption(),
+            'entities'      => $entities,
+            'searchForm'    => $data,
+        ));
+    }
+
     public function salesVendorCustomerAction()
     {
         $em = $this->getDoctrine()->getManager();

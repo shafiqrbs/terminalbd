@@ -78,7 +78,7 @@
                         <div class="clearfix">&nbsp;</div>
                         <table  class="table table-bordered table-striped table-condensed flip-content " style="width: 100%">
                             <thead class="flip-content ">
-                            <tr class="">
+                            <tr class="head-blue">
                                 <th class="numeric" >S/N</th>
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
@@ -152,7 +152,7 @@
                                             {% endfor %}
                                         {% elseif entity.medicineSales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'miss' %}
                                             {% for item in entity.medicineSales.medicineSalesItems  %}
-                                                <p>{{ loop.index }}. {{ item.medicineStock.name }}</p>
+                                                <p>{{ loop.index }}. {{ item.medicineStock.name }} - ({{ item.quantity }})</p>
                                             {% endfor %}
                                         {% elseif entity.hotelInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'hotel' %}
                                             {% for item in entity.hotelInvoice.hotelInvoiceParticulars  %}
@@ -180,10 +180,11 @@
                             {% if searchForm['mobile'] is defined and searchForm['mobile'] is not empty  %}
                                 <tfoot>
                                 <tr>
-                                    <td class="numeric" colspan="5" ></td>
+                                    <td class="numeric" colspan="6" ></td>
                                     <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.receiveAmount|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</strong></td>
+                                    <td></td>
                                 </tr>
                                 </tfoot>
                             {% endif %}

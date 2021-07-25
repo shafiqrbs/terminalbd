@@ -46,13 +46,12 @@ class DefaultController extends Controller
 	 //   $userEntities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserReport($user,$data);
 	    $startMonthDate = $datetime->format('Y-m-01 00:00:00');
 	    $endMonthDate = $datetime->format('Y-m-t 23:59:59');
-	    $medicineSalesMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	    $medicinePurchaseMonthly = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->medicinePurchaseMonthly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	    $shortMedicineCount = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findMedicineShortListCount($user);
+	    $medicineSalesDaily = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesDaily($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+        $medicineSalesHourly = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->medicineSalesHourly($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+        $shortMedicineCount = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findMedicineShortListCount($user);
 	    $expiryMedicineCount = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->expiryMedicineCount($user);
-
 	    //   $purchaseUserReport = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
-	  //  $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
+	    //  $userSalesPurchasePrice = $em->getRepository('MedicineBundle:MedicineSales')->salesUserPurchasePriceReport($user,$data = array('startDate'=>$startMonthDate,'endDate'=>$endMonthDate));
 
 	    $employees = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->getSalesUser($user->getGlobalOption());
 
@@ -62,16 +61,6 @@ class DefaultController extends Controller
 		    $userSalesAmount[$row['salesBy'].$row['month']] = $row['total'];
 	    }
 
-	    $medicineSalesMonthlyArr = array();
-	    foreach($medicineSalesMonthly as $row) {
-		    $medicineSalesMonthlyArr[$row['month']] = $row['total'];
-	    }
-	    $medicinePurchaseMonthlyArr = array();
-	    foreach($medicinePurchaseMonthly as $row) {
-		    $medicinePurchaseMonthlyArr[$row['month']] = $row['total'];
-	    }
-
-
 	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,
@@ -80,13 +69,13 @@ class DefaultController extends Controller
             'expenditureOverview'       => $expenditureOverview ,
             'salesCashOverview'         => $salesCashOverview ,
             'purchaseCashOverview'      => $purchaseCashOverview ,
-            'medicineSalesMonthly'      => $medicineSalesMonthlyArr ,
-            'medicinePurchaseMonthly'   => $medicinePurchaseMonthlyArr ,
             'salesUserReport'           => $salesUserReport ,
             'userSalesAmount'           => $userSalesAmount ,
             'employees'                 => $employees ,
             'shortMedicineCount'        => $shortMedicineCount ,
             'expiryMedicineCount'       => $expiryMedicineCount ,
+            'medicineSalesDaily'        => $medicineSalesDaily ,
+            'medicineSalesHourly'       => $medicineSalesHourly ,
             'searchForm'                => $data ,
         ));
 

@@ -111,7 +111,7 @@ class AccountPurchaseRepository extends EntityRepository
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
         $qb = $this->createQueryBuilder('e');
-        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,COALESCE(SUM(e.purchaseAmount),0) as purchaseAmount, COALESCE(SUM(e.payment),0) as payment,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
         if ($globalOption->getMainApp()->getSlug() == 'inventory'){
             $qb->join('e.vendor','vendor');
         }else if ($globalOption->getMainApp()->getSlug() == 'miss') {
@@ -131,6 +131,29 @@ class AccountPurchaseRepository extends EntityRepository
             $qb->orderBy('vendor.companyName','ASC');
         }
 
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public function vendorSummary(GlobalOption $globalOption,$data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('vendor.id as vendorId ,vendor.companyName as companyName ,vendor.name as vendorName , vendor.mobile as vendorMobile,COALESCE(SUM(e.purchaseAmount),0) as purchaseAmount, COALESCE(SUM(e.payment),0) as payment,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as customerBalance ');
+        if ($globalOption->getMainApp()->getSlug() == 'inventory'){
+            $qb->join('e.vendor','vendor');
+        }else if ($globalOption->getMainApp()->getSlug() == 'miss') {
+            $qb->join('e.medicineVendor','vendor');
+        }else{
+            $qb->join('e.accountVendor','vendor');
+        }
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('vendor.id');
+        if($amount){
+            $qb->having('purchaseAmount >= :balance')->setParameter('balance', $amount);
+        }
+        $qb->orderBy('purchaseAmount','DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
