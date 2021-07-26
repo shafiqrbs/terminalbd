@@ -1,0 +1,131 @@
+<html>
+<head>
+    <title>{{ entity.invoice }}</title>
+    <style>
+
+        body, table {
+            color: #3c4043;
+            font-family: Roboto-Medium,Roboto,arial,sans-serif;
+            font-size: 12px;
+            letter-spacing: .2px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        table td,table th{
+            font-size: 10px;
+            padding: 0!important;
+        }
+        table td.center,table th.center{
+            text-align: center;
+        }
+        table td.left,table th.left{
+            text-align: left;
+        }
+        table td.right,table th.right{
+            text-align: right;
+        }
+        table td.span12,table th.span12{
+            width: 100%!important;
+        }
+        table td.span9,table th.span9{
+            width: 74.35897435897436%!important;
+        }
+        table td.span8,table th.span8{
+            width: 65.81196581196582%!important;
+        }
+        table td.span6,table th.span6{
+            width: 48.717948717948715%!important;
+        }
+        table td.span4,table th.span4{
+            width: 31.623931623931625%!important;
+        }
+        table td.span3,table th.span3{
+            width: 23.076923076923077%!important;
+        }
+        table td.span2,table th.span2{
+            width: 14.52991452991453%!important;
+        }
+        table td.span2,table th.span2{
+            width: 5.982905982905983%!important;
+        }
+    </style>
+</head>
+</html>
+<div style="width:377.9527559055px; margin: 0 auto">
+    <table class="">
+        <tr>
+            <td colspan="3" class="span12 center"><strong>{{ entity.medicineConfig.globalOption.name }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="span12 center">{{ entity.medicineConfig.address|raw }}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="span12 center"><strong>Invoice</strong></td>
+        </tr>
+        <tr>
+            <td class="span6 left">Bill No: {{ entity.invoice }}</td>
+            <td colspan="2" class="span6 right">Sales By:{{ entity.salesBy.profile.name }}</td>
+        </tr>
+         <tr>
+            <td class="span6 left">Date: {{ entity.created|date('d-m-Y H:m') }}</td>
+            <td colspan="2" class="span6 right">Pay Mode:{{ entity.transactionMethod.name }}</td>
+        </tr>
+        <tr>
+            <th class="span6 left">Item Name</th>
+            <th class="span3 center">QTY</th>
+            <th class="span3 right">Amount</th>
+        </tr>
+        <tr>
+            <td colspan="4" class="span12" style="border: 1px solid #000"></td>
+        </tr>
+        {% if entity.medicineSalesItems is not empty %}
+            {% for item in entity.medicineSalesItems %}
+                <tr>
+                    <td class="span6 left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
+                    <td class="span3 center">{{ item.quantity }}</td>
+                    <td class="span3 right">{{ item.subTotal|number_format }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        <tr>
+            <td colspan="3" style="border: 1px solid #000"></td>
+        </tr>
+        <tr>
+            <td class="span6"><strong>Sub-total</strong></td>
+            <td class="span3 center">TK.</td>
+            <td class="span3 right"><strong id="">{{ entity.subTotal|number_format }}</strong></td>
+        </tr>
+        <tr>
+            <td class="span6"><strong>(-)</strong></td>
+            <td class="span3 center">TK.</td>
+            <td class="span3 right"><strong id="">{{ entity.discount|number_format }}</strong></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border: 1px dotted #000"></td>
+        </tr>
+        <tr>
+            <td class="span9"><strong>Net Payable</strong></td>
+            <td class="span3 center">TK.</td>
+            <td class="span3 right"><strong id="">{{ entity.netTotal|number_format }}</strong></td>
+        </tr>
+        <tr>
+            <td class="span9"><strong>Paid</strong></td>
+            <td class="span3 center"><strong>TK.</strong></td>
+            <td class="span3 right"><strong id="">{{ entity.received|number_format }}</strong></td>
+        </tr>
+        <tr>
+            <td class="span9"><strong>Due TK.</strong></td>
+            <td class="span3 center"><strong>TK.</strong></td>
+            <td class="span3 right"><strong id="">{{ entity.due|number_format }}</strong></td>
+        </tr>
+         <tr>
+            <td colspan="3" class="span12 center">
+                <p>Thanks for being here</p>
+                <p><strong>*Medicines once sold are not taken back*</strong></p>
+            </td>
+        </tr>
+    </table>
+</div>
+             

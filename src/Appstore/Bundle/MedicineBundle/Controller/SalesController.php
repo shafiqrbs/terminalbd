@@ -400,6 +400,23 @@ class SalesController extends Controller
     }
 
 
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function posPrintAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+        return $this->render('MedicineBundle:Sales:print.html.twig', array(
+            'entity'      => $entity,
+        ));
+    }
+
+
     public function approvedAction(MedicineSales $sales)
     {
         $em = $this->getDoctrine()->getManager();

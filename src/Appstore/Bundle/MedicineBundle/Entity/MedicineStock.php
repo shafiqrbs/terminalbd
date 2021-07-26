@@ -94,6 +94,11 @@ class MedicineStock
      **/
     private $accessoriesBrand;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineParticular")
+     **/
+    private $category;
+
     /**
      * @var string
      *
@@ -907,6 +912,22 @@ class MedicineStock
     public function setIsImport($isImport)
     {
         $this->isImport = $isImport;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
 

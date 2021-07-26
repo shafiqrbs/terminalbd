@@ -54,12 +54,14 @@ class MedicineController extends Controller
             $entity->setMedicineForm($data['medicineForm']);
             $entity->setPackSize($data['packSize']);
             $entity->setName($data['brand']);
+            $entity->setPrice($data['mrp']);
             $generic = $this->getDoctrine()->getRepository('MedicineBundle:MedicineGeneric')->checkGenericName($data['generic']);
             $entity->setMedicineGeneric($generic);
             $company = $this->getDoctrine()->getRepository('MedicineBundle:MedicineCompany')->checkCompanyName($data['companyName']);
             $entity->setMedicineCompany($company);
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertGlobalToLocalStock($option,$entity);
             return $this->redirect($this->generateUrl('medicine_user'));
         }
         $this->get('session')->getFlashBag()->add(

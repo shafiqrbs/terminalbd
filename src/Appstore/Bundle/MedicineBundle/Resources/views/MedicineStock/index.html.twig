@@ -107,7 +107,7 @@
                                     <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >Avg MRP</th>
                                     <th class="numeric" >MRP</th>
-                                   {# <th class="numeric" >Opening</th>#}
+                                    <th class="numeric" >Opening</th>
                                     <th class="numeric" >PP Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                     <th {% if pagination.isSorted('e.remainingQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Stock', 'e.remainingQuantity') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -142,16 +142,17 @@
                                                 <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
                                             {% endif %}
                                         </td>
-                                        {# <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                         <td class="numeric">
+                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN")) and entity.openingQuantity is empty %}
                                                 <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                            {% else %}
+                                                {{ entity.openingQuantity }}
                                             {% endif %}
-                                        </td>#}
+                                        </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
-
-                                       <td class="numeric">
+                                        <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="pack" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change pack qnt">{{ entity.pack }}</a>
                                             {% endif %}

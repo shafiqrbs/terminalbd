@@ -118,3 +118,29 @@ api_business_invoice_token:
     methods:  POST
     options:
             expose: true
+
+api_system_short_list:
+    path:     /purchase-short-list
+    defaults: { _controller: BinduBundle:Api:purchaseShortList }
+
+api_system_add_purchase_shortlist:
+    path:     /add-purchase-short-list
+    defaults: { _controller: BinduBundle:Api:insertPurchaseShortItem }
+
+api_system_add_global_to_local:
+    path:     /add-global-to-local
+    defaults: { _controller: BinduBundle:Api:insertGlobalToLocal }
+
+
+api_system_stock_create:
+    path:     /stock-create
+    defaults: { _controller: BinduBundle:Api:createStock }
+
+api_system_stock_edit:
+    path:     /stock-edit
+    defaults: { _controller: BinduBundle:Api:stockEdit }
+
+api_system_stock_update:
+    path:     /stock-update
+    defaults: { _controller: BinduBundle:Api:stockUpdate }
+

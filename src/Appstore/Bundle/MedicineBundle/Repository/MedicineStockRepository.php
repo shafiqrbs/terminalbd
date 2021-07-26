@@ -574,4 +574,97 @@ class MedicineStockRepository extends EntityRepository
         $qb1->execute();
     }
 
+    public function insertGlobalToLocalStock(GlobalOption $option,MedicineBrand $brand)
+    {
+        $config = $option->getMedicineConfig();
+        $em = $this->_em;
+        $find = $this->findOneBy(array('medicineConfig'=>$config,'medicineBrand' => $brand));
+        if(empty($find)){
+            $entity = new MedicineStock();
+            $entity->setMedicineConfig($config);
+            $name = $brand->getMedicineForm().' '.$brand->getName().' '.$brand->getStrength();
+            $entity->setName($name);
+            $entity->setBrandName($brand->getMedicineCompany()->getName());
+            $entity->setMedicineBrand($brand);
+            $unit = $em->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name'=>'Pcs'));
+            $entity->setUnit($unit);
+            $entity->setSalesPrice($brand->getPrice());
+            if($brand->getPrice()){
+                $purchasePrice = ((float)$brand->getPrice()-(((float)$brand->getPrice()* 10)/100));
+                $entity->setPurchasePrice($purchasePrice);
+            }
+            $entity->setMode('medicine');
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
+    }
+
+    public function insertAndroidStock(GlobalOption $option,$data)
+    {
+        $config = $option->getMedicineConfig();
+        $em = $this->_em;
+        $find = $this->findOneBy(array('medicineConfig'=>$config,'name' => $data['name']));
+        if(empty($find)){
+            $entity = new MedicineStock();
+            $entity->setMedicineConfig($config);
+            $entity->setName($data['name']);
+            $entity->setBrandName($data['brandName']);
+            $medicine = $em->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('name'=>$entity->getName()));
+            if($medicine){
+                $entity->setMedicineBrand($medicine);
+            }
+            if($data['unit']){
+                $unit = $em->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $data['unit']));
+                $entity->setUnit($unit);
+            }else{
+                $unit = $em->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name'=>'Pcs'));
+                $entity->setUnit($unit);
+            }
+            if($data['category']){
+                $category = $em->getRepository('MedicineBundle:MedicineParticular')->findOneBy(array('medicineConfig'=>$config,'name' => $data['category']));
+                $entity->setCategory($category);
+            }
+            $entity->setOpeningQuantity($data['openingQuantity']);
+            $entity->setRemainingQuantity($data['openingQuantity']);
+            $entity->setSalesPrice($data['price']);
+            $purchasePrice = ((float)$data['price']-(((float)$data['price'] * 10)/100));
+            $entity->setPurchasePrice($purchasePrice);
+            $entity->setMinQuantity($data['minQuantity']);
+            $entity->setMode('medicine');
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
+        return $find;
+    }
+
+    public function updateAndroidStock($data)
+    {
+
+        $em = $this->_em;
+        $entity = $this->find($data['id']);
+        /* @var $entity MedicineStock */
+        if($entity){
+            $entity->setName($data['name']);
+            $entity->setBrandName($data['brandName']);
+            if($data['category']){
+                $category = $em->getRepository('MedicineBundle:MedicineParticular')->findOneBy(array('name' => $data['category']));
+                $entity->setCategory($category);
+            }
+            if($data['unit']){
+                $unit = $em->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $data['unit']));
+                $entity->setUnit($unit);
+            }
+            $entity->setSalesPrice($data['price']);
+            $purchasePrice = ((float)$data['price']-(((float)$data['price'] * 10)/100));
+            $entity->setPurchasePrice($purchasePrice);
+            $entity->setMinQuantity($data['minQuantity']);
+            $entity->setMode('medicine');
+            $em->persist($entity);
+            $em->flush();
+        }
+
+    }
+
 }

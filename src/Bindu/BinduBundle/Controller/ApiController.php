@@ -5,6 +5,7 @@ namespace Bindu\BinduBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -734,6 +735,97 @@ class ApiController extends Controller
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode("success"));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function createStockAction(Request $request)
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+            /* @var $entity GlobalOption */
+
+            $entity = $this->checkApiValidation($request);
+            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertAndroidStock($entity,$data);
+            $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+            $array = array(
+                'stockId'=> $stock->getId(),
+                'stock' => $data
+            );
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($array));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function stockEditAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
+        if( $this->checkApiValidation($request) == 'invalid') {
+            return new Response('Unauthorized access.', 401);
+        }else{
+
+            /* @var $entity GlobalOption */
+            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+            $entity = $this->checkApiValidation($request);
+            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($id);
+            $array  = array();
+            if($stock){
+                /* @var $stock MedicineStock */
+                $array = array(
+                    'stockId'=> $stock->getId(),
+                    'name' => $stock->getName(),
+                    'category' => ($stock->getCategory()) ? $stock->getCategory()->getName() : "",
+                    'brandName' => $stock->getBrandName(),
+                    'price' => $stock->getSalesPrice(),
+                    'unit' => ($stock->getUnit()) ? $stock->getUnit()->getName() : "",
+                    'minQuantity' => $stock->getMinQuantity()
+                );
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($array));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function stockUpdateAction(Request $request)
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+            $entity = $this->checkApiValidation($request);
+            $stockId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateAndroidStock($data);
+            $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

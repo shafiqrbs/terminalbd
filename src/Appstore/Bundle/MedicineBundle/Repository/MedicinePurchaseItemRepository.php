@@ -481,11 +481,11 @@ class MedicinePurchaseItemRepository extends EntityRepository
                $rack = $entity->getMedicineStock()->getRackNo()->getName();
             }
             $unit = ($entity->getMedicineStock()->getUnit()) ? $entity->getMedicineStock()->getUnit()->getName():'';
-
             $data .= '<tr id="remove-'. $entity->getId().'">';
             $data .= '<td class="span1" >' . $i.'. '.$entity->getBarcode().'</td>';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
             $data .= '<td class="span1" >' .$rack. '</td>';
+            $data .= '<td class="span1" >' .$expiration. '</td>';
             $data .= '<td class="span1" >' .$entity->getMedicineStock()->getPurchasePrice(). '</td>';
             $data .= "<td class='span1' >";
             $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
