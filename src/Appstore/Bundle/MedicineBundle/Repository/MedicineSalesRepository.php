@@ -490,7 +490,7 @@ class MedicineSalesRepository extends EntityRepository
 	{
 
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
-		$compare = new \DateTime('18-06-2021');
+		$compare = new \DateTime('now');
 		$year =  $compare->format('Y');
 		$year = isset($data['year'])? $data['year'] :$year;
         $month = isset($data['month'])? $data['month'] :$compare->format('m');
@@ -518,7 +518,7 @@ class MedicineSalesRepository extends EntityRepository
 	{
 
 		$config =  $user->getGlobalOption()->getMedicineConfig()->getId();
-		$compare = new \DateTime('18-06-2021');
+		$compare = new \DateTime('now');
 		$year =  $compare->format('Y');
         $year = isset($data['year'])? $data['year'] :$year;
         $month = isset($data['month'])? $data['month'] :$compare->format('m');

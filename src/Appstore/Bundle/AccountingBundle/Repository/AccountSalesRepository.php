@@ -330,7 +330,7 @@ class AccountSalesRepository extends EntityRepository
             $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
             $qb->orderBy('customer.name','ASC');
         }
-        $result = $qb->getQuery();
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
 
     }

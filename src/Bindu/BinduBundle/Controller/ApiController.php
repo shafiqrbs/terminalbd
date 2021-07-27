@@ -757,15 +757,19 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertAndroidStock($entity,$data);
-            $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
-            $array = array(
-                'stockId'=> $stock->getId(),
-                'stock' => $data
-            );
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertAndroidStock($entity,$data);
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getApiStock($entity);
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($array));
+            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -822,7 +826,15 @@ class ApiController extends Controller
             $entity = $this->checkApiValidation($request);
             $stockId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateAndroidStock($data);
-            $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+            if($entity->getMainApp()->getSlug() == 'miss'){
+                $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
+                $data = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'inventory'){
+                $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getApiStock($entity);
+            }elseif($entity->getMainApp()->getSlug() == 'business'){
+                $data = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->getApiStock($entity);
+            }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

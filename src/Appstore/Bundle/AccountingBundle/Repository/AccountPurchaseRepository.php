@@ -131,7 +131,7 @@ class AccountPurchaseRepository extends EntityRepository
             $qb->orderBy('vendor.companyName','ASC');
         }
 
-        $result = $qb->getQuery();
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
