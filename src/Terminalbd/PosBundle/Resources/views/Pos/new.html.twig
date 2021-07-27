@@ -1,6 +1,5 @@
 {% extends '::pos-base.html.twig' %}
 {% block body %}
-
     {#{% if config.templateCss is not empty %}
     <style>{{ config.templateCss|raw }}</style>
     {% endif %}#}
@@ -395,7 +394,6 @@
     }
 </style>
 {% endblock %}
-
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@PosBundle/Resources/public/css/pos.css'
