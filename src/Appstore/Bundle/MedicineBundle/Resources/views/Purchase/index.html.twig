@@ -76,6 +76,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >GRN</th>
+                                    <th class="numeric" >Memo No</th>
                                     <th class="numeric" >Device Id</th>
                                     <th class="numeric" >Vendor Name</th>
                                     <th class="numeric" >Total</th>
@@ -96,6 +97,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y g:i:s a') }}</td>
                                         <td class="numeric" >{{ entity.grn }}</td>
+                                        <td class="numeric" >{{ entity.memoNo }}</td>
                                         <td class="numeric" >{{ entity.devicePurchaseId }}</td>
                                         <td class="numeric" >{% if entity.medicineVendor is defined and entity.medicineVendor is not empty %}{{ entity.medicineVendor.companyName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>

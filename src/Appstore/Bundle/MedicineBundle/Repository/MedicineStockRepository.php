@@ -278,7 +278,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $pack = 1, $minStock = 0 ){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $pack = 1, $openStock = 0 ){
 
     	$em = $this->_em;
         if($fieldName == 'sales'){
@@ -295,7 +295,9 @@ class MedicineStockRepository extends EntityRepository
             $stock->setDamageQuantity($quantity);
         }else{
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
-            $stock->setMinQuantity($minStock);
+            if($openStock > 0){
+                $stock->setOpeningQuantity($openStock);
+            }
             $stock->setPack($pack);
             $stock->setPurchaseQuantity($qnt);
         }
@@ -628,8 +630,13 @@ class MedicineStockRepository extends EntityRepository
             $entity->setOpeningQuantity($data['openingQuantity']);
             $entity->setRemainingQuantity($data['openingQuantity']);
             $entity->setSalesPrice($data['price']);
-            $purchasePrice = ((float)$data['price']-(((float)$data['price'] * 10)/100));
+            if($data['purchasePrice']){
+                $entity->setPurchasePrice($data['purchasePrice']);
+            }else{
+                $purchasePrice = ((float)$data['price']-(((float)$data['price'] * 10)/100));
+            }
             $entity->setPurchasePrice($purchasePrice);
+            $entity->setDescription($data['description']);
             $entity->setMinQuantity($data['minQuantity']);
             $entity->setMode('medicine');
             $em->persist($entity);

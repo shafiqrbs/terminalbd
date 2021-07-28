@@ -188,6 +188,30 @@ class MedicineConfig
     private $vatEnable = false;
 
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="openingQuantity", type="boolean",  nullable=true)
+     */
+    private $openingQuantity = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="regularPosPrint", type="boolean",  nullable=true)
+     */
+    private $regularPosPrint = false;
+
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrint", type="boolean",  nullable=true)
+     */
+    private $isPrint = false;
+
+
     /**
      * @var boolean
      *
@@ -636,6 +660,56 @@ class MedicineConfig
     {
         return $this->androidProcesses;
     }
+
+    /**
+     * @return bool
+     */
+    public function isOpeningQuantity()
+    {
+        return $this->openingQuantity;
+    }
+
+    /**
+     * @param bool $openingQuantity
+     */
+    public function setOpeningQuantity($openingQuantity)
+    {
+        $this->openingQuantity = $openingQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRegularPosPrint()
+    {
+        return $this->regularPosPrint;
+    }
+
+    /**
+     * @param bool $regularPosPrint
+     */
+    public function setRegularPosPrint($regularPosPrint)
+    {
+        $this->regularPosPrint = $regularPosPrint;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrint()
+    {
+        return $this->isPrint;
+    }
+
+    /**
+     * @param bool $isPrint
+     */
+    public function setIsPrint($isPrint)
+    {
+        $this->isPrint = $isPrint;
+    }
+
+
 
 }
 

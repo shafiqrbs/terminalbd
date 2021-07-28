@@ -362,6 +362,42 @@ function jqueryTemporaryLoad() {
 
     });
 
+    $(document).on("click", "#regularPrint", function() {
+
+        $('#buttonType').val('regularBtn');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $('.salesBtn').prop("disabled", true);
+                $.ajax({
+                    url         : $('form#salesTemporaryForm').attr( 'action' ),
+                    type        : $('form#salesTemporaryForm').attr( 'method' ),
+                    data        : new FormData($('form#salesTemporaryForm')[0]),
+                    processData : false,
+                    contentType : false,
+                    success: function(response){
+                        $('#salesTemporaryForm')[0].reset();
+                        $('#invoiceParticulars').html('');
+                        $('#subTotal').html('');
+                        $('#grandTotal').html('');
+                        $('.discount').html('');
+                        $('.dueAmount').html('');
+                        $('#profit').html('');
+                        $('#salesNetTotal').val('');
+                        $('#salesSubTotal').val('');
+                        $('#salesTemporary_discount').val('');
+                        $('#salesTemporary_due').val('');
+                        $('#cartMethod , #bkashMethod').css("display","none");
+                        window.open('/medicine/sales/'+response+'/print', '_blank');
+
+                    }
+                });
+            }
+        });
+
+    });
+
     $(document).on("click", "#posBtn", function() {
 
         $('#buttonType').val('posBtn');

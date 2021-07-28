@@ -216,7 +216,16 @@ class PurchaseController extends Controller
     {
         $unit = !empty($particular->getUnit()) ? $particular->getUnit()->getName():'Unit';
         $pack = $particular->getPack() > 0  ?  $particular->getPack() : 1;
-        return new Response(json_encode(array('purchasePrice'=> '', 'pack'=> $pack,'minQuantity'=> $particular->getMinQuantity(), 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
+        if($particular->isOpeningApprove() != 1 and $particular->getMedicineConfig()->isOpeningQuantity() == 1){
+            $salesQty = $particular->getSalesQuantity();
+        }else{
+            $salesQty = 0;
+        }
+        $openingStatus = 'in-valid';
+        if($particular->isOpeningApprove() != 1 and empty($particular->getPurchaseQuantity())) {
+            $openingStatus = 'valid';
+        }
+        return new Response(json_encode(array('purchasePrice'=> '', 'salesQty'=> $salesQty,'openingStatus'=> $openingStatus,'pack'=> $pack,'minQuantity'=> $particular->getMinQuantity(), 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
     }
 
     public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)
@@ -227,14 +236,14 @@ class PurchaseController extends Controller
         $entity = new MedicineStock();
         $form = $this->createStockItemForm($entity, $purchase);
         $form->handleRequest($request);
-        $medicineName = $data['medicineStock']['name'];
+        $medicineName = trim($data['medicineStock']['name']);
         if(empty($data['medicineId'])) {
             $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config,$medicineName);
         }else{
             $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
             $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config, $medicine);
         }
-        if (empty($checkStockMedicine)){
+        if (empty($checkStockMedicine) and $medicineName){
             $entity->setMedicineConfig($config);
             if(!empty($data['medicineId'])){
                 $entity->setMedicineBrand($medicine);
@@ -247,16 +256,13 @@ class PurchaseController extends Controller
                 $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                 $entity->setUnit($unit);
             }
-            $quantity = $entity->getPurchaseQuantity();
             $entity->setPurchasePrice($entity->getSalesPrice());
             $purchasePrice = round(($entity->getPurchasePrice()/$entity->getPurchaseQuantity()),2);
             $salesPrice = round(($entity->getSalesPrice()/$entity->getPurchaseQuantity()),2);
-            // $entity->setPurchaseQuantity($quantity);
             $entity->setPurchasePrice($purchasePrice);
             $entity->setAveragePurchasePrice($purchasePrice);
             $entity->setSalesPrice($salesPrice);
             $entity->setAverageSalesPrice($salesPrice);
-            // $entity->setRemainingQuantity($entity->getPurchaseQuantity());
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);
@@ -304,12 +310,15 @@ class PurchaseController extends Controller
 
     public function returnResultData(MedicinePurchase $entity,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($entity);
+       // $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->getPurchaseItems($entity);
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
         $due = $entity->getDue();
         $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $invoiceParticulars = $this->renderView('MedicineBundle:Purchase:item.html.twig', array(
+            'entity'        => $entity,
+        ));
         $data = array(
             'msg' => $msg,
             'subTotal' => $subTotal,
@@ -320,7 +329,6 @@ class PurchaseController extends Controller
             'invoiceParticulars' => $invoiceParticulars ,
             'success' => 'success'
         );
-
         return $data;
 
     }
@@ -338,7 +346,7 @@ class PurchaseController extends Controller
         $stockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stockMedicine);
         $pack = !empty($data['pack']) ? $data['pack'] :1;
-        $minStock = !empty($data['minQuantity']) ? $data['minQuantity'] :1;
+        $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
         $quantity = ($pack * $entity->getQuantity());
         $entity->setQuantity($quantity);
         if(!empty($stockMedicine) and empty($entity->getPurchasePrice())){
@@ -363,7 +371,7 @@ class PurchaseController extends Controller
         $entity->setPack($pack);
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack,$minStock);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack,$openStock);
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -385,6 +393,7 @@ class PurchaseController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
+
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
@@ -442,10 +451,12 @@ class PurchaseController extends Controller
                 if($entity->getSubTotal() > $total){
                    $subTotal = $entity->getSubTotal();
                    $discount = ($subTotal - $total);
-                   $percentage = (($discount * 100 )/$subTotal);
-                   $entity->setDiscount($discount);
-                   $percen = number_format((float)$percentage, 2, '.', '');
-                   $entity->setDiscountCalculation($percen);
+                   if($total > 0 ){
+                       $percentage = (($discount * 100 )/$subTotal);
+                       $entity->setDiscount($discount);
+                       $percen = number_format((float)$percentage, 2, '.', '');
+                       $entity->setDiscountCalculation($percen);
+                   }
                    $entity->setDue($due);
                 }
                 $entity->setNetTotal($total);
@@ -805,5 +816,6 @@ class PurchaseController extends Controller
             return new Response('failed');
         }
     }
+
 
 }

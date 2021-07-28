@@ -34,7 +34,7 @@ class MedicineSalesTemporaryController extends Controller
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
         $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-        $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
+       /* $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
             'entity'        => $entity,
             'salesItem'     => $salesItemForm->createView(),
             'form'          => $editForm->createView(),
@@ -42,7 +42,15 @@ class MedicineSalesTemporaryController extends Controller
             'config'        => $config,
             'result'        => $result,
         ));
-        return New Response($html);
+        return New Response($html);*/
+        return $this->render('MedicineBundle:Sales:pos.html.twig', array(
+            'entity'        => $entity,
+            'salesItem'     => $salesItemForm->createView(),
+            'form'          => $editForm->createView(),
+            'user'          => $user,
+            'config'        => $config,
+            'result'        => $result,
+        ));
     }
 
     /**
@@ -172,6 +180,9 @@ class MedicineSalesTemporaryController extends Controller
                 $pos = $this->posPrint($entity,$invoiceParticulars);
                 return new Response($pos);
             }
+        }
+        if($btn == "regularBtn" and $entity->getProcess() == 'Done'){
+            return new Response($entity->getId());
         }
         return new Response('success');
 

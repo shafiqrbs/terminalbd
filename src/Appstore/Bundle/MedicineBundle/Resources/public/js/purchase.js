@@ -46,8 +46,24 @@ $(document).on('change', '#purchaseItem_stockName', function() {
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
+            if(obj['openingStatus'] === 'valid' ){
+                $('#opening-box').show();
+                $('#currentSalesQty').html(obj['salesQty']);
+                $('#salesQty').val(obj['salesQty']);
+                $('#openingQuantity').val(obj['salesQty']);
+                $('#totalQty').html(obj['salesQty']);
+            }
         }
     })
+});
+
+$('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
+
+    var salesQty =  parseInt($('#salesQty').val());
+    var currentQty =  parseInt($(this).val());
+    var total = (salesQty + currentQty);
+    $('#totalQty').html(total);
+    $('#openingQuantity').val(total);
 });
 
 $('form#purchaseItemForm').on('keyup', ' #pack , #purchaseItem_quantity', function (e) {
@@ -59,7 +75,6 @@ $('form#purchaseItemForm').on('keyup', ' #pack , #purchaseItem_quantity', functi
         var totalQnt = (pack * qnt);
         $('#totalQnt').html(totalQnt);
     }
-
 });
 
 $('#purchaseItem_stockName').on("select2-selecting", function (e) {
@@ -67,6 +82,8 @@ $('#purchaseItem_stockName').on("select2-selecting", function (e) {
         $('#purchaseItem_stockName').focus();
     }, 500)
 });
+
+
 
 $('form#purchaseItemForm').on('keyup', '#purchaseItem_purchasePrice', function (e) {
     var mrp = $('#purchaseItem_purchasePrice').val();
@@ -221,6 +238,7 @@ var formStock = $("#medicineStock").validate({
                 $("#medicineStock_unit").select2("val", "");
                 $("#medicineId").val();
                 $('#medicineStock')[0].reset();
+                $('#opening-box').hide();
             }
         });
     }
@@ -267,6 +285,7 @@ var form = $("#purchaseItemForm").validate({
                 $("#purchaseItem_stockName").select2("val", "");
                 $('#purchaseItemForm')[0].reset();
                 $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
+                $('#opening-box').hide();
             }
         });
     }

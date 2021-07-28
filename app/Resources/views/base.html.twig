@@ -105,7 +105,7 @@
 {% if is_granted('ROLE_CUSTOMER') %}
     {{ include('customer/topbar.html.twig')}}
 {% else %}
-    {# {% render controller("SettingToolBundle:BackendWidget:topBar") %}#}
+     {% render controller("SettingToolBundle:BackendWidget:topBar") %}
     {{ include('SettingToolBundle:Widget:common.html.twig')}}
 {% endif %}
 <!-- END RESPONSIVE MENU TOGGLER -->

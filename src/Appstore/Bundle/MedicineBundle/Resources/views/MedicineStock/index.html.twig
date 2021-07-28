@@ -81,7 +81,7 @@
                                     <div class="span2">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="sku"  name="sku"  class="span10 m-wrap" value="{% if searchForm.sku is defined %}{{ searchForm.sku }}{% endif %}"  autocomplete="off"  placeholder="Product sku">
+                                                <input type="text" id="keyword"  name="keyword"  class="span10 m-wrap" value="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% endif %}"  autocomplete="off"  placeholder="Product name">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -143,11 +143,13 @@
                                             {% endif %}
                                         </td>
                                          <td class="numeric">
-                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN")) and entity.openingQuantity is empty %}
-                                                <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
-                                            {% else %}
-                                                {{ entity.openingQuantity }}
-                                            {% endif %}
+                                             {% if entity.medicineConfig.openingQuantity == 1 %}
+                                                {% if ( (app.user.granted("ROLE_MEDICINE_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN")) and entity.openingApprove != 1) %}
+                                                    <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                                {% else %}
+                                                    {{ entity.openingQuantity }}
+                                                {% endif %}
+                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>
@@ -175,15 +177,21 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
+
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini yellow btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                             {% else %}
                                                 <a class="btn mini red btn-action" href="{{ path('medicine_stock_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
+                                            <div class="btn-group">
                                             <a href="{{ path('medicine_stock_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-edit"></i></a>
-                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER")  and entity.purchaseQuantity == 0 ) or (app.user.granted("ROLE_DOMAIN") and entity.purchaseQuantity == 0)  %}
-                                             <a href="{{ path('medicine_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            {% if ( app.user.granted("ROLE_MEDICINE_MANAGER")  and (entity.purchaseQuantity + entity.openingQuantity) == 0 ) or (app.user.granted("ROLE_DOMAIN") and (entity.purchaseQuantity + entity.openingQuantity) == 0)  %}
+                                                <a href="{{ path('medicine_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
+                                           {# {% if (app.user.granted("ROLE_MEDICINE_MANAGER")  and  entity.medicineConfig.openingQuantity == 1 and entity.openingApprove != 1 ) or (app.user.granted("ROLE_DOMAIN") and entity.medicineConfig.openingQuantity == 1 and entity.openingApprove != 1 )  %}
+                                                <a href="{{ path('medicine_stock_delete', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-ok"></i></a>
+                                            {% endif %}#}
+                                            </div>
 
                                         </td>
                                     </tr>

@@ -136,6 +136,14 @@ class MedicineStock
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", nullable = true)
+     */
+    private $description;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
@@ -256,6 +264,13 @@ class MedicineStock
      * @ORM\Column(name="isWeb", type="boolean",  nullable=true)
      */
     private $isWeb = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="openingApprove", type="boolean",  nullable=true)
+     */
+    private $openingApprove = false;
 
     /**
      * @var boolean
@@ -928,6 +943,38 @@ class MedicineStock
     public function setCategory($category)
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOpeningApprove()
+    {
+        return $this->openingApprove;
+    }
+
+    /**
+     * @param bool $openingApprove
+     */
+    public function setOpeningApprove($openingApprove)
+    {
+        $this->openingApprove = $openingApprove;
     }
 
 

@@ -108,7 +108,9 @@
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="span1">{% if item.expirationEndDate is not empty %} {{ item.expirationEndDate|date('d M y') }}{% endif %}</td>
+                                                    <td class="span1">
+                                                        <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                                    </td>
                                                     <td class="span1">{{ item.purchasePrice }}</td>
                                                     <td class="span1">{{ item.salesPrice }}</td>
                                                     <td class="span1">{{ item.quantity }}</td>
@@ -153,8 +155,6 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Complete') %}
                                     <a  href="javascript:"  data-url="{{ path('medicine_purchase_approved',{'id':entity.id}) }}" class="btn green approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
-                                    {% endif %}
-                                    {% if ( entity.process == 'In-progress') %}
                                     <a  href="{{ path('medicine_purchase_edit',{'id':entity.id}) }}"  class="btn red"><i class="icon-edit"></i>&nbsp;Edit</a>
                                     {% endif %}
                                     {% if ( ("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process == 'Approved' and app.user.granted("ROLE_MEDICINE_REVERSE")) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
@@ -181,5 +181,14 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $('.expirationDate').editable({
+        format: 'yyyy-mm-dd',
+        viewformat: 'dd-mm-yyyy',
+        datepicker: {
+        minYear: {{ "now"|date('YY') }},
+        maxYear: {{ "now"|date_modify("+5 year")|date('YY') }},
+        minuteStep: 1
+        }
+    });
 {% endblock %}
 

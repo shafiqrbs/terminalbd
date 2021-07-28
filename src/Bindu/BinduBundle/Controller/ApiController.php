@@ -753,12 +753,12 @@ class ApiController extends Controller
 
         }else{
 
-            $data = $request->request->all();
+            $formArray = $request->request->all();
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertAndroidStock($entity,$data);
             if($entity->getMainApp()->getSlug() == 'miss'){
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->insertAndroidStock($entity,$formArray);
                 $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
                 $data = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getApiStock($entity);

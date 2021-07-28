@@ -2,9 +2,8 @@
 <head>
     <title>{{ entity.invoice }}</title>
     <style>
-
         body, table {
-            color: #3c4043;
+            color:#000000;
             font-family: Roboto-Medium,Roboto,arial,sans-serif;
             font-size: 12px;
             letter-spacing: .2px;
@@ -13,9 +12,22 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        table td.header strong,table td.header strong{
+          font-size: 35px;
+        }
         table td,table th{
-            font-size: 10px;
             padding: 0!important;
+            font-weight: bold;
+            padding-bottom: 5px!important;
+        }
+        table th{
+            font-size: 22px;
+        }
+        table td{
+            font-size: 18px;
+        }
+        table td{
+            padding-bottom: 5px!important;
         }
         table td.center,table th.center{
             text-align: center;
@@ -51,16 +63,24 @@
             width: 5.982905982905983%!important;
         }
     </style>
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
+    </script>
 </head>
 </html>
-<div style="width:377.9527559055px; margin: 0 auto">
+<div style="width:100%; margin: 0 auto">
     <table class="">
         <tr>
-            <td colspan="3" class="span12 center"><strong>{{ entity.medicineConfig.globalOption.name }}</strong></td>
+            <td colspan="3" class="span12 center header"><strong>{{ entity.medicineConfig.globalOption.name }}</strong></td>
         </tr>
         <tr>
-            <td colspan="3" class="span12 center">{{ entity.medicineConfig.address|raw }}</td>
+            <td colspan="3" class="span12 center address">{{ entity.medicineConfig.address|raw }}</td>
         </tr>
+        <tr><td colspan="3"><br/></td></tr>
         <tr>
             <td colspan="3" class="span12 center"><strong>Invoice</strong></td>
         </tr>
@@ -69,9 +89,16 @@
             <td colspan="2" class="span6 right">Sales By:{{ entity.salesBy.profile.name }}</td>
         </tr>
          <tr>
-            <td class="span6 left">Date: {{ entity.created|date('d-m-Y H:m') }}</td>
+            <td class="span6 left">Date: {{ entity.created|date('d-m-Y H:m A') }}</td>
             <td colspan="2" class="span6 right">Pay Mode:{{ entity.transactionMethod.name }}</td>
         </tr>
+        {% if entity.customer.name != entity.medicineConfig.globalOption.mobile %}
+        <tr>
+            <td class="span6 left">Customer: {{ entity.customer.name }}</td>
+            <td colspan="2" class="span6 right">{{ entity.customer.mobile }}</td>
+        </tr>
+        {% endif %}
+        <tr><td colspan="3"><br/><br/></td></tr>
         <tr>
             <th class="span6 left">Item Name</th>
             <th class="span3 center">QTY</th>

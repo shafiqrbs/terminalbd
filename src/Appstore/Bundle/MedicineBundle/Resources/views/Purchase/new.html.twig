@@ -46,8 +46,7 @@
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
                             <div class="clearfix">&nbsp;</div>
-                            <div class="portlet-body ">
-                                <div class="" style="display:none">
+                            {#<div class="" style="display:block">
                                 <form name="medicine" method="post" action="" class="horizontal-form" novalidate="novalidate" id="medicine">
                                     <div class="row-fluid">
                                         <!--/span-->
@@ -126,8 +125,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                </div>
-                            </div>
+                            </div>#}
                             <div class="clearfix">&nbsp;</div>
                             <div class="" id="hide">
                                 {{ form_start(stockItemForm) }}
@@ -176,16 +174,39 @@
                             <div class="clearfix">&nbsp;</div>
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
+                            <div class="row-fluid particular-label" >
+                                <div class="span5">Select Stock Item </div>
+                                {% if entity.medicineConfig.openingQuantity == 1 %}
+                                <div class="span3">Opening QTY</div>
+                                {% endif %}
+                                <div class="span1 pull-center">Quantity</div>
+                                <div class="span1 pull-center">Total MRP</div>
+                                <div class="span1 pull-center">Expiration</div>
+                            </div>
                             <div class="row-fluid particular-info" >
-                                <div class="span6" style="padding-left:15px">
+                                <div class="span5" style="padding-left:15px">
                                     {{ form_widget(purchaseItem.stockName) }}
                                     {{ form_errors(purchaseItem.stockName) }}
                                 </div>
-                                <div class="span6">
+                                {% if entity.medicineConfig.openingQuantity == 1 %}
+                                <div class="span3">
+                                    <div id="opening-box">
+                                        <div class="input-append">
+                                            <div class="input-group">
+                                                <button class="btn">Sales</button>
+                                                <button class="btn red" id="currentSalesQty">0</button>
+                                                <input type="text" id="currentQty" name="currentQty" class="m-wrap purchase-input span4" placeholder="Current Qty" autocomplete="off" value="">
+                                                <input type="hidden" id="openingQuantity" name="openingQuantity"  value="0">
+                                                <input type="hidden" id="salesQty" name="salesQty"  value="0">
+                                                <button class="btn yellow" id="totalQty">0</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="span4">
                                     <div class="input-append">
                                         <div class="input-group">
-                                            <button class="btn">Min Qnt.</button>
-                                            <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input span2" placeholder="Mini qnt" autocomplete="off" value="" aria-required="true" aria-invalid="false">
                                             {{ form_widget(purchaseItem.quantity) }}
                                             <button class="btn" id="unit">Unit</button>
                                             {{ form_widget(purchaseItem.salesPrice) }}
@@ -195,9 +216,10 @@
                                         </div>
                                     </div>
                                     {{ form_errors(purchaseItem.quantity) }}
-                              </div>
+                                </div>
                             </div>
                             {{ form_end(purchaseItem) }}
+                            <div class="clearfix">&nbsp;</div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span12" id="particular-table">
@@ -226,9 +248,12 @@
                                                     <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="span1">{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</td>
-                                                    {#<td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>#}
-                                                    {#<td class="span1">
+                                                    <td class="span1">
+                                                        <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                                    </td>
+                                                    {#
+                                                    <td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>
+                                                    <td class="span1">
                                                         <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
                                                     </td>#}
                                                     <td class="span1">{{ item.medicineStock.purchasePrice }}</td>
@@ -413,7 +438,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName"><span class="label">Payable TK.</span> <span class="pull-right sales-right"><button class="btn red mini" id="discountPercentage">{% if entity.discountType == 'flat' %}{{  entity.discountCalculation }}{% else %}{{  entity.discountCalculation }}{% endif %}%</button>{{ form_widget(form.payment) }}</span>
+                                                <label class="control-label" for="firstName"><span class="label">Payment TK.</span> <span class="pull-right sales-right"><button class="btn red mini" id="discountPercentage">{% if entity.discountType == 'flat' %}{{  entity.discountCalculation }}{% else %}{{  entity.discountCalculation }}{% endif %}%</button>{{ form_widget(form.payment) }}</span>
                                                 </label>
                                                 <div class="controls">
                                                     {{ form_errors(form.payment) }}
@@ -470,6 +495,9 @@
         </div>
     </div>
     <style>
+        #opening-box{
+            display: none;
+        }
         .purchase-input{
             width:6%;
             background: #FFFFff!important;
@@ -514,6 +542,22 @@
             min-height: 15px!important;
             font-size: 13px!important;
         }
+        .particular-label {
+            background: #ffffff;
+            padding: 10px;
+            padding-left: 0;
+            padding-right: 4px;
+            border-bottom: 2px solid #9e9521fc;
+            border-top: 2px solid #9e9521fc;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .sales-right {
+            padding-right: 10px;
+            float: right;
+            text-align: right;
+            width: 250px;
+        }
     </style>
 {% endblock %}
 
@@ -528,7 +572,6 @@
     {{ parent() }}
     {% javascripts
     '@MedicineBundle/Resources/public/js/purchase.js'
-    '@MedicineBundle/Resources/public/js/editable.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     '@MedicineBundle/Resources/public/js/medicine.js'
     %}
@@ -537,7 +580,16 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    $('.expirationDate').editable({
+        format: 'yyyy-mm-dd',
+        viewformat: 'dd-mm-yyyy',
+        datepicker: {
+            minYear: {{ "now"|date('YY') }},
+            maxYear: {{ "now"|date_modify("+5 year")|date('YY') }},
+            minuteStep: 1
+        }
+    });
+
     $('#purchaseItem_stockName').focus();
 {% endblock %}
 
