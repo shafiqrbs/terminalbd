@@ -82,6 +82,11 @@ class ItemImport
      */
     protected $path;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $importMode = 'item';
+
 
     /**
      * @Assert\File(
@@ -309,6 +314,22 @@ class ItemImport
     public function setBusinessConfig($businessConfig)
     {
         $this->businessConfig = $businessConfig;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportMode()
+    {
+        return $this->importMode;
+    }
+
+    /**
+     * @param string $importMode
+     */
+    public function setImportMode($importMode)
+    {
+        $this->importMode = $importMode;
     }
 
 

@@ -34,12 +34,9 @@ class MedicineStockRepository extends EntityRepository
         $mode = isset($data['mode'])? $data['mode'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
-        $webName = isset($data['webName'])? $data['webName'] :'';
+        $keyword = isset($data['keyword'])? $data['keyword'] :'';
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'$name%'"  ));
-        }
-        if (!empty($webName)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'%$webName%'"  ));
         }
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
@@ -55,6 +52,12 @@ class MedicineStockRepository extends EntityRepository
         }
         if(!empty($category)){
             $qb->andWhere($qb->expr()->like("c.slug", "'%$category%'"  ));
+        }
+        if (!empty($keyword)) {
+            $qb->leftJoin('e.medicineBrand','mb');
+            $qb->leftJoin('mb.medicineGeneric','mg');
+            $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.$keyword.'%');
         }
     }
 

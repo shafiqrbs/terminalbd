@@ -788,6 +788,12 @@ $(document).on( "click", ".btn-number", function(e){
     }
 });
 
+$(document).on( "click", "#globalMedicine", function(e){
+    $('#generic-hide').slideToggle(2000);
+    $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
+    $('#medicineStock_name').focus();
+});
+
 $(document).on( "click", ".btn-number-day", function(e){
 
     e.preventDefault();

@@ -10,14 +10,14 @@
         <div class="btn-group">
             <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine Sales</a>
             <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
-            <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
+            <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
         </div>
     </div>
 </div>
 <div class="portlet-body form">
     {% include('flash-message.html.twig')  %}
     <!-- BEGIN FORM-->
-    <div class="row-fluid" id="hide">
+    <div class="row-fluid" id="generic-hide">
         <div class="span12">
             <input type="text" id="select2GenericMedicine" name="select2GenericMedicine"  class="m-wrap span12 input select2GenericMedicine" placeholder="Search medicine name" aria-required="true">
         </div>
@@ -448,7 +448,7 @@
             position: relative;
             height: 32px!important;
             min-height: 32px!important;
-            line-height: normal!important;
+            line-height:32px!important;
             text-decoration: none!important;
             padding-left: 1%!important;
             display: inline-block;
@@ -491,28 +491,4 @@
     jqueryTemporaryLoad();
     jqueryInstantTemporaryLoad();
     $('#salesTemporaryItem_stockName').focus();
-    $(document).on( "click", "#stockShow", function(e){
-        $('#hide').slideToggle(2000);
-        $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
-        $('#medicineStock_name').focus();
-    });
-
-    $( ".select2GenericMedicine" ).autocomplete({
-
-        source: function( request, response ) {
-        $.ajax( {
-        url: Routing.generate('medicine_search_medicine_generic_complete'),
-        data: {
-        term: request.term
-        },
-        success: function( data ) {
-        response( data );
-        }
-        } );
-        },
-        minLength: 2,
-        select: function( event, ui ) {
-            $("#medicineId").val(ui.item.id); // save selected id to hidden input
-        }
-    });
 {% endblock %}

@@ -51,6 +51,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Created By</th>
                                     <th class="numeric" >Name </th>
+                                    <th class="numeric" >Import Mode </th>
                                     <th class="numeric" >File</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -61,6 +62,7 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" ><a href="{{ path('business_itemimporter_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.importMode }}</td>
                                         <td class="numeric" ><a href="/{{ entity.webPath }}">Download File</a> </td>
                                         <td class="numeric" >
                                             {% if entity.progress == 'created' or entity.progress == 'invalid' %}

@@ -34,6 +34,19 @@ class ItemImporterType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please choose  any valid file which extension excel'))
                 )))
+                ->add('importMode', 'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please choose  import mode'))
+                    ),
+                    'expanded'      =>false,
+                    'multiple'      =>false,
+                    'choices' => array(
+                        'stock' => 'Stock Item',
+                        'purchase' => 'Purchase',
+                        'sales' => 'Sales',
+                    ),
+                ))
             ->add('file');
     }
     

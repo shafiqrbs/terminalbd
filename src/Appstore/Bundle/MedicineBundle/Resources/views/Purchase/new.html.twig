@@ -36,7 +36,8 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
-                                <a class="btn purple" target="_blank" href="{{ path('medicine') }}"><i class="icon-plus"></i> New Medicine </a>
+                                <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
+                                <a class="btn yellow" target="_blank" href="{{ path('medicine') }}"><i class="icon-plus"></i> New Medicine </a>
                                 <a class="btn black" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
                             </div>
                         </div>
@@ -46,6 +47,11 @@
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
                             <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid" id="generic-hide">
+                                <div class="span12">
+                                    <input type="text" id="select2GenericMedicine" name="select2GenericMedicine"  class="m-wrap span12 input select2GenericMedicine" placeholder="Search medicine name" aria-required="true">
+                                </div>
+                            </div>
                             {#<div class="" style="display:block">
                                 <form name="medicine" method="post" action="" class="horizontal-form" novalidate="novalidate" id="medicine">
                                     <div class="row-fluid">
