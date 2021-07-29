@@ -54,7 +54,7 @@
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
-                        <div class="row-fluid" id="hide">
+                        <div class="row-fluid" id="generic-hide">
                             <div class="span12">
                                 <input type="text" id="select2GenericMedicine" name="select2GenericMedicine"  class="m-wrap span12 input select2GenericMedicine" placeholder="Search medicine name" aria-required="true">
                             </div>
@@ -241,6 +241,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@ElectionBundle/Resources/public/css/messagebox.css'
+    '@MedicineBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
