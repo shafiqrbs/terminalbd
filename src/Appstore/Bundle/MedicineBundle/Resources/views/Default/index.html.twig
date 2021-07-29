@@ -18,7 +18,7 @@
                 <div class="span4">
                     <div class="btn-group">
                         {% if ( app.user.granted("ROLE_MEDICINE_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a class="btn blue big" style="width: 50%" id="temporarySales" href="{{ path('medicine_sales_temporary_new') }}"><i class="icon-shopping-cart"></i> Sales</a>
+                            <a class="btn blue big" style="width: 50%"  href="{{ path('medicine_sales_temporary_new') }}"><i class="icon-shopping-cart"></i> Sales</a>
                         {% endif %}
                         {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('account_sales_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Receive</a>
