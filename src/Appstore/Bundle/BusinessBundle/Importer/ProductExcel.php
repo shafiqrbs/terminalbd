@@ -31,13 +31,13 @@ class ProductExcel
         $inventory = $this->itemImport->getBusinessConfig();
         foreach($this->data as $key => $item) {
 
-            $name = ucfirst(strtolower($item['Name']));
-            $category = ucfirst(strtolower($item['Category']));
+            $name = ucfirst(strtolower(trim($item['Name'])));
+            $category = ucfirst(strtolower(trim($item['Category'])));
             $productOld = $this->getDoctrain()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $inventory,'name' => $name));
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
-                $barcode = empty($item['Barcode']) ? time() : $item['Barcode'];
+                $quantity = empty($item['OpeningQuantity']) ? 0 : trim($item['OpeningQuantity']);
                 $product = new BusinessParticular();
                 $product->setBusinessConfig($inventory);
                 $product->setName($name);
@@ -46,6 +46,10 @@ class ProductExcel
                     $product->setUnit($unit);
                 }
                 $product->setSalesPrice($salesPrice);
+                $product->setOpeningQuantity($quantity);
+                $pQTY = ($product->getPurchaseQuantity() > 0 ) ? $product->getPurchaseQuantity() :0;
+                $remin = ($quantity+$pQTY);
+                $product->setRemainingQuantity($remin);
                 if ($category) {
                     $cat = $this->getCategory($category);
                     $product->setCategory($cat);
