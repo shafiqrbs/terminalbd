@@ -343,22 +343,26 @@ class PurchaseController extends Controller
         $form->handleRequest($request);
         $entity->setMedicinePurchase($invoice);
         $stockItem = ($data['purchaseItem']['stockName']);
+
+        /* @var $stockMedicine MedicineStock */
+
         $stockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stockMedicine);
         $pack = !empty($data['pack']) ? $data['pack'] :1;
+        echo $salesPrice = !empty($data['purchaseItem']['salesPrice']) ? $data['purchaseItem']['salesPrice'] :'';
         $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
         $quantity = ($pack * $entity->getQuantity());
         $entity->setQuantity($quantity);
-        if(!empty($stockMedicine) and empty($entity->getPurchasePrice())){
+        if(!empty($stockMedicine) and empty($salesPrice)){
             $entity->setActualPurchasePrice($stockMedicine->getSalesPrice());
             $entity->setPurchasePrice($stockMedicine->getSalesPrice());
             $entity->setSalesPrice($stockMedicine->getSalesPrice());
             $entity->setPurchaseSubTotal(round($entity->getQuantity() * $stockMedicine->getSalesPrice()));
             $entity->setRemainingQuantity($entity->getQuantity());
         }else{
-            $entity->setPurchaseSubTotal($entity->getPurchasePrice());
+            $entity->setPurchaseSubTotal($entity->getSalesPrice());
             $entity->setRemainingQuantity($entity->getQuantity());
-            $unitPrice = round(($entity->getPurchasePrice()/$entity->getQuantity()),2);
+            $unitPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
             $salesPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
             $entity->setActualPurchasePrice($unitPrice);
             $entity->setPurchasePrice($unitPrice);

@@ -135,6 +135,7 @@ function jqueryTemporaryLoad() {
 
             "salesTemporaryItem[stockName]": {required: true},
             "salesTemporaryItem[barcode]": {required: false},
+            "salesTemporaryItem[itemPercent]": {required: false},
             "salesTemporaryItem[salesPrice]": {required: true},
             "salesTemporaryItem[quantity]": {required: true},
         },

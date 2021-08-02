@@ -40,7 +40,15 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
         if(empty($invoiceParticular)) {
 	        $entity->setQuantity( $data['quantity'] );
-	        $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+            if($data['itemPercent'] > 0){
+                $entity->setItemPercent( $data['itemPercent'] );
+                $salesPrice = $data['salesPrice'];
+                $initialDiscount = round(($salesPrice *  $data['itemPercent'])/100);
+                $initialGrandTotal = round($salesPrice  - $initialDiscount);
+                $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+            }else{
+                $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+            }
 	        $entity->setSubTotal( round( ( $entity->getSalesPrice() * $data['quantity'] ), 2 ) );
 	        $entity->setUser( $user );
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
@@ -123,6 +131,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $data .= "<td class='span1' >";
             $data .= "<input type='number' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
             $data .= "</td>";
+            $data .= '<td class="span1" >' . $entity->getItemPercent().'</td>';
             $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getSubTotal()}</td>";
             $data .= '<td class="span1" >
             <a data-id="'.$entity->getid().'" title="" data-url="/medicine/sales-temporary/sales-item-update" href="javascript:" class="btn blue mini itemUpdate"><i class="icon-save"></i></a>

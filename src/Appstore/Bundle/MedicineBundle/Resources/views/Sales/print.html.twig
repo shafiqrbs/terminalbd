@@ -90,13 +90,15 @@
             max-width: 220px;
         }
     </style>
-    <script type="text/javascript">
-        window.print();
-        setTimeout(function () {
-            window.open('', '_self', '');
-            window.close();
-        }, 2000);
-    </script>
+    {% if  entity.medicineConfig.posPrint == 1 %}
+        <script type="text/javascript">
+            window.print();
+            setTimeout(function () {
+                window.open('', '_self', '');
+                window.close();
+            }, 2000);
+        </script>
+    {% endif %}
 </head>
 <body>
 <div style="width:380px; margin: 0 auto">
@@ -192,7 +194,11 @@
         <tr>
             <td colspan="3" class="span12 center footer">
                 <p>Thanks for being here</p>
-                <span><strong>*Medicines once sold are not taken back*</strong></span>
+                {% if entity.printMessage is not empty %}
+                    <span><strong>*{{ entity.printMessage|raw }}*</strong></span>
+                {% else %}
+                    <span><strong>*Medicines once sold are not taken back*</strong></span>
+                {% endif %}
                 <span>Development by www.terminalbd.com</span>
             </td>
         </tr>

@@ -68,6 +68,13 @@ class MedicineSalesTemporary
      /**
      * @var float
      *
+     * @ORM\Column(name="itemPercent", type="float", nullable=true)
+     */
+    private $itemPercent;
+
+     /**
+     * @var float
+     *
      * @ORM\Column(name="purchasePrice", type="float")
      */
     private $purchasePrice;
@@ -293,6 +300,22 @@ class MedicineSalesTemporary
 	public function setPurchasePrice( float $purchasePrice ) {
 		$this->purchasePrice = $purchasePrice;
 	}
+
+    /**
+     * @return float
+     */
+    public function getItemPercent()
+    {
+        return $this->itemPercent;
+    }
+
+    /**
+     * @param float $itemPercent
+     */
+    public function setItemPercent($itemPercent)
+    {
+        $this->itemPercent = $itemPercent;
+    }
 
 
 }

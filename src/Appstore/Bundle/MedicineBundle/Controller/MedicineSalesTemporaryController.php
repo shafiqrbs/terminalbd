@@ -159,7 +159,11 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('Done');
         }
-
+        if($data['salesTemporary']['printMessage']){
+            $messageId = $data['salesTemporary']['printMessage'];
+            $message = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($messageId);
+            $entity->setPrintMessage($message);
+        }
         $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
         if($accountConfig == 1){
             $datetime = new \DateTime("yesterday 23:30:30");
@@ -302,6 +306,7 @@ class MedicineSalesTemporaryController extends Controller
         $payment            = $entity->getReceived();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy()->getProfile()->getName();
+        $printMessage       = $entity->getPrintMessage();
         if($entity->getCustomer()->getName() != "Default"){
         $customer           = "Customer: {$entity->getCustomer()->getName()},Mobile: {$entity->getCustomer()->getMobile()}\n";
         }
@@ -412,6 +417,7 @@ class MedicineSalesTemporaryController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }*/
         $printer -> text($date . "\n");
+        if($printMessage){$printer->text("{$printMessage}\n");}
         $printer -> text("*Medicines once sold are not taken back*\n");
         $response =  base64_encode($connector->getData());
         $printer -> close();

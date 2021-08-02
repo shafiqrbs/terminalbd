@@ -136,6 +136,13 @@ class MedicineSales
      */
     private $cardNo;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="printMessage", type="string", length=100, nullable=true)
+     */
+    private $printMessage;
+
     /**
      * @var string
      *
@@ -1030,6 +1037,22 @@ class MedicineSales
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintMessage()
+    {
+        return $this->printMessage;
+    }
+
+    /**
+     * @param string $printMessage
+     */
+    public function setPrintMessage($printMessage)
+    {
+        $this->printMessage = $printMessage;
     }
 
 

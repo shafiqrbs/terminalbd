@@ -53,6 +53,7 @@ $(document).on('change', '#purchaseItem_stockName', function() {
                 $('#openingQuantity').val(obj['salesQty']);
                 $('#totalQty').html(obj['salesQty']);
             }
+            $('.expirationDate').editable();
         }
     })
 });
@@ -239,6 +240,7 @@ var formStock = $("#medicineStock").validate({
                 $("#medicineId").val();
                 $('#medicineStock')[0].reset();
                 $('#opening-box').hide();
+
             }
         });
     }
@@ -286,6 +288,7 @@ var form = $("#purchaseItemForm").validate({
                 $('#purchaseItemForm')[0].reset();
                 $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
                 $('#opening-box').hide();
+                $('.expirationDate').editable();
             }
         });
     }
