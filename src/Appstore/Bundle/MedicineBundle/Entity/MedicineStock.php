@@ -167,6 +167,13 @@ class MedicineStock
     /**
      * @var integer
      *
+     * @ORM\Column(name="reorderQuantity", type="integer", nullable=true)
+     */
+    private $reorderQuantity;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
      */
     private $remainingQuantity = 0;
@@ -975,6 +982,22 @@ class MedicineStock
     public function setOpeningApprove($openingApprove)
     {
         $this->openingApprove = $openingApprove;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReorderQuantity()
+    {
+        return $this->reorderQuantity;
+    }
+
+    /**
+     * @param int $reorderQuantity
+     */
+    public function setReorderQuantity($reorderQuantity)
+    {
+        $this->reorderQuantity = $reorderQuantity;
     }
 
 

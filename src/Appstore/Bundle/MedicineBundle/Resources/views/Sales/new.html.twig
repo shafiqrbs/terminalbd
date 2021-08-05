@@ -48,13 +48,16 @@
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
             <div class="row-fluid particular-info" >
-                <div class="span8">
+                <div class="span6">
                     {{ form_widget(salesItem.stockName) }}
                     {{ form_errors(salesItem.stockName) }}
                 </div>
                 <div class="span2">
                     {{ form_widget(salesItem.salesPrice) }}
                     {{ form_errors(salesItem.salesPrice) }}
+                </div>
+                <div class="span2">
+                    {{ form_widget(salesItem.itemPercent) }}
                 </div>
                 <div class="span2">
                     <div class="input-append">

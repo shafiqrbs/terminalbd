@@ -80,6 +80,8 @@ class PrepurchaseController extends Controller
 			    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertShortList($entity,$stock);
 		    }
 	    }
+        $barcodes = $request->cookies->get( 'barcodes' );
+        unset($barcodes);
 	    return $this->redirect($this->generateUrl('medicine_prepurchase_edit', array('id' => $entity->getId())));
 
     }
@@ -114,6 +116,19 @@ class PrepurchaseController extends Controller
             'stockItemForm' => $stockItemForm->createView(),
             'form' => $editForm->createView(),
         ));
+    }
+
+    public function processAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $em->getRepository('MedicineBundle:MedicinePrepurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->purchaseGenerate($entity->getId());
+        return $this->redirect($this->generateUrl('medicine_prepurchase'));
+
     }
 
     /**

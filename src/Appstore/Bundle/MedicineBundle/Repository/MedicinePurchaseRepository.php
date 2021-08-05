@@ -3,11 +3,14 @@
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Proxies\__CG__\Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchase;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
@@ -84,6 +87,41 @@ class MedicinePurchaseRepository extends EntityRepository
         $qb->orderBy('e.id','DESC');
         $result = $qb->getQuery();
         return  $result;
+    }
+
+    public function purchaseGenerate($id)
+    {
+
+        $em = $this->_em;
+        $prepurchase = $em->getRepository('MedicineBundle:MedicinePrepurchase')->find($id);
+        $purchase = new MedicinePurchase();
+        $purchase->setMedicineConfig($prepurchase->getMedicineConfig());
+        $purchase->setMedicineVendor($prepurchase->getMedicineVendor());
+        $em->persist($purchase);
+        $em->flush();
+
+        /* @var $row MedicinePrepurchaseItem */
+        if($prepurchase->getMedicinePrepurchaseItems()){
+            foreach ($prepurchase->getMedicinePrepurchaseItems() as $row):
+
+                $entity = new MedicinePurchaseItem();
+                $entity->setMedicinePurchase($purchase);
+                $entity->setMedicineStock($row->getMedicineStock());
+                $entity->setQuantity($row->getQuantity());
+                $entity->setActualPurchasePrice($row->getMedicineStock()->getPurchasePrice());
+                $entity->setPurchasePrice($row->getMedicineStock()->getSalesPrice());
+                $entity->setSalesPrice($row->getMedicineStock()->getSalesPrice());
+                $entity->setPurchaseSubTotal($row->getMedicineStock()->getSalesPrice() * $entity->getQuantity());
+                $em->persist($entity);
+                $em->flush();
+
+            endforeach;
+            $this->updatePurchaseTotalPrice($purchase);
+        }
+
+
+
+
     }
 
 

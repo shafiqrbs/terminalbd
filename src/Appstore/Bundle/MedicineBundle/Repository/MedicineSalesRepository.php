@@ -38,7 +38,6 @@ class MedicineSalesRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
-
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
@@ -52,14 +51,16 @@ class MedicineSalesRepository extends EntityRepository
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
 	    $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 	    $amount = isset($data['amount'])? $data['amount'] :'';
-        if (!empty($invoice)) {
+	    if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
             $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
         }
-
+        if (!empty($process)) {
+            $qb->andWhere($qb->expr()->like("s.process", "'$process%'"  ));
+        }
         if (!empty($customerMobile)) {
             $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.mobile", "'%$customerMobile%'"  ));
@@ -196,11 +197,15 @@ class MedicineSalesRepository extends EntityRepository
     }
 
 
-    public function invoiceLists(User $user, $data)
+    public function invoiceLists(User $user, $data, $hold = "")
     {
+      //  var_dump($data);
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        if($hold == "Hold"){
+            $qb->andWhere($qb->expr()->like("s.process", "'$hold%'"  ));
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $qb->getQuery();

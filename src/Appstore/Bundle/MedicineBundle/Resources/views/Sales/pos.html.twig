@@ -8,7 +8,8 @@
     <div class="caption"><i class="icon-reorder"></i>Add Medicine/Accessories</div>
     <div class="actions">
         <div class="btn-group">
-            <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Medicine Sales</a>
+            <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> SALES </a>
+            <a class="btn red" href="{{ path('medicine_sales') }}"><i class="icon-pause"></i> HOLD </a>
             <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
             <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
         </div>
@@ -57,8 +58,8 @@
     <div class="row-fluid">
         <div class="span12" id="particular-table">
             <table class="table table-bordered table-striped table-condensed table-fixed">
-                <thead>
-                <tr>
+                <thead class="flip-content ">
+                <tr class="head-blue">
                     {#<th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>#}
                     <th class="span3">Name</th>
                     <th class="span1">Rack</th>
@@ -148,17 +149,6 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label">Discount TK.</span>
-                            <span class="pull-right sales-right"></span>
-                        </label>
-                    </div>
-                </div>
-                <!--/span-->
-            </div>
-            <div class="clearfix"></div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="control-group">
                         <div class="controls">
                             {{ form_widget(form.transactionMethod) }}
                             {{ form_errors(form.transactionMethod) }}
@@ -242,7 +232,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <input type="text" style="margin-left: 0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2TemporaryCustomer" value=""  autocomplete="off" placeholder="Customer mobile no">
-                    <button class="pull-right btn btn-large green big  addTemporaryCustomer"><i class="icon-user"></i></button>
+                    <button class="pull-right btn btn-large green big span2  addTemporaryCustomer"><i class="icon-user"></i></button>
                 </div>
             </div>
             <div class="row-fluid customer" id="">
@@ -441,9 +431,9 @@
             min-height: 15px!important;
             font-size: 13px!important;
         }
-        .sales-right input[class*="span"]#salesTemporary_received{
-            height: 40px!important;
-            font-size: 36px!important;
+        .sales-right input[class*="span"]#salesTemporary_received {
+            height: 54px!important;
+            font-size: 41px!important;
         }
         .sales-right .discount-type {
             height: 40px!important;
@@ -452,7 +442,7 @@
         }
         .sales-right input[class*="span"].m-wrap {
             font-weight: bold;
-            margin-top: -1px;
+            margin-top: -4px;
             text-align: right;
             border: 2px solid red !important;
             height: 40px!important;
@@ -472,6 +462,9 @@
 
         .form-horizontal .payment-info .control-label .label{
             font-size: 18px;
+        }
+        .select2-container .select2-choice .select2-arrow {
+            top: 10px;
         }
     </style>
     <script>

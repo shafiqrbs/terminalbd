@@ -30,7 +30,15 @@ class SalesItemType extends AbstractType
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 input','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span5 form-control input-number input','placeholder'=>'quantity')))
-           /* ->add('medicineStock', 'entity', array(
+            ->add('itemPercent', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12 input'),
+                'expanded'      =>false,
+                'empty_value' => '-Disc(%)-',
+                'mapped' => false,
+                'multiple'      =>false,
+                'choices' => array(1,2,3,4,5,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,),
+            ))
+            /* ->add('medicineStock', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineStock',
                 'empty_value' => '---Choose a medicine ---',

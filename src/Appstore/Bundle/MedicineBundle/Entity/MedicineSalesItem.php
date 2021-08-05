@@ -80,6 +80,13 @@ class MedicineSalesItem
     /**
      * @var float
      *
+     * @ORM\Column(name="mrpPrice", type="float", nullable=true)
+     */
+    private $mrpPrice;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
     private $salesPrice;
@@ -371,6 +378,22 @@ class MedicineSalesItem
     public function setAndroidProcess($androidProcess)
     {
         $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMrpPrice()
+    {
+        return $this->mrpPrice;
+    }
+
+    /**
+     * @param float $mrpPrice
+     */
+    public function setMrpPrice($mrpPrice)
+    {
+        $this->mrpPrice = $mrpPrice;
     }
 
 

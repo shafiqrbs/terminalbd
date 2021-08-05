@@ -428,6 +428,7 @@ class BusinessInvoiceRepository extends EntityRepository
         return  $qb;
     }
 
+
 	public function monthlySales(User $user , $data =array())
 	{
 

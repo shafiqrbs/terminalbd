@@ -74,12 +74,15 @@ $('form#salesItemForm').on('keypress', '.input', function (e) {
         }
         switch (this.id) {
 
-            case 'salesitem_quantity':
-                $('#addParticular').focus();
+            case 'salesitem_stockName':
+                $('#salesitem_quantity').focus();
                 break;
-            case 'addParticular':
+
+            case 'salesitem_quantity':
+                $('#addParticular').click();
                 $('#salesitem_stockName').select2('open');
                 break;
+
         }
         return false;
     }
@@ -92,6 +95,7 @@ var form = $("#salesItemForm").validate({
         "salesitem[stockName]": {required: true},
         "salesitem[barcode]": {required: true},
         "salesitem[salesPrice]": {required: true},
+        "salesitem[itemPercent]": {required: false},
         "salesitem[quantity]": {required: true},
     },
 

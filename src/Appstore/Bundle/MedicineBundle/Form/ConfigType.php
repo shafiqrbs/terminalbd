@@ -24,6 +24,14 @@ class ConfigType extends AbstractType
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('instantVendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'Instant vendor item percentage')))
             ->add('vendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'Vendor item percentage')))
+            ->add('currency', 'choice', array(
+                'attr'=>array('class'=>'span8'),
+                'choices' => array(
+                    '৳'       => 'Taka(৳)',
+                    '$'       => 'Dollar($)'
+                ),
+            ))
+            ->add('invoiceActualPrice')
             ->add('customPrint')
             ->add('posPrint')
             ->add('openingQuantity')

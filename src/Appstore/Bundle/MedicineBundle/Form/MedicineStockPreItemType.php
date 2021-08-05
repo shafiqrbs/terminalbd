@@ -34,7 +34,7 @@ class MedicineStockPreItemType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('accessoriesBrand', 'entity', [
+            ->add('accessoriesBrand', 'entity',array(
                 'required'    => false,
                 'group_by'  => 'particularType.name',
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
@@ -50,7 +50,7 @@ class MedicineStockPreItemType extends AbstractType
                         ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
                         ->andWhere('pt.modeFor = :brand')->setParameter('brand','brand');
                 },
-            ])
+            ))
             ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
             ->add('unit', 'entity', array(

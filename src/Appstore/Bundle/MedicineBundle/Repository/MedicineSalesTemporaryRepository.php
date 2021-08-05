@@ -49,7 +49,8 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             }else{
                 $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
             }
-	        $entity->setSubTotal( round( ( $entity->getSalesPrice() * $data['quantity'] ), 2 ) );
+            $entity->setEstimatePrice($stockItem->getSalesprice());
+	        $entity->setSubTotal( round(($entity->getSalesPrice() * $data['quantity'] ), 2 ) );
 	        $entity->setUser( $user );
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );

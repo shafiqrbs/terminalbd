@@ -112,8 +112,8 @@ var formStock = $("#stockItemForm").validate({
 
         "stockItemForm[name]": {required: true},
         "stockItemForm[rackNo]": {required: true},
-        "stockItemForm[unit]": {required: true},
-        "stockItemForm[purchasePrice]": {required: true},
+        "stockItemForm[unit]": {required: false},
+        "stockItemForm[purchasePrice]": {required: false},
         "stockItemForm[purchaseQuantity]": {required: true}
     },
 

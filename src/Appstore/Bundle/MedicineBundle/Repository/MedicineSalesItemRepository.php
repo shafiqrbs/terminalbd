@@ -156,7 +156,8 @@ class MedicineSalesItemRepository extends EntityRepository
 	        	$entity = new MedicineSalesItem();
 		        $entity->setMedicineSales( $sales );
 		        $entity->setMedicineStock( $item->getMedicineStock() );
-		        $entity->setQuantity( $item->getQuantity() );
+		        $entity->setQuantity($item->getQuantity() );
+		        $entity->setMrpPrice($item->getMedicineStock()->getSalesPrice());
 		        $entity->setSalesPrice( $item->getSalesPrice() );
 		        $entity->setSubTotal( $item->getSubTotal() );
 	            $entity->setPurchasePrice( $item->getPurchasePrice() );

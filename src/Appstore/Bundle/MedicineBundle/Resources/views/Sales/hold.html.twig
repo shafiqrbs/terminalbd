@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Sales List
+                   Manage Hold List
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_sales') }}">Manage Sales List</a>
+                        <a href="{{ path('medicine_sales_hold') }}">Manage Hold List</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,10 +33,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Sales List Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Sales Hold List Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn green"  href="{{ path('medicine_sales_hold') }}"><i class="icon-push"></i> HOLD </a>
+                                <a class="btn green"  href="{{ path('medicine_sales') }}"><i class="icon-push"></i> Sales </a>
                                 <a class="btn red"  href="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Device Sales</th>
+                                    <th class="numeric" >Customer</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -122,7 +122,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y g:i:s a') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{{ entity.deviceSalesId }}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty and entity.customer.name !="Default" %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ entity.received|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>

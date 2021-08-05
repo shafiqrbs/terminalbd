@@ -2,6 +2,10 @@ business_invoice:
     path:     /
     defaults: { _controller: "BusinessBundle:Invoice:index" }
 
+business_invoice_condition:
+    path:     /condition
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceCondition" }
+
 business_invoice_show:
     path:     /{id}/show
     defaults: { _controller: "BusinessBundle:Invoice:show" }

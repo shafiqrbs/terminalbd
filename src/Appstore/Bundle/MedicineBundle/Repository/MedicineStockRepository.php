@@ -158,8 +158,46 @@ class MedicineStockRepository extends EntityRepository
 
         $sort = isset($data['sort'])? $data['sort'] :'e.name';
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
+        $process = isset($data['process'])? $data['process'] :'';
+        $startQuantity = isset($data['quantityStart'])? $data['quantityStart'] :0;
+        $endQuantity = isset($data['quantityEnd'])? $data['quantityEnd'] :0;
+
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        if($process == 'Current Stock' and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.remainingQuantity  > 0');
+        }elseif($process == 'Current Stock'  and $startQuantity >= 0 and $endQuantity > 0){
+            $qb->andWhere("e.remainingQuantity  >= {$startQuantity}");
+            $qb->andWhere("e.remainingQuantity  <= {$endQuantity}");
+        }
+        if($process == 'Empty Stock'){
+            $qb->andWhere('e.remainingQuantity  = 0');
+            $qb->andWhere('e.salesQuantity = 0');
+        }
+        if($process == 'Sales' and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.remainingQuantity  <= 0');
+        }elseif ($process == 'Sales'  and $startQuantity >= 0 and $endQuantity > 0){
+            $qb->andWhere("e.salesQuantity  >= {$startQuantity}");
+            $qb->andWhere("e.salesQuantity  <= {$endQuantity}");
+        }
+         if($process == 'Sales Minus' and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.remainingQuantity  <= 0');
+        }elseif ($process == 'Sales Minus'  and $startQuantity >= 0 and $endQuantity > 0){
+             $qb->andWhere("e.remainingQuantity  >= -{$startQuantity}");
+             $qb->andWhere("e.remainingQuantity  <= -{$endQuantity}");
+        }
+        if($process == "Opening Quantity" and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.openingQuantity > 0');
+        }elseif($process == "Opening Quantity"  and $startQuantity >= 0 and $endQuantity > 0){
+            $qb->andWhere("e.openingQuantity  >= {$startQuantity}");
+            $qb->andWhere("e.openingQuantity  <= {$endQuantity}");
+        }
+        if($process == "Min Quantity" and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.minQuantity > 0');
+        }elseif($process == "Min Quantity"  and $startQuantity >= 0 and $endQuantity > 0){
+            $qb->andWhere("e.minQuantity  >= {$startQuantity}");
+            $qb->andWhere("e.minQuantity  <= {$endQuantity}");
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
         $result = $qb->getQuery();

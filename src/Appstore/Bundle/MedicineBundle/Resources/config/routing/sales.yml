@@ -2,6 +2,10 @@ medicine_sales:
     path:     /
     defaults: { _controller: "MedicineBundle:Sales:index" }
 
+medicine_sales_hold:
+    path:     /hold
+    defaults: { _controller: "MedicineBundle:Sales:hold" }
+
 medicine_sales_android:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }

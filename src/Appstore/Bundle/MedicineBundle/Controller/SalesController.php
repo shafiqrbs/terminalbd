@@ -60,6 +60,29 @@ class SalesController extends Controller
     }
 
     /**
+     * @Secure(roles="ROLE_MEDICINE_SALES")
+     */
+
+    public function holdAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($this->getUser(),$data,"Hold");
+        $pagination = $this->paginate($entities);
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        $banks = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption' => $user->getGlobalOption(),'status' => 1), array('name' => 'ASC'));
+        $mobiles =  $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption' => $user->getGlobalOption() , 'status' => 1), array('name' => 'ASC'));
+        return $this->render('MedicineBundle:Sales:hold.html.twig', array(
+            'entities' => $pagination,
+            'banks' => $banks,
+            'mobiles' => $mobiles,
+            'transactionMethods' => $transactionMethods,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
      * Lists all Vendor entities.
      *
      */
@@ -108,7 +131,6 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineSales entity.');
         }
@@ -213,16 +235,22 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity->setMedicineSales($invoice);
         $stockItem = ($data['salesitem']['stockName']);
+        $itemPercent = ($data['salesitem']['itemPercent']);
+        $salesPrice = ($data['salesitem']['salesPrice']);
         $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stock);
-       // $barcode = $data['salesitem']['barcode'];
-       // $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($barcode);
-      //  $entity->setMedicinePurchaseItem($purchaseItem);
+        if($itemPercent > 0){
+            $initialDiscount = round(($salesPrice *  $itemPercent)/100);
+            $initialGrandTotal = round($salesPrice  - $initialDiscount);
+            $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+        }else{
+            $entity->setSalesPrice( round( $salesPrice, 2 ) );
+        }
         $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
+        $entity->setMrpPrice($stock->getSalesPrice());
         $entity->setPurchasePrice($stock->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
-      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'sales');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
         $msg = 'Medicine added successfully';

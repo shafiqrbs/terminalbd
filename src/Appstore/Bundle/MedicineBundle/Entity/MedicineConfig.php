@@ -126,6 +126,13 @@ class MedicineConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="invoiceActualPrice", type="boolean",  nullable=true)
+     */
+    private $invoiceActualPrice = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
      */
     private $isPrintHeader = true;
@@ -226,6 +233,13 @@ class MedicineConfig
      */
     private $vatRegNo;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string",  nullable=true)
+     */
+    private $currency="৳";
+
 
      /**
      * @var string
@@ -241,8 +255,6 @@ class MedicineConfig
      * @ORM\Column(name="homeService",  type="boolean",  nullable=true)
      */
     private $homeService;
-
-
 
     /**
      * @var boolean
@@ -709,6 +721,37 @@ class MedicineConfig
         $this->isPrint = $isPrint;
     }
 
+    /**
+     * @return bool
+     */
+    public function isInvoiceActualPrice()
+    {
+        return $this->invoiceActualPrice;
+    }
+
+    /**
+     * @param bool $invoiceActualPrice
+     */
+    public function setInvoiceActualPrice($invoiceActualPrice)
+    {
+        $this->invoiceActualPrice = $invoiceActualPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
 
 
 }

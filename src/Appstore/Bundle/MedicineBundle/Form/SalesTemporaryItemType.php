@@ -30,7 +30,7 @@ class SalesTemporaryItemType extends AbstractType
                 'choices' => array(),
             ))
             ->add('itemPercent', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span3'),
+                'attr'=>array('class'=>'m-wrap span3 input'),
                 'expanded'      =>false,
                 'empty_value' => '-Disc(%)-',
                 'mapped' => false,

@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * BusinessInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+class InvoiceConditionController extends Controller
 {
 
     public function paginate($entities)
@@ -49,23 +49,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
-        $pagination = $this->paginate($entities);
-        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-        return $this->render("BusinessBundle:Invoice/{$view}:index.html.twig", array(
-            'entities' => $pagination,
-            'salesTransactionOverview' => '',
-            'previousSalesTransactionOverview' => '',
-            'searchForm' => $data,
-        ));
-    }
-
-    public function invoiceConditionAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $data[] = array('process' => 'Condition');
+        $data[] = array('process'=>'Condition');
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
         $pagination = $this->paginate($entities);
         return $this->render("BusinessBundle:InvoiceCondition:index.html.twig", array(
@@ -74,33 +58,8 @@ class InvoiceController extends Controller
             'previousSalesTransactionOverview' => '',
             'searchForm' => $data,
         ));
-
     }
 
-    public function newAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = new BusinessInvoice();
-        $option = $this->getUser()->getGlobalOption();
-        $config = $option->getBusinessConfig();
-        $entity->setCreatedBy($this->getUser());
-        $entity->setSalesBy($this->getUser());
-        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
-        $entity->setCustomer($customer);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $entity->setBusinessConfig($config);
-        $entity->setPaymentStatus('Pending');
-        $entity->setComment($config->getInvoiceComment());
-        $em->persist($entity);
-        $em->flush();
-        if($config->getBusinessModel() == "distribution"){
-           // $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('post-production','pre-production','stock','service','virtual'));
-         //   $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertDistributionItem($entity,$particulars);
-        }
-        return $this->redirect($this->generateUrl('business_invoice_edit', array('id' => $entity->getId())));
-
-    }
 
     /**
      * Creates a form to edit a Invoice entity.wq

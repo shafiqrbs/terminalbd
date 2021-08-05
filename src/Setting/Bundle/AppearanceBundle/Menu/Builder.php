@@ -224,6 +224,8 @@ class Builder extends ContainerAware
 
             $menu[$business]['Manage Sales']->addChild('Sales', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
+             $menu[$business]['Manage Sales']->addChild('Condition Sales', array('route' => 'business_invoice_condition'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
                 ->setAttribute('icon', 'icon-plus-sign');
 	        if ($securityContext->isGranted('ROLE_BUSINESS_REPORT')){
@@ -1285,7 +1287,11 @@ class Builder extends ContainerAware
 	        $menu['Medicine']->addChild('Manage Sales')
 	                         ->setAttribute('icon', 'icon-shopping-cart')
 	                         ->setAttribute('dropdown', true);
+        	    $menu['Medicine']['Manage Sales']->addChild('ADD SALES', array('route' => 'medicine_sales_temporary_new'))
+                    ->setAttribute('icon', 'icon-shopping-cart');
         	    $menu['Medicine']['Manage Sales']->addChild('Sales', array('route' => 'medicine_sales'))
+                    ->setAttribute('icon', 'icon-list');
+        	    $menu['Medicine']['Manage Sales']->addChild('Hold Sales', array('route' => 'medicine_sales_hold'))
                     ->setAttribute('icon', 'icon-list');
         	    $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
                     ->setAttribute('icon', 'icon-list');

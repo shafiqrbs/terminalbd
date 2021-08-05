@@ -62,12 +62,20 @@
                                 </div>
                                 <div class="span2">
                                     <label class="control-label " for="">&nbsp;</label>
+                                    {{ form_widget(form.invoiceActualPrice) }} Invoice Actual Price <br/>
                                     {{ form_widget(form.openingQuantity) }} Opening Quantity <br/>
                                     {{ form_widget(form.customPrint) }} Custom Print <br/>
                                     {{ form_widget(form.posPrint) }} POS Print <br/>
                                     {{ form_widget(form.regularPosPrint) }} without POS Print
                                 </div>
                                 <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label " for="vatPercentage">Currency</label>
+                                        <div class="control">
+                                            {{ form_widget(form.currency) }}
+                                            {{ form_errors(form.currency) }}
+                                        </div>
+                                    </div>
                                     <div class="control-group">
                                         <label class="control-label " for="vatPercentage">Instant Item <span class="required">%</span></label>
                                         <div class="control">

@@ -111,6 +111,26 @@ $(document).on("click", ".delete", function() {
     });
 });
 
+$(document).on("click", ".tr-remove", function(event) {
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-action");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                if(data === 'invalid'){
+                    location.reload();
+                }else{
+                    $('#remove-'+id).remove();
+                    $(event.target).closest('tr').remove();
+                }
+            });
+        }
+    });
+});
+
+
 /*
 
 

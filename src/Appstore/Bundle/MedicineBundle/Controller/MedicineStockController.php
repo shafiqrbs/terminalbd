@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -39,7 +39,7 @@ class MedicineStockController extends Controller
 	 * @Secure(roles="ROLE_MEDICINE_STOCK")
 	 */
 
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -50,6 +50,7 @@ class MedicineStockController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
             'pagination'    => $pagination,
+            'selected' => explode(',', $request->cookies->get('barcodes', '')),
             'racks' => $racks,
             'modeFor' => $modeFor,
             'searchForm' => $data,
@@ -416,6 +417,7 @@ class MedicineStockController extends Controller
     public function deleteAction(Request $request , MedicineStock $entity)
     {
         $em = $this->getDoctrine()->getManager();
+        $msg = 'invalid';
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineStock entity.');
         }
@@ -423,6 +425,7 @@ class MedicineStockController extends Controller
 
             $em->remove($entity);
             $em->flush();
+            $msg = "success";
             $this->get('session')->getFlashBag()->add(
                 'error',"Data has been deleted successfully"
             );
@@ -431,13 +434,16 @@ class MedicineStockController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'notice',"Data has been relation another Table"
             );
+            $msg = "invalid";
         }catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
                 'notice', 'Please contact system administrator further notification.'
             );
+            $msg = "invalid";
         }
-        $referer = $request->headers->get('referer');
-        return new RedirectResponse($referer);
+        return new Response($msg);
+       // $referer = $request->headers->get('referer');
+       // return new RedirectResponse($referer);
     }
 
     public function rackSelectAction()

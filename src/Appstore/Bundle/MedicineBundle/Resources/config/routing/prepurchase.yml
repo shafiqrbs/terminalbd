@@ -19,6 +19,10 @@ medicine_prepurchase_edit:
     path:     /{id}/edit
     defaults: { _controller: "MedicineBundle:Prepurchase:edit" }
 
+medicine_prepurchase_process:
+    path:     /{id}/purchase-process
+    defaults: { _controller: "MedicineBundle:Prepurchase:process" }
+
 medicine_prepurchase_update:
     path:     /{id}/update
     defaults: { _controller: "MedicineBundle:Prepurchase:update" }
