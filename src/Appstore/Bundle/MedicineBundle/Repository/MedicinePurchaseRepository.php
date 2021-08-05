@@ -117,10 +117,9 @@ class MedicinePurchaseRepository extends EntityRepository
 
             endforeach;
             $this->updatePurchaseTotalPrice($purchase);
+            return $purchase->getId();
         }
-
-
-
+        return 'invalid';
 
     }
 

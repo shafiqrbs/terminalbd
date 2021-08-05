@@ -36,7 +36,7 @@ class SalesTemporaryItemType extends AbstractType
                 'mapped' => false,
                 'required'    => false,
                 'multiple'      =>false,
-                'choices' => array(1,2,3,4,5,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,),
+                'choices' => array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),
             ))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','placeholder'=>'quantity')))

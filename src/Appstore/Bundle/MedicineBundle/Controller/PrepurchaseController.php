@@ -126,8 +126,12 @@ class PrepurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->purchaseGenerate($entity->getId());
-        return $this->redirect($this->generateUrl('medicine_prepurchase'));
+        $return = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->purchaseGenerate($entity->getId());
+        if($return == 'invalid'){
+            return $this->redirect($this->generateUrl('medicine_prepurchase'));
+        }else{
+            return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $return)));
+        }
 
     }
 
