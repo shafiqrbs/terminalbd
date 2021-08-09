@@ -41,7 +41,7 @@ $(document).on('change', '#particular', function() {
             $('#particularId').val(obj['particularId']);
            // $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
-            $('#purchasePrice').val(obj['purchasePrice']);
+            //$('#purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
         }
     })
