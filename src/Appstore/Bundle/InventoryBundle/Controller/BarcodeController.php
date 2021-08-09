@@ -249,7 +249,6 @@ class BarcodeController extends Controller
 		return $this->render('InventoryBundle:Barcode:item.html.twig', array(
 			'entities'      => $entities
 		));
-
 	}
 
 

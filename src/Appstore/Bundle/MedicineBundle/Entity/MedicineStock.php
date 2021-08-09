@@ -213,6 +213,13 @@ class MedicineStock
      */
     private $pack = 1;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="barcode", type="string", nullable = true)
+     */
+    private $barcode;
+
 
     /**
      * @var integer
@@ -998,6 +1005,22 @@ class MedicineStock
     public function setReorderQuantity($reorderQuantity)
     {
         $this->reorderQuantity = $reorderQuantity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string $barcode
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
     }
 
 

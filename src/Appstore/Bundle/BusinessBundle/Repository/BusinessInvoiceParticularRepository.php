@@ -53,6 +53,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $entity->setBusinessInvoice($invoice);
         $entity->setParticular($data['particular']);
         $entity->setPrice($data['price']);
+        $entity->setDescription($data['description']);
         $entity->setQuantity($quantity);
         $entity->setSubQuantity(1);
         $entity->setTotalQuantity($quantity);
@@ -206,9 +207,11 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 	    $entity->setTotalQuantity($quantity);
 	    $accessoriesId = $data['accessories'];
 	    $price = $data['price'];
+        $description = $data['description'];
 	    $stock = $em->getRepository('BusinessBundle:BusinessParticular')->find($accessoriesId);
 	    $entity->setParticular($stock->getName());
 	    $entity->setBusinessParticular($stock);
+	    $entity->setDescription($description);
 	    $entity->setPrice($price);
 	    $entity->setPurchasePrice($stock->getPurchasePrice());
         $entity->setSubTotal($quantity * $price);
@@ -330,7 +333,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
-            $data .= "<td>{$entity->getParticular()}</td>";
+            $data .= "<td>{$entity->getParticular()}<br/>{$entity->getDescription()}</td>";
             if($sales->getBusinessConfig()->getBusinessModel() == 'sign') {
             $data .= "<td>{$subQuantity}</td>";
             }

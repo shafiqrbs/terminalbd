@@ -14,6 +14,7 @@ use Appstore\Bundle\MedicineBundle\Form\MedicineStockPreItemType;
 use Appstore\Bundle\MedicineBundle\Form\PrepurchaseType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -80,8 +81,6 @@ class PrepurchaseController extends Controller
 			    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertShortList($entity,$stock);
 		    }
 	    }
-        $barcodes = $request->cookies->get( 'barcodes' );
-        unset($barcodes);
 	    return $this->redirect($this->generateUrl('medicine_prepurchase_edit', array('id' => $entity->getId())));
 
     }
@@ -100,7 +99,7 @@ class PrepurchaseController extends Controller
     }
 
 
-    public function editAction($id)
+    public function editAction(Request $request , $id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -110,9 +109,15 @@ class PrepurchaseController extends Controller
         }
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
         $editForm = $this->createEditForm($entity);
+        $response = new Response();
+        $response->headers->setCookie(new Cookie('barcodes', 'true', time() + (3600 * 48), '/', null, false, false));
+        setcookie("barcodes", "", time()-3600);
+        if (isset($_COOKIE['barcodes'])) {
+            unset($_COOKIE['barcodes']);
+            setcookie('barcodes', '', time() - 3600, '/'); // empty value and old timestamp
+        }
         return $this->render('MedicineBundle:Prepurchase:new.html.twig', array(
             'entity' => $entity,
-
             'stockItemForm' => $stockItemForm->createView(),
             'form' => $editForm->createView(),
         ));

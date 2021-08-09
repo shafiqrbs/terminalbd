@@ -241,6 +241,14 @@ class BusinessConfig
     private $isInvoiceTitle = true;
 
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="printOutstanding", type="boolean",  nullable=true)
+     */
+    private $printOutstanding = false;
+
+
     /**
      * @var boolean
      *
@@ -1362,6 +1370,22 @@ class BusinessConfig
     public function setInvoiceComment($invoiceComment)
     {
         $this->invoiceComment = $invoiceComment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintOutstanding()
+    {
+        return $this->printOutstanding;
+    }
+
+    /**
+     * @param bool $printOutstanding
+     */
+    public function setPrintOutstanding($printOutstanding)
+    {
+        $this->printOutstanding = $printOutstanding;
     }
 
 

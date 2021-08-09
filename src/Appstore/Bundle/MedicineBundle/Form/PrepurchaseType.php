@@ -32,9 +32,9 @@ class PrepurchaseType extends AbstractType
             ->add('medicineVendor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
-                'empty_value' => '---Choose a vendor ---',
+                'empty_value' => '---Choose a vendor/supplier ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'attr'=>array('class'=>'m-wrap span12 inputs select2'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')

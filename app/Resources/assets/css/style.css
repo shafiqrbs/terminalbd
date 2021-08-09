@@ -1152,7 +1152,7 @@ Footer
 Icon stuff
 ***/
 i.icon, a.icon {
-  color: #999;
+  color: #ffffff;
   margin-right: 5px;
   font-weight: normal;
   font-size: 13px;
@@ -1241,6 +1241,10 @@ Form stuff
   margin-left:-10px !important;
   margin-right:-10px !important;
   margin-bottom: -10px !important;
+}
+
+.table-striped tbody>tr:nth-child(odd)>td, .table-striped tbody>tr:nth-child(odd)>th {
+  background-color: #EBEDF0;
 }
 
 /***

@@ -48,9 +48,10 @@ class MedicineStockController extends Controller
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
         $pagination = $this->paginate($entities);
+        $selected = explode(',', $request->cookies->get('barcodes', ''));
         return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
             'pagination'    => $pagination,
-            'selected' => explode(',', $request->cookies->get('barcodes', '')),
+            'selected' => $selected,
             'racks' => $racks,
             'modeFor' => $modeFor,
             'searchForm' => $data,

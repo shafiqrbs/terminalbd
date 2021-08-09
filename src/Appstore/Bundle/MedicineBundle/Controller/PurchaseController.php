@@ -449,6 +449,10 @@ class PurchaseController extends Controller
         $invoiceDue = $request->request->get('invoiceDue');
         if ($editForm->isValid()) {
             $entity->setProcess('Complete');
+            if($entity->getPayment() > 0 and empty($entity->getTransactionMethod())){
+                $method = $this->getDoctrine()->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+                $entity->setTransactionMethod($method);
+            }
             if($entity->getInvoiceMode() == 'invoice'){
                 $due = empty($invoiceDue) ? 0 : $invoiceDue;
                 $total = ($entity->getPayment() + $due);

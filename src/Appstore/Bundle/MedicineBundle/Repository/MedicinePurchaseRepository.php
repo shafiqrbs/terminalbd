@@ -97,6 +97,8 @@ class MedicinePurchaseRepository extends EntityRepository
         $purchase = new MedicinePurchase();
         $purchase->setMedicineConfig($prepurchase->getMedicineConfig());
         $purchase->setMedicineVendor($prepurchase->getMedicineVendor());
+        $date = new \DateTime("now");
+        $purchase->setReceiveDate($date);
         $em->persist($purchase);
         $em->flush();
 

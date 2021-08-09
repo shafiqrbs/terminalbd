@@ -65,7 +65,7 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $data[] = array('process' => 'Condition');
+        $data = array('process' => 'Condition');
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
         $pagination = $this->paginate($entities);
         return $this->render("BusinessBundle:InvoiceCondition:index.html.twig", array(
@@ -450,7 +450,8 @@ class InvoiceController extends Controller
         $price = $request->request->get('price');
         $unit = $request->request->get('unit');
         $quantity = $request->request->get('quantity');
-        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit);
+        $description = $request->request->get('description');
+        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit,'description' => $description);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceParticular($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
@@ -623,8 +624,9 @@ class InvoiceController extends Controller
         $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('salesPrice');
+        $description = $request->request->get('description');
         if(!empty($particular)){
-            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price);
+            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price,'description' => $description);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';

@@ -35,8 +35,9 @@ class MedicineStockType extends AbstractType
                 )
             ))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price')))
-            ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Minimum')))
-            ->add('maxQuantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Maximum')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price')))
+            ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Minimum')))
+            ->add('reorderQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Reorder quantity')))
             ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no')))
             ->add('unit', 'entity', array(
                 'required'    => false,

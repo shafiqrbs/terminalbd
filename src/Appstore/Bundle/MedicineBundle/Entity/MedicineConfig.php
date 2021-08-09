@@ -123,6 +123,13 @@ class MedicineConfig
      */
     private $posPrint = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="printOutstanding", type="boolean",  nullable=true)
+     */
+    private $printOutstanding = false;
+
     /**
      * @var boolean
      *
@@ -751,6 +758,22 @@ class MedicineConfig
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintOutstanding()
+    {
+        return $this->printOutstanding;
+    }
+
+    /**
+     * @param bool $printOutstanding
+     */
+    public function setPrintOutstanding($printOutstanding)
+    {
+        $this->printOutstanding = $printOutstanding;
     }
 
 

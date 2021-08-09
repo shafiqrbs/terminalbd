@@ -124,8 +124,9 @@
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processIntArr = ['Hold','Created','Revised','Quotation'] %}
+                                                {% set processIntArr = ['Hold','Created','Revised','Quotation','Condition'] %}
                                                 {% set processDone = ['Done','Delivered','Chalan','Quotation','In-progress'] %}
+                                                {{ entity.process }}
                                                 {% if entity.process in  processIntArr %}
                                                 <a href="{{ path('business_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-pencil"></i> Edit</a>
                                                 <a  data-id="{{ entity.id }}" data-url="{{ path('business_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>

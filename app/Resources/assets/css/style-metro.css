@@ -71,7 +71,7 @@ select:focus {
 
 .btn.green-stripe
 {
-	border-left: 3px solid #0B610B;
+	border-left: 3px solid #00b22d;
 }
 
 .btn.yellow-stripe {
@@ -148,7 +148,7 @@ select:focus {
 .btn.green {
   color: white;
   text-shadow: none;
-  background-color: #0B610B;
+  background-color: #00b22d;
 }
 .btn.green:hover,
 .btn.green:focus,
@@ -156,12 +156,12 @@ select:focus {
 .btn.green.active,
 .btn.green.disabled,
 .btn.green[disabled]{
-  background-color: #1c7d74 !important;
+  background-color: #00b22d !important;
   color: #fff !important;
 }
 
 .btn-group .btn.green.dropdown-toggle {
-  background-color: #0B610B !important;
+  background-color: #00b22d !important;
 }
 .btn-group .btn.green:hover,
 .btn-group .btn.green:focus,
@@ -169,7 +169,7 @@ select:focus {
 .btn-group .btn.green.active,
 .btn-group .btn.green.disabled,
 .btn-group .btn.green[disabled] {
-  background-color: #1c7d74 !important;
+  background-color: #00b22d !important;
   color: #fff !important;
 }
 

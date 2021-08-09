@@ -283,6 +283,7 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
 		$entity->setMedicineStock($item);
 		$entity->setPurchaseSubTotal(0);
 		$entity->setPurchasePrice($item->getPurchasePrice());
+		$entity->setSalesPrice($item->getSalesPrice());
 		$entity->setQuantity($item->getReorderQuantity());
 		$em->persist($entity);
 		$em->flush();

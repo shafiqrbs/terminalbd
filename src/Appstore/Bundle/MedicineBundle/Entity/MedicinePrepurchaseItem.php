@@ -59,6 +59,14 @@ class MedicinePrepurchaseItem
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="salesPrice", type="float", nullable = true)
+     */
+    private $salesPrice;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="code", type="integer", nullable = true)
@@ -214,6 +222,22 @@ class MedicinePrepurchaseItem
 	public function setMedicinePrepurchase( $medicinePrepurchase ) {
 		$this->medicinePrepurchase = $medicinePrepurchase;
 	}
+
+    /**
+     * @return float
+     */
+    public function getSalesPrice()
+    {
+        return $this->salesPrice;
+    }
+
+    /**
+     * @param float $salesPrice
+     */
+    public function setSalesPrice($salesPrice)
+    {
+        $this->salesPrice = $salesPrice;
+    }
 
 }
 
