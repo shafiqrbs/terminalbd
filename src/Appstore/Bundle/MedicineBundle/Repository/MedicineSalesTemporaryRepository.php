@@ -34,7 +34,6 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
         $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
-
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
@@ -125,7 +124,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $subTotal = number_format((float)$entity->getSubTotal(), 2, '.', '');
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             /*$data .= '<td class="span1" >' . $barcode . '</td>';*/
-            $data .= '<td class="span4" >' . $entity->getMedicineStock()->getName() . '</td>';
+            $data .= "<td class='span4'>{$i}. {$entity->getMedicineStock()->getName()}</td>";
             $data .= '<td class="span1" >' . $rack. '</td>';
             $data .= "<td class='span1' >{$purchasePrice}</td>";
             $data .= "<td class='span1' >";

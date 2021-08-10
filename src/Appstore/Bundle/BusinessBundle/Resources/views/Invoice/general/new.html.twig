@@ -54,14 +54,14 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">&nbsp;</div>
-                                        <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
+                                        <form class="stockInvoice" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="row-fluid particular-info" >
                                                         <div class="span8" >
                                                             <div class="row-fluid">
                                                                 <div class="span12" >
-                                                                    <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2" style="margin-left: 15px">
+                                                                    <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2 input" style="margin-left: 15px">
                                                                         <option value="">--- Select Stock Product ---- </option>
                                                                         {% for particular in particulars %}
                                                                             {% if particular.category is not empty %}
@@ -82,8 +82,8 @@
                                                         <div class="span4">
                                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="m-wrap span3 form-control input-number" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
-                                                                    <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1">
+                                                                    <input type="number" class="m-wrap span4 form-control input-number input" id="quantity" name="quantity" value="1" min="1">
+                                                                    <input type="text" class="m-wrap span3 form-control input-number input" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
                                                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                                                     <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                                 </div>

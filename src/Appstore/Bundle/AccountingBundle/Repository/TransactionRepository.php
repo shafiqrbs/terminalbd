@@ -2488,7 +2488,7 @@ class TransactionRepository extends EntityRepository
 		$transaction->setGlobalOption($globalOption);
 		$transaction->setAccountHead($accountHead);
 		$transaction->setProcessHead('Damage');
-		$transaction->setProcess('Long Term Liabilities');
+		$transaction->setProcess('Administrative expenses');
 		/* Cash - Cash various */
 		$transaction->setAmount($damage->getSubTotal());
 		$transaction->setDebit($damage->getSubTotal());

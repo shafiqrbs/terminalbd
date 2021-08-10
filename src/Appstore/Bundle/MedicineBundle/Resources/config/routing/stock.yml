@@ -103,6 +103,12 @@ medicine_stock_name_search:
     options:
             expose: true
 
+medicine_stock_select2_item:
+    path:      /{stock}/select2-item
+    defaults: { _controller: "MedicineBundle:MedicineStock:searchStockItem" }
+    options:
+            expose: true
+
 medicine_stock_name:
     path:      /{stock}/name
     defaults: { _controller: "MedicineBundle:MedicineStock:searchName" }

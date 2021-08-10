@@ -128,9 +128,9 @@ class InstantPurchaseController extends Controller
     {
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
-        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        $users = $this->getDoctrine()->getRepository('UserBundle:User')->getEmployees($this->getUser()->getGlobalOption());
         $html = $this->renderView('MedicineBundle:Sales:instantPurchaseItem.html.twig',
-            array( 'racks' => $racks , 'modeFor' => $modeFor));
+            array( 'racks' => $racks ,'users' => $users));
         return New Response($html);
     }
 

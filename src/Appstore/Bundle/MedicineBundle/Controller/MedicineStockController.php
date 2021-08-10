@@ -51,6 +51,7 @@ class MedicineStockController extends Controller
         $selected = explode(',', $request->cookies->get('barcodes', ''));
         return $this->render('MedicineBundle:MedicineStock:index.html.twig', array(
             'pagination'    => $pagination,
+            'config' => $config,
             'selected' => $selected,
             'racks' => $racks,
             'modeFor' => $modeFor,
@@ -570,8 +571,15 @@ class MedicineStockController extends Controller
     public function searchNameAction($stock)
     {
         return new JsonResponse(array(
-            'id'=>$stock,
-            'text'=>$stock
+            'id'=>  $stock,
+            'text'=> $stock
+        ));
+    }
+    public function searchStockItemAction(MedicineStock $stock)
+    {
+        return new JsonResponse(array(
+            'id' => $stock->getId(),
+            'text' => $stock->getName()
         ));
     }
     public function autoSearchBrandAction(Request $request)
@@ -637,7 +645,6 @@ class MedicineStockController extends Controller
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
 		/* @var MedicineStock $item */
-
 		foreach ($pagination as $item){
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'');
 			$this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item,'sales');

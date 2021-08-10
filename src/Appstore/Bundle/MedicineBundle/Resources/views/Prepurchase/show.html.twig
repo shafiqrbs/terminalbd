@@ -110,7 +110,7 @@
                                                     <a href="{{ path('medicine_prepurchase_process', { 'id': entity.id }) }}" class="btn blue" ><i class="icon icon-shopping-cart"></i> Purchase </a>
                                                 {% endif %}
                                                 {% if entity.medicinePrepurchaseItems is not empty %}
-                                                    <a href="{{ path('medicine_prepurchase_process', { 'id': entity.id }) }}" class="btn yellow" ><i class="icon icon-download"></i> Download </a>
+                                                    <a href="{{ path('medicine_prepurchase_download', { 'id': entity.id }) }}" class="btn yellow" ><i class="icon icon-download"></i> Download </a>
                                                 {% endif %}
                                                 </div>
                                             </td>

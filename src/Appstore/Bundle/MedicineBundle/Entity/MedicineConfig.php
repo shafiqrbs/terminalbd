@@ -270,6 +270,13 @@ class MedicineConfig
      */
     private $customPrint;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isBarcode",  type="boolean",  nullable=true)
+     */
+    private $isBarcode;
+
 
     /**
      * Get id
@@ -774,6 +781,22 @@ class MedicineConfig
     public function setPrintOutstanding($printOutstanding)
     {
         $this->printOutstanding = $printOutstanding;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBarcode()
+    {
+        return $this->isBarcode;
+    }
+
+    /**
+     * @param bool $isBarcode
+     */
+    public function setIsBarcode($isBarcode)
+    {
+        $this->isBarcode = $isBarcode;
     }
 
 

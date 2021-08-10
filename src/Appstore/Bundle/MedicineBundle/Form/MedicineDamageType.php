@@ -21,8 +21,10 @@ class MedicineDamageType extends AbstractType
             ->add('medicineStock','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')
             ,'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-            )
+            ),
+                'mapped'=>false
             ))
+
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 form-control input-number input','placeholder'=>'quantity')))
             ->add('notes','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter notes ')))
 

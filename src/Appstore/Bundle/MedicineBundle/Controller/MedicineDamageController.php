@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDamage;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\MedicineDamageType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,28 +66,29 @@ class MedicineDamageController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
+        /* @var $stock MedicineStock */
         $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['damage']['medicineStock']);
-      //  $purchaseItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['medicinePurchaseItem']);
-
-        if ($form->isValid() and !empty($stock)) {
-
+        if(empty($stock)){
+            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['medicineStock']);
+        }
+        if ($form->isValid() and !empty($stock) and $stock->getRemainingQuantity() >= $entity->getQuantity()) {
             $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $entity->setMedicineConfig($config);
             $entity->setMedicineStock($stock);
-       //     $entity->setMedicinePurchaseItem($purchaseItem);
             $entity->setPurchasePrice($stock->getPurchasePrice());
             $entity->setSubTotal($stock->getPurchasePrice() * $entity->getQuantity());
             $em->persist($entity);
             $em->flush();
-          //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'damage');
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
             return $this->redirect($this->generateUrl('medicine_damage', array('id' => $entity->getId())));
         }
-
+        $this->get('session')->getFlashBag()->add(
+            'notice',"Damage quantity must be less or equal current stock quantity"
+        );
         return $this->render('MedicineBundle:Damage:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -128,10 +130,7 @@ class MedicineDamageController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Damage entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-
-
         return $this->render('MedicineBundle:Damage:index.html.twig', array(
             'entities'      => $entities,
             'entity'      => $entity,
@@ -199,11 +198,9 @@ class MedicineDamageController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('MedicineBundle:MedicineDamage')->find($id);
-       // $purchaseItem = $entity->getMedicinePurchaseItem();
         $stock = $entity->getMedicineStock();
         $em->remove($entity);
         $em->flush();
-      //  $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($purchaseItem,'damage');
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'damage');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
@@ -220,11 +217,11 @@ class MedicineDamageController extends Controller
 			$em = $this->getDoctrine()->getManager();
 			$damage->setProcess('Approved');
 			$em->flush();
+			$this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($this->getUser()->getGlobalOption(),$damage);
 			return new Response('success');
 		} else {
 			return new Response('failed');
 		}
-		exit;
 	}
 
 

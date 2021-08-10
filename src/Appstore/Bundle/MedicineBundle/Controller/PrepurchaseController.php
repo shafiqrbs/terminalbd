@@ -14,6 +14,7 @@ use Appstore\Bundle\MedicineBundle\Form\MedicineStockPreItemType;
 use Appstore\Bundle\MedicineBundle\Form\PrepurchaseType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -535,6 +536,38 @@ class PrepurchaseController extends Controller
             'entity' => $entity,
         ));
 
+    }
+
+
+	public function downloadPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $em->getRepository('MedicineBundle:MedicinePrepurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $html = $this->renderView(
+            'MedicineBundle:Prepurchase:pdf.html.twig', array(
+                'entity'            => $entity,
+                'config'            => $config,
+                'globalOption'      => $this->getUser()->getGlobalOption(),
+            )
+        );
+        $this->downloadPdf($html,"{$entity->getMedicineVendor()->getName()}.pdf");
+
+    }
+
+    public function downloadPdf($html,$fileName = '')
+    {
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
     }
 
 

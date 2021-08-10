@@ -37,6 +37,7 @@ class ConfigType extends AbstractType
             ->add('posPrint')
             ->add('openingQuantity')
             ->add('regularPosPrint')
+            ->add('isBarcode')
             ->add('isPrint')
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')

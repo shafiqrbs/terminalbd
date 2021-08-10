@@ -245,7 +245,8 @@ class MedicineSalesTemporaryController extends Controller
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all()['salesTemporaryItem'];
+        $form = $request->request->all();
+        $data = $form['salesTemporaryItem'];
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertInvoiceItems($user, $data);
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);

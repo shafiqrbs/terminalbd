@@ -263,6 +263,7 @@ $(document).on('change', '#particular', function() {
             $('#remainQnt').html(obj['remainQnt']);
             $('#unitPrice').html(obj['salesPrice']);
             $('#subTotal').html(obj['salesPrice']);
+            $('#quantity').focus();
         }
     })
 
@@ -351,8 +352,37 @@ var stockInvoice = $("#stockInvoicex").validate({
     }
 });
 
-$("#stockInvoice").validate({
+$('form#stockInvoice').on('keypress', '.input', function (e) {
 
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        alert(this.id);
+        switch (this.id) {
+
+            case 'particular':
+                $('#quantity').focus();
+                break;
+
+            case 'quantity':
+                $('#salesPrice').focus();
+                break;
+
+            case 'salesPrice':
+                $('#addAccessories').click();
+                $('#particular').select2('open');
+                break;
+        }
+        return false;
+    }
+});
+
+var formTemporary = $("#stockInvoice").validate({
     rules: {
 
         "particular": {required: true},
@@ -385,7 +415,7 @@ $("#stockInvoice").validate({
                 obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#unit').html('Unit');
-                $("#particular").select2().select2("val","");
+                $("#particular").select2('open').select2("val","");
                 $('#stockInvoice')[0].reset();
                 returnData(response);
             }

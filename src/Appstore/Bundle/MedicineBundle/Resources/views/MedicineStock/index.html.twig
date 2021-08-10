@@ -130,8 +130,10 @@
                                     <th class="numeric" ><i class="icon icon-th-list"></i></th>
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
+                                    {% if config.isBarcode == 1 %}
+                                        <th class="numeric" >Barcode</th>
+                                    {% endif %}
                                     <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    {#<th class="numeric" >DAR</th>#}
                                     <th {% if pagination.isSorted('e.rack') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Rack', 'p.name') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Avg PP</th>
                                     <th class="numeric" >PP Tk.</th>
@@ -152,6 +154,13 @@
                                 {% for entity in pagination %}
                                     <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %} id="remove-{{ entity.id }}">
                                         <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %}checked="checked"{% endif %}  value="{{ entity.id }}"></td>
+                                        {% if config.isBarcode == 1 %}
+                                            <td class="numeric">
+                                                {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                                    <a  class="editable" data-name="Barcode" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase price">{{ entity.purchasePrice }}</a>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% else %}
@@ -161,7 +170,8 @@
                                             <a  data-type="select" class="editable" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
                                         </td>
                                         <td class="numeric" >{{ entity.averagePurchasePrice|number_format(2) }}</td>
-                                        <td class="numeric">
+
+                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="PurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase price">{{ entity.purchasePrice }}</a>
                                             {% endif %}

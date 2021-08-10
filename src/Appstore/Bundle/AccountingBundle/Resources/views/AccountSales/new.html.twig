@@ -49,7 +49,7 @@
                         {{ form_row(form._token) }}
 
                         <div class="row-fluid">
-                            <div class="span6">
+                            <div class="span8">
                                 <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="control-group">
@@ -57,7 +57,7 @@
                                             <div class="controls">
                                                 {{ form_widget(form.customer) }}
                                                 {{ form_errors(form.customer) }}
-                                                <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i></a>
+                                                <a href="javascript:" class="pull-right btn green addCustomer inputs span3"><i class="icon-plus"></i> Add Customer</a>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="row-fluid">
-                            <div class="span6">
+                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
@@ -136,18 +136,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label" for="amount">Invoice Mode</label>
                                     <div class="controls">
                                         {{ form_widget(form.processHead) }}
                                         {{ form_errors(form.processHead) }}
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label" for="amount">Amount</label>
+                                    <label class="control-label" for="amount">Receive Amount</label>
                                     <div class="controls">
                                         {{ form_widget(form.amount) }}
                                         {{ form_errors(form.amount) }}

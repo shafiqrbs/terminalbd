@@ -64,9 +64,9 @@ $(".select2StockMedicine").select2({
     },
     formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
     formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
+    initSelection: function (item, callback) {
         var id = $(element).val();
-        $.ajax(Routing.generate('medicine_stock_name', { vendor : id}), {
+        $.ajax(Routing.generate('medicine_stock_select2_item', { stock : id}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);

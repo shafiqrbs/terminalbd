@@ -240,8 +240,13 @@ $(".select2Medicine").select2({
         return item.text
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
-        var id = $(element).val();
-       
+        var id = $(item).val();
+        $.ajax(Routing.generate('medicine_stock_name', { stock : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            console.log(data);
+            return  callback(data);
+        });
     },
     allowClear: true,
     minimumInputLength: 1

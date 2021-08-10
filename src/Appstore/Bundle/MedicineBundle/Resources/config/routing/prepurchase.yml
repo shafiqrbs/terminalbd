@@ -80,6 +80,10 @@ medicine_prepurchase_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "MedicineBundle:Prepurchase:approved" }
 
+medicine_prepurchase_download:
+    path:     /{id}/pdf-download
+    defaults: { _controller: "MedicineBundle:Prepurchase:downloadPdf" }
+
 
 
 

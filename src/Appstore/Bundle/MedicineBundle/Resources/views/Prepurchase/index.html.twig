@@ -98,6 +98,7 @@
                                             <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_prepurchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% if entity.medicinePrepurchaseItems is not empty %}
                                                 <a href="{{ path('medicine_prepurchase_process', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon icon-shopping-cart"></i> Purchase </a>
+                                                <a href="{{ path('medicine_prepurchase_download', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon icon-download"></i> Download </a>
                                             {% endif %}
                                             <a href="{{ path('medicine_prepurchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>
