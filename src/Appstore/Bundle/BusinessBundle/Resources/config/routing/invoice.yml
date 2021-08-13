@@ -90,10 +90,17 @@ business_invoice_banner_sign:
     options:
             expose: true
 
-
 business_invoice_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "BusinessBundle:Invoice:approve" }
+
+business_invoice_received:
+    path:     /{id}/invoice-received
+    defaults: { _controller: "BusinessBundle:Invoice:received" }
+
+business_invoice_returned:
+    path:     /{id}/invoice-returned
+    defaults: { _controller: "BusinessBundle:Invoice:returned" }
 
 
 business_invoice_update:

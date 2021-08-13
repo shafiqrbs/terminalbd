@@ -70,10 +70,15 @@
                         <td colspan="2"  style="width: 33%; border-right:1px solid #999999">
                             <table style="width: 100%;">
                                 <tr><th>Previous Due</th><th><strong  class="pull-right">{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</strong></th></tr>
-                                <tr><th>Sales Amount</th><th><strong  class="pull-right">{{ entity.total|number_format() }}</strong></th></tr>
-                                <tr><th>Current Due</th><th><strong  class="pull-right">{{ entity.due|number_format() }}</strong></th></tr>
+                                {% if entity.isCondition == 1 %}
+                                <tr><th>Courier Name</th><th><strong  class="pull-right">{% if entity.courier is not empty %}{{ entity.courier.companyName }}{% endif %}</strong></th></tr>
+                                <tr><th>Process By:</th><th><strong  class="pull-right">Condition</strong></th></tr>
+                                {% else %}
+                                    <tr><th>Sales Amount</th><th><strong  class="pull-right">{{ entity.total|number_format() }}</strong></th></tr>
+                                    <tr><th>Current Due</th><th><strong  class="pull-right">{{ entity.due|number_format() }}</strong></th></tr>
+                                {% endif %}
                                 <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                <tr><th>Out Standing</th><th><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</strong></th></tr>
+                                <tr><th>Out Standing</th><th><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format(2) }}{% elseif entity.isCondition != 1 %}x{% endif %}</strong></th></tr>
                             </table>
                         </td>
                         <td style="width: 33%; text-align: center!important;">
@@ -110,13 +115,13 @@
 <footer>
     Invoice was created on a computer and is valid without the signature and seal.
 </footer>
-<script>
+{#<script>
     window.print();
     setTimeout(function () {
         window.open('', '_self', '');
         window.close();
     }, 2000);
-</script>
+</script>#}
 </body>
 </html>
 

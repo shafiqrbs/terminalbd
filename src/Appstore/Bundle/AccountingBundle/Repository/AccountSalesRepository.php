@@ -1012,7 +1012,6 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setTloPrice($entity->getTloPrice());
         }
-
         $accountSales->setAmount($entity->getReceived());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setBusinessInvoice($entity);

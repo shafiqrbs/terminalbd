@@ -418,10 +418,19 @@ class BusinessInvoiceRepository extends EntityRepository
 
     public function invoiceLists($config, $data)
     {
-
-
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+    public function invoiceConditionLists($config, $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.isCondition = 1');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();

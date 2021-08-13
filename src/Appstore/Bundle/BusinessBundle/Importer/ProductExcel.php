@@ -36,6 +36,8 @@ class ProductExcel
             $productOld = $this->getDoctrain()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $inventory,'name' => $name));
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
+                $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
+             //   $purchasePrice = empty($item['PurchaseQuantity']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
                 $quantity = empty($item['OpeningQuantity']) ? 0 : trim($item['OpeningQuantity']);
                 $product = new BusinessParticular();
@@ -45,7 +47,12 @@ class ProductExcel
                 if(!empty($unit)){
                     $product->setUnit($unit);
                 }
+                $type = $this->getDoctrain()->getRepository('BusinessBundle:BusinessParticularType')->find(2);
+                if(!empty($type)){
+                    $product->setBusinessParticularType($type);
+                }
                 $product->setSalesPrice($salesPrice);
+                $product->setPurchasePrice($purchasePrice);
                 $product->setOpeningQuantity($quantity);
                 $pQTY = ($product->getPurchaseQuantity() > 0 ) ? $product->getPurchaseQuantity() :0;
                 $remin = ($quantity+$pQTY);

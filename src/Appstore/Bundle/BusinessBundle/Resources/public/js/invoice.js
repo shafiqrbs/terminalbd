@@ -105,6 +105,10 @@ $(".addCustomer").click(function(){
     $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
 });
 
+$("#isCondition").click(function(){
+    $( "#condition" ).slideToggle( "slow" );
+});
+
 var form = $("#customInvoice").validate({
 
     rules: {
@@ -362,7 +366,6 @@ $('form#stockInvoice').on('keypress', '.input', function (e) {
         } else {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
-        alert(this.id);
         switch (this.id) {
 
             case 'particular':

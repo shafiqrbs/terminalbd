@@ -116,6 +116,12 @@ class BusinessInvoice
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Marketing", inversedBy="invoices" )
      **/
     private  $marketing;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Courier", inversedBy="invoices" )
+     **/
+    private  $courier;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessArea", inversedBy="invoices" )
      **/
@@ -170,6 +176,7 @@ class BusinessInvoice
      * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
      */
     private $invoice;
+
 
     /**
      * @var integer
@@ -301,6 +308,12 @@ class BusinessInvoice
      * @ORM\Column(name="startDate", type="datetime", nullable=true)
      */
     private $startDate;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="isCondition", type="boolean", nullable=true)
+     */
+    private $isCondition;
 
     /**
      * @var \DateTime
@@ -1041,6 +1054,38 @@ class BusinessInvoice
     public function setDue($due)
     {
         $this->due = $due;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCondition()
+    {
+        return $this->isCondition;
+    }
+
+    /**
+     * @param bool $isCondition
+     */
+    public function setIsCondition($isCondition)
+    {
+        $this->isCondition = $isCondition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourier()
+    {
+        return $this->courier;
+    }
+
+    /**
+     * @param mixed $courier
+     */
+    public function setCourier($courier)
+    {
+        $this->courier = $courier;
     }
 
 }

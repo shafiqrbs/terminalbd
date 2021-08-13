@@ -65,10 +65,10 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $data = array('process' => 'Condition');
-        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceLists( $config->getId(),$data);
+        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceConditionLists( $config->getId(),$data);
         $pagination = $this->paginate($entities);
-        return $this->render("BusinessBundle:InvoiceCondition:index.html.twig", array(
+        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        return $this->render("BusinessBundle:Invoice/{$view}:condition.html.twig", array(
             'entities' => $pagination,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
@@ -148,6 +148,7 @@ class InvoiceController extends Controller
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $this->getUser()->getGlobalOption(),'status'=>1),array('companyName'=>"ASC"));
         $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $courier = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $config,'status'=>1),array('companyName'=>"ASC"));
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
@@ -155,6 +156,7 @@ class InvoiceController extends Controller
             'vendors' => $vendors,
             'areas' => $areas,
             'marketings' => $marketings,
+            'couriers' => $courier,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
@@ -198,6 +200,15 @@ class InvoiceController extends Controller
              $marketingExist =$this->getDoctrine()->getRepository('BusinessBundle:Marketing')->find($marketing);
              if($marketingExist){ $entity->setMarketing($marketingExist);}
             }
+            if(isset($data['courier']) and !empty($data['courier'])){
+                $courier = $data['courier'];
+                $courierExist =$this->getDoctrine()->getRepository('BusinessBundle:Courier')->find($courier);
+                if($courierExist){ $entity->setCourier($courierExist);}
+            }
+             if(isset($data['invoice']) and !empty($data['invoice'])){
+                $invoice = $data['invoice'];
+                if($invoice){ $entity->setInvoice($invoice);}
+            }
             if(isset($data['vendor']) and !empty($data['vendor'])){
                 $vendor = $data['vendor'];
                 $vendorExist =$this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->find($vendor);
@@ -219,6 +230,11 @@ class InvoiceController extends Controller
             if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	            $entity->setPaymentInWord($amountInWords);
+            }
+            if($entity->getProcess() == 'Condition'){
+                $entity->setIsCondition(true);
+            }else{
+                $entity->setIsCondition(false);
             }
 	        $em->flush();
             if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
@@ -243,8 +259,7 @@ class InvoiceController extends Controller
                 }
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            }
-            if($entity->getProcess() == "Condition") {
+            }elseif($entity->getProcess() == 'Condition') {
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             }
             $inProgress = array('Hold', 'Created');
@@ -867,7 +882,6 @@ class InvoiceController extends Controller
     public function approveAction(BusinessInvoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
         if($entity and empty($entity->getApprovedBy())){
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceDistributionTotalPrice($entity);
@@ -889,6 +903,41 @@ class InvoiceController extends Controller
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.association_invoice', new \Setting\Bundle\ToolBundle\Event\AssociationInvoiceSmsEvent($entity));
             }
+            return new Response("Success");
+        }
+
+    }
+
+    public function receivedAction(BusinessInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if($entity and empty($entity->getApprovedBy())){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess("Received");
+            $entity->setApprovedBy($this->getUser());
+            $entity->setReceived($entity->getTotal());
+            $entity->setDue(0);
+            $em->persist($entity);
+            $em->flush();
+            return new Response("Success");
+        }
+
+    }
+
+    public function returnedAction(BusinessInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if($entity and empty($entity->getApprovedBy())){
+            set_time_limit(0);
+            $em = $this->getDoctrine()->getManager();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($entity);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($entity);
+            $entity->setProcess('Returned');
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             return new Response("Success");
         }
 

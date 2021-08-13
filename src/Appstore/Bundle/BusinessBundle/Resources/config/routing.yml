@@ -26,6 +26,10 @@ business_marketing:
     resource: "@BusinessBundle/Resources/config/routing/marketing.yml"
     prefix:   /marketing
 
+business_courier:
+    resource: "@BusinessBundle/Resources/config/routing/courier.yml"
+    prefix:   /courier
+
 business_vendor:
     resource: "@BusinessBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor
