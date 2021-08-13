@@ -37,7 +37,6 @@ class ProductExcel
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
                 $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
-             //   $purchasePrice = empty($item['PurchaseQuantity']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
                 $quantity = empty($item['OpeningQuantity']) ? 0 : trim($item['OpeningQuantity']);
                 $product = new BusinessParticular();

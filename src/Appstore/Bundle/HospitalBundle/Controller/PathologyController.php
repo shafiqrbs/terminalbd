@@ -257,56 +257,76 @@ class PathologyController extends Controller
         return $this->redirect($this->generateUrl('hms_pathology'));
     }
 
+    public function copyToMedicineStockAction()
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+        $config = $option->getMedicineConfig();
+        if($option and !empty($config)) {
+            $fromConfig = $config->getId();
+            $toConfig = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->processStockMigration($fromConfig,$toConfig);
+            return new Response('success');
+        }
+        return new Response('failed');
+    }
+
     public function resetPathologyTestWithReportAction()
     {
+
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
+        $option = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->find($_REQUEST['option']);
+        $toConfig = $option->getHospitalConfig();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsMasterDiagnosticReport')->findBy(array('status'=>1));
-
-        /* @var $entity HmsMasterDiagnosticReport */
-        foreach ($entities as $entity)
-        {
-            $exist = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $config,'hmsMasterDiagnosticReport' => $entity));
-            if(empty($exist)){
-                $pathological = New Particular();
-                $pathological->setHospitalConfig($config);
-                $pathological->setHmsMasterDiagnosticReport($entity);
-                $pathological->setName($entity->getName());
-                if(!empty($entity->getCategory())){
-                    $pathological->setCategory($entity->getCategory());
-                }
-                if(!empty($entity->getDepartment())) {
-                    $pathological->setDepartment($entity->getDepartment());
-                }
-                $pathological->setStatus(1);
-                $pathological->setService($this->getDoctrine()->getRepository('HospitalBundle:Service')->findOneBy(array('slug'=>'diagnostic')));
-                $pathological->setSepcimen($entity->getSepcimen());
-                $pathological->setInstruction($entity->getInstruction());
-                $pathological->setTestDuration($entity->isTestDuration());
-                $pathological->setReportFormat($entity->isReportFormat());
-                $em->persist($pathological);
-                $em->flush();
-                $this->insertMasterReport($entity,$pathological);
-
+        if($option and !empty($config)) {
+            $stock = $em->createQuery("DELETE HospitalBundle:Particular e WHERE e.hospitalConfig={$config->getId()}");
+            if($stock){
+                $stock->execute();
             }
-
-
+            $ent = $em->getRepository('HospitalBundle:Particular')->findWithSearch($toConfig , $service = 1,$data='');
+            $entities = $ent->getQuery()->getResult();
+            /* @var $entity Particular */
+            foreach ($entities as $entity) {
+                $exist = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $config, 'oldReportId' => $entity->getId()));
+                if (empty($exist)) {
+                    $pathological = new Particular();
+                    $pathological->setHospitalConfig($config);
+                    $pathological->setOldReportId($entity->getId());
+                    $pathological->setCode($entity->getCode());
+                    $pathological->setName($entity->getName());
+                    if ($entity->getCategory()) {
+                        $pathological->setCategory($entity->getCategory());
+                    }
+                    if ($entity->getDepartment()) {
+                        $pathological->setDepartment($entity->getDepartment());
+                    }
+                    $pathological->setStatus(1);
+                    $pathological->setPrice($entity->getPrice());
+                    $pathological->setService($entity->getService());
+                    $pathological->setSepcimen($entity->getSepcimen());
+                    $pathological->setInstruction($entity->getInstruction());
+                    $pathological->setTestDuration($entity->getTestDuration());
+                    $pathological->setReportFormat($entity->getReportFormat());
+                    $em->persist($pathological);
+                    $em->flush();
+                    $this->insertMasterReport($entity, $pathological);
+                }
+            }
         }
         return $this->redirect($this->generateUrl('hms_pathology'));
     }
 
-    public function insertMasterReport(DiagnosticReport $entity,Particular $pathological)
+    public function insertMasterReport(Particular $entity,Particular $pathological)
     {
 
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
-        /* @var $report DiagnosticReportFormat */
-
-        foreach ($entity->getDiagnosticReportFormats() as $report){
-
+        foreach ($entity->getPathologicalReports() as $report){
             $format = New PathologicalReport();
             $format->setParticular($pathological);
             $format->setParent($report->getParent());
@@ -317,7 +337,6 @@ class PathologyController extends Controller
             $format->setStatus(1);
             $em->persist($format);
             $em->flush();
-
         }
     }
 }

@@ -32,6 +32,10 @@ hms_pathology_reset_report:
     path:     /reset-pathology-report
     defaults: { _controller: "HospitalBundle:Pathology:resetPathologyTestWithReport" }
 
+hms_pathology_copy_report:
+    path:     /copy-pathology-report
+    defaults: { _controller: "HospitalBundle:Pathology:resetPathologyTestWithReport" }
+
 hms_pathology_status:
     path:     /{id}/status
     defaults: { _controller: "HospitalBundle:Pathology:status" }

@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class ParticularRepository extends EntityRepository
 {
-    public function findWithSearch($config,$service, $data){
+    public function findWithSearch($config,$service, $data = ""){
 
         $name = isset($data['name'])? $data['name'] :'';
         $category = isset($data['category'])? $data['category'] :'';
@@ -331,6 +331,24 @@ class ParticularRepository extends EntityRepository
                 $pass2[$child][$parent] = true;
             }
         }
+
+    }
+
+    public function  processStockMigration($from, $to)
+    {
+
+        $em = $this->_em;
+        $stock = $em->createQuery("DELETE HospitalBundle:Particular e WHERE e.hospitalConfig={$to}");
+        if($stock){
+            $stock->execute();
+        }
+        $elem = "INSERT INTO hms_particular(`name`,`sepcimen`,`department_id`,`category_id`,`testDuration`, `reportFormat`,`discountValid`,`room`,`instruction`,`minimumPrice`,`commission`,`overHeadCost`,price,status,`hospitalConfig_id`)
+  SELECT `name`,`sepcimen`,'department_id',`category_id`, `testDuration`, `reportFormat`, `discountValid`, `room`, `instruction`, `minimumPrice`, `commission`, `overHeadCost`,price,1,$to
+  FROM medicine_stock
+  WHERE hospitalConfig_id    =:config";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('config', $from);
+        $qb1->execute();
 
     }
 

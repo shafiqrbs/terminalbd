@@ -153,6 +153,13 @@ class Particular
     /**
      * @var integer
      *
+     * @ORM\Column(name="oldReportId", type="smallint", length=5, nullable=true)
+     */
+    private $oldReportId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
      */
     private $openingQuantity;
@@ -1357,6 +1364,14 @@ class Particular
     public function setDiscountValid($discountValid)
     {
         $this->discountValid = $discountValid;
+    }
+
+    /**
+     * @param int $oldReportId
+     */
+    public function setOldReportId($oldReportId)
+    {
+        $this->oldReportId = $oldReportId;
     }
 
 }
