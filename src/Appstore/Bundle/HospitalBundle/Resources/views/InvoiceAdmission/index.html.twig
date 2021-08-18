@@ -183,12 +183,13 @@
                                                     Action <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
+                                                    <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn black"><i class="icon-pencil"></i> Edit</a></li>
                                                     {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
                                                     {% if entity.paymentStatus in  PaymentArr|keys and  entity.process in processArr %}
                                                         <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == 'Pending' or entity.process =='Created' %}
-                                                    <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
+                                                        <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
                                                     <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn black"><i class="icon-eye-open"></i> View</a></li>
                                                 </ul>

@@ -45,7 +45,7 @@ class DoctorAppointmentType extends AbstractType
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
               ->add('assignDoctor', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
                 'empty_value' => '---Select Assign Doctor---',

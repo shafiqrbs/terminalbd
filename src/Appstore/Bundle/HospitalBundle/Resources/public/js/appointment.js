@@ -106,7 +106,7 @@ function appointmentFormSubmit() {
             "appointment_invoice[customer][name]": {placement: 'top', html: true},
             "appointment_invoice[customer][mobile]": {placement: 'top', html: true},
             "appointment_invoice[customer][age]": {placement: 'top', html: true},
-           "appointment_invoice[payment]": {placement: 'top', html: true},
+            "appointment_invoice[payment]": {placement: 'top', html: true},
         },
         submitHandler: function (form) {
             $.ajax({

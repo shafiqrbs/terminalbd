@@ -27,7 +27,7 @@ class ConfigType extends AbstractType
             ->add('initialDiagnosticShow')
             ->add('invoiceProcess',
                 'choice', array(
-                    'attr'=>array('class'=>'check-list  span12'),
+                    'attr'=>array('class'=>'check-list  span8'),
                     'choices' => array(
                         'diagnostic'    => 'Diagnostic',
                         'admission'   => 'Admission',

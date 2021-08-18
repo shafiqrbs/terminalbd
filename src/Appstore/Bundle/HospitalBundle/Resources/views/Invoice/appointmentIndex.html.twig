@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Diagnostic Invoice
+                    Manage Doctor Visit
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}"> Patient Diagnostic Invoice</a>
+                        <a href="{{ path('hms_invoice') }}"> Manage Doctor Visit</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -32,12 +32,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Diagnostic Invoice</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Doctor Visit</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('hms_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
                                 <a class="btn purple" href="{{ path('hms_report_sales_summary') }}"><i class="icon-cart"></i> Sales Summary</a>
-                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add Invoice</a>
+                                <a class="btn red addAppointment" href="javascript:"><i class="icon-plus-sign"></i> Add Visit</a>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.assignDoctor.name }}</td>
+                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != "Done" %}
@@ -145,7 +145,6 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 <a target="_blank"  href="{{ path('hms_invoice_appointment_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
-                                                <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -177,8 +176,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/diagnostic.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/appointment.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
