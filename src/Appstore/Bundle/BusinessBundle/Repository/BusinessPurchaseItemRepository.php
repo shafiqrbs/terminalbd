@@ -167,7 +167,8 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
         $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
-        $purchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        $purchasePrice = ($totalPurchasePrice/$data['quantity']);
         $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);

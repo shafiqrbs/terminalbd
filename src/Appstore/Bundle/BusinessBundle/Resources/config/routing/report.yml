@@ -18,6 +18,14 @@ business_report_stock_report:
     path:     /stock-item-report
     defaults: { _controller: "BusinessBundle:Report:stockItemReport" }
 
+business_report_monthly_sales_price:
+    path:     /monthly-item-sales-price
+    defaults: { _controller: "BusinessBundle:Report:monthlyProductSalesPrice" }
+
+business_report_monthly_sales_stock:
+    path:     /monthly-item-sales
+    defaults: { _controller: "BusinessBundle:Report:monthlyProductSales" }
+
 business_report_purchase_stock_price:
     path:     /purchase-stock-price
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
@@ -93,6 +101,14 @@ business_report_sales_dsr:
 business_report_sales_area:
     path:     /sales-area
     defaults: { _controller: "BusinessBundle:Report:salesArea" }
+
+business_report_sales_courier:
+    path:     /sales-courier
+    defaults: { _controller: "BusinessBundle:Report:courier" }
+
+business_report_sales_courier_details:
+    path:     /sales-courier-details
+    defaults: { _controller: "BusinessBundle:Report:courierDetails" }
 
 business_report_sales_user_monthly:
     path:     /sales-user-monthly

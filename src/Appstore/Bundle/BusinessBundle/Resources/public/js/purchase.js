@@ -41,10 +41,20 @@ $(document).on('change', '#particular', function() {
             $('#particularId').val(obj['particularId']);
            // $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
-            //$('#purchasePrice').val(obj['purchasePrice']);
+            $('#purchasePrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
         }
     })
+});
+
+
+$(document).on('keypress', '#quantity', function() {
+    var quantity = parseFloat($(this).val());
+    var price = parseFloat($('#price').val());
+    var purchasePrice = parseFloat(quantity * price);
+    if(purchasePrice != 'NaN' && purchasePrice > 0){
+        $('#purchasePrice').val(purchasePrice);
+    }
 });
 
 
@@ -92,8 +102,8 @@ var form = $("#purchaseItem").validate({
     rules: {
 
         "particular": {required: true},
-        "purchasePrice": {required: true},
-        "quantity": {required: true},
+        "purchasePrice": {required: false},
+        "quantity": {required: false},
     },
 
     messages: {
@@ -134,6 +144,37 @@ var form = $("#purchaseItem").validate({
         });
     }
 });
+
+$(document).on('change', '.itemUpdate', function() {
+
+    var id = $(this).attr('data-id');
+    var quantity = parseFloat($('#quantity-'+id).val());
+    var price = parseFloat($('#price-'+id).val());
+    var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
+    var totalQuantity  = (quantity + bonusQuantity);
+    var subTotal  = (quantity * price);
+    $("#subTotal-"+id).html(subTotal);
+    $("#totalQuantity-"+id).html(totalQuantity);
+    if(id > 0){
+        $.ajax({
+            url: Routing.generate('business_purchase_item_update'),
+            type: 'POST',
+            data:'purchaseItem='+ id +'&quantity='+ quantity +'&price='+ price+'&bonusQuantity='+ bonusQuantity,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#netTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['netTotal']);
+                $('#discount').html(obj['discount']);
+                $('#due').html(obj['due']);
+
+            },
+
+        })
+    }
+
+});
+
 
 /*$(document).on('click', '#addParticular', function() {
 

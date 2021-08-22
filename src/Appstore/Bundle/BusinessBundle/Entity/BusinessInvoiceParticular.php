@@ -123,6 +123,20 @@ class BusinessInvoiceParticular
      */
     private $tloPrice;
 
+      /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $tloTotal;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $tloMode;
+
     /**
      * @var float
      *
@@ -550,6 +564,38 @@ class BusinessInvoiceParticular
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTloMode()
+    {
+        return $this->tloMode;
+    }
+
+    /**
+     * @param string $tloMode
+     */
+    public function setTloMode($tloMode)
+    {
+        $this->tloMode = $tloMode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTloTotal()
+    {
+        return $this->tloTotal;
+    }
+
+    /**
+     * @param float $tloTotal
+     */
+    public function setTloTotal($tloTotal)
+    {
+        $this->tloTotal = $tloTotal;
     }
 }
 

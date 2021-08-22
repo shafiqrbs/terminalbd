@@ -29,16 +29,17 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class BusinessParticularRepository extends EntityRepository
 {
 
-    public function getServiceLists(BusinessConfig $config)
+
+    public function getStockItemReport(BusinessConfig $config)
     {
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.service','service');
-        $qb->where('e.businessConfig = :config');
-        $qb->setParameter('config',$config);
-        $qb->andWhere('service.dentalService is null');
-        $qb->orderBy('service.name , e.name','ASC');
-        $result = $qb->getQuery()->getResult();
-        return $result;
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.id as id');
+        $query->addSelect('e.name as name');
+        $query->andWhere("e.businessConfig = :config");
+        $query->setParameter('config', $config->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        return $query->getQuery()->getArrayResult();
     }
 
     public function updateSalesPrice(BusinessParticular $particular)
@@ -639,6 +640,7 @@ class BusinessParticularRepository extends EntityRepository
         return $result;
 
     }
+
 
 
 

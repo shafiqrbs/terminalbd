@@ -326,6 +326,72 @@ class ReportController extends Controller
         }
     }
 
+    public function courierAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesCourierReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesArea.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities,
+                'executives'        => $executives,
+                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'        => $data,
+            ));
+
+        }else{
+
+            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['area']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesAreaPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption(),
+                    'marketing'     => $customer,
+                    'entities'      => $entities,
+                    'searchForm'    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-area.pdf');
+
+        }
+    }
+
+    public function courierDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessParticular')->salesSrReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesArea.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities,
+                'executives'        => $executives,
+                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'        => $data,
+            ));
+
+        }else{
+
+            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['area']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesAreaPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption(),
+                    'marketing'     => $customer,
+                    'entities'      => $entities,
+                    'searchForm'    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-area.pdf');
+
+        }
+    }
+
 	public function monthlyUserSalesAction(){
 
 		$em = $this->getDoctrine()->getManager();
@@ -347,6 +413,43 @@ class ReportController extends Controller
 		));
 
 	}
+
+    public function monthlyProductSalesPriceAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+        $stocks = $em->getRepository('BusinessBundle:BusinessParticular')->getStockItemReport($config);
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->dailyProductSalesPriceReport($user,$data);
+        return $this->render('BusinessBundle:Report:sales/salesDailyStockPrice.html.twig', array(
+            'inventory'      => $config ,
+            'entities'       => $entities['dailySalesArr'] ,
+            'totalItemSales'       => $entities['salesItemTotal'] ,
+            'dailyTotalSalesArr'       => $entities['dailyTotalSalesArr'] ,
+            'stocks'         => $stocks ,
+            'searchForm'     => $data ,
+        ));
+
+    }
+
+    public function monthlyProductSalesAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+        $stocks = $em->getRepository('BusinessBundle:BusinessParticular')->getStockItemReport($config);
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->dailyProductSalesReport($user,$data);
+        return $this->render('BusinessBundle:Report:sales/salesDailyStock.html.twig', array(
+            'inventory'      => $config ,
+            'entities'       => $entities['dailySalesArr'] ,
+            'totalItemSales'       => $entities['salesItemTotal'] ,
+            'stocks'         => $stocks ,
+            'searchForm'     => $data ,
+        ));
+
+    }
 
 
 	public function purchaseOverviewAction(){

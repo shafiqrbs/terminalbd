@@ -585,17 +585,26 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $totalQuantity = ($data['quantity'] -  (float)$data['returnQuantity'] -  (float)$data['damageQuantity'] - (float)$data['spoilQuantity']);
         $entity = new BusinessInvoiceParticular();
         $entity->setBusinessInvoice($invoice);
-        $entity->setBusinessParticular($particular );
+        $entity->setBusinessParticular($particular);
         if($particular->getUnit()){
             $entity->setUnit($particular->getUnit()->getName());
         }
         $entity->setParticular($particular->getName());
-        $entity->setTloPrice( $data['tloPrice'] );
-        /*if($entity->getTloPrice()){
-            $entity->setPrice($data['salesPrice']-$entity->getTloPrice());
+        $tloMode = $data['tloMode'];
+        if($tloMode == 'flat' and $data['tloPrice'] > 0){
+            $tlo = $data['tloPrice'];
+            $tloTotal = $tlo;
+        }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
+            $tlox = $data['tloPrice'];
+            $tlo = (($data['salesPrice']) * $tlox)/100;
+            $tloTotal = ($tlo * $data['quantity']);
         }else{
-            $entity->setPrice($data['salesPrice']);
-        }*/
+            $tlo = ($data['tloPrice']);
+            $tloTotal = ($tlo * $data['quantity']);
+        }
+        $entity->setTloMode($tloMode);
+        $entity->setTloPrice($tlo);
+        $entity->setTloTotal($tloTotal);
         $entity->setPrice($data['salesPrice']);
         $entity->setQuantity( $data['quantity'] );
         $entity->setReturnQnt( $data['returnQuantity'] );
@@ -622,8 +631,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
         foreach ($entities as $entity) {
 
-            $subTlo = empty($entity->getTloPrice()) ? 0 : ($entity->getTloPrice() * $entity->getTotalQuantity());
-
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}</td>";
@@ -637,7 +644,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "<td id='totalQuantity-{$entity->getId()}'>{$entity->getTotalQuantity()}</td>";
             $data .= "<td id='subTotal-{$entity->getId()}'>{$entity->getSubTotal()}</td>";
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt tloPrice' data-id='{$entity->getId()}' autocomplete='off' min=1  id='tloPrice-{$entity->getId()}' name='tloPrice[]' value='{$entity->getTloPrice()}' placeholder='{$entity->getTloPrice()}'></td>";
-            $data .= "<td class='tloPrice-{$entity->getId()}'>{$subTlo}</td>";
+            $data .= "<td class='tloPrice-{$entity->getId()}'>{$entity->getTloTotal()}</td>";
 
             $data .= "<td><input type='number' class='remove-value numeric td-inline-input-qnt bonusQuantity' data-id='{$entity->getId()}' autocomplete='off' min=1  id='bonusQuantity-{$entity->getId()}' name='bonusQuantity[]' value='{$entity->getBonusQnt()}' placeholder='{$entity->getBonusQnt()}'></td>";
             $data .= "<td>";
@@ -661,12 +668,26 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 
             /* @var $entity BusinessInvoiceParticular */
 
+            $tloMode = $entity->getTloMode();
+
+            if($tloMode == 'flat' and $data['tloPrice'] > 0){
+                $tlo = $data['tloPrice'];
+                $tloTotal = $tlo;
+            }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
+                $tlox = $data['tloPrice'];
+                $tlo = (($data['salesPrice']) * $tlox)/100;
+                $tloTotal = ($tlo * $data['totalQuantity']);
+            }else{
+                $tlo = ($data['tloPrice']);
+                $tloTotal = ($tlo * $data['totalQuantity']);
+            }
             $entity->setQuantity( $data['salesQuantity'] );
             $entity->setReturnQnt( $data['returnQuantity'] );
             $entity->setDamageQnt( $data['damageQuantity'] );
             $entity->setSpoilQnt( $data['spoilQuantity'] );
             $entity->setBonusQnt( $data['bonusQuantity'] );
-            $entity->setTloPrice( $data['tloPrice'] );
+            $entity->setTloPrice($tlo);
+            $entity->setTloTotal($tloTotal);
             $entity->setPrice( $data['salesPrice'] );
             $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
             $entity->setTotalQuantity((int)$data['totalQuantity']);

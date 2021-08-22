@@ -45,11 +45,6 @@
                         {% if entity.businessConfig.showStock == 1 %}
                             <div class="row-fluid">
                                 <div class="span12">
-                                    <div class="form-actions portlet box yellow">
-                                        <div class="portlet-title">
-                                            <div class="caption"><i class="icon-reorder"></i>Stock Product</div>
-                                        </div>
-                                    </div>
                                     <div class="clearfix">&nbsp;</div>
                                     <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_distribution',{'id':entity.id}) }}" method="post">
                                         <div class="row-fluid">
@@ -87,16 +82,16 @@
                                                         <td id="unitPrice"></td>
 
                                                         <td class="">
-                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="0" placeholder="0">
+                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
-                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"   name="returnQuantity" id="returnQuantity" value="0" placeholder="0">
+                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"   name="returnQuantity" id="returnQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
-                                                            <input type="number" class="numeric td-inline-input-qnt" id="damageQuantity" name="damageQuantity" value="0" placeholder="0">
+                                                            <input type="number" class="numeric td-inline-input-qnt" id="damageQuantity" name="damageQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
-                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"  id="spoilQuantity" name="spoilQuantity" value="0" placeholder="0">
+                                                            <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"  id="spoilQuantity" name="spoilQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
                                                             <strong id="totalQuantity">0</strong>
@@ -104,13 +99,20 @@
                                                         <td class="">
                                                             <strong id="subTotal">0.00</strong>
                                                         </td>
-                                                        <td id="tloPrice"> <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="tloPrice" name="tloPrice" value="0" placeholder="0"></td>
+                                                        <td id="tloPrice">
+                                                            <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important;" class="m-wrap discount-type span6">
+                                                                <option value="multiply">Multiply</option>
+                                                                <option value="percent">(%)</option>
+                                                                <option value="flat">Flat</option>
+                                                            </select>
+                                                            <input type="text" class="numeric td-inline-input-qnt span6"  autocomplete="off"  id="tloPrice" name="tloPrice" value="" placeholder="0">
+                                                        </td>
                                                         <td>
                                                             <input type="number" class="numeric td-inline-input-qnt"   id="bonusQuantity" name="bonusQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
                                                             <div class="input-group">
-                                                                <input type="hidden" id="salesPrice" name="salesPrice" value="0" >
+                                                                <input type="hidden" id="salesPrice" name="salesPrice" value="" >
                                                                 <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                             </div>
                                                         </td>
@@ -202,7 +204,9 @@
                                             <td class="">
                                                 <input type="number" class="remove-value numeric td-inline-input-qnt tloPrice" data-id="{{ item.id }}"  autocomplete = "off"   id="tloPrice-{{ item.id }}" name="tloPrice[]" value="{{ item.tloPrice }}" placeholder="{{ item.tloPrice }}">
                                             </td>
-                                            <td class="tloPrice-{{ item.id }}">{{ item.tloPrice * item.totalQuantity }}</td>
+                                            <td class="tloPrice-{{ item.id }}">
+                                                {{ item.TloTotal }}
+                                            </td>
                                             <td class="">
                                                 <input type="number" class="remove-value numeric td-inline-input-qnt bonusQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="bonusQuantity-{{ item.id }}" name="quantity[]" value="{{ item.bonusQnt }}" placeholder="{{ item.bonusQnt }}">
                                             </td>
@@ -241,7 +245,7 @@
                                             <option value="">--Select TLO Vendor</option>
                                             {% if vendors is not empty %}
                                                 {% for vendor in vendors %}
-                                                    <option {% if entity.vendor is not empty and entity.vendor.id ==  vendor.id %} selected="selected" {% endif %} value="{{ vendor.id }}">{{ vendor.name }}</option>
+                                                    <option {% if entity.vendor is not empty and entity.vendor.id ==  vendor.id %} selected="selected" {% endif %} value="{{ vendor.id }}">{{ vendor.companyName }}</option>
                                                 {% endfor %}
                                             {% endif %}
                                         </select>

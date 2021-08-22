@@ -515,7 +515,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
         $qb->from('BusinessBundle:BusinessInvoiceParticular','si')
-        ->select("sum(si.subTotal) as subTotal","sum(si.tloPrice * si.totalQuantity) as tloPrice","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+        ->select("sum(si.subTotal) as subTotal","sum(si.tloTotal) as tloPrice","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
         ->where('si.businessInvoice = :invoice')
         ->setParameter('invoice', $invoice ->getId());
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -732,5 +732,162 @@ class BusinessInvoiceRepository extends EntityRepository
         }
 
     }
+
+    public function dailyProductSalesPriceReport(User $user , $data = array())
+    {
+
+        $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $compare    = new \DateTime('now');
+        $year       =  $compare->format('Y');
+        $year       = isset($data['year'])? $data['year'] :$year;
+        $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+        $sql = "SELECT DAY (sales.created) as day, SUM(salesItem.subTotal) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailySalesArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailySalesArr[$id] = $row['total'];
+        }
+
+        $sql = "SELECT SUM(salesItem.subTotal) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY salesItem.businessParticular_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $salesItemTotal = array();
+        foreach($result as $row) {
+            $salesItemTotal[$row['stockId']] = $row['total'];
+        }
+
+        $sql = "SELECT DAY (sales.created) as day,SUM(salesItem.subTotal) AS total 
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailyTotalSalesArr = array();
+        foreach($result as $row) {
+            $dailyTotalSalesArr[$row['day']] = $row['total'];
+        }
+        return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr,'dailyTotalSalesArr' => $dailyTotalSalesArr);
+    }
+
+    public function dailyProductSalesReport(User $user , $data = array())
+    {
+
+        $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $compare    = new \DateTime('now');
+        $year       =  $compare->format('Y');
+        $year       = isset($data['year'])? $data['year'] :$year;
+        $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+        $sql = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailySalesArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailySalesArr[$id] = $row['total'];
+        }
+
+        $sql = "SELECT SUM(salesItem.quantity) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY salesItem.businessParticular_id";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month',$month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $salesItemTotal = array();
+        foreach($result as $row) {
+            $salesItemTotal[$row['stockId']] = $row['total'];
+        }
+        return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr);
+    }
+
+    public function salesCourierReport( User $user , $data)
+    {
+
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.courier', 'i');
+        $qb->select('i.id as courierId','i.name as name');
+        $qb->addSelect('COUNT(e.id) as invoice');
+        $qb->addSelect('SUM(e.total) as total');
+        $qb->addSelect('SUM(e.received) as received');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Received','Condition'));
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('i.id');
+        $qb->orderBy('i.name','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function salesCourierSummaryReport( User $user , $data)
+    {
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $courier = isset($data['courier'])? $data['courier'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.courier', 'i');
+        $qb->join('e.customer', 'c');
+        $qb->select('c.name as customer');
+        $qb->addSelect('COUNT(e.id) as invoice');
+        $qb->addSelect('SUM(e.total) as total');
+        $qb->addSelect('SUM(e.received) as received');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Received','Condition'));
+        $qb->andWhere('i.id = :courier');
+        $qb->setParameter('courier',$courier);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('c.name');
+        $qb->orderBy('c.name','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        var_dump($result);
+            exit;
+        return $result;
+
+    }
+
 
 }

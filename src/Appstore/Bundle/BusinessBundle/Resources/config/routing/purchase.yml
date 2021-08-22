@@ -42,6 +42,13 @@ business_purchase_particular_add:
     options:
             expose: true
 
+business_purchase_item_update:
+    path:     /purchase-item-update
+    defaults: { _controller: "BusinessBundle:Purchase:updateItem" }
+    methods:  POST
+    options:
+            expose: true
+
 business_purchase_particular_distribution:
     path:     /{invoice}/particular-distribution
     defaults: { _controller: "BusinessBundle:Purchase:insertPurchaseDistributionItems" }

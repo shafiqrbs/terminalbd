@@ -170,7 +170,6 @@ class PurchaseController extends Controller
 
     public function returnResultData(BusinessPurchase $invoice, $msg=''){
         $config = $invoice->getBusinessConfig();
-        $invoiceParticulars = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->getPurchaseItems($invoice);
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $netTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
         $due = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
@@ -199,6 +198,29 @@ class PurchaseController extends Controller
     {
 	    $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
 	    return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getSalesPrice(), 'purchasePrice'=> $particular->getPurchasePrice(), 'quantity'=> 1 , 'unit'=> $unit)));
+    }
+
+    public function updateItemAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $item = $request->request->get('purchaseItem');
+        $quantity = empty($request->request->get('quantity'))?0 :$request->request->get('quantity');
+        $price = floatval(empty($request->request->get('price')) ? 0 : $request->request->get('price'));
+        $bonusQty = empty($request->request->get('bonusQuantity')) ? 0 : $request->request->get('bonusQuantity');
+
+        /* @var $purchaseItem BusinessPurchaseItem */
+
+        $purchaseItem = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->find($item);
+        $purchaseItem->setQuantity($quantity);
+        $purchaseItem->setPurchasePrice($price);
+        $purchaseItem->setPurchaseSubTotal($price * $quantity);
+        $purchaseItem->setBonusQuantity($bonusQty);
+        $em->persist($purchaseItem);
+        $em->flush();
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($purchaseItem->getBusinessPurchase());
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+
     }
 
     public function addParticularAction(Request $request, BusinessPurchase $invoice)

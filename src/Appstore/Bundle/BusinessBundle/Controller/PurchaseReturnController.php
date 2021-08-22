@@ -195,7 +195,7 @@ class PurchaseReturnController extends Controller
 	    $purchase = $em->getRepository('BusinessBundle:BusinessPurchaseReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
 	    $arrs = array('created','sales','commission','Done');
 	    if (!empty($purchase) and !empty($purchase->getVendor()) and in_array($purchase->getProcess(),$arrs)) {
-            $this->approvePurchaseReturn($id);
+            $this->approvePurchaseReturn($purchase);
             return new Response('success');
         } else {
             return new Response('failed');

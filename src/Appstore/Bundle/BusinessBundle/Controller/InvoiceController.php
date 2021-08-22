@@ -392,7 +392,7 @@ class InvoiceController extends Controller
 
     public function particularSearchAction(BusinessParticular $particular)
     {
-	    $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
+        $unit = !empty($particular->getUnit() && !empty($particular->getUnit()->getName())) ? $particular->getUnit()->getName():'Unit';
         return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'salesPrice'=> $particular->getSalesPrice(),'remainQnt'=> $particular->getRemainingQuantity(),'quantity'=> 1,'unit' => $unit)));
     }
 
