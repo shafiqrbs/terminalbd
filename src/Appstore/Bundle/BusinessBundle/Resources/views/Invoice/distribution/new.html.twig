@@ -101,9 +101,9 @@
                                                         </td>
                                                         <td id="tloPrice">
                                                             <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important;" class="m-wrap discount-type span6">
+                                                                <option value="flat">Flat</option>
                                                                 <option value="multiply">Multiply</option>
                                                                 <option value="percent">(%)</option>
-                                                                <option value="flat">Flat</option>
                                                             </select>
                                                             <input type="text" class="numeric td-inline-input-qnt span6"  autocomplete="off"  id="tloPrice" name="tloPrice" value="" placeholder="0">
                                                         </td>
@@ -276,12 +276,41 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="clearfix"></div>
                                 <div class="row-fluid">
-                                    <div class="span12" >
-                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span12 m-wrap select2Customer eventProcess inputs" value="{% if entity.customer.name != 'Default' %}{{ entity.customer.mobile }}{% endif %}"  autocomplete="off" placeholder="Search existing customer name/mobile">
+                                    <div class="span12 input-append-border">
+                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                        <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                     </div>
                                 </div>
-
+                                <div class="row-fluid customer" id="">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <div class="input-icon left input-height">
+                                                <i class="icon-user"></i>
+                                                <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name/company" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid customer">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <div class="input-icon left input-height">
+                                                <i class="icon-phone"></i>
+                                                <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid customer">
+                                    <div class="span12 input-append-border">
+                                        <div class="row-fluid">
+                                            <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer details"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
