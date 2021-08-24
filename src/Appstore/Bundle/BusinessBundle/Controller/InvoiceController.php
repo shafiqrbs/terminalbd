@@ -800,6 +800,7 @@ class InvoiceController extends Controller
             $customerBarcode = $this->getBarcode($entity->getCustomer()->getMobile());
             $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
             $balance = empty($result) ? 0 : $result;
+            $balanceWords = $this->get('settong.toolManageRepo')->intToWords($balance);
             return  $this->render("BusinessBundle:Print:{$template}.html.twig",
                 array(
                     'config' => $config,
@@ -807,6 +808,7 @@ class InvoiceController extends Controller
                     'balance' => $balance,
                     'customerBarcode' => $customerBarcode,
                     'amountInWords' => $amountInWords,
+                    'balanceWords' => $balanceWords,
                     'print' => $print,
                 )
             );

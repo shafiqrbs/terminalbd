@@ -349,7 +349,7 @@ var stockInvoice = $("#stockInvoicex").validate({
                 $('.discount').html(obj['discount']);
                 $('#subQuantity').html('0');
                 $('#unit').html('Unit');
-                $("#particular").select2().select2("val","");
+                $('#particular').select2('open');
                 $('#stockInvoice')[0].reset();
             }
         });
@@ -418,8 +418,10 @@ var formTemporary = $("#stockInvoice").validate({
                 obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#unit').html('Unit');
-                $("#particular").select2('open').select2("val","");
-                $('#stockInvoice')[0].reset();
+               // $("#particular").select2('open').select2("val","");
+                $('#particular').select2('open');
+               // $('#stockInvoice')[0].reset();
+                document.getElementById('stockInvoice').reset();
                 returnData(response);
             }
         });

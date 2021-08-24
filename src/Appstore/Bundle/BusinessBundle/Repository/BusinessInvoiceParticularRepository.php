@@ -591,6 +591,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         }
         $entity->setParticular($particular->getName());
         $tloMode = $data['tloMode'];
+        $tlo = 0;
+        $tloTotal = 0;
         if($tloMode == 'flat' and $data['tloPrice'] > 0){
             $tlo = $data['tloPrice'];
             $tloTotal = $tlo;
@@ -598,7 +600,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $tlox = $data['tloPrice'];
             $tlo = (($data['salesPrice']) * $tlox)/100;
             $tloTotal = ($tlo * $data['quantity']);
-        }else{
+        }elseif ($data['tloPrice'] > 0){
             $tlo = ($data['tloPrice']);
             $tloTotal = ($tlo * $data['quantity']);
         }

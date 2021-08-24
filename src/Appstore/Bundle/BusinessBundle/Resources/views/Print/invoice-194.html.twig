@@ -69,14 +69,12 @@
                         <thead>
                         <tr>
                             <th style="width: 1%">S/N</th>
-                            <th class="text-left">Particular</th>
-                            <th>Quantity</th>
-                            <th>Return</th>
-                            <th>Damage</th>
-                            <th>Spoil</th>
-                            <th>Sales</th>
+                            <th class="text-left">Product Name</th>
+                            <th>QTY</th>
+                            <th>Free QTY</th>
+                            <th>Total QTY</th>
                             <th>Unit</th>
-                            <th>Unit Price</th>
+                            <th>Rate</th>
                             <th style="width: 8%" class="text-right">Total</th>
                         </tr>
                         </thead>
@@ -92,10 +90,8 @@
                                     <td class="">{{ i }}</td>
                                     <td class="">{{ item.particular }}</td>
                                     <td class="">{{ item.quantity }}</td>
-                                    <td class="">{% if item.returnQnt > 0 %}{{ item.returnQnt }}{% endif %}</td>
-                                    <td class="">{% if item.damageQnt > 0 %}{{ item.damageQnt }}{% endif %}</td>
-                                    <td class="">{% if item.spoilQnt > 0 %}{{ item.spoilQnt }}{% endif %}</td>
-                                    <td class="">{% if item.totalQuantity > 0 %}{{ item.totalQuantity }}{% endif %}</td>
+                                    <td class="">{{ item.bonusQnt }}</td>
+                                    <td class="">{{ (item.quantity+item.bonusQnt) }}</td>
                                     <td class="text-right">{{ item.unit }}</td>
                                     <td class="text-right">{{ item.price|number_format(2) }}</td>
                                     <td class="text-right" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
@@ -103,35 +99,19 @@
                                 {% set i = i + 1 %}
                             {% endif %}
                         {% endfor %}
-                        <tr>
-                            <td colspan="9">TOTAL</td>
-                            <td class="text-right">{{ entity.subTotal|number_format(2) }}</td>
-                        </tr>
                         </tbody>
+
                         <tfoot>
                         <tr>
-                            <td colspan="4" style="width:50%;">
-                                <table style="width: 100%;" class="tfoot-table">
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                    <tr><td>Sales Amount</td><td><strong  class="pull-right">{{ entity.total|number_format(0) }}</strong></td></tr>
-                                    <tr><td>Current Due</td><td><strong  class="pull-right">{{ entity.due|number_format(0) }}</strong></td></tr>
-                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td>Outstanding</td><td><strong  class="pull-right">{% if balance > 0 %} {{ balance|number_format }}{% endif %}</strong></td></tr>
-                                </table>
-                            </td>
-                            <td colspan="6" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
-                                <table style="width: 100%;margin-bottom: -20px;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                    <tr><td>TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format(2) }}</strong></td></tr>
-                                    <tr><td>DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
-                                    <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format }}</strong></td></tr>
-                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td style="text-align: left!important;"><strong class="pull-left" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format }}</strong></td></tr>
-                                    <tr><td colspan="2"  style="height: 5px"></td></tr>
-                                </table>
-                            </td>
+                            <td colspan="7"><strong class="pull-right">TOTAL</strong></td>
+                            <td class="text-right">{{ entity.subTotal|number_format(2) }}</td>
                         </tr>
-                        <tr><td colspan="10">In words: {{ entity.paymentInWord|raw }} </td></tr>
+                        <tr><td colspan="7"><strong class="pull-right">DISCOUNT(-)</strong></td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
+                        <tr><td colspan="7"><strong class="pull-right">NET AMOUNT</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format(2) }}</strong></td></tr>
+                        <tr><td colspan="7"><strong class="pull-right">PREVIOUS DUE</strong></td><td><strong  class="pull-right">{% if balance > 0 %} {{ (balance-entity.total) |number_format(2) }}{% endif %}</strong></td></tr>
+                        <tr><td colspan="7"><strong class="pull-right">RECEIVED</strong></td><td><strong  class="pull-right">{{ (entity.received)|number_format(2) }}</strong></td></tr>
+                        <tr><td colspan="7" style="text-align: left!important;"><strong class="pull-right" >TOTAL DUE</strong></td><td><strong  class="pull-right">{{ balance|number_format(2) }}</strong></td></tr>
+                        <tr><td colspan="8">In words: {{ balanceWords|raw }} </td></tr>
                         </tfoot>
                     </table>
                     <div style="clear: both; display: flex"></div>

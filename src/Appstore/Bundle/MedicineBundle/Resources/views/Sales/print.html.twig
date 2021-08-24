@@ -90,15 +90,13 @@
             max-width: 220px;
         }
     </style>
-    {% if  entity.medicineConfig.posPrint == 1 %}
-        <script type="text/javascript">
-            window.print();
-            setTimeout(function () {
-                window.open('', '_self', '');
-                window.close();
-            }, 2000);
-        </script>
-    {% endif %}
+    <script type="text/javascript">
+        window.print();
+        setTimeout(function () {
+            window.open('', '_self', '');
+            window.close();
+        }, 2000);
+    </script>
 </head>
 <body>
 <div style="width:380px; margin: 0 auto">
