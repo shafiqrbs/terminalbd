@@ -113,7 +113,7 @@
                                     <td class="span3">{{ loop.index }}. <strong>{{ item.medicineStock.name }}</strong></td>
                                     <td class="span3">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="span1">
-                                       <input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.medicineStock.salesPrice }}" >{{ (item.medicineStock.salesPrice * item.quantity|default(0)) }}
+                                       <input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.medicineStock.salesPrice }}" >
                                     </td>
                                     <td class="span1">
                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.purchasePrice }}" >
@@ -142,8 +142,8 @@
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="5"><span class="pull-right"><strong>Vendor/Supplier</strong> =</span></td>
-                            <td colspan="3">
+                            <td colspan="3"><span class="pull-right"><strong>Vendor/Supplier</strong> =</span></td>
+                            <td colspan="5">
                                 {{ form_widget(form.medicineVendor) }}
                                 {{ form_errors(form.medicineVendor) }}
                             </td>

@@ -525,7 +525,7 @@ class MedicineStockController extends Controller
             $quantity = abs($data['value']);
             $entity->$setField($quantity);
             $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
-            $entity->setRemainingQuantity($remainingQuantity);
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->remainingQnt($entity);
         }elseif('rackNo' == $data['name']){
             $rackNo = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($data['value']);
             $entity->setRackNo($rackNo);

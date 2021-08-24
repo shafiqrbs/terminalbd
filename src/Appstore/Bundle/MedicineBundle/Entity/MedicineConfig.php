@@ -190,6 +190,20 @@ class MedicineConfig
     /**
      * @var float
      *
+     * @ORM\Column(name="tpPercent", type = "float",  nullable=true)
+     */
+    private $tpPercent = 12.5;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="tpVatPercent", type = "float",  nullable=true)
+     */
+    private $tpVatPercent = 17.4;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="vendorPercentage", type = "float",  nullable=true)
      */
     private $vendorPercentage = 8;
@@ -797,6 +811,38 @@ class MedicineConfig
     public function setIsBarcode($isBarcode)
     {
         $this->isBarcode = $isBarcode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTpPercent()
+    {
+        return $this->tpPercent;
+    }
+
+    /**
+     * @param float $tpPercent
+     */
+    public function setTpPercent($tpPercent)
+    {
+        $this->tpPercent = $tpPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTpVatPercent()
+    {
+        return $this->tpVatPercent;
+    }
+
+    /**
+     * @param float $tpVatPercent
+     */
+    public function setTpVatPercent($tpVatPercent)
+    {
+        $this->tpVatPercent = $tpVatPercent;
     }
 
 

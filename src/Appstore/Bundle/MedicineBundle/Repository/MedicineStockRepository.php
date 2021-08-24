@@ -61,10 +61,11 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function checkDuplicateStockMedicine(MedicineConfig $config,MedicineBrand $brand)
+    public function checkDuplicateStockMedicine(MedicineConfig $config, MedicineBrand $brand)
     {
-      $stock =  $this->findOneBy(array('medicineConfig'=>$config,'medicineBrand'=> $brand));
-      return $stock;
+
+        $stock =  $this->findOneBy(array('medicineConfig'=>$config,'medicineBrand'=> $brand));
+        return $stock;
     }
 
     public function checkDuplicateStockNonMedicine(MedicineConfig $config,$brand)
@@ -603,8 +604,8 @@ class MedicineStockRepository extends EntityRepository
         if($stock){
             $stock->execute();
         }
-        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`remainingQuantity`,`purchasePrice`,`salesPrice`, `medicineBrand_id`,`brandName`,`pack`,`averagePurchasePrice`,`averageSalesPrice`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
-  SELECT `unit_id`, `name`,`minQuantity`,0,`purchasePrice`, `salesPrice`, `medicineBrand_id`, `brandName`, `pack`, `averagePurchasePrice`, `averageSalesPrice`, `isAndroid`, `printHide`,mode,1,$to
+        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`remainingQuantity`,`salesPrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
+  SELECT `unit_id`, `name`,`minQuantity`,0, `salesPrice`, `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
   FROM medicine_stock
   WHERE medicineConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);

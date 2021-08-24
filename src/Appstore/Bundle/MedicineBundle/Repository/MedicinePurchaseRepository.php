@@ -113,6 +113,7 @@ class MedicinePurchaseRepository extends EntityRepository
                 $entity->setActualPurchasePrice($row->getMedicineStock()->getPurchasePrice());
                 $entity->setPurchasePrice($row->getMedicineStock()->getSalesPrice());
                 $entity->setSalesPrice($row->getMedicineStock()->getSalesPrice());
+                $this->dpGenerate($entity);
                 $entity->setPurchaseSubTotal($row->getMedicineStock()->getSalesPrice() * $entity->getQuantity());
                 $em->persist($entity);
                 $em->flush();
@@ -123,6 +124,18 @@ class MedicinePurchaseRepository extends EntityRepository
         }
         return 'invalid';
 
+    }
+
+    public function dpGenerate($entity)
+    {
+        $config = $entity->getMedicinePurchase()->getMedicineConfig();
+        //echo $dpPrice = ($config->getTpPercent() + $config->getTpVatPercent());
+        $dpPrice = $config->getTpPercent();
+        // $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+        if($dpPrice > 0){
+            $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+            $entity->setTp($dp);
+        }
     }
 
 

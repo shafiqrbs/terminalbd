@@ -40,7 +40,7 @@ class MedicineStockType extends AbstractType
             ->add('reorderQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Reorder quantity')))
             ->add('rackNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Rack no')))
             ->add('unit', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
                 'empty_value' => '---Choose a unit ---',

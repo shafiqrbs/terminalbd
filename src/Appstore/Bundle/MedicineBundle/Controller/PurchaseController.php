@@ -216,7 +216,7 @@ class PurchaseController extends Controller
     {
         $unit = !empty($particular->getUnit()) ? $particular->getUnit()->getName():'Unit';
         $pack = $particular->getPack() > 0  ?  $particular->getPack() : 1;
-        if($particular->isOpeningApprove() != 1 and $particular->getMedicineConfig()->isOpeningQuantity() == 1){
+        if($particular->isOpeningApprove() != 1 and $particular->getMedicineConfig()->isOpeningQuantity() == 1 and $particular->getSalesQuantity() > 0){
             $salesQty = $particular->getSalesQuantity();
         }else{
             $salesQty = 0;
@@ -257,12 +257,9 @@ class PurchaseController extends Controller
                 $entity->setUnit($unit);
             }
             $entity->setPurchasePrice($entity->getSalesPrice());
-            $purchasePrice = round(($entity->getPurchasePrice()/$entity->getPurchaseQuantity()),2);
             $salesPrice = round(($entity->getSalesPrice()/$entity->getPurchaseQuantity()),2);
-            $entity->setPurchasePrice($purchasePrice);
-            $entity->setAveragePurchasePrice($purchasePrice);
+            $entity->setPurchasePrice($salesPrice);
             $entity->setSalesPrice($salesPrice);
-            $entity->setAverageSalesPrice($salesPrice);
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);
@@ -368,6 +365,7 @@ class PurchaseController extends Controller
             $entity->setPurchasePrice($unitPrice);
             $entity->setSalesPrice($salesPrice);
         }
+        $this->dpGenerate($entity);
         if(!empty($expirationEndDate)){
             $expirationEndDate = (new \DateTime($expirationEndDate));
             $entity->setExpirationEndDate($expirationEndDate);
@@ -381,6 +379,18 @@ class PurchaseController extends Controller
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
 
+    }
+
+    public function dpGenerate($entity)
+    {
+        $config = $entity->getMedicinePurchase()->getMedicineConfig();
+        //echo $dpPrice = ($config->getTpPercent() + $config->getTpVatPercent());
+        $dpPrice = $config->getTpPercent();
+        // $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+        if($dpPrice > 0){
+            $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+            $entity->setTp($dp);
+        }
     }
 
     public function invoiceParticularDeleteAction(MedicinePurchase $invoice, MedicinePurchaseItem $particular){

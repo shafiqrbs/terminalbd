@@ -87,10 +87,17 @@
                                 </div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label " for="vatPercentage">Vendor Item <span class="required">%</span></label>
+                                        <label class="control-label " for="vatPercentage">TP Percent <span class="required">(%)</span></label>
                                         <div class="control">
-                                            {{ form_widget(form.vendorPercentage) }}
-                                            {{ form_errors(form.vendorPercentage) }}
+                                            {{ form_widget(form.tpPercent) }}
+                                            {{ form_errors(form.tpPercent) }}
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label " for="vatPercentage">TP VAT Percent <span class="required">(%)</span></label>
+                                        <div class="control">
+                                            {{ form_widget(form.tpVatPercent) }}
+                                            {{ form_errors(form.tpVatPercent) }}
                                         </div>
                                     </div>
                                 </div>

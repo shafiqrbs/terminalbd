@@ -33,7 +33,7 @@ class PurchaseType extends AbstractType
             ->add('medicineVendor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
-                'empty_value' => '---Choose a vendor ---',
+                'empty_value' => '---Choose a vendor/supplier ---',
                 'property' => 'companyName',
                 'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),

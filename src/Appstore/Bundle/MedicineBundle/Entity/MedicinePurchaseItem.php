@@ -148,6 +148,13 @@ class MedicinePurchaseItem
     /**
      * @var float
      *
+     * @ORM\Column(name="tp", type="float", nullable = true)
+     */
+    private $tp;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="actualPurchasePrice", type="float", nullable = true)
      */
     private $actualPurchasePrice;
@@ -621,6 +628,23 @@ class MedicinePurchaseItem
     {
         $this->androidProcess = $androidProcess;
     }
+
+    /**
+     * @return float
+     */
+    public function getTp()
+    {
+        return $this->tp;
+    }
+
+    /**
+     * @param float $tp
+     */
+    public function setTp($tp)
+    {
+        $this->tp = $tp;
+    }
+
 
 }
 

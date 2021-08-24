@@ -101,9 +101,8 @@
                                             <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                                            <td class="span2">
-                                                <div class="btn-group">
+                                            <td colspan="6">
+                                                <div class="btn-group pull-right">
                                                 <a href="{{ path('medicine_prepurchase_edit', { 'id': entity.id }) }}" class="btn green " ><i class="icon-pencil"></i></a>
                                                 <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_prepurchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red delete" ><i class="icon-trash"></i></a>
                                                 {% if entity.medicinePrepurchaseItems is not empty %}

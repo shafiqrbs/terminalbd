@@ -361,9 +361,22 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $entity->setActualPurchasePrice($item->getPurchasePrice());
         $entity->setQuantity($item->getPurchaseQuantity());
         $entity->setPack($item->getPack());
+        $this->dpGenerate($entity);
         $entity->setRemainingQuantity($item->getPurchaseQuantity());
         $em->persist($entity);
         $em->flush();
+    }
+
+    public function dpGenerate($entity)
+    {
+        $config = $entity->getMedicinePurchase()->getMedicineConfig();
+        //echo $dpPrice = ($config->getTpPercent() + $config->getTpVatPercent());
+        $dpPrice = $config->getTpPercent();
+        // $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+        if($dpPrice > 0){
+            $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+            $entity->setTp($dp);
+        }
     }
 
     public function checkInsertStockItem(MedicineConfig $config,$data){
