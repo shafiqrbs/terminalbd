@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * Courier
  *
- * @ORM\Table( name ="business_customer")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessCustomerRepository")
+ * @ORM\Table( name ="business_store")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessStoreRepository")
  */
-class BusinessCustomer
+class BusinessStore
 {
     /**
      * @var integer

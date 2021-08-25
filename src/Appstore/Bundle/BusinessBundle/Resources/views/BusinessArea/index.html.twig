@@ -39,17 +39,6 @@
                             <div class="row-fluid">
                                 <div class="span6">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Location<span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.location) }}
-                                            {{ form_errors(form.location) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span6">
-                                    <div class="control-group">
                                         <label class="control-label" for="name">Business Area name<span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.name) }}
@@ -76,9 +65,7 @@
                                     <tr class="head-blue">
                                         <th> S/N</th>
                                         <th>Name</th>
-                                        <th>Location</th>
                                         <th>Action</th>
-
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceParticulars">
@@ -86,7 +73,6 @@
                                         <tr id="remove-{{ entity.id }}">
                                             <td  class="">{{ loop.index }}.</td>
                                             <td class="">{{ entity.name }}</td>
-                                            <td class="">{{ entity.location.name }}</td>
                                             <td class=""> {% if( entity.status == 1) %}
                                                     <a class="btn mini blue btn-action" href="{{ path('business_area_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                                 {% else %}
@@ -100,7 +86,6 @@
                                     </tbody>
                                 </table>
                                 <div class="clearfix">&nbsp;</div>
-
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>

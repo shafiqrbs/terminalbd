@@ -34,18 +34,7 @@ class BusinessAreaType extends AbstractType
                     new NotBlank(array('message'=>'Please enter wear house name'))
                 ))
             )
-            ->add('location', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 m-wrap span12'),
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select customer location'))
-                ),
-                'choices'=> $this->LocationChoiceList(),
-                'choices_as_values' => true,
-                'choice_label' => 'nestedLabel',
-            ))
+
         ;
     }
     

@@ -277,6 +277,14 @@ class BusinessInvoice
     /**
      * @var float
      *
+     * @ORM\Column(name="salesReturn", type="float", nullable=true)
+     */
+    private $salesReturn;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="due", type="float", nullable=true)
      */
     private $due;
@@ -1086,6 +1094,22 @@ class BusinessInvoice
     public function setCourier($courier)
     {
         $this->courier = $courier;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesReturn()
+    {
+        return $this->salesReturn;
+    }
+
+    /**
+     * @param float $salesReturn
+     */
+    public function setSalesReturn($salesReturn)
+    {
+        $this->salesReturn = $salesReturn;
     }
 
 }
