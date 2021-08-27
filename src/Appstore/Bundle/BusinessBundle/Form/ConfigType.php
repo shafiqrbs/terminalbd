@@ -73,6 +73,8 @@ class ConfigType extends AbstractType
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('isStockHistory')
+            ->add('salesReturn')
+            ->add('storeLedger')
             ->add('printOutstanding')
             ->add('removeImage')
             ->add('file')

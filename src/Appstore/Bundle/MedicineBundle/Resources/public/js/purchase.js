@@ -70,10 +70,10 @@ $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
 $('form#purchaseItemForm').on('keyup', ' #pack , #purchaseItem_quantity', function (e) {
     var pack = parseInt($('#pack').val());
     var qnt = parseInt($('#purchaseItem_quantity').val());
-    alert(qnt);
-    if(qnt =="NaN" || qnt == ""){
+    if(qnt === "NaN" || qnt === ""){
         $('#totalQnt').html(0);
-    }else{
+    }
+    if(qnt > 0){
         var totalQnt = (pack * qnt);
         $('#totalQnt').html(totalQnt);
     }

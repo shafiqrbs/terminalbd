@@ -175,6 +175,20 @@ class BusinessConfig
     private $vatEnable = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="salesReturn", type="boolean",  nullable=true)
+     */
+    private $salesReturn = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="storeLedger", type="boolean",  nullable=true)
+     */
+    private $storeLedger = false;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="invoiceWidth", type="smallint",  nullable=true)
@@ -1386,6 +1400,38 @@ class BusinessConfig
     public function setPrintOutstanding($printOutstanding)
     {
         $this->printOutstanding = $printOutstanding;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSalesReturn()
+    {
+        return $this->salesReturn;
+    }
+
+    /**
+     * @param bool $salesReturn
+     */
+    public function setSalesReturn($salesReturn)
+    {
+        $this->salesReturn = $salesReturn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStoreLedger()
+    {
+        return $this->storeLedger;
+    }
+
+    /**
+     * @param bool $storeLedger
+     */
+    public function setStoreLedger($storeLedger)
+    {
+        $this->storeLedger = $storeLedger;
     }
 
 
