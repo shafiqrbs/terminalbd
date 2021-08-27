@@ -52,11 +52,11 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <div class="col invoice-to">
+                        {#<div class="col invoice-to">
                             <div class="text-gray-light">Marketing BY</div>
                             <h4 class="to">S.R. {% if  entity.marketing is not empty %}{{ entity.marketing.name }}{% endif %}</h4>
                             <div class="address">Area. {% if  entity.area is not empty %}{{ entity.area.name }},{{ entity.area.location.name }}{% endif %}</div>
-                        </div>
+                        </div>#}
                         <div class="col invoice-details">
                             <h5 class="invoice-id">INVOICE {{ entity.invoice }}</h5>
                             <div class="date">Date of Invoice: {{ entity.created|date('d-m-Y') }}</div>
