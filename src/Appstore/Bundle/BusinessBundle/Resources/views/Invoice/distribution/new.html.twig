@@ -297,10 +297,8 @@
                                                         <tr id="remove-{{ item.id }}">
                                                             <td  class="">{{ loop.index }}.
                                                                 <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
-
                                                             </td>
                                                             <td class="">{{ item.particular }}</td>
-                                                            <td class="">{{ item.businessParticular.remainingQuantity }}</td>
                                                             <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                                             <td class="">{{ item.businessParticular.salesPrice }}</td>
                                                             <td class="">{{ item.quantity }}</td>
@@ -336,15 +334,59 @@
                                     <div class="portlet-body form">
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <form class="stockInvoice" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
                                                     <div class="row-fluid">
                                                         <div class="span12">
-                                                            <div class="row-fluid particular-info" >
+                                                            <form class="storeLedgerForm"  id="storeLedgerForm" name="storeLedgerForm" action="{{ path('business_invoice_distribution_store_create') }}" method="post">
+                                                                <div class="row-fluid particular-info" id="storeLedger" style="display: block">
+                                                                    <div class="span4">
+                                                                        <select class="span12 m-wrap input select2" name="dsm">
+                                                                            <option value="">Select DSM</option>
+                                                                            {% for customer in customers %}
+                                                                                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="span2" >
+                                                                        <select name="area" id="area" class="span12 m-wrap">
+                                                                            <option>--Select area</option>
+                                                                            {% if areas is not empty %}
+                                                                                {% for area in areas %}
+                                                                                    <option value="{{ area.id }}">{{ area.name }}</option>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="span3" >
+                                                                        <input type="text" class="m-wrap span12 form-control input" id="store" name="store" placeholder="Store name" value="">
+                                                                    </div>
+                                                                    <div class="span3">
+                                                                        <div class="input-append span12" style="margin-bottom:0!important">
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="m-wrap span6 mobile form-control input-number input" id="storeMobile" name="storeMobile" placeholder="Mobile no" value="" >
+                                                                                <button type="submit" class="btn green" id="" ><i class="icon-save"></i> Create</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            <form class="storeForm" id="storeForm" name="storeForm" action="{{ path('business_invoice_distribution_store_payment',{'invoice':entity.id}) }}" method="post">
+                                                                <div class="row-fluid particular-info" >
                                                                 <div class="span6" >
                                                                     <div class="row-fluid">
                                                                         <div class="span12" >
-                                                                            <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2 input" style="margin-left: 15px">
-                                                                                <option value="">--- Select Store Name ---- </option>
+                                                                            <select name="store" id="store" class="span12 m-wrap">
+                                                                                <option>--Select a store</option>
+                                                                                {% if areas is not empty %}
+                                                                                    {% for area in areas %}
+                                                                                        <optgroup label="{{ area.name }}">
+                                                                                            {% if area.stores is not empty %}
+                                                                                                {% for store in area.stores %}
+                                                                                                    <option value="{{ store.id }}">{{ store.name }}</option>
+                                                                                                {% endfor %}
+                                                                                            {% endif %}
+                                                                                        </optgroup>
+                                                                                    {% endfor %}
+                                                                                {% endif %}
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -353,25 +395,26 @@
                                                                     <button type="button" class="btn yellow" id="storeOutstanding">0</button>
                                                                 </div>
                                                                 <div class="span2">
-                                                                    <select class="span12 m-wrap input" name="paymentMode">
-                                                                        <option value="receive">Receive</option>
-                                                                        <option value="due">Due</option>
+                                                                    <select class="span12 m-wrap input" name="transactionType" id="transactionType">
+                                                                        {% set paymentModes = ['Receive','Due','Adjustment'] %}
+                                                                        {% for mode in paymentModes %}
+                                                                        <option value="{{ mode }}">{{ mode }}</option>
+                                                                        {% endfor %}
                                                                     </select>
                                                                 </div>
                                                                 <div class="span3">
                                                                     <div class="input-append span12" style="margin-bottom:0!important">
                                                                         <div class="input-group">
-                                                                            <input type="text" class="m-wrap span5 form-control input-number input" id="receive" name="receive" placeholder="Amount" value="" min="">
-                                                                            <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Save</button>
-                                                                            <button type="submit" class="btn purple" id="addStore" ><i class="icon-user"></i></button>
+                                                                            <input type="text" class="m-wrap span5 form-control input-number input" id="amount" name="amount" placeholder="Amount" value="" min="">
+                                                                            <button type="submit" class="btn blue" id="addPayment" ><i class="icon-save"></i> Save</button>
+                                                                            <button type="button" class="btn purple" id="addStore" ><i class="icon-user"></i></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                </form>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
@@ -391,6 +434,9 @@
                                                     {% for item in entity.businessInvoiceParticulars %}
                                                         {% set totalQnt = totalQnt + item.totalQuantity %}
                                                         <tr id="remove-{{ item.id }}">
+                                                            <td  class="">{{ loop.index }}.
+                                                                <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
+                                                            </td>
                                                             <td  class="">{{ loop.index }}.
                                                                 <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
                                                             </td>
@@ -466,7 +512,12 @@
                                         <div class="clearfix"></div>
                                         <div class="row-fluid">
                                             <div class="span12 input-append-border">
-                                                <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                                <select class="span11 m-wrap input select2" name="customer">
+                                                    <option value="">Select DSM</option>
+                                                    {% for customer in customers %}
+                                                        <option value="{{ customer.id }}">{{ customer.name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                                 <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                             </div>
                                         </div>
@@ -687,6 +738,7 @@
     {{ parent() }}
     {% javascripts
     '@BusinessBundle/Resources/public/js/invoice.js'
+    '@BusinessBundle/Resources/public/js/distribution.js'
     '@BusinessBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

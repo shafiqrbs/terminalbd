@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
@@ -21,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  * BusinessInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+class DistributorController extends Controller
 {
 
     public function paginate($entities)
@@ -58,23 +60,6 @@ class InvoiceController extends Controller
             'previousSalesTransactionOverview' => '',
             'searchForm' => $data,
         ));
-    }
-
-    public function invoiceConditionAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceConditionLists( $config->getId(),$data);
-        $pagination = $this->paginate($entities);
-        $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
-        return $this->render("BusinessBundle:Invoice/{$view}:condition.html.twig", array(
-            'entities' => $pagination,
-            'salesTransactionOverview' => '',
-            'previousSalesTransactionOverview' => '',
-            'searchForm' => $data,
-        ));
-
     }
 
     public function newAction()
@@ -149,18 +134,14 @@ class InvoiceController extends Controller
         $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $courier = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $config,'status'=>1),array('companyName'=>"ASC"));
-        $stores = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
-        $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $global),array('name'=>"ASC"));
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
-            'customers' => $customers,
             'areas' => $areas,
             'marketings' => $marketings,
             'couriers' => $courier,
-            'stores' => $stores,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
         ));
@@ -476,6 +457,86 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+    public function storePaymentAction(Request $request, BusinessInvoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $storeId = $data['store'];
+        $transaction = $data['transactionType'];
+        $amount = $data['amount'];
+        $store = $this->getDoctrine()->getRepository("BusinessBundle:BusinessStore")->find($storeId);
+        $entity = new BusinessStoreLedger();
+        $entity->setBusinessConfig($invoice->getBusinessConfig());
+        $entity->setInvoice($invoice);
+        $entity->setAmount($amount);
+        $entity->setStore($store);
+        $entity->setTransactionType($transaction);
+        if($transaction == 'Receive' || $transaction == 'Adjustment') {
+            $entity->setAmount("-{$entity->getAmount()}");
+            $entity->setCredit(abs($entity->getAmount()));
+        }else{
+            $entity->setDebit($entity->getAmount());
+        }
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:30:30");
+            $entity->setCreated($datetime);
+            $entity->setUpdated($datetime);
+        }else{
+            $datetime = new \DateTime("now");
+            $entity->setUpdated($datetime);
+        }
+        $em->persist($entity);
+        $em->flush();
+        exit;
+      //  $result = $this->returnResultData($invoice,$msg);
+       // return new Response(json_encode($result));
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+    public function storeCreateAction(Request $request)
+    {
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $name = $data['store'];
+        $area = $data['area'];
+        $mobile = $data['storeMobile'];
+        $customer = $data['dsm'];
+        $customerId = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->find($customer);
+        $areaId = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($area);
+        $mobileno = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+        $find = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findOneBy(array('businessConfig' => $config,'area'=> $area,'name'=>$name));
+        if(empty($find)){
+            $entity = new BusinessStore();
+            $entity->setName($name);
+            $entity->setMobileNo($mobileno);
+            $entity->setCustomer($customerId);
+            $entity->setArea($areaId);
+            $em->persist($entity);
+            $em->flush();
+        }
+        $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig'=>$config),array('name'=>'ASC'));
+        $select= "";
+        foreach ($areas as $area){
+            $select .="<optgroup label='{$area->getName()}'>";
+            if($area->getStores()){
+                foreach ($area->getStores() as $store){
+                    $select .="<option value='{$store->getId()}'>{$store->getName()}</option>";
+                }
+            }
+            $select .="</optgroup>";
+        }
+        return new Response($select);
 
     }
 

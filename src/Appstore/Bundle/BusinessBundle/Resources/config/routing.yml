@@ -6,6 +6,10 @@ business_purchase:
     resource: "@BusinessBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+business_distribution:
+    resource: "@BusinessBundle/Resources/config/routing/distributor.yml"
+    prefix:   /distributor-invoice
+
 business_importer:
     resource: "@BusinessBundle/Resources/config/routing/itemimporter.yml"
     prefix:   /item-import

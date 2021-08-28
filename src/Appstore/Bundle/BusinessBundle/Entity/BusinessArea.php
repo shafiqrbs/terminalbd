@@ -40,6 +40,11 @@ class BusinessArea
     private $invoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStore", mappedBy="area")
+      **/
+    private $stores;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=true)
@@ -144,6 +149,14 @@ class BusinessArea
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return BusinessStore
+     */
+    public function getStores()
+    {
+        return $this->stores;
     }
 
 
