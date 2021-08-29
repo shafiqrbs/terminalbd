@@ -51,16 +51,14 @@
                                                 <table class="table table-bordered table-striped table-condensed table-fixed">                                      <thead class="flip-content ">
 
                                                     <tr class="head-blue">
-                                                        <th style="width: 30%">Particular</th>
+                                                        <th style="width: 30%">Item Name</th>
                                                         <th>Remain</th>
                                                         <th>Unit</th>
                                                         <th>Price</th>
                                                         <th>Quantity</th>
-                                                        <th>Ret.Qnt</th>
-                                                        <th>Dmg.Qnt</th>
-                                                        <th>Spoil.Qnt</th>
                                                         <th>Sales</th>
                                                         <th>Sub-total</th>
+                                                        <th>TLO Mode</th>
                                                         <th>TLO Price</th>
                                                         <th>Bonus Qnt</th>
                                                         <th>&nbsp;</th>
@@ -78,12 +76,13 @@
                                                         </td>
                                                         <td id="remainQnt"></td>
                                                         <td id="unit"></td>
-                                                        <td id="unitPrice"></td>
-
+                                                        <td id="">
+                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="salesPrice" name="salesPrice" value="" placeholder="0">
+                                                        </td>
                                                         <td class="">
                                                             <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="" placeholder="0">
                                                         </td>
-                                                        <td class="">
+                                                        {#<td class="">
                                                             <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"   name="returnQuantity" id="returnQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
@@ -92,26 +91,28 @@
                                                         <td class="">
                                                             <input type="number" class="numeric td-inline-input-qnt"  autocomplete="off"  id="spoilQuantity" name="spoilQuantity" value="" placeholder="0">
                                                         </td>
+                                                        #}
                                                         <td class="">
                                                             <strong id="totalQuantity">0</strong>
                                                         </td>
                                                         <td class="">
                                                             <strong id="subTotal">0.00</strong>
                                                         </td>
-                                                        <td id="tloPrice">
-                                                            <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important;" class="m-wrap discount-type span6">
+                                                        <td>
+                                                            <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important; height: 28px!important;" class="m-wrap discount-type span12">
                                                                 <option value="flat">Flat</option>
                                                                 <option value="multiply">Multiply</option>
                                                                 <option value="percent">(%)</option>
                                                             </select>
-                                                            <input type="text" class="numeric td-inline-input-qnt span6"  autocomplete="off"  id="tloPrice" name="tloPrice" value="" placeholder="0">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="tloPrice" name="tloPrice" value="" placeholder="0">
                                                         </td>
                                                         <td>
                                                             <input type="number" class="numeric td-inline-input-qnt"   id="bonusQuantity" name="bonusQuantity" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
                                                             <div class="input-group">
-                                                                <input type="hidden" id="salesPrice" name="salesPrice" value="" >
                                                                 <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                             </div>
                                                         </td>
@@ -164,14 +165,13 @@
 
                                             <tr id="remove-{{ item.id }}">
                                                 <td  class="">{{ loop.index }}.
-                                                    <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
-
                                                 </td>
                                                 <td class="">{{ item.particular }}</td>
                                                 <td class="">{{ item.businessParticular.remainingQuantity }}</td>
                                                 <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
-                                                <td class="">{{ item.businessParticular.salesPrice }}</td>
-
+                                                <td class="">
+                                                    <input type="text" class="remove-value numeric td-inline-input-qnt salesPrice" data-id="{{ item.id }}" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}">
+                                                </td>
                                                 <td class="">
                                                     <input type="number" class="remove-value numeric td-inline-input-qnt salesQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="salesQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"></td>
 
