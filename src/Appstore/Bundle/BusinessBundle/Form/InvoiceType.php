@@ -55,7 +55,7 @@ class InvoiceType extends AbstractType
            /* ->add('discount','hidden')*/
             ->add('received','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Payment amount')))
             ->add('process', 'choice', array(
-                'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
+                'attr'=>array('class'=>'m-wrap invoiceProcess span12 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'constraints' =>array( new NotBlank(array('message'=>'Confirm current process status')) ),

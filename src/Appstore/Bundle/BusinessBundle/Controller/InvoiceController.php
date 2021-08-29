@@ -188,10 +188,13 @@ class InvoiceController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
                 $entity->setCustomer($customer);
-
-            }elseif (!empty($data['mobile'])){
+            }elseif (isset($data['mobile']) and !empty($data['mobile'])){
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
+                $entity->setCustomer($customer);
+            }elseif (isset($data['customer']) and !empty($data['customer'])){
+                $customerId = $data['customer'];
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'id' => $customerId));
                 $entity->setCustomer($customer);
             }
             if(isset($data['area']) and !empty($data['area'])){
@@ -275,15 +278,21 @@ class InvoiceController extends Controller
         }
 
         $config = $entity->getBusinessConfig();
-        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
-	    $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
+        $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(array('globalOption' => $this->getUser()->getGlobalOption(),'status'=>1),array('companyName'=>"ASC"));
         $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $couriers = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $config,'status'=>1),array('companyName'=>"ASC"));
+        $stores = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $this->getUser()->getGlobalOption()),array('name'=>"ASC"));
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
             'areas' => $areas,
+            'couriers' => $couriers,
+            'stores' => $stores,
+            'customers' => $customers,
             'marketings' => $marketings,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
