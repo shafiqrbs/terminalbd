@@ -43,6 +43,11 @@ class BusinessStore
      **/
     private $area;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="stores")
+     **/
+    private $storeLedgers;
+
 
     /**
      * @var string
@@ -276,7 +281,13 @@ class BusinessStore
         $this->address = $address;
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function getStoreLedgers()
+    {
+        return $this->storeLedgers;
+    }
 
 
 }

@@ -290,7 +290,7 @@
                                                         <th></th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody id="invoiceParticulars">
+                                                    <tbody id="SalesReturnItem">
                                                     {% set salesQnt = 0 %}
                                                     {% for item in entity.businessInvoiceParticulars %}
                                                         {% set totalQnt = totalQnt + item.totalQuantity %}
@@ -308,8 +308,6 @@
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
-                                                    </tbody>
-                                                    <tfoot>
                                                     <tr>
                                                         <td colspan="7" class="" style="border: 1px double #000"></td>
                                                     </tr>
@@ -318,7 +316,7 @@
                                                         <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
                                                         <td class=""></td>
                                                     </tr>
-                                                    </tfoot>
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>
@@ -424,40 +422,42 @@
                                                     <tr>
                                                         <th class="">S/N</th>
                                                         <th>Customer Name</th>
+                                                        <th>Mode</th>
                                                         <th>Due</th>
                                                         <th>Receive</th>
+                                                        <th>Balance</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody id="invoiceParticulars">
-                                                    {% set salesQnt = 0 %}
-                                                    {% for item in entity.businessInvoiceParticulars %}
-                                                        {% set totalQnt = totalQnt + item.totalQuantity %}
-                                                        <tr id="remove-{{ item.id }}">
-                                                            <td  class="">{{ loop.index }}.
-                                                                <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
-                                                            </td>
-                                                            <td  class="">{{ loop.index }}.
-                                                                <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
-                                                            </td>
-                                                            <td class="">Receive</td>
-                                                            <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
+                                                    <tbody id="storeLedgerItem">
+                                                    {% set totalDebit = 0 %}
+                                                    {% set totalCredit = 0 %}
+                                                    {% for ledger in entity.storeLedgers %}
+                                                        {% set totalDebit = totalDebit + ledger.debit %}
+                                                        {% set totalCredit = totalCredit + ledger.credit %}
+                                                        <tr id="remove-{{ ledger.id }}">
+                                                            <td class="">{{ loop.index }}</td>
+                                                            <td class="">{{ ledger.store.name }}</td>
+                                                            <td class="">{{ ledger.transactionType }}</td>
+                                                            <td class="">{{ ledger.debit }}</td>
+                                                            <td class="">{{ ledger.credit }}</td>
+                                                            <td class="">{{ ledger.balance }}</td>
                                                             <td>
-                                                                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
+                                                                <a id="{{ ledger.id }}" data-id="{{ ledger.id }}"  data-url="{{ path('business_invoice_distributor_ledger_delete',{'invoice': entity.id ,'id': ledger.id }) }}" href="javascript:" class="btn red mini ledgerDelete" ><i class="icon-trash"></i></a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
-                                                    </tbody>
-                                                    <tfoot>
                                                     <tr>
-                                                        <td colspan="5" class="" style="border: 1px double #000"></td>
+                                                        <td colspan="7" class="" style="border: 1px double #000"></td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="2" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                                        <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
+                                                        <td colspan="3" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                                        <td class=""><strong class="subTotal">{{ totalDebit|number_format(2) }}</strong></td>
+                                                        <td class=""><strong class="subTotal">{{ totalCredit|number_format(2) }}</strong></td>
+                                                        <td class=""></td>
                                                         <td class=""></td>
                                                     </tr>
-                                                    </tfoot>
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>
@@ -688,7 +688,7 @@
                                             {{ form_widget(form.process) }}
                                             {{ form_errors(form.process) }}
                                         </div>
-                                        <div class="clearfix"></div>
+                                        <div class="clearfix"><br/></div>
                                         <div class="row-fluid">
                                             <div class="span6">
                                                 <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due - entity.tloPrice }}">
@@ -699,12 +699,9 @@
                                             </div>
                                             <div class="span6">
                                                 <button type="reset" class="btn yellow span12" ><i class="icon-refresh"></i>&nbsp; Reset</button>
-
                                             </div>
                                         </div>
-
                                     </div>
-
                                     </div>
                             </div>
                             {{ form_end(form) }}

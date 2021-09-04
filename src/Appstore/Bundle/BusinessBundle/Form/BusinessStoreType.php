@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class BusinessAreaType extends AbstractType
+class BusinessStoreType extends AbstractType
 {
 
 
@@ -31,7 +31,7 @@ class BusinessAreaType extends AbstractType
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter business area name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter area name'))
+                    new NotBlank(array('message'=>'Enter store name'))
                 ))
             )
 

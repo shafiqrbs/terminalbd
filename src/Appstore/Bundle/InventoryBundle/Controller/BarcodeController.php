@@ -240,7 +240,6 @@ class BarcodeController extends Controller
 	public function addItemBarcodeAction(Request $request)
 	{
 		$data = explode(',',$request->cookies->get('itemBarcode'));
-
 		if(is_null($data)) {
 			return $this->redirect($this->generateUrl('inventory_item'));
 		}

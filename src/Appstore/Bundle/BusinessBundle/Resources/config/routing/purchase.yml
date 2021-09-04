@@ -6,6 +6,15 @@ business_purchase_item:
     path:     /purchase-item
     defaults: { _controller: "BusinessBundle:Purchase:purchaseItem" }
 
+business_purchase_opening:
+    path:     /opening
+    defaults: { _controller: "BusinessBundle:Purchase:vendorOpening" }
+
+business_purchase_opening_create:
+    path:     /opening/create
+    defaults: { _controller: "BusinessBundle:Purchase:openingCreate" }
+    methods:  [POST, PUT]
+
 business_purchase_show:
     path:     /{id}/show
     defaults: { _controller: "BusinessBundle:Purchase:show" }

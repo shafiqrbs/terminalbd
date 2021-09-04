@@ -11,8 +11,11 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
+use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningType;
+use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningTypeType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,13 +98,93 @@ class PurchaseController extends Controller
             'searchForm' => $data,
         ));
     }
+
     /**
-     * Creates a new Vendor entity.
+     * Lists all AccountSales entities.
      *
      */
-    public function createAction(Request $request)
+    public function vendorOpeningAction(Request $request)
     {
 
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        if ( is_null( $data ) ) {
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
+        $amount = 0;
+        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($data);
+        $entity = new MedicinePurchase();
+        $editForm = $this->createOpeningForm($entity);
+        return $this->render('MedicineBundle:Purchase:opening.html.twig', array(
+            'entity' => $entity,
+            'amount' => $amount,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param MedicinePurchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createOpeningForm(MedicinePurchase $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseOpeningType($globalOption), $entity, array(
+            'action' => $this->generateUrl('medicine_purchase_opening_create'),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'purchaseForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function openingCreateAction(Request $request)
+    {
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        $ids =  $request->cookies->get( 'barcodes');
+        if ( is_null( $data ) ) {
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
+        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($data);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = new MedicinePurchase();
+        $form = $this->createOpeningForm($entity);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $entity->setMedicineConfig($config);
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+            $entity->setTransactionMethod($method);
+            $entity->setSubTotal($amount);
+            $entity->setNetTotal($amount);
+            $entity->setPayment($amount);
+            $entity->setMode("Opening");
+            $entity->setProcess("Approved");
+            $entity->setApprovedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($entity);
+            $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateOpeningQuantity($ids);
+            return $this->redirect($this->generateUrl('medicine_stock'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Required field does not input"
+        );
+        return $this->render('MedicineBundle:Purchase:opening.html.twig', array(
+            'entity' => $entity,
+            'amount' => $amount,
+            'form' => $form->createView(),
+        ));
     }
 
 	/**

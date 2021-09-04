@@ -18,6 +18,15 @@ medicine_purchase_new:
     path:     /new
     defaults: { _controller: "MedicineBundle:Purchase:new" }
 
+medicine_purchase_opening:
+    path:     /opening
+    defaults: { _controller: "MedicineBundle:Purchase:vendorOpening" }
+
+medicine_purchase_opening_create:
+    path:     /opening/create
+    defaults: { _controller: "MedicineBundle:Purchase:openingCreate" }
+    methods:  [POST, PUT]
+
 medicine_purchase_edit:
     path:     /{id}/edit
     defaults: { _controller: "MedicineBundle:Purchase:edit" }

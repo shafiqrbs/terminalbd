@@ -5,10 +5,12 @@ namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\BusinessBundle\Form\PurchaseOpeningType;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -520,5 +522,94 @@ class PurchaseController extends Controller
             'entity'      => $entity,
         ));
     }
+
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function vendorOpeningAction(Request $request)
+    {
+
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        if ( is_null( $data ) ) {
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
+        $amount = 0;
+        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($data);
+        $entity = new BusinessPurchase();
+        $editForm = $this->createOpeningForm($entity);
+        return $this->render('BusinessBundle:Purchase:opening.html.twig', array(
+            'entity' => $entity,
+            'amount' => $amount,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param BusinessPurchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createOpeningForm(BusinessPurchase $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseOpeningType($globalOption), $entity, array(
+            'action' => $this->generateUrl('business_purchase_opening_create'),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'purchaseForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function openingCreateAction(Request $request)
+    {
+        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        $ids =  $request->cookies->get( 'barcodes');
+        if ( is_null( $data ) ) {
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
+        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($data);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entity = new BusinessPurchase();
+        $form = $this->createOpeningForm($entity);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $entity->setBusinessConfig($config);
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+            $entity->setTransactionMethod($method);
+            $entity->setSubTotal($amount);
+            $entity->setNetTotal($amount);
+            $entity->setPayment($amount);
+            $entity->setMode("Opening");
+            $entity->setProcess("Approved");
+            $entity->setApprovedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($entity);
+            $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->updateOpeningQuantity($ids);
+            return $this->redirect($this->generateUrl('business_stock'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Required field does not input"
+        );
+        return $this->render('BusinessBundle:Purchase:opening.html.twig', array(
+            'entity' => $entity,
+            'amount' => $amount,
+            'form' => $form->createView(),
+        ));
+    }
+
 
 }

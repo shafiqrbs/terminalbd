@@ -123,6 +123,11 @@ class BusinessInvoice
     private  $courier;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="invoice" )
+     **/
+    private  $storeLedgers;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessArea", inversedBy="invoices" )
      **/
     private  $area;
@@ -1110,6 +1115,14 @@ class BusinessInvoice
     public function setSalesReturn($salesReturn)
     {
         $this->salesReturn = $salesReturn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStoreLedgers()
+    {
+        return $this->storeLedgers;
     }
 
 }

@@ -641,6 +641,25 @@ class BusinessParticularRepository extends EntityRepository
 
     }
 
+    public function sumOpeningQuantity($data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.salesPrice * e.openingQuantity),0) as opening');
+        $qb->where('e.id IN(:ids)')->setParameter('ids', $data);
+        $res = $qb->getQuery();
+        $result = $res->getSingleScalarResult();
+        return $result;
+
+    }
+
+    public function updateOpeningQuantity($data)
+    {
+
+        $stockUpdate = "UPDATE business_particular SET openingApprove = 1 WHERE  id in ({$data})";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->execute();
+    }
+
 
 
 

@@ -25,13 +25,41 @@ var storeForm = $("#storeForm").validate({
             processData : false,
             contentType : false,
             success: function(response){
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#storeLedgerItem').html(response);
                 document.getElementById('storeLedgerForm').reset();
             }
         });
     }
 });
 
+var salesReturnForm = $("#salesReturnForm").validate({
+
+    rules: {
+        "salesId": {required: true},
+        "quantity": {required: true},
+        "amount": {required: true},
+    },
+    tooltip_options: {
+        "salesId": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true},
+        "amount": {placement:'top',html:true},
+    },
+
+    submitHandler: function(salesReturnForm) {
+
+        $.ajax({
+            url         : $('form#salesReturnForm').attr( 'action' ),
+            type        : $('form#salesReturnForm').attr( 'method' ),
+            data        : new FormData($('form#salesReturnForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                $('#salesReturnItem').html(response);
+                document.getElementById('salesReturnForm').reset();
+            }
+        });
+    }
+});
 
 var formLedger = $("#storeLedgerForm").validate({
 
@@ -63,5 +91,21 @@ var formLedger = $("#storeLedgerForm").validate({
         });
     }
 });
+
+$(document).on("click", ".ledgerDelete", function(event) {
+
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.get(url, function( data ) {
+                $(event.target).closest('tr').remove();
+                $('#storeLedgerItem').html(response);
+            });
+        }
+    });
+});
+
 
 

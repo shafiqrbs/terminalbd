@@ -34,13 +34,15 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a  href="{{ path('medicine_prepurchase_create') }}" id="btn-create-barcode" class="btn green" >
-                                    Pre-Purchase Generate
-                                    <i class="icon-barcode"></i>
-                                </a>
+                                <a  href="{{ path('medicine_prepurchase_create') }}" id="btn-create-barcode" class="btn purple" >
+                                    <i class="icon-shopping-cart"></i> Pre-Purchase</a>
+                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                <a  href="{{ path('medicine_purchase_opening') }}" id="btn-create-barcode" class="btn yellow" >
+                                    <i class="icon-shopping-cart"></i> Opening</a>
+                                {% endif %}
                                 <a href="{{ path('medicine_stock_new') }}"  class=" btn red"><i class="icon-plus-sign"></i> Add Stock</a>
 {#                                <a href="{{ path('medicine_stock_global') }}"  class=" btn yellow"><i class="icon-plus-sign"></i> Global Stock</a>#}
-                                <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
+                                {#<a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>#}
                                 {% if app.user.granted("ROLE_DOMAIN") %}
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     Tools

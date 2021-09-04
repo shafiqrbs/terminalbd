@@ -32,12 +32,12 @@ class BusinessStoreLedger
     protected $businessConfig;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice",inversedBy="storeLedgers")
      **/
     protected $invoice;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStore")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStore", inversedBy="storeLedgers")
      **/
     protected $store;
 

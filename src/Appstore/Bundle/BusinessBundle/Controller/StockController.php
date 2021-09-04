@@ -36,7 +36,7 @@ class StockController extends Controller
      * Lists all Particular entities.
      * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -46,9 +46,11 @@ class StockController extends Controller
         $pagination = $this->paginate($entities);
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
         $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $config ,'status'=>1));
+        $selected = explode(',', $request->cookies->get('barcodes', ''));
         return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
             'types' => $type,
+            'selected' => $selected,
             'categories' => $category,
             'config' => $config,
             'searchForm' => $data,

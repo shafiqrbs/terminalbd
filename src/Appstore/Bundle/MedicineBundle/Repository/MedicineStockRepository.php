@@ -604,8 +604,8 @@ class MedicineStockRepository extends EntityRepository
         if($stock){
             $stock->execute();
         }
-        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`remainingQuantity`,`salesPrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
-  SELECT `unit_id`, `name`,`minQuantity`,0, `salesPrice`, `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
+        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`remainingQuantity`,`salesPrice`, `purchasePrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
+  SELECT `unit_id`, `name`,`minQuantity`,0, `salesPrice`,`purchasePrice`, `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
   FROM medicine_stock
   WHERE medicineConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
@@ -714,6 +714,26 @@ class MedicineStockRepository extends EntityRepository
             $em->flush();
         }
 
+    }
+
+    public function sumOpeningQuantity($data)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.purchasePrice * e.openingQuantity),0) as opening');
+        $qb->where('e.id IN(:ids)')->setParameter('ids', $data);
+        $res = $qb->getQuery();
+        $result = $res->getSingleScalarResult();
+        return $result;
+
+    }
+
+    public function updateOpeningQuantity($data)
+    {
+
+        $stockUpdate = "UPDATE medicine_stock SET openingApprove = 1 WHERE  id in ({$data})";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+        $qb1->execute();
     }
 
 }

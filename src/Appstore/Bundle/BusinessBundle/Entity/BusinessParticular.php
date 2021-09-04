@@ -155,6 +155,14 @@ class BusinessParticular
     private $openingQuantity;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="openingApprove", type="boolean",  nullable=true)
+     */
+    private $openingApprove = false;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="minQuantity", type="integer", nullable=true)
@@ -1149,6 +1157,22 @@ class BusinessParticular
     public function setTloPrice($tloPrice)
     {
         $this->tloPrice = $tloPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOpeningApprove()
+    {
+        return $this->openingApprove;
+    }
+
+    /**
+     * @param bool $openingApprove
+     */
+    public function setOpeningApprove($openingApprove)
+    {
+        $this->openingApprove = $openingApprove;
     }
 
 }

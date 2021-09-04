@@ -35,6 +35,10 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
                         <div class="actions">
+                            {% if app.user.granted("ROLE_DOMAIN") %}
+                            <a  href="{{ path('business_purchase_opening') }}" id="btn-create-barcode" class="btn purple" >
+                                <i class="icon-shopping-cart"></i> Opening</a>
+                            {% endif %}
                             <a href="{{ path('business_stock_new') }}" class=" btn red"><i class="icon-plus"></i> Add Stock</a>
                             <a target="_blank" href="{{ path('business_stock_excel') }}" class=" btn purple"><i class="icon-download"></i> Download Excel</a>
                         </div>
@@ -81,11 +85,12 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >SKU</th>
+                                    <th class="numeric" >#</th>
                                     <th class="numeric" >Name</th>
                                     {% if 'wearhouse' in config.stockFormat %}
                                     <th class="numeric" >Wearhouse</th>
                                     {% endif %}
+                                    <th class="numeric" >SKU</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >PP</th>
                                     <th class="numeric" >Price</th>
@@ -105,21 +110,29 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.particularCode }}</td>
+                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %}checked="checked"{% endif %}  value="{{ entity.id }}"></td>
                                         <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+
                                         {% if 'wearhouse' in config.stockFormat %}
                                         <td class="numeric" >{% if entity.wearHouse is not empty %}{{ entity.wearHouse.name }}{% endif %}</td>
                                         {% endif %}
-                                       <td class="numeric" >{% if entity.Category is not empty %}{{ entity.category.name }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            <a  class="editable" data-name="particularCode" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change SKU/Barcode">{{ entity.particularCode }}</a>
+                                        </td>
+                                       <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
                                         <td class="numeric">
                                                 <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                         </td>
                                         <td class="numeric"><a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
 
                                         </td>
-                                        <td class="numeric">
-                                                <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
-                                       </td>
+                                        <td>
+                                        {% if ( (app.user.granted("ROLE_BUSINESS_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN")) and entity.openingApprove != 1) %}
+                                            <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                        {% else %}
+                                            {{ entity.openingQuantity }}
+                                        {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.bonusQuantity|number_format }}</td>
@@ -182,4 +195,18 @@
 {% block documentready %}
     {{ parent() }}
     EditableWithOutReloadInit();
+    var itemArr = $.cookie('barcodes') ? $.cookie('barcodes').split(',') : [];
+    $('body').on('change', 'input.stockId', function(el) {
+    console.log(itemArr);
+    var val = $(this).val();
+    if($(this).prop('checked')) {
+    itemArr.push(val);
+    }else{
+    var index = itemArr.indexOf(val);
+    if (index > -1) {
+    itemArr.splice(index, 1);
+    }
+    }
+    $.cookie('barcodes', itemArr, {path: '/'});
+    });
 {% endblock %}
