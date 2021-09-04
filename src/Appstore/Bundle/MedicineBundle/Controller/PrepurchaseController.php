@@ -110,13 +110,8 @@ class PrepurchaseController extends Controller
         }
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
         $editForm = $this->createEditForm($entity);
-        $response = new Response();
-        $response->headers->setCookie(new Cookie('barcodes', 'true', time() + (3600 * 48), '/', null, false, false));
-        setcookie("barcodes", "", time()-3600);
-        if (isset($_COOKIE['barcodes'])) {
-            unset($_COOKIE['barcodes']);
-            setcookie('barcodes', '', time() - 3600, '/'); // empty value and old timestamp
-        }
+        unset($_COOKIE['barcodes']);
+        setcookie('barcodes', '', time() - 3600, '/');
         return $this->render('MedicineBundle:Prepurchase:new.html.twig', array(
             'entity' => $entity,
             'stockItemForm' => $stockItemForm->createView(),

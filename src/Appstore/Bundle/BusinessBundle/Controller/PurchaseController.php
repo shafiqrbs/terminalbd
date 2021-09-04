@@ -599,6 +599,8 @@ class PurchaseController extends Controller
             );
             $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($entity);
             $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->updateOpeningQuantity($ids);
+            unset($_COOKIE['barcodes']);
+            setcookie('barcodes', '', time() - 3600, '/'); // empty value and old timestamp
             return $this->redirect($this->generateUrl('business_stock'));
         }
         $this->get('session')->getFlashBag()->add(

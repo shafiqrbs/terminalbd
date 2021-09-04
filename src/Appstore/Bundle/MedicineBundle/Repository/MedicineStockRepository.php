@@ -722,6 +722,7 @@ class MedicineStockRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.purchasePrice * e.openingQuantity),0) as opening');
         $qb->where('e.id IN(:ids)')->setParameter('ids', $data);
+        $qb->andWhere('e.id != 1');
         $res = $qb->getQuery();
         $result = $res->getSingleScalarResult();
         return $result;

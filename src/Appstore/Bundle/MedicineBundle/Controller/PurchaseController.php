@@ -175,6 +175,8 @@ class PurchaseController extends Controller
             );
             $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($entity);
             $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateOpeningQuantity($ids);
+            unset($_COOKIE['barcodes']);
+            setcookie('barcodes', '', time() - 3600, '/');
             return $this->redirect($this->generateUrl('medicine_stock'));
         }
         $this->get('session')->getFlashBag()->add(
