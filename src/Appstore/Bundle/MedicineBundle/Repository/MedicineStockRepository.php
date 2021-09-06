@@ -737,4 +737,13 @@ class MedicineStockRepository extends EntityRepository
         $qb1->execute();
     }
 
+    public function getApiStockDelete(GlobalOption $option,$id)
+    {
+        $em = $this->_em;
+        $config = $option->getMedicineConfig()->getId();
+        $stock = $em->createQuery("DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = {$config} and id = {$id}");
+        $stock->execute();
+        return 'success';
+    }
+
 }

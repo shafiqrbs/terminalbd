@@ -6,6 +6,8 @@ $("#addStore").click(function(){
     $(this).removeClass("red").addClass("purple").html('<i class="icon-user"></i>');
 });
 
+
+
 var storeForm = $("#storeForm").validate({
 
     rules: {
@@ -35,12 +37,12 @@ var storeForm = $("#storeForm").validate({
 var salesReturnForm = $("#salesReturnForm").validate({
 
     rules: {
-        "salesId": {required: true},
+        "returnItem": {required: true},
         "quantity": {required: true},
         "amount": {required: true},
     },
     tooltip_options: {
-        "salesId": {placement:'top',html:true},
+        "returnItem": {placement:'top',html:true},
         "quantity": {placement:'top',html:true},
         "amount": {placement:'top',html:true},
     },
@@ -54,7 +56,11 @@ var salesReturnForm = $("#salesReturnForm").validate({
             processData : false,
             contentType : false,
             success: function(response){
+                obj = JSON.parse(response);
                 $('#salesReturnItem').html(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#salesReturn').html(obj['salesReturn']);
+                $('.netTotal').html(obj['netTotal']);
                 document.getElementById('salesReturnForm').reset();
             }
         });
@@ -90,6 +96,25 @@ var formLedger = $("#storeLedgerForm").validate({
             }
         });
     }
+});
+
+$(document).on("click", ".returnItemDelete", function(event) {
+
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.get(url, function( response ) {
+                $(event.target).closest('tr').remove();
+                obj = JSON.parse(response);
+                $('#salesReturnItem').html(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#salesReturn').html(obj['salesReturn']);
+                $('.netTotal').html(obj['netTotal']);
+            });
+        }
+    });
 });
 
 $(document).on("click", ".ledgerDelete", function(event) {

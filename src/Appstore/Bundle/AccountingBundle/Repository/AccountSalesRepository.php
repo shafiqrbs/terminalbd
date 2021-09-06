@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
@@ -41,6 +42,7 @@ class AccountSalesRepository extends EntityRepository
 			$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 			$mobile =    isset($data['mobile'])? $data['mobile'] :'';
 			$customer =    isset($data['customer'])? $data['customer'] :'';
+			$customerId =    isset($data['customerId'])? $data['customerId'] :'';
 			$invoice =    isset($data['invoice'])? $data['invoice'] :'';
 			$accountRefNo =    isset($data['accountRefNo'])? $data['accountRefNo'] :'';
 			$medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
@@ -79,6 +81,10 @@ class AccountSalesRepository extends EntityRepository
 				$qb->join('e.customer','cn');
 				$qb->andWhere("cn.name = :name");
 				$qb->setParameter('name', $customer);
+			}
+			if (!empty($customerId)) {
+				$qb->andWhere("customer.id = :cid");
+				$qb->setParameter('cid', $customerId);
 			}
 			if (!empty($invoice)) {
 				$qb->andWhere($qb->expr()->like("e.sourceInvoice", "'%$invoice%'"  ));
@@ -128,6 +134,20 @@ class AccountSalesRepository extends EntityRepository
 		return $result;
 
 	}
+
+	public function insertOpeningBalance(Customer $customer,$opening)
+    {
+        $em = $this->_em;
+        $entity = new AccountSales();
+        $entity->setCustomer($customer);
+        $entity->setGlobalOption($customer->getGlobalOption());
+        $entity->setProcessHead('Outstanding');
+        $entity->setTotalAmount($opening);
+        $entity->setAmount(0);
+        $entity->setBalance($opening);
+        $entity->setTransactionMethod(null);
+
+    }
 
 
 	public function salesOverview(User $user,$data, $process = [])
@@ -1164,8 +1184,86 @@ class AccountSalesRepository extends EntityRepository
             $em->remove($entity);
             $em->flush();
         }
+    }
 
+    public function apiCustomerLedger(GlobalOption $globalOption,$arr)
+    {
 
+       // var_dump($data);
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','customer');
+        $qb->leftJoin('e.transactionMethod','transactionMethod');
+        $qb->select('transactionMethod.name as method');
+        $qb->addSelect('e.id as id','e.created as updated','e.totalAmount as totalAmount','e.amount as amount','e.balance as balance','e.sourceInvoice as sourceInvoice');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$arr);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach ($result as $key => $row){
+
+            $data[$key]['id'] = $row['id'];
+            $data[$key]['method'] = ($row['method']) ? $row['method']:'';
+            $data[$key]['sales'] = $row['totalAmount'];
+            $data[$key]['receive'] = $row['amount'];
+            $data[$key]['balance'] = $row['balance'];
+            $data[$key]['sourceInvoice'] = ($row['sourceInvoice']) ? $row['sourceInvoice']:'';
+            $data[$key]['updated'] = $row['updated']->format('d-m-Y H:m A');
+        }
+        return $data;
+
+    }
+
+    public function apiInsertSalesReceive(GlobalOption $option, $data)
+    {
+
+        $em = $this->_em;
+        $mobile = $data['customerId'];
+        $methodId = $data['method'];
+        $userId = $data['userId'];
+        $bankId = $data['bankAccount'];
+        $mobileId = $data['mobileAccount'];
+        $amount = $data['amount'];
+        $mode = $data['mode'];
+        $remark = $data['remark'];
+
+        $entity = new AccountSales();
+        $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'id' => $mobile));
+        $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug' => $methodId));
+        $user = $em->getRepository('UserBundle:User')->find($userId);
+        $bankAccount = $em->getRepository('AccountingBundle:AccountBank')->find($bankId);
+        $mobileAccount = $em->getRepository('AccountingBundle:AccountMobileBank')->find($mobileId);
+        $entity->setGlobalOption($option);
+        $entity->setCustomer($customer);
+        $entity->setAccountRefNo(time());
+        $entity->setTransactionMethod($method);
+        $entity->setCreatedBy($user);
+        $entity->setApprovedBy($user);
+        $entity->setProcess('approved');
+        $entity->setProcessHead($mode);
+        $entity->setRemark($remark);
+        $datetime = new \DateTime("now");
+        $entity->setUpdated($datetime);
+        if($mode == 'opening'){
+            $entity->setTotalAmount(abs($entity->getAmount()));
+            $entity->setAmount(0);
+            $entity->setTransactionMethod(null);
+        }else{
+            $entity->setAmount($amount);
+        }
+        if($method == 'bank'){
+            $entity->setAccountBank($bankAccount);
+        }elseif($method == 'mobile'){
+            $entity->setAccountMobileBank($mobileAccount);
+        }
+        $em->persist($entity);
+        $em->flush();
+        $this->updateCustomerBalance($entity);
+        if($entity->getAmount() > 0 and in_array($entity->getProcessHead(),array( 'Due','Advance')) ){
+            $em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
+        }
+        return "valid";
     }
 
 }

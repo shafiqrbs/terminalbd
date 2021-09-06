@@ -1,3 +1,10 @@
+business_invoice_distribution_invoice_return:
+    path:     /{invoice}/invoice-item-return
+    defaults: { _controller: "BusinessBundle:Distributor:salesReturnItem" }
+    methods:  POST
+    options:
+            expose: true
+
 business_invoice_distribution_store_payment:
     path:     /{invoice}/store-payment
     defaults: { _controller: "BusinessBundle:Distributor:storePayment" }
@@ -15,6 +22,10 @@ business_invoice_distribution_store_create:
 business_invoice_distributor_ledger_delete:
     path:     /{invoice}/{id}/delete-ledger
     defaults: { _controller: "BusinessBundle:Distributor:deleteLedger" }
+
+business_invoice_distribution_return_item_delete:
+    path:     /{invoice}/{id}/return-item-delete
+    defaults: { _controller: "BusinessBundle:Distributor:deleteReturnItem" }
 
 
 business_invoice_distributor_item_update:

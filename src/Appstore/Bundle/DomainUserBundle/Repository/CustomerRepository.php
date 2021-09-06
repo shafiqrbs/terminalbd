@@ -853,4 +853,47 @@ class CustomerRepository extends EntityRepository
 
     }
 
+    public function apiCreateCustomer(GlobalOption $global,$data)
+    {
+        $em = $this->_em;
+        $mobile = trim($data['mobile']);
+        $name = trim($data['name']);
+        $address = trim($data['address']);
+        $openingBalance = floatval($data['openingBalance']);
+        $email = $data['email'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $global ,'mobile' => $mobile));
+        if($entity){
+            return 'invalid';
+        }else {
+            $entity = new Customer();
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setEmail($email);
+            $entity->setAddress($address);
+            $entity->setGlobalOption($global);
+            $em->persist($entity);
+            $em->flush();
+            if ($openingBalance > 0){
+                $em->getRepository("AccountingBundle:AccountSales")->insertOpeningBalance($entity,$openingBalance);
+            }
+            return 'success';
+        }
+    }
+
+    public function apiUpdateCustomer(GlobalOption $globalOption,$data)
+    {
+        $em = $this->_em;
+        $customerId = trim($data['customer']);
+        $name = trim($data['name']);
+        $address = trim($data['address']);
+        $email = $data['email'];
+        $customer = $this->find($customerId);
+        $customer->setName($name);
+        $customer->setAddress($address);
+        $customer->setEmail($email);
+        $em->persist($customer);
+        $em->flush();
+        return 'success';
+    }
+
 }

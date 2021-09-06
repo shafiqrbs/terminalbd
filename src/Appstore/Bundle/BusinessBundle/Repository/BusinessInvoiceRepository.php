@@ -519,7 +519,18 @@ class BusinessInvoiceRepository extends EntityRepository
         ->where('si.businessInvoice = :invoice')
         ->setParameter('invoice', $invoice ->getId());
         $result = $qb->getQuery()->getOneOrNullResult();
+
+
+        $qb1 = $em->createQueryBuilder();
+        $qb1->from('BusinessBundle:BusinessDistributionReturnItem','si')
+            ->select("sum(si.subTotal) as subTotal")
+            ->where('si.invoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId());
+        $result1 = $qb1->getQuery()->getOneOrNullResult();
+
         $subTotal = !empty($result) ? $result['subTotal'] :0;
+        $returnSubTotal = !empty($result1) ? $result1['subTotal'] :0;
+
         if($subTotal > 0){
 
             if ($invoice->getBusinessConfig()->getVatEnable() == 1 && $invoice->getBusinessConfig()->getVatPercentage() > 0) {
@@ -528,8 +539,9 @@ class BusinessInvoiceRepository extends EntityRepository
                 $invoice->setVat($vat);
             }
             $invoice->setSubTotal(round($subTotal,2));
+            $invoice->setSalesReturn(round($returnSubTotal,2));
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount() - $invoice->getSalesReturn());
             $invoice->setTotal($total);
             $invoice->setTloPrice($result['tloPrice']);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
@@ -537,6 +549,7 @@ class BusinessInvoiceRepository extends EntityRepository
         }else{
 
             $invoice->setSubTotal(0);
+            $invoice->setSalesReturn(0);
             $invoice->setTotal(0);
             $invoice->setTloPrice(0);
             $invoice->setDue(0);

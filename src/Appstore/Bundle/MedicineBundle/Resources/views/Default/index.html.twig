@@ -46,7 +46,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-green-sharp">
-                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format }}</span>
+                                        <span data-counter="counterup" data-value="">{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit'])-transactionCashOverviews['credit'])|number_format(2) }}</span>
                                         <small class="font-green-sharp">BDT</small>
                                     </h3>
                                     <small>BALANCE</small>
@@ -74,7 +74,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-red-haze">
-                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format(2) }}">{{ expenditureOverview|number_format }}</span>
                                         <small class="font-red-sharp">BDT</small>
                                     </h3>
                                     <small>Expense</small>
@@ -86,7 +86,7 @@
                             <div class="progress-info">
                                 <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success red-haze">
-                                <span class="sr-only">75% change</span>
+                                <span class="sr-only">65% change</span>
                             </span>
                                 </div>
                                 <div class="status">
@@ -105,7 +105,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-blue-sharp">
-                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total'] }}</span>
+                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total']|number_format(2) }}</span>
                                         <small class="font-blu-sharp">BDT</small>
                                     </h3>
                                     <small>Purchase</small>
@@ -134,7 +134,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-purple-soft">
-                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total']|number_format(2) }}</span>
                                         <small class="font-purple-soft">BDT</small>
                                     </h3>
                                     <small>SALES</small>

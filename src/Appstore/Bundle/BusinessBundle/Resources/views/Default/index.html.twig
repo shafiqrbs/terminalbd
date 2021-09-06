@@ -72,7 +72,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-red-haze">
-                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format }}</span>
+                                        <span data-counter="counterup" data-value="{{ expenditureOverview|number_format }}">{{ expenditureOverview|number_format(2) }}</span>
                                         <small class="font-red-sharp">BDT</small>
                                     </h3>
                                     <small>Expense</small>
@@ -107,7 +107,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-blue-sharp">
-                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total'] }}</span>
+                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['total'] }}">{{ purchaseCashOverview['total']|number_format(2) }}</span>
                                         <small class="font-blu-sharp">BDT</small>
                                     </h3>
                                     <small>Purchase</small>
@@ -140,7 +140,7 @@
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-purple-soft">
-                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total'] }}</span>
+                                        <span data-counter="counterup" data-value="{{ salesCashOverview['total'] }}">{{ salesCashOverview['total']|number_format(2) }}</span>
                                         <small class="font-purple-soft">BDT</small>
                                     </h3>
                                     <small>SALES</small>

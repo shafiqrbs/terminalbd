@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
@@ -27,6 +28,34 @@ use Symfony\Component\HttpFoundation\Response;
 class DistributorController extends Controller
 {
 
+    public function returnResultData(BusinessInvoice $entity){
+
+        $res = $this->render("BusinessBundle:Distribution:invoice-return-item.html.twig", array(
+            'entity' => $entity
+        ));
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $tloPrice = $entity->getTloPrice() > 0 ? $entity->getTloPrice() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $salesReturn = $entity->getSalesReturn() > 0 ? $entity->getSalesReturn() : 0;
+        $data = array(
+            'subTotal' => $subTotal,
+            'tloPrice' => $tloPrice,
+            'salesReturn' => $salesReturn,
+            'netTotal' => ($netTotal - $tloPrice - $salesReturn),
+            'payment' => $payment ,
+            'due' => $due,
+            'vat' => $vat,
+            'discount' => $discount,
+            'invoiceParticulars' => $res ,
+            'success' => 'success'
+        );
+        return $data;
+
+    }
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
@@ -76,24 +105,41 @@ class DistributorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $itemId = $data['itemId'];
+        $itemId = $data['returnItem'];
         $quantity = $data['quantity'];
-        $amount = $data['amount'];
+        $amount = $data['salesPrice'];
         $item = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->find($itemId);
-        $entity = new BusinessInvoiceReturnItem();
+        $entity = new BusinessDistributionReturnItem();
         $entity->setInvoice($invoice);
-        $entity->setParticular($item);
+        $entity->setBusinessParticular($item);
         $entity->setQuantity($quantity);
         $entity->setPrice($amount/$quantity);
         $entity->setSubTotal($amount);
         $em->persist($entity);
         $em->flush();
-        $data = $this->render("BusinessBundle:Distribution:invoice-return-item.html.twig", array(
-            'entity' => $invoice
-        ));
-        return new Response($data);
+        $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->updateInvoiceDistributionTotalPrice($invoice);
+        $res = $this->returnResultData($invoice);
+        return new Response(json_encode($res));
 
     }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+    public function deleteReturnItemAction(BusinessInvoice $invoice, BusinessDistributionReturnItem $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->updateInvoiceDistributionTotalPrice($invoice);
+        $res = $this->returnResultData($invoice);
+        return new Response(json_encode($res));
+
+    }
+
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");

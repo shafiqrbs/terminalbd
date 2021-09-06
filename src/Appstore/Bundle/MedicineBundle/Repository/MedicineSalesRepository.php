@@ -1049,4 +1049,46 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
         $qb->execute();
     }
 
+    public function getApiSalesInvoice(GlobalOption $option, $invoice)
+    {
+        $em     = $this->_em;
+        /* @var $entity MedicineSales */
+        $entity = $this->findOneBy(array('medicineConfig'=> $option->getMedicineConfig(),'invoice'=>$invoice));
+        $data = array();
+        if($entity) {
+            $data['id'] = (int)$entity->getId();
+            $data['created'] = $entity->getCreated()->format('d-m-Y H:m A');
+            $data['invoice'] = $entity->getInvoice();
+            $data['customer'] = $entity->getCustomer()->getName();
+            $data['customerMobile'] = $entity->getCustomer()->getMobile();
+            $data['address'] = $entity->getCustomer()->getAddress();
+            $data['method'] = $entity->getTransactionMethod()->getName();
+            $data['salesBy'] = $entity->getSalesBy()->getUsername();
+            $data['subTotal'] = $entity->getSubTotal();
+            $data['discount'] = $entity->getDiscount();
+            $data['total'] = $entity->getNetTotal();
+            $data['payment'] = $entity->getReceived();
+            $data['vat'] = $entity->getVat();
+            $data['sd'] = 0;
+            if ($entity->getMedicineSalesItems()) {
+                /* @var $item MedicineSalesItem */
+                foreach ($entity->getMedicineSalesItems() as $i => $item) {
+                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
+                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
+                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
+                    $data['orderItem'][$i]['price'] = (integer)$item->getQuantity();
+                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
+                    $data['orderItem'][$i]['bonus'] = 0;
+                    $data['orderItem'][$i]['totalQuantity'] = 0;
+                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
+                }
+
+            } else {
+                $data['orderItem'] = array();
+            }
+            return $data;
+        }
+
+    }
+
 }

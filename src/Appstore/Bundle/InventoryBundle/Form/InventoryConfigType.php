@@ -144,6 +144,19 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => true,
                     'empty_data'  =>"stock",
                 ))
+            ->add('deliveryProcess',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap inline-radio'),
+                    'choices' => array(
+                        'manual-sales' => 'Simple sales',
+                        'general-sales' => 'General Sales'
+                    ),
+                    'empty_value' => '---Choose a sales ---',
+                    'required'    => false,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  =>"manual-sales",
+                ))
             ->add('barcodeScale',
                 'choice', array(
                     'attr'=>array('class'=>'m-wrap span12'),

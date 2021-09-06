@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -26,6 +27,21 @@ class MedicineParticularRepository extends EntityRepository
         $query->orderBy('e.companyName', 'ASC');
         $query->setMaxResults( '30' );
         return $query->getQuery()->getResult();
+
+    }
+
+    public function apiInvoiceMessage(GlobalOption $option)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->join("e.particularType","pt");
+        $query->select('e.name');
+        $query->where("ic.id = :config");
+        $query->setParameter('config', $option->getMedicineConfig()->getId());
+        $query->andWhere("pt.slug = 'print-message'");
+        $query->orderBy('e.name', 'ASC');
+        $result = $query->getQuery()->getArrayResult();
+        return $result;
 
     }
 

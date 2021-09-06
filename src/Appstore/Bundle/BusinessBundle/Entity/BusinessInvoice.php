@@ -56,6 +56,12 @@ class BusinessInvoice
      **/
     private  $businessInvoiceParticulars;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem", mappedBy="invoice" , cascade={"remove"})
+     * @ORM\OrderBy({"id" = "ASC"})
+     **/
+    private  $invoiceReturnItems;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="businessInvoices" ,cascade={"persist"} )
      **/
@@ -1123,6 +1129,14 @@ class BusinessInvoice
     public function getStoreLedgers()
     {
         return $this->storeLedgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceReturnItems()
+    {
+        return $this->invoiceReturnItems;
     }
 
 }

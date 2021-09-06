@@ -431,7 +431,6 @@ class InvoiceController extends Controller
            'msg' => $msg ,
            'success' => 'success'
        );
-
        return $data;
 
     }

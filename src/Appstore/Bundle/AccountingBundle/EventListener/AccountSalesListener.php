@@ -18,11 +18,8 @@ class AccountSalesListener
 
         // perhaps you only want to act on some "Sales" entity
         if ($entity instanceof AccountSales) {
-
             $datetime = new \DateTime("now");
-
             $lastCode = $this->getLastCode($args, $datetime, $entity);
-
             $entity->setCode($lastCode+1);
             $entity->setAccountRefNo(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
         }
@@ -36,27 +33,23 @@ class AccountSalesListener
      */
     public function getLastCode(LifecycleEventArgs $args, $datetime, AccountSales $entity)
     {
-	    $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
+        $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
-
-
         $entityManager = $args->getEntityManager();
         $qb = $entityManager->getRepository('AccountingBundle:AccountSales')->createQueryBuilder('s');
-
+        $entity->getGlobalOption()->getid();
         $qb
             ->select('MAX(s.code)')
             ->where('s.globalOption = :globalOption')
+            ->setParameter('globalOption', $entity->getGlobalOption()->getid())
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('globalOption', $entity->getGlobalOption()->getid())
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();
-
         if (empty($lastCode)) {
             return 0;
         }
-
         return $lastCode;
     }
 }

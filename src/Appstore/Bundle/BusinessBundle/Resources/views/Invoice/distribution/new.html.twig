@@ -140,6 +140,7 @@
                                             <th>Spoil.Qnt</th>
                                             <th>Sales</th>
                                             <th>Sub-total</th>
+                                            <th>TLO Mode</th>
                                             <th>TLO</th>
                                             <th>Sub-TLO</th>
                                             <th>Bonus Qnt</th>
@@ -190,9 +191,17 @@
                                                 <td class="">
                                                     <strong id="subTotal-{{ item.id }}">{{ item.subTotal |number_format(2)}}</strong>
                                                 </td>
+                                                <td>
+                                                    <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important; height: 28px!important;" class="m-wrap discount-type span12">
+                                                        <option value="flat">Flat</option>
+                                                        <option value="multiply">Multiply</option>
+                                                        <option value="percent">(%)</option>
+                                                    </select>
+                                                </td>
                                                 <td class="">
                                                     <input type="number" class="remove-value numeric td-inline-input-qnt tloPrice" data-id="{{ item.id }}"  autocomplete = "off"   id="tloPrice-{{ item.id }}" name="tloPrice[]" value="{{ item.tloPrice }}" placeholder="{{ item.tloPrice }}">
                                                 </td>
+
                                                 <td class="tloPrice-{{ item.id }}">
                                                     {{ item.TloTotal }}
                                                 </td>
@@ -239,14 +248,14 @@
                                     <div class="portlet-body form">
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <form class="stockInvoice" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
+                                                <form class="stockInvoice" id="salesReturnForm" name="salesReturnForm" action="{{ path('business_invoice_distribution_invoice_return',{'invoice':entity.id}) }}" method="post">
                                                     <div class="row-fluid">
                                                         <div class="span12">
                                                             <div class="row-fluid particular-info" >
                                                                 <div class="span8" >
                                                                     <div class="row-fluid">
                                                                         <div class="span12" >
-                                                                            <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2 input" style="margin-left: 15px">
+                                                                            <select id="returnItem" name="returnItem" class="span12 m-wrap select2 input" style="margin-left: 15px">
                                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                                 {% for particular in particulars %}
                                                                                     {% if particular.category is not empty %}
@@ -265,7 +274,7 @@
                                                                             <input type="number" class="m-wrap span4 form-control input-number input" id="quantity" name="quantity" value="1" min="1">
                                                                             <input type="text" class="m-wrap span3 form-control input-number input" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
                                                                             <button type="button" class="btn yellow"  id="unit" >Unit</button>
-                                                                            <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
+                                                                            <button type="submit" class="btn blue" id="addReturnItem" ><i class="icon-save"></i> Add</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -290,32 +299,34 @@
                                                         <th></th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody id="SalesReturnItem">
-                                                    {% set salesQnt = 0 %}
-                                                    {% for item in entity.businessInvoiceParticulars %}
-                                                        {% set totalQnt = totalQnt + item.totalQuantity %}
-                                                        <tr id="remove-{{ item.id }}">
-                                                            <td  class="">{{ loop.index }}.
-                                                                <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
-                                                            </td>
-                                                            <td class="">{{ item.particular }}</td>
-                                                            <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
-                                                            <td class="">{{ item.businessParticular.salesPrice }}</td>
-                                                            <td class="">{{ item.quantity }}</td>
-                                                            <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
-                                                            <td>
-                                                                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
-                                                            </td>
+                                                    <tbody id="salesReturnItem">
+                                                    {% if entity.invoiceReturnItems is not empty %}
+                                                        {% set subTotal = 0 %}
+                                                        {% for item in entity.invoiceReturnItems %}
+                                                            {% set subTotal = subTotal + item.subTotal %}
+                                                            <tr id="remove-{{ item.id }}">
+                                                                <td  class="">{{ loop.index }}.
+                                                                    <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
+                                                                </td>
+                                                                <td class="">{{ item.businessParticular.name }}</td>
+                                                                <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
+                                                                <td class="">{{ item.businessParticular.salesPrice }}</td>
+                                                                <td class="">{{ item.quantity }}</td>
+                                                                <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
+                                                                <td>
+                                                                    <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini returnItemDelete" ><i class="icon-trash"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr>
+                                                            <td colspan="7" class="" style="border: 1px double #000"></td>
                                                         </tr>
-                                                    {% endfor %}
-                                                    <tr>
-                                                        <td colspan="7" class="" style="border: 1px double #000"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                                        <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
-                                                        <td class=""></td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                                            <td class=""><strong class="subTotal">{{ entity.salesReturn|number_format(2) }}</strong></td>
+                                                            <td class=""></td>
+                                                        </tr>
+                                                    {% endif %}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -335,7 +346,7 @@
                                                     <div class="row-fluid">
                                                         <div class="span12">
                                                             <form class="storeLedgerForm"  id="storeLedgerForm" name="storeLedgerForm" action="{{ path('business_invoice_distribution_store_create') }}" method="post">
-                                                                <div class="row-fluid particular-info" id="storeLedger" style="display: block">
+                                                                <div class="row-fluid particular-info" id="storeLedger" style="display: none">
                                                                     <div class="span4">
                                                                         <select class="span12 m-wrap input select2" name="dsm">
                                                                             <option value="">Select DSM</option>
@@ -589,7 +600,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" for="firstName"><span class="label">Sales Return</span> <span class="pull-right sales-right salesReturn" style="text-align:right;width:110px">{{ entity.tloPrice|number_format(2) }}</span></label>
+                                                    <label class="control-label" for="firstName"><span class="label">Sales Return</span> <span class="pull-right sales-right salesReturn" style="text-align:right;width:110px">{{ entity.salesReturn|number_format(2) }}</span></label>
                                                 </div>
                                             </div>
                                             <!--/span-->
