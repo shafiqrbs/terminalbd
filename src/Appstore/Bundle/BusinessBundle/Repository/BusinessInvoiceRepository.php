@@ -520,7 +520,6 @@ class BusinessInvoiceRepository extends EntityRepository
         ->setParameter('invoice', $invoice ->getId());
         $result = $qb->getQuery()->getOneOrNullResult();
 
-
         $qb1 = $em->createQueryBuilder();
         $qb1->from('BusinessBundle:BusinessDistributionReturnItem','si')
             ->select("sum(si.subTotal) as subTotal")

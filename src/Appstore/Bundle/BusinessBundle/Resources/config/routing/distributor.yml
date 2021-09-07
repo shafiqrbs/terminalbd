@@ -28,10 +28,20 @@ business_invoice_distribution_return_item_delete:
     defaults: { _controller: "BusinessBundle:Distributor:deleteReturnItem" }
 
 
-business_invoice_distributor_item_update:
-    path:     /sales-item-update
-    defaults: { _controller: "BusinessBundle:Invoice:invoiceItemUpdate" }
+business_invoice_distribution:
+    path:     /{id}/add-distribution
+    defaults: { _controller: "BusinessBundle:Distributor:addDistribution" }
     methods:  POST
     options:
-            expose: true
+        expose: true
 
+business_invoice_distribution_delete:
+    path:     /{invoice}/{id}/distribution-delete
+    defaults: { _controller: "BusinessBundle:Distributor:invoiceDistributionDelete" }
+
+business_invoice_distribution_item_update:
+    path:     /sales-distribution-item-update
+    defaults: { _controller: "BusinessBundle:Distributor:invoiceDistributionItemUpdate" }
+    methods:  POST
+    options:
+        expose: true

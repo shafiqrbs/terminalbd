@@ -28,9 +28,89 @@ use Symfony\Component\HttpFoundation\Response;
 class DistributorController extends Controller
 {
 
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+    public function addDistributionAction(Request $request, BusinessInvoice $invoice)
+    {
+        $data = $request->request->all();
+        $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceDistributionItems($invoice,$data);
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        $html = $this->renderView("BusinessBundle:Distribution:invoice-item.html.twig", array(
+            'invoice' => $result,
+            'entity' => $entity
+        ));
+        $arrary = array(
+            'invoiceParticulars' => $html,
+            'subTotal' => $result['subTotal'],
+            'discount' => $invoice->getDiscount(),
+            'tloPrice' => $result['tloPrice'],
+            'salesReturn' => $invoice->getSalesReturn(),
+            'total' => $invoice->getTotal(),
+            'netTotal' => ($result['subTotal'] - $result['tloPrice'] - $invoice->getSalesReturn()),
+            'payment' => $invoice->getPayment() ,
+            'vat' => $invoice->getVat(),
+
+        );
+        return new Response(json_encode($arrary));
+    }
+
+    public function invoiceDistributionItemUpdateAction(Request $request)
+    {
+
+        $data = $request->request->all();
+        /* @var $invoice BusinessInvoice  */
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->updateInvoiceDistributionItems($data);
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        $arrary = array(
+            'subTotal' => $result['subTotal'],
+            'discount' => $invoice->getDiscount(),
+            'tloPrice' => $result['tloPrice'],
+            'salesReturn' => $invoice->getSalesReturn(),
+            'total' => $invoice->getTotal(),
+            'netTotal' => ($result['subTotal'] - $result['tloPrice'] - $invoice->getSalesReturn()),
+            'payment' => $invoice->getPayment() ,
+            'vat' => $invoice->getVat(),
+
+        );
+        return new Response(json_encode($arrary));
+    }
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+
+    public function invoiceDistributionDeleteAction(BusinessInvoice $invoice, BusinessInvoiceParticular $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+        if($particular->getBusinessParticular()){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->deletePurchaseReturnItem($particular);
+        }
+        $em->remove($particular);
+        $em->flush();
+        $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceDistributionTotalPrice($invoice);
+        $arrary = array(
+            'subTotal' => $result['subTotal'],
+            'discount' => $invoice->getDiscount(),
+            'tloPrice' => $result['tloPrice'],
+            'salesReturn' => $invoice->getSalesReturn(),
+            'total' => $invoice->getTotal(),
+            'netTotal' => ($result['subTotal'] - $result['tloPrice'] - $invoice->getSalesReturn()),
+            'payment' => $invoice->getPayment() ,
+            'vat' => $invoice->getVat(),
+
+        );
+        return new Response(json_encode($arrary));
+
+    }
+
     public function returnResultData(BusinessInvoice $entity){
 
-        $res = $this->render("BusinessBundle:Distribution:invoice-return-item.html.twig", array(
+        $html = $this->renderView("BusinessBundle:Distribution:invoice-return-item.html.twig", array(
             'entity' => $entity
         ));
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
@@ -50,7 +130,7 @@ class DistributorController extends Controller
             'due' => $due,
             'vat' => $vat,
             'discount' => $discount,
-            'invoiceParticulars' => $res ,
+            'invoiceParticulars' => $html ,
             'success' => 'success'
         );
         return $data;
@@ -91,7 +171,7 @@ class DistributorController extends Controller
         }
         $em->persist($entity);
         $em->flush();
-        $data = $this->render("BusinessBundle:BusinessStore:store-ledger.html.twig", array(
+        $data = $this->renderView("BusinessBundle:Distribution:store-ledger.html.twig", array(
             'entity' => $invoice
         ));
         return new Response($data);
@@ -152,7 +232,7 @@ class DistributorController extends Controller
         }
         $em->remove($entity);
         $em->flush();
-        $data = $this->render("BusinessBundle:Distribution:store-ledger.html.twig", array(
+        $data = $this->renderView("BusinessBundle:Distribution:store-ledger.html.twig", array(
             'entity' => $invoice
         ));
         return new Response($data);

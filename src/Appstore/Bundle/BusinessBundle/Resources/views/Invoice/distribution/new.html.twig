@@ -45,7 +45,7 @@
                         {% if entity.businessConfig.showStock == 1 %}
                             <div class="row-fluid">
                                 <div class="span12">
-                                    <form class="" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_distribution',{'id':entity.id}) }}" method="post">
+                                    <form class="" id="distributionInvoice" name="stockInvoice" action="{{ path('business_invoice_distribution',{'id':entity.id}) }}" method="post">
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <table class="table table-bordered table-striped table-condensed table-fixed">                                      <thead class="flip-content ">
@@ -113,7 +113,7 @@
                                                         </td>
                                                         <td class="">
                                                             <div class="input-group">
-                                                                <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
+                                                                <button type="submit" class="btn blue" id="addDistribution" ><i class="icon-save"></i> Add</button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -154,14 +154,13 @@
                                         {% set spoilQnt = 0 %}
                                         {% set bonusQnt = 0 %}
                                         {% set totalQnt = 0 %}
-
                                         {% for item in entity.businessInvoiceParticulars %}
 
                                             {% set salesQnt = salesQnt + item.quantity %}
                                             {% set returnQnt = returnQnt + item.returnQnt %}
                                             {% set damageQnt = damageQnt + item.damageQnt %}
                                             {% set spoilQnt = spoilQnt + item.spoilQnt %}
-                                            {% set bonusQnt = bonusQnt + item.bonusQnt %}
+                                            {% set bonusQnt = bonusQnt + item.bonusQnt|default(0) %}
                                             {% set totalQnt = totalQnt + item.totalQuantity %}
 
                                             <tr id="remove-{{ item.id }}">
@@ -171,7 +170,7 @@
                                                 <td class="">{{ item.businessParticular.remainingQuantity }}</td>
                                                 <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                                 <td class="">
-                                                    <input type="text" class="remove-value numeric td-inline-input-qnt salesPrice" data-id="{{ item.id }}" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}">
+                                                    <input type="text" class="remove-value numeric td-inline-input-qnt salesPrice" data-id="{{ item.id }}" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}" placeholder="{{ item.price }}">
                                                 </td>
                                                 <td class="">
                                                     <input type="number" class="remove-value numeric td-inline-input-qnt salesQuantity" data-id="{{ item.id }}"  autocomplete = "off" min="1" max="{{ item.quantity }}"  id="salesQuantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"></td>
@@ -192,10 +191,11 @@
                                                     <strong id="subTotal-{{ item.id }}">{{ item.subTotal |number_format(2)}}</strong>
                                                 </td>
                                                 <td>
-                                                    <select id="tloMode" name="tloMode" style="margin-bottom: 0!important;border: 2px solid red!important; height: 28px!important;" class="m-wrap discount-type span12">
-                                                        <option value="flat">Flat</option>
-                                                        <option value="multiply">Multiply</option>
-                                                        <option value="percent">(%)</option>
+                                                    <select id="tloMode-{{ item.id }}" name="tloMode-{{ item.id }}" style="margin-bottom: 0!important;border: 2px solid red!important; height: 28px!important;" class="m-wrap discount-type span12">
+                                                        {% set tloModes = {flat:'Flat',multiply:'Multiply',percent:'(%)'} %}
+                                                        {% for key,mode  in tloModes  %}
+                                                            <option {% if item.tloMode is not empty and key == item.tloMode %} selected {% endif %} value="{{ key }}">{{ mode }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </td>
                                                 <td class="">
@@ -213,14 +213,11 @@
                                                 </td>
                                             </tr>
                                         {% endfor %}
-                                        </tbody>
-                                        <tfoot>
                                         <tr>
-                                            <td colspan="15" class="" style="border: 1px double #000"></td>
+                                            <td colspan="16" class="" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
                                             <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-
                                             <td class=""><strong class="salesQnt">{{ salesQnt }}</strong></td>
                                             <td class=""><strong class="returnQnt">{{ returnQnt }}</strong></td>
                                             <td class=""><strong class="damageQnt">{{ damageQnt }}</strong></td>
@@ -228,11 +225,12 @@
                                             <td class=""><strong class="totalQnt">{{ totalQnt }}</strong></td>
                                             <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
                                             <td class=""></td>
+                                            <td class=""></td>
                                             <td class=""><strong class="tloPrice">{{ entity.tloPrice|number_format(2) }}</strong></td>
                                             <td class=""><strong class="bonusQnt">{{ bonusQnt }}</strong></td>
                                             <td class=""></td>
                                         </tr>
-                                        </tfoot>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -323,7 +321,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                                            <td class=""><strong class="subTotal">{{ entity.salesReturn|number_format(2) }}</strong></td>
+                                                            <td class=""><strong>{{ entity.salesReturn|number_format(2) }}</strong></td>
                                                             <td class=""></td>
                                                         </tr>
                                                     {% endif %}

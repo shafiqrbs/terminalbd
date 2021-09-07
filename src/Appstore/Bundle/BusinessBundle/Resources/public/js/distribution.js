@@ -6,6 +6,149 @@ $("#addStore").click(function(){
     $(this).removeClass("red").addClass("purple").html('<i class="icon-user"></i>');
 });
 
+$('form#distributionInvoice').on('keypress', '.input', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form").eq(0).find("input,select");
+        var idx = inputs.index(this);
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+
+            case 'particular':
+                $('#quantity').focus();
+                break;
+
+            case 'quantity':
+                $('#addDistribution').click();
+                $('#particular').select2('open');
+                break;
+        }
+        return false;
+    }
+});
+
+var formDistributionInvoice = $("#distributionInvoice").validate({
+    rules: {
+
+        "particular": {required: true},
+        "quantity": {required: true},
+        "salesPrice": {required: true}
+    },
+
+    messages: {
+
+        "particular":"Enter particular name",
+        "salesPrice":"Enter sales price",
+        "quantity":"Enter sales quantity"
+    },
+
+    tooltip_options: {
+        "particular": {placement:'top',html:true},
+        "salesPrice": {placement:'top',html:true},
+        "quantity": {placement:'top',html:true}
+    },
+
+    submitHandler: function(distributionInvoice) {
+
+        $.ajax({
+            url         : $('form#distributionInvoice').attr( 'action' ),
+            type        : $('form#distributionInvoice').attr( 'method' ),
+            data        : new FormData($('form#distributionInvoice')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#unit').html('Unit');
+                // $("#particular").select2('open').select2("val","");
+                $('#particular').select2('open');
+                // $('#distributionInvoice')[0].reset();
+                document.getElementById('distributionInvoice').reset();
+                returnData(response);
+            }
+        });
+    }
+});
+
+
+$(document).on('change', '.salesPrice,.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity, .tloPrice', function() {
+
+    var id = $(this).attr('data-id');
+    var price = parseFloat($('#salesPrice-'+id).val());
+    var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
+    var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
+    var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
+    var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
+    var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
+    var tloPrice = parseFloat($('#tloPrice-'+id).val());
+    var tloMode = $('#tloMode-'+id).val();
+
+    var totalQuantity  = (salesQuantity - returnQuantity - damageQuantity - spoilQuantity);
+    var subTotal  = (totalQuantity * price);
+    $("#totalQuantity-"+id).html(totalQuantity);
+
+    if(tloMode === 'flat'){
+        $(".tloPrice-"+id).html(financial(tloPrice));
+    }
+    if(tloMode === 'multiply'){
+        var subTlo = (tloPrice * totalQuantity);
+        $(".tloPrice-"+id).html(financial(tloPrice));
+    }
+    if(tloMode === 'percent'){
+        var percent = ((price * tloPrice)/100);
+        var subTlo = (percent * totalQuantity);
+        $(".tloPrice-"+id).html(financial(tloPrice));
+    }
+    $("#subTotal-"+id).html(financial(subTotal));
+    $.ajax({
+        url: Routing.generate('business_invoice_distribution_item_update'),
+        type: 'POST',
+        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity +'&tloPrice='+ tloPrice +'&tloMode='+ tloMode,
+        success: function(response) {
+            returnData(response);
+        }
+    })
+});
+
+function returnData(response)
+{
+    obj = JSON.parse(response);
+    $('.subTotal').html(financial(obj['subTotal']));
+    $('.netTotal').html(financial(obj['subTotal']));
+    var due = (obj['subTotal'] - obj['tloPrice']);
+    $('#paymentTotal').val(financial(due));
+    $('#due').val(financial(due));
+    $('.due').html(financial(due));
+    $('.payment').html(financial(due));
+    $('.discount').html(0);
+    $('.salesQnt').html(obj['salesQnt']);
+    $('.returnQnt').html(obj['returnQnt']);
+    $('.damageQnt').html(obj['damageQnt']);
+    $('.spoilQnt').html(obj['spoilQnt']);
+    $('.totalQnt').html(obj['totalQnt']);;
+    $('.bonusQnt').html(obj['bonusQnt']);
+}
+
+$(document).on("click", ".distributionDelete", function() {
+
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( response ) {
+                $('#remove-'+id).remove();
+                returnData(response);
+            });
+        }
+    });
+});
+
 
 
 var storeForm = $("#storeForm").validate({
@@ -34,6 +177,14 @@ var storeForm = $("#storeForm").validate({
     }
 });
 
+function salesReturnData(response) {
+    obj = JSON.parse(response);
+    $('#salesReturnItem').html(obj['invoiceParticulars']);
+    $('#subTotal').html(obj['subTotal']);
+    $('.salesReturn').html(obj['salesReturn']);
+    $('.netTotal').html(obj['netTotal']);
+}
+
 var salesReturnForm = $("#salesReturnForm").validate({
 
     rules: {
@@ -56,11 +207,7 @@ var salesReturnForm = $("#salesReturnForm").validate({
             processData : false,
             contentType : false,
             success: function(response){
-                obj = JSON.parse(response);
-                $('#salesReturnItem').html(response);
-                $('#subTotal').html(obj['subTotal']);
-                $('#salesReturn').html(obj['salesReturn']);
-                $('.netTotal').html(obj['netTotal']);
+                salesReturnData(response);
                 document.getElementById('salesReturnForm').reset();
             }
         });
@@ -107,11 +254,7 @@ $(document).on("click", ".returnItemDelete", function(event) {
         onOkBut: function(el) {
             $.get(url, function( response ) {
                 $(event.target).closest('tr').remove();
-                obj = JSON.parse(response);
-                $('#salesReturnItem').html(response);
-                $('#subTotal').html(obj['subTotal']);
-                $('#salesReturn').html(obj['salesReturn']);
-                $('.netTotal').html(obj['netTotal']);
+                salesReturnData(response);
             });
         }
     });

@@ -135,19 +135,6 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
-	public function insertOpeningBalance(Customer $customer,$opening)
-    {
-        $em = $this->_em;
-        $entity = new AccountSales();
-        $entity->setCustomer($customer);
-        $entity->setGlobalOption($customer->getGlobalOption());
-        $entity->setProcessHead('Outstanding');
-        $entity->setTotalAmount($opening);
-        $entity->setAmount(0);
-        $entity->setBalance($opening);
-        $entity->setTransactionMethod(null);
-
-    }
 
 
 	public function salesOverview(User $user,$data, $process = [])
@@ -1214,6 +1201,27 @@ class AccountSalesRepository extends EntityRepository
         return $data;
 
     }
+
+    public function apiInsertOpeningBalance(Customer $customer,$userId,$opening)
+    {
+        $em = $this->_em;
+        $user = $em->getRepository('UserBundle:User')->find($userId);
+        $entity = new AccountSales();
+        $entity->setCustomer($customer);
+        $entity->setGlobalOption($customer->getGlobalOption());
+        $entity->setProcessHead('Outstanding');
+        $entity->setCreatedBy($user);
+        $entity->setApprovedBy($user);
+        $datetime = new \DateTime("now");
+        $entity->setUpdated($datetime);
+        $entity->setProcess('approved');
+        $entity->setTotalAmount($opening);
+        $entity->setAmount(0);
+        $entity->setBalance($opening);
+        $entity->setTransactionMethod(null);
+
+    }
+
 
     public function apiInsertSalesReceive(GlobalOption $option, $data)
     {

@@ -859,6 +859,7 @@ class CustomerRepository extends EntityRepository
         $mobile = trim($data['mobile']);
         $name = trim($data['name']);
         $address = trim($data['address']);
+        $userId = trim($data['userId']);
         $openingBalance = floatval($data['openingBalance']);
         $email = $data['email'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $global ,'mobile' => $mobile));
@@ -874,7 +875,7 @@ class CustomerRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
             if ($openingBalance > 0){
-                $em->getRepository("AccountingBundle:AccountSales")->insertOpeningBalance($entity,$openingBalance);
+                $em->getRepository("AccountingBundle:AccountSales")->apiInsertOpeningBalance($entity,$userId,$openingBalance);
             }
             return 'success';
         }

@@ -12,7 +12,7 @@
             <td class="">{{ item.quantity }}</td>
             <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
             <td>
-                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
+                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
             </td>
         </tr>
     {% endfor %}
@@ -21,7 +21,7 @@
     </tr>
     <tr>
         <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-        <td class=""><strong class="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
+        <td class=""><strong class="subTotal">{{ entity.salesReturn|number_format(2) }}</strong></td>
         <td class=""></td>
     </tr>
 {% endif %}
