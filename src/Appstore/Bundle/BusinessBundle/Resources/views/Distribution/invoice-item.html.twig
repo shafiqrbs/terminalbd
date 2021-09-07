@@ -42,11 +42,10 @@
         </td>
         <td>
             <select id="tloMode-{{ item.id }}" name="tloMode-{{ item.id }}" style="margin-bottom: 0!important;border: 2px solid red!important; height: 28px!important;" class="m-wrap discount-type span12">
-                {% set tloModes = ['flat:Flat','multiply:Multiply','percent:(%)'] %}
+                {% set tloModes = {flat:'Flat',multiply:'Multiply',percent:'(%)'} %}
                 {% for key,mode  in tloModes  %}
-                <option {% if item.tloMode is not empty and key == item.tloMode %} value="{{ key }}">{{ mode }}</option>
+                    <option {% if item.tloMode is not empty and key == item.tloMode %} selected {% endif %} value="{{ key }}">{{ mode }}</option>
                 {% endfor %}
-
             </select>
         </td>
         <td class="">
