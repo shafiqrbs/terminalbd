@@ -33,7 +33,7 @@ class BusinessInvoiceReturnItem
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessInvoiceReturnItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceReturnItems" )
      **/
     private  $invoice;
 

@@ -4,15 +4,17 @@
         {% set subTotal = subTotal + item.subTotal %}
         <tr id="remove-{{ item.id }}">
             <td  class="">{{ loop.index }}.
-                <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
+                <input type="hidden" id="price-{{ item.id }}" name="price" value="{{ item.price }}">
             </td>
-            <td class="">{{ item.businessParticular.name }}</td>
-            <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
-            <td class="">{{ item.businessParticular.salesPrice }}</td>
+            <td class="">{{ item.particular.name }}</td>
+            <td>{% if item.particular.unit is not empty %}{{ item.particular.unit.name }}{% endif %}</td>
+            <td class="">{{ item.price }}</td>
             <td class="">{{ item.quantity }}</td>
-            <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
+            <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.price) }}</td>
             <td>
-                <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini distributionDelete" ><i class="icon-trash"></i></a>
+                {% if item.status != 1 %}
+                    <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini returnItemDelete" ><i class="icon-trash"></i></a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

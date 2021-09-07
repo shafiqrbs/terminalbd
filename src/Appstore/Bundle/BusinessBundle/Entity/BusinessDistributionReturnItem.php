@@ -80,6 +80,15 @@ class BusinessDistributionReturnItem
     private $subTotal;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    private $status=false;
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -225,6 +234,22 @@ class BusinessDistributionReturnItem
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

@@ -304,15 +304,17 @@
                                                             {% set subTotal = subTotal + item.subTotal %}
                                                             <tr id="remove-{{ item.id }}">
                                                                 <td  class="">{{ loop.index }}.
-                                                                    <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.businessParticular.salesPrice }}">
+                                                                    <input type="hidden" id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.price }}">
                                                                 </td>
-                                                                <td class="">{{ item.businessParticular.name }}</td>
-                                                                <td>{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
-                                                                <td class="">{{ item.businessParticular.salesPrice }}</td>
+                                                                <td class="">{{ item.particular.name }}</td>
+                                                                <td>{% if item.particular.unit is not empty %}{{ item.particular.unit.name }}{% endif %}</td>
+                                                                <td class="">{{ item.price }}</td>
                                                                 <td class="">{{ item.quantity }}</td>
-                                                                <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.businessParticular.salesPrice) }}</td>
+                                                                <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.price) }}</td>
                                                                 <td>
+                                                                    {% if item.status != 1 %}
                                                                     <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini returnItemDelete" ><i class="icon-trash"></i></a>
+                                                                    {% endif %}
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}
@@ -381,7 +383,7 @@
                                                                 <div class="span6" >
                                                                     <div class="row-fluid">
                                                                         <div class="span12" >
-                                                                            <select name="store" id="store" class="span12 m-wrap">
+                                                                            <select name="store" id="store" class="span12 m-wrap" >
                                                                                 <option>--Select a store</option>
                                                                                 {% if areas is not empty %}
                                                                                     {% for area in areas %}
@@ -434,7 +436,6 @@
                                                         <th>Mode</th>
                                                         <th>Due</th>
                                                         <th>Receive</th>
-                                                        <th>Balance</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -450,14 +451,15 @@
                                                             <td class="">{{ ledger.transactionType }}</td>
                                                             <td class="">{{ ledger.debit }}</td>
                                                             <td class="">{{ ledger.credit }}</td>
-                                                            <td class="">{{ ledger.balance }}</td>
                                                             <td>
+                                                                {% if ledger.status != 1 %}
                                                                 <a id="{{ ledger.id }}" data-id="{{ ledger.id }}"  data-url="{{ path('business_invoice_distributor_ledger_delete',{'invoice': entity.id ,'id': ledger.id }) }}" href="javascript:" class="btn red mini ledgerDelete" ><i class="icon-trash"></i></a>
+                                                                {% endif %}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
                                                     <tr>
-                                                        <td colspan="7" class="" style="border: 1px double #000"></td>
+                                                        <td colspan="6" class="" style="border: 1px double #000"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
@@ -581,6 +583,15 @@
                                                 <div class="control-group">
                                                     <label class="control-label" for="firstName"><span class="label">Discount TK.</span> <span class="pull-right sales-right">{{ form_widget(form.discountCalculation) }}</span></label>
                                                     {# {{ form_widget(form.discount) }}#}
+                                                </div>
+                                            </div>
+                                            <!--/span-->
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName"><span class="label">SubTotal TK.</span> <span class="pull-right sales-right subTotal" style="text-align:right;width:110px">{{ entity.subTotal|number_format(2) }}</span></label>
                                                 </div>
                                             </div>
                                             <!--/span-->

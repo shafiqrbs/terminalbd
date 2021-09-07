@@ -95,6 +95,18 @@ class BusinessStoreLedger
      */
     private $transactionType = 'Debit';
 
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="businessInvoiceCreatedBy" )
+     **/
+    private  $createdBy;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="businessInvoiceApprovedBy" )
+     **/
+    private  $approvedBy;
+
 
 
     /**
@@ -103,6 +115,14 @@ class BusinessStoreLedger
      * @ORM\Column(name="code", type="integer",  nullable=true)
      */
     private $code;
+
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean",  nullable=true)
+     */
+    private $status = false;
 
 
     /**
@@ -390,6 +410,38 @@ class BusinessStoreLedger
     public function setStore($store)
     {
         $this->store = $store;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param mixed $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

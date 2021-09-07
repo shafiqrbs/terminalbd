@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
@@ -245,20 +246,9 @@ class InvoiceController extends Controller
             }
 	        $em->flush();
             if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
-                $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceDistributionTotalPrice($entity);
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                if($result['damageQnt'] > 0 or $result['spoilQnt'] > 0) {
-                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->insertUpdateDistributionReturnItem($entity);
-                }
                 if(in_array($entity->getProcess(),$done)){
-                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-                    $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-                    if($entity->getTloPrice() > 0 and !empty($entity->getVendor())){
-                        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->insertTloAdjustment($entity);
-                    }
-                    if($entity->getBusinessConfig()->isStockHistory() == 1 ){
-                        $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesItem($entity);
-                    }
+                    $this->approveDistributionAction($entity);
                 }
             }elseif(in_array($entity->getProcess(), $done)) {
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
@@ -535,6 +525,7 @@ class InvoiceController extends Controller
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($sales);
         $sales->setIsReversed(true);
 		$sales->setProcess('Created');
+		$sales->setApprovedBy(NULL);
 		$em->flush();
 		$template = $this->get('twig')->render('BusinessBundle:Invoice:reverse.html.twig', array(
 			'entity' => $sales,
@@ -922,6 +913,51 @@ class InvoiceController extends Controller
         endforeach;
 
         exit;
+    }
+
+    public function approveDistributionAction(BusinessInvoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        if($entity){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+            if($entity->getTloPrice() > 0 and !empty($entity->getVendor())){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->insertTloAdjustment($entity);
+            }
+            $result = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceDistributionTotalPrice($entity);
+            if($result['damageQnt'] > 0 or $result['spoilQnt'] > 0) {
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->insertUpdateDistributionReturnItem($entity);
+            }
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+            if($entity->getSalesReturn() > 0 ){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountSalesReturn($entity);
+            }
+            if($entity->getStoreLedgers()){
+                foreach ($entity->getStoreLedgers() as $ledger){
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessStoreLedger')->approveStorePayment($ledger,$user);
+                    if($ledger->getTransactionType() == "Receive"){
+                        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertStorePayment($ledger);
+                    }
+                }
+            }
+            if($entity->getInvoiceReturnItems()){
+                /* @var $row BusinessInvoiceReturnItem */
+                foreach ($entity->getInvoiceReturnItems() as $row){
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->approveSalesReturnItem($row);
+                }
+            }
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess("Done");
+            $entity->setApprovedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            if($entity->getBusinessConfig()->isStockHistory() == 1 ){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesItem($entity);
+            }
+            return new Response("Success");
+        }
+        return new Response("invalid");
+
     }
 
 }

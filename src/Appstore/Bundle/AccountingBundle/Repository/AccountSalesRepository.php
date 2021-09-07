@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
@@ -1037,27 +1038,46 @@ class AccountSalesRepository extends EntityRepository
         return $accountSales;
     }
 
-    public function insertBusinessAccountPurchaseReturn(MedicineSalesReturn $entity)
+    public function insertBusinessAccountSalesReturn(BusinessInvoice $sales)
     {
-       /* $global = $entity->getMedicineConfig()->getGlobalOption();
-        $sales = $entity->getMedicineSalesItem()->getMedicineSales();
+        $global = $sales->getBusinessConfig()->getGlobalOption();
+        $amount = $sales->getSalesReturn();
         $em = $this->_em;
         $accountSales = new AccountSales();
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
-        $accountSales->setCustomer($sales->getCustomer());
-        $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setProcessHead('business');
+        $accountSales->setAmount($amount);
+        $accountSales->setProcessHead('Sales-Return');
         $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
-        $accountSales->setApprovedBy($entity->getCreatedBy());
-        $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        $accountSales->setApprovedBy($sales->getCreatedBy());
+        $em->persist($accountSales);
+        $em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+    }
+
+    public function insertStorePayment(BusinessStoreLedger $sales)
+    {
+        $global = $sales->getBusinessConfig()->getGlobalOption();
+        $amount = $sales->getCredit();
+        $customer = $sales->getStore()->getCustomer();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($customer);
+        $accountSales->setAmount($amount);
+        $accountSales->setProcessHead('Store Payment');
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($sales->getCreatedBy());
+        $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+        $accountSales->setTransactionMethod($method);
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        return $accountSales;*/
-
+        return $accountSales;
     }
 
 	public function accountBusinessSalesReverse(BusinessInvoice $entity)

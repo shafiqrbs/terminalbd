@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
@@ -19,4 +21,30 @@ use Doctrine\ORM\EntityRepository;
  */
 class BusinessStoreLedgerRepository extends EntityRepository
 {
+
+    public function getStoreBalance($store)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit,COALESCE(SUM(e.credit),0) AS credit');
+        $qb->where("e.store = :store");
+        $qb->setParameter('store', $store);
+        $qb->andWhere("e.status = 1");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $balance =($result['debit']- $result['credit']);
+        return $balance;
+    }
+
+    public function approveStorePayment(BusinessStoreLedger $store,$user)
+    {
+        $em = $this->_em;
+        $store->setApprovedBy($user);
+        $store->setStatus(1);
+        $em->flush();
+
+        $balance = $this->getStoreBalance($store->getId());
+        $store->setBalance($balance);
+        $em->flush();
+    }
+
 }

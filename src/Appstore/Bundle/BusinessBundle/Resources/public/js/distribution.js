@@ -214,6 +214,18 @@ var salesReturnForm = $("#salesReturnForm").validate({
     }
 });
 
+$(document).on('change', '#store', function() {
+    var store = $(this).val();
+    $.ajax({
+        url: Routing.generate('business_invoice_distribution_store_balance',{'id':store}),
+        type: 'GET',
+        success: function (response) {
+            $('#storeOutstanding').html(response);
+        }
+    })
+
+});
+
 var formLedger = $("#storeLedgerForm").validate({
 
     rules: {

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
@@ -18,5 +19,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class BusinessInvoiceReturnItemRepository extends EntityRepository
 {
+    public function approveSalesReturnItem(BusinessInvoiceReturnItem $store)
+    {
+        $em = $this->_em;
+        $store->setStatus(1);
+        $em->flush();
 
+    }
 }
