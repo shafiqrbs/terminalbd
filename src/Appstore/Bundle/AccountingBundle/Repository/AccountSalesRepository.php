@@ -1100,7 +1100,6 @@ class AccountSalesRepository extends EntityRepository
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
     }
 
