@@ -55,12 +55,15 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
     public function deletePurchaseReturnItem(BusinessInvoiceParticular $invoiceParticular)
     {
        $em = $this->_em;
-       $entity = $this->findOneBy(array('salesInvoiceItem' => $invoiceParticular->getId()));
-       if($entity){
-           $em->remove($entity);
-           $em->flush();
-           $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($invoiceParticular->getBusinessParticular(), "purchase-return");
+       if($invoiceParticular){
+           $entity = $this->findOneBy(array('salesInvoiceItem' => $invoiceParticular->getId()));
+           if($entity){
+               $em->remove($entity);
+               $em->flush();
+               $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($invoiceParticular->getBusinessParticular(), "purchase-return");
+           }
        }
+
 
     }
 

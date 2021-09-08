@@ -59,11 +59,42 @@ class BusinessDistributionReturnItem
     private $quantity;
 
      /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="price", type="float",nullable=true)
+     * @ORM\Column(name="spoilQnt", type="integer",nullable=true)
      */
-    private $price;
+    private $spoilQnt;
+
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQnt", type="integer",nullable=true)
+     */
+    private $damageQnt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deliverQnt", type="integer",nullable=true)
+     */
+    private $deliverQnt;
+
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQnt", type="integer",nullable=true)
+     */
+    private $remainingQnt;
+
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesInvoiceItem", type="integer",nullable=true)
+     */
+    private $salesInvoiceItem;
 
     /**
      * @var float
@@ -124,6 +155,30 @@ class BusinessDistributionReturnItem
     }
 
     /**
+     * Set purchasePrice
+     *
+     * @param float $purchasePrice
+     *
+     * @return BusinessPurchaseReturnItem
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get purchasePrice
+     *
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
      * @return float
      */
     public function getSubTotal()
@@ -155,6 +210,87 @@ class BusinessDistributionReturnItem
         $this->businessParticular = $businessParticular;
     }
 
+
+
+    /**
+     * @return int
+     */
+    public function getSalesInvoiceItem()
+    {
+        return $this->salesInvoiceItem;
+    }
+
+    /**
+     * @param int $salesInvoiceItem
+     */
+    public function setSalesInvoiceItem($salesInvoiceItem)
+    {
+        $this->salesInvoiceItem = $salesInvoiceItem;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSpoilQnt()
+    {
+        return $this->spoilQnt;
+    }
+
+    /**
+     * @param int $spoilQnt
+     */
+    public function setSpoilQnt($spoilQnt)
+    {
+        $this->spoilQnt = $spoilQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQnt()
+    {
+        return $this->damageQnt;
+    }
+
+    /**
+     * @param int $damageQnt
+     */
+    public function setDamageQnt($damageQnt)
+    {
+        $this->damageQnt = $damageQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeliverQnt()
+    {
+        return $this->deliverQnt;
+    }
+
+    /**
+     * @param int $deliverQnt
+     */
+    public function setDeliverQnt($deliverQnt)
+    {
+        $this->deliverQnt = $deliverQnt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQnt()
+    {
+        return $this->remainingQnt;
+    }
+
+    /**
+     * @param int $remainingQnt
+     */
+    public function setRemainingQnt($remainingQnt)
+    {
+        $this->remainingQnt = $remainingQnt;
+    }
 
     /**
      * @return BusinessConfig
@@ -202,38 +338,6 @@ class BusinessDistributionReturnItem
     public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param float $price
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPurchasePrice()
-    {
-        return $this->purchasePrice;
-    }
-
-    /**
-     * @param float $purchasePrice
-     */
-    public function setPurchasePrice($purchasePrice)
-    {
-        $this->purchasePrice = $purchasePrice;
     }
 
     /**
