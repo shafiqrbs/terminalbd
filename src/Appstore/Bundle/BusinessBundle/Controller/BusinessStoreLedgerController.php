@@ -160,6 +160,7 @@ class BusinessStoreLedgerController extends Controller
         } else{
             $entity->setApprovedBy($this->getUser());
             $entity->setStatus(true);
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStoreLedger')->approveStorePayment($entity,$this->getUser());
             if($entity->getTransactionType() == "Receive"){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertStorePayment($entity);
             }elseif($entity->getTransactionType() == "Opening" || $entity->getTransactionType() == "Due"){
