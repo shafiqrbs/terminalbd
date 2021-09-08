@@ -407,7 +407,7 @@
                                                                     <select class="span12 m-wrap input" name="transactionType" id="transactionType">
                                                                         {% set paymentModes = ['Receive','Due','Adjustment'] %}
                                                                         {% for mode in paymentModes %}
-                                                                        <option value="{{ mode }}">{{ mode }}</option>
+                                                                            <option value="{{ mode }}">{{ mode }}</option>
                                                                         {% endfor %}
                                                                     </select>
                                                                 </div>
@@ -463,9 +463,8 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                                                        <td class=""><strong class="subTotal">{{ totalDebit|number_format(2) }}</strong></td>
-                                                        <td class=""><strong class="subTotal">{{ totalCredit|number_format(2) }}</strong></td>
-                                                        <td class=""></td>
+                                                        <td class=""><strong>{{ totalDebit|number_format(2) }}</strong></td>
+                                                        <td class=""><strong>{{ totalCredit|number_format(2) }}</strong></td>
                                                         <td class=""></td>
                                                     </tr>
                                                     </tbody>

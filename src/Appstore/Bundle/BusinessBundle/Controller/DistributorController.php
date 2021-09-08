@@ -206,7 +206,7 @@ class DistributorController extends Controller
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
      */
-    public function deleteReturnItemAction(BusinessInvoice $invoice, BusinessDistributionReturnItem $entity)
+    public function deleteReturnItemAction(BusinessInvoice $invoice, BusinessInvoiceReturnItem $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -272,6 +272,7 @@ class DistributorController extends Controller
         $find = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findOneBy(array('businessConfig' => $config,'area'=> $area,'name'=>$name));
         if(empty($find)){
             $entity = new BusinessStore();
+            $entity->setBusinessConfig($config);
             $entity->setName($name);
             $entity->setMobileNo($mobileno);
             $entity->setCustomer($customerId);

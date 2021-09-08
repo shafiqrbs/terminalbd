@@ -2,7 +2,9 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
+use Appstore\Bundle\BusinessBundle\Form\BusinessStoreLedgerType;
 use Appstore\Bundle\BusinessBundle\Form\BusinessStoreType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,19 +27,31 @@ class BusinessStoreController extends Controller
     public function indexAction()
     {
 
-        $entity = new BusinessStore();
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
-        $form   = $this->createCreateForm($entity);
         return $this->render('BusinessBundle:BusinessStore:index.html.twig', array(
-            'entity' => $entity,
             'entities' => $entities,
-            'form'   => $form->createView(),
         ));
-
-
     }
+
+    /**
+     * Displays a form to create a new Vendor entity.
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+
+    public function newAction()
+    {
+        $entity = new BusinessStore();
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('BusinessBundle:BusinessStore:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView()
+        ));
+    }
+
+
 
 
     /**
@@ -48,12 +62,9 @@ class BusinessStoreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
-
         $entity = new BusinessStore();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $entity->setBusinessConfig($option);
             $em->persist($entity);
@@ -61,11 +72,10 @@ class BusinessStoreController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('business_area', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('business_store', array('id' => $entity->getId())));
         }
-        return $this->render('BusinessBundle:BusinessStore:index.html.twig', array(
+        return $this->render('BusinessBundle:BusinessStore:new.html.twig', array(
             'entity' => $entity,
-            'entities'      => $entities,
             'form'   => $form->createView(),
         ));
     }
@@ -79,9 +89,30 @@ class BusinessStoreController extends Controller
      */
     private function createCreateForm(BusinessStore $entity)
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new BusinessStoreType($location), $entity, array(
-            'action' => $this->generateUrl('business_area_create', array('id' => $entity->getId())),
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new BusinessStoreType($option), $entity, array(
+            'action' => $this->generateUrl('business_store_create', array('id' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Creates a form to create a BusinessStore entity.
+     *
+     * @param BusinessStore $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createLedgerForm(BusinessStore $entity)
+    {
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new BusinessStoreLedgerType($option), $entity, array(
+            'action' => $this->generateUrl('business_store_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -103,18 +134,14 @@ class BusinessStoreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
-
         $entity = $em->getRepository('BusinessBundle:BusinessStore')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find BusinessStore entity.');
         }
         $editForm = $this->createEditForm($entity);
-
-        return $this->render('BusinessBundle:BusinessStore:index.html.twig', array(
+        return $this->render('BusinessBundle:BusinessStore:new.html.twig', array(
             'entity'      => $entity,
-            'entities'      => $entities,
             'form'   => $editForm->createView(),
         ));
     }
@@ -128,9 +155,9 @@ class BusinessStoreController extends Controller
      */
     private function createEditForm(BusinessStore $entity )
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new BusinessStoreType($location), $entity, array(
-            'action' => $this->generateUrl('business_area_update', array('id' => $entity->getId())),
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new BusinessStoreType($option), $entity, array(
+            'action' => $this->generateUrl('business_store_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -149,7 +176,6 @@ class BusinessStoreController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
         $entity = $em->getRepository('BusinessBundle:BusinessStore')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find BusinessStore entity.');
@@ -163,12 +189,11 @@ class BusinessStoreController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('business_area'));
+            return $this->redirect($this->generateUrl('business_store'));
         }
 
-        return $this->render('BusinessBundle:BusinessStore:index.html.twig', array(
+        return $this->render('BusinessBundle:BusinessStore:new.html.twig', array(
             'entity'      => $entity,
-            'entities'      => $entities,
             'form'   => $editForm->createView(),
         ));
     }
@@ -227,6 +252,7 @@ class BusinessStoreController extends Controller
         );
         return $this->redirect($this->generateUrl('business_area'));
     }
+
 
 
 }

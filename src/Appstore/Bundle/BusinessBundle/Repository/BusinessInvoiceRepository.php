@@ -469,6 +469,14 @@ class BusinessInvoiceRepository extends EntityRepository
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
+        $qb1 = $em->createQueryBuilder();
+        $qb1->from('BusinessBundle:BusinessInvoiceReturnItem','si')
+            ->select("sum(si.subTotal) as subTotal")
+            ->where('si.invoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId());
+        $result1 = $qb1->getQuery()->getOneOrNullResult();
+
+        $returnSubTotal = !empty($result1) ? $result1['subTotal'] :0;
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         if($subTotal > 0){
 
@@ -478,8 +486,9 @@ class BusinessInvoiceRepository extends EntityRepository
                 $invoice->setVat($vat);
             }
             $invoice->setSubTotal(round($subTotal));
+            $invoice->setSalesReturn(round($returnSubTotal));
             $invoice->setDiscount($this->getUpdateDiscount($invoice,$subTotal));
-            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount() - $returnSubTotal);
             $invoice->setTotal($total);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
@@ -489,6 +498,8 @@ class BusinessInvoiceRepository extends EntityRepository
             $invoice->setTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
+            $invoice->setTloPrice(0);
+            $invoice->setSalesReturn(0);
             $invoice->setVat(0);
         }
 

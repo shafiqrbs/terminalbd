@@ -68,15 +68,15 @@ $(document).on("click", ".confirm", function() {
     });
 });
 
-$(document).on("click", ".delete", function() {
+$(document).on("click", ".delete", function(event) {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
-        onOkBut: function(event, el) {
+        onOkBut: function(el) {
             $.get(url, function( data ) {
-              $('#delete-'+id).remove();
+                $(event.target).closest('tr').remove();
             });
         }
     });

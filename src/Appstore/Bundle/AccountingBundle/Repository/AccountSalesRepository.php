@@ -1046,6 +1046,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales = new AccountSales();
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
+        $accountSales->setSourceInvoice($sales->getInvoice());
         $accountSales->setAmount($amount);
         $accountSales->setProcessHead('Sales-Return');
         $accountSales->setProcessType('Sales-Return');
@@ -1068,6 +1069,29 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setCustomer($customer);
         $accountSales->setAmount($amount);
         $accountSales->setProcessHead('Store Payment');
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($sales->getCreatedBy());
+        $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+        $accountSales->setTransactionMethod($method);
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+    }
+
+    public function insertStoreOpeningPayment(BusinessStoreLedger $sales)
+    {
+        $global = $sales->getBusinessConfig()->getGlobalOption();
+        $amount = $sales->getDebit();
+        $customer = $sales->getStore()->getCustomer();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($customer);
+        $accountSales->setTotalAmount($amount);
+        $accountSales->setProcessHead('Outstanding');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($sales->getCreatedBy());

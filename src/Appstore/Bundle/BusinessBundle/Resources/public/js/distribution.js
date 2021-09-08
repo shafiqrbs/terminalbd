@@ -119,6 +119,8 @@ function returnData(response)
     obj = JSON.parse(response);
     $('.subTotal').html(financial(obj['subTotal']));
     $('.netTotal').html(financial(obj['subTotal']));
+    $('.tloPrice').html(financial(obj['tloPrice']));
+    $('.salesReturn').html(financial(obj['salesReturn']));
     var due = (obj['subTotal'] - obj['tloPrice']);
     $('#paymentTotal').val(financial(due));
     $('#due').val(financial(due));
@@ -133,16 +135,16 @@ function returnData(response)
     $('.bonusQnt').html(obj['bonusQnt']);
 }
 
-$(document).on("click", ".distributionDelete", function() {
+$(document).on("click", ".distributionDelete", function(event) {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
-        onOkBut: function(event, el) {
+        onOkBut: function(el) {
             $.get(url, function( response ) {
-                $('#remove-'+id).remove();
+                $(event.target).closest('tr').remove();
                 returnData(response);
             });
         }
@@ -183,6 +185,7 @@ function salesReturnData(response) {
     $('#subTotal').html(obj['subTotal']);
     $('.salesReturn').html(obj['salesReturn']);
     $('.netTotal').html(obj['netTotal']);
+    $('.tloPrice').html(obj['tloPrice']);
 }
 
 var salesReturnForm = $("#salesReturnForm").validate({
@@ -213,6 +216,22 @@ var salesReturnForm = $("#salesReturnForm").validate({
         });
     }
 });
+
+$(document).on("click", ".returnItemDelete", function(event) {
+
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.get(url, function( response ) {
+                $(event.target).closest('tr').remove();
+                salesReturnData(response);
+            });
+        }
+    });
+});
+
 
 $(document).on('change', '#store', function() {
     var store = $(this).val();
@@ -257,20 +276,6 @@ var formLedger = $("#storeLedgerForm").validate({
     }
 });
 
-$(document).on("click", ".returnItemDelete", function(event) {
-
-    var url = $(this).attr('data-url');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(el) {
-            $.get(url, function( response ) {
-                $(event.target).closest('tr').remove();
-                salesReturnData(response);
-            });
-        }
-    });
-});
 
 $(document).on("click", ".ledgerDelete", function(event) {
 

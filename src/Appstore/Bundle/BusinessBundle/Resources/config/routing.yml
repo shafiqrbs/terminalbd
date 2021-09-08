@@ -90,6 +90,11 @@ business_sales_user:
     resource: "@BusinessBundle/Resources/config/routing/salesuser.yml"
     prefix:   /sales-user
 
+
+business_store_ledger:
+    resource: "@BusinessBundle/Resources/config/routing/storeLedger.yml"
+    prefix:   /store-ledger
+
 business_config:
     resource: "@BusinessBundle/Resources/config/routing/config.yml"
     prefix:   /config

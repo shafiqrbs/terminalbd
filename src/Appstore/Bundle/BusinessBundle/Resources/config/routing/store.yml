@@ -2,6 +2,10 @@ business_store:
     path:     /
     defaults: { _controller: "BusinessBundle:BusinessStore:index" }
 
+business_store_new:
+    path:     /new
+    defaults: { _controller: "BusinessBundle:BusinessStore:new" }
+
 business_store_create:
     path:     /create
     defaults: { _controller: "BusinessBundle:BusinessStore:create" }

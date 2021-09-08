@@ -96,7 +96,11 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Marketing</th>
+                                    <th class="numeric" >Area</th>
+                                    <th class="numeric" >SubTotal</th>
+                                    <th class="numeric" >Tlo</th>
+                                    <th class="numeric" >Sales Return</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -112,7 +116,11 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.marketing is defined and entity.marketing is not empty %}{{ entity.marketing.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.area is defined and entity.area is not empty %}{{ entity.area.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.subTotal|number_format(2) }}</td>
+                                        <td class="numeric" >{{ entity.tloPrice|number_format(2) }}</td>
+                                        <td class="numeric" >{{ entity.salesReturn|number_format(2) }}</td>
                                         <td class="numeric" >{{ entity.total|number_format(2) }}</td>
                                         <td class="numeric" >{{ entity.received|number_format(2) }}</td>
                                         <td class="numeric" >{{ entity.due|number_format(2) }}</td>
