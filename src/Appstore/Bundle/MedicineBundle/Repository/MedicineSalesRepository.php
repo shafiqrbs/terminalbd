@@ -1056,7 +1056,6 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
         $entity = $this->findOneBy(array('medicineConfig'=> $option->getMedicineConfig(),'invoice'=>$invoice));
         $data = array();
         if($entity) {
-
             $data['id'] = (int)$entity->getId();
             $data['created'] = $entity->getCreated()->format('d-m-Y H:m A');
             $data['invoice'] = $entity->getInvoice();
@@ -1087,7 +1086,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
             } else {
                 $data['orderItem'] = array();
             }
-            return $data;
+            return array($data);
         }
 
     }
