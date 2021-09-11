@@ -66,7 +66,7 @@
                                             <td class="">{{ entity.debit|number_format(2) }}</td>
                                             <td class="">{{ entity.credit|number_format(2) }}</td>
                                             <td class="">
-                                                {% if( entity.status IS NULL and entity.invoice is not empty) %}
+                                                {% if( entity.status == 0 and entity.invoice is empty) %}
                                                     <a class="btn mini blue btn-action confirm" href="javascript:" data-url="{{ path('business_store_ledger_status', { 'id': entity.id}) }}"><i class="icon-ok"></i> Approve</a>
                                                     <a  href="javascript:" data-url="{{ path('business_store_ledger_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
