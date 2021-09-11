@@ -82,7 +82,7 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no')))
+            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no')))
 
             ->add('receiveDate', 'date', array(
                 'attr' => array('class'=>'m-wrap span12 purchaseInput'),
@@ -117,8 +117,8 @@ class PurchaseType extends AbstractType
                     'approved' => 'Approved',
                 ),
             ))
-            ->add('asInvestment')
-            ->add('file','file',array('attr'=>array('class'=>'m-wrap span3')))
+          /*  ->add('asInvestment')*/
+          /*  ->add('file','file',array('attr'=>array('class'=>'m-wrap span3')))*/
 
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))

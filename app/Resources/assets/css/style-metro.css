@@ -148,7 +148,7 @@ select:focus {
 .btn.green {
   color: white;
   text-shadow: none;
-  background-color: #1cd249;
+  background-color: #10a736;
 }
 .btn.green:hover,
 .btn.green:focus,
@@ -156,12 +156,12 @@ select:focus {
 .btn.green.active,
 .btn.green.disabled,
 .btn.green[disabled]{
-  background-color: #1cd249 !important;
+  background-color: #10a736 !important;
   color: #fff !important;
 }
 
 .btn-group .btn.green.dropdown-toggle {
-  background-color: #1cd249 !important;
+  background-color: #10a736 !important;
 }
 .btn-group .btn.green:hover,
 .btn-group .btn.green:focus,
@@ -169,7 +169,7 @@ select:focus {
 .btn-group .btn.green.active,
 .btn-group .btn.green.disabled,
 .btn-group .btn.green[disabled] {
-  background-color: #1cd249 !important;
+  background-color: #10a736 !important;
   color: #fff !important;
 }
 

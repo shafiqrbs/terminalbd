@@ -119,7 +119,7 @@ class DomainController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
         $entities = $this->paginate($entities);
-        $apps = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findAll();
+        $apps = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1),array('name'=>"ASC"));
         return $this->render('SettingToolBundle:Domain:index.html.twig', array(
             'entities' => $entities,
             'apps' => $apps,
