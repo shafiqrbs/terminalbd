@@ -63,6 +63,13 @@ class BusinessInvoiceReturnItem
      */
     private $subTotal;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="itemProcess", type="string", nullable = true)
+     */
+    private $itemProcess;
+
 
 
 	/**
@@ -181,9 +188,21 @@ class BusinessInvoiceReturnItem
         $this->invoice = $invoice;
     }
 
+    /**
+     * @return string
+     */
+    public function getItemProcess()
+    {
+        return $this->itemProcess;
+    }
 
-
-
+    /**
+     * @param string $itemProcess
+     */
+    public function setItemProcess($itemProcess)
+    {
+        $this->itemProcess = $itemProcess;
+    }
 
 
 }

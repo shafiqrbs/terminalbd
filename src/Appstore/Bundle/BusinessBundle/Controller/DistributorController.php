@@ -188,11 +188,13 @@ class DistributorController extends Controller
         $itemId = $data['returnItem'];
         $quantity = $data['quantity'];
         $amount = $data['salesPrice'];
+        $itemProcess = $data['itemProcess'];
         $item = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->find($itemId);
         $entity = new BusinessInvoiceReturnItem();
         $entity->setInvoice($invoice);
         $entity->setParticular($item);
         $entity->setQuantity($quantity);
+        $entity->setItemProcess($itemProcess);
         $entity->setPrice($amount/$quantity);
         $entity->setSubTotal($amount);
         $em->persist($entity);

@@ -194,6 +194,7 @@ var salesReturnForm = $("#salesReturnForm").validate({
         "returnItem": {required: true},
         "quantity": {required: true},
         "amount": {required: true},
+        "itemProcess": {required: true},
     },
     tooltip_options: {
         "returnItem": {placement:'top',html:true},

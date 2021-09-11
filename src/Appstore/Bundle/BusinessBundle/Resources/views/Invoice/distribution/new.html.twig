@@ -250,7 +250,7 @@
                                                     <div class="row-fluid">
                                                         <div class="span12">
                                                             <div class="row-fluid particular-info" >
-                                                                <div class="span8" >
+                                                                <div class="span6" >
                                                                     <div class="row-fluid">
                                                                         <div class="span12" >
                                                                             <select id="returnItem" name="returnItem" class="span12 m-wrap select2 input" style="margin-left: 15px">
@@ -265,6 +265,14 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
+                                                                </div>
+                                                                <div class="span2">
+                                                                    <select class="span12 m-wrap input" name="itemProcess" id="itemProcess">
+                                                                        {% set itemProcesses = ['Stock-Return','Purchase-Return','Damage'] %}
+                                                                        {% for itemProcesse in itemProcesses %}
+                                                                            <option value="{{ itemProcesse }}">{{ itemProcesse }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
                                                                 </div>
                                                                 <div class="span4">
                                                                     <div class="input-append span12" style="margin-bottom:0!important">
