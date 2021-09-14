@@ -61,15 +61,17 @@ class ChangePasswordController extends Controller
         $form->setData($user);
 
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
-
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_SUCCESS, $event);
-
             $userManager->updateUser($user);
+            $em = $this->getDoctrine()->getManager();
+            $data = $request->request->all();
+            $password = $data['fos_user_change_password_form']['plainPassword']['first'];
+            $user->setAppPassword($password);
+            $em->flush();
 
             if (null === $response = $event->getResponse()) {
                 $url = $this->generateUrl('domain_change_password');

@@ -309,20 +309,20 @@ class UserRepository extends EntityRepository
             );
         }
 
-        $dms = array('dps');
-        $result = array_intersect($arrSlugs, $dms);
+        $dps = array('dps');
+        $result = array_intersect($arrSlugs, $dps);
         if (!empty($result)) {
-            $array['DMS'] = array(
+            $array['DPS'] = array(
                 'ROLE_DPS'                                      => 'Doctor Prescription',
                 'ROLE_DPS_DOCTOR'                               => 'Doctor',
                 'ROLE_DPS_ADMIN'                                => 'Doctor Admin',
             );
         }
 
-         $dms = array('inventory','miss','business','restaurant');
-        $result = array_intersect($arrSlugs, $dms);
+        $pos = array('inventory','miss','business','restaurant');
+        $result = array_intersect($arrSlugs, $pos);
         if (!empty($result)) {
-            $array['DMS'] = array(
+            $array['POS'] = array(
                 'ROLE_POS'                                      => 'POS',
                 'ROLE_POS_ANDROID'                              => 'Android',
                 'ROLE_POS_MANAGER'                              => 'POS Manager',

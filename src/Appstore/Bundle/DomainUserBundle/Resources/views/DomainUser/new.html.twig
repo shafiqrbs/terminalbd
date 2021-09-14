@@ -50,287 +50,167 @@
                             {{ form_row(form._token) }}
 
                             <!--/row-->
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label">Full name<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.profile.name) }}
-                                                {{ form_errors(form.profile.name) }}
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label">Designation</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.profile.designation) }}
-                                            {{ form_errors(form.profile.designation) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
                             <!--/row-->
 
                             <!--/row-->
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label">Mobile<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.profile.mobile) }}
-                                                {{ form_errors(form.profile.mobile) }}
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label">Joining date</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.profile.joiningDate) }}
-                                            {{ form_errors(form.profile.joiningDate) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label">Branch</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.profile.branches) }}
-                                            {{ form_errors(form.profile.branches) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <!--/row-->
-                            <!--/row-->
-                            <div class="clearfix">&nbsp;</div>
-                            <!--/row-->
-                            <div class="form-actions portlet box grey">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Login information</div>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-
-                            <div class="row-fluid">
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label">User name<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-user"></i>
-                                                {{ form_widget(form.username) }}
-                                                {{ form_errors(form.username) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label">Password<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-lock"></i>
-                                                {{ form_widget(form.plainPassword.first) }}
-                                                {{ form_errors(form.plainPassword.first) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label">Email<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-envelope"></i>
-                                                {{ form_widget(form.email) }}
-                                                {{ form_errors(form.email) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label">Re-Password</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-lock"></i>
-                                                {{ form_widget(form.plainPassword.second) }}
-                                                {{ form_errors(form.plainPassword.second) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                Enabled
-                                                {{ form_widget(form.enabled) }}
-                                                {{ form_errors(form.enabled) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/row-->
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="form-group">
-                                        <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
-                                            Access Control Role:
-                                        </label>
-                                        <div class="col-md-9">
-                                            <div class="input-icon right">
-                                                <div class="controls">
-                                                    {{ form_errors(form.roles) }}
-                                                    {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
                             <!--/row-->
                             <!--/row-->
                             <div class="clearfix">&nbsp;</div>
                             <!--/row-->
                             <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="form-group">
-                                        <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
-                                            Android Control Roles:
-                                        </label>
-                                        <div class="col-md-9">
-                                            <div class="input-icon right">
-                                                <div class="controls">
-                                                    {{ form_errors(form.appRoles) }}
-                                                    {{ form_widget(form.appRoles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/row-->
-                            <!--/row-->
-                            <div class="clearfix">&nbsp;</div>
-                            <!--/row-->
-                            <div class="form-actions portlet box grey">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Address & Others</div>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-
-                            <div class="row-fluid">
-                                <div class="span8 ">
-                                    <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                <div class="controls">
-                                                    <label class="control-label">Address<span class="required">*</span></label>
-                                                    <div class="input-icon left">
-                                                        <i class="icon-map-marker"></i>
-                                                        {{ form_widget(form.profile.address) }}
-                                                        {{ form_errors(form.profile.address) }}
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="span6">
                                     <div class="row-fluid">
                                         <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label">Location<span
-                                                            class="required">*</span></label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.profile.location) }}
-                                                    {{ form_errors(form.profile.location) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="span6">
-                                            <div class="control-group">
-                                                <label class="control-label">National ID</label>
+                                                <label class="control-label">Full name<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-font"></i>
-                                                        {{ form_widget(form.profile.nid) }}
-                                                        {{ form_errors(form.profile.nid) }}
+                                                        {{ form_widget(form.profile.name) }}
+                                                        {{ form_errors(form.profile.name) }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <!--/span-->
-                                    </div>
-                                </div>
-                                <div class="span4">
-                                    <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6 ">
                                             <div class="control-group">
-                                                <label class="control-label">Profile Image</label>
+                                                <label class="control-label">Designation</label>
                                                 <div class="controls">
-
+                                                    {{ form_widget(form.profile.designation) }}
+                                                    {{ form_errors(form.profile.designation) }}
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label">User name<span class="required">*</span></label>
                                                 <div class="controls">
-                                                    <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                        <div style="width: 200px; height: 150px;"
-                                                             class="fileupload-new thumbnail">
-                                                            {% if entity.profile is defined and entity.profile.id is defined %}
-                                                                <img class="fileupload-preview fileupload-exists thumbnail"
-                                                                     alt="" src="/{{ entity.profile.webPath }}">
-                                                            {% else %}
-                                                                <img alt=""
-                                                                     src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                            {% endif %}
-                                                        </div>
-                                                        <div class="fileupload-preview fileupload-exists thumbnail"></div>
-                                                        <div>
-                                                            <span class="btn btn-file">
-                                                                <span class="fileupload-new">Select image</span>
-                                                                <span class="fileupload-exists">Change</span>
-                                                                {{ form_widget(form.profile.file) }}
-                                                                {{ form_errors(form.profile.file) }}
-                                                            </span>
-                                                            <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                                        </div>
+                                                    <div class="input-icon left">
+                                                        <i class="icon-user"></i>
+                                                        {{ form_widget(form.username) }}
+                                                        {{ form_errors(form.username) }}
                                                     </div>
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label">Password<span class="required">*</span></label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-lock"></i>
+                                                        {{ form_widget(form.plainPassword.first) }}
+                                                        {{ form_errors(form.plainPassword.first) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label">Email<span class="required">*</span></label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-envelope"></i>
+                                                        {{ form_widget(form.email) }}
+                                                        {{ form_errors(form.email) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label">Re-Password</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-lock"></i>
+                                                        {{ form_widget(form.plainPassword.second) }}
+                                                        {{ form_errors(form.plainPassword.second) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span6 ">
+                                            <div class="control-group">
+                                                <label class="control-label">Mobile</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-font"></i>
+                                                        {{ form_widget(form.profile.mobile) }}
+                                                        {{ form_errors(form.profile.mobile) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label"></label>
+                                                <div class="controls">
+                                                    Enabled
+                                                    {{ form_widget(form.enabled) }}
+                                                    {{ form_errors(form.enabled) }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="span6">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="form-group">
+                                                <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
+                                                    Access Control Role:
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class="input-icon right">
+                                                        <div class="controls">
+                                                            {{ form_errors(form.roles) }}
+                                                            {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="form-group">
+                                                <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
+                                                    Android Control Roles:
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class="input-icon right">
+                                                        <div class="controls">
+                                                            {{ form_errors(form.appRoles) }}
+                                                            {{ form_widget(form.appRoles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--/row-->
                             <div class="clearfix">&nbsp;</div>
                             <!--/row-->
                             <div class="form-actions portlet box grey">

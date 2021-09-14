@@ -49,15 +49,9 @@ class DomainProfileType extends AbstractType
                     new Length(array('max'=>200))
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input user mobile no'))
-                )
-            ))
-            ->add('joiningDate','date', array('attr'=>array('class'=>'m-wrap span12  inputs','placeholder'=>'Enter receive date')))
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover')))
             ->add('designation', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
                 'empty_value' => '---Choose a designation---',
                 'property' => 'name',
@@ -70,34 +64,7 @@ class DomainProfileType extends AbstractType
                         ->where("e.status =1")
                         ->orderBy("e.name", "ASC");
                 },
-            ))
-
-            ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
-            ->add('branches', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
-                'empty_value' => '---Choose a branch---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId())
-                        ->orderBy("e.name", "ASC");
-                },
-            ))
-            ->add('location', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select user location'))
-                ),
-                'choices'=> $this->LocationChoiceList(),
-                'choices_as_values' => true,
-                'choice_label' => 'nestedLabel',
-            ))
-            ->add('file');
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

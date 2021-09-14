@@ -50,12 +50,15 @@ class DomainUserController extends Controller
         $entity = new User();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+       $data = $request->request->all();
+       $password = $data['user']['plainPassword']['first'];
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($globalOption);
             $entity->getProfile()->upload();
             $entity->setDomainOwner(2);
+            $entity->setAppPassword($password);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -311,8 +314,9 @@ class DomainUserController extends Controller
 
     public function forgetPasswordAction(User $user)
     {
-        $password = '*4848#';
+        $password = '@123456';
         $user->setPlainPassword($password);
+        $user->setAppPassword($password);
         $this->get('fos_user.user_manager')->updateUser($user);
         $this->get('session')->getFlashBag()->add(
             'success',"Password reset successfully"

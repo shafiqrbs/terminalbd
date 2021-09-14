@@ -110,7 +110,7 @@ class DomainSignType extends AbstractType
      */
     public function getName()
     {
-        return 'Core_userbundle_user';
+        return 'user';
     }
 
     public function getAccessRoleGroup(){

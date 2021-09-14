@@ -57,7 +57,6 @@ class ProfileController extends BaseProfileController
 
         $editForm = $this->createEditProfileForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             $em->flush();
             $this->get('session')->getFlashBag()->add(
