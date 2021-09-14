@@ -33,6 +33,8 @@ class BusinessStoreLedger
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice",inversedBy="storeLedgers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     protected $invoice;
 

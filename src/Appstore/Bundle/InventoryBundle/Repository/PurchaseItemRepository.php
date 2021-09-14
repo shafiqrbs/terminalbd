@@ -429,6 +429,53 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
+    public function  getApiPurchaseItem(GlobalOption $option , $data = '')
+    {
+
+        $config = $option->getInventoryConfig()->getId();
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.stockItem','e');
+        $qb->join('e.masterItem','m');
+        $qb->join('m.category','c');
+        $qb->leftJoin('m.productUnit','u');
+        $qb->select('si.id as id','e.id as stockId','si.barcode as barcode','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice','e.path as path');
+        $qb->addSelect('u.id as unitId','u.name as unitName');
+        $qb->addSelect('c.id as categoryId','c.name as categoryName');
+        $qb->where('e.inventoryConfig = :config');
+        $qb->setParameter('config',$config);
+        if(isset($data['category']) and !empty($data['category'])){
+            $catid = $data['category'];
+            $qb->andWhere('c.id = :catid');
+            $qb->setParameter('catid',$catid);
+        }
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['item_id']              = (int) $row['stockId'];
+
+            $data[$key]['category_id']          = $row['categoryId'];
+            $data[$key]['categoryName']         = $row['categoryName'];
+            if ($row['unitId']){
+                $data[$key]['unit_id']          = $row['barcode'];
+                $data[$key]['unit']             = $row['unitName'];
+            }else{
+                $data[$key]['unit_id']          = $row['barcode'];
+                $data[$key]['unit']             = '';
+            }
+            $data[$key]['name']                 = $row['name'];
+            $data[$key]['printName']            = $row['name'];
+            $data[$key]['quantity']             = $row['quantity'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
+            $data[$key]['purchasePrice']        = $row['purchasePrice'];
+            $data[$key]['printHidden']          = "";
+
+        }
+        return $data;
+    }
+
 
 
 }

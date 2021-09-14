@@ -18,17 +18,20 @@ class BusinessConfigRepository extends EntityRepository
     public function businessReset(GlobalOption $option)
     {
 
-	    set_time_limit(0);
-	    ignore_user_abort(true);
+        set_time_limit(0);
+        ignore_user_abort(true);
 
-	    $em = $this->_em;
-	    $config = $option->getBusinessConfig()->getId();
+        $em = $this->_em;
+        $config = $option->getBusinessConfig()->getId();
 
-	    $sales = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
-	    $sales->execute();
+        $ledger = $em->createQuery("DELETE BusinessBundle:BusinessStoreLedger e WHERE e.businessConfig = {$config}");
+        $ledger->execute();
 
-	     $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
-	    $sales->execute();
+        $store = $em->createQuery("DELETE BusinessBundle:BusinessStore e WHERE e.businessConfig = {$config}");
+        $store->execute();
+
+        $sales = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
+        $sales->execute();
 
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
@@ -66,6 +69,7 @@ class BusinessConfigRepository extends EntityRepository
 		    $item->setBonusQuantity(0);
 		    $item->setBonusSalesQuantity(0);
 		    $item->setBonusPurchaseQuantity(0);
+		    $item->setOpeningApprove(0);
 		    $this->_em->flush($item);
 	    }
 

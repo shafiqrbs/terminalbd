@@ -129,7 +129,7 @@ class BusinessInvoice
     private  $courier;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="invoice" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="invoice", cascade={"remove"} )
      **/
     private  $storeLedgers;
 
