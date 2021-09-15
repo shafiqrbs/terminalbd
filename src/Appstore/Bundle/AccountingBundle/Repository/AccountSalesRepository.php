@@ -1297,7 +1297,7 @@ class AccountSalesRepository extends EntityRepository
         $datetime = new \DateTime("now");
         $entity->setUpdated($datetime);
         if($mode == 'opening'){
-            $entity->setTotalAmount(abs($entity->getAmount()));
+            $entity->setTotalAmount(abs($amount));
             $entity->setAmount(0);
             $entity->setTransactionMethod(null);
         }else{
