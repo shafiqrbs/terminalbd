@@ -19,6 +19,42 @@ $('.horizontal-form').submit(function(){
 
 
 
+var itemArr = $.cookie('barcodes') ? $.cookie('barcodes').split(',') : [];
+$('input.check').toggle(function(){
+    $('input:checkbox').attr('checked','checked');
+    $('input.stockId').closest('span').addClass('checked');
+        $.each($("input[type=checkbox]:checked"), function(){
+            console.log(itemArr);
+            itemArr.push($(this).val());
+        });
+        $.cookie('barcodes', itemArr, {path: '/'});
+    },function(){
+        $('input:checkbox').removeAttr('checked');
+        $('input.stockId').closest('span').removeClass('checked');
+       // $.cookie('barcodes', null);
+    });
+
+$('body').on('change', 'input.stockId', function(el) {
+    console.log(itemArr);
+    var val = $(this).val();
+    if($(this).prop('checked')) {
+        itemArr.push(val);
+    }else{
+        var index = itemArr.indexOf(val);
+        alert(index);
+        if (index > -1) {
+            itemArr.splice(index, 1);
+        }
+    }
+    $.cookie('barcodes', itemArr, {path: '/'});
+});
+
+
+
+
+
+
+
 /*
 $(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);

@@ -170,7 +170,7 @@ class ReportController extends Controller
         $user = $this->getUser();
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
         $parent = array(23,37);
-        $expenditureHead = $em->getRepository('AccountingBundle:Transaction')->parentsAccountHead($user->getGlobalOption(),$parent,$data);
+        $expenditureHead = $em->getRepository('AccountingBundle:Expenditure')->parentsExpenseAccountHead($user->getGlobalOption(),$parent,$data);
         if(empty($data['pdf'])){
             return $this->render('AccountingBundle:Report/Expenditure:accountHead.html.twig', array(
                 'overview' => $overview,

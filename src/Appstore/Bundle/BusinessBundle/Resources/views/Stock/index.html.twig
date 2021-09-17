@@ -85,7 +85,8 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >#</th>
+
+                                    <th class="numeric" ><input type="checkbox" {% if selected|length > 1 %} checked="checked" {% endif %} class="check"></th>
                                     <th class="numeric" >Name</th>
                                     {% if 'wearhouse' in config.stockFormat %}
                                     <th class="numeric" >Wearhouse</th>
@@ -195,18 +196,4 @@
 {% block documentready %}
     {{ parent() }}
     EditableWithOutReloadInit();
-    var itemArr = $.cookie('barcodes') ? $.cookie('barcodes').split(',') : [];
-    $('body').on('change', 'input.stockId', function(el) {
-    console.log(itemArr);
-    var val = $(this).val();
-    if($(this).prop('checked')) {
-    itemArr.push(val);
-    }else{
-    var index = itemArr.indexOf(val);
-    if (index > -1) {
-    itemArr.splice(index, 1);
-    }
-    }
-    $.cookie('barcodes', itemArr, {path: '/'});
-    });
 {% endblock %}

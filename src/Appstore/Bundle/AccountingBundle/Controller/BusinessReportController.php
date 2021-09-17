@@ -88,11 +88,50 @@ class BusinessReportController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportBusinessMonthlyIncome($this->getUser(),$data);
-        return $this->render('AccountingBundle:Report/Business:monthlyIncome.html.twig', array(
-            'overview' => $overview,
-            'searchForm' => $data,
-        ));
+        if(!empty($data['startMonth']) and !empty($data['endMonth'])){
+            $sm = "01-{$data['startMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($sm);
+            $startMonth =  $compareTo->format('F');
+            $endm = "01-{$data['endMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($endm);
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange = $startMonth .' To '.$endMonth;
+        }else{
+            $compareTo = new \DateTime("now");
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange =  $compareTo->format('F,Y');
+        }
+
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineMonthlyIncome($this->getUser(),$data);
+
+        if(!empty($data['startMonth']) and !empty($data['endMonth'])){
+            $sm = "01-{$data['startMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($sm);
+            $startMonth =  $compareTo->format('F');
+            $endm = "01-{$data['endMonth']}-{$data['year']}";
+            $compareTo = new \DateTime($endm);
+            $endMonth =  $compareTo->format('F,Y');
+            $dateRange = $startMonth .' To '.$endMonth;
+        }else{
+            $compareTo = new \DateTime("now");
+            $dateRange =  $compareTo->format('F,Y');
+        }
+        if(empty($data['pdf'])){
+            return $this->render('AccountingBundle:Report/Medicine:monthlyIncome.html.twig', array(
+                'overview' => $overview,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'AccountingBundle:Report/Medicine:monthlyIncomePdf.html.twig', array(
+                    'overview' => $overview,
+                    'globalOption' => $this->getUser()->getGlobalOption(),
+                    'dateRange' => $dateRange,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyIncomePdf.pdf');
+        }
     }
 
 

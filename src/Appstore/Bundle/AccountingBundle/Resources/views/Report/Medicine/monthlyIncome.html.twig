@@ -33,12 +33,13 @@
                             <div class="btn-group">
                                 {% set currentMonth = "now"|date("m") %}
                                 {% set currentYear = "now"|date("Y") %}
-                                {% set startMonth = searchForm.startMonth is defined ? searchForm.startMonth :"now"|date("m") %}
-                                {% set endMonth = searchForm.endMonth is defined ? searchForm.endMonth :"now"|date("m") %}
+                                {% set startMonth = (searchForm.startMonth is defined and searchForm.startMonth is empty) ? searchForm.startMonth :"now"|date("m") %}
+                                {% set endMonth = (searchForm.endMonth is defined and searchForm.endMonth is empty) ? searchForm.endMonth :"now"|date("m") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
                                 <a class="btn purple" target="_blank" href="{{ path('account_medicine_income_monthly',{'pdf':'pdf','startMonth':startMonth,'endMonth':endMonth,'year':year}) }}" >
-                                    <i class=" icon-download"></i>&nbsp;Download PDF
+                                    <i class=" icon-download"></i>&nbsp;Download PDF --   {{ "now"|date("m") }}
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -51,14 +52,14 @@
                                         {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
                                         <select class="span12 m-wrap" name="startMonth" id='startMonth'>
                                             {% for key,month in months %}
-                                                <option value='{{ key }}' {% if (searchForm.startMonth is defined and searchForm.startMonth == key) %} selected="selected" {% endif %} >{{ month }}</option>
+                                                <option value='{{ key }}' {% if (startMonth is defined and  startMonth == key) %} selected="selected" {% endif %} >{{ month }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="span4">
                                         <select class="span12 m-wrap" name="endMonth" id='endMonth'>
                                             {% for key,month in months %}
-                                                <option value='{{ key }}' {% if (searchForm.endMonth is defined and searchForm.endMonth == key)  %} selected="selected" {% endif %} >{{ month }}</option>
+                                                <option value='{{ key }}' {% if (endMonth is defined and  endMonth == key) %} selected="selected" {% endif %} >{{ month }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

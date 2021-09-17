@@ -112,6 +112,21 @@ class ExpenditureRepository extends EntityRepository
 
     }
 
+    public function parentsExpenseAccountHead($globalOption,$parent,$data){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.amount) as amount, accountHead.name as name , accountHead.id, accountHead.toIncrease, accountHead.code');
+        $qb->innerJoin('e.expenseCategory','c');
+        $qb->innerJoin('c.accountHead','accountHead');
+        $qb->where('e.globalOption = :globalOption')->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("accountHead.parent IN(:parent)")->setParameter('parent', $parent);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('e.accountHead');
+        $qb->orderBy('e.accountHead','ASC');
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
+
     public function dailyPurchasePayment(User $user,$data)
     {
         $globalOption = $user->getGlobalOption();

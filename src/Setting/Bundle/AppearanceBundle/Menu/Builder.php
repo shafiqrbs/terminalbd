@@ -581,7 +581,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Journal']->addChild('Double Entry', array('route' => 'account_double_entry'));
-           /* $menu['Accounting']['Journal']->addChild('Journal', array('route' => 'account_journal'));*/
+            $menu['Accounting']['Journal']->addChild('Journal', array('route' => 'account_journal'));
             $menu['Accounting']['Journal']->addChild('Contra Account', array('route' => 'account_balancetransfer'));
             $menu['Accounting']['Journal']->addChild('Profit Withdrawal', array('route' => 'account_profit_withdrawal'));
             $menu['Accounting']['Journal']->addChild('Profit Generate', array('route' => 'account_profit'));

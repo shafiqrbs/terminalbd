@@ -545,17 +545,9 @@ class AccountSalesRepository extends EntityRepository
 			$data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
             $monthYear = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
 		}
-
-	//	$sales = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesOverview($user, $data);
-    //    $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
-      //  $purchase = $this->_em->getRepository('MedicineBundle:MedicineSales')->reportSalesItemPurchaseSalesOverview($user, $data);
-
         $sales = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales',$monthYear);
-
         $purchase = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales-purchase',$monthYear);
-
         $salesAdjustment = $em->getRepository('AccountingBundle:Transaction')->monthlyProfitReconcialtionProcess($user->getGlobalOption(),'sales-adjustment',$monthYear);
-
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
 		$operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
 		$data =  array('sales' => $sales['debit'] ,'salesAdjustment' => $salesAdjustment ,'purchase' => $purchase['credit'], 'operatingRevenue' => $operatingRevenue, 'expenditures' => $expenditures);
@@ -621,8 +613,10 @@ class AccountSalesRepository extends EntityRepository
 		}
 		$sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
 		$purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
-		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37,23), $data);
-		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditureAccountHead($globalOption, $accountHeads = array(23,37), $data);
+		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment,'operatingRevenue' => $operatingRevenue,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
 		return $data;
 
 	}
@@ -640,9 +634,10 @@ class AccountSalesRepository extends EntityRepository
 		}
 
 		$sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
-		$purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
-		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-		$data =  array('sales' => $sales['total'] ,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditureAccountHead($globalOption, $accountHeads = array(37), $data);
+		$data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
 		return $data;
 
 	}
