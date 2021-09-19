@@ -167,6 +167,13 @@ class MedicineStock
     /**
      * @var integer
      *
+     * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
+     */
+    private $bonusQuantity;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="reorderQuantity", type="integer", nullable=true)
      */
     private $reorderQuantity;
@@ -1021,6 +1028,22 @@ class MedicineStock
     public function setBarcode($barcode)
     {
         $this->barcode = $barcode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusQuantity()
+    {
+        return $this->bonusQuantity;
+    }
+
+    /**
+     * @param int $bonusQuantity
+     */
+    public function setBonusQuantity($bonusQuantity)
+    {
+        $this->bonusQuantity = $bonusQuantity;
     }
 
 

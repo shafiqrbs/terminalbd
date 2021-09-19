@@ -142,8 +142,9 @@
                                     <th class="numeric" >Avg MRP</th>
                                     <th class="numeric" >MRP</th>
                                     <th class="numeric" >Opening</th>
-                                    <th class="numeric" >PP Qnt</th>
-                                    <th class="numeric" >Sales Qnt</th>
+                                    <th class="numeric" >PP QTY</th>
+                                    <th class="numeric" >Sales QTY</th>
+                                    <th class="numeric" >Bonus QTY</th>
                                     <th {% if pagination.isSorted('e.remainingQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Stock', 'e.remainingQuantity') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Pack</th>
                                     <th {% if pagination.isSorted('e.minQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Mini', 'e.minQuantity') }}{% if( direction == 'desc' and sort == 'e.minQuantity') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -195,6 +196,7 @@
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                        <td class="numeric" >{{ entity.bonusQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

@@ -31,8 +31,9 @@ class PurchaseItemType extends AbstractType
 
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchase input','placeholder'=>'Enter stock medicine name')))
             ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span3 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span3 input','placeholder'=>'MRP','autoComplete'=>'off')))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input span3 form-control input-number input','placeholder'=>'quantity')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span2 input','placeholder'=>'MRP','autoComplete'=>'off')))
+            ->add('bonusQuantity','text', array('attr'=>array('class'=>'m-wrap span2','placeholder'=>'Bonus QTY','autoComplete'=>'off')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input span2 form-control input-number input','placeholder'=>'quantity')))
             ;
     }
     

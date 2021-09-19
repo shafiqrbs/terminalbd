@@ -90,6 +90,15 @@ class MedicinePurchaseItem
     /**
      * @var integer
      *
+     * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
+     */
+    private $bonusQuantity;
+
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="pack", type="integer",nullable=true)
      */
     private $pack;
@@ -643,6 +652,22 @@ class MedicinePurchaseItem
     public function setTp($tp)
     {
         $this->tp = $tp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusQuantity()
+    {
+        return $this->bonusQuantity;
+    }
+
+    /**
+     * @param int $bonusQuantity
+     */
+    public function setBonusQuantity($bonusQuantity)
+    {
+        $this->bonusQuantity = $bonusQuantity;
     }
 
 

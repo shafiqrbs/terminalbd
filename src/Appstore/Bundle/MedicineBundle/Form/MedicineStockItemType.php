@@ -34,8 +34,8 @@ class MedicineStockItemType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
             ->add('unit', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',

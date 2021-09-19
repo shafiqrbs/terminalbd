@@ -117,7 +117,7 @@ $(document).on("click", ".tr-remove", function(event) {
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
-        onOkBut: function(event, el) {
+        onOkBut: function(el) {
             $.get(url, function( data ) {
                 if(data === 'invalid'){
                     location.reload();

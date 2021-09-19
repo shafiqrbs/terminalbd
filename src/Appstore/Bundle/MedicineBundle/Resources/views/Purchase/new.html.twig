@@ -217,9 +217,10 @@
                                     <div class="span4">
                                         <div class="input-append">
                                             <div class="input-group">
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span3" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
+                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
                                                 <button class="btn yellow">x</button>
                                                 {{ form_widget(purchaseItem.quantity) }}
+                                                {{ form_widget(purchaseItem.bonusQuantity) }}
                                                 <button class="btn red">=</button>
                                                 <button class="btn green" id="totalQnt">Total</button>
                                                 <button class="btn" id="unit">Unit</button>
@@ -244,6 +245,7 @@
                                                 <input type="text" id="pack" name="pack" class="m-wrap purchase-input span3" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
                                                 <button class="btn yellow">x</button>
                                                 {{ form_widget(purchaseItem.quantity) }}
+                                                {{ form_widget(purchaseItem.bonusQuantity) }}
                                                 <button class="btn red">=</button>
                                                 <button class="btn green" id="totalQnt">Total</button>
                                                 <button class="btn" id="unit">Unit</button>
@@ -274,7 +276,8 @@
                                             <th class="span1">Last PP</th>
                                             <th class="span1">Trade Price</th>
                                             <th class="span1">MRP</th>
-                                            <th class="span1">Qnt</th>
+                                            <th class="span1">QTY</th>
+                                            <th class="span1">Bonus QTY</th>
                                             <th class="span1">Total</th>
                                             <th class="span1">Sales Qnt</th>
                                             <th class=""><i class="icon-trash"></i></th>
@@ -303,6 +306,9 @@
                                                     <td class="span1">
                                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                                     </td>
+                                                    <td class="span1">
+                                                        <input type="text" class="td-inline-input bonusQuantity" data-id="{{ item.id }}" autocomplete = "off"  id="bonusQuantity-{{ item.id }}" name="bonusQuantity[]" value="{{ item.bonusQuantity }}" placeholder="{{ item.bonusQuantity }}">
+                                                    </td>
                                                     <td class="" id="subTotal-{{ item.id }}">{{ (item.actualPurchasePrice * item.quantity)|number_format }}</td>
                                                     <td class="span1">
                                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
@@ -315,23 +321,23 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="11" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="12" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
                                             <th colspan="5">AVG Purchase Price</th>
-                                            <td colspan="3" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td colspan="4" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                             <td class="span1"></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
+                                            <td colspan="9" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
                                             <td class="span1"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="span1"></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="11">
+                                            <td colspan="12">
                                                 <table class="table">
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>

@@ -106,13 +106,9 @@ class PurchaseController extends Controller
     public function vendorOpeningAction(Request $request)
     {
 
-        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
-        if ( is_null( $data ) ) {
-            $referer = $request->headers->get('referer');
-            return new RedirectResponse($referer);
-        }
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $amount = 0;
-        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($data);
+        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($config);
         $entity = new MedicinePurchase();
         $editForm = $this->createOpeningForm($entity);
         return $this->render('MedicineBundle:Purchase:opening.html.twig', array(
@@ -146,15 +142,10 @@ class PurchaseController extends Controller
 
     public function openingCreateAction(Request $request)
     {
-        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
-        $ids =  $request->cookies->get( 'barcodes');
-        if ( is_null( $data ) ) {
-            $referer = $request->headers->get('referer');
-            return new RedirectResponse($referer);
-        }
-        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($data);
-        $em = $this->getDoctrine()->getManager();
+
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $amount = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->sumOpeningQuantity($config);
+        $em = $this->getDoctrine()->getManager();
         $entity = new MedicinePurchase();
         $form = $this->createOpeningForm($entity);
         $form->handleRequest($request);
@@ -174,14 +165,9 @@ class PurchaseController extends Controller
                 'success',"Data has been added successfully"
             );
             $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($entity);
-            $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateOpeningQuantity($ids);
-            unset($_COOKIE['barcodes']);
-            setcookie('barcodes', '', time() - 3600, '/');
+            $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateOpeningQuantity($config);
             return $this->redirect($this->generateUrl('medicine_stock'));
         }
-        $this->get('session')->getFlashBag()->add(
-            'error',"Required field does not input"
-        );
         return $this->render('MedicineBundle:Purchase:opening.html.twig', array(
             'entity' => $entity,
             'amount' => $amount,
@@ -433,8 +419,10 @@ class PurchaseController extends Controller
         $pack = !empty($data['pack']) ? $data['pack'] :1;
         $salesPrice = !empty($data['purchaseItem']['salesPrice']) ? $data['purchaseItem']['salesPrice'] :'';
         $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
+        $bonusQuantity = !empty($data['purchaseItem']['bonusQuantity']) ? $data['purchaseItem']['bonusQuantity'] :0;
         $quantity = ($pack * $entity->getQuantity());
         $entity->setQuantity($quantity);
+        $entity->setBonusQuantity($bonusQuantity);
         if(!empty($stockMedicine) and empty($salesPrice)){
             $entity->setActualPurchasePrice($stockMedicine->getSalesPrice());
             $entity->setPurchasePrice($stockMedicine->getSalesPrice());

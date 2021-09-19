@@ -67,14 +67,15 @@ $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
     $('#openingQuantity').val(total);
 });
 
-$('form#purchaseItemForm').on('keyup', ' #pack , #purchaseItem_quantity', function (e) {
-    var pack = parseInt($('#pack').val());
-    var qnt = parseInt($('#purchaseItem_quantity').val());
+$('form#purchaseItemForm').on('keyup', '#pack , #purchaseItem_quantity,#purchaseItem_bonusQuantity', function (e) {
+    var bonus     = parseInt($('#purchaseItem_bonusQuantity').val()  != '' ? $('#purchaseItem_bonusQuantity').val() : 0 );
+    var pack     = parseInt($('#pack').val()  != '' ? $('#pack').val() : 0 );
+    var qnt     = parseInt($('#purchaseItem_quantity').val()  != '' ? $('#purchaseItem_quantity').val() : 0 );
     if(qnt === "NaN" || qnt === ""){
         $('#totalQnt').html(0);
     }
     if(qnt > 0){
-        var totalQnt = (pack * qnt);
+        var totalQnt = ((pack * qnt)+bonus);
         $('#totalQnt').html(totalQnt);
     }
 });
@@ -198,7 +199,7 @@ var formStock = $("#medicineStock").validate({
         "medicineStock[name]": {required: true},
         "medicineStock[purchaseQuantity]": {required: true},
         "medicineStock[unit]": {required: false},
-        "medicineStock[salesPrice]": {required: true}
+        "medicineStock[salesPrice]": {required: true},
     },
     messages: {
         "medicineStock[name]": "Enter medicine name",
@@ -252,7 +253,8 @@ var form = $("#purchaseItemForm").validate({
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: true},
-        "purchaseItem[expirationEndDate]": {required: false}
+        "purchaseItem[expirationEndDate]": {required: false},
+        "purchaseItem[bonusQuantity]": {required: false}
     },
 
     messages: {
@@ -320,12 +322,13 @@ $('#invoiceParticulars').on("click", ".deleteParticular", function() {
 });
 
 
-$(document).on('change', '.quantity ,.salesPrice', function() {
+$(document).on('change', '.quantity ,.salesPrice,.bonusQuantity', function() {
 
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
     var salesQuantity = parseFloat($('#salesQuantity-'+id).val());
     var salesPrice = parseFloat($('#salesPrice-'+id).val());
+    var bonusQuantity = parseFloat($('#bonusQuantity-'+id).val());
     if(salesQuantity > quantity){
         $('#quantity-'+id).val($('purchaseQuantity-'+id).val());
         alert("Purchase quantity must be more then sales quantity.");
@@ -336,7 +339,7 @@ $(document).on('change', '.quantity ,.salesPrice', function() {
     $.ajax({
         url: Routing.generate('medicine_purchase_item_update'),
         type: 'POST',
-        data:'purchaseItemId='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice,
+        data:'purchaseItemId='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice+'&bonusQuantity='+ bonusQuantity,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);

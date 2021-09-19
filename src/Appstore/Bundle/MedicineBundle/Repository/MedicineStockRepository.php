@@ -337,10 +337,12 @@ class MedicineStockRepository extends EntityRepository
             $stock->setDamageQuantity($quantity);
         }else{
             $qnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockItemUpdate($stock);
+            $bonusQnt = $em->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseStockBonusItemUpdate($stock);
             if($openStock > 0){
                 $stock->setOpeningQuantity($openStock);
             }
             $stock->setPack($pack);
+            $stock->setBonusQuantity($bonusQnt);
             $stock->setPurchaseQuantity($qnt);
         }
         $em->persist($stock);
@@ -351,7 +353,7 @@ class MedicineStockRepository extends EntityRepository
     public function remainingQnt(MedicineStock $stock)
     {
         $em = $this->_em;
-	    $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
+	    $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getBonusQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();
@@ -716,12 +718,12 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
-    public function sumOpeningQuantity($data)
+    public function sumOpeningQuantity(MedicineConfig $config)
     {
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.purchasePrice * e.openingQuantity),0) as opening');
-        $qb->where('e.id IN(:ids)')->setParameter('ids', $data);
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         $qb->andWhere('e.id != 1');
         $res = $qb->getQuery();
         $result = $res->getSingleScalarResult();
@@ -729,10 +731,9 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
-    public function updateOpeningQuantity($data)
+    public function updateOpeningQuantity($config)
     {
-
-        $stockUpdate = "UPDATE medicine_stock SET openingApprove = 1 WHERE  id in ({$data})";
+        $stockUpdate = "UPDATE medicine_stock SET openingApprove = 1 WHERE  medicineConfig_id = {$config->getId()}";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->execute();
     }

@@ -236,6 +236,17 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
+    public function purchaseStockBonusItemUpdate(MedicineStock $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.medicinePurchase', 'mp');
+        $qb->select('SUM(e.bonusQuantity) AS quantity');
+        $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt['quantity'];
+    }
+
     public function getPurchaseSalesAvg(MedicineStock $stockItem)
     {
         $qb = $this->createQueryBuilder('e');
@@ -328,6 +339,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $salesQnt = $entity->getSalesQuantity() + $entity->getDamageQuantity() + $entity->getPurchaseReturnQuantity();
         if(!empty($entity) and $salesQnt  <= (float)$data['quantity']) {
             $entity->setQuantity($data['quantity']);
+            $entity->setBonusQuantity($data['bonusQuantity']);
             $entity->setPurchasePrice($data['salesPrice']);
             $entity->setActualPurchasePrice($data['salesPrice']);
             $entity->setSalesPrice($data['salesPrice']);
