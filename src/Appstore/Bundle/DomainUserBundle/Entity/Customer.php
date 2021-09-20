@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\CustomerRepository")
- * @UniqueEntity(fields="mobile",message="Mobile no already existing,Please try again.")
+ * @UniqueEntity(fields={"mobile","globalOption"}, message="Mobile no already existing,Please try again.")
  */
 class Customer
 {
@@ -326,6 +326,13 @@ class Customer
      * @ORM\Column(name="mobile", type="string", length=50, nullable =true)
      */
     private $mobile;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="alternativeMobile", type="string", length=50, nullable =true)
+     */
+    private $alternativeMobile;
 
     /**
      * @var string
@@ -1807,6 +1814,22 @@ class Customer
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlternativeMobile()
+    {
+        return $this->alternativeMobile;
+    }
+
+    /**
+     * @param string $alternativeMobile
+     */
+    public function setAlternativeMobile($alternativeMobile)
+    {
+        $this->alternativeMobile = $alternativeMobile;
     }
 
 

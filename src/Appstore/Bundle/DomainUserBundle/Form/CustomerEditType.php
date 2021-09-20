@@ -32,9 +32,9 @@ class CustomerEditType extends AbstractType
                         new NotBlank(array('message'=>'Please enter customer name'))
                     ))
             )
-            ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Customer facebook ID'))
-            )
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Mobile no')))
+            ->add('alternativeMobile','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Alternative mobile no')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address'))
             )
             ->add('location', 'entity', array(

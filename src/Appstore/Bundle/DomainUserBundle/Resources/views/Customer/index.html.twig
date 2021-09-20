@@ -71,6 +71,7 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Customer ID</td>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
+                                    <th class="numeric">Alt. Mobile</th>
                                     <th class="numeric">Location</th>
                                     <th class="numeric">Email</th>
                                     <th class="numeric">Address</th>
@@ -83,6 +84,7 @@
                                         <td>{{ entity.customerId }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
+                                        <td>{{ entity.alternativeMobile }}</td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td>{{ entity.email }}</td>
                                         <td>{{ entity.address|raw }}</td>
@@ -91,9 +93,9 @@
                                                 <a class="btn mini green" href="{{ path('domain_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('domain_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                              {% endif %}
-                                            {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CUSTOMER_REHAB"))  %}
+                                           {# {% if (app.user.granted("ROLE_CRM_MANAGER") and app.user.globalOption.mainApp.slug == "hms")  %}
                                              <a class="btn mini  blue" href="{{ path('domain_customer_rehab_show', { 'id': entity.id }) }}" >&nbsp;<i class="icon-user"></i> Patient </a>
-                                            {% endif %}
+                                            {% endif %}#}
                                         </td>
                                     </tr>
                                 {% endfor %}
