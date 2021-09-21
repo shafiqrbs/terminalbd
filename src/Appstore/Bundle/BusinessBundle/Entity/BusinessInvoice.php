@@ -258,6 +258,14 @@ class BusinessInvoice
     /**
      * @var float
      *
+     * @ORM\Column(name="sr_commission", type="float", nullable=true)
+     */
+    private $srCommission;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment;
@@ -1138,6 +1146,23 @@ class BusinessInvoice
     {
         return $this->invoiceReturnItems;
     }
+
+    /**
+     * @return float
+     */
+    public function getSrCommission()
+    {
+        return $this->srCommission;
+    }
+
+    /**
+     * @param float $srCommission
+     */
+    public function setSrCommission($srCommission)
+    {
+        $this->srCommission = $srCommission;
+    }
+
 
 }
 

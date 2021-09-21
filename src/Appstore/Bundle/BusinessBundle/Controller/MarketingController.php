@@ -16,6 +16,42 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 class MarketingController extends Controller
 {
 
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
+    /**
+     * Lists all BusinessStore entities.
+     *
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     *
+     */
+    public function ledgerAction()
+    {
+
+        $data = $_REQUEST;
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getBusinessConfig();
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->srLedger($option,$data);
+        $pagination = $this->paginate($entities);
+        $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        return $this->render('BusinessBundle:Marketing:ledger.html.twig', array(
+            'entities' => $pagination,
+            'marketings' => $marketings,
+            'searchForm' => $data,
+        ));
+    }
+
     /**
      * Lists all Marketing entities.
      *
@@ -38,6 +74,8 @@ class MarketingController extends Controller
 
 
     }
+
+
 
 
     /**

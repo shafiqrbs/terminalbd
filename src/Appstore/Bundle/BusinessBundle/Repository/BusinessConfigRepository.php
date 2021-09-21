@@ -30,7 +30,16 @@ class BusinessConfigRepository extends EntityRepository
         $store = $em->createQuery("DELETE BusinessBundle:BusinessStore e WHERE e.businessConfig = {$config}");
         $store->execute();
 
-        $sales = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
+        $history = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
+        $history->execute();
+
+        $DistributionReturnItem = $em->createQuery('DELETE BusinessBundle:BusinessDistributionReturnItem e WHERE e.businessConfig = '.$config);
+        $DistributionReturnItem->execute();
+
+        $PurchaseReturn = $em->createQuery('DELETE BusinessBundle:BusinessPurchaseReturn e WHERE e.businessConfig = '.$config);
+        $PurchaseReturn->execute();
+
+        $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
         $sales->execute();
 
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
@@ -39,8 +48,6 @@ class BusinessConfigRepository extends EntityRepository
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessVendorStock e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
 
-	 //   $stock = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
-	  //  $stock->execute();
 
 	    $items = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findBy(array('businessConfig'=>$config));
 

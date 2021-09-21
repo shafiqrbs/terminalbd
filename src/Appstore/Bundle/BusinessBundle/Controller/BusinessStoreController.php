@@ -18,6 +18,18 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 class BusinessStoreController extends Controller
 {
 
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     /**
      * Lists all BusinessStore entities.
      *
@@ -26,12 +38,24 @@ class BusinessStoreController extends Controller
      */
     public function indexAction()
     {
-
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getBusinessConfig();
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $option),array( 'name' =>'asc' ));
+        $entities = $em->getRepository('BusinessBundle:BusinessStore')->invoiceLists($option,$data);
+        $pagination = $this->paginate($entities);
+        $areas = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $marketings = $this->getDoctrine()->getRepository('BusinessBundle:Marketing')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $stores = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $global),array('name'=>"ASC"));
         return $this->render('BusinessBundle:BusinessStore:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
+            'customers' => $customers,
+            'marketings' => $marketings,
+            'areas' => $areas,
+            'stores' => $stores,
+            'searchForm' => $data,
         ));
     }
 

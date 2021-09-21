@@ -64,9 +64,8 @@ var formDistributionInvoice = $("#distributionInvoice").validate({
                 obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#unit').html('Unit');
-                // $("#particular").select2('open').select2("val","");
+               // $("#particular").select2('open').select2("val","");
                 $('#particular').select2('open');
-                // $('#distributionInvoice')[0].reset();
                 document.getElementById('distributionInvoice').reset();
                 returnData(response);
             }
@@ -75,7 +74,7 @@ var formDistributionInvoice = $("#distributionInvoice").validate({
 });
 
 
-$(document).on('change', '.salesPrice,.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity, .tloPrice', function() {
+$(document).on('change', '.salesPrice,.salesQuantity , .bonusQuantity , .returnQuantity , .damageQuantity , .spoilQuantity, .tloPrice, .srCommission', function() {
 
     var id = $(this).attr('data-id');
     var price = parseFloat($('#salesPrice-'+id).val());
@@ -84,30 +83,44 @@ $(document).on('change', '.salesPrice,.salesQuantity , .bonusQuantity , .returnQ
     var returnQuantity = parseFloat($('#returnQuantity-'+id).val());
     var damageQuantity = parseFloat($('#damageQuantity-'+id).val());
     var spoilQuantity = parseFloat($('#spoilQuantity-'+id).val());
-    var tloPrice = parseFloat($('#tloPrice-'+id).val());
+    var tloPrice = ($('#tloPrice-'+id).val() !="" && $('#tloPrice-'+id).val() !="NaN") ? parseInt($('#tloPrice-'+id).val()) : 0;
+    var srCommission = ($('#tloPrice-'+id).val() !="" && $('#tloPrice-'+id).val() !="NaN") ? parseInt($('#srCommission-'+id).val()) : 0;
     var tloMode = $('#tloMode-'+id).val();
-
     var totalQuantity  = (salesQuantity - returnQuantity - damageQuantity - spoilQuantity);
     var subTotal  = (totalQuantity * price);
     $("#totalQuantity-"+id).html(totalQuantity);
 
-    if(tloMode === 'flat'){
+    if(tloMode === 'flat' && tloPrice > 0){
         $(".tloPrice-"+id).html(financial(tloPrice));
     }
-    if(tloMode === 'multiply'){
+    if(tloMode === 'multiply' && tloPrice > 0 ){
         var subTlo = (tloPrice * totalQuantity);
-        $(".tloPrice-"+id).html(financial(tloPrice));
+        $(".tloPrice-"+id).html(financial(subTlo));
     }
-    if(tloMode === 'percent'){
+    if(tloMode === 'percent' && tloPrice > 0){
         var percent = ((price * tloPrice)/100);
         var subTlo = (percent * totalQuantity);
-        $(".tloPrice-"+id).html(financial(tloPrice));
+        $(".tloPrice-"+id).html(financial(subTlo));
     }
+
+    if(tloMode === 'flat' && srCommission > 0 ){
+        $(".srCommissionTotal-"+id).html(financial(srCommission));
+    }
+    if(tloMode === 'multiply' && srCommission > 0){
+        var subTlo = (srCommission * totalQuantity);
+        $(".srCommissionTotal-"+id).html(financial(subTlo));
+    }
+    if(tloMode === 'percent' && srCommission > 0){
+        var percent = ((price * srCommission)/100);
+        var subTlo = (percent * totalQuantity);
+        $(".srCommissionTotal-"+id).html(financial(subTlo));
+    }
+
     $("#subTotal-"+id).html(financial(subTotal));
     $.ajax({
         url: Routing.generate('business_invoice_distribution_item_update'),
         type: 'POST',
-        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity +'&tloPrice='+ tloPrice +'&tloMode='+ tloMode,
+        data:'itemId='+ id +'&salesPrice='+ price +'&salesQuantity='+ salesQuantity +'&bonusQuantity='+ bonusQuantity +'&returnQuantity='+ returnQuantity +'&damageQuantity='+ damageQuantity  +'&spoilQuantity='+ spoilQuantity +'&totalQuantity='+ totalQuantity +'&tloPrice='+ tloPrice +'&tloMode='+ tloMode+'&srCommission='+srCommission,
         success: function(response) {
             returnData(response);
         }
@@ -120,6 +133,7 @@ function returnData(response)
     $('.subTotal').html(financial(obj['subTotal']));
     $('.netTotal').html(financial(obj['subTotal']));
     $('.tloPrice').html(financial(obj['tloPrice']));
+    $('.srCommission').html(financial(obj['srCommission']));
     $('.salesReturn').html(financial(obj['salesReturn']));
     var due = (obj['subTotal'] - obj['tloPrice']);
     $('#paymentTotal').val(financial(due));

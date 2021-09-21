@@ -20,17 +20,42 @@ use Doctrine\ORM\EntityRepository;
 class BusinessStoreRepository extends EntityRepository
 {
 
-    public function setCategorySorting($data)
+    protected function handleSearchBetween($qb,$data)
     {
-        $i = 1;
-        $em = $this->_em;
-        foreach ($data as $key => $value){
-            $particular = $this->findOneBy(array('status'=> 1,'id' => $value));
-            $particular->setSorting($i);
-            $em->persist($particular);
-            $em->flush();
-            $i++;
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $customer = isset($data['customer'])? $data['customer'] :'';
+        $area = isset($data['area'])? $data['area'] :'';
+        $sr = isset($data['marketing'])? $data['marketing'] :'';
+
+
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
+        if (!empty($customer)) {
+            $qb->join('e.customer','c');
+            $qb->andWhere("c.id = :user")->setParameter('user', $customer);
+        }
+        if (!empty($area)) {
+            $qb->join('e.area','a');
+            $qb->andWhere("a.id = :area")->setParameter('area', $area);
+        }
+        if (!empty($sr)) {
+            $qb->join('e.marketing','sr');
+            $qb->andWhere("sr.id = :sr")->setParameter('sr', $sr);
+        }
+
+
+    }
+
+    public function invoiceLists($config, $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.name','DESC');
+        $qb->getQuery();
+        return  $qb;
     }
 
 }

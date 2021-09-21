@@ -581,8 +581,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $particular = $em->getRepository('BusinessBundle:BusinessParticular')->find($item);
 
         /* @var $entity BusinessInvoiceParticular */
-
-     //   $totalQuantity = ($data['quantity'] -  (float)$data['returnQuantity'] -  (float)$data['damageQuantity'] - (float)$data['spoilQuantity']);
+        $config = $invoice->getBusinessConfig();
         $totalQuantity = $data['quantity'];
         $entity = new BusinessInvoiceParticular();
         $entity->setBusinessInvoice($invoice);
@@ -591,28 +590,44 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $entity->setUnit($particular->getUnit()->getName());
         }
         $entity->setParticular($particular->getName());
-        $tloMode = $data['tloMode'];
         $tlo = 0;
         $tloTotal = 0;
-        if($tloMode == 'flat' and $data['tloPrice'] > 0){
-            $tlo = $data['tloPrice'];
-            $tloTotal = $tlo;
-        }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
-            $tlox = $data['tloPrice'];
-            $tlo = (($data['salesPrice']) * $tlox)/100;
-            $tloTotal = ($tlo * $data['quantity']);
-        }elseif ($data['tloPrice'] > 0){
-            $tlo = ($data['tloPrice']);
-            $tloTotal = ($tlo * $data['quantity']);
+        if($config->isTloCommission() == 1){
+            $tloMode = $data['tloMode'];
+            if($tloMode == 'flat' and $data['tloPrice'] > 0){
+                $tlo = $data['tloPrice'];
+                $tloTotal = $tlo;
+            }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
+                $tlox = $data['tloPrice'];
+                $tlo = (($data['salesPrice']) * $tlox)/100;
+                $tloTotal = ($tlo * $data['quantity']);
+            }elseif ($data['tloPrice'] > 0){
+                $tlo = ($data['tloPrice']);
+                $tloTotal = ($tlo * $data['quantity']);
+            }
+            $entity->setTloMode($tloMode);
+            $entity->setTloPrice($tlo);
+            $entity->setTloTotal($tloTotal);
         }
-        $entity->setTloMode($tloMode);
-        $entity->setTloPrice($tlo);
-        $entity->setTloTotal($tloTotal);
+        if($config->isSrCommission() == 1){
+            $tloMode = $data['tloMode'];
+            if($tloMode == 'flat' and $data['srCommission'] > 0){
+                $tlo = $data['tloPrice'];
+                $tloTotal = $tlo;
+            }elseif($tloMode == 'percent' and $data['srCommission'] > 0){
+                $tlox = $data['srCommission'];
+                $tlo = (($data['salesPrice']) * $tlox)/100;
+                $tloTotal = ($tlo * $data['quantity']);
+            }elseif ($data['srCommission'] > 0){
+                $tlo = ($data['srCommission']);
+                $tloTotal = ($tlo * $data['quantity']);
+            }
+            $entity->setTloMode($tloMode);
+            $entity->setSrCommission($tlo);
+            $entity->setSrCommissionTotal($tloTotal);
+        }
         $entity->setPrice($data['salesPrice']);
         $entity->setQuantity( $data['quantity'] );
-      //  $entity->setReturnQnt( $data['returnQuantity'] );
-       // $entity->setDamageQnt( $data['damageQuantity'] );
-       // $entity->setSpoilQnt( $data['spoilQuantity'] );
         $entity->setBonusQnt( $data['bonusQuantity'] );
         $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
         $entity->setTotalQuantity((float)$totalQuantity);
@@ -665,30 +680,52 @@ class BusinessInvoiceParticularRepository extends EntityRepository
     {
 
         $em = $this->_em;
+        /* @var $entity BusinessInvoiceParticular */
         $entity = $this->find($data['itemId']);
+        $config = $entity->getBusinessInvoice()->getBusinessConfig();
         if(!empty($entity)) {
 
             /* @var $entity BusinessInvoiceParticular */
-            $entity->setTloMode( $data['tloMode'] );
-            $tloMode = $entity->getTloMode();
-            if($tloMode == 'flat' and $data['tloPrice'] > 0){
-                $tlo = $data['tloPrice'];
-                $tloTotal = $tlo;
-            }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
-                $tlox = $data['tloPrice'];
-                $tlo = (($data['salesPrice']) * $tlox)/100;
-                $tloTotal = ($tlo * $data['totalQuantity']);
-            }else{
-                $tlo = ($data['tloPrice']);
-                $tloTotal = ($tlo * $data['totalQuantity']);
+
+            if($config->isTloCommission() == 1){
+                $tloMode = $data['tloMode'];
+                if($tloMode == 'flat' and $data['tloPrice'] > 0){
+                    $tlo = $data['tloPrice'];
+                    $tloTotal = $tlo;
+                }elseif($tloMode == 'percent' and $data['tloPrice'] > 0){
+                    $tlox = $data['tloPrice'];
+                    $tlo = (($data['salesPrice']) * $tlox)/100;
+                    $tloTotal = ($tlo * $data['totalQuantity']);
+                }elseif ($data['tloPrice'] > 0){
+                    $tlo = ($data['tloPrice']);
+                    $tloTotal = ($tlo * $data['totalQuantity']);
+                }
+                $entity->setTloMode($tloMode);
+                $entity->setTloPrice($tlo);
+                $entity->setTloTotal($tloTotal);
+            }
+            if($config->isSrCommission() == 1){
+                $tloMode = $data['tloMode'];
+                if($tloMode == 'flat' and $data['srCommission'] > 0){
+                    $tlo = $data['tloPrice'];
+                    $tloTotal = $tlo;
+                }elseif($tloMode == 'percent' and $data['srCommission'] > 0){
+                    $tlox = $data['srCommission'];
+                    $tlo = (($data['salesPrice']) * $tlox)/100;
+                    $tloTotal = ($tlo * $data['totalQuantity']);
+                }elseif ($data['srCommission'] > 0){
+                    $tlo = ($data['srCommission']);
+                    $tloTotal = ($tlo * $data['totalQuantity']);
+                }
+                $entity->setTloMode($tloMode);
+                $entity->setSrCommission($tlo);
+                $entity->setSrCommissionTotal($tloTotal);
             }
             $entity->setQuantity( $data['salesQuantity'] );
             $entity->setReturnQnt( $data['returnQuantity'] );
             $entity->setDamageQnt( $data['damageQuantity'] );
             $entity->setSpoilQnt( $data['spoilQuantity'] );
             $entity->setBonusQnt( $data['bonusQuantity'] );
-            $entity->setTloPrice($tlo);
-            $entity->setTloTotal($tloTotal);
             $entity->setPrice( $data['salesPrice'] );
             $entity->setPurchasePrice($entity->getBusinessParticular()->getPurchasePrice());
             $entity->setTotalQuantity((int)$data['totalQuantity']);

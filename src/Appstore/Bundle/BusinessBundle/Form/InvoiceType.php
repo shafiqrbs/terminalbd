@@ -42,7 +42,7 @@ class InvoiceType extends AbstractType
     {
         $builder
 
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','maxlength' => 6,'autocomplete'=>'off')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Discount','data-original-title'=>'Add payment discount','maxlength' => 6,'autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap discount-type span12'),
                 'expanded'      =>false,
@@ -61,14 +61,11 @@ class InvoiceType extends AbstractType
                 'constraints' =>array( new NotBlank(array('message'=>'Confirm current process status')) ),
                 'empty_value' => '--- Choose an order process ---',
                 'choices' => array(
-                    'Done' => 'Done',
+                    'Created' => 'Created',
                     'Delivered' => 'Delivered',
-                    'Condition' => 'Condition',
                     'In-progress' => 'In-progress',
-                    'Hold' => 'Hold',
-                    'Advance' => 'Advance',
+                    'Condition' => 'Condition',
                     'Quotation' => 'Quotation',
-                    'Canceled' => 'Canceled',
                 ),
             ))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))

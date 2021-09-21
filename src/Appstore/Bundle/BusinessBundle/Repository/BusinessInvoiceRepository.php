@@ -425,6 +425,16 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
+    public function srLedger($config, $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.srCommission > 0');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
 
     public function invoiceConditionLists($config, $data)
     {
@@ -526,7 +536,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
         $qb->from('BusinessBundle:BusinessInvoiceParticular','si')
-        ->select("sum(si.subTotal) as subTotal","sum(si.tloTotal) as tloPrice","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
+        ->select("sum(si.subTotal) as subTotal","sum(si.tloTotal) as tloPrice","sum(si.srCommissionTotal) as srCommission","sum(si.quantity) as salesQnt","sum(si.returnQnt) as returnQnt","sum(si.damageQnt) as damageQnt","sum(si.spoilQnt) as spoilQnt","sum(si.totalQuantity) as totalQnt","sum(si.bonusQnt) as bonusQnt")
         ->where('si.businessInvoice = :invoice')
         ->setParameter('invoice', $invoice ->getId());
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -554,6 +564,7 @@ class BusinessInvoiceRepository extends EntityRepository
             $total = round($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount() - $invoice->getSalesReturn());
             $invoice->setTotal($total);
             $invoice->setTloPrice($result['tloPrice']);
+            $invoice->setSrCommission($result['srCommission']);
             $invoice->setDue($invoice->getTotal() - $invoice->getReceived());
 
         }else{
@@ -562,6 +573,7 @@ class BusinessInvoiceRepository extends EntityRepository
             $invoice->setSalesReturn(0);
             $invoice->setTotal(0);
             $invoice->setTloPrice(0);
+            $invoice->setSrCommission(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);

@@ -22,6 +22,48 @@ use Doctrine\ORM\EntityRepository;
 class BusinessStoreLedgerRepository extends EntityRepository
 {
 
+    protected function handleSearchBetween($qb,$data)
+    {
+
+
+        $customer = isset($data['customer'])? $data['customer'] :'';
+        $store = isset($data['store'])? $data['store'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+        if (!empty($customer)) {
+            $qb->join('e.store','sr');
+            $qb->join('sr.customer','c');
+            $qb->andWhere("c.id = :user")->setParameter('user', $customer);
+        }
+        if (!empty($store)) {
+            $qb->join('e.store','sr');
+            $qb->andWhere("sr.id = :sr")->setParameter('sr', $store);
+        }
+        if (!empty($startDate)) {
+            $compareTo = new \DateTime($startDate);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.created >= :created");
+            $qb->setParameter('created', $created);
+        }
+        if (!empty($endDate)) {
+            $compareTo = new \DateTime($endDate);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
+
+    }
+
+    public function invoiceLists($config, $data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
     public function getStoreBalance($store)
     {
 
@@ -35,14 +77,15 @@ class BusinessStoreLedgerRepository extends EntityRepository
         return $balance;
     }
 
-    public function approveStorePayment(BusinessStoreLedger $store,$user)
+    public function approveStorePayment(BusinessStoreLedger $ledger,$user)
     {
         $em = $this->_em;
-        $store->setApprovedBy($user);
-        $store->setStatus(1);
+        $ledger->setApprovedBy($user);
+        $ledger->setStatus(1);
         $em->flush();
-
-        $balance = $this->getStoreBalance($store->getId());
+        echo $balance = $this->getStoreBalance($ledger->getStore()->getId());
+        $ledger->setBalance($balance);
+        $store = $ledger->getStore();
         $store->setBalance($balance);
         $em->flush();
     }

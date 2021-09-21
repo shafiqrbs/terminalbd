@@ -77,6 +77,14 @@ class BusinessStore
      */
     private $joiningDate;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="balance", type="float",  nullable = true)
+     */
+    private $balance;
+
+
 
     /**
      * @var boolean
@@ -129,29 +137,6 @@ class BusinessStore
         $this->businessConfig = $businessConfig;
     }
 
-    /**
-     * @return BusinessInvoice
-     */
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDesignation()
-    {
-        return $this->designation;
-    }
-
-    /**
-     * @param string $designation
-     */
-    public function setDesignation(string $designation)
-    {
-        $this->designation = $designation;
-    }
 
     /**
      * @return string
@@ -169,21 +154,6 @@ class BusinessStore
         $this->mobileNo = $mobileNo;
     }
 
-    /**
-     * @return string
-     */
-    public function getCompanyName()
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * @param string $companyName
-     */
-    public function setCompanyName(string $companyName)
-    {
-        $this->companyName = $companyName;
-    }
 
     /**
      * @return \DateTime
@@ -287,6 +257,22 @@ class BusinessStore
     public function getStoreLedgers()
     {
         return $this->storeLedgers;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
     }
 
 

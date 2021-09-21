@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Store
+                   Manage Business Store Ledger
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                     <li><a href="#">Business Store</a></li>
+                     <li><a href="#">Business Store Ledger</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Business Store</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Business Store Ledger</div>
                         <div class="actions">
                             <a href="{{ path('business_store_new') }}" class=" btn red"><i class="icon-plus"></i> Add Store</a>
                             <a  href="{{ path('business_store_ledger_new') }}" class=" btn blue"><i class="icon-money"></i> Receive</a>
@@ -44,33 +44,23 @@
                                     <form class="search-form" action="" method="get" name="itemSearch">
                                         <div class="row-fluid" style="margin-bottom: 10px">
                                             <div class="span3">
-                                                <select name="area" id="area" class="m-wrap span12 select2">
-                                                    <option value="" >--Area--</option>
-                                                    {% for area in areas %}
-                                                        <option value="{{ area.id }}" {% if searchForm.area is defined and searchForm.area == area.id %} selected="selected" {% endif %} >{{ area.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="span3">
                                                 <select name="marketing" id="marketing" class="m-wrap span12 select2">
-                                                    <option value="" >--SR--</option>
-                                                    {% for marketing in marketings %}
-                                                        <option value="{{ marketing.id }}" {% if searchForm.marketing is defined and searchForm.marketing == marketing.id %} selected="selected" {% endif %} >{{ marketing.name }}</option>
+                                                    <option value="" >--Marketing SR--</option>
+                                                    {% for store in marketings %}
+                                                        <option value="{{ store.id }}" {% if searchForm.store is defined and searchForm.store == store.id %} selected="selected" {% endif %} >{{ store.name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                             <div class="span3">
-                                                <select name="customer" id="customer" class="m-wrap span12 select2">
-                                                    <option value="" >--DSR--</option>
-                                                    {% for customer in customers %}
-                                                        <option value="{{ customer.id }}" {% if searchForm.customer is defined and searchForm.customer == customer.id %} selected="selected" {% endif %} >{{ customer.name }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                                <div class="input-icon left">
+                                                    <i class="icon-calendar"></i>
+                                                    <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Start date{% endif %}" >
+                                                </div>
                                             </div>
                                             <div class="span3">
                                                 <div class="controls">
                                                     <div class="input-append span12">
-                                                        <input type="text" id="name" name="name"  class="m-wrap span8" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Store name{% endif %} ">
+                                                        <input class="m-wrap span8 search-input date-picker" name="createdEnd" id="createdEnd" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}End date{% endif %}">
                                                         <div class="btn-group">
                                                             <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                         </div>
@@ -84,34 +74,32 @@
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
-                                        <th> S/N</th>
+                                        <th>Created</th>
                                         <th>Store Name</th>
-                                        <th>Mobile</th>
                                         <th>DSR</th>
                                         <th>Area</th>
-                                        <th>Address</th>
-                                        <th>Balance</th>
+                                        <th>Invoice</th>
+                                        <th>Mode</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody id="invoiceParticulars">
                                     {% for entity in entities %}
                                         <tr id="remove-{{ entity.id }}">
-                                            <td  class="">{{ loop.index }}.</td>
-                                            <td class="">{{ entity.name }}</td>
-                                            <td class="">{{ entity.mobileNo }}</td>
-                                            <td class="">{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                            <td class="">{% if entity.area is defined and entity.area is not empty %}{{ entity.area.name }}{% endif %}</td>
-                                            <td class="">{{ entity.address }}</td>
-                                            <td class="">{{ entity.balance|number_format(2) }}</td>
-                                            <td class=""> {% if( entity.status == 1) %}
-                                                    <a class="btn mini blue btn-action" href="{{ path('business_store_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
-                                                {% else %}
-                                                    <a class="btn mini red btn-action" href="{{ path('business_store_status', { 'id': entity.id}) }}">x</a>
-                                                {% endif %}
-                                                <a href="{{ path('business_store_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                                {% if entity.balance is empty %}
-                                                <a title="Are you sure went to delete ?" href="{{ path('business_store_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <td class="">{{ entity.created|date('d-m-Y h:m A') }}</td>
+                                            <td class="">{% if entity.store is defined and entity.store is not empty %}{{ entity.store.name }}{% endif %}</td>
+                                            <td class="">{% if entity.store.customer is defined and entity.store.customer is not empty %}{{ entity.store.customer.name }}{% endif %}</td>
+                                            <td class="">{% if entity.store.area is defined and entity.store.area is not empty %}{{ entity.store.area.name }}{% endif %}</td>
+                                            <td class="">{% if entity.invoice is not empty %}{{ entity.invoice.invoice }}{% endif %}</td>
+                                            <td class="">{{ entity.transactionType }}</td>
+                                            <td class="">{{ entity.debit|number_format(2) }}</td>
+                                            <td class="">{{ entity.credit|number_format(2) }}</td>
+                                            <td class="">
+                                                {% if( entity.status == 0 and entity.invoice is empty) %}
+                                                    <a class="btn mini blue btn-action confirm" href="javascript:" data-url="{{ path('business_store_ledger_status', { 'id': entity.id}) }}"><i class="icon-ok"></i> Approve</a>
+                                                    <a  href="javascript:" data-url="{{ path('business_store_ledger_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -131,7 +119,14 @@
         </div>
     </div>
 {% endblock %}
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+        '@BusinessBundle/Resources/public/js/approveProcess.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
 {% block documentready %}
     {{ parent() }}
 {% endblock %}

@@ -123,6 +123,20 @@ class BusinessInvoiceParticular
      */
     private $tloPrice;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $srCommission;
+
+      /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $srCommissionTotal;
+
       /**
      * @var float
      *
@@ -596,6 +610,38 @@ class BusinessInvoiceParticular
     public function setTloTotal($tloTotal)
     {
         $this->tloTotal = $tloTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSrCommission()
+    {
+        return $this->srCommission;
+    }
+
+    /**
+     * @param float $srCommission
+     */
+    public function setSrCommission($srCommission)
+    {
+        $this->srCommission = $srCommission;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSrCommissionTotal()
+    {
+        return $this->srCommissionTotal;
+    }
+
+    /**
+     * @param float $srCommissionTotal
+     */
+    public function setSrCommissionTotal($srCommissionTotal)
+    {
+        $this->srCommissionTotal = $srCommissionTotal;
     }
 }
 

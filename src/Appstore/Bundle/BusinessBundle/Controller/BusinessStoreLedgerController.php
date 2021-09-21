@@ -20,6 +20,19 @@ use Symfony\Component\HttpFoundation\Response;
 class BusinessStoreLedgerController extends Controller
 {
 
+
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     /**
      * Lists all BusinessStore entities.
      *
@@ -29,11 +42,20 @@ class BusinessStoreLedgerController extends Controller
     public function indexAction()
     {
 
+        $data = $_REQUEST;
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getBusinessConfig();
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption()->getBusinessConfig();
-        $entities = $em->getRepository('BusinessBundle:BusinessStoreLedger')->findBy(array('businessConfig' => $option),array( 'created' =>'DESC' ));
+        $entities = $em->getRepository('BusinessBundle:BusinessStoreLedger')->invoiceLists($option,$data);
+        $pagination = $this->paginate($entities);
+        $stores = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
+        $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $global),array('name'=>"ASC"));
         return $this->render('BusinessBundle:BusinessStoreLedger:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
+            'customers' => $customers,
+            'stores' => $stores,
+            'searchForm' => $data,
         ));
     }
 
@@ -153,7 +175,6 @@ class BusinessStoreLedgerController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-
         $status = $entity->isStatus();
         if($status == 1){
             $entity->setStatus(false);

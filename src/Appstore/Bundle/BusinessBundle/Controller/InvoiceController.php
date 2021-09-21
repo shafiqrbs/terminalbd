@@ -254,9 +254,8 @@ class InvoiceController extends Controller
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            }elseif($entity->getProcess() == 'Condition') {
+            }elseif(in_array($entity->getProcess(), $done) or $entity->getProcess() == 'Condition' or $entity->getProcess() == 'In-progress' ) {
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             }
             $inProgress = array('Hold', 'Created');

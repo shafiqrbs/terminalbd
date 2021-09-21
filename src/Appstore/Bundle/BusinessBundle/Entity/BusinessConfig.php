@@ -177,6 +177,20 @@ class BusinessConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="tloCommission", type="boolean",  nullable=true)
+     */
+    private $tloCommission = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="srCommission", type="boolean",  nullable=true)
+     */
+    private $srCommission = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="salesReturn", type="boolean",  nullable=true)
      */
     private $salesReturn = false;
@@ -1432,6 +1446,38 @@ class BusinessConfig
     public function setStoreLedger($storeLedger)
     {
         $this->storeLedger = $storeLedger;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTloCommission()
+    {
+        return $this->tloCommission;
+    }
+
+    /**
+     * @param bool $tloCommission
+     */
+    public function setTloCommission($tloCommission)
+    {
+        $this->tloCommission = $tloCommission;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSrCommission()
+    {
+        return $this->srCommission;
+    }
+
+    /**
+     * @param bool $srCommission
+     */
+    public function setSrCommission($srCommission)
+    {
+        $this->srCommission = $srCommission;
     }
 
 
