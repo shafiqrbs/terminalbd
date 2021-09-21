@@ -686,7 +686,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         if(!empty($entity)) {
 
             /* @var $entity BusinessInvoiceParticular */
-
+            $tlo = 0;
+            $tloTotal = 0;
             if($config->isTloCommission() == 1){
                 $tloMode = $data['tloMode'];
                 if($tloMode == 'flat' and $data['tloPrice'] > 0){

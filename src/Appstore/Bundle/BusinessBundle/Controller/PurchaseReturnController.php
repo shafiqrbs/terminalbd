@@ -140,7 +140,6 @@ class PurchaseReturnController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessPurchaseItem')->getVendorItem($config,$entity->getVendor());
-
 	    return $this->render("BusinessBundle:PurchaseReturn:edit.html.twig", array(
             'entity' => $entity,
             'id' => 'purchase',
@@ -162,7 +161,7 @@ class PurchaseReturnController extends Controller
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->updatePurchaseTotalPrice($entity);
         $arrs = array('created','sales','commission','Done');
         $id = $entity->getId();
-        $this->approvePurchaseReturn($id);
+        $this->approvePurchaseReturn($entity);
         return $this->redirect($this->generateUrl('business_purchase_return'));
 
     }

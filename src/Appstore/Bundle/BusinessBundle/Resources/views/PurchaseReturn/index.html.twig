@@ -97,11 +97,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set approveProcess = ['created','commission','sales'] %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >
-                                            <a  data-type="select" class="editable" id="Vendor" data-name="Vendor" href="#" data-source="{{ path('business_purchase_vendor_select') }}"  data-url="{{ path('business_purchase_vendor_update',{'id':entity.id}) }}" data-pk="{{ entity.id }}" data-value="{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.id }}{% endif %}" data-original-title="Enter Vendor name">{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</a>
+                                            {% if  entity.process in approveProcess and entity.subTotal > 0 %}
+                                                <a  data-type="select" class="editable" id="Vendor" data-name="Vendor" href="#" data-source="{{ path('business_purchase_vendor_select') }}"  data-url="{{ path('business_purchase_vendor_update',{'id':entity.id}) }}" data-pk="{{ entity.id }}" data-value="{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.id }}{% endif %}" data-original-title="Enter Vendor name">{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}</a>
+                                            {% else %}
+                                                {% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.companyName }}{% endif %}
+                                            {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.purchaseInvoice }}</td>
@@ -118,7 +123,7 @@
                                             {% endif %}
                                             <a href="{{ path('business_purchase_return_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             {% set approveProcess = ['created','commission','sales'] %}
-                                            {% if  entity.process in approveProcess and entity.subTotal > 0 %}
+                                            {% if  entity.process in approveProcess and entity.subTotal > 0 and entity.vendor is not empty %}
                                                 <a  href="javascript:"  data-url="{{ path('business_purchase_return_approved',{'id':entity.id}) }}" class="btn blue mini approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                             {% endif %}
                                             </td>

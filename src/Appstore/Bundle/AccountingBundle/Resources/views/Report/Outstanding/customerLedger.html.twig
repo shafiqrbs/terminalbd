@@ -84,15 +84,17 @@
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >
                                     {% if globalOption.mainApp.slug == 'business' %}
-                                <table>
-                                    <tr>
-                                        <th class="span4">Particular</th>
-                                        <th class="span2">Size</th>
-                                        <th class="span1">Qnt</th>
-                                        <th class="span1">Unit</th>
-                                        <th class="span1">Price</th>
-                                        <th class="span2">Sub-Total</th>
-                                    </tr>
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead class="flip-content ">
+                                        <tr class="head-blue">
+                                            <th class="span4">Particular</th>
+                                            <th class="span2">Size</th>
+                                            <th class="span1">Qnt</th>
+                                            <th class="span1">Unit</th>
+                                            <th class="span1">Price</th>
+                                            <th class="span2">Sub-Total</th>
+                                        </tr>
+                                    </thead>
                                 </table>
                                     {% else %}
                                         Particulars

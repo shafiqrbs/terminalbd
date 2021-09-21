@@ -52,6 +52,18 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         endforeach;
     }
 
+    public function insertStockPurchaseReturnItem(BusinessPurchaseReturn $entity,BusinessParticular $particular)
+    {
+        $em = $this->_em;
+        $item = new BusinessPurchaseReturnItem();
+        $item->setBusinessPurchaseReturn($entity);
+        $item->setBusinessParticular($particular);
+        $item->setPurchasePrice($particular->getPurchasePrice());
+        $item->setSubTotal(0);
+        $em->persist($item);
+        $em->flush();
+    }
+
     public function deletePurchaseReturnItem(BusinessInvoiceParticular $invoiceParticular)
     {
        $em = $this->_em;

@@ -46,6 +46,7 @@ class DistributorController extends Controller
             'subTotal' => $result['subTotal'],
             'discount' => $invoice->getDiscount(),
             'tloPrice' => $result['tloPrice'],
+            'srCommission' => $result['srCommission'],
             'salesReturn' => $invoice->getSalesReturn(),
             'total' => $invoice->getTotal(),
             'netTotal' => ($result['subTotal'] - $result['tloPrice'] - $invoice->getSalesReturn()),
