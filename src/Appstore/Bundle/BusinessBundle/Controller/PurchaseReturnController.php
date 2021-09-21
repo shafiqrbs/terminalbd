@@ -159,8 +159,6 @@ class PurchaseReturnController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->insertPurchaseReturnItem($entity,$data);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->updatePurchaseTotalPrice($entity);
-        $arrs = array('created','sales','commission','Done');
-        $id = $entity->getId();
         $this->approvePurchaseReturn($entity);
         return $this->redirect($this->generateUrl('business_purchase_return'));
 
