@@ -292,7 +292,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
-        $mobile         = "Mobile -".$option->getMobile();
+       // $mobile         = "Mobile -".$option->getMobile();
         $address        = $config->getAddress();
         $website        = $option->getDomain();
         $customer       = '';
@@ -318,7 +318,6 @@ class MedicineSalesTemporaryController extends Controller
 
         /* Date is kept the same for testing */
         $date = date('d-M-y h:i:s A');
-
         /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
@@ -326,7 +325,7 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($companyName."\n");
         $printer -> selectPrintMode();
         $printer -> text($address."\n");
-        $printer -> text($mobile."\n");
+       // $printer -> text($mobile."\n");
         $printer -> feed();
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);

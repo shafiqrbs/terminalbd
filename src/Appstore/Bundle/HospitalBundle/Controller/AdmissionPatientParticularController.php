@@ -8,7 +8,9 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
+use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmittedParticularType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
+use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -71,7 +73,6 @@ class AdmissionPatientParticularController extends Controller
     public function dailyAdmittedInvoiceAction($invoice, InvoiceTransaction $transaction)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
@@ -81,14 +82,38 @@ class AdmissionPatientParticularController extends Controller
         if($transaction->getProcess() == 'In-progress'){
             return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
         }
-
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));
+        $particular = new AdmissionPatientParticular();
+        $particularForm = $this->createCreateForm($particular);
         return $this->render('HospitalBundle:InvoiceAdmission:confirm.html.twig', array(
             'entity' => $entity,
             'invoiceTransaction' => $transaction,
-            'particularService' => $services,
+            'form' => $particularForm->createView(),
         ));
     }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(AdmissionPatientParticular $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $form = $this->createForm(new InvoiceAdmittedParticularType($config), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_admitted_create', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
 
     public function addParticularAction(Request $request, InvoiceTransaction $transaction)
     {

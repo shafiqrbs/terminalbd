@@ -73,6 +73,55 @@ $(document).on( "click", ".receivePayment", function(e){
     $("span", this).toggleClass("fa-minus fa-money");
 });
 
+$(document).on('change', '.particular', function() {
+
+    var particular = $(this).val();
+    $.get( Routing.generate('hms_invoice_admission_particular_search') ,{id:particular } )
+        .done(function( response ) {
+            obj = JSON.parse(response);
+            $('#particularId').val(obj['particularId']);
+            $('#quantity').val(obj['quantity']).focus();
+            $('.price').val(obj['price']);
+            $('#instruction').html(obj['instruction']);
+            $('#addParticular').attr("disabled", false);
+        });
+
+});
+
+
+$(document).on('click', '#addPatientParticular', function() {
+
+    var particularId = $('#particularId').val();
+    var quantity = parseInt($('#admitted_particular_quantity').val());
+    var price = parseInt($('#admitted_particular_salesPrice').val());
+    var url = $('#addPatientParticular').attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function (event, el){
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
+                success: function (response) {
+                    obj = JSON.parse(response);
+                    $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                    $('.total').html(obj['total']);
+                    $('.msg-hidden').show();
+                    $('#msg').html(obj['msg']);
+                    $("#particular").select2().select2("val","");
+                    $('#price').val('');
+                    $('#quantity').val('1');
+                    $('#addPatientParticular').attr("disabled", false);
+                }
+            })
+        }
+    });
+
+
+});
+
+
 $(document).on('change', '#particular', function() {
 
     var url = $(this).val();
@@ -128,31 +177,63 @@ $(document).on('click', '#addParticular', function() {
     })
 });
 
+var form = $("#invoiceForm").validate({
 
-$(document).on('change', '#discountType , #hospitalInvoice_discountCalculation', function() {
+    rules: {
 
-    var discount = parseInt($('#hospitalInvoice_discountCalculation').val());
+        "invoice[receive]": {required: true, digits: true},
+        "invoice[discountCalculation]": {required: false},
+        "invoice[comment]": {required: false},
+    },
+
+    messages: {
+        "invoice[invoice_receive]": "Enter payment amount",
+    },
+    tooltip_options: {
+        "invoice[invoice_receive]": {placement: 'top', html: true},
+    },
+    submitHandler: function (form) {
+        $.ajax({
+            url         : $('form#invoiceForm').attr( 'action' ),
+            type        : $('form#invoiceForm').attr( 'method' ),
+            data        : new FormData($('form#invoiceForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                $('form#invoiceForm')[0].reset();
+                obj = JSON.parse(response);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.payment').html(obj['payment']);
+                $('.due').html(obj['due']);
+                $('.discount').html(obj['discount']);
+                $('#invoiceTransaction').html(obj['invoiceTransaction']);
+            }
+        });
+
+    }
+});
+
+$(document).on('change', '#discountType , #invoice_discountCalculation', function() {
+
+    var discount = parseInt($('#invoice_discountCalculation').val());
     var invoice = parseInt($('#invoiceId').val());
     var discountType = $('#discountType').val();
-    alert(discount);
     if(discount === "NaN"){
         return false;
     }
     $.ajax({
-        url: Routing.generate('hms_invoice_discount_update'),
+        url: Routing.generate('hms_invoice_admission_discount'),
         type: 'POST',
         data:'discount=' + discount+'&invoice='+ invoice+'&discountType='+discountType,
         success: function(response) {
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
+            $('.total').html(obj['total']);
+            $('.payment').html(obj['payment']);
             $('.due').html(obj['due']);
             $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('#msg').html(obj['msg']);
+            $('.discount').html(obj['discount']);
         }
 
     })
@@ -191,6 +272,43 @@ $(document).on("click", ".particularDelete", function() {
         }
     });
 });
+
+$(document).on("click", ".transactionDelete", function(event) {
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.get(url, function( data ) {
+                obj = JSON.parse(data);
+                $('#invoiceTransaction').html(obj['invoiceTransaction']);
+                $('.payment').html(obj['payment']);
+            });
+        }
+    });
+});
+
+$(document).on("click", ".paymentConfirm", function(event) {
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.get(url, function( data ) {
+                obj = JSON.parse(data);
+                $('.subTotal').html(obj['subTotal']);
+                $('.total').html(obj['total']);
+                $('.discount').html(obj['discount']);
+                $('.payment').html(obj['payment']);
+                $('.due').html(obj['due']);
+                $('#invoiceTransaction').html(obj['invoiceTransaction']);
+            });
+        }
+    });
+});
+
 
 $(document).on('click', '#addPayment', function() {
 

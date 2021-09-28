@@ -146,6 +146,23 @@ class InvoiceTransactionRepository extends EntityRepository
 
     }
 
+    public function initialInsertAdmissionInvoiceTransaction(Invoice $invoice){
+
+        $code = $this->getLastCode($invoice);
+        $entity = New InvoiceTransaction();
+        $entity->setHmsInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setProcess('Create');
+        $entity->setTransactionCode($transactionCode);
+        $entity->setPayment($invoice->getReceive());
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+        return $entity;
+
+    }
+
     public function admissionPaymentTransaction(Invoice $invoice,$data){
 
         $code = $this->getLastCode($invoice);

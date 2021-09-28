@@ -50,29 +50,12 @@ class InvoiceAdmissionType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 admissionInput','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-           /* ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Patient release date','data-original-title'=>'Patient release date','autocomplete'=>'off')))*/
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips span11 m-wrap payment admissionInput','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+            ->add('receive','text', array('attr'=>array('class'=>'tooltips span11 m-wrap payment admissionInput','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
             ))
-            ->add('discount','text', array('attr'=>array('class'=>'tooltips span11 m-wrap discount admissionInput','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
+            ->add('discount','hidden')
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'tooltips span11 m-wrap discount admissionInput','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
-           /* ->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom'),
-                'empty_value' => '--- Select Patient Status ---',
-                'expanded'      =>false,    x
-                'multiple'      =>false,
-                'choices' => array(
-                    'admission' => 'Admission',
-                    'admitted'  => 'Admitted',
-                    'release'   => 'Release Certificate',
-                    'death'     => 'Death Certificate',
-                ),
-            ))*/
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -125,48 +108,8 @@ class InvoiceAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-            ->add('cabin', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Select cabin/ward no---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.service = 2")
-                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
-            ->add('department', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select department---',
-                'attr'=>array('class'=>'m-wrap span12 '),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->DepartmentChoiceList()
-            ))
-
-            ->add('assignDoctor', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'doctor',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '--- Choose assign doctor ---',
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.service = 6")
-                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
         ;
-        $builder->add('customer', new CustomerForHospitalAdmissionType( $this->location ));
+        //$builder->add('customer', new CustomerForHospitalAdmissionType( $this->location ));
     }
     
     /**
@@ -184,7 +127,7 @@ class InvoiceAdmissionType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_invoice';
+        return 'invoice';
     }
 
     /**

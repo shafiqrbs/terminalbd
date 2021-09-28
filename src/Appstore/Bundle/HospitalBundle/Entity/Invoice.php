@@ -247,7 +247,7 @@ class Invoice
      *
      * @ORM\Column(name="discountCalculation", type="float", nullable=true)
      */
-    private $discountCalculation;
+    private $discountCalculation=0;
 
     /**
      * @var integer
@@ -270,6 +270,13 @@ class Invoice
      * @ORM\Column(name="total", type="decimal", nullable=true)
      */
     private $total;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="receive", type="decimal", nullable=true)
+     */
+    private $receive;
 
     /**
      * @var string
@@ -1303,7 +1310,7 @@ class Invoice
     /**
      * @param float $discountCalculation
      */
-    public function setDiscountCalculation(float $discountCalculation)
+    public function setDiscountCalculation($discountCalculation)
     {
         $this->discountCalculation = $discountCalculation;
     }
@@ -1330,6 +1337,22 @@ class Invoice
     public function getHmsInvoiceReturn()
     {
         return $this->hmsInvoiceReturn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceive()
+    {
+        return $this->receive;
+    }
+
+    /**
+     * @param string $receive
+     */
+    public function setReceive($receive)
+    {
+        $this->receive = $receive;
     }
 
 

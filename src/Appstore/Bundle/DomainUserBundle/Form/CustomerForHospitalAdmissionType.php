@@ -33,25 +33,24 @@ class CustomerForHospitalAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'patient name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span8 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span6 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'patient mobile no')),
                 )
             ))
-            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'customer code')))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'father/spouse name'),
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'father/spouse name'),
 
             ))
-            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'mother name'),
+            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'mother name'),
 
             ))
             ->add('religion','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'religion'),
 
             ))
-            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'weight')))
-            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'BP')))
-            ->add('height','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'height')))
-            ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span8','autocomplete'=>'off','placeholder'=>'diabetes')))
+            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'weight')))
+            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'BP')))
+            ->add('height','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'height')))
+            ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'diabetes')))
 
             ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'profession'),
 
@@ -59,14 +58,14 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'nationality'),
 
             ))
-            ->add('dob','text', array('attr'=>array('class'=>'m-wrap span8 dateCalendar','placeholder'=>'patient date of birth'),
+            ->add('dob','date', array('attr'=>array('class'=>'m-wrap span5 dob','placeholder'=>'patient date of birth'),
                 ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span8 numeric patientAge','placeholder'=>'age'),
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'patient age')),
             )))
             ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
+                'attr'=>array('class'=>'m-wrap span6'),
                 'empty_value' => '--- Select Blood Group ---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))
@@ -80,29 +79,24 @@ class CustomerForHospitalAdmissionType extends AbstractType
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span8 m-wrap select-custom gender'),
+                'attr'=>array('class'=>'span4 m-wrap select-custom gender'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
             ->add('maritalStatus', 'choice', array(
-                'attr'=>array('class'=>'span8 m-wrap select-custom maritalStatus'),
+                'attr'=>array('class'=>'span4 m-wrap select-custom maritalStatus'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Single' => 'Single','Married' => 'Married', 'Divorced' => 'Divorced','Widow'=>'Widow'),
             ))
 
-            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 numeric patientAge','placeholder'=>'guardian name'),
+            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span6 ','placeholder'=>'guardian name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'guardian name')),
             )))
 
-            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span12 alternativeContactPerson','placeholder'=>'guardian name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'guardian name')),
-            )))
-
-            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span8 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no'),
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'guardian mobile no')),
             )))
@@ -141,7 +135,7 @@ class CustomerForHospitalAdmissionType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_domainuserbundle_customer';
+        return 'customer';
     }
 
     protected function LocationChoiceList()

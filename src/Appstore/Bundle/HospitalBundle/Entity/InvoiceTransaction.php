@@ -49,6 +49,12 @@ class InvoiceTransaction
     private  $createdBy;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceApprovedBy" )
+     **/
+    private  $approvedBy;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoiceTransactions" )
      **/
     private  $transactionMethod;
@@ -569,6 +575,22 @@ class InvoiceTransaction
     public function setIsMaster($isMaster)
     {
         $this->isMaster = $isMaster;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param mixed $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
     }
 
 

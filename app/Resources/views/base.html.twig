@@ -290,26 +290,26 @@
 
         $('.horizontal-form').submit(function(){
             $("button[type='submit']", this)
-                .html("Please Wait...")
                 .attr('disabled', 'disabled');
-            //setTimeout(function(){ location.reload() }, 3000);
+            setTimeout(function(){
+                $('.pull-right').find('button').removeAttr('disabled')
+            }, 3000);
             return true;
         });
 
         $('.form-horizontal').submit(function(){
             $("button[type='submit']", this)
-                .html("Please Wait...")
-                .attr('disabled', 'disabled');
-            //setTimeout(function(){ location.reload() }, 3000);
+                .attr('disabled', true);
+                setTimeout(function(){
+                    $('.pull-right').find('button').removeAttr('disabled')
+                }, 3000);
             return true;
         });
 
         $(document).on('change', '.targetTo', function() {
-
             var targetTo = $(this).val();
             $('.hide').hide();
             $('#'+targetTo).show();
-
         });
 
         $(document).on('click', '#show-messenger', function() {

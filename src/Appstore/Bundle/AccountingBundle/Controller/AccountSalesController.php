@@ -160,8 +160,8 @@ class AccountSalesController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-	        if($entity->getProcessHead() == 'Outstanding'){
-		        $entity->setTotalAmount(abs($entity->getAmount()));
+            if( in_array($entity->getProcessType(),array("Outstanding","Opening"))){
+	            $entity->setTotalAmount(abs($entity->getAmount()));
 		        $entity->setAmount(0);
 		        $entity->setTransactionMethod(null);
 	        }

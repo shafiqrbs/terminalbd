@@ -4,9 +4,12 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
+use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
+use Appstore\Bundle\HospitalBundle\Form\PatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -66,13 +69,78 @@ class InvoiceAdmissionController extends Controller
             'referredDoctors' => $referredDoctors,
             'cabinGroups' => $cabinGroups,
             'cabins' => $cabins,
+            'option' => $user->getGlobalOption(),
             'searchForm' => $data,
         ));
 
     }
 
-
+    /**
+     * Displays a form to create a new Particular entity.
+     *
+     */
     public function newAction()
+    {
+        $entity = new Invoice();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function createAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $entity = new Invoice();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createAdmissionForm($entity);
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $entity->setHospitalConfig($hospital);
+            $entity->setProcess('Admitted');
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admission'));
+        }
+        return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
+            'entity' => $entity,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Invoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new NewPatientAdmissionType($globalOption,$category ,$location), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_admitted_create', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+
+    public function newAxction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
@@ -93,12 +161,105 @@ class InvoiceAdmissionController extends Controller
         }
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
 
     }
 
+    public function oldPatientAction(Request $request)
+    {
+
+        $customerId = $request->request->get('customer');
+        $option = $this->getUser()->getGlobalOption();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Invoice();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity->setHospitalConfig($hospital);
+        $entity->setCustomer($customer);
+        $entity->setInvoiceMode('admission');
+        $entity->setPrintFor('admission');
+        $entity->setCreatedBy($this->getUser());
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+
+    }
+
+    public function admittedPatientAction(Invoice $invoice)
+    {
+        $customer = $invoice->getCustomer();
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Invoice();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity->setHospitalConfig($hospital);
+        $entity->setCustomer($customer);
+        $entity->setInvoiceMode('admission');
+        $entity->setPrintFor('admission');
+        $entity->setCreatedBy($this->getUser());
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+
+    }
+
+    public function admittedPatientUpdateAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createAdmissionForm($entity);
+        return $this->render('HospitalBundle:InvoiceAdmission:patient.html.twig', array(
+            'entity' => $entity,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    public function updatePatientAction(Request $request, Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createAdmissionForm($entity);
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $entity->setProcess('Admitted');
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admission'));
+        }
+         return $this->render('HospitalBundle:InvoiceAdmission:patient.html.twig', array(
+            'entity' => $entity,
+            'form' => $editForm->createView(),
+        ));
+    }
 
     public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(2,3,4,8,7));
+        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
+        return $this->render('HospitalBundle:InvoiceAdmission:invoice.html.twig', array(
+            'entity' => $entity,
+            'particularService' => $services,
+            'referredDoctors' => $referredDoctors,
+            'admissionForm' => 'hide',
+            'form' => $editForm->createView(),
+        ));
+    }
+
+
+    public function patientInvoiceAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
@@ -107,11 +268,10 @@ class InvoiceAdmissionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "Admitted" and $entity->getProcess() != "Created") {
+       /* if ($entity->getProcess() != "Admitted" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
-        }
+        }*/
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(2,3,4,8,7));
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
@@ -147,7 +307,31 @@ class InvoiceAdmissionController extends Controller
         return $form;
     }
 
-    public function updateAction(Request $request, Invoice $entity)
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createAdmissionForm(Invoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new PatientAdmissionType($globalOption,$category ,$location), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_admitted_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoiceForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function updateOldAction(Request $request, Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -215,22 +399,166 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
-    public function particularSearchAction(Particular $particular)
+    public function updateAction(Request $request, Invoice $entity)
     {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $em->flush();
+            if($entity->getReceive() > 0 ){
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertAdmissionInvoiceTransaction($entity);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
+        }
+        $invoiceTransaction = $this->renderView("HospitalBundle:InvoiceAdmission:invoice-transaction.html.twig", array(
+            'entity' => $entity
+        ));
+        $data = array(
+            'subTotal' => $entity->getSubTotal(),
+            'total' => $entity->getTotal(),
+            'payment' => $entity->getPayment() ,
+            'due' => $entity->getDue(),
+            'discount' => $entity->getDiscount(),
+            'invoiceTransaction' => $invoiceTransaction,
+        );
+        return new Response(json_encode($data));
+    }
+
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discountCalculation = (float)$request->request->get('discount');
+        $invoice = $request->request->get('invoice');
+        $discountType = $request->request->get('discountType');
+        $entity = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $subTotal = $entity->getSubTotal();
+        $discount = 0;
+        if($discountType == 'flat' and $discountCalculation > 0 ){
+            $total = ($subTotal  - $discountCalculation);
+            $discount = $discountCalculation;
+        }elseif($discountType == 'percent' and $discountCalculation > 0 ){
+            $discount = ($subTotal * $discountCalculation)/100;
+            $total = ($subTotal  - $discount);
+        }
+        if( $subTotal > $discount and $discount > 0 ){
+            $entity->setDiscountType($discountType);
+            $entity->setDiscountCalculation($discountCalculation);
+            $entity->setDiscount($discount);
+            $entity->setTotal($total);
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
+            $em->flush();
+        }
+        $data = array(
+            'subTotal' => $subTotal,
+            'total' => $entity->getTotal(),
+            'payment' => $entity->getPayment() ,
+            'due' => $entity->getDue(),
+            'discount' => $discount,
+        );
+        return new Response(json_encode($data));
+    }
+
+    public function particularSearchAction()
+    {
+        $id = $_REQUEST['id'];
+        $particular = $this->getDoctrine()->getRepository("HospitalBundle:Particular")->find($id);
         $quantity = $particular->getQuantity() > 0 ? $particular->getQuantity() :1;
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $quantity, 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
+    public function returnResultData(Invoice $entity,$msg=''){
+
+        $invoiceParticulars = $this->renderView("HospitalBundle:InvoiceAdmission:invoice-item.html.twig", array(
+            'entity' => $entity
+        ));
+        $invoiceTransaction = $this->renderView("HospitalBundle:InvoiceAdmission:invoice-transaction.html.twig", array(
+            'entity' => $entity
+        ));
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'subTotal' => $subTotal,
+            'total' => $entity->getTotal(),
+            'payment' => $entity->getPayment() ,
+            'due' => $entity->getDue(),
+            'discount' => $discount,
+            'invoiceTransaction' => $invoiceTransaction,
+            'invoiceParticulars' => $invoiceParticulars ,
+            'msg' => $msg ,
+            'success' => 'success'
+        );
+        return $data;
+
+    }
+
     public function addParticularAction(Request $request, Invoice $invoice)
     {
+        $em = $this->getDoctrine()->getManager();
+        $particularId = $request->request->get('particularId');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('price');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateAdmissionPaymentReceive($invoice);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
+
     }
 
     public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
     }
 
-    public function invoiceDiscountUpdateAction(Request $request)
+    public function invoiceParticularUpdateAction(Request $request)
     {
+
     }
+
+    public function invoiceTransactionDeleteAction($invoice, InvoiceTransaction $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($particular);
+        $em->flush();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateAdmissionPaymentReceive($entity);
+        $invoiceTransaction = $this->renderView("HospitalBundle:InvoiceAdmission:invoice-transaction.html.twig", array(
+            'entity' => $entity
+        ));
+        $result = array(
+            'invoiceTransaction' => $invoiceTransaction,
+            'payment' => $entity->getPayment(),
+        );
+        return new Response(json_encode($result));
+
+    }
+
+    public function invoiceTransactionApproveAction($invoice ,InvoiceTransaction $particular)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $particular->setApprovedBy($this->getUser());
+        $particular->setProcess("Done");
+        $em->flush();
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateAdmissionPaymentReceive($entity);
+        $invoiceTransaction = $this->renderView("HospitalBundle:InvoiceAdmission:invoice-transaction.html.twig", array(
+            'entity' => $entity
+        ));
+        $data = array(
+            'subTotal' => $entity->getSubTotal(),
+            'total' => $entity->getTotal(),
+            'payment' => $entity->getPayment() ,
+            'due' => $entity->getDue(),
+            'discount' => $entity->getDiscount(),
+            'invoiceTransaction' => $invoiceTransaction,
+        );
+        return new Response(json_encode($data));
+    }
+
     public function deleteAction(Request $request)
     {
     }
@@ -259,7 +587,7 @@ class InvoiceAdmissionController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
 
@@ -401,6 +729,43 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
+    public function paymentReceiveInvoicePrintAction($invoice, InvoiceTransaction $transaction)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+        $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($transaction->getPayment());
+        return $this->render('HospitalBundle:Print:receive.html.twig', array(
+            'entity'                => $entity,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+            'transaction'           => $transaction,
+            'inWordTransaction'     => $inWordTransaction,
+        ));
+    }
+
+
+     public function paymentTransactionInvoicePrintAction($invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+        return $this->render('HospitalBundle:Print:transaction.html.twig', array(
+            'entity'                => $entity,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+        ));
+    }
+
+
     public function invoicePrintForAction(Request $request, Invoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
@@ -417,6 +782,16 @@ class InvoiceAdmissionController extends Controller
         $cabin = $request->request->get('cabin');
         $invoice = $request->request->get('invoice');
         $status = $em->getRepository('HospitalBundle:Invoice')->checkCabinBooking($invoice,$cabin);
+        echo $status;
+        exit;
+    }
+
+    public function newCheckPatientCabinBookingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        $cabin = $request->request->get('cabin');
+        $status = $em->getRepository('HospitalBundle:Invoice')->checkNewCabinBooking($config,$cabin);
         echo $status;
         exit;
     }
@@ -465,7 +840,6 @@ class InvoiceAdmissionController extends Controller
         return $this->render('HospitalBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
-
     }
 }
 

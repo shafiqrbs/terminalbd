@@ -68,7 +68,7 @@
                                         <ul class="unstyled">
                                             {% if entity.customer is not empty %}<li><strong>Patient ID #:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
                                             <li><strong>Age:</strong>&nbsp;{{ entity.customer.age }} {{ entity.customer.ageType }}</li>
-                                            <li><strong>Date of Birth:</strong>&nbsp;{{ entity.customer.dob }}</li>
+                                            <li><strong>Date of Birth:</strong>&nbsp;{% if entity.customer.dob %}{{ entity.customer.dob|date('d-m-Y') }}{% endif %}</li>
                                             <li><strong>Marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
                                             <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
                                         </ul>
@@ -111,7 +111,7 @@
                                     <div class="caption"><i class="icon-reorder"></i>Particulars Information</div>
                                     <div class="actions">
                                         {#<a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>#}
-                                        <a target="_blank" href="{{ path('hms_invoice_admission_particular_print',{'invoice':entity.invoice}) }}"  class="btn purple"><i class="icon icon-print"></i> Print</a>
+                                        {#<a target="_blank" href="{{ path('hms_invoice_admission_particular_print',{'invoice':entity.invoice}) }}"  class="btn purple"><i class="icon icon-print"></i> Print</a>#}
                                     </div>
                                 </div>
                             </div>
@@ -210,8 +210,6 @@
                                         </thead>
                                         <tbody id="invoiceTransaction">
                                         {% for transaction in entity.invoiceTransactions %}
-
-
                                             <tr id="delete-{{ transaction.id }}" {% if transaction.process in ['Pending','In-progress'] %} class="yellow-alert" {% endif %} >
                                                 <td  class="numeric">{{ transaction.transactionCode }}</td>
                                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
@@ -305,16 +303,18 @@
                                     </div>
                                 </div>
                                 <div class="clearfix">&nbsp;</div>
+
+                                <div class="clearfix">&nbsp;</div>
+                                {{ form_start(form) }}
+                                {{ form_row(form._token) }}
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="row-fluid particular-info" >
                                                     <div class="span7">
-                                                        <select id="particular" name="particular" class="span12 select2">
-                                                            <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
-                                                            {{ particularService|raw }}
-                                                        </select>
+                                                        {{ form_widget(form.particular) }}
+                                                        {{ form_errors(form.particular) }}
                                                     </div>
                                                     <div class="span2">
                                                         <div class="input-append span12" style="margin-bottom:0!important">
@@ -324,7 +324,7 @@
                                                                         <span class="fa fa-minus"></span>
                                                                </button>
                                                             </span>
-                                                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                                                            {{ form_widget(form.quantity) }}
                                                                             <span class="input-group-btn">
                                                               <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
                                                                       <span class="fa fa-plus"></span>
@@ -336,7 +336,7 @@
                                                     <div class="span3">
                                                         <div class="input-append span11" style="margin-bottom:0!important">
                                                             <input type="hidden" id="particularId" name="particularId" value="">
-                                                            <input type="text" class="m-wrap span10" id="price" name="price" value="" maxlength="8">
+                                                            {{ form_widget(form.salesPrice) }}
                                                             <div class="btn-group">
                                                                 <button type="button" class="btn blue" id="addPatientParticular" data-url="{{ path('hms_invoice_admission_daily_invoice_add',{'id':invoiceTransaction.id}) }}" ><i class="icon-plus"></i> Add</button>
                                                             </div>
@@ -348,8 +348,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{ form_end(form) }}
                                 <div class="clearfix">&nbsp;</div>
-                                {% if entity.invoiceParticulars is defined and  entity.invoiceParticulars is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
                                         <thead>
                                         <tr class="head-purple">
@@ -364,19 +364,21 @@
                                         </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
+                                    {% if entity.invoiceParticulars is defined and  entity.invoiceParticulars is not empty  %}
                                         {% set subTotal = 0 %}
-                                        {% for item in invoiceTransaction.admissionPatientParticulars %}
-                                            <tr id="remove-{{ item.id }}">
-                                                <td  class="span1">{{ loop.index }}</td>
-                                                <td  class="span1">{{ item.particular.particularCode }}</td>
-                                                <td class="span4">{{ item.particular.name }}</td>
-                                                <td class="span2">{{ item.particular.service.name }}</td>
-                                                <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
-                                                <td class="span2">{{ item.salesPrice }}</td>
-                                                <td class="span1">{{ item.subTotal|number_format }}</td>
-                                                <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_admission_daily_particular_delete',{'transaction': invoiceTransaction.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
-                                            </tr>
-                                        {% endfor %}
+                                            {% for item in invoiceTransaction.admissionPatientParticulars %}
+                                                <tr id="remove-{{ item.id }}">
+                                                    <td  class="span1">{{ loop.index }}</td>
+                                                    <td  class="span1">{{ item.particular.particularCode }}</td>
+                                                    <td class="span4">{{ item.particular.name }}</td>
+                                                    <td class="span2">{{ item.particular.service.name }}</td>
+                                                    <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
+                                                    <td class="span2">{{ item.salesPrice }}</td>
+                                                    <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                    <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_admission_daily_particular_delete',{'transaction': invoiceTransaction.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
+                                                </tr>
+                                            {% endfor %}
+                                    {% endif %}
                                         </tbody>
                                         <tfoot>
                                         <tr>
@@ -389,7 +391,7 @@
                                         </tr>
                                         </tfoot>
                                     </table>
-                                {% endif %}
+
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-right">
@@ -444,7 +446,7 @@
                                                 </ul>
                                             {% endif %}
                                         {% endif %}
-                                        {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death','Released','Dead'] %}
+                                        {% if entity.process not in ['Release','Death','Released','Dead'] %}
                                         <a class="btn purple" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Invoice</a>
                                         {% endif %}
                                         </div>
@@ -476,6 +478,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/admission.js'
     '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -490,39 +493,7 @@
     });
 
 
-    $(document).on('click', '#addPatientParticular', function() {
 
-        var particularId = $('#particularId').val();
-        var quantity = parseInt($('#quantity').val());
-        var price = parseInt($('#price').val());
-        var url = $('#addPatientParticular').attr('data-url');
-
-        $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function (event, el){
-
-        $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('.total').html(obj['total']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-            $("#particular").select2().select2("val","");
-            $('#price').val('');
-            $('#quantity').val('1');
-            $('#addPatientParticular').attr("disabled", false);
-        }
-        })
-        }
-        });
-
-
-    });
 
 {% endblock %}
 

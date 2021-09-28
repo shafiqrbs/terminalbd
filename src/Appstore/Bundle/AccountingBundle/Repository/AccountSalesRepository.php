@@ -642,6 +642,26 @@ class AccountSalesRepository extends EntityRepository
 
 	}
 
+    public function reportBusinessTotalIncome(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+        $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
+        $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);
+        $purchase = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditureAccountHead($globalOption, $accountHeads = array(37), $data);
+        $data =  array('sales' => $sales['total'] ,'salesAdjustment' => $salesAdjustment,'purchase' => $purchase['totalPurchase'], 'expenditures' => $expenditures);
+        return $data;
+
+    }
+
     /* =============   Assets Module ================= */
 
     public function insertAccountSalesTally(\Appstore\Bundle\AssetsBundle\Entity\Sales $entity) {

@@ -376,7 +376,7 @@ class InvoiceRepository extends EntityRepository
 
     }
 
-    public function updatePaymentReceive(Invoice $invoice)
+    public function updateAdmissionPaymentReceive(Invoice $invoice)
     {
         $em = $this->_em;
         $res = $em->createQueryBuilder()
@@ -384,15 +384,14 @@ class InvoiceRepository extends EntityRepository
             ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
             ->where('si.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
-            ->andWhere('si.process = :process')
-            ->setParameter('process', 'Done')
+            ->andWhere('si.process = :process')->setParameter('process', 'Done')
+            ->andWhere('si.approvedBy IS NOT NULL')
             ->getQuery()->getOneOrNullResult();
         $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $discount = !empty($res['discount']) ? $res['discount'] :0;
         $vat = !empty($res['vat']) ? $res['vat'] :0;
         $invoice->setPayment($payment);
-        $invoice->setDiscount($discount);
         $invoice->setVat($vat);
+        $invoice->setReceive(0);
         $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
         $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
         if($invoice->getPayment() >= $invoice->getTotal()){
@@ -405,6 +404,35 @@ class InvoiceRepository extends EntityRepository
         }
         $em->flush();
     }
+
+    public function updatePaymentReceive(Invoice $invoice)
+    {
+        $em = $this->_em;
+        $res = $em->createQueryBuilder()
+            ->from('HospitalBundle:InvoiceTransaction','si')
+            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
+            ->where('si.hmsInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->andWhere('si.process = :process')->setParameter('process', 'Done')
+            ->getQuery()->getOneOrNullResult();
+        $payment = !empty($res['payment']) ? $res['payment'] :0;
+        $vat = !empty($res['vat']) ? $res['vat'] :0;
+        $invoice->setPayment($payment);
+        $invoice->setVat($vat);
+        $invoice->setReceive(0);
+        $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+        if($invoice->getPayment() >= $invoice->getTotal()){
+            $invoice->setPaymentStatus('Paid');
+        }else{
+            $invoice->setPaymentStatus('Due');
+        }
+        if($invoice->getPrintFor() == "visit" and $invoice->getPaymentStatus() == "Paid") {
+            $invoice->setProcess('Done');
+        }
+        $em->flush();
+    }
+
     public function updateCommissionPayment(Invoice $invoice)
     {
         $em = $this->_em;
@@ -494,6 +522,24 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('COUNT(e.cabin) AS cabinCount');
         $qb->where('e.hospitalConfig = :config')->setParameter('config', $invoice ->getHospitalConfig()->getId());
+        $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
+        $res = $qb->getQuery()->getOneOrNullResult();
+        if(!empty($res) and $res['cabinCount'] > 0 ){
+            echo 'invalid';
+        }else{
+            echo 'valid';
+        }
+        exit;
+
+    }
+
+    public function checkNewCabinBooking($config,$cabin)
+    {
+        $cabin = $this->_em->getRepository('HospitalBundle:Particular')->find($cabin);
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.cabin) AS cabinCount');
+        $qb->where('e.hospitalConfig = :config')->setParameter('config', $config);
         $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
         $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
         $res = $qb->getQuery()->getOneOrNullResult();

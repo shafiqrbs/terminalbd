@@ -31,7 +31,9 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('hms_invoice_admission_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
-                                <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> New Admission</a>
+                                {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
+                                    <a  href="{{ path('hms_invoice_admission_new') }}" class="btn red"><i class="fa fa-ambulance"></i> New Admission</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -40,7 +42,6 @@
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
                                 <form class="search-form" action="" method="get" name="itemSearch">
-
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
                                             <select name="doctor" id="doctor" class="m-wrap span12">
@@ -177,13 +178,13 @@
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}
                                                 {% if entity.process in  processEdit %}
-                                                    <a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green mini " ><i class="fa fa-refresh"></i> Process</a>
+                                                    <a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green mini " ><i class="fa fa-refresh"></i> Admission</a>
                                                 {% endif %}
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                     Action <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
-                                                    <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn black"><i class="icon-pencil"></i> Edit</a></li>
+                                                    <li><a href="{{ path('hms_invoice_admitted_patient_edit', { 'id': entity.id }) }}" class="btn yellow"><i class="icon-pencil"></i> Edit</a></li>
                                                     {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
                                                     {% if entity.paymentStatus in  PaymentArr|keys and  entity.process in processArr %}
                                                         <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
@@ -191,10 +192,10 @@
                                                     {% if entity.paymentStatus == 'Pending' or entity.process =='Created' %}
                                                         <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
-                                                    <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn black"><i class="icon-eye-open"></i> View</a></li>
+                                                    <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn green"><i class="icon-eye-open"></i> View</a></li>
                                                 </ul>
                                                 {% if entity.revised == 1 %}
-                                                    <a href="{{ path('hms_invoice_admission_reverse_show', { 'invoice': entity.invoice }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                    <a href="{{ path('hms_invoice_admission_reverse_show', { 'invoice': entity.invoice }) }}" class="btn purple mini"><i class="icon-retweet"></i> Revised</a>
                                                 {% endif %}
 
                                             </div>
@@ -217,6 +218,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@InventoryBundle/Resources/public/css/jquery-ui.css'
+    '@HospitalBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -225,6 +227,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@HospitalBundle/Resources/public/js/appointment.js'
     '@HospitalBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

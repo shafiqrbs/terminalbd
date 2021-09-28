@@ -56,7 +56,6 @@ class AccountPurchaseType extends AbstractType
 		        'choices' => array(
 			        'Due' => 'Due',
 			        'Discount' => 'Discount',
-			        'Outstanding' => 'Outstanding',
 			        'Advance' => 'Advance',
 			        'Opening' => 'Opening',
 		        ),

@@ -42,6 +42,18 @@ class BusinessParticularRepository extends EntityRepository
         return $query->getQuery()->getArrayResult();
     }
 
+    public function reportCurrentStockPrice(User $user)
+    {
+
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.purchasePrice * e.remainingQuantity) as purchasePrice, SUM(e.salesPrice * e.remainingQuantity) as salesPrice');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
+    }
+
     public function updateSalesPrice(BusinessParticular $particular)
     {
 	    $price = $this->_em->getRepository('BusinessBundle:BusinessProductionElement')->getProductPurchaseSalesPrice($particular);

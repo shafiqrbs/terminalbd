@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\CustomerRepository")
- * @UniqueEntity(fields={"mobile","globalOption"}, message="Mobile no already existing,Please try again.")
+ * @UniqueEntity(fields={"mobile","name","globalOption"}, message="Mobile no already existing,Please try again.")
  */
 class Customer
 {

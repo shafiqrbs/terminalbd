@@ -220,6 +220,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_BUSINESS_REPORT') and $config->getBusinessModel() != "association") {
             $menu[$business]->addChild('Reports')->setAttribute('icon', 'icon icon-bar-chart')->setAttribute('dropdown', true);
+            $menu[$business]['Reports']->addChild( 'System Overview', array( 'route' => 'business_report_system_overview' ) )->setAttribute( 'icon', 'icon-th-list' );
             $menu[$business]['Reports']->addChild( 'Sales' )
                 ->setAttribute( 'dropdown', true );
             $menu[$business]['Reports']['Sales']->addChild( 'Invoice Summary', array( 'route' => 'business_report_sales_summary' ) )->setAttribute( 'icon', 'icon-th-list' );

@@ -28,11 +28,11 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric removeZero','placeholder'=>'Received Amount'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric removeZero','placeholder'=>'Received amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
-            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add Remark')))
+            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remark')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -46,8 +46,7 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true),
-                ))
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
             ->add('accountBank', 'entity', array(
                'required'    => true,
                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -68,7 +67,7 @@ class AccountSalesType extends AbstractType
 			        'Due' => 'Due',
 			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
-			        'Outstanding' => 'Outstanding',
+			        'Opening' => 'Opening',
 		        ),
 	        ))
             ->add('accountMobileBank', 'entity', array(

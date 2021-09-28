@@ -31,6 +31,55 @@ class ReportController extends Controller
 		return $pagination;
 	}
 
+    public function systemOverviewAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3);
+        $datetime = new \DateTime("now");
+        $dataIncome['startDate'] = $user->getGlobalOption()->getCreated()->format('Y-m-d');
+        $dataIncome['endDate'] = $datetime->format('Y-m-d');
+        $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportBusinessTotalIncome($this->getUser(),$dataIncome);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
+        $currentStockPrice = $em->getRepository('BusinessBundle:BusinessParticular')->reportCurrentStockPrice($user);
+        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user, $data);
+        $accountSales = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($user, $data);
+        $accountExpenditure = $em->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user, $data);
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:systemOverview.html.twig', array(
+                'option'                => $user->getGlobalOption(),
+                'income'     => $income,
+                'transactionCashOverviews'     => $transactionCashOverview,
+                'currentStockPrice'     => $currentStockPrice,
+                'accountPurchase'       => $accountPurchase,
+                'accountSales'          => $accountSales,
+                'accountExpenditure'    => $accountExpenditure,
+                'searchForm'            => $data,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:systemOverviewPdf.html.twig', array(
+                'option'                        => $user->getGlobalOption(),
+                'income'                        => $income,
+                'transactionCashOverviews'      => $transactionCashOverview,
+                'currentStockPrice'             => $currentStockPrice,
+                'accountPurchase'               => $accountPurchase,
+                'accountSales'                  => $accountSales,
+                'accountExpenditure'            => $accountExpenditure,
+                'searchForm'                    => $data,
+            ));
+            $this->downloadPdf($html,'systemOverview.pdf');
+        }
+
+
+
+    }
+
 	public function salesOverviewAction()
 	{
 		$em = $this->getDoctrine()->getManager();

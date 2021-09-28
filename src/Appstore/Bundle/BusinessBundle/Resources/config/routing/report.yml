@@ -1,3 +1,7 @@
+business_report_system_overview:
+    path:     /system-overview
+    defaults: { _controller: "BusinessBundle:Report:systemOverview" }
+
 business_report_purchase_summary:
     path:     /purchase-overview
     defaults: { _controller: "BusinessBundle:Report:purchaseOverview" }
