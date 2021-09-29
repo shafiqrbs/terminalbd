@@ -73,7 +73,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     padding-right: 10px;
     float: right;
     text-align: right;
-    width: 190px;
+    width: 150px!important;
 }
 .sales-right input[class*="span"].m-wrap{
     font-weight: bold;
