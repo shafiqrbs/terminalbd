@@ -113,7 +113,6 @@
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     {% set payable = (accountPurchase.purchaseAmount - accountPurchase.payment) %}
                                     {% set receivable = (accountSales.totalAmount - accountSales.receiveAmount) %}
-
                                     <tr><td class="numeric" >Cash in hand</td><td>{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit']) - transactionCashOverviews['credit'])|number_format }}</td></tr>
                                     <tr><td class="numeric" >Stock Purchase Price</td><td>{{ currentStockPrice.purchasePrice|number_format }}</td></tr>
                                     <tr><td class="numeric" >Sales Receivable Amount</td><td>{{ (receivable)|number_format }}</td></tr>
