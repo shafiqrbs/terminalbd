@@ -8,6 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -235,7 +236,8 @@ class DomainController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Successfully reset data"
         );
-        return $this->redirect($this->generateUrl('tools_domain'));
+        return new Response('success');
+
 
     }
 

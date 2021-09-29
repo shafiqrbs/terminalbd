@@ -34,6 +34,7 @@ class BusinessInvoiceReturnItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceReturnItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $invoice;
 

@@ -116,12 +116,13 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                             <a href="javascript:" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-cogs"></i>&nbsp;Operation</a>
-                                            <a href="javascript:" class="btn green mini badge badge-warning toggle badge-custom" id="software-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;Software</a>
+                                       {#     <a href="javascript:" class="btn green mini badge badge-warning toggle badge-custom" id="software-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;Software</a>
                                             <a href="javascript:" class="btn purple mini badge badge-warning toggle badge-custom" id="sms-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;SMS Invoice</a>
-                                            </div>
+                                      #}      </div>
                                         </td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        {% if app.user.granted("ROLE_SUPER_ADMIN") and app.user.id == 1 %}
                                         <td colspan="10">
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                                 <tr>
@@ -139,7 +140,7 @@
                                                 <tr>
                                                     <th class="numeric" >Reset Operational Data</th>
                                                     <td class="numeric" >
-                                                        <a href="{{ path('tools_option_reset',{id: entity.id}) }}" data-url="" class="btn purple mini resetPass" ><i class="icon-refresh"></i>&nbsp;Reset Data</a>
+                                                        <a href="javascript:" data-url="{{ path('tools_option_reset',{id: entity.id}) }}" class="btn purple mini reset" ><i class="icon-refresh"></i>&nbsp;Reset Data</a>
                                                     </td>
                                                 </tr>
 
@@ -159,6 +160,7 @@
 
                                             </table>
                                         </td>
+                                        {% endif %}
                                     </tr>
                                     {% if entity.invoiceSmsEmails is not empty %}
                                         <tr id="show-sms-{{ entity.id }}" class="showing-overview">

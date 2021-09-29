@@ -1478,7 +1478,7 @@ Portlets
 }
 
 .portlet > .portlet-body.purple, .portlet.purple {
-  background-color: #8e5fa2 !important;
+  background-color: #6d0eb1 !important;
 }
 
 .portlet > .portlet-body.light-grey, .portlet.light-grey {
@@ -1661,11 +1661,11 @@ Box portlet
 }
 
 .portlet.box.purple > .portlet-title {
-  background-color: #8e5fa2;
+  background-color: #6d0eb1;
 }
 
 .portlet.box.purple {
-  border: 1px solid #af5cc1;
+  border: 1px solid #6d0eb1;
   border-top: 0;
 }
 

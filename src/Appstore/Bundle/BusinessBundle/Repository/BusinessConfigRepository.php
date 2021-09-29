@@ -61,7 +61,7 @@ class BusinessConfigRepository extends EntityRepository
 		    $bp = $em->createQuery('DELETE BusinessBundle:BusinessProduction e WHERE e.businessParticular = '.$item->getId());
             $bp->execute();
 
-		    $ip = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessParticular = '.$item->getId());
+		    $ip = $em->createQuery('DELETE BusinessBundle:BusinessInvoiceParticular e WHERE e.businessParticular = '.$item->getId());
             $ip->execute();
 
 		    $item->setQuantity(0);
