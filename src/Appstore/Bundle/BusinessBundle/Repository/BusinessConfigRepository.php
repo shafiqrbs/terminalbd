@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -27,8 +28,8 @@ class BusinessConfigRepository extends EntityRepository
         $ledger = $em->createQuery("DELETE BusinessBundle:BusinessStoreLedger e WHERE e.businessConfig = {$config}");
         $ledger->execute();
 
-        $store = $em->createQuery("DELETE BusinessBundle:BusinessStore e WHERE e.businessConfig = {$config}");
-        $store->execute();
+        //$store = $em->createQuery("DELETE BusinessBundle:BusinessStore e WHERE e.businessConfig = {$config}");
+        //$store->execute();
 
         $history = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
         $history->execute();
@@ -42,12 +43,8 @@ class BusinessConfigRepository extends EntityRepository
         $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
         $sales->execute();
 
-	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
-	    $purchase->execute();
-
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessVendorStock e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
-
 
 	    $items = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findBy(array('businessConfig'=>$config));
 
@@ -55,14 +52,17 @@ class BusinessConfigRepository extends EntityRepository
 
 	    foreach ($items as $item){
 
-		    $stock = $em->createQuery('DELETE BusinessBundle:BusinessProductionExpense e WHERE e.productionItem = '.$item->getId());
-		    $stock->execute();
+		    $bpx = $em->createQuery('DELETE BusinessBundle:BusinessProductionExpense e WHERE e.productionItem = '.$item->getId());
+            $bpx->execute();
 
-		    $stock = $em->createQuery('DELETE BusinessBundle:BusinessProductionElement e WHERE e.businessParticular = '.$item->getId());
-		    $stock->execute();
+		    $bpe = $em->createQuery('DELETE BusinessBundle:BusinessProductionElement e WHERE e.businessParticular = '.$item->getId());
+            $bpe->execute();
 
-		    $stock = $em->createQuery('DELETE BusinessBundle:BusinessProduction e WHERE e.businessParticular = '.$item->getId());
-		    $stock->execute();
+		    $bp = $em->createQuery('DELETE BusinessBundle:BusinessProduction e WHERE e.businessParticular = '.$item->getId());
+            $bp->execute();
+
+		    $ip = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessParticular = '.$item->getId());
+            $ip->execute();
 
 		    $item->setQuantity(0);
 		    $item->setPurchaseQuantity(0);
@@ -79,6 +79,18 @@ class BusinessConfigRepository extends EntityRepository
 		    $item->setOpeningApprove(0);
 		    $this->_em->flush($item);
 	    }
+
+        $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
+        $sales->execute();
+
+        $items = $this->_em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig'=>$config));
+
+        /* @var BusinessStore $item */
+
+        foreach ($items as $item){
+            $item->setBalance(0);
+            $this->_em->flush($item);
+        }
 
     }
 }

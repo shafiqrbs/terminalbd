@@ -99,7 +99,7 @@ class InvoiceAdmissionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $editForm = $this->createAdmissionForm($entity);
+        $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $entity->setHospitalConfig($hospital);

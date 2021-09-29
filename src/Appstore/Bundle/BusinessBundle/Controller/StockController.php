@@ -58,6 +58,8 @@ class StockController extends Controller
 
     }
 
+
+
     /**
      * Lists all Particular entities.
      * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");

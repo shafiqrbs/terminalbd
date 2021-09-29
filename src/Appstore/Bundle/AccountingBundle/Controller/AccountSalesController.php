@@ -119,11 +119,12 @@ class AccountSalesController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-
-            if($entity->getProcessHead() == 'Outstanding'){
+            if( in_array($entity->getProcessHead(),array("Outstanding","Opening"))){
                 $entity->setTotalAmount(abs($entity->getAmount()));
                 $entity->setAmount(0);
                 $entity->setTransactionMethod(null);
+            }else{
+                $entity->setAmount(abs($entity->getAmount()));
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
@@ -160,11 +161,13 @@ class AccountSalesController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-            if( in_array($entity->getProcessType(),array("Outstanding","Opening"))){
+            if( in_array($entity->getProcessHead(),array("Outstanding","Opening"))){
 	            $entity->setTotalAmount(abs($entity->getAmount()));
 		        $entity->setAmount(0);
 		        $entity->setTransactionMethod(null);
-	        }
+            }else{
+                $entity->setAmount(abs($entity->getAmount()));
+            }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 23:30:30");

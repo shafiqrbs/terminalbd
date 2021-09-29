@@ -105,6 +105,8 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Device Sales</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
@@ -122,6 +124,8 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y g:i:s a') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.customer.name != "Default" %}{{ entity.customer.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer.name != "Default" %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.deviceSalesId }}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ entity.received|number_format }}</td>

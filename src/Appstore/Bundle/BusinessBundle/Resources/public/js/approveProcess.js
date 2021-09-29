@@ -41,19 +41,12 @@ $('body').on('change', 'input.stockId', function(el) {
         itemArr.push(val);
     }else{
         var index = itemArr.indexOf(val);
-        alert(index);
         if (index > -1) {
             itemArr.splice(index, 1);
         }
     }
     $.cookie('barcodes', itemArr, {path: '/'});
 });
-
-
-
-
-
-
 
 /*
 $(document).on("click", ".editable-submit", function() {

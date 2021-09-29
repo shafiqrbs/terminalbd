@@ -439,8 +439,14 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
+        $option = $this->getUser()->getGlobalOption();
+        $previousDue = 0;
+        if($entity->getCustomer()->getName() != "Default"){
+            $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
+        }
         return $this->render('MedicineBundle:Sales:print.html.twig', array(
             'entity'      => $entity,
+            'previousDue'      => $previousDue,
         ));
     }
 

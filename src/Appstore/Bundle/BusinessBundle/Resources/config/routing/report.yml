@@ -2,6 +2,10 @@ business_report_system_overview:
     path:     /system-overview
     defaults: { _controller: "BusinessBundle:Report:systemOverview" }
 
+business_report_stock_price:
+    path:     /stock-price
+    defaults: { _controller: "BusinessBundle:Report:stockPriceReport" }
+
 business_report_purchase_summary:
     path:     /purchase-overview
     defaults: { _controller: "BusinessBundle:Report:purchaseOverview" }

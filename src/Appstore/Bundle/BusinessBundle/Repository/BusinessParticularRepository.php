@@ -103,6 +103,30 @@ class BusinessParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function currentStockPrice($config, $data){
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $type = isset($data['type'])? $data['type'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.remainingQuantity > 0');
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if(!empty($category)){
+            $qb->andWhere("e.category = :category");
+            $qb->setParameter('category', $category);
+        }
+        if(!empty($type)){
+            $qb->andWhere("e.businessParticularType = :type");
+            $qb->setParameter('type', $type);
+        }
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
     public function stockShortListSearch($config, $data){
 
         $name = isset($data['name'])? $data['name'] :'';

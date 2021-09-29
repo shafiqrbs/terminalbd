@@ -80,6 +80,29 @@ class ReportController extends Controller
 
     }
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+    public function stockPriceReportAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->currentStockPrice($config,$data);
+        $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $config ,'status'=>1));
+        return $this->render('BusinessBundle:Report:stock-price.html.twig', array(
+            'pagination' => $entities,
+            'types' => $type,
+            'categories' => $category,
+            'config' => $config,
+            'searchForm' => $data,
+        ));
+
+    }
+
 	public function salesOverviewAction()
 	{
 		$em = $this->getDoctrine()->getManager();
