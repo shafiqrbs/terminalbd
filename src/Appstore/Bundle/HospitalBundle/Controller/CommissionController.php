@@ -148,7 +148,6 @@ class CommissionController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             $em->flush();
             $this->get('session')->getFlashBag()->add(
