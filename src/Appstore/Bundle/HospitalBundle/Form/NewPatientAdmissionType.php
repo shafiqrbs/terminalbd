@@ -56,7 +56,7 @@ class NewPatientAdmissionType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 invoiceCabinBooking m-wrap'),
                 'empty_value' => '---Select cabin/ward no---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))

@@ -146,6 +146,8 @@
                                         {{ form_widget(form.customer.age) }}
                                         {{ form_widget(form.customer.ageType) }}
                                         {{ form_errors(form.customer.dob) }}
+                                        {{ form_errors(form.customer.ageType) }}
+
                                     </div>
                                 </div>
                             </div>
@@ -237,6 +239,7 @@
                                     <label class="control-label red" for="firstName"><span>Blood Group</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.customer.bloodGroup) }}
+                                        {{ form_errors(form.customer.bloodGroup) }}
                                     </div>
                                 </div>
                             </div>

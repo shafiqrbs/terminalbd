@@ -296,42 +296,16 @@
     {{ parent() }}
     EditableInit();
 
-    $(document).on('click', '#addPatient', function(e) {
-        var url = $('#addPatient').attr('data-url');
-        e.preventDefault();
-        $.ajax({
-            type: 'post',
-            url: url,
-            data: $('#invoiceForm').serialize(),
-            success: function (response) {
-                obj = JSON.parse(response);
-                location.reload();
-            }
-        });
-    });
-
-    $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_printFor', function(e) {
-
-        var printFor = $(this).val();
-        var url = $('#invoice').attr('data-action');
-        e.preventDefault();
-        $.ajax({
-        type: 'post',
-        url: url,
-        data:'printFor='+printFor,
-        success: function (response) {}
-        });
-    });
-
     var url ="{{ path('hms_invoice_admission_newpatint_cabin') }}";
     var cabin = $('#invoice_cabin').val();
+    alert(cabin);
     if(cabin == ''){
-    return false;
+        return false;
     }
     $.post( url,{cabin:cabin } )
     .done(function( data ) {
     if(data == 'invalid'){
-    $("#invoice_cabin").select2().select2("val","");
+    $("#invoice_cabin").select2("val","");
     $('#cabinInvalid').notifyModal({
     duration : 5000,
     placement : 'center',
@@ -341,11 +315,13 @@
     });
     }
     });
+{#
 
     $('input[name=particular]').focus();
     $( ".payment" ).val('');
     $( ".discount" ).val('');
     $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );
     $( ".discount" ).attr( "placeholder", "{{ entity.discount }}" );
+#}
 
 {% endblock %}

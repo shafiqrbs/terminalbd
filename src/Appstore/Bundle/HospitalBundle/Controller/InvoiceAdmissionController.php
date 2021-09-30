@@ -410,7 +410,7 @@ class InvoiceAdmissionController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
             if($entity->getReceive() > 0 ){
-                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertAdmissionInvoiceTransaction($entity);
+               // $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertAdmissionInvoiceTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }
         }
@@ -570,9 +570,7 @@ class InvoiceAdmissionController extends Controller
         $discount = (float)$request->request->get('discount');
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
-
         if ((!empty($entity) and !empty($payment)) or !empty($entity) and !empty($discount)) {
-
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('Admitted');
             $em->flush();
@@ -583,6 +581,7 @@ class InvoiceAdmissionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
             $em->flush();
+            $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -630,6 +629,7 @@ class InvoiceAdmissionController extends Controller
                 $entity->setProcess('Dead');
             }
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->removePendingTransaction($entity);
+            $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
         }elseif($process == 'cancel'){
             $entity->setProcess('Admitted');
         }

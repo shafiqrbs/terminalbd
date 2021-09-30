@@ -13,6 +13,8 @@ $("form#invoiceForm").on('click', '.addCustomer', function() {
     $( ".customer" ).slideToggle( "slow" );
 });
 
+
+
 $( "#name" ).autocomplete({
 
     source: function( request, response ) {
@@ -30,7 +32,7 @@ $( "#name" ).autocomplete({
     select: function( event, ui ) {}
 });
 
-$( "#mobile" ).autocomplete({
+/*$( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
         $.ajax( {
@@ -45,7 +47,8 @@ $( "#mobile" ).autocomplete({
     },
     minLength: 2,
     select: function( event, ui ) {}
-});
+});*/
+
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
@@ -420,3 +423,29 @@ $('form.horizontal-form').on('keypress', 'input', function (e) {
         }
     }
 });
+
+$(document).on('change', '.invoiceCabinBooking', function(e) {
+
+    var url ="{{ path('hms_invoice_admission_newpatint_cabin') }}";
+    var invoice = $('#invoiceId').val();
+    var cabin = $(this).val();
+    if(cabin === ''){
+        return false;
+    }
+    $.post( url,{ invoice:invoice , cabin:cabin } )
+        .done(function( data ) {
+            if(data === 'invalid'){
+                $("#invoice_cabin").select2().select2("val","");
+                $('#cabinInvalid').notifyModal({
+                    duration : 5000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false,
+                });
+            }
+        });
+
+});
+
+

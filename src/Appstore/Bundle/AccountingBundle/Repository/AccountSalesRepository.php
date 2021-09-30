@@ -205,8 +205,8 @@ class AccountSalesRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
-	    $qb->orderBy("{$sort}",$direction);
+        $qb->orderBy('e.id','DESC');
+	    $qb->addOrderBy("{$sort}",$direction);
         $result = $qb->getQuery();
         return $result;
 
@@ -846,27 +846,30 @@ class AccountSalesRepository extends EntityRepository
     {
 
         $em = $this->_em;
-        $accountSales = new AccountSales();
-        $accountSales->setAccountBank($entity->getAccountBank());
-        $accountSales->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
-        $accountSales->setHmsInvoices($entity);
-        $accountSales->setSourceInvoice( $entity->getInvoice() );
-        $accountSales->setCustomer($entity->getCustomer());
-        $accountSales->setTotalAmount($entity->getTotal());
-        $accountSales->setProcessHead('Diagnostic');
-        $accountSales->setApprovedBy($entity->getCreatedBy());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        $exist = $this->findOneBy(array('hmsInvoices'=>$entity->getId(),'processHead' => $entity->getInvoiceMode(),'processType'=>'Sales'));
+        if(empty($exist)){
+            $accountSales = new AccountSales();
+            $accountSales->setAccountBank($entity->getAccountBank());
+            $accountSales->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+            $accountSales->setHmsInvoices($entity);
+            $accountSales->setSourceInvoice( $entity->getInvoice() );
+            $accountSales->setCustomer($entity->getCustomer());
+            $accountSales->setTotalAmount($entity->getTotal());
+            $accountSales->setProcessHead($entity->getInvoiceMode());
+            $accountSales->setApprovedBy($entity->getCreatedBy());
+            if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+                $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+            }
+            $accountSales->setProcessType('Sales');
+            $accountSales->setProcess('approved');
+            $accountSales->setCreated($entity->getCreated());
+            $accountSales->setUpdated($entity->getCreated());
+            $em->persist($accountSales);
+            $em->flush();
+            $this->updateCustomerBalance($accountSales);
+            return $accountSales;
         }
-        $accountSales->setProcessType('Sales');
-        $accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-        $em->persist($accountSales);
-        $em->flush();
-        $this->updateCustomerBalance($accountSales);
-        return $accountSales;
-
+        return $exist;
     }
 
 

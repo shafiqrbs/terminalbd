@@ -96,11 +96,7 @@ class CustomerForHospitalAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'guardian name')),
             )))
 
-            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'guardian mobile no')),
-            )))
-
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no')))
             ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Relationship with the Patient'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Relationship with the Patient')),

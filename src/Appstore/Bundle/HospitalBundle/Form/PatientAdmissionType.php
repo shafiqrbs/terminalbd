@@ -46,11 +46,8 @@ class PatientAdmissionType extends AbstractType
     {
         $builder
 
-            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('disease','textarea',
+                array('attr'=>array('class'=>'m-wrap span12','required'=> false,'rows' => 4,'placeholder'=>'Add disease')))
             ->add('cabin', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -69,7 +66,7 @@ class PatientAdmissionType extends AbstractType
                 }
             ))
             ->add('department', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
