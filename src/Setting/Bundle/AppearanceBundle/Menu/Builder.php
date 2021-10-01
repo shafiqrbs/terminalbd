@@ -1075,6 +1075,8 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Doctor', array('route' => 'hms_doctor'))
                     ->setAttribute('icon', 'icon-th-list');
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Lab User', array('route' => 'hms_labuser'))
+                    ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Referred', array('route' => 'hms_referreddoctor'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
