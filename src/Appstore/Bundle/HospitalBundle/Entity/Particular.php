@@ -313,6 +313,20 @@ class Particular
     /**
      * @var string
      *
+     * @ORM\Column(name="doctorSignature", type="string", length=255, nullable=true)
+     */
+    private $doctorSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pathologistSignature", type="string", length=255, nullable=true)
+     */
+    private $pathologistSignature;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="currentJob", type="string", length=256, nullable=true)
      */
     private $currentJob;
@@ -1372,6 +1386,38 @@ class Particular
     public function setOldReportId($oldReportId)
     {
         $this->oldReportId = $oldReportId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathologistSignature()
+    {
+        return $this->pathologistSignature;
+    }
+
+    /**
+     * @param string $pathologistSignature
+     */
+    public function setPathologistSignature($pathologistSignature)
+    {
+        $this->pathologistSignature = $pathologistSignature;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoctorSignature()
+    {
+        return $this->doctorSignature;
+    }
+
+    /**
+     * @param string $doctorSignature
+     */
+    public function setDoctorSignature($doctorSignature)
+    {
+        $this->doctorSignature = $doctorSignature;
     }
 
 }

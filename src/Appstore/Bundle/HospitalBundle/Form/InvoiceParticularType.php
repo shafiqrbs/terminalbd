@@ -48,6 +48,20 @@ class InvoiceParticularType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
+            ->add('assignLabuser', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'referred',
+                'empty_value' => '---Select Assign Labuser---',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->hospitalConfig->getId())
+                        ->andWhere("e.service = 9")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,

@@ -437,7 +437,7 @@
                                             <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                             <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                             <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-                                            {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))  %}
                                                 {% if entity.process in ['Release','Death'] %}
                                                     <a class="btn purple" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                         Process <i class="icon-tasks"></i>

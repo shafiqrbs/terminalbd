@@ -66,6 +66,10 @@ hospital_doctor:
     resource: "@HospitalBundle/Resources/config/routing/doctor.yml"
     prefix:   /doctor
 
+hospital_labuser:
+    resource: "@HospitalBundle/Resources/config/routing/labuser.yml"
+    prefix:   /lab-user
+
 hospital_cabin:
     resource: "@HospitalBundle/Resources/config/routing/cabin.yml"
     prefix:   /cabin-ward

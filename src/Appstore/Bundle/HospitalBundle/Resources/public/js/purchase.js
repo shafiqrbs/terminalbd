@@ -65,13 +65,15 @@ $(document).on('click', '#addParticular', function() {
     var quantity = $('#quantity').val();
     var price = $('#purchasePrice').val();
     var url = $('#addParticular').attr('data-url');
-    if(particularId == ''){
+    alert(particularId);
+    alert(price);
+    if(particularId === ''){
         $('.msg-hidden').show();
         $('input[name=particular]').focus();
         $('#msg').html('Please select medicine or accessories name');
         return false;
     }
-    if(price == ''){
+    if(price === ''){
         $('.msg-hidden').show();
         $('#msg').html('Please enter purchase price');
         $('input[name=purchasePrice]').focus();
@@ -83,6 +85,7 @@ $(document).on('click', '#addParticular', function() {
         data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
         success: function (response) {
             obj = JSON.parse(response);
+            console.log(response);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#subTotal').html(obj['subTotal']);
             $('#vat').val(obj['vat']);
@@ -90,8 +93,6 @@ $(document).on('click', '#addParticular', function() {
             $('#paymentTotal').val(obj['grandTotal']);
             $('#due').val(obj['dueAmount']);
             $('.dueAmount').html(obj['dueAmount']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
             $('#purchasePrice').val('');
             $("#particular").select2().select2("val","");
             $('#price').val('');
@@ -99,6 +100,7 @@ $(document).on('click', '#addParticular', function() {
         }
     })
 });
+
 $(document).on('change', '#discount', function() {
 
     var discount = parseInt($('#discount').val());

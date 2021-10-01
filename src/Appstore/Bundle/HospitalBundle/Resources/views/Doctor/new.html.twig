@@ -134,6 +134,17 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
+                                <label class="control-label" for="specialist">Doctor Signature</label>
+                                <div class="controls">
+                                    {{ form_widget(form.doctorSignature) }}
+                                    {{ form_errors(form.doctorSignature) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
                                 <label class="control-label" for="specialist">Specialist</label>
                                 <div class="controls">
                                     {{ form_widget(form.specialist) }}

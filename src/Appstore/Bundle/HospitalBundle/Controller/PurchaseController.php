@@ -8,6 +8,7 @@ use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\PurchaseType;
 use Appstore\Bundle\HospitalBundle\Form\VendorType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -144,7 +145,8 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
-        $price = $request->request->get('price');
+        $totalPrice = $request->request->get('price');
+        $price = ($totalPrice/$quantity);
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->updatePurchaseTotalPrice($invoice);

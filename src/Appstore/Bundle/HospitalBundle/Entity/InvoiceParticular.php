@@ -43,6 +43,11 @@ class InvoiceParticular
     private $assignDoctor;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     **/
+    private $assignLabuser;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular" , cascade={"remove"})
      **/
     private $invoicePathologicalReports;
@@ -561,6 +566,22 @@ class InvoiceParticular
 		// clean up the file property as you won't need it anymore
 		$this->file = null;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getAssignLabuser()
+    {
+        return $this->assignLabuser;
+    }
+
+    /**
+     * @param mixed $assignLabuser
+     */
+    public function setAssignLabuser($assignLabuser)
+    {
+        $this->assignLabuser = $assignLabuser;
+    }
 
 }
 
