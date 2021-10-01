@@ -158,6 +158,7 @@ class InvoiceController extends Controller
             $entity->setProcess('Done');
             $em->persist($entity);
             $em->flush();
+            $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($entity);
         }
         return new Response('done');
     }

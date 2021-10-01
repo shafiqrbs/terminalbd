@@ -231,7 +231,7 @@ class ExpenditureRepository extends EntityRepository
         $em->persist($entity);
         $em->flush();
         $em->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($entity);
-        $em->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($entity);
+       // $em->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($entity);
 
     }
 
