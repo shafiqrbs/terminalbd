@@ -127,9 +127,6 @@ class EmployeeProfileType extends AbstractType
                 'empty_value' => '---Select Location---',
                 'attr'=>array('class'=>'select2 span12'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select Employee Location'))
-                ),
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
