@@ -104,6 +104,7 @@ class InvoiceAdmissionController extends Controller
         if ($editForm->isValid()) {
             $entity->setHospitalConfig($hospital);
             $entity->setProcess('Admitted');
+            $entity->setInvoiceMode('admission');
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('hms_invoice_admission'));

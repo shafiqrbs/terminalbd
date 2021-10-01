@@ -65,8 +65,6 @@ $(document).on('click', '#addParticular', function() {
     var quantity = $('#quantity').val();
     var price = $('#purchasePrice').val();
     var url = $('#addParticular').attr('data-url');
-    alert(particularId);
-    alert(price);
     if(particularId === ''){
         $('.msg-hidden').show();
         $('input[name=particular]').focus();
