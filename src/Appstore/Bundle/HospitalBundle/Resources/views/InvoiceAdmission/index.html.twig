@@ -173,7 +173,7 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processArr = {'Admitted': 'Admitted' ,'Revised':'Revised','Release':'Release','Death':'Death'} %}
-                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death'} %}
+                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admmited':'Admmited'} %}
                                                 {% if entity.process in processArr %}
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}
@@ -184,7 +184,7 @@
                                                     Action <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
-                                                    {% if entity.process in  processEdit %}
+                                                    {% if entity.process in  processEdit or app.user.granted("ROLE_DOMAIN") %}
                                                         <li><a href="{{ path('hms_invoice_admitted_patient_edit', { 'id': entity.id }) }}" class="btn yellow"><i class="icon-pencil"></i> Edit</a></li>
                                                     {% endif %}
                                                     {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
