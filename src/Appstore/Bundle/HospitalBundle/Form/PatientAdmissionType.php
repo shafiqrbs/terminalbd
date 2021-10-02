@@ -83,7 +83,7 @@ class PatientAdmissionType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.service = 6")
+                        ->andWhere("b.service = 5")
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }
