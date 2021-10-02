@@ -173,7 +173,7 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processArr = {'Admitted': 'Admitted' ,'Revised':'Revised','Release':'Release','Death':'Death'} %}
-                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admmited':'Admmited'} %}
+                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
                                                 {% if entity.process in processArr %}
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}
