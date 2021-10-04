@@ -455,7 +455,7 @@
                                                                 </div>
                                                                 <div class="span2">
                                                                     <select class="span12 m-wrap input" name="transactionType" id="transactionType">
-                                                                        {% set paymentModes = ['Receive','Due','Adjustment'] %}
+                                                                        {% set paymentModes = ['Due','Receive','Adjustment'] %}
                                                                         {% for mode in paymentModes %}
                                                                             <option value="{{ mode }}">{{ mode }}</option>
                                                                         {% endfor %}

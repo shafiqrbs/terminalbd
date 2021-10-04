@@ -239,8 +239,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $this->_em->persist($entity);
             $this->_em->flush($entity);
             if($invoice->getPayment() > 0){
-                $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
-                $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
+                $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
             }
     }
     public function insertPaymentTransaction(Invoice $invoice, $data)
@@ -272,20 +271,34 @@ class InvoiceTransactionRepository extends EntityRepository
 
     }
 
+    public function getTransactionSummary($invoice)
+    {
+        $em = $this->_em;
+        $res = $em->createQueryBuilder()
+            ->from('HospitalBundle:InvoiceTransaction','si')
+            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
+            ->where('si.hmsInvoice = :invoice')
+            ->setParameter('invoice', $invoice)
+            ->andWhere('si.process = :process')->setParameter('process', 'Done')
+            ->andWhere('si.approvedBy IS NOT NULL')
+            ->getQuery()->getOneOrNullResult();
+        return $res;
+    }
+
     public function admissionInvoiceTransactionUpdate(InvoiceTransaction $entity )
     {
+        $em = $this->_em;
         $invoice = $entity->getHmsInvoice();
         if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
             $vat = $this->getCulculationVat($invoice, $entity->getPayment());
             $entity->setVat($vat);
         }
         if(empty($entity->getTransactionMethod())){
-            $entity->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+            $entity->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         }
-        $this->_em->persist($entity);
-        $this->_em->flush($entity);
-        $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
-        $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
+        $em->persist($entity);
+        $em->flush($entity);
+        $em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
 
     }
 
@@ -297,8 +310,6 @@ class InvoiceTransactionRepository extends EntityRepository
             foreach ($entity->getAccountSales() as $sales ){
                 $globalOption = $sales->getGlobalOption()->getId();
                 $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
                 $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
                 $accountCash->execute();
             }
@@ -325,8 +336,6 @@ class InvoiceTransactionRepository extends EntityRepository
             foreach ($entity->getAccountSales() as $sales ){
                 $globalOption = $sales->getGlobalOption()->getId();
                 $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
                 $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
                 $accountCash->execute();
             }
@@ -356,8 +365,6 @@ class InvoiceTransactionRepository extends EntityRepository
 
                 $globalOption = $sales->getGlobalOption()->getId();
                 $accountRefNo = $sales->getAccountRefNo();
-                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
-                $transaction->execute();
                 $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
                 $accountCash->execute();
             }

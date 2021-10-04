@@ -376,6 +376,8 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+
+
     public function updateAdmissionPaymentReceive(Invoice $invoice)
     {
         $em = $this->_em;
@@ -390,6 +392,7 @@ class InvoiceRepository extends EntityRepository
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $vat = !empty($res['vat']) ? $res['vat'] :0;
         $invoice->setPayment($payment);
+        $invoice->setDiscount($res['discount']);
         $invoice->setVat($vat);
         $invoice->setReceive(0);
         $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
@@ -417,7 +420,9 @@ class InvoiceRepository extends EntityRepository
             ->getQuery()->getOneOrNullResult();
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $vat = !empty($res['vat']) ? $res['vat'] :0;
+        $discount = !empty($res['discount']) ? $res['discount'] :0;
         $invoice->setPayment($payment);
+        $invoice->setDiscount($discount);
         $invoice->setVat($vat);
         $invoice->setReceive(0);
         $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
