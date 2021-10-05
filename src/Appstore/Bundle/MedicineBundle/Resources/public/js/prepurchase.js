@@ -110,28 +110,28 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
 var formStock = $("#stockItemForm").validate({
     rules: {
 
-        "stockItemForm[name]": {required: true},
-        "stockItemForm[rackNo]": {required: true},
-        "stockItemForm[unit]": {required: false},
-        "stockItemForm[purchasePrice]": {required: false},
-        "stockItemForm[purchaseQuantity]": {required: true}
+        "medicineStock[name]": {required: true},
+        "medicineStock[rackNo]": {required: false},
+        "medicineStock[unit]": {required: false},
+        "medicineStock[purchasePrice]": {required: false},
+        "medicineStock[purchaseQuantity]": {required: true}
     },
 
     messages: {
 
-        "stockItemForm[name]":"Enter medicine name",
-        "stockItemForm[rackNo]":"Enter medicine rack no",
-        "stockItemForm[unit]":"Enter medicine unit",
-        "stockItemForm[purchasePrice]":"Enter purchase price",
-        "stockItemForm[purchaseQuantity]":"Enter purchase quantity",
+        "medicineStock[name]":"Enter medicine name",
+        "medicineStock[rackNo]":"Enter medicine rack no",
+        "medicineStock[unit]":"Enter medicine unit",
+        "medicineStock[purchasePrice]":"Enter purchase price",
+        "medicineStock[purchaseQuantity]":"Enter purchase quantity",
 
     },
     tooltip_options: {
-        "stockItemForm[name]": {placement:'top',html:true},
-        "stockItemForm[rackNo]": {placement:'top',html:true},
-        "stockItemForm[unit]": {placement:'top',html:true},
-        "stockItemForm[purchasePrice]": {placement:'top',html:true},
-        "stockItemForm[purchaseQuantity]": {placement:'top',html:true},
+        "medicineStock[name]": {placement:'top',html:true},
+        "medicineStock[rackNo]": {placement:'top',html:true},
+        "medicineStock[unit]": {placement:'top',html:true},
+        "medicineStock[purchasePrice]": {placement:'top',html:true},
+        "medicineStock[purchaseQuantity]": {placement:'top',html:true},
     },
 
     submitHandler: function(formStock) {

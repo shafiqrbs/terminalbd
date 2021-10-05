@@ -57,9 +57,6 @@ class MedicineStockPreItemType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Choose a unit ---',
                 'attr'=>array('class'=>'span6 m-wrap stockInput'),
                 'query_builder' => function(EntityRepository $er){
