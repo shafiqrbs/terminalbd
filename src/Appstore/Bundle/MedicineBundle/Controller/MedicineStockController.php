@@ -215,6 +215,10 @@ class MedicineStockController extends Controller
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }
+            if(empty($entity->getUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setUnit($unit);
+            }
             $entity->upload();
             $em->persist($entity);
             $em->flush();

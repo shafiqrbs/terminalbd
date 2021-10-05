@@ -223,8 +223,11 @@ class PrepurchaseController extends Controller
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }
+            if(empty($entity->getUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setUnit($unit);
+            }
 	        $entity->setPurchaseQuantity(0);
-            $em->persist($entity);
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);
