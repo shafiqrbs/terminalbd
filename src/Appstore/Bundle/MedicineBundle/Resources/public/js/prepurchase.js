@@ -1,6 +1,9 @@
 /**
  * Created by rbs on 5/1/17.
  */
+function financial(val) {
+    return Number.parseFloat(val).toFixed(2);
+}
 
 $(document).on("click", ".approve", function() {
     var url = $(this).attr('data-url');
@@ -192,48 +195,37 @@ $(document).on('change', '.quantity , .purchasePrice ,.salesPrice', function() {
 
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
-    var purchasePrice = parseFloat($('#purchasePrice-'+id).val());
     var salesPrice = parseFloat($('#salesPrice-'+id).val());
-    var subTotal  = (quantity * purchasePrice);
-    $("#subTotal-"+id).html(subTotal);
+    var subTotal  = (quantity * salesPrice);
+    $("#subTotal-"+id).html(financial(subTotal));
     $.ajax({
         url: Routing.generate('medicine_prepurchase_item_update'),
         type: 'POST',
-        data:'purchaseItemId='+ id +'&quantity='+ quantity +'&purchasePrice='+ purchasePrice,
+        data:'purchaseItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ salesPrice,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
-            $('#due').val(obj['due']);
-            $('.dueAmount').html(obj['due']);
-            $('#discount').html(obj['discount']);
+            $('#total').html(obj['netTotal']);
+            $('#distcount').val(obj['discount']);
         },
 
     })
 });
 
 
-$(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurchase_discountType', function() {
+$(document).on('change', '#medicinepurchase_discountCalculation', function() {
 
-    var discountType = $('#medicinepurchase_discountType').val();
     var discount = parseFloat($('#medicinepurchase_discountCalculation').val());
     var purchase = parseInt($('#purchaseId').val());
     $.ajax({
         url: Routing.generate('medicine_prepurchase_discount_update'),
         type: 'POST',
-        data:'discount=' + discount+'&discountType='+discountType+'&purchase='+purchase,
+        data:'discount=' + discount+'&purchase='+purchase,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);
-            $('.grandTotal').html(obj['netTotal']);
-            $('#paymentTotal').val(obj['netTotal']);
-            $('#due').val(obj['due']);
-            $('.dueAmount').html(obj['due']);
-            $('#msg').html(obj['msg']);
+            $('#total').html(obj['netTotal']);
             $('#discount').html(obj['discount']);
-            $('#medicinepurchase_discount').val(obj['discount']);
         }
 
     })

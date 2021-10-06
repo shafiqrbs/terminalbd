@@ -77,48 +77,35 @@ class MedicinePrepurchaseRepository extends EntityRepository
         return  $qb;
     }
 
-
-
     public function updatePurchaseTotalPrice(MedicinePrepurchase $entity)
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('MedicineBundle:MedicinePrepurchaseItem','si')
-            ->select('sum(si.purchaseSubTotal) as total')
+            ->select('sum(si.subTotal) as total')
             ->where('si.medicinePrepurchase = :entity')
             ->setParameter('entity', $entity ->getId())
             ->getQuery()->getSingleResult();
-
         $subTotal = $total['total'];
+        $discount = $this->getUpdateDiscount($entity,$subTotal);
         if($subTotal > 0){
-
             $entity->setSubTotal(round($subTotal));
-            $entity->setDiscount(round($this->getUpdateDiscount($entity,$subTotal)));
-            $entity->setNetTotal(round($entity->getSubTotal() - $entity->getDiscount()));
-            $entity->setDue(round($entity->getNetTotal() - $entity->getPayment()));
-
+            $entity->setDiscount(round($discount));
+            $entity->setNetTotal($subTotal-$discount);
         }else{
-
             $entity->setSubTotal(0);
-            $entity->setNetTotal(0);
-            $entity->setDue(0);
             $entity->setDiscount(0);
+            $entity->setNetTotal(0);
         }
-
         $em->persist($entity);
         $em->flush();
-
         return $entity;
 
     }
 
     public function getUpdateDiscount(MedicinePrepurchase $invoice,$subTotal)
     {
-        if($invoice->getDiscountType() == 'flat'){
-            $discount = $invoice->getDiscountCalculation();
-        }else{
-            $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
-        }
+        $discount = ($subTotal * $invoice->getDiscountCalculation())/100;
         return round($discount,2);
     }
 

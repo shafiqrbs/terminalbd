@@ -262,16 +262,12 @@ class PrepurchaseController extends Controller
         $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->getPurchaseItems($entity);
         $subTotal   = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal   = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
-        $payment    = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
-        $due        = $entity->getDue();
         $discount   = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
         $data = array(
             'msg'                   => $msg,
-            'subTotal'              => $subTotal,
-            'netTotal'              => $netTotal,
-            'payment'               => $payment ,
-            'due'                   => $due,
-            'discount'              => $discount,
+            'subTotal'              => number_format($subTotal,2),
+            'netTotal'              => number_format($netTotal,2),
+            'discount'              => number_format($discount,2),
             'invoiceParticulars'    => $invoiceParticulars ,
             'success'               => 'success'
         );
@@ -293,38 +289,33 @@ class PrepurchaseController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $discountType = $request->request->get('discountType');
         $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
         $entity = $em->getRepository('MedicineBundle:MedicinePrepurchase')->find($invoice);
-        $subTotal = $entity->getSubTotal();
-        if($discountType == 'flat'){
-            $total = ($subTotal  - $discountCal);
-            $discount = $discountCal;
-        }else{
+        if($discountCal > 0 ){
+            $subTotal = $entity->getSubTotal();
             $discount = ($subTotal * $discountCal)/100;
             $total = ($subTotal  - $discount);
+            $vat = 0;
+            if($total > $discount ){
+                $entity->setDiscountType("percent");
+                $entity->setDiscountCalculation($discountCal);
+                $entity->setDiscount(round($discount));
+                $entity->setNetTotal(round($total + $vat));
+                $entity->setDue(round($total + $vat));
+                $em->flush();
+            }
         }
-        $vat = 0;
-        if($total > $discount ){
-            $entity->setDiscountType($discountType);
-            $entity->setDiscountCalculation($discountCal);
-            $entity->setDiscount(round($discount));
-            $entity->setNetTotal(round($total + $vat));
-            $entity->setDue(round($total + $vat));
-            $em->flush();
-        }
-
         $result = $this->returnResultData($entity);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function updateAction(Request $request, MedicinePrepurchase $entity)
@@ -334,7 +325,6 @@ class PrepurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
@@ -384,7 +374,6 @@ class PrepurchaseController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
     /**
@@ -445,10 +434,9 @@ class PrepurchaseController extends Controller
             $em->flush();
         }
 
-        if($data['name'] == 'PurchasePrice' and 0 < (float)$data['value']){
-            $entity->setPurchasePrice((float)$data['value']);
-            $entity->setActualPurchasePrice((float)$data['value']);
-            $entity->setPurchaseSubTotal((float)$data['value'] * $entity->getQuantity());
+        if($data['name'] == 'SalesPrice' and 0 < (float)$data['value']){
+            $entity->setSalesPrice((float)$data['value']);
+            $entity->setSubTotal((float)$data['value'] * $entity->getQuantity());
             $em->flush();
             $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchase')->updatePurchaseTotalPrice($entity->getMedicinePrepurchase());
         }
@@ -460,16 +448,6 @@ class PrepurchaseController extends Controller
 		    $entity->setExpirationEndDate($expirationEndDate);
 		    $em->flush();
 	    }
-
-        $salesQnt = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($entity);
-        if($data['name'] == 'Quantity' and $salesQnt <= (int)$data['value']){
-            $entity->setQuantity((int)$data['value']);
-            $entity->setRemainingQuantity((int)$data['value']);
-            $entity->setPurchaseSubTotal((int)$data['value'] * $entity->getActualPurchasePrice());
-            $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock());
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchase')->updatePurchaseTotalPrice($entity->getMedicinePrepurchase());
-        }
         exit;
     }
 

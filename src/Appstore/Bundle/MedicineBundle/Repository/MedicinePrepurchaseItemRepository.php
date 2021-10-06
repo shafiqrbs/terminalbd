@@ -172,86 +172,14 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
-    public function salesMedicinePurchaseItemUpdate(MedicinePurchaseItem $item,$fieldName='')
-    {
-
-        $qb = $this->createQueryBuilder('e');
-        if($fieldName == 'sales'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
-            $qb->select('e.salesQuantity AS quantity');
-        }elseif($fieldName == 'sales-return'){
-            $qb->select('e.quantity AS quantity');
-        }elseif($fieldName == 'sales-return'){
-            $qb->select('e.quantity AS quantity');
-        }elseif($fieldName == 'sales-return'){
-            $qb->select('e.quantity AS quantity');
-        }else{
-            $qb->select('SUM(e.quantity) AS quantity');
-        }
-        $qb->addSelect('e.remainingQuantity AS remainingQuantity');
-
-        $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $item->getMedicineStock()->getId());
-        $qnt = $qb->getQuery()->getOneOrNullResult();
-        return $qnt['quantity'];
-    }
-
-    public function updateRemovePurchaseItemQuantity(MedicinePurchaseItem $item,$fieldName='')
-    {
-
-        $em = $this->_em;
-        if($fieldName == 'sales'){
-	        $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->salesPurchaseStockItemUpdate($item);
-            $item->setSalesQuantity($quantity);
-        }elseif($fieldName == 'sales-return'){
-	        $quantity = $this->_em->getRepository('MedicineBundle:MedicineSalesReturn')->salesReturnStockItemUpdate($item);
-            $item->setSalesReturnQuantity($quantity);
-        }elseif($fieldName == 'purchase-return'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicinePurchaseReturnItem')->purchaseReturnStockItemUpdate($item);
-            $item->setPurchaseReturnQuantity($quantity);
-        }elseif($fieldName == 'damage'){
-            $quantity = $this->_em->getRepository('MedicineBundle:MedicineDamage')->damagePurchaseStockItemUpdate($item);
-            $item->setDamageQuantity($quantity);
-        }
-        $em->persist($item);
-        $em->flush();
-        $this->remainingQnt($item);
-
-    }
-
-    public function remainingQnt(MedicinePurchaseItem $item)
-    {
-        $em = $this->_em;
-	    $qnt = ($item->getQuantity()  + $item->getSalesReturnQuantity()) - ($item->getPurchaseReturnQuantity() + $item->getSalesQuantity() + $item->getDamageQuantity());
-        $item->setRemainingQuantity($qnt);
-        $em->persist($item);
-        $em->flush();
-    }
-
-    public function updatePurchaseItemPrice(MedicinePurchase $purchase)
-    {
-        /* @var  $item MedicinePurchaseItem */
-
-        foreach ($purchase->getMedicinePurchaseItems() as $item){
-
-            $em = $this->_em;
-            $percentage = $purchase->getDiscountCalculation();
-            $purchasePrice = $this->stockInstantPurchaseItemPrice($percentage,$item->getActualPurchasePrice());
-            $item->setPurchasePrice($purchasePrice);
-            $item->setPurchaseSubTotal($purchasePrice * $item->getQuantity());
-            $em->persist($item);
-            $em->flush();
-
-        }
-    }
 
     public function updatePurchaseItem($data)
     {
-
         $em = $this->_em;
         $entity = $this->_em->getRepository('MedicineBundle:MedicinePrepurchaseItem')->find($data['purchaseItemId']);
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchasePrice($data['purchasePrice']);
-        $entity->setPurchaseSubTotal($data['purchasePrice'] * $data['quantity']);
+        $entity->setSalesprice($data['salesPrice']);
+        $entity->setSubtotal($data['salesPrice'] * $data['quantity']);
         $em->persist($entity);
         $em->flush();
         return $entity->getMedicinePrepurchase();
@@ -262,14 +190,14 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
     public function insertStockPurchaseItems(MedicinePrepurchase $purchase,MedicineStock $item, $data)
     {
         $em = $this->_em;
-        $purchasePrice = $data["medicineStock"]['purchasePrice'];
+        $purchasePrice = $data["medicineStock"]['salesPrice'];
         $purchaseQuantity = $data["medicineStock"]['purchaseQuantity'];
         $entity = new MedicinePrepurchaseItem();
         $entity->setMedicinePrepurchase($purchase);
         $entity->setMedicineStock($item);
         $unitPrice = round(($purchasePrice/$purchaseQuantity),2);
-        $entity->setPurchaseSubTotal($item->getPurchasePrice());
-        $entity->setPurchasePrice($unitPrice);
+        $entity->setSubTotal($item->getPurchasePrice());
+        $entity->setSalesPrice($unitPrice);
         $entity->setQuantity($purchaseQuantity);
         $em->persist($entity);
         $em->flush();
@@ -281,10 +209,9 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
 		$entity = new MedicinePrepurchaseItem();
 		$entity->setMedicinePrepurchase($purchase);
 		$entity->setMedicineStock($item);
-		$entity->setPurchaseSubTotal(0);
-		$entity->setPurchasePrice($item->getPurchasePrice());
 		$entity->setSalesPrice($item->getSalesPrice());
 		$entity->setQuantity($item->getReorderQuantity());
+		$entity->setSubTotal($item->getSalesPrice() * $item->getReorderQuantity());
 		$em->persist($entity);
 		$em->flush();
 	}
@@ -359,17 +286,18 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
             if(!empty($entity->getMedicineStock()->getRackNo())){
                $rack = $entity->getMedicineStock()->getRackNo()->getName();
             }
+            $subTotal = ($entity->getQuantity() * $entity->getSalesPrice());
             $data .= '<tr id="remove-'. $entity->getId().'">';
             $data .= '<td class="span3" >' . $entity->getMedicineStock()->getName() .'</td>';
             $data .= '<th class="span1" >' .$rack. '</th>';
 	        $data .= "<td class='span1' >";
-            $data .= "<input type='text' class='numeric td-inline-input purchasePrice' data-id='{$entity->getid()}' autocomplete='off' id='purchasePrice-{$entity->getId()}' name='purchasePrice' value='{$entity->getPurchasePrice()}'>";
+            $data .= "<input type='text' class='numeric td-inline-input salesPrice' data-id='{$entity->getid()}' autocomplete='off' id='salesPrice-{$entity->getId()}' name='salesPrice' value='{$entity->getSalesPrice()}'>";
             $data .= "</td>";
             $data .= "<td class='span1' >";
             $data .= "<input type='hidden' id='purchaseQuantity-{$entity->getId()}'  value='{$entity->getQuantity()}' >";
             $data .= "<input type='text' class='numeric td-inline-input quantity' data-id='{$entity->getid()}' autocomplete='off' id='quantity-{$entity->getId()}' name='quantity' value='{$entity->getQuantity()}'>";
             $data .= "</td>";
-            $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$entity->getPurchaseSubTotal()}</td>";
+            $data .= "<td class='span1' id='subTotal-{$entity->getid()}'>{$subTotal}</td>";
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" data-url="/medicine/prepurchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';

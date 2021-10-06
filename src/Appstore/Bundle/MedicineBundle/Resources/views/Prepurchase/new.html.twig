@@ -99,7 +99,6 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Name</th>
                             <th class="span1">Rack no</th>
                             <th class="span1">MRP</th>
-                            <th class="span1">PP</th>
                             <th class="span1">Pack</th>
                             <th class="span1">Qnt</th>
                             <th class="span1">Total</th>
@@ -113,17 +112,14 @@
                                     <td class="span3">{{ loop.index }}. <strong>{{ item.medicineStock.name }}</strong></td>
                                     <td class="span3">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="span1">
-                                       <input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.medicineStock.salesPrice }}" >
-                                    </td>
-                                    <td class="span1">
-                                       <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.purchasePrice }}" >
+                                       <input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" >
                                     </td>
                                     <td class="span1">{{ item.medicineStock.pack }}</td>
                                     <td class="span1">
                                         <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                     </td>
-                                    <td class="" id="subTotal-{{ item.id }}">{{ (item.purchasePrice * item.quantity)|number_format }}</td>
-                                    <td class=""><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_prepurchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="" id="subTotal-{{ item.id }}">{{ (item.salesPrice * item.quantity)|number_format }}</td>
+                                    <td class=""><a id="{{ item.id }}" data-url="{{ path('medicine_prepurchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -133,25 +129,25 @@
                             <td colspan="8" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="2" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                            <td class="span1"></td>
-                            <td class="span1"></td>
-                            <td class="span1"></td>
+                            <td colspan="2" class="span10"><span class="pull-right"><strong>Percent(%)</strong> =</span></td>
+                            <td class="span1">  {{ form_widget(form.discountCalculation) }}</td>
                             <td class="span1"></td>
                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format(2) }}</strong></td>
-                            <td class="span1"></td>
+                            <td class="span1"><strong id="discount">{{ entity.discount|number_format(2) }}</strong></td>
+                            <td class="span1"><strong id="total">{{ entity.netTotal|number_format(2) }}</strong></td>
                         </tr>
                         <tr>
                             <td colspan="3"><span class="pull-right"><strong>Vendor/Supplier</strong> =</span></td>
-                            <td colspan="5">
+                            <td colspan="4">
                                 {{ form_widget(form.medicineVendor) }}
                                 {{ form_errors(form.medicineVendor) }}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5"></td>
+                            <td colspan="4"></td>
                             <td colspan="3">
                                 <div class="pull-right">
+                                    <input type="hidden" id="purchaseId" value="{{ entity.id }}">
                                     <button type="reset" class="btn yellow" id=""><i class="icon-refresh"></i> Reset</button>
                                     <button type="submit" class="btn blue" id="receiveBtn"><i class="icon-save"></i> Save</button>
                                 </div>

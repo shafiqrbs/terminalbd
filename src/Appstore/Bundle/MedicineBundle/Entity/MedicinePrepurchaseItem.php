@@ -83,6 +83,15 @@ class MedicinePrepurchaseItem
 
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float", nullable = true)
+     */
+    private $subTotal;
+
+
+
     /**
      * Get id
      *
@@ -237,6 +246,22 @@ class MedicinePrepurchaseItem
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
     }
 
 }

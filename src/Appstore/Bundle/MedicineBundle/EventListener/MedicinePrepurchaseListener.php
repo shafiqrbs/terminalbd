@@ -38,9 +38,8 @@ class MedicinePrepurchaseListener
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
-
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('MedicineBundle:MedicinePurchase')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('MedicineBundle:MedicinePrepurchase')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')
