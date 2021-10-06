@@ -1076,7 +1076,7 @@ class AccountSalesRepository extends EntityRepository
         return $accountSales;
     }
 
-    public function insertStorePayment(BusinessStoreLedger $sales)
+    public function insertStorePayment(BusinessInvoice $entity ,BusinessStoreLedger $sales)
     {
         $global = $sales->getBusinessConfig()->getGlobalOption();
         $amount = $sales->getCredit();
@@ -1084,9 +1084,11 @@ class AccountSalesRepository extends EntityRepository
         $em = $this->_em;
         $accountSales = new AccountSales();
         $accountSales->setGlobalOption($global);
+        $accountSales->setBusinessInvoice($entity);
         $accountSales->setCustomer($customer);
         $accountSales->setAmount($amount);
         $accountSales->setProcessHead('Store Payment');
+        $accountSales->setRemark($sales->getStore()->getName());
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($sales->getCreatedBy());

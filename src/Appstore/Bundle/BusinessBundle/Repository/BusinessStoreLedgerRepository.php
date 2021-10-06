@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStore;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
@@ -88,6 +89,15 @@ class BusinessStoreLedgerRepository extends EntityRepository
         $store = $ledger->getStore();
         $store->setBalance($balance);
         $em->flush();
+    }
+
+    public function storeInvoiceReverse(BusinessInvoice $entity)
+    {
+        $em = $this->_em;
+        $accountCash = $em->createQuery('DELETE BusinessBundle:BusinessStoreLedger e WHERE e.invoice = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
     }
 
 }

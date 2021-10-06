@@ -517,10 +517,12 @@ class InvoiceController extends Controller
 		 * Transaction
 		 * Delete Journal & Account Purchase
 		 */
+
 		set_time_limit(0);
 		$em = $this->getDoctrine()->getManager();
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessProductionExpense')->removeProductionExpense($sales);
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
+		$this->getDoctrine()->getRepository('BusinessBundle:BusinessStoreLedger')->storeInvoiceReverse($sales);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($sales);
         $sales->setIsReversed(true);
 		$sales->setProcess('Created');
@@ -935,7 +937,7 @@ class InvoiceController extends Controller
                 foreach ($entity->getStoreLedgers() as $ledger){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessStoreLedger')->approveStorePayment($ledger,$user);
                     if($ledger->getTransactionType() == "Receive"){
-                        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertStorePayment($ledger);
+                        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertStorePayment($entity,$ledger);
                     }
                 }
             }

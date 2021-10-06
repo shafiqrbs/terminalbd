@@ -112,13 +112,12 @@ $(document).on("click", ".delete", function(event) {
 });
 
 
-$(document).on("change", "#mobile", function() {
+$(document).on("change", "#mobile, #customer", function() {
     var customer = $(this).val();
     $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
         .done(function( data ) {
             $('#outstanding').html(data);
         });
-
  });
 
 
