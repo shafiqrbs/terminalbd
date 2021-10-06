@@ -111,8 +111,8 @@ class MedicinePurchaseRepository extends EntityRepository
                 $entity->setMedicineStock($row->getMedicineStock());
                 $entity->setQuantity($row->getQuantity());
                 $entity->setActualPurchasePrice($row->getMedicineStock()->getPurchasePrice());
-                $entity->setPurchasePrice($row->getMedicineStock()->getSalesPrice());
-                $entity->setSalesPrice($row->getMedicineStock()->getSalesPrice());
+                $entity->setPurchasePrice($row->getSalesPrice());
+                $entity->setSalesPrice($row->getSalesPrice());
                 $this->dpGenerate($entity);
                 $entity->setPurchaseSubTotal($row->getMedicineStock()->getSalesPrice() * $entity->getQuantity());
                 $em->persist($entity);
