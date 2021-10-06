@@ -84,7 +84,7 @@ class BusinessStoreLedgerRepository extends EntityRepository
         $ledger->setApprovedBy($user);
         $ledger->setStatus(1);
         $em->flush();
-        echo $balance = $this->getStoreBalance($ledger->getStore()->getId());
+        $balance = $this->getStoreBalance($ledger->getStore()->getId());
         $ledger->setBalance($balance);
         $store = $ledger->getStore();
         $store->setBalance($balance);
@@ -94,10 +94,18 @@ class BusinessStoreLedgerRepository extends EntityRepository
     public function storeInvoiceReverse(BusinessInvoice $entity)
     {
         $em = $this->_em;
-        $accountCash = $em->createQuery('DELETE BusinessBundle:BusinessStoreLedger e WHERE e.invoice = '.$entity->getId());
-        if(!empty($accountCash)){
-            $accountCash->execute();
-        }
+        /* @var $ledger BusinessStoreLedger */
+        foreach ($entity->getStoreLedgers() as $ledger):
+            $ledger->setApprovedBy(NULL);
+            $ledger->setStatus(false);
+            $em->persist($ledger);
+            $em->flush();
+            $balance = $this->getStoreBalance($ledger->getStore()->getId());
+            $ledger->setBalance($balance);
+            $store = $ledger->getStore();
+            $store->setBalance($balance);
+            $em->flush();
+        endforeach;
     }
 
 }

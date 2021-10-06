@@ -2,20 +2,23 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Core\UserBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * BusinessInvoiceReturn
  *
- * @ORM\Table("business_invoice_return")
+ * @ORM\Table( name ="business_invoice_return")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\BusinessBundle\Repository\BusinessInvoiceReturnRepository")
  */
 class BusinessInvoiceReturn
 {
     /**
      * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,35 +27,45 @@ class BusinessInvoiceReturn
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessInvoiceReturns")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessPurchasesReturns" , cascade={"detach","merge"} )
      **/
-    private $businessConfig;
+    private  $businessConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessInvoiceReturns", cascade={"persist"} )
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem", mappedBy="invoice" , cascade={"remove"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
-    private $businessParticular;
-
+    private  $invoiceReturnItems;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", inversedBy="businessInvoiceReturns", cascade={"persist"} )
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="businessInvoices" ,cascade={"persist"} )
      **/
-    private $businessInvoiceParticular;
+    private  $customer;
+
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="damage" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="invoice", type="string", length=255, nullable=true)
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
      */
-    private $invoice;
+    private $created;
+
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
+
+
 
     /**
      * @var integer
@@ -62,55 +75,18 @@ class BusinessInvoiceReturn
     private $code;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
+     */
+    private $subTotal;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="process", type="string", nullable=true)
      */
     private $process = "created";
-
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="quantity", type="integer")
-     */
-    private $quantity;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="salesPrice", type="float",nullable=true)
-     */
-    private $salesPrice;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subTotal", type="float",nullable=true)
-     */
-    private $subTotal;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
-    private $updated;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notes", type="string",  nullable=true)
-     */
-    private $notes;
-
 
     /**
      * Get id
@@ -122,39 +98,10 @@ class BusinessInvoiceReturn
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
 
     /**
-     * @param int $quantity
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * @param mixed $createdBy
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    }
-
-    /**
+     * Get created
+     *
      * @return \DateTime
      */
     public function getCreated()
@@ -162,13 +109,43 @@ class BusinessInvoiceReturn
         return $this->created;
     }
 
+
     /**
-     * @param \DateTime $created
+     * @return User
      */
-    public function setCreated($created)
+    public function getCreatedBy()
     {
-        $this->created = $created;
+        return $this->createdBy;
     }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     * created
+     * progress
+     * complete
+     * approved
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    }
+
 
     /**
      * @return \DateTime
@@ -186,21 +163,7 @@ class BusinessInvoiceReturn
         $this->updated = $updated;
     }
 
-    /**
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
 
-    /**
-     * @param string $notes
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-    }
 
     /**
      * @return float
@@ -216,39 +179,6 @@ class BusinessInvoiceReturn
     public function setSubTotal($subTotal)
     {
         $this->subTotal = $subTotal;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * @param float $salesPrice
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param string $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
     }
 
     /**
@@ -268,25 +198,7 @@ class BusinessInvoiceReturn
     }
 
     /**
-     * @return string
-     */
-    public function getProcess()
-    {
-        return $this->process;
-    }
-
-    /**
-     * @param string $process
-     */
-    public function setProcess($process)
-    {
-        $this->process = $process;
-    }
-
-
-
-    /**
-     * @return BusinessConfig
+     * @return mixed
      */
     public function getBusinessConfig()
     {
@@ -294,7 +206,7 @@ class BusinessInvoiceReturn
     }
 
     /**
-     * @param BusinessConfig $businessConfig
+     * @param mixed $businessConfig
      */
     public function setBusinessConfig($businessConfig)
     {
@@ -302,36 +214,37 @@ class BusinessInvoiceReturn
     }
 
     /**
-     * @return BusinessParticular
+     * @return mixed
      */
-    public function getBusinessParticular()
+    public function getInvoiceReturnItems()
     {
-        return $this->businessParticular;
+        return $this->invoiceReturnItems;
     }
 
     /**
-     * @param BusinessParticular $businessParticular
+     * @param mixed $invoiceReturnItems
      */
-    public function setBusinessParticular($businessParticular)
+    public function setInvoiceReturnItems($invoiceReturnItems)
     {
-        $this->businessParticular = $businessParticular;
+        $this->invoiceReturnItems = $invoiceReturnItems;
     }
 
     /**
-     * @return BusinessInvoiceParticular
+     * @return mixed
      */
-    public function getBusinessInvoiceParticular()
+    public function getCustomer()
     {
-        return $this->businessInvoiceParticular;
+        return $this->customer;
     }
 
     /**
-     * @param BusinessInvoiceParticular $businessInvoiceParticular
+     * @param mixed $customer
      */
-    public function setBusinessInvoiceParticular($businessInvoiceParticular)
+    public function setCustomer($customer)
     {
-        $this->businessInvoiceParticular = $businessInvoiceParticular;
+        $this->customer = $customer;
     }
+
 
 }
 

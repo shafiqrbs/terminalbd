@@ -52,7 +52,7 @@
                                                 </select>
                                             </div>
                                             <div class="span3">
-                                                <select name=customer" id="customer" class="m-wrap span12 select2">
+                                                <select name="customer" id="customer" class="m-wrap span12 select2">
                                                     <option value="" >--DSR--</option>
                                                     {% for customer in customers %}
                                                         <option value="{{ customer.id }}" {% if searchForm.customer is defined and searchForm.customer == customer.id %} selected="selected" {% endif %} >{{ customer.name }}</option>

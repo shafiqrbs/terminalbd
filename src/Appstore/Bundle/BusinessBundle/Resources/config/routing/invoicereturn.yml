@@ -1,0 +1,51 @@
+business_invoice_return:
+    path:     /
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:index" }
+
+business_invoice_return_show:
+    path:     /{id}/show
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:show" }
+
+business_invoice_return_new:
+    path:     /new
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:new" }
+
+business_invoice_return_create:
+    path:     /create
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:create" }
+    methods:  [POST]
+
+business_invoice_return_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:edit" }
+
+business_invoice_return_update:
+    path:     /{id}/update
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:update" }
+    methods:  [POST]
+
+business_invoice_return_status:
+    path:     /{id}/status
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:edit" }
+
+business_invoice_return_approved:
+    path:     /{id}/approved
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:approved" }
+
+business_invoice_return_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:delete" }
+
+business_invoice_vendor_select:
+    path:     /vendor-selection
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:vendorSelect" }
+    options:
+           expose: true
+
+business_invoice_vendor_update:
+    path:     /{id}/vendor-purchase-return-update
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:vendorUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
