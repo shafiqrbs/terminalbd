@@ -91,7 +91,7 @@ class MedicinePrepurchaseRepository extends EntityRepository
         if($subTotal > 0){
             $entity->setSubTotal(round($subTotal));
             $entity->setDiscount(round($discount));
-            $entity->setNetTotal($subTotal-$discount);
+            $entity->setNetTotal($subTotal - $discount);
         }else{
             $entity->setSubTotal(0);
             $entity->setDiscount(0);
