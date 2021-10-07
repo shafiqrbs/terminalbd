@@ -3,10 +3,13 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -26,4 +29,32 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $em->flush();
 
     }
+
+    public function insertInvoiceReturnItem(BusinessInvoiceReturn $entity, $data)
+    {
+        $em = $this->_em;
+
+        $itemIds = $data['itemId'];
+        $quantity= $data['quantity'];
+        $price = $data['price'];
+        $itemProcess = $data['itemProcess'];
+        foreach ($itemIds as $key  => $itemId):
+
+            if($quantity[$key] > 0 ){
+                $product = $em->getRepository('BusinessBundle:BusinessParticular')->find($itemId);
+                $item = new BusinessInvoiceReturnItem();
+                $item->setInvoiceReturn($entity);
+                $item->setParticular($product);
+                $item->setQuantity($quantity[$key]);
+                $item->setPrice($price[$key]);
+                $item->setItemProcess($itemProcess[$key]);
+                $item->setSubTotal($price[$key] * $quantity[$key]);
+                $em->persist($item);
+                $em->flush();
+            }
+
+        endforeach;
+    }
+
+
 }

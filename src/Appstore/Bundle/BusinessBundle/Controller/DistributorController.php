@@ -221,7 +221,6 @@ class DistributorController extends Controller
         $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->updateInvoiceDistributionTotalPrice($invoice);
         $res = $this->returnResultData($invoice);
         return new Response(json_encode($res));
-
     }
 
 

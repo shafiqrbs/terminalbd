@@ -40,6 +40,13 @@ class BusinessInvoiceReturnItem
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn", inversedBy="invoiceReturnItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $invoiceReturn;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="quantity", type="float")
@@ -203,6 +210,22 @@ class BusinessInvoiceReturnItem
     public function setItemProcess($itemProcess)
     {
         $this->itemProcess = $itemProcess;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceReturn()
+    {
+        return $this->invoiceReturn;
+    }
+
+    /**
+     * @param mixed $invoiceReturn
+     */
+    public function setInvoiceReturn($invoiceReturn)
+    {
+        $this->invoiceReturn = $invoiceReturn;
     }
 
 

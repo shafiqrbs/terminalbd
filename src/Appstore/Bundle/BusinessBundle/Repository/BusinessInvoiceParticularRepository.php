@@ -1,12 +1,14 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Core\UserBundle\Entity\User;
@@ -876,6 +878,22 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             endforeach;
         }
 
+    }
+
+    public function getCustomerItem(BusinessConfig $config, Customer $vendor)
+    {
+        $configId = $config->getId();
+        $vendorId = $vendor->getId();
+        $qb = $this->createQueryBuilder('pi');
+        $qb->select('p.name as itemName','p.id as itemId','p.salesPrice as salesPrice','SUM(pi.totalQuantity) as quantity');
+        $qb->join('pi.businessInvoice','e');
+        $qb->join('pi.businessParticular','p');
+        $qb->where('p.businessConfig = :config')->setParameter('config', $configId) ;
+        $qb->andWhere('e.customer = :vendorId')->setParameter('vendorId', $vendorId) ;
+        $qb->groupBy('p.name');
+        $qb->orderBy('p.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
     }
 
 

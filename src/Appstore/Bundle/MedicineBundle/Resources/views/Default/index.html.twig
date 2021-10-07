@@ -28,7 +28,7 @@
                 <div class="span4">
                     <div class="btn-group">
                         {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a href="{{ path('medicine_purchase_new') }}" style="width: 50%" class="btn green big"><i class="icon-truck"></i> Purchase</a>
+                            <a href="{{ path('medicine_purchase') }}" style="width: 50%" class="btn green big"><i class="icon-truck"></i> Purchase</a>
                         {% endif %}
                         {% if ( app.user.granted("ROLE_MEDICINE_PURCHASE") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('account_purchase_new') }}" style="width: 50%" class="btn yellow big"><i class="icon-money"></i> Payment</a>

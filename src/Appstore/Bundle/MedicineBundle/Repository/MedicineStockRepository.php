@@ -479,7 +479,7 @@ class MedicineStockRepository extends EntityRepository
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
         $query->orderBy('e.name', 'ASC');
-        $query->setMaxResults( '30' );
+        $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();
 
     }

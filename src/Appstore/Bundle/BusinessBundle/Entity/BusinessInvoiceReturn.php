@@ -74,12 +74,40 @@ class BusinessInvoiceReturn
      */
     private $code;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="invoice", type="string",  nullable=true)
+     */
+    private $invoice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string",  nullable=true)
+     */
+    private $mode = "adjustment";
+
     /**
      * @var float
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="adjustment", type="float", nullable=true)
+     */
+    private $adjustment=0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="payment", type="float", nullable=true)
+     */
+    private $payment=0;
 
     /**
      * @var string
@@ -243,6 +271,70 @@ class BusinessInvoiceReturn
     public function setCustomer($customer)
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param string $invoice
+     */
+    public function setInvoice($invoice)
+    {
+        $this->invoice = $invoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdjustment()
+    {
+        return $this->adjustment;
+    }
+
+    /**
+     * @param float $adjustment
+     */
+    public function setAdjustment($adjustment)
+    {
+        $this->adjustment = $adjustment;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param float $payment
+     */
+    public function setPayment($payment)
+    {
+        $this->payment = $payment;
     }
 
 

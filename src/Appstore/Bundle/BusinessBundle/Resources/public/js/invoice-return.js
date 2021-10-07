@@ -20,16 +20,20 @@ $(document).on("keyup", ".input-number", function() {
     });
     $("#total").html(sum);
     $("#grandTotal").val(sum);
-    if(sum > 0){
+});
+
+
+$(document).on("keyup", "#payment , #adjustment", function() {
+    var adjustment = parseInt($('#adjustment').val());
+    var payment = parseInt($('#payment').val());
+    var grandTotal = parseInt($('#grandTotal').val());
+    sum = (adjustment+payment);
+    if(grandTotal === sum){
         $("#submitBtn").attr("disabled", false);
     }else{
         $("#submitBtn").attr("disabled", true);
     }
-
 });
-
-
-
 
 $(document).on("click", ".approve", function() {
     $('#confirm-content').confirmModal({
