@@ -139,6 +139,8 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
+                                    <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Department</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Cabin</th>
                                     <th class="numeric" >Net Total</th>
@@ -155,6 +157,8 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}</td>
+                                        <td class="numeric" >{% if entity.department is not empty %}{{ entity.department.name }} {% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.cabin %}{{  entity.cabin.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
