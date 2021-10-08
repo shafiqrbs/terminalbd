@@ -109,6 +109,13 @@ class MedicineStock
     /**
      * @var string
      *
+     * @ORM\Column(name="slug", type="string", length=255,nullable = true)
+     */
+    private $slug;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="brandName", type="string", length=255,nullable = true)
      */
     private $brandName;
@@ -1044,6 +1051,22 @@ class MedicineStock
     public function setBonusQuantity($bonusQuantity)
     {
         $this->bonusQuantity = $bonusQuantity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
 

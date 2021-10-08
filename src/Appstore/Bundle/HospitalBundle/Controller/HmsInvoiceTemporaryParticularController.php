@@ -127,7 +127,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
         return new Response($entity->getId());
-        exit;
 
     }
 
