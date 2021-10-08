@@ -199,5 +199,5 @@ hms_invoice_admission_particular_print:
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularPrint" }
 
 hms_invoice_admission_print:
-    path:      /{invoice}/admitted-invoice-print
+    path:      /{id}/admitted-invoice-print
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionPrint" }
