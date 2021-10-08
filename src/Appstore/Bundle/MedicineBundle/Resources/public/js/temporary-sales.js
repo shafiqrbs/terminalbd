@@ -643,6 +643,7 @@ function jqueryInstantTemporaryLoad(){
                         $("#medicineName").select2("val", "");
                         $("#purchasesBy").select2("val", "");
                         $("#medicineId").val('');
+                        $('.salesBtn').prop("disabled", false);
                     }
                 });
             }
