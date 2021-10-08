@@ -188,14 +188,10 @@
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
                                                     {% if entity.process in ['Released','Dead'] %}
-                                                        <a target="_blank"  href="{{ path('hms_invoice_admission_print',{'id':entity.id}) }}" class="btn green mini"><i class="icon-print"></i>&nbsp;Invoice Print</a>
+                                                        <a target="_blank"  href="{{ path('hms_invoice_admission_print',{'id':entity.id}) }}" class="btn blue"><i class="icon-print"></i>&nbsp;Invoice Print</a>
                                                     {% endif %}
                                                     {% if entity.process in  processEdit or app.user.granted("ROLE_DOMAIN") %}
                                                         <li><a href="{{ path('hms_invoice_admitted_patient_edit', { 'id': entity.id }) }}" class="btn yellow"><i class="icon-pencil"></i> Edit</a></li>
-                                                    {% endif %}
-                                                    {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
-                                                    {% if entity.paymentStatus in  PaymentArr|keys and  entity.process in processArr %}
-                                                        <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == 'Pending' or entity.process =='Created' %}
                                                         <li><a id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete"><i class="icon-trash"></i> Delete</a></li>
