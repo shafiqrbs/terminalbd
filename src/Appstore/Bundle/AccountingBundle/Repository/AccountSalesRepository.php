@@ -1101,17 +1101,51 @@ class AccountSalesRepository extends EntityRepository
         return $accountSales;
     }
 
+    public function insertStoreLedgerPayment(BusinessStoreLedger $sales)
+    {
+        $global = $sales->getBusinessConfig()->getGlobalOption();
+        $amount = $sales->getCredit();
+        $customer = $sales->getStore()->getCustomer();
+        $em = $this->_em;
+        $date = time();
+        $invoice = "{$sales->getId()}-{$date}";
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setSourceInvoice($invoice);
+        $accountSales->setRemark($sales->getStore()->getName());
+        $accountSales->setCustomer($customer);
+        $accountSales->setAmount($amount);
+        $accountSales->setProcessHead('Store Payment');
+        $dateC = $sales->getUpdated()->format('d-m-Y H:m');
+        $accountSales->setRemark($sales->getId().'/'.$dateC .'-'. $sales->getStore()->getName() );
+        $accountSales->setProcessType('Sales');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($sales->getCreatedBy());
+        $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+        $accountSales->setTransactionMethod($method);
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+    }
+
     public function insertStoreOpeningPayment(BusinessStoreLedger $sales)
     {
         $global = $sales->getBusinessConfig()->getGlobalOption();
         $amount = $sales->getDebit();
         $customer = $sales->getStore()->getCustomer();
         $em = $this->_em;
+        $date = time();
+        $invoice = "{$sales->getId()}-{$date}";
         $accountSales = new AccountSales();
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($customer);
         $accountSales->setTotalAmount($amount);
-        $accountSales->setProcessHead('Outstanding');
+        $accountSales->setSourceInvoice($invoice);
+        $dateC = $sales->getUpdated()->format('d-m-Y H:m');
+        $accountSales->setRemark($sales->getId().'/'.$dateC .'-'. $sales->getStore()->getName() );
+        $accountSales->setProcessHead('Opening');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($sales->getCreatedBy());
