@@ -197,3 +197,7 @@ hms_invoice_admission_transaction_print_single:
 hms_invoice_admission_particular_print:
     path:      /{invoice}/admitted-patient-transaction-invoice-particular
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularPrint" }
+
+hms_invoice_admission_print:
+    path:      /{invoice}/admitted-invoice-print
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionPrint" }

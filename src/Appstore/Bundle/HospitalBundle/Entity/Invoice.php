@@ -318,6 +318,41 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="caseOfDeath", type="text", nullable=true)
+     */
+    private $caseOfDeath;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="advice", type="text", nullable=true)
+     */
+    private $advice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medicine", type="text", nullable=true)
+     */
+    private $medicine;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="patientHistory", type="text", nullable=true)
+     */
+    private $patientHistory;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="doctorComment", type="text", nullable=true)
+     */
+    private $doctorComment;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="disease", type="text", nullable=true)
      */
     private $disease;
@@ -1353,6 +1388,86 @@ class Invoice
     public function setReceive($receive)
     {
         $this->receive = $receive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaseOfDeath()
+    {
+        return $this->caseOfDeath;
+    }
+
+    /**
+     * @param string $caseOfDeath
+     */
+    public function setCaseOfDeath($caseOfDeath)
+    {
+        $this->caseOfDeath = $caseOfDeath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdvice()
+    {
+        return $this->advice;
+    }
+
+    /**
+     * @param string $advice
+     */
+    public function setAdvice($advice)
+    {
+        $this->advice = $advice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMedicine()
+    {
+        return $this->medicine;
+    }
+
+    /**
+     * @param string $medicine
+     */
+    public function setMedicine($medicine)
+    {
+        $this->medicine = $medicine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPatientHistory()
+    {
+        return $this->patientHistory;
+    }
+
+    /**
+     * @param string $patientHistory
+     */
+    public function setPatientHistory($patientHistory)
+    {
+        $this->patientHistory = $patientHistory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoctorComment()
+    {
+        return $this->doctorComment;
+    }
+
+    /**
+     * @param string $doctorComment
+     */
+    public function setDoctorComment($doctorComment)
+    {
+        $this->doctorComment = $doctorComment;
     }
 
 

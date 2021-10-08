@@ -721,12 +721,58 @@ class InvoiceAdmissionController extends Controller
         if(count($invoiceDetails['Pathology']['items']) == 0) {
             unset($invoiceDetails['Pathology']);
         }
-        return $this->render('HospitalBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
-            'entity'      => $entity,
-            'invoiceDetails'      => $invoiceDetails,
+        if(in_array($entity->getProcess(),array('Admitted'))){
+            $print = "admitted";
+        }elseif(in_array($entity->getProcess(),array('Released'))){
+            $print = "released";
+        }elseif(in_array($entity->getProcess(),array('Dead'))){
+            $print = "dead";
+        }
+
+        return $this->render("HospitalBundle:Print:{$print}.html.twig", array(
+            'entity'               => $entity,
+            'invoiceDetails'        => $invoiceDetails,
             'invoiceBarcode'     => $barcode,
             'patientBarcode'     => $patientId,
             'inWords'           => $inWords,
+        ));
+    }
+
+    public function admissionPrintAction(Invoice $entity)
+    {
+
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($entity->getInvoiceParticulars() as $item) {
+
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+        $print = "admitted";
+        return $this->render("HospitalBundle:Print:{$print}.html.twig", array(
+            'entity'               => $entity,
+            'invoiceDetails'        => $invoiceDetails,
+            'invoiceBarcode'     => $barcode,
+            'patientBarcode'     => $patientId,
+            'iWords'           => $inWords,
         ));
     }
 

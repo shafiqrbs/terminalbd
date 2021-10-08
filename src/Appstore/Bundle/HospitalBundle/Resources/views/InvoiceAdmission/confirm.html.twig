@@ -186,7 +186,9 @@
                                         <div class="caption"><i class="icon-money"></i>Transaction Information</div>
                                         <div class="actions">
                                             {#<a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>#}
-                                            <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print',{'invoice':entity.invoice}) }}" class="btn purple"><i class="icon icon-print"></i> Print</a>
+                                            {% if entity.invoiceTransactions is not empty %}
+                                                <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print',{'invoice':entity.invoice}) }}" class="btn purple"><i class="icon icon-print"></i> Print</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -431,14 +433,16 @@
                                     <div class="form-actions portlet box grey">
                                         <div class="pull-right" id="action-{{ entity.id }}">
                                             <div class="btn-group dropup">
-                                            <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+                                            {% if entity.process in ['Admitted','Released','Dead'] %}
+                                                <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+                                            {% endif %}
                                             <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                             <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                                 {% if entity.process not in ['Released','Dead'] %}
                                                     <a class="btn purple" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                                 {% endif %}
                                                 {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))  %}
-                                                    {% if entity.process in ['Release','Death','Admitted'] and entity.total <= entity.payment %}
+                                                    {% if entity.process in ['Release','Death'] and entity.total <= entity.payment %}
                                                         <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                             Process <i class="icon-tasks"></i>
                                                         </a>

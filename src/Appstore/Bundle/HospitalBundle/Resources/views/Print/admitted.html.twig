@@ -1,28 +1,25 @@
 {% extends '::hms-print.html.twig' %}
 {% block body %}
     {%  if entity.hospitalConfig.isPrintHeader == 1 %}
-    <table class="table" style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
-        <tr>
-            <td>
-                <div class="span4  pull-left invoice-logo-space">
-                    {%  if entity.hospitalConfig.invoicePrintLogo == 1 %}
-                    {% if entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
-                    {%  endif %}
-                </div>
-            </td>
-            <td class="pull-right">
-                <div class="span4">
-                    <ul class="unstyled">
-                        <li><strong>{{ entity.hospitalConfig.globalOption.name }}</strong></li>
-                        <li><i class="icon-phone"></i>&nbsp;{{ entity.hospitalConfig.globalOption.mobile }}</li>
-                        {% if  entity.hospitalConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.hospitalConfig.globalOption.email }}</li>{% endif %}
-                        {% if  entity.hospitalConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.hospitalConfig.globalOption.contactPage.address1 }}</li>{% endif %}
-                        {% if entity.hospitalConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.hospitalConfig.globalOption.domain }}</li>{% endif %}
-                    </ul>
-                </div>
-            </td>
-        </tr>
-    </table>
+        <table class="table" style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
+            <tr>
+                <td>
+                    <div class="span4  pull-left invoice-logo-space">
+                        {%  if entity.hospitalConfig.invoicePrintLogo == 1 %}
+                            {% if entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
+                        {%  endif %}
+                    </div>
+                </td>
+                <td class="pull-right">
+                    <div class="span4">
+                        <ul class="unstyled">
+                            <li><strong>{{ entity.hospitalConfig.globalOption.name }}</strong></li>
+                            <li><p>{{ entity.hospitalConfig.address|raw }}</p></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
     {% endif %}
     <table class="table table-border" >
         <thead class="flip-content ">
@@ -43,16 +40,14 @@
                     <li><strong>Invoice no:</strong>&nbsp;{{ entity.invoice }}</li>
                     {% if entity.customer is not empty %}<li><strong>Patient Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Mobile No:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
-                    {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}{% if entity.customer is not empty %}, <strong>Age:</strong> {{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}  {% endif %}</li>{% endif %}
+                    {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}{% if entity.customer is not empty %}, {{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}  {% endif %}</li>{% endif %}
                     {% if entity.customer is not empty and entity.customer.location is not empty %}<li><strong>Location</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                 </ul>
             </td>
             <td class="pull-right">
                 <ul class="unstyled">
-                    <li><strong>Invoice no: </strong>&nbsp;<strong>{{ entity.invoice }}</strong></li>
                     <li><strong>Admission Date: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
-                    {% if entity.releaseDate is not empty %}<li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.releaseDate|date('d-m-Y') }}</strong></li>{% endif %}
-                    <li><strong>Cabin no:</strong>&nbsp;{{  entity.cabin.name|capitalize }}</li>
+                    <li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.releaseDate|date('d-m-Y h:m A') }}</strong></li>
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>
@@ -65,7 +60,7 @@
         <table class="table table-bordered table-striped">
             <thead class="flip-content ">
             <tr class="head-black">
-                <th class="span9" colspan="2">Investigation</th>
+                <th class="span9" colspan="2">Description</th>
                 <th class="span1">Qnt</th>
                 <th class="span2">Amount</th>
             </tr>
@@ -145,8 +140,8 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/print.css'
+        '@HospitalBundle/Resources/public/css/print.css'
     %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
+        <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
