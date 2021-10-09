@@ -37,7 +37,6 @@ class InvoiceAdmissionType extends AbstractType
         $this->globalOption     = $globalOption;
     }
 
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -45,7 +44,6 @@ class InvoiceAdmissionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 admissionInput','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))

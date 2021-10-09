@@ -1043,11 +1043,11 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
             }
-            if (!empty($config) and in_array('admission', $config)) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
-            }
             if (!empty($config) and in_array('visit', $config)) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Appointment', array('route' => 'hms_invoice_appointment'));
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_invoice_appointment'));
+            }
+            if (!empty($config) and in_array('admission', $config)) {
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
