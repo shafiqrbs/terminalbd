@@ -12,15 +12,14 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Vendor controller.
- *
- */
+
+
 class ReportController extends Controller
 {
 
@@ -35,6 +34,10 @@ class ReportController extends Controller
         $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
         return $pagination;
     }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE_REPORT")
+     */
 
     public function salesOverviewAction()
     {

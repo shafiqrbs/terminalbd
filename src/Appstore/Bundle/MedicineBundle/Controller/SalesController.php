@@ -35,7 +35,6 @@ class SalesController extends Controller
         return $pagination;
     }
 
-
     /**
      * @Secure(roles="ROLE_MEDICINE_SALES")
      */

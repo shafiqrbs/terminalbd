@@ -1398,7 +1398,7 @@ class Builder extends ContainerAware
             $menu['Medicine']['Master Data']->addChild('New Medicine', array('route' => 'medicine_user'))
                 ->setAttribute('icon', 'icon icon-cog');
         }
-        if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
+        if ($securityContext->isGranted('ROLE_MEDICINE_REPORT')) {
 
                 $menu['Medicine']->addChild('Reports')
                     ->setAttribute('icon', 'icon icon-bar-chart')
