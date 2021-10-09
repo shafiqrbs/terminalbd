@@ -159,6 +159,9 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('Done');
         }
+        if(empty($entity->getSalesBy())){
+            $entity->setSalesBy($this->getUser());
+        }
         if($data['salesTemporary']['printMessage']){
             $messageId = $data['salesTemporary']['printMessage'];
             $message = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($messageId);
@@ -418,8 +421,11 @@ class MedicineSalesTemporaryController extends Controller
             $printer -> text("Please visit www.".$website."\n");
         }*/
         $printer -> text($date . "\n");
-        if($printMessage){$printer->text("{$printMessage}\n");}
-        $printer -> text("*Medicines once sold are not taken back*\n");
+        if($printMessage){
+            $printer->text("{$printMessage}\n");
+        }else{
+            $printer->text("*Medicines once sold are not taken back*\n");
+        }
         $response =  base64_encode($connector->getData());
         $printer -> close();
         return $response;

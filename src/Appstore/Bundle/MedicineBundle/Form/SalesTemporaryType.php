@@ -95,10 +95,11 @@ class SalesTemporaryType extends AbstractType
                 }
             ))
             ->add('salesBy', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 m-wrap salesInput'),
+                'empty_value' => '---Choose sales by---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")
