@@ -2,18 +2,23 @@
 {% block body %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
         {%  if entity.hospitalConfig.isPrintHeader == 1 %}
-            <table class="table">
-                <tr>
-                    <td>
-                        <div class="span4 title-center text-center">
-                        <div style="position: relative; left: 50%;
-transform: translateX(-50%);">
-                        </div>
-                           {{ entity.hospitalConfig.address|raw }}
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <table class="table" >
+            <tr>
+                <td>
+                    <div class="span4  pull-left invoice-logo-space">
+                        {% if global.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height:80px" src="/{{ global.templateCustomize.webPath('logo') }}">{% endif %}
+                    </div>
+                </td>
+                <td class="pull-right">
+                    <div class="span4">
+                        <ul class="unstyled">
+                            <li><strong>{{ global.name }}</strong></li>
+                            <li>{{ global.hospitalConfig.address|raw }}</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
         {% endif %}
         <table class="table table-border" >
             <tr class="print-header">

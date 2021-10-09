@@ -635,6 +635,7 @@ class InvoiceController extends Controller
             'inWords'               => $inWords,
             'lastTransaction'       => $lastTransaction,
             'inWordTransaction'     => $inWordTransaction,
+            'global'     => $hospital->getGlobalOption(),
         ));
     }
 
