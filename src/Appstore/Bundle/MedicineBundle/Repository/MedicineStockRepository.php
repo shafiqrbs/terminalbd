@@ -411,7 +411,7 @@ class MedicineStockRepository extends EntityRepository
        // $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name,\' - PP Tk. \', e.purchasePrice) AS text');
         $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name, ' => PP Tk.', e.purchasePrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name,'=>', rack.name , ' => PP Tk.', e.purchasePrice)  END as text");
         //$query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.medicineForm,' ', e.name,' ',g.name, ' ', c.name)  ELSE CONCAT(e.medicineForm,' ',e.name, ' ',e.strength,' ', g.name,' ',c.name)  END as text");
-        $query->where($query->expr()->like("e.slug", "'$q%'"  ));
+        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
     //    $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
         $query->andWhere("ic.id = :config");
         $query->andWhere('e.status = 1');
@@ -453,7 +453,7 @@ class MedicineStockRepository extends EntityRepository
         $query->select('e.id as id');
        // $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
         $query->addSelect("CONCAT(e.name,' => MRP - ', e.salesPrice) as text");
-        $query->where($query->expr()->like("e.slug", "'$q%'"  ));
+        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
         $query->andWhere("e.status = 1");
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());
@@ -472,7 +472,7 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.slug", "'$q%'"  ));
+        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
         $query->andWhere("e.status = 1");
         $query->andWhere("ic.id = :config");
         $query->setParameter('config', $config->getId());

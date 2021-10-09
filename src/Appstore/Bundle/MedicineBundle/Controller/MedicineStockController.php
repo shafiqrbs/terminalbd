@@ -208,17 +208,22 @@ class MedicineStockController extends Controller
                     $entity->setBrandName($brand->getName());
                     $entity->setMode($brand->getParticularType()->getSlug());
                 }
+                $slug = str_replace(" ",'',$entity->getName());
+                $entity->setSlug(strtolower($slug));
             }else{
                 $entity->setMedicineBrand($medicine);
-                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
                 $entity->setName($name);
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
+                $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
+                $entity->setSlug(strtolower($slug));
             }
             if(empty($entity->getUnit())){
                 $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                 $entity->setUnit($unit);
             }
+
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -401,6 +406,10 @@ class MedicineStockController extends Controller
         if ($editForm->isValid()) {
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
+            }
+            if(empty($entity->getMedicineBrand())) {
+                $slug = str_replace(" ",'',$entity->getName());
+                $entity->setSlug(strtolower($slug));
             }
             $entity->upload();
             $em->flush();

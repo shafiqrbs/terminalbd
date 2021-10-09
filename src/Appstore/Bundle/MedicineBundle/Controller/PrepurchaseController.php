@@ -217,10 +217,14 @@ class PrepurchaseController extends Controller
                     $brand = $entity->getAccessoriesBrand();
                     $entity->setBrandName($brand->getName());
                 }
+                $slug = str_replace(" ",'',$entity->getName());
+                $entity->setSlug(strtolower($slug));
             }else{
                 $entity->setMedicineBrand($medicine);
-                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
                 $entity->setName($name);
+                $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
+                $entity->setSlug(strtolower($slug));
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
             }

@@ -410,6 +410,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
                     $entity->setMode($brandName->getParticularType()->getSlug());
                     $entity->setBrandName($brandName->getName());
                 }
+                $slug = str_replace(" ",'',$entity->getName());
+                $entity->setSlug(strtolower($slug));
                 $entity->setName($data['medicineBrand']);
             }else{
                 $entity->setMedicineBrand($medicine);
@@ -417,6 +419,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
                 $entity->setName($name);
                 $entity->setBrandName($medicine->getMedicineCompany()->getName());
                 $entity->setMode('medicine');
+                $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
+                $entity->setSlug(strtolower($slug));
             }
             if(!empty($data['rackNo'])){
                 $entity->setRackNo($this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['rackNo']));
