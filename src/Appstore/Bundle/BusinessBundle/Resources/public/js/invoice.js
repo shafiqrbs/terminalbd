@@ -233,9 +233,6 @@ $(document).on("click", ".particularDelete", function() {
 });
 
 
-
-
-
 $(document).on("click", ".approve", function() {
 
     var id = $(this).attr("data-id");
@@ -306,6 +303,23 @@ $(document).on('keyup', '#quantity , #salesPrice ', function() {
     }
 
 });
+
+
+function returnData(response) {
+    obj = JSON.parse(response);
+    $('#invoiceParticulars').html(obj['invoiceParticulars']);
+    $('.subTotal').html(obj['subTotal']);
+    $('.netTotal').html(obj['netTotal']);
+    $('#paymentTotal').val(obj['netTotal']);
+    $('#due').val(obj['due']);
+    $('.due').html(obj['due']);
+    $('.payment').html(obj['payment']);
+    $('.discount').html(obj['discount']);
+    $('#subQuantity').html('0');
+    $('#unit').html('Unit');
+    $('#particular').select2('open');
+    $('#stockInvoice')[0].reset();
+}
 
 var stockInvoice = $("#stockInvoicex").validate({
 
@@ -416,11 +430,8 @@ var formTemporary = $("#stockInvoice").validate({
             contentType : false,
             success: function(response){
                 obj = JSON.parse(response);
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#unit').html('Unit');
-               // $("#particular").select2('open').select2("val","");
                 $('#particular').select2('open');
-               // $('#stockInvoice')[0].reset();
                 document.getElementById('stockInvoice').reset();
                 returnData(response);
             }

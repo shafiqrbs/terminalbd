@@ -246,7 +246,6 @@ class InvoiceController extends Controller
             }
 	        $em->flush();
             if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
-                $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
                 if(in_array($entity->getProcess(),$done)){
                     $this->approveDistributionAction($entity);
                 }
@@ -255,7 +254,8 @@ class InvoiceController extends Controller
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
-            }elseif(in_array($entity->getProcess(), $done) or $entity->getProcess() == 'Condition' or $entity->getProcess() == 'In-progress' ) {
+            }
+            if(in_array($entity->getProcess(), array('Condition','In-progress','Delivered'))) {
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             }
             $inProgress = array('Hold', 'Created');
