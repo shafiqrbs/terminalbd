@@ -245,10 +245,8 @@ class InvoiceController extends Controller
                 $entity->setIsCondition(false);
             }
 	        $em->flush();
-            if(in_array($entity->getProcess(), $distribution) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
-                if(in_array($entity->getProcess(),$done)){
-                    $this->approveDistributionAction($entity);
-                }
+            if(in_array($entity->getProcess(), $done) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
+                $this->approveDistributionAction($entity);
             }elseif(in_array($entity->getProcess(), $done)) {
                 if($entity->getBusinessConfig()->getBusinessModel() == 'commission'){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
