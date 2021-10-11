@@ -496,8 +496,8 @@ class BusinessParticularRepository extends EntityRepository
             /* @var  $item BusinessInvoiceParticular */
 
             foreach ($invoice->getBusinessInvoiceParticulars() as $item) {
-				if(!empty($item->getBusinessParticular()) and $item->getTotalQuantity() > 0) {
-					if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'post-production') {
+                if(!empty($item->getBusinessParticular()) and $item->getTotalQuantity() > 0) {
+                    if ( $item->getBusinessParticular()->getBusinessParticularType()->getSlug() == 'post-production') {
 						$this->productionExpense( $item );
 					}
                     $this->getSalesUpdateQnt( $item );
@@ -573,7 +573,7 @@ class BusinessParticularRepository extends EntityRepository
         $qb->join('e.businessInvoice','i');
 		$qb->select('COALESCE(SUM(e.totalQuantity),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
-		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered','In-progress'));
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Condition','Delivered','In-progress'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
         $invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
@@ -586,7 +586,7 @@ class BusinessParticularRepository extends EntityRepository
         $qb->join('e.businessInvoice','i');
 		$qb->select(' COALESCE(SUM(e.bonusQnt),0) AS quantity');
 		$qb->where('e.businessParticular = :particular')->setParameter('particular', $particular->getId());
-		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Delivered','In-progress'));
+		$qb->andWhere('i.process IN (:process)')->setParameter('process', array('Done','Condition','Delivered','In-progress'));
 		$qnt = $qb->getQuery()->getOneOrNullResult();
         $invoiceQnt = ($qnt['quantity'] > 0 ) ? $qnt['quantity'] : 0;
 		return $invoiceQnt;
@@ -668,7 +668,7 @@ class BusinessParticularRepository extends EntityRepository
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('i.process IN (:process)');
-        $qb->setParameter('process', array('Done','Delivered'));
+        $qb->setParameter('process', array('Done','Delivered','Condition','In-progress'));
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('e.name');
         $qb->orderBy('e.name','DESC');

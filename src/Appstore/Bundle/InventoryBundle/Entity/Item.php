@@ -266,12 +266,21 @@ class Item
      */
     protected $brand;
 
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean", nullable=true)
      */
-    private $status=true;
+    private $status = true;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="modelYear", type="integer", nullable=true)
+     */
+    private $modelYear;
+
 
     /**
      * @var float
@@ -1159,6 +1168,22 @@ class Item
     public function setItemUnit($itemUnit)
     {
         $this->itemUnit = $itemUnit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getModelYear()
+    {
+        return $this->modelYear;
+    }
+
+    /**
+     * @param int $modelYear
+     */
+    public function setModelYear($modelYear)
+    {
+        $this->modelYear = $modelYear;
     }
 
 }
