@@ -78,6 +78,19 @@ class StockType extends AbstractType
                         ->orderBy("e.sorting","ASC");
                 }
             ))
+            ->add('brand', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\BusinessBundle\Entity\BusinessBrand',
+                'property' => 'name',
+                'empty_value' => '---Choose a brand ---',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.businessConfig ={$this->option->getBusinessConfig()->getId()}")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('unit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',

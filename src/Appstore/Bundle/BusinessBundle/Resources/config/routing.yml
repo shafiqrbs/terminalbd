@@ -34,6 +34,10 @@ business_store:
     resource: "@BusinessBundle/Resources/config/routing/store.yml"
     prefix:   /store
 
+business_brand:
+    resource: "@BusinessBundle/Resources/config/routing/brand.yml"
+    prefix:   /brand
+
 business_marketing:
     resource: "@BusinessBundle/Resources/config/routing/marketing.yml"
     prefix:   /marketing

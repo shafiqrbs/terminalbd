@@ -36,7 +36,7 @@
                             <div class="btn-group">
                                 <a  href="{{ path('medicine_prepurchase_create') }}" target="_blank" id="btn-create-barcode" class="btn purple" >
                                     <i class="icon-shopping-cart"></i> Pre-Purchase</a>
-                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                {% if app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_MEDICINE_ADMIN") %}
                                 <a  href="{{ path('medicine_purchase_opening') }}" id="btn-create-barcode" class="btn yellow" >
                                     <i class="icon-shopping-cart"></i> Opening</a>
                                 {% endif %}

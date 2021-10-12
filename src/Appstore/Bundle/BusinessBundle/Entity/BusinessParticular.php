@@ -36,6 +36,12 @@ class BusinessParticular
     private $category;
 
      /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessBrand", inversedBy="particulars" )
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $brand;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", inversedBy="businessParticulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
@@ -1173,6 +1179,22 @@ class BusinessParticular
     public function setOpeningApprove($openingApprove)
     {
         $this->openingApprove = $openingApprove;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param mixed $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
     }
 
 }
