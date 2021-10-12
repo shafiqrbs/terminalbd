@@ -75,12 +75,6 @@ class DistributionReturnController extends Controller
 
     public function newAction(){
 
-        $entity = new BusinessDistributionReturn();
-        $form = $this->createCreateForm($entity);
-        return $this->render('BusinessBundle:DistributionReturn:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
     }
 
 
