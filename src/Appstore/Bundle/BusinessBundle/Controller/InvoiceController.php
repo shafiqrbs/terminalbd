@@ -865,13 +865,12 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         if($entity and empty($entity->getApprovedBy())){
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess("Received");
+            $entity->setProcess("Delivered");
             $entity->setApprovedBy($this->getUser());
             $entity->setReceived($entity->getTotal());
             $entity->setDue(0);
             $em->persist($entity);
             $em->flush();
-          //  $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             return new Response("Success");
         }
