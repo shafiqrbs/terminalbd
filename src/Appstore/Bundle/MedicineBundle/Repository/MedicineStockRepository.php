@@ -733,7 +733,7 @@ class MedicineStockRepository extends EntityRepository
 
     public function updateOpeningQuantity($config)
     {
-        $stockUpdate = "UPDATE medicine_stock SET openingApprove = 1 WHERE  medicineConfig_id = {$config->getId()}";
+        $stockUpdate = "UPDATE medicine_stock SET openingApprove = 1 WHERE  medicineConfig_id = {$config->getId()} && openingQuantity IS NOT NULL";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->execute();
     }
