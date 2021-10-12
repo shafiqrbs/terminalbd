@@ -864,8 +864,6 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if($entity and empty($entity->getApprovedBy())){
-            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess("Received");
             $entity->setApprovedBy($this->getUser());
@@ -873,6 +871,8 @@ class InvoiceController extends Controller
             $entity->setDue(0);
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             return new Response("Success");
         }
 
