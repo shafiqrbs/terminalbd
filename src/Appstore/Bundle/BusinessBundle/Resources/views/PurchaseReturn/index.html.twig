@@ -121,6 +121,9 @@
                                                     <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_purchase_return_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                             {% endif %}
+                                            {% if  entity.process == 'sales' %}
+                                                <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('business_purchase_return_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            {% endif %}
                                             <a href="{{ path('business_purchase_return_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             {% set approveProcess = ['created','commission','sales'] %}
                                             {% if  entity.process in approveProcess and entity.subTotal > 0 and entity.vendor is not empty %}

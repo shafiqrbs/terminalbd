@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
@@ -24,6 +25,25 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         $qb->where('e.businessParticular = :businessParticular')->setParameter('businessParticular', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
+    }
+
+    public function remainingStock($config)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->addSelect('s.id AS id');
+        $qb->join('e.businessPurchaseReturn','pr');
+        $qb->join('e.businessParticular','s');
+        $qb->where('pr.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere("pr.process = 'Approved'");
+        $qb->andWhere("pr.mode = 1");
+        $qb->groupBy('s.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $arrs = array();
+        foreach ($result as $row){
+            $arrs[$row['id']] = $row;
+        }
+        return  $arrs;
     }
 
     public function insertPurchaseReturnItem(BusinessPurchaseReturn $entity, $data)

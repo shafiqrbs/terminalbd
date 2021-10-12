@@ -126,6 +126,13 @@ class BusinessPurchaseReturn
      */
     private $process = "created";
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mode", type="boolean", nullable=true)
+     */
+    private $mode = false;
+
     /**
      * Get id
      *
@@ -377,6 +384,22 @@ class BusinessPurchaseReturn
     public function setSpoilQuantity($spoilQuantity)
     {
         $this->spoilQuantity = $spoilQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param bool $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

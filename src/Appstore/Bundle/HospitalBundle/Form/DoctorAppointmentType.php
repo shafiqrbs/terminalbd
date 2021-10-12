@@ -58,7 +58,7 @@ class DoctorAppointmentType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
-            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 textarea','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

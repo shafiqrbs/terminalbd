@@ -18,14 +18,15 @@ use Doctrine\ORM\EntityRepository;
 class BusinessDistributionReturnItemRepository extends EntityRepository
 {
 
-    public function findWithSearch($config, $data = array())
+    public function findWithSearch($config)
     {
-
         $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.damageQnt) AS damageQnt','SUM(e.spoilQnt) AS spoilQnt');
+        $qb->addSelect('s.id AS id','s.name AS name','s.purchasePrice AS purchasePrice');
+        $qb->join('e.businessParticular','s');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.remainingQnt > 0');
-     //   $qb->orderBy('e.updated','DESC');
-        $result = $qb->getQuery();
+        $qb->groupBy('s.name');
+        $result = $qb->getQuery()->getArrayResult();
         return  $result;
 
 

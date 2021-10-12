@@ -39,6 +39,7 @@ class PatientForDoctorAppointmentType extends AbstractType
             ->add('height','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Height')))
             ->add('weight','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Weight')))
             ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'B/P')))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 numeric inputs','placeholder'=>'Address')))
 
             ->add('ageType', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap inputs ageType'),

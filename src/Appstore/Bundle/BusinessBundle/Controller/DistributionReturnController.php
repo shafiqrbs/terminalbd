@@ -15,6 +15,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,11 +49,12 @@ class DistributionReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $data = $_REQUEST;
-	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->findWithSearch($config->getId(),$data);
-        $pagination = $this->paginate($entities);
+	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->findWithSearch($config->getId());
+        $remains = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->remainingStock($config->getId());
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
         return $this->render('BusinessBundle:DistributionReturn:index.html.twig', array(
-            'entities' => $pagination,
+            'entities' => $entities,
+            'remains' => $remains,
             'vendors' => $vendors,
             'searchForm' => $data,
         ));
@@ -90,9 +92,12 @@ class DistributionReturnController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($this->getUser(),$data);
-
-        return $this->redirect($this->generateUrl('business_purchase_return'));
+        if(!empty($data['vendor']) and !empty($data['grandTotal'])) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturn')->insertInvoiceDamageItem($this->getUser(), $data);
+            return $this->redirect($this->generateUrl('business_purchase_return'));
+        }
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     /**

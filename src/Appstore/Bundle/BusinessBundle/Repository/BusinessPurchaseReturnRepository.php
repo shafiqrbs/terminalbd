@@ -146,9 +146,10 @@ class BusinessPurchaseReturnRepository extends EntityRepository
                 $entity->setCreatedBy($user);
                 $entity->setSubTotal($data['grandTotal']);
                 $entity->setProcess('sales');
+                $entity->setMode(1);
                 $em->persist($entity);
                 $em->flush();
-                $this->insertUpdatePurchaseReturnItem($entity,$data);
+                $this->insertDistributionReturnItem($entity,$data);
 
             }
 
@@ -179,6 +180,32 @@ class BusinessPurchaseReturnRepository extends EntityRepository
             $em->flush();
             $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($distribution->getBusinessParticular(), "purchase-return");
             $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->updatReturnQuantity($distribution);
+        endforeach;
+    }
+
+    public function insertDistributionReturnItem(BusinessPurchaseReturn $entity, $data)
+    {
+        $em = $this->_em;
+
+        foreach ($data['itemId'] as $key => $item):
+
+            $quantity = floatval($data['quantity'][$key]);
+            if($quantity > 0 ){
+
+                /* @var  $particular BusinessParticular */
+                $particular = $em->getRepository('BusinessBundle:BusinessParticular')->find($item);
+                $purchaseItem = new BusinessPurchaseReturnItem();
+                $purchaseItem->setBusinessPurchaseReturn($entity);
+                $purchaseItem->setBusinessParticular($particular);
+                $purchaseItem->setQuantity($data['quantity'][$key]);
+                $purchaseItem->setPurchasePrice($particular->getPurchasePrice());
+                $purchaseItem->setSubTotal($quantity * $particular->getPurchasePrice());
+                $em->persist($purchaseItem);
+                $em->flush();
+            }
+
+           // $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($distribution->getBusinessParticular(), "purchase-return");
+           // $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->updatReturnQuantity($distribution);
         endforeach;
     }
 }

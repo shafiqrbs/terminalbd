@@ -1,6 +1,8 @@
 
 $(document).on("keyup", ".input-number", function() {
+
     var sum = 0;
+    var qty = 0;
     var dataId = $(this).attr("data-id");
     var price = $(this).attr("data-value");
     var remainingQnt = parseInt($(this).attr("data-content"));
@@ -18,8 +20,13 @@ $(document).on("keyup", ".input-number", function() {
     $(".subTotal").each(function(){
         sum += +parseFloat($(this).val());
     });
+
+    $(".quantity").each(function(){
+        qty += +parseFloat($(this).val());
+    });
     $("#total").html(sum);
     $("#grandTotal").val(sum);
+    $("#totalQTY").html(qty);
     if(sum > 0){
         $("#submitBtn").attr("disabled", false);
     }else{

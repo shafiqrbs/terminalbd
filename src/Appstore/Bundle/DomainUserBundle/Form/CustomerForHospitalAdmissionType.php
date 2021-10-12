@@ -58,11 +58,10 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'nationality'),
 
             ))
-            ->add('dob', 'date', array(
-                'widget' => 'choice',
+            ->add('dob','date', array(
                 'years' => range(date('Y'), date('Y')-100),
-                'data' => date('d-m-Y')
-            ))
+                'attr'=>array('class'=>'m-wrap span5 dob','placeholder'=>'patient date of birth'),
+                ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'patient age')),
