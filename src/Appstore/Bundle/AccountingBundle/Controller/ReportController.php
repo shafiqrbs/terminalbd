@@ -595,12 +595,12 @@ class ReportController extends Controller
                     'overview' => $overview,
                     'option' => $globalOption,
                     'searchForm' => $data,
-
                 )
             );
             $this->downloadPdf($html,"{$vendor->getCompanyName()}.pdf");
 
         }else{
+
             return $this->render('AccountingBundle:Report/Outstanding:vendorLedger.html.twig', array(
                 'globalOption' => $globalOption,
                 'vendor' => $vendor,
