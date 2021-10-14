@@ -50,6 +50,9 @@ class BusinessReverseController extends Controller
 
     	$config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessReverse')->findOneBy(array('businessConfig' => $config, 'id' => $id));
+        if(empty($entity)){
+            throw $this->createNotFoundException('Unable to find reverse entity.');
+        }
         $twig = 'sales';
         if($entity->getProcess() == 'purchase'){
           $twig = 'purchase';

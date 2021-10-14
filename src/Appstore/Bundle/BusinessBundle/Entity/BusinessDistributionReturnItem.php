@@ -117,6 +117,13 @@ class BusinessDistributionReturnItem
      */
     private $status=false;
 
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
 
 
     /**

@@ -439,8 +439,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		$qb->where('e.businessConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process IN (:process)');
-		$qb->setParameter('process', array('Done','Delivered','Chalan'));
-		$this->handleSearchStockBetween($qb,$data);
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
+        $this->handleSearchStockBetween($qb,$data);
 		$qb->groupBy('si.businessParticular');
 		$qb->orderBy('mds.name','ASC');
 		return $qb->getQuery()->getArrayResult();
@@ -496,7 +496,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process IN (:process)');
-        $qb->setParameter('process', array('Done','Delivered','Chalan'));
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $this->handleSearchStockBetween($qb,$data);
         if(!empty($vendor)){
             $qb->andWhere("vendor.id = :type");
@@ -527,8 +527,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		$qb->where('e.businessConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process IN (:process)');
-		$qb->setParameter('process', array('Done','Delivered','Chalan'));
-		$this->handleSearchStockBetween($qb,$data);
+	    $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
+        $this->handleSearchStockBetween($qb,$data);
 		$qb->orderBy('mds.name','ASC');
 		return $qb->getQuery()->getArrayResult();
 	}
@@ -778,7 +778,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->join('pi.businessParticular','ms');
         $qb->join('pi.businessInvoice','e');
         $qb->select('ms.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
-        $qb->where('e.process IN (:processes)')->setParameter('processes', array('Done','Delivered')) ;
+        $qb->where('e.process IN (:processes)');
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $qb->andWhere('ms.id IN (:ids)')->setParameter('ids', $ids) ;
         $qb->groupBy('ms.id');
         $this->handleSearchBetween($qb,$data);
@@ -820,7 +821,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process IN (:process)');
-        $qb->setParameter('process', array('Done','Delivered','Chalan'));
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $this->handleSearchCommissionBetween($qb,$data);
         $qb->orderBy('created','ASC');
         return $qb->getQuery()->getArrayResult();
@@ -894,6 +895,18 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->orderBy('p.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
+    }
+
+    public function getCurrentStock($stock)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessInvoice', 'mp');
+        $qb->select('SUM(e.totalQuantity) AS quantity');
+        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stock);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt;
     }
 
 

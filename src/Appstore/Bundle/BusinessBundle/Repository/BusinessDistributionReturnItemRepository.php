@@ -25,7 +25,12 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
         $qb->addSelect('s.id AS id','s.name AS name','s.purchasePrice AS purchasePrice');
         $qb->join('e.businessParticular','s');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $datetime = new \DateTime("now");
+        $end = $datetime->format('Y-m-d 00:00:00');
+        $qb->andWhere("e.created < :endDate");
+        $qb->setParameter('endDate', $end);
         $qb->groupBy('s.name');
+        $qb->orderBy('s.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
 

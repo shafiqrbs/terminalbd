@@ -324,4 +324,15 @@ class BusinessPurchaseItemRepository extends EntityRepository
         return $purchasePrice;
 
     }
+
+    public function getCurrentStock($stock)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessPurchase', 'mp');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.bonusQuantity) AS bonus');
+        $qb->where('e.businessParticular = :particular')->setParameter('particular', $stock);
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        return $qnt;
+    }
 }

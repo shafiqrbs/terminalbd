@@ -481,6 +481,7 @@ class BusinessParticularRepository extends EntityRepository
     public function remainingQnt(BusinessParticular $stock)
     {
         $em = $this->_em;
+       // $em->getRepository('BusinessBundle:BusinessPurchaseItem')->getCurrentStock($stock);
         $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $stock->setBonusQuantity($stock->getBonusPurchaseQuantity() - $stock->getBonusSalesQuantity());

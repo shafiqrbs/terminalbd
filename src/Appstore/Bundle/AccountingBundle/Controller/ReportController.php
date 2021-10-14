@@ -586,13 +586,31 @@ class ReportController extends Controller
             $entities = $em->getRepository('AccountingBundle:AccountPurchase')->vendorLedger($globalOption,$data);
             $entities = $entities->getResult();
 		}
-		return $this->render('AccountingBundle:Report/Outstanding:vendorLedger.html.twig', array(
-			'vendor' => $vendor,
-			'entities' => $entities,
-			'overview' => $overview,
-			'option' => $globalOption,
-			'searchForm' => $data,
-		));
+		if($data['pdf']){
+            $html = $this->renderView(
+                'AccountingBundle:Report/Outstanding:vendorLedgerPdf.html.twig', array(
+                    'globalOption' => $globalOption,
+                    'vendor' => $vendor,
+                    'entities' => $entities,
+                    'overview' => $overview,
+                    'option' => $globalOption,
+                    'searchForm' => $data,
+
+                )
+            );
+            $this->downloadPdf($html,"{$vendor->getCompanyName()}.pdf");
+
+        }else{
+            return $this->render('AccountingBundle:Report/Outstanding:vendorLedger.html.twig', array(
+                'globalOption' => $globalOption,
+                'vendor' => $vendor,
+                'entities' => $entities,
+                'overview' => $overview,
+                'option' => $globalOption,
+                'searchForm' => $data,
+            ));
+        }
+
 	}
 
 

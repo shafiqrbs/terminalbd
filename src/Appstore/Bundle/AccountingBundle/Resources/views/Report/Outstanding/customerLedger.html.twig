@@ -118,7 +118,6 @@
                                     </td>
                                     <td class="numeric" >
                                         {% if entity.businessInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'business' %}
-
                                             <table>
                                                 {% for item in entity.businessInvoice.businessInvoiceParticulars  %}
                                                 <tr>
