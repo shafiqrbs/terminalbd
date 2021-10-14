@@ -337,7 +337,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
-        $qb->orderBy('e.created', 'DESC');
+        $qb->orderBy('e.created', 'ASC');
         $result = $qb->getQuery();
         return $result;
 

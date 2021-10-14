@@ -368,9 +368,8 @@
 
 
 </style>
-{% set startDate = searchForm.month is defined ? searchForm.month :"now"|date("d-m-Y") %}
-{% set endDate = searchForm.year is defined ? searchForm.year :"now"|date("d-m-Y") %}
-
+{% set startDate = searchForm.startDate is defined ? searchForm.startDate :"now"|date("d-m-Y") %}
+{% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
 <table class="table">
     <thead>
     <tr><td class="pull-center" colspan="10"><h3>{{ globalOption.name }}</h3></td></tr>
@@ -412,7 +411,6 @@
         <th class="numeric" >Total</th>
         <th class="numeric" >Received</th>
         <th class="numeric" >Due</th>
-        <th class="numeric" >Created</th>
     </tr>
     </thead>
     <tbody>
@@ -421,7 +419,7 @@
             <td class="numeric" >{{ loop.index }}.</td>
             <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
             <td class="numeric" >
-                {{ entity.sourceInvoice }}
+                {{ entity.grn }}
             </td>
             <td class="numeric" style="padding: 0!important; border: none!important;">
                 {% if globalOption.mainApp.slug == 'business' and entity.businessPurchase is defined and  entity.businessPurchase is not empty %}
