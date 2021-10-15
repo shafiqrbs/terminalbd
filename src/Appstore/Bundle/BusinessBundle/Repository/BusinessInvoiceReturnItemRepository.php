@@ -28,16 +28,15 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
     {
 
         $grn = isset($data['grn'])? $data['grn'] :'';
-        $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $business = isset($data['name'])? $data['name'] :'';
         $brand = isset($data['brandName'])? $data['brandName'] :'';
         $mode = isset($data['mode'])? $data['mode'] :'';
-        $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+        $customer = isset($data['customer'])? $data['customer'] :'';
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
 
         if (!empty($grn)) {
-            $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+            $qb->andWhere($qb->expr()->like("ir.invoice", "'%$grn%'"  ));
         }
         if(!empty($business)){
             $qb->andWhere($qb->expr()->like("ms.name", "'%$business%'"  ));
@@ -48,13 +47,9 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         if(!empty($mode)){
             $qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
         }
-        if(!empty($vendor)){
-            $qb->join('e.vendor','v');
-            $qb->andWhere($qb->expr()->like("v.companyName", "'%$vendor%'"  ));
-        }
-        if(!empty($vendorId)){
-            $qb->join('e.vendor','v');
-            $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
+        if (!empty($customer)) {
+            $qb->join('ir.customer','c');
+            $qb->andWhere($qb->expr()->like("c.name", "'$customer%'"  ));
         }
         if (!empty($startDate) ) {
             $datetime = new \DateTime($data['startDate']);
@@ -142,7 +137,15 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $price = $data['price'];
         $itemProcess = $data['itemProcess'];
         foreach ($itemIds as $key  => $itemId):
-
+            $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'particular'=>$itemId));
+            if($exist){
+                $exist->setQuantity($quantity[$key]);
+                $exist->setPrice($price[$key]);
+                $exist->setItemProcess($itemProcess[$key]);
+                $exist->setSubTotal($price[$key] * $quantity[$key]);
+                $em->persist($exist);
+                $em->flush();
+            }else{
             if($quantity[$key] > 0 ){
                 $product = $em->getRepository('BusinessBundle:BusinessParticular')->find($itemId);
                 $item = new BusinessInvoiceReturnItem();
@@ -155,6 +158,8 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
                 $em->persist($item);
                 $em->flush();
             }
+            }
+
 
         endforeach;
     }

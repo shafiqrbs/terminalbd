@@ -37,9 +37,6 @@
                                 {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
                                 {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
                                 <a target="_blank" href="{{ path('report_vendor_ledger',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'vendor':supplier}) }}" class="btn purple"><i class="icon icon-download"></i> Download</a>
-                                <a class="btn red"  href="javascript:" id="printLedger"   >
-                                    <i class=" icon-print"></i>&nbsp;Print
-                                </a>
                             </div>
                         </div>
                     </div>

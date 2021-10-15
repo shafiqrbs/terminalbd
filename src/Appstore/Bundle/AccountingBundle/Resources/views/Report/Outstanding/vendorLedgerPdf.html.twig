@@ -414,7 +414,11 @@
     </tr>
     </thead>
     <tbody>
+    {% set total = 0 %}
+    {% set received = 0 %}
     {% for entity in entities %}
+        {% set total = total + entity.purchaseAmount %}
+        {% set received = received + entity.payment %}
         <tr id="remove-{{ entity.id }}">
             <td class="numeric" >{{ loop.index }}.</td>
             <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
@@ -439,12 +443,20 @@
                 {% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}
             </td>
             <td class="numeric" >{{ entity.processType }}</td>
-            <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
-            <td class="numeric" >{{ entity.payment|number_format }}</td>
-            <td class="numeric" >{{ entity.balance|number_format }}</td>
+            <td class="numeric" >{{ entity.purchaseAmount|number_format(2) }}</td>
+            <td class="numeric" >{{ entity.payment|number_format(2) }}</td>
+            <td class="numeric" >{{ entity.balance|number_format(2) }}</td>
         </tr>
     {% endfor %}
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="6">Grand Total</th>
+            <th>{{ total|number_format(2) }}</th>
+            <th>{{ received|number_format(2) }}</th>
+            <th>{{ (total-received)|number_format(2) }}</th>
+        </tr>
+    </tfoot>
 </table>
 <script>
     window.print();

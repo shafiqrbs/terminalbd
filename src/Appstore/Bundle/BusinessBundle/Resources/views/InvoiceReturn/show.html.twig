@@ -58,7 +58,6 @@
                                 </div>
                             </div>
                             {% include('flash-message.html.twig')  %}
-                            <form class="horizontal-form" action="{{ path('business_invoice_return_approved',{'id':entity.id}) }}" method="post" id="purchaseReturn">
                             <div class="row-fluid box blue">
                                 <div class="span12">
                                 {% if entity.invoiceReturnItems is defined and  entity.invoiceReturnItems is not empty  %}
@@ -83,8 +82,8 @@
                                                 </td>
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
                                                 <td class="span4">{{ item.particular.name }}</td>
-                                                <td class="span2"><input class="m-wrap span12 form-control input-number" type="text" name="quantity[]" data-id="{{ item.id }}" data-value="{{ item.quantity }}" id="quantity-{{ item.id }}" value="{{ item.quantity }}" placeholder="Input quantity"></td>
-                                                <td class="span2"><input class="m-wrap span12 form-control input-number" type="text" name="price[]" data-id="{{ item.id }}" data-value="{{ item.price }}" id="quantity-{{ item.id }}" value="{{ item.price }}" placeholder="Input price"></td>
+                                                <td class="span2">{{ item.quantity }}</td>
+                                                <td class="span2">{{ item.price }}</td>
                                                 <td class="span1" id="subTotal-{{  item.id }}" >{{ item.subTotal|number_format }}</td>
                                                 <td class="span1">{{ item.itemProcess }}</td>
                                             </tr>
@@ -101,14 +100,16 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% set approveProcess = ['created','commission','sales','Done'] %}
-                                    {% if  entity.process in approveProcess and entity.subTotal > 0 %}
+                                    {% set approveProcess = ['created','Created','Done'] %}
+                                    {% if  entity.process in approveProcess %}
+                                        <a  href="{{ path('business_invoice_return_edit', { 'id': entity.id }) }}"  class="btn green" ><i class="icon-pencil"></i></a>
                                     {% endif %}
-                                    <button  class="btn blue" type="submit"><i class="icon-ok"></i>&nbsp;Approve</button>
-                                    <span  class="btn green"><i class="icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
+                                    {% if  entity.process in approveProcess and entity.subTotal > 0 %}
+                                        <a href="javascript:" data-url="{{ path('business_invoice_return_approved',{'id':entity.id}) }}"  class="btn blue approve" ><i class="icon-ok"></i>&nbsp;Approve</a>
+                                    {% endif %}
                                 </div>
                            </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-        '@BusinessBundle/Resources/public/js/invoice-return.js'
+        '@BusinessBundle/Resources/public/js/approveProcess.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

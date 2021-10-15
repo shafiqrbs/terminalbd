@@ -586,7 +586,7 @@ class ReportController extends Controller
             $entities = $em->getRepository('AccountingBundle:AccountPurchase')->vendorLedger($globalOption,$data);
             $entities = $entities->getResult();
 		}
-		if($data['pdf']){
+		if(isset($data['pdf']) and $data['pdf']){
             $html = $this->renderView(
                 'AccountingBundle:Report/Outstanding:vendorLedgerPdf.html.twig', array(
                     'globalOption' => $globalOption,
