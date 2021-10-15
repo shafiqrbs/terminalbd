@@ -287,7 +287,9 @@ class Builder extends ContainerAware
 
             $menu[$business]['Manage Sales']->addChild('Sales', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
-             $menu[$business]['Manage Sales']->addChild('Condition Sales', array('route' => 'business_invoice_condition'))
+            $menu[$business]['Manage Sales']->addChild('Condition Sales', array('route' => 'business_invoice_condition'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu[$business]['Manage Sales']->addChild('Sales Return', array('route' => 'business_invoice_return'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
                 ->setAttribute('icon', 'icon-plus-sign');
