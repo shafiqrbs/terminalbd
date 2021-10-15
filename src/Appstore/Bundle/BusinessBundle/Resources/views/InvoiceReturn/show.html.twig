@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase Return Invoice # {{ entity.invoice }}
+                    Sales Return Invoice # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('business_purchase') }}">Purchase Return</a>
+                        <a href="{{ path('business_invoice_return') }}">Sales Return</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Purchase Return</a></li>
+                    <li><a href="#">Manage Sales Return</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,76 +34,81 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Return Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Sales Return Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn black" href="{{ path('business_purchase_return') }}"><i class="icon-th-list"></i> Purchase Return</a>
+                                <a class="btn black" href="{{ path('business_invoice_return') }}"><i class="icon-th-list"></i> Sales Return</a>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="portlet-body">
-
                         <div class="portlet-body form">
-                           {# <div class="row-fluid">
-
+                            <div class="row-fluid">
                                 <div class="span4">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
-                                        {% if entity.vendor is not empty %}<li><strong>Vendor #:</strong>&nbsp;{{ entity.vendor.name }}</li>{% endif %}
-                                        {% if entity.vendor is not empty %}<li><strong>Company #:</strong>&nbsp;{{ entity.vendor.companyName }}</li>{% endif %}
-                                        {% if entity.vendor is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.vendor.mobile }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address|raw }}</li>{% endif %}
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                     </ul>
                                 </div>
-                            </div>#}
+                            </div>
                             {% include('flash-message.html.twig')  %}
+                            <form class="horizontal-form" action="{{ path('business_invoice_return_approved',{'id':entity.id}) }}" method="post" id="purchaseReturn">
                             <div class="row-fluid box blue">
-                                {% if entity.businessPurchaseReturnItems is defined and  entity.businessPurchaseReturnItems is not empty  %}
+                                <div class="span12">
+                                {% if entity.invoiceReturnItems is defined and  entity.invoiceReturnItems is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
                                         <thead class="flip-content ">
                                         <tr class="head-blue">
-                                            <td class="span1">&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                            <th class="span1">Code</th>
-                                            <th class="span4">Particular</th>
-                                            <th class="span1">Damage Qnt</th>
-                                            <th class="span1">Spoil Qnt</th>
-                                            <th class="span1">Total Qnt</th>
-                                            <th class="span2">Price</th>
-                                            <th class="span1">Sub-Total</th>
+                                            <td class="">&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                            <th class="">Code</th>
+                                            <th class="">Particular</th>
+                                            <th class="">Quantity</th>
+                                            <th class="">Price</th>
+                                            <th class="">Sub-Total</th>
+                                            <th class="">Item Process</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for item in entity.businessPurchaseReturnItems %}
+                                        {% for item in entity.invoiceReturnItems %}
                                             <tr id="remove-{{ item.id }}">
-                                                <td  class="span1">{{ loop.index }}</td>
-                                                <td  class="span1">{{ item.businessParticular.particularCode }}</td>
-                                                <td class="span4">{{ item.businessParticular.name }}</td>
-                                                <td class="span1">{{ item.damageQnt }}</td>
-                                                <td class="span1">{{ item.spoilQnt }}</td>
-                                                <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span2">{{ item.purchasePrice }}</td>
-                                                <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                <td  class="span1">{{ loop.index }}
+                                                    <input type="hidden" name="subTotal[]" id="sub-{{ item.id }}" class="subTotal" value="0">
+                                                    <input type="hidden" name="itemId[]" value="{{ item.id }}">
+                                                </td>
+                                                <td  class="span1">{{ item.particular.particularCode }}</td>
+                                                <td class="span4">{{ item.particular.name }}</td>
+                                                <td class="span2"><input class="m-wrap span12 form-control input-number" type="text" name="quantity[]" data-id="{{ item.id }}" data-value="{{ item.quantity }}" id="quantity-{{ item.id }}" value="{{ item.quantity }}" placeholder="Input quantity"></td>
+                                                <td class="span2"><input class="m-wrap span12 form-control input-number" type="text" name="price[]" data-id="{{ item.id }}" data-value="{{ item.price }}" id="quantity-{{ item.id }}" value="{{ item.price }}" placeholder="Input price"></td>
+                                                <td class="span1" id="subTotal-{{  item.id }}" >{{ item.subTotal|number_format }}</td>
+                                                <td class="span1">{{ item.itemProcess }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
-                                        <tfoot><tr><th colspan="7">SubTotal</th><td>{{ entity.subTotal|number_format(2) }}</td></tr></tfoot>
+                                        <tfoot>
+                                        <tr><th colspan="5">SubTotal</th><td>{{ entity.subTotal|number_format(2) }}</td><td></td></tr>
+                                        <tr><th colspan="5">Payment & Adjustment</th><td>{{ entity.payment|number_format(2) }}</td><td>{{ entity.adjustment|number_format(2) }}</td></tr>
+                                        </tfoot>
                                     </table>
                                 {% endif %}
+                                </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% set approveProcess = ['created','commission','sales','Done'] %}
                                     {% if  entity.process in approveProcess and entity.subTotal > 0 %}
-                                        <a  href="javascript:"  data-url="{{ path('business_purchase_return_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
-                                   {# <a target="_blank" href="{{ path('business_purchase_print_invoice',{'id':entity.id}) }}"  class="btn purple"><i class=" icon-print"></i>&nbsp;Print</a>#}
+                                    <button  class="btn blue" type="submit"><i class="icon-ok"></i>&nbsp;Approve</button>
                                     <span  class="btn green"><i class="icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
                                 </div>
                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -115,9 +120,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@BusinessBundle/Resources/public/js/approveProcess.js'
+        '@BusinessBundle/Resources/public/js/invoice-return.js'
     %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}

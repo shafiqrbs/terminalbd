@@ -50,10 +50,12 @@ class DistributionReturnController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
 	    $data = $_REQUEST;
 	    $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->findWithSearch($config->getId());
+	    $todayReturnItems = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->todayReturnItems($config->getId());
         $remains = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->remainingStock($config->getId());
         $vendors = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->findBy(['globalOption' => $this->getUser()->getGlobalOption(),'status'=>1]);
         return $this->render('BusinessBundle:DistributionReturn:index.html.twig', array(
             'entities' => $entities,
+            'todayReturnItems' => $todayReturnItems,
             'remains' => $remains,
             'vendors' => $vendors,
             'searchForm' => $data,

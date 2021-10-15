@@ -42,14 +42,15 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric span8" >Product Name </th>
-                                    <th class="numeric span1" >Price</th>
-                                    <th class="numeric span1" >DamageQTY</th>
-                                    <th class="numeric span1" >Spoil QTY</th>
-                                    <th class="numeric span1" >Return QTY</th>
-                                    <th class="numeric span1" >Remaining QTY</th>
-                                    <th class="numeric span1" >Process QTY</th>
-                                    <th class="numeric span1" >SubTotal</th>
+                                    <th class="numeric" >Product Name </th>
+                                    <th class="numeric" >Price</th>
+                                    <th class="numeric" >Today Damage QTY</th>
+                                    <th class="numeric" >DamageQTY</th>
+                                    <th class="numeric" >Spoil QTY</th>
+                                    <th class="numeric" >Return QTY</th>
+                                    <th class="numeric" >Remaining QTY</th>
+                                    <th class="numeric" >Process QTY</th>
+                                    <th class="numeric" >SubTotal</th>
                                 </tr>
                                 </thead>
 
@@ -63,6 +64,7 @@
                                             <input type="hidden" name="price[]" value="{{ entity.purchasePrice }}">
                                         </td>
                                         <td class="numeric" > {{ entity.purchasePrice }}</td>
+                                        <td class="numeric" > {% if todayReturnItems[entity.id] is defined and todayReturnItems[entity.id] is not empty %} {{ todayReturnItems[entity.id].quantity }} {% endif %}</td>
                                         <td class="numeric" > {{ entity.damageQnt }}</td>
                                         <td class="numeric" > {{ entity.spoilQnt }}</td>
                                         <td class="numeric" > {% if remains[entity.id] is defined and remains[entity.id] is not empty %} {{ remains[entity.id].quantity }} {% endif %}</td>

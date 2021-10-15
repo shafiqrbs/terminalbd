@@ -32,7 +32,7 @@ class BusinessInvoiceReturn
     private  $businessConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem", mappedBy="invoice" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem", mappedBy="invoiceReturn" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceReturnItems;

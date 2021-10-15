@@ -10,6 +10,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -22,11 +23,113 @@ use Doctrine\ORM\EntityRepository;
  */
 class BusinessInvoiceReturnItemRepository extends EntityRepository
 {
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $business = isset($data['name'])? $data['name'] :'';
+        $brand = isset($data['brandName'])? $data['brandName'] :'';
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        $vendorId = isset($data['vendorId'])? $data['vendorId'] :'';
+        $startDate = isset($data['startDate'])? $data['startDate'] :'';
+        $endDate = isset($data['endDate'])? $data['endDate'] :'';
+
+        if (!empty($grn)) {
+            $qb->andWhere($qb->expr()->like("e.grn", "'%$grn%'"  ));
+        }
+        if(!empty($business)){
+            $qb->andWhere($qb->expr()->like("ms.name", "'%$business%'"  ));
+        }
+        if(!empty($brand)){
+            $qb->andWhere($qb->expr()->like("ms.brandName", "'%$brand%'"  ));
+        }
+        if(!empty($mode)){
+            $qb->andWhere($qb->expr()->like("ms.mode", "'%$mode%'"  ));
+        }
+        if(!empty($vendor)){
+            $qb->join('e.vendor','v');
+            $qb->andWhere($qb->expr()->like("v.companyName", "'%$vendor%'"  ));
+        }
+        if(!empty($vendorId)){
+            $qb->join('e.vendor','v');
+            $qb->andWhere("v.id = :vendorId")->setParameter('vendorId', $vendorId);
+        }
+        if (!empty($startDate) ) {
+            $datetime = new \DateTime($data['startDate']);
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $start);
+        }
+
+        if (!empty($endDate)) {
+            $datetime = new \DateTime($data['endDate']);
+            $end = $datetime->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $end);
+        }
+    }
+
+    public function findWithSearch($config, $data = array())
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.invoiceReturn','ir');
+        $qb->where('ir.businessConfig = :config')->setParameter('config', $config) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('ir.updated','DESC');
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
+
+    public function getCustomerItem(BusinessConfig $config, Customer $vendor)
+    {
+        $configId = $config->getId();
+        $vendorId = $vendor->getId();
+        $qb = $this->createQueryBuilder('pi');
+        $qb->select('p.id as itemId','SUM(pi.quantity) as quantity');
+        $qb->join('pi.invoiceReturn','e');
+        $qb->join('pi.particular','p');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $configId) ;
+        $qb->andWhere('e.customer = :vendorId')->setParameter('vendorId', $vendorId) ;
+        $qb->groupBy('p.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $array[$row['itemId']] = $row;
+        }
+        return  $array;
+    }
+
     public function approveSalesReturnItem(BusinessInvoiceReturnItem $store)
     {
         $em = $this->_em;
         $store->setStatus(1);
         $em->flush();
+        $mode  = strtolower($store->getItemProcess());
+        $arrs = array("purchase-return",'stock-return');
+        if(in_array($mode,array("purchase-return",'stock-return'))){
+            $qty = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
+            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$qty);
+        }elseif($mode == "damage"){
+            $em->getRepository("BusinessBundle:BusinessDamage")->insertSalesReturn($store);
+        }
+    }
+
+    public function returnSalesReturnQuantity(BusinessParticular $particular,$modes)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.invoiceReturn','ir');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->where('e.particular = :particular')->setParameter('particular', $particular->getId());
+        $qb->andWhere('e.itemProcess IN (:modes)')->setParameter('modes', $modes);
+        $qb->andWhere('ir.process = :approve')->setParameter('approve', 'Approved');
+        $qnt = $qb->getQuery()->getOneOrNullResult();
+        $qty = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
+        return $qty;
 
     }
 

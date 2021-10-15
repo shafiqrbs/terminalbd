@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProduction;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense;
@@ -460,12 +461,11 @@ class BusinessParticularRepository extends EntityRepository
 		foreach ($invoice_particular->getBusinessParticular()->getProductionElements() as $entity){
 
 			$production = $entity->getParticular();
-
 			if($fieldName == 'sales'){
 				$qnt = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemProduction($invoice_particular,$entity);
 				$production->setSalesQuantity($qnt);
-			}elseif($fieldName == 'sales-return'){
-				$quantity = $em->getRepository('BusinessBundle:BusinessInvoiceReturn')->salesStockItemProduction($invoice_particular,$entity);
+			}elseif($fieldName == 'purchase-return'){
+				$quantity = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->salesStockItemProduction($invoice_particular,$entity);
 				$production->setSalesReturnQuantity($quantity);
 			}elseif($fieldName == 'damage'){
 				$quantity = $em->getRepository('BusinessBundle:BusinessDamage')->salesStockItemProduction($invoice_particular,$entity);
@@ -477,6 +477,16 @@ class BusinessParticularRepository extends EntityRepository
 		}
 
 	}
+
+    public function updateSalesReturnQuantity(BusinessParticular $particular,$quantity){
+
+        $em = $this->_em;
+        $particular->setSalesReturnQuantity($quantity);
+        $em->persist($particular);
+        $em->flush();
+        $this->remainingQnt($particular);
+
+    }
 
     public function remainingQnt(BusinessParticular $stock)
     {

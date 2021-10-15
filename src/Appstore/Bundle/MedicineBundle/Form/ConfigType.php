@@ -37,6 +37,7 @@ class ConfigType extends AbstractType
             ->add('customPrint')
             ->add('printOutstanding')
             ->add('posPrint')
+            ->add('searchSlug')
             ->add('openingQuantity')
             ->add('regularPosPrint')
             ->add('isBarcode')
@@ -48,6 +49,7 @@ class ConfigType extends AbstractType
                 'attr' => array(
                     'class'=>'m-wrap span12'),
                     'expanded'      =>false,
+                    'empty_value' => '---Default expiry date---',
                     'multiple'      =>false,
                     'choices' => array(
                         '1' => '1 Month',
@@ -56,6 +58,10 @@ class ConfigType extends AbstractType
                         '4' => '4 Month',
                         '5' => '5 Month',
                         '6' => '6 Month',
+                        '12' => '1 Year',
+                        '18' => '1.5 Year',
+                        '24' => '2 Years',
+
                     ),
             ))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

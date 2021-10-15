@@ -47,12 +47,15 @@
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
-                                        <th class="numeric span6" >Product Name </th>
-                                        <th class="numeric span1" >Price</th>
-                                        <th class="numeric span1" >Current QTY</th>
-                                        <th class="numeric span1" >Return QTY</th>
-                                        <th class="numeric span1" >SubTotal</th>
-                                        <th class="numeric span1" >Mode</th>
+                                        <th class="numeric" >Product Name </th>
+                                        <th class="numeric" >Price</th>
+                                        <th class="numeric" >QTY</th>
+                                        <th class="numeric" >Return QTY</th>
+                                        <th class="numeric" >Remain QTY</th>
+                                        <th class="numeric" >Process QTY</th>
+                                        <th class="numeric" >Return price</th>
+                                        <th class="numeric" >SubTotal</th>
+                                        <th class="numeric" >Mode</th>
 
                                     </tr>
                                     </thead>
@@ -62,17 +65,26 @@
                                             <th class="numeric" >{{ loop.index }}. {{ particular.itemName }}
                                                 <input type="hidden" name="subTotal[]" id="sub-{{  particular.itemId }}" class="subTotal" value="0">
                                                 <input type="hidden" name="itemId[]" value="{{ particular.itemId }}">
-                                                <input type="hidden" name="price[]" value="{{ particular.salesPrice }}">
                                             </th>
                                             <td class="numeric" > {{ particular.salesPrice }}</td>
                                             <td class="numeric" > {{ particular.quantity }}</td>
-                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" type="text" name="quantity[]" data-id="{{ particular.itemId }}" data-value="{{ particular.salesPrice }}" id="quantity-{{  particular.itemId }}" value="" placeholder="Input quantity"></td>
+                                            <td class="numeric" > {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %} {{ returnItems[particular.itemId].quantity }}{% endif %}</td>
+                                            <td class="numeric" >
+                                                {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %}
+                                                    {% set remain  = particular.quantity - returnItems[particular.itemId].quantity %}
+                                                {% else %}
+                                                    {% set remain  = particular.quantity %}
+                                                {% endif %}
+                                                {{ remain }}
+                                            </td>
+                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" data-content="{{ remain }}" type="text" name="quantity[]" data-id="{{ particular.itemId }}"  id="quantity-{{  particular.itemId }}" value="" placeholder="Input quantity"></td>
+                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" type="text" name="price[]" data-id="{{ particular.itemId }}"  id="price-{{  particular.itemId }}" value="{{ particular.salesPrice }}" placeholder="Input price"></td>
                                             <td class="numeric" id="subTotal-{{  particular.itemId }}" ></td>
                                             <td class="numeric">
-                                                <select class="span12 m-wrap input" name="itemProcess" id="itemProcess">
+                                                <select class="span12 m-wrap input" name="itemProcess[]" id="itemProcess">
                                                     {% set itemProcesses = ['Stock-Return','Purchase-Return','Damage'] %}
-                                                    {% for itemProcesse in itemProcesses %}
-                                                        <option value="{{ itemProcesse }}">{{ itemProcesse }}</option>
+                                                    {% for itemProcess in itemProcesses %}
+                                                        <option value="{{ itemProcess }}">{{ itemProcess }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -80,13 +92,13 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    <tr><th colspan="4" class="text-right"><span class="text-right">Total </span></th><th id="total"></th>
+                                    <tr><th colspan="5" class="text-right"><span class="text-right">Total </span></th><th id="total"></th>
                                         <td></td>
                                     </tr>
-                                    <tr><th colspan="4" ><span class="text-right">Previous Due</span></th><th>{{ balance|number_format(2) }}</th>
+                                    <tr><th colspan="5" ><span class="text-right">Previous Due</span></th><th>{{ balance|number_format(2) }}</th>
                                     <td></td>
                                     </tr>
-                                    <tr><th colspan="4" class="text-right"><span class="text-right">Process Amount</span></th>
+                                    <tr><th colspan="5" class="text-right"><span class="text-right">Process Amount</span></th>
                                     <th>
                                         <input class="m-wrap span12 form-control input-number" type="text" name="payment" id="payment" value="" placeholder="Payment">
                                     </th>

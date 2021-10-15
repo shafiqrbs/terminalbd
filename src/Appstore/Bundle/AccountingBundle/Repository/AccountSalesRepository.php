@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -1072,7 +1073,27 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setApprovedBy($sales->getCreatedBy());
         $em->persist($accountSales);
         $em->flush();
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+      //  $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+    }
+
+    public function insertBusinessInvoiceReturn(BusinessInvoiceReturn $sales)
+    {
+        $global = $sales->getBusinessConfig()->getGlobalOption();
+        $amount = $sales->getAdjustment();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($sales->getCustomer());
+        $accountSales->setSourceInvoice($sales->getInvoice());
+        $accountSales->setAmount($amount);
+        $accountSales->setProcessHead('Sales-Return');
+        $accountSales->setProcessType('Sales-Return');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($sales->getCreatedBy());
+        $em->persist($accountSales);
+        $em->flush();
+      //  $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
     }
 

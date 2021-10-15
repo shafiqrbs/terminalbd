@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\BusinessBundle\Repository;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessDamage;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Doctrine\ORM\EntityRepository;
 
@@ -21,6 +23,24 @@ class BusinessDamageRepository extends EntityRepository
         $qb->where('e.businessParticular = :businessParticular')->setParameter('businessParticular', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt['quantity'];
+    }
+
+    public function insertSalesReturn(BusinessInvoiceReturnItem $item)
+    {
+        $em = $this->_em;
+        $entity = new BusinessDamage();
+        $config = $item->getInvoiceReturn()->getBusinessConfig();
+        $entity->setBusinessConfig($config);
+        $entity->setBusinessParticular($item->getParticular());
+        $entity->setQuantity($item->getQuantity());
+        $entity->setPurchasePrice($item->getPrice());
+        $entity->setSubTotal($item->getPrice() * $item->getQuantity());
+        $entity->setProcess('Approved');
+        $entity->setCreatedBy($item->getInvoiceReturn()->getCreatedBy());
+        $em->persist($entity);
+        $em->flush();
+        $em->getRepository('BusinessBundle:BusinessParticular')->updateRemoveStockQuantity($entity->getBusinessParticular(),'damage');
+        $em->getRepository('AccountingBundle:Transaction')->insertGlobalDamageTransaction($item->getInvoiceReturn()->getBusinessConfig()->getGlobalOption(),$entity);
     }
 
 }

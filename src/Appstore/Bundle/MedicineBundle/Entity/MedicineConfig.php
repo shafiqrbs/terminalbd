@@ -219,6 +219,14 @@ class MedicineConfig
      /**
      * @var boolean
      *
+     * @ORM\Column(name="searchSlug", type="boolean",  nullable=true)
+     */
+    private $searchSlug = false;
+
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="openingQuantity", type="boolean",  nullable=true)
      */
     private $openingQuantity = false;
@@ -843,6 +851,22 @@ class MedicineConfig
     public function setTpVatPercent($tpVatPercent)
     {
         $this->tpVatPercent = $tpVatPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchSlug()
+    {
+        return $this->searchSlug;
+    }
+
+    /**
+     * @param bool $searchSlug
+     */
+    public function setSearchSlug($searchSlug)
+    {
+        $this->searchSlug = $searchSlug;
     }
 
 

@@ -164,6 +164,27 @@ class AccountVendorRepository extends EntityRepository
         return false;
     }
 
+    public function insertSalesReturnVendor(GlobalOption $globalOption)
+    {
+        $em = $this->_em;
+        $name = "Sales-Return";
+        $mobile = $globalOption->getMobile();
+        $entity = $this->findOneBy(array('globalOption' => $globalOption ,'companyName' => $name ,'mobile' => $mobile));
+        if($entity){
+            return $entity;
+        }elseif(!empty($mobile) and !empty($name)){
+            $entity = new AccountVendor();
+            $entity->setCompanyName($name);
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+        return false;
+    }
+
     public function updateVendorCompanyName(AccountVendor $vendor)
     {
         $com = $vendor->getCompanyName();

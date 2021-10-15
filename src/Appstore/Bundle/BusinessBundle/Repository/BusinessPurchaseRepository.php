@@ -5,6 +5,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendorStock;
@@ -348,6 +350,35 @@ class BusinessPurchaseRepository extends EntityRepository
         $em = $this->_em;
         $purchase = $em->createQuery("DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = {$config} AND e.process = 'Commission' AND e.created LIKE '%{$today}%' ");
         $purchase->execute();
+    }
+
+    public function insertPurchaseReturn(BusinessInvoiceReturn $return)
+    {
+        $em = $this->_em;
+        if($return->getInvoiceReturnItems()){
+            $entity = new BusinessPurchase();
+            $entity->setBusinessConfig($return->getBusinessConfig());
+            $vendor = $em->getRepository('AccountingBundle:AccountVendor')->insertSalesReturnVendor($return->getBusinessConfig()->getGlobalOption());
+            $entity->setBusinessConfig($return->getBusinessConfig());
+            $entity->setVendor($vendor);
+            $entity->setMode('Sales-Return');
+            $entity->setMemo($return->getInvoice());
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'cash'));
+            $entity->setTransactionMethod($method);
+            $entity->setSubTotal($return->getPayment());
+            $entity->setNetTotal($return->getPayment());
+            $entity->setPayment($return->getPayment());
+            $entity->setCreatedBy($return->getCreatedBy());
+            $entity->setApprovedBy($return->getCreatedBy());
+            $entity->setProcess("Approved");
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+
+        }
+        return false;
+
+
     }
 
 

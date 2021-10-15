@@ -897,6 +897,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return  $result;
     }
 
+
+
     public function getCurrentStock($stock)
     {
         $qb = $this->createQueryBuilder('e');

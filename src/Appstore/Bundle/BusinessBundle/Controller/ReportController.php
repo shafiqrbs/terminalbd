@@ -268,7 +268,6 @@ class ReportController extends Controller
 		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
 		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
-
 		return $this->render('BusinessBundle:Report:productLedger.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
 			'entities' => $pagination,
@@ -278,8 +277,6 @@ class ReportController extends Controller
 			'searchForm' => $data,
 		));
 	}
-
-
 
 
 	public function salesUserAction()
@@ -712,6 +709,25 @@ class ReportController extends Controller
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
         $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
 
+        return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
+            'option'  => $user->getGlobalOption() ,
+            'entities' => $pagination,
+            'types' => $type,
+            'categories' => $category,
+            'branches' => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm' => $data,
+        ));
+    }
+
+    public function customerSalesItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
+        $pagination = $this->paginate($entities);
+        $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
         return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
             'option'  => $user->getGlobalOption() ,
             'entities' => $pagination,

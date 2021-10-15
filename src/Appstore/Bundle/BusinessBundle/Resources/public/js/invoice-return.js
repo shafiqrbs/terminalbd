@@ -1,8 +1,14 @@
+$('.horizontal-form').submit(function(){
+    $("button[type='submit']", this)
+        .html("Please Wait...")
+        .attr('disabled', 'disabled');
+    return true;
+});
 
 $(document).on("keyup", ".input-number", function() {
     var sum = 0;
     var dataId = $(this).attr("data-id");
-    var price = $(this).attr("data-value");
+    var price = $('#price-'+dataId).val();
     var remainingQnt = parseInt($(this).attr("data-content"));
     var quantity = parseInt($(this).val());
     if(quantity > remainingQnt ){

@@ -36,6 +36,29 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
 
 
     }
+    public function todayReturnItems($config)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.damageQnt) AS damageQnt','SUM(e.spoilQnt) AS spoilQnt');
+        $qb->addSelect('s.id AS id','s.name AS name','s.purchasePrice AS purchasePrice');
+        $qb->join('e.businessParticular','s');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $datetime = new \DateTime("now");
+        $start = $datetime->format('Y-m-d 00:00:00');
+        $end = $datetime->format('Y-m-d 23:59:59');
+        $qb->andWhere("e.created >= :start")->setParameter('start', $start);
+        $qb->andWhere("e.created <= :endDate")->setParameter('endDate', $end);
+        $qb->groupBy('s.name');
+        $qb->orderBy('s.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach ($result as $row){
+            $data[$row['id']] = $row;
+        }
+        return  $data;
+
+
+    }
 
     public function purchaseReturnStockUpdate(BusinessParticular $item)
     {

@@ -2,6 +2,10 @@ business_invoice_return:
     path:     /
     defaults: { _controller: "BusinessBundle:InvoiceReturn:index" }
 
+business_invoice_return_item:
+    path:     /sales-return-item
+    defaults: { _controller: "BusinessBundle:InvoiceReturn:salesReturn" }
+
 business_invoice_return_show:
     path:     /{id}/show
     defaults: { _controller: "BusinessBundle:InvoiceReturn:show" }
@@ -24,28 +28,13 @@ business_invoice_return_update:
     defaults: { _controller: "BusinessBundle:InvoiceReturn:update" }
     methods:  [POST]
 
-business_invoice_return_status:
-    path:     /{id}/status
-    defaults: { _controller: "BusinessBundle:InvoiceReturn:edit" }
-
 business_invoice_return_approved:
     path:     /{id}/approved
     defaults: { _controller: "BusinessBundle:InvoiceReturn:approved" }
+    methods:  [POST, PUT]
 
 business_invoice_return_delete:
     path:     /{id}/delete
     defaults: { _controller: "BusinessBundle:InvoiceReturn:delete" }
 
-business_invoice_vendor_select:
-    path:     /vendor-selection
-    defaults: { _controller: "BusinessBundle:InvoiceReturn:vendorSelect" }
-    options:
-           expose: true
-
-business_invoice_vendor_update:
-    path:     /{id}/vendor-purchase-return-update
-    defaults: { _controller: "BusinessBundle:InvoiceReturn:vendorUpdate" }
-    methods:  POST
-    options:
-            expose: true
 

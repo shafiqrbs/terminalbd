@@ -408,15 +408,14 @@ class MedicineStockRepository extends EntityRepository
         $query->leftJoin('e.medicineBrand', 'brand');
         $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
-       // $query->addSelect('CONCAT(e.sku, \' - \', e.name,  \' [\', e.remainingQuantity, \'] \', unit.name,\' => \', rack.name,\' - PP Tk. \', e.purchasePrice) AS text');
-        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name, ' => PP Tk.', e.purchasePrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name,'=>', rack.name , ' => MRP Tk.', e.salesPrice)  END as text");
-        //$query->addSelect("CASE WHEN (e.strength IS NULL) THEN CONCAT(e.medicineForm,' ', e.name,' ',g.name, ' ', c.name)  ELSE CONCAT(e.medicineForm,' ',e.name, ' ',e.strength,' ', g.name,' ',c.name)  END as text");
-        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
-        $query->orWhere($query->expr()->like("e.name", "'%$q%'"  ));
-        //    $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
-        $query->andWhere("ic.id = :config");
+        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name, ' => MRP Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name,'=>', rack.name , ' => MRP Tk.', e.salesPrice)  END as text");
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
         $query->andWhere('e.status = 1');
-        $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
@@ -435,10 +434,12 @@ class MedicineStockRepository extends EntityRepository
         $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
         $query->addSelect("e.name as text");
-        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
-        $query->orWhere($query->expr()->like("generic.name", "'%$q%'"  ));
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
@@ -450,15 +451,14 @@ class MedicineStockRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
         $query->join('e.medicineConfig', 'ic');
-       // $query->leftJoin('e.rackNo', 'rack');
         $query->select('e.id as id');
-       // $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN e.name  ELSE CONCAT(e.name,' => ', rack.name)  END as text");
         $query->addSelect("CONCAT(e.name,' => MRP - ', e.salesPrice) as text");
-        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
-        $query->orWhere($query->expr()->like("e.name", "'%$q%'"  ));
-        $query->andWhere("e.status = 1");
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
@@ -474,10 +474,13 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.slug", "'%$q%'"  ));
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
         $query->andWhere("e.status = 1");
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();
@@ -491,9 +494,12 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->select('e.id as id');
         $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
-        $query->andWhere("ic.id = :config");
-        $query->setParameter('config', $config->getId());
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '30' );
@@ -606,8 +612,8 @@ class MedicineStockRepository extends EntityRepository
         if($stock){
             $stock->execute();
         }
-        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`minQuantity`,`remainingQuantity`,`salesPrice`, `purchasePrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
-  SELECT `unit_id`, `name`,`minQuantity`,0, `salesPrice`,`purchasePrice`, `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
+        $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`slug`,`minQuantity`,`remainingQuantity`,`salesPrice`, `purchasePrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
+  SELECT `unit_id`, trim(name),trim(slug),`minQuantity`,0, `salesPrice`,(salesPrice - ((salesPrice * 12.5)/100)), `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
   FROM medicine_stock
   WHERE medicineConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
