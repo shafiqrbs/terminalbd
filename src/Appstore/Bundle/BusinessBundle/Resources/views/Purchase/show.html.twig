@@ -78,6 +78,9 @@
                                         {% if entity.accountMobileBank is not empty %}<li><strong>Payment Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
                                         {% if entity.accountBank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.accountBank.name  }}</li>{% endif %}
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
+                                        <li><strong>Attachment:</strong>&nbsp;
+                                            {% if entity.webPath is not empty %}<a  href="{{ asset('uploads/domain/'~entity.businessConfig.globalOption.id~'/business'~entity.webPath) }}" target="_blank">Download</a>{% endif %}
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -136,12 +139,12 @@
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done' and entity.netTotal > 0) %}
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                        <a  href="{{ path('business_purchase_edit',{'id':entity.id}) }}" class="btn green"><i class="icon-pencil"></i>&nbsp;Edit</a>
                                     {% endif %}
                                     {% if (entity.process == 'Approved' and app.user.granted("ROLE_BUSINESS_PURCHASE_REVERSE") and entity.created|date("d-m-Y") == "now"|date("d-m-Y") ) or (entity.process == 'Approved' and app.user.granted("ROLE_DOMAIN")) %}
                                         <a  href="javascript:" data-id=""  data-url="{{ path('business_purchase_reverse',{'id':entity.id}) }}" class="btn red reverse"><i class="icon-retweet"></i>&nbsp;Reverse</a>
                                     {% endif %}
                                     <a target="_blank" href="{{ path('business_purchase_print_invoice',{'id':entity.id}) }}"  class="btn purple"><i class=" icon-print"></i>&nbsp;Print</a>
-                                    <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>
                         </div>

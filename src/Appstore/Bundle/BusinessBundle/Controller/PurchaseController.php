@@ -352,6 +352,7 @@ class PurchaseController extends Controller
             $entity->setProcess('Done');
             $entity->setNetTotal(round($entity->getNetTotal()));
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
+            $entity->upload();
             $em->flush();
             return $this->redirect($this->generateUrl('business_purchase_show', array('id' => $entity->getId())));
         }

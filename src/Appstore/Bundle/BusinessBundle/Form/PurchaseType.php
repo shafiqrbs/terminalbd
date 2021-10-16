@@ -6,8 +6,10 @@ use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PurchaseType extends AbstractType
@@ -91,6 +93,18 @@ class PurchaseType extends AbstractType
                     'percentage' => 'Percentage',
                     'flat' => 'Flat',
                 ),
+            ))
+            ->add('file', FileType::class,array(
+                'required' => false,
+                'attr'=>array('class'=>'custom-file-input'),
+                'constraints' => array(new File(array( 'maxSize' => '1024k',
+                    'mimeTypes' =>array('application/pdf',
+                        'application/x-pdf',
+                        'image/png',
+                        'image/jpeg',
+                        'image/jpg',
+                        'image/gif'),
+                    'mimeTypesMessage' => 'Please upload a valid document',))),
             ))
             ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12','required' => true ,'label' => 'form.name','placeholder'=>'Memo no')))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
