@@ -204,7 +204,7 @@ class InvoiceReturnController extends Controller
         ));
     }
 
-    public function approvedAction(Request $request,BusinessInvoiceReturn $entity)
+    public function approvedAction(BusinessInvoiceReturn $entity)
     {
         $em = $this->getDoctrine()->getManager();
         $entity->setProcess('Approved');

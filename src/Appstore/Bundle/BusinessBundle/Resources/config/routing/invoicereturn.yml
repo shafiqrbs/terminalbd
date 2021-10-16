@@ -31,7 +31,6 @@ business_invoice_return_update:
 business_invoice_return_approved:
     path:     /{id}/approved
     defaults: { _controller: "BusinessBundle:InvoiceReturn:approved" }
-    methods:  [POST, PUT]
 
 business_invoice_return_delete:
     path:     /{id}/delete
