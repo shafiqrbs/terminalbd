@@ -108,6 +108,8 @@ class InvoiceReturnController extends Controller
             $time = time();
             $timebd = (string)($time);
             $entity->setInvoice($timebd);
+            $entity->setAdjustment(0);
+            $entity->setPayment(0);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -149,7 +151,6 @@ class InvoiceReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entity = $em->getRepository('BusinessBundle:BusinessInvoiceReturn')->findOneBy(array('businessConfig' => $config , 'id' => $id));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
