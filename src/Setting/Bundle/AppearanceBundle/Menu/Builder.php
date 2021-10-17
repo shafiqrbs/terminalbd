@@ -291,6 +291,8 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Manage Sales']->addChild('Sales Return', array('route' => 'business_invoice_return'))
                 ->setAttribute('icon', 'icon-th-list');
+            $menu[$business]['Manage Sales']->addChild('Sales Return Item', array('route' => 'business_invoice_return_item'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
                 ->setAttribute('icon', 'icon-plus-sign');
             if($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
@@ -329,7 +331,7 @@ class Builder extends ContainerAware
 		    $menu[$business]['Manage Purchase']->addChild('Purchase Return', array('route' => 'business_purchase_return'));
             if($config->getBusinessModel() == 'distribution') {
                 $menu[$business]['Manage Purchase']->addChild(
-                    'Distribution Return',
+                    'Damage Return',
                     array('route' => 'business_distribution_return')
                 );
             }
