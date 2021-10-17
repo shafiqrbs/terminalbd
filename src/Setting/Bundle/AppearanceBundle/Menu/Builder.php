@@ -1074,7 +1074,7 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']->addChild('Master Data')
                     ->setAttribute('icon', 'icon icon-cog')
                     ->setAttribute('dropdown', true);
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Diagnostic Test', array('route' => 'hms_pathology'))
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Pathology Test', array('route' => 'hms_pathology'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Doctor', array('route' => 'hms_doctor'))
                     ->setAttribute('icon', 'icon-th-list');

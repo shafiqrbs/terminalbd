@@ -227,6 +227,8 @@
                                                         {% set processArr = ['Created','Pending','In-progress'] %}
                                                         {% if (transaction.process in  processArr and invoiceTransaction is defined and transaction.id != invoiceTransaction.id)  %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                        {% elseif (transaction.process in  processArr and invoiceTransaction is not defined)  %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                         {% endif %}
                                                         {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction blue mini"><i class="fa fa-eye"></i> Particulars</a>
@@ -377,7 +379,7 @@
                                                         <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
                                                         <td class="span2">{{ item.salesPrice }}</td>
                                                         <td class="span1">{{ item.subTotal|number_format }}</td>
-                                                        <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_admission_daily_particular_delete',{'transaction': invoiceTransaction.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
+                                                        <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('hms_invoice_admission_daily_particular_delete',{'transaction': invoiceTransaction.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
                                                     </tr>
                                                 {% endfor %}
                                         {% endif %}
