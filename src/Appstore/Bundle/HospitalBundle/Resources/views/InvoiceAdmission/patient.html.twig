@@ -73,8 +73,10 @@
                         <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                         <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
                         <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
-                        <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
                         <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
+                        <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
+                        <li><strong>Anesthesia Doctor:</strong>&nbsp;{% if entity.anesthesiaDoctor is not empty %}{{ entity.anesthesiaDoctor.name }}{% endif %}</li>
+                        <li><strong>Assistant Doctor:</strong>&nbsp;{% if entity.assistantDoctor is not empty %}{{ entity.assistantDoctor.name }}{% endif %}</li>
                     </ul>
                 </div>
 
@@ -281,17 +283,6 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
-                                    <label class="control-label red" for="firstName"><span>Assign Doctor</span></label>
-                                    <div class="controls">
-                                        {{ form_widget(form.assignDoctor) }}
-                                        {{ form_errors(form.assignDoctor) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <div class="control-group">
                                     <label class="control-label red" for="firstName"><span>Department</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.department) }}
@@ -303,12 +294,45 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
-                                    <label class="control-label red" for=""><span>Disease<span class="required">*</span></span></label>
+                                    <label class="control-label red" for="firstName"><span>Assign Doctor</span></label>
                                     <div class="controls">
-                                        {{ form_widget(form.disease) }}
-                                        {{ form_errors(form.disease) }}
+                                        {{ form_widget(form.assignDoctor) }}
+                                        {{ form_errors(form.assignDoctor) }}
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label red" for="firstName"><span>Anesthesia Doctor</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.anesthesiaDoctor) }}
+                                        {{ form_errors(form.anesthesiaDoctor) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label red" for="firstName"><span>Assistant Doctor</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.assistantDoctor) }}
+                                        {{ form_errors(form.assistantDoctor) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label class="control-label red" for=""><span>Disease<span class="required">*</span></span></label>
+                            <div class="controls">
+                                {{ form_widget(form.disease) }}
+                                {{ form_errors(form.disease) }}
                             </div>
                         </div>
                     </div>

@@ -61,6 +61,13 @@ class PathologicalReport
     /**
      * @var string
      *
+     * @ORM\Column(name="parentName", type="string", length=200, nullable=true)
+     */
+    private $parentName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
@@ -265,6 +272,22 @@ class PathologicalReport
     public function setSorting($sorting)
     {
         $this->sorting = $sorting;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParentName()
+    {
+        return $this->parentName;
+    }
+
+    /**
+     * @param string $parentName
+     */
+    public function setParentName($parentName)
+    {
+        $this->parentName = $parentName;
     }
 
 

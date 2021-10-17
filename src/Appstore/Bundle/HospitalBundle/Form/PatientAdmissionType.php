@@ -88,6 +88,34 @@ class PatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('anesthesiaDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'doctor',
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'empty_value' => '--- Choose anesthesia doctor ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.service = 5")
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
+            ->add('assistantDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'doctor',
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'empty_value' => '--- Choose assistant doctor ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.service = 5")
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
         ;
         $builder->add('customer', new CustomerForHospitalAdmissionType( $this->location ));
     }

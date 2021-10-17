@@ -88,6 +88,16 @@ class Invoice
     private  $assignDoctor;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
+     **/
+    private  $anesthesiaDoctor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
+     **/
+    private  $assistantDoctor;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceCabin", cascade={"persist"}  )
      **/
     private  $cabin;
@@ -1468,6 +1478,38 @@ class Invoice
     public function setDoctorComment($doctorComment)
     {
         $this->doctorComment = $doctorComment;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnesthesiaDoctor()
+    {
+        return $this->anesthesiaDoctor;
+    }
+
+    /**
+     * @param mixed $anesthesiaDoctor
+     */
+    public function setAnesthesiaDoctor($anesthesiaDoctor)
+    {
+        $this->anesthesiaDoctor = $anesthesiaDoctor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAssistantDoctor()
+    {
+        return $this->assistantDoctor;
+    }
+
+    /**
+     * @param mixed $assistantDoctor
+     */
+    public function setAssistantDoctor($assistantDoctor)
+    {
+        $this->assistantDoctor = $assistantDoctor;
     }
 
 
