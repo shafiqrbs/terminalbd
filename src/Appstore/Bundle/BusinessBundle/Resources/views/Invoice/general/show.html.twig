@@ -176,7 +176,8 @@
                                 <a class="btn yellow" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'print'}) }}"><i class="icon-print"></i> Print Invoice</a>
                                 <a class="btn black" target="_blank" href="{{ path('business_invoice_print',{'id':entity.id,'print':'chalan'}) }}"><i class="icon-print"></i> Print Chalan</a>
                                 {% if (entity.process == "In-progress" and app.user.granted("ROLE_DOMAIN")) or (  entity.process == "In-progress" and app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
-                                    <a class="btn blue confirm"  data-url="{{ path('business_invoice_distributor_approve',{'id':entity.id}) }}"><i class="icon-refresh"></i> Approve</a>
+                                    <a class="btn purple"  href="{{ path('business_invoice_edit',{'id':entity.id}) }}"><i class="icon-pencil"></i> Edit</a>
+                                    <a class="btn blue confirm"  data-url="{{ path('business_invoice_approved',{'id':entity.id}) }}"><i class="icon-refresh"></i> Approve</a>
                                 {% endif %}
                             </div>
                         </div>
