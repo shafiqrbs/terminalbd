@@ -181,7 +181,6 @@
                                 {% if (entity.process == "In-progress" and app.user.granted("ROLE_DOMAIN")) or (  entity.process == "In-progress" and app.user.granted("ROLE_BUSINESS_MANAGER"))  %}
                                 <a class="btn blue confirm"  data-url="{{ path('business_invoice_distributor_approve',{'id':entity.id}) }}"><i class="icon-refresh"></i> Approve</a>
                                 {% endif %}
-                                <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                             </div>
                         </div>
                     </div>
