@@ -63,7 +63,8 @@
                                             <select name="process" id="process" class="m-wrap span12">
                                                 <option value="" >--Process--</option>
                                                 <option value="Admitted" {% if searchForm.process is defined and searchForm.process == 'Admitted' %} selected="selected" {% endif %} >Admitted</option>
-                                                <option value="Release"  {% if searchForm.process is defined and searchForm.process == 'Release' %} selected="selected" {% endif %} >Release</option>
+                                                <option value="Release"  {% if searchForm.process is defined and searchForm.process == 'Released' %} selected="selected" {% endif %} >Released</option>
+                                                <option value="Release"  {% if searchForm.process is defined and searchForm.process == 'Dead' %} selected="selected" {% endif %} >Death</option>
                                                 <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
                                             </select>
                                         </div>
