@@ -73,7 +73,7 @@
                                         <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="due" name="due"  class="span12 m-wrap select2User" value="{% if searchForm.due is defined %}{{ searchForm.due }}{% endif %}"  autocomplete="off" placeholder="Due amount">
+                                        <input type="text" id="due" name="due"  class="span12 m-wrap" value="{% if searchForm.due is defined %}{{ searchForm.due }}{% endif %}"  autocomplete="off" placeholder="Due amount">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and  searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
