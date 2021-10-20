@@ -47,7 +47,7 @@
             <td class="pull-right">
                 <ul class="unstyled">
                     <li><strong>Admission Date: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
-                    <li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.releaseDate|date('d-m-Y h:m A') }}</strong></li>
+                    <li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.updated|date('d-m-Y h:m A') }}</strong></li>
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>

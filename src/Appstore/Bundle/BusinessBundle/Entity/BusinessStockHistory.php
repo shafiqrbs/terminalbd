@@ -82,6 +82,13 @@ class BusinessStockHistory
      *
      * @ORM\Column(type="float", nullable=true)
      */
+    private $opening = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
     private $quantity = 0;
 
     /**
@@ -458,6 +465,22 @@ class BusinessStockHistory
     public function setClosingQuantity($closingQuantity)
     {
         $this->closingQuantity = $closingQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOpening()
+    {
+        return $this->opening;
+    }
+
+    /**
+     * @param float $opening
+     */
+    public function setOpening($opening)
+    {
+        $this->opening = $opening;
     }
 
 

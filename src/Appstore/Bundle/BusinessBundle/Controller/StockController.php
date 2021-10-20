@@ -110,9 +110,9 @@ class StockController extends Controller
             $data['monthYear'] = $compare->format('Y-m-d');
         }
         $product = "";
-        $openingBalance = [];
+        $openingBalance = array();
         $daily = '';
-
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getProducts($config->getId());
         if(isset($data['name']) and !empty($data['name'])){
             for ($i = 1; $end >= $i ; $i++ ){
                 $no = sprintf("%s", str_pad($i,2, '0', STR_PAD_LEFT));
@@ -120,14 +120,16 @@ class StockController extends Controller
                 $day =  $compare->format("{$no}-m-Y");
                 $data['startDate'] = $start;
                 $openingBalance[$day] = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->openingDailyQuantity($config,$data);
-
             }
             $daily = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->monthlyStockLedger($config,$data);
         }
+       // var_dump($openingBalance);
+       // exit;
         if(empty($data['pdf'])){
             return $this->render('BusinessBundle:Stock:productLedger.html.twig', array(
                 'globalOption'                  => $this->getUser()->getGlobalOption(),
                 'openingBalance'                => $openingBalance,
+                'particulars'                   => $particulars,
                 'entity'                        => $daily,
                 'searchForm'                    => $data,
             ));
@@ -136,6 +138,7 @@ class StockController extends Controller
                 'BusinessBundle:Stock:productLedgerPdf.html.twig', array(
                     'option'                  => $this->getUser()->getGlobalOption(),
                     'openingBalance'                => $openingBalance,
+                    'particulars'                => $particulars,
                     'entity'                        => $daily,
                     'searchForm'                    => $data,
                 )

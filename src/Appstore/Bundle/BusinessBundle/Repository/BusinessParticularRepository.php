@@ -291,7 +291,18 @@ class BusinessParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function getProducts($config){
 
+        $qb = $this->createQueryBuilder('e')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->where('e.businessConfig = :config')->setParameter('config', $config)
+            ->andWhere('e.status=1')
+            ->orderBy('e.name','ASC')
+            ->getQuery()->getArrayResult();
+        return  $qb;
+    }
 
     public function getServiceWithParticular($config,$services){
 
@@ -308,7 +319,7 @@ class BusinessParticularRepository extends EntityRepository
             ->where('e.businessConfig = :config')->setParameter('config', $config)
             ->andWhere('s.slug IN(:slugs)')
             ->setParameter('slugs',array_values($services))
-            ->orderBy('e.service','ASC')
+            ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
     }
@@ -696,19 +707,21 @@ class BusinessParticularRepository extends EntityRepository
         $qb->andWhere('e.id != 1');
         $res = $qb->getQuery();
         $result = $res->getSingleScalarResult();
+        $this->updateOpeningQuantity($data);
         return $result;
 
     }
 
     public function updateOpeningQuantity($data)
     {
-
+        $em = $this->_em;
         $stockUpdate = "UPDATE business_particular SET openingApprove = 1 WHERE  id in ({$data})";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->execute();
+        foreach ($data as $row){
+            $particualr = $this->find($row);
+            $em->getRepository("BusinessBundle:BusinessStockHistory")->processStockQuantity($particualr);
+        }
     }
-
-
-
 
 }

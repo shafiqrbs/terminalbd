@@ -5,6 +5,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessDamage;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceAccessories;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProduction;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionElement;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessProductionExpense;
@@ -56,8 +57,12 @@ class BusinessStockHistoryRepository extends EntityRepository
     public function processStockQuantity($item , $fieldName = ''){
 
         $em = $this->_em;
-
-        $openingQnt = $this->getItemOpeningQuantity($item->getBusinessParticular());
+        $opningQnt = 0;
+        if($fieldName == "opening"){
+            $opningQnt = $this->getItemOpeningQuantity($item);
+        }else{
+            $opningQnt = $this->getItemOpeningQuantity($item->getBusinessParticular());
+        }
 
         /* @var  $entity BusinessParticular */
 
@@ -98,7 +103,7 @@ class BusinessStockHistoryRepository extends EntityRepository
 
         }elseif($fieldName == 'sales-return'){
 
-            /* @var $item BusinessInvoiceReturn */
+            /* @var $item BusinessInvoiceReturnItem */
 
             $entity->setQuantity($item->getQuantity());
             $entity->setSalesQuantity($item->getQuantity());
@@ -115,6 +120,13 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setItem($item->getBusinessParticular());
             $entity->setDamageItem($item);
             $entity->setProcess('sales-return');
+
+        }elseif($fieldName == 'opening') {
+
+            $entity->setQuantity("{$item->getQuantity()}");
+            $entity->setOpening($item->getQuantity());
+            $entity->setItem($item->getBusinessParticular());
+            $entity->setProcess('opening');
 
         }
         if($openingQnt){
@@ -207,15 +219,14 @@ class BusinessStockHistoryRepository extends EntityRepository
         }
     }
 
-    public function processInsertSalesReturnItem(BusinessInvoice $entity){
+    public function processInsertSalesReturnItem(BusinessInvoiceReturn $entity){
 
         $em = $this->_em;
 
-        /** @var $item BusinessInvoiceReturn  */
+        /** @var $item BusinessInvoiceReturnItem  */
 
-        if($entity->getBusinessInvoiceParticulars()){
-
-            foreach($entity->getBusinessInvoiceParticulars() as $item ){
+        if($entity->getInvoiceReturnItems()){
+            foreach($entity->getInvoiceReturnItems() as $item ){
                 $em->createQuery("DELETE BusinessBundle:BusinessStockHistory e WHERE e.salesReturnItem = '{$item->getId()}'")->execute();
                 if($item->getQuantity() > 0){
                     $this->processStockQuantity($item,"sales-return");
@@ -255,12 +266,9 @@ class BusinessStockHistoryRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.quantity) as openingQnt');
         $qb->join("e.item",'i');
-        $qb->where("i.name = :name")->setParameter('name',$item);
+        $qb->where("i.id = :name")->setParameter('name',$item);
         $qb->andWhere("e.created <= :created")->setParameter('created', $tillDate);
         $lastCode = $qb->getQuery()->getOneOrNullResult()['openingQnt'];
-        if (empty($lastCode)) {
-            return '';
-        }
         return $lastCode;
 
     }
@@ -277,7 +285,7 @@ class BusinessStockHistoryRepository extends EntityRepository
         $sql = "SELECT DATE_FORMAT(e.created,'%d-%m-%Y') as date ,COALESCE(SUM(e.purchaseQuantity),0) as purchaseQuantity,COALESCE(SUM(e.purchaseReturnQuantity),0) as purchaseReturnQuantity,COALESCE(SUM(e.salesQuantity),0) as salesQuantity,COALESCE(SUM(e.salesReturnQuantity),0) as salesReturnQuantity,COALESCE(SUM(e.damageQuantity),0) as damageQuantity
                 FROM business_stock_history as e
                 JOIN business_particular ON e.item_id = business_particular.id
-                WHERE e.businessConfig_id = :config AND business_particular.name = :item  AND MONTHNAME(e.created) =:month AND YEAR(e.created) =:year
+                WHERE e.businessConfig_id = :config AND business_particular.id = :item  AND MONTHNAME(e.created) =:month AND YEAR(e.created) =:year
                 GROUP BY date";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
