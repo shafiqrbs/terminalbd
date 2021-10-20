@@ -25,6 +25,32 @@ class ReportController extends Controller
         return $pagination;
     }
 
+    public function patientDownloadAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        var_dump($data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
+        $lists = $entities->getQuery()->getResult();
+        $html = $this->renderView(
+            'HospitalBundle:Report:admission/patient.html.twig', array(
+            'entities' => $lists,
+            'globalOption' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+        $date = date('d-m-Y');
+        $date = "{$date}-patient.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+    }
+
     public function salesSummaryAction()
     {
 

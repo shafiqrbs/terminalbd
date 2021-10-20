@@ -41,17 +41,17 @@
                     {% if entity.customer is not empty %}<li><strong>Patient Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Mobile No:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}{% if entity.customer is not empty %}, {{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}  {% endif %}</li>{% endif %}
-                    {% if entity.customer is not empty and entity.customer.location is not empty %}<li><strong>Location</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
+                    {% if entity.customer is not empty and entity.customer.address is not empty %}<li><strong>Address</strong>&nbsp;{{ entity.customer.address|raw }}</li>{% endif %}
                 </ul>
             </td>
             <td class="pull-right">
                 <ul class="unstyled">
                     <li><strong>Admission Date: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
-                    <li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.updated|date('d-m-Y h:m A') }}</strong></li>
+                    <li><strong>Released Date: </strong>&nbsp;<strong>{{ entity.updated|date('d-m-Y h:m A') }}</strong></li>
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>
-                    {% if entity.referredDoctor is not empty %}<li><strong>Referred By:</strong>&nbsp;{{ entity.referredDoctor.particularCode }}-{{ entity.referredDoctor.name }}</li>{% endif %}
+                    {% if entity.assignDoctor is not empty %}<li><strong>Assign Doctor:</strong>&nbsp;{{ entity.assignDoctor.particularCode }}-{{ entity.assignDoctor.name }}</li>{% endif %}
                 </ul>
             </td>
         </tr>

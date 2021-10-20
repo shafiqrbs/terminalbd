@@ -75,6 +75,38 @@ class InvoiceAdmissionController extends Controller
 
     }
 
+    public function downloadAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
+        $pagination = $this->paginate($entities);
+
+        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
+
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
+        $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
+
+        return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
+            'entities' => $pagination,
+            'salesTransactionOverview' => $salesTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+            'assignDoctors' => $assignDoctors,
+            'referredDoctors' => $referredDoctors,
+            'cabinGroups' => $cabinGroups,
+            'cabins' => $cabins,
+            'option' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+
+    }
+
     /**
      * Displays a form to create a new Particular entity.
      *
@@ -569,11 +601,23 @@ class InvoiceAdmissionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
         $discount = (float)$request->request->get('discount');
+        $remark = $request->request->get('remark');
+        $medicine = $request->request->get('medicine');
+        $advice = $request->request->get('advice');
+        $doctorComment = $request->request->get('doctorComment');
+        $doctorDeadComment = $request->request->get('doctorDeadComment');
+        $caseOfDeath = $request->request->get('caseOfDeath');
+
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
         if ((!empty($entity) and !empty($payment)) or !empty($entity) and !empty($discount)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('Admitted');
+            $entity->setComment($remark);
+            $entity->setMedicine($medicine);
+            $entity->setAdvice($advice);
+            $entity->setDoctorComment($doctorComment);
+            $entity->setCaseOfDeath($caseOfDeath);
             $em->flush();
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
@@ -581,6 +625,15 @@ class InvoiceAdmissionController extends Controller
         } elseif (!empty($entity) and in_array($process , array('Release','Death')) and $entity->getTotal() <= $entity->getPayment() ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
+            $entity->setComment($remark);
+            $entity->setMedicine($medicine);
+            $entity->setAdvice($advice);
+            if($entity->getProcess() == "Death"){
+                $entity->setDoctorComment($doctorDeadComment);
+            }else{
+                $entity->setDoctorComment($doctorComment);
+            }
+            $entity->setCaseOfDeath($caseOfDeath);
             $em->flush();
             $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
             return new Response('success');
@@ -744,7 +797,6 @@ class InvoiceAdmissionController extends Controller
         $barcode = $this->getBarcode($entity->getInvoice());
         $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
 
         foreach ($entity->getInvoiceParticulars() as $item) {
@@ -772,7 +824,7 @@ class InvoiceAdmissionController extends Controller
             'invoiceDetails'        => $invoiceDetails,
             'invoiceBarcode'     => $barcode,
             'patientBarcode'     => $patientId,
-            'iWords'           => $inWords,
+            'inWords'           => $inWords,
         ));
     }
 

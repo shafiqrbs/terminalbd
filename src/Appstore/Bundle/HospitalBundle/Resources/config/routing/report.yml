@@ -2,6 +2,10 @@ hms_report_sales_summary:
     path:     /sales-summary
     defaults: { _controller: "HospitalBundle:Report:salesSummary" }
 
+hms_report_admission_patient_download:
+    path:     /patient-download
+    defaults: { _controller: "HospitalBundle:Report:patientDownload" }
+
 hms_report_sales_summary_pdf:
     path:     /sales-summary-pdf
     defaults: { _controller: "HospitalBundle:Report:salesSummaryPdf" }

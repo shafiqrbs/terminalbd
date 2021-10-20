@@ -318,6 +318,12 @@ $(document).on('click', '#addPayment', function() {
     var payment = $('#payment').val();
     var discount = $('#discount').val();
     var process = $('#process').val();
+    var remark = $('#remark').val();
+    var advice = $('#advice').val();
+    var medicine = $('#medicine').val();
+    var doctorComment = $('#doctorComment').val();
+    var doctorDeadComment = $('#doctorDeadComment').val();
+    var caseOfDeath = $('#caseOfDeath').val();
     var url = $('#addPayment').attr('data-url');
     $('#confirm-content').confirmModal({
         topOffset: 0,
@@ -326,7 +332,7 @@ $(document).on('click', '#addPayment', function() {
             $.ajax({
                 url: url,
                 type: 'POST',
-                data: 'payment=' + payment + '&discount=' + discount + '&process=' + process,
+                data: 'payment=' + payment + '&discount=' + discount + '&process=' + process+ '&remark=' + remark+ '&caseOfDeath=' + caseOfDeath+ '&doctorComment=' + doctorComment+'&doctorDeadComment=' + doctorDeadComment+ '&medicine=' + medicine,
                 success: function (response){
                     location.reload();
                 }

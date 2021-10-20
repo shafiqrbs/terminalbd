@@ -25,12 +25,14 @@ class HmsInvoiceReturnRepository extends EntityRepository
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+
         $referred = isset($data['referred'])? $data['referred'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $created = isset($data['created'])? $data['created'] :'';
         $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
+        $released = isset($data['released'])? $data['released'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $service = isset($data['service'])? $data['service'] :'';
         $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
@@ -55,6 +57,8 @@ class HmsInvoiceReturnRepository extends EntityRepository
             $qb->setParameter('created', $created.'%');
         }
 
+
+
         if (!empty($deliveryDate)) {
             $compareTo = new \DateTime($deliveryDate);
             $created =  $compareTo->format('Y-m-d');
@@ -70,6 +74,7 @@ class HmsInvoiceReturnRepository extends EntityRepository
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
         }
+
 
         if(!empty($referred)){
             $qb->andWhere("e.referredDoctor = :referredDoctor");

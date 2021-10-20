@@ -29,6 +29,7 @@ class InvoiceRepository extends EntityRepository
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $anesthesia = isset($data['anesthesia'])? $data['anesthesia'] :'';
         $referred = isset($data['referred'])? $data['referred'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
@@ -36,6 +37,7 @@ class InvoiceRepository extends EntityRepository
         $created = isset($data['created'])? $data['created'] :'';
         $posted = isset($data['posted'])? $data['posted'] :'';
         $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
+        $released = isset($data['released'])? $data['released'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $service = isset($data['service'])? $data['service'] :'';
         $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
@@ -84,10 +86,21 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
         }
+        if(!empty($anesthesia)){
+            $qb->andWhere("e.anesthesiaDoctor = :anesthesia");
+            $qb->setParameter('anesthesia', $anesthesia);
+        }
 
         if(!empty($referred)){
             $qb->andWhere("e.referredDoctor = :referredDoctor");
             $qb->setParameter('referredDoctor', $referred);
+        }
+
+        if (!empty($released)) {
+            $compareTo = new \DateTime($released);
+            $created =  $compareTo->format('Y-m-d');
+            $qb->andWhere("e.updated LIKE :created");
+            $qb->setParameter('created', $created.'%');
         }
 
         if(!empty($process)){
