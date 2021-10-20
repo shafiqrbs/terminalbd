@@ -38,6 +38,7 @@ class MedicineSalesRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
+
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $salesBy = isset($data['salesBy'])? $data['salesBy'] :'';
@@ -51,12 +52,17 @@ class MedicineSalesRepository extends EntityRepository
         $createdStart = isset($data['startDate'])? $data['startDate'] :'';
 	    $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 	    $amount = isset($data['amount'])? $data['amount'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $due = isset($data['due'])? $data['due'] :'';
 	    if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
             $qb->join('s.customer','c');
             $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
+        }
+        if (!empty($due)) {
+            $qb->andWhere("s.due >= :due")->setParameter('due', $due);
         }
         if (!empty($process)) {
             $qb->andWhere($qb->expr()->like("s.process", "'$process%'"  ));
@@ -556,20 +562,18 @@ class MedicineSalesRepository extends EntityRepository
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
-        $qb->leftJoin('s.salesBy', 'u');
+        $qb->leftJoin('s.customer', 'c');
         $qb->leftJoin('s.transactionMethod', 't');
-        $qb->select('u.username as salesBy');
         $qb->addSelect('t.name as transactionMethod');
         $qb->addSelect('s.id as id');
         $qb->addSelect('s.created as created');
-        $qb->addSelect('s.process as process');
         $qb->addSelect('s.invoice as invoice');
         $qb->addSelect('(s.due) as due');
         $qb->addSelect('(s.subTotal) as subTotal');
         $qb->addSelect('(s.netTotal) as total');
         $qb->addSelect('(s.received) as payment');
         $qb->addSelect('(s.discount) as discount');
-        $qb->addSelect('(s.vat) as vat');
+        $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->where('s.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('s.process = :process');

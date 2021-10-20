@@ -624,7 +624,6 @@ class MedicineStockController extends Controller
 
 	    /* @var $item MedicineStock */
 	    foreach ($entities as $item){
-
 		    $percentage = floatval(12.50);
 		    $purchasePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
 		    $item->setPurchasePrice($purchasePrice);

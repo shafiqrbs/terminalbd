@@ -66,8 +66,9 @@
                                         <tr class="head-blue">
                                             <td class="">&nbsp;&nbsp;<i class="icon-list"></i></td>
                                             <th class="">Code</th>
-                                            <th class="">Particular</th>
+                                            <th class="">Item Name</th>
                                             <th class="">Quantity</th>
+                                            <th class="">Bonus QTY</th>
                                             <th class="">Price</th>
                                             <th class="">Sub-Total</th>
                                             <th class="">Item Process</th>
@@ -83,6 +84,7 @@
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
                                                 <td class="span4">{{ item.particular.name }}</td>
                                                 <td class="span2">{{ item.quantity }}</td>
+                                                <td class="span2">{{ item.bonusQuantity }}</td>
                                                 <td class="span2">{{ item.price }}</td>
                                                 <td class="span1" id="subTotal-{{  item.id }}" >{{ item.subTotal|number_format }}</td>
                                                 <td class="span1">{{ item.itemProcess }}</td>
@@ -90,8 +92,8 @@
                                         {% endfor %}
                                         </tbody>
                                         <tfoot>
-                                        <tr><th colspan="5">SubTotal</th><td>{{ entity.subTotal|number_format(2) }}</td><td></td></tr>
-                                        <tr><th colspan="5">Payment & Adjustment</th><td>{{ entity.payment|number_format(2) }}</td><td>{{ entity.adjustment|number_format(2) }}</td></tr>
+                                        <tr><th colspan="6">SubTotal</th><td>{{ entity.subTotal|number_format(2) }}</td><td></td></tr>
+                                        <tr><th colspan="6">Adjustment & Payment</th><td>{{ entity.adjustment|number_format(2) }}</td><td>{{ entity.payment|number_format(2) }}</td></tr>
                                         </tfoot>
                                     </table>
                                 {% endif %}

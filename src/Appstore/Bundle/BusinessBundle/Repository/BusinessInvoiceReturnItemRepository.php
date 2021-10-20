@@ -85,7 +85,7 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $configId = $config->getId();
         $vendorId = $vendor->getId();
         $qb = $this->createQueryBuilder('pi');
-        $qb->select('p.id as itemId','SUM(pi.quantity) as quantity');
+        $qb->select('p.id as itemId','SUM(pi.quantity) as quantity','SUM(pi.bonusQuantity) as bonusQuantity');
         $qb->join('pi.invoiceReturn','e');
         $qb->join('pi.particular','p');
         $qb->where('e.businessConfig = :config')->setParameter('config', $configId) ;
@@ -105,10 +105,12 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $store->setStatus(1);
         $em->flush();
         $mode  = strtolower($store->getItemProcess());
-        $arrs = array("purchase-return",'stock-return');
-        if(in_array($mode,array("purchase-return",'stock-return'))){
+        if($mode == 'stock-return'){
+            $arrs = array("damage-return",'stock-return');
             $qty = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
             $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$qty);
+        }elseif($mode == "damage-return"){
+            $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->insertDamageReturnItem($store);
         }elseif($mode == "damage"){
             $em->getRepository("BusinessBundle:BusinessDamage")->insertSalesReturn($store);
         }
@@ -118,13 +120,12 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.invoiceReturn','ir');
-        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.bonusQuantity) AS bonus');
         $qb->where('e.particular = :particular')->setParameter('particular', $particular->getId());
         $qb->andWhere('e.itemProcess IN (:modes)')->setParameter('modes', $modes);
         $qb->andWhere('ir.process = :approve')->setParameter('approve', 'Approved');
         $qnt = $qb->getQuery()->getOneOrNullResult();
-        $qty = ($qnt['quantity'] == 'NULL') ? 0 : $qnt['quantity'];
-        return $qty;
+        return $qnt;
 
     }
 
@@ -134,12 +135,14 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
 
         $itemIds = $data['itemId'];
         $quantity= $data['quantity'];
+        $bonusQuantity = $data['bonusQuantity'];
         $price = $data['price'];
         $itemProcess = $data['itemProcess'];
         foreach ($itemIds as $key  => $itemId):
             $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'particular'=>$itemId));
             if($exist){
                 $exist->setQuantity($quantity[$key]);
+                $exist->setBonusQuantity($bonusQuantity[$key]);
                 $exist->setPrice($price[$key]);
                 $exist->setItemProcess($itemProcess[$key]);
                 $exist->setSubTotal($price[$key] * $quantity[$key]);
@@ -152,6 +155,7 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
                 $item->setInvoiceReturn($entity);
                 $item->setParticular($product);
                 $item->setQuantity($quantity[$key]);
+                $item->setBonusQuantity($bonusQuantity[$key]);
                 $item->setPrice($price[$key]);
                 $item->setItemProcess($itemProcess[$key]);
                 $item->setSubTotal($price[$key] * $quantity[$key]);

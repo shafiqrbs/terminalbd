@@ -37,10 +37,17 @@ class BusinessDistributionReturnItem
     private  $businessParticular;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceReturnItems" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $invoice;
+    private  $invoiceReturnItem;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $invoiceItem;
+
 
     /**
      * @var int
@@ -361,6 +368,38 @@ class BusinessDistributionReturnItem
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceReturnItem()
+    {
+        return $this->invoiceReturnItem;
+    }
+
+    /**
+     * @param mixed $invoiceReturnItem
+     */
+    public function setInvoiceReturnItem($invoiceReturnItem)
+    {
+        $this->invoiceReturnItem = $invoiceReturnItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceItem()
+    {
+        return $this->invoiceItem;
+    }
+
+    /**
+     * @param mixed $invoiceItem
+     */
+    public function setInvoiceItem($invoiceItem)
+    {
+        $this->invoiceItem = $invoiceItem;
     }
 
 

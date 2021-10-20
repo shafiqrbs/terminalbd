@@ -246,6 +246,14 @@ class BusinessParticular
     /**
      * @var integer
      *
+     * @ORM\Column(name="returnBonusQuantity", type="integer", nullable=true)
+     */
+    private $returnBonusQuantity = 0;
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="bonusPurchaseQuantity", type="integer", nullable=true)
      */
     private $bonusPurchaseQuantity = 0;
@@ -1195,6 +1203,22 @@ class BusinessParticular
     public function setBrand($brand)
     {
         $this->brand = $brand;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReturnBonusQuantity()
+    {
+        return $this->returnBonusQuantity;
+    }
+
+    /**
+     * @param int $returnBonusQuantity
+     */
+    public function setReturnBonusQuantity($returnBonusQuantity)
+    {
+        $this->returnBonusQuantity = $returnBonusQuantity;
     }
 
 }

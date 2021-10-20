@@ -491,8 +491,11 @@ class BusinessParticularRepository extends EntityRepository
 
     public function updateSalesReturnQuantity(BusinessParticular $particular,$quantity){
 
+        $quantity = $qty['quantity'];
+        $bonus = $qty['bonus'];
         $em = $this->_em;
         $particular->setSalesReturnQuantity($quantity);
+        $particular->setReturnBonusQuantity($bonus);
         $em->persist($particular);
         $em->flush();
         $this->remainingQnt($particular);
@@ -505,7 +508,7 @@ class BusinessParticularRepository extends EntityRepository
        // $em->getRepository('BusinessBundle:BusinessPurchaseItem')->getCurrentStock($stock);
         $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
-        $stock->setBonusQuantity($stock->getBonusPurchaseQuantity() - $stock->getBonusSalesQuantity());
+        $stock->setBonusQuantity(($stock->getBonusPurchaseQuantity() + $stock->getReturnBonusQuantity()) - $stock->getBonusSalesQuantity());
         $em->persist($stock);
         $em->flush();
     }

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
@@ -93,6 +94,25 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
             }
 
         endforeach;
+    }
+
+    public function insertDamageReturnItem(BusinessInvoiceReturnItem $entity)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->findOneBy(array('invoiceReturnItem' => $entity));
+        if(empty($exist)){
+            $item = new BusinessDistributionReturnItem();
+            $item->setBusinessConfig($entity->getParticular()->getBusinessConfig());
+            $item->setInvoiceReturnItem($entity);
+            $item->setBusinessParticular($entity->getParticular());
+            $item->setQuantity($entity->getQuantity());
+            $item->setDamageQnt($entity->getQuantity());
+            $item->setPurchasePrice($entity->getParticular()->getPurchasePrice());
+            $item->setSubTotal($entity->getQuantity() * $entity->getParticular()->getPurchasePrice());
+            $em->persist($item);
+            $em->flush();
+        }
+
     }
 
     public function deletePurchaseReturnItem(BusinessInvoiceParticular $invoiceParticular)

@@ -50,9 +50,13 @@
                                         <th class="numeric" >Product Name </th>
                                         <th class="numeric" >Price</th>
                                         <th class="numeric" >QTY</th>
+                                        <th class="numeric" >Bonus QTY</th>
+                                        <th class="numeric" >Total QTY</th>
                                         <th class="numeric" >Return QTY</th>
+                                        <th class="numeric" >Return Bonus QTY</th>
                                         <th class="numeric" >Remain QTY</th>
-                                        <th class="numeric" >Process QTY</th>
+                                        <th class="numeric" >Clim QTY</th>
+                                        <th class="numeric" >Clim Bonus QTY</th>
                                         <th class="numeric" >Return price</th>
                                         <th class="numeric" >SubTotal</th>
                                         <th class="numeric" >Mode</th>
@@ -68,21 +72,27 @@
                                             </th>
                                             <td class="numeric" > {{ particular.salesPrice }}</td>
                                             <td class="numeric" > {{ particular.quantity }}</td>
+                                            <td class="numeric" > {{ particular.bonusQuantity }}</td>
+                                            <td class="numeric" > {{ particular.quantity+particular.bonusQuantity }}</td>
                                             <td class="numeric" > {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %} {{ returnItems[particular.itemId].quantity }}{% endif %}</td>
+                                            <td class="numeric" > {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %} {{ returnItems[particular.itemId].bonusQuantity }}{% endif %}</td>
                                             <td class="numeric" >
                                                 {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %}
                                                     {% set remain  = particular.quantity - returnItems[particular.itemId].quantity %}
+                                                    {% set remainBonus  = particular.bonusQuantity - returnItems[particular.itemId].bonusQuantity %}
                                                 {% else %}
                                                     {% set remain  = particular.quantity %}
+                                                    {% set remainBonus  = particular.quantity %}
                                                 {% endif %}
                                                 {{ remain }}
                                             </td>
-                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" data-content="{{ remain }}" type="text" name="quantity[]" data-id="{{ particular.itemId }}"  id="quantity-{{  particular.itemId }}" value="" placeholder="Input quantity"></td>
-                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" type="text" name="price[]" data-id="{{ particular.itemId }}"  id="price-{{  particular.itemId }}" value="{{ particular.salesPrice }}" placeholder="Input price"></td>
+                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" data-content="{{ remain }}" type="text" name="quantity[]" data-id="{{ particular.itemId }}"  id="quantity-{{  particular.itemId }}" value="" placeholder="Return quantity"></td>
+                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" data-value="{{ remainBonus }}" type="text" name="bonusQuantity[]" data-id="{{ particular.itemId }}"  id="bonusQuantity-{{  particular.itemId }}" value="" placeholder="Bouns quantity"></td>
+                                            <td class="numeric" ><input class="m-wrap span12 form-control input-number" type="text" name="price[]" data-id="{{ particular.itemId }}"  id="price-{{  particular.itemId }}" value="{{ particular.salesPrice }}" placeholder="{{ particular.salesPrice }}"></td>
                                             <td class="numeric" id="subTotal-{{  particular.itemId }}" ></td>
                                             <td class="numeric">
                                                 <select class="span12 m-wrap input" name="itemProcess[]" id="itemProcess">
-                                                    {% set itemProcesses = ['Stock-Return','Purchase-Return','Damage'] %}
+                                                    {% set itemProcesses = ['Stock-Return','Damage-Return','Damage'] %}
                                                     {% for itemProcess in itemProcesses %}
                                                         <option value="{{ itemProcess }}">{{ itemProcess }}</option>
                                                     {% endfor %}
@@ -92,19 +102,21 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    <tr><th colspan="7" class="text-right"><span class="text-right">Total </span></th><th id="total"></th>
+                                    <tr><th colspan="11" class="text-right"><span class="text-right">Total </span></th><th id="total">{{ entity.subTotal|number_format(2) }}</th>
                                         <td></td>
                                     </tr>
-                                    <tr><th colspan="7" ><span class="text-right">Previous Due</span></th><th>{{ balance|number_format(2) }}</th>
+                                    <tr><th colspan="11" ><span class="text-right">Previous Due</span></th><th>{{ balance|number_format(2) }}</th>
                                     <td></td>
                                     </tr>
-                                    <tr><th colspan="7" class="text-right"><span class="text-right">Process Amount</span></th>
-                                    <th>
-                                        <input class="m-wrap span12 form-control input-number" type="text" name="payment" id="payment" value="0" placeholder="Payment">
-                                    </th>
-                                    <td>
-                                        <input class="m-wrap span12 form-control input-number" type="text" name="adjustment" id="adjustment" value="0" placeholder="Adjustment">
-                                    </td>
+                                    <tr>
+                                    <th colspan="11" class="text-right"><span class="text-right">Adjustment BDT</span></th>
+                                    <td><input class="m-wrap span12 form-control input-number" type="text" name="adjustment" id="adjustment" value="0" placeholder="Adjustment"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                    <th colspan="11" class="text-right"><span class="text-right">Return BDT</span></th>
+                                    <td><input class="m-wrap span12 form-control input-number" type="text" name="payment" id="payment" value="0" placeholder="Payment"></td>
+                                        <td></td>
                                     </tr>
                                     </tfoot>
                                 </table>

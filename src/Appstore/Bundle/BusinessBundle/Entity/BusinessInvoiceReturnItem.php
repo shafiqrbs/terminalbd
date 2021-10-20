@@ -53,6 +53,13 @@ class BusinessInvoiceReturnItem
      */
     private $quantity;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="bonusQuantity", type="float")
+     */
+    private $bonusQuantity;
+
 
 
     /**
@@ -226,6 +233,22 @@ class BusinessInvoiceReturnItem
     public function setInvoiceReturn($invoiceReturn)
     {
         $this->invoiceReturn = $invoiceReturn;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBonusQuantity()
+    {
+        return $this->bonusQuantity;
+    }
+
+    /**
+     * @param float $bonusQuantity
+     */
+    public function setBonusQuantity($bonusQuantity)
+    {
+        $this->bonusQuantity = $bonusQuantity;
     }
 
 

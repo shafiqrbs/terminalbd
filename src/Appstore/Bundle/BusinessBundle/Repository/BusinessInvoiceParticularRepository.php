@@ -886,7 +886,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $configId = $config->getId();
         $vendorId = $vendor->getId();
         $qb = $this->createQueryBuilder('pi');
-        $qb->select('p.name as itemName','p.id as itemId','p.salesPrice as salesPrice','SUM(pi.totalQuantity) as quantity');
+        $qb->select('p.name as itemName','p.id as itemId','p.salesPrice as salesPrice','SUM(pi.totalQuantity) as quantity','SUM(pi.bonusQnt) as bonusQuantity');
         $qb->join('pi.businessInvoice','e');
         $qb->join('pi.businessParticular','p');
         $qb->where('p.businessConfig = :config')->setParameter('config', $configId) ;

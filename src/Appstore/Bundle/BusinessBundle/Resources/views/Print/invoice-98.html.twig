@@ -112,10 +112,12 @@
                                 <td>{{ item.price|number_format() }}</td>
                                 <td ><strong class="pull-right" >{{ item.subTotal|number_format() }}</strong></td>
                             </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td colspan="7">{{ item.description }}</td>
-                        </tr>
+                            {% if item.description %}
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td colspan="7">{{ item.description }}</td>
+                            </tr>
+                            {% endif %}
                         {% endfor %}
                         {% if entity.comment is not empty %}
                         <tr> <td colspan="8" style="border-top:1px solid #999999; text-align: left!important; background: #FFFFFF!important;border-bottom: 1px solid #000000"><strong>PC No. </strong> : {{ entity.comment|raw }}</td></tr>

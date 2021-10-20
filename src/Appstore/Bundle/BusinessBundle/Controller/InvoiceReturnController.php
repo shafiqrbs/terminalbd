@@ -223,7 +223,7 @@ class InvoiceReturnController extends Controller
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->approveSalesReturnItem($row);
             }
         }
-        return $this->redirect($this->generateUrl('business_invoice_return'));
+        return new Response('success');
 
     }
 

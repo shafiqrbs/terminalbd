@@ -10,12 +10,19 @@ $(document).on("keyup", ".input-number", function() {
     var dataId = $(this).attr("data-id");
     var price = $('#price-'+dataId).val();
     var remainingQnt = parseInt($(this).attr("data-content"));
-    var quantity = parseInt($(this).val());
+    var quantity = parseInt($('#quantity-'+dataId).val());
     if(quantity > remainingQnt ){
         alert('Return quantity must be remaining quantity equal or less');
         $(this).val(0);
         $("#subTotal-"+dataId).html(0);
         $("#sub-"+dataId).val(0);
+        return false;
+    }
+    var bonusRemainingQnt = parseInt($(this).attr("data-value"));
+    var bonusQty = parseInt($(this).val());
+    if(bonusQty > bonusRemainingQnt ){
+        alert('Return bonus quantity must be bonus remaining quantity equal or less');
+        $(this).val(0);
         return false;
     }
     var amount = (price * quantity);

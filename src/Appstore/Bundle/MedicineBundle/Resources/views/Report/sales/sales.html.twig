@@ -73,16 +73,8 @@
                                         <input type="text" id="toUser" name="toUser"  class="span12 m-wrap select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Enter sales user">
                                     </div>
                                     <div class="span3">
-                                        <select name="process" id="process" class="span12 m-wrap">
-                                            <option value=""> ---Process--- </option>
-                                            <option value="Pending" {% if searchForm.process is defined and searchForm.process == 'Pending' %} selected="selected" {% endif %} >Pending</option>
-                                            <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
-                                            <option value="Courier" {% if searchForm.process is defined and searchForm.process == 'Courier' %} selected="selected" {% endif %}>Courier</option>
-                                            <option value="Done" {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %}>Done</option>
-                                            <option value="Returned" {% if searchForm.process is defined and searchForm.process == 'Returned' %} selected="selected" {% endif %}>Returned</option>
-                                        </select>
+                                        <input type="text" id="due" name="due"  class="span12 m-wrap select2User" value="{% if searchForm.due is defined %}{{ searchForm.due }}{% endif %}"  autocomplete="off" placeholder="Due amount">
                                     </div>
-
                                     <div class="span3">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined and  searchForm.startDate is not empty %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                     </div>
@@ -125,12 +117,11 @@
                             <tr class="head-blue">
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
-                                <th class="numeric" >SalesBy</th>
-                                <th class="numeric" >Transaction</th>
-                                <th class="numeric" >Process</th>
+                                <th class="numeric" >Customer</th>
+                                <th class="numeric" >Mobile</th>
+                                <th class="numeric" >Method</th>
                                 <th class="numeric" >Sub-Total</th>
                                 <th class="numeric" >Discount</th>
-                                <th class="numeric" >Vat</th>
                                 <th class="numeric" >Net Total</th>
                                 <th class="numeric" >Payment</th>
                                 <th class="numeric" >Due</th>
@@ -144,18 +135,17 @@
                                 <tr id="salesRemove-{{ entity.id }}">
                                     <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ entity.invoice }}</td>
-                                    <td class="numeric" >{{ entity.salesBy }}</td>
+                                    <td class="numeric" >{% if entity.name != "Default" %}{{ entity.name }}{% endif %}</td>
+                                    <td class="numeric" >{% if entity.name != "Default" %}{{ entity.mobile }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.transactionMethod }}</td>
-                                    <td class="numeric" >{{ entity.process }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                     <td class="numeric" >{{ entity.discount|number_format  }}</td>
-                                    <td class="numeric" >{{ entity.vat|number_format  }}</td>
                                     <th class="numeric" >{{ entity.total|number_format  }}</th>
                                     <th class="numeric" >{{ entity.payment|number_format }}</th>
                                     <td class="numeric" >{{ entity.due|number_format }}</td>
-                                    <td class="numeric" >{{ purchasePrice[entity.id]|number_format }}</td>
-                                    <th class="numeric" >{{ (entity.total - purchasePrice[entity.id])|number_format }}</th>
-                                    <td class="numeric" >{{ (((entity.total|default(0) - purchasePrice[entity.id]|default(0))*100)/entity.total|default(0))|number_format }}%</td>
+                                    <td class="numeric" >{% if purchasePrice[entity.id] is defined and purchasePrice[entity.id] is not empty %}{{ purchasePrice[entity.id]|number_format }}{% endif %}</td>
+                                    <th class="numeric" >{% if purchasePrice[entity.id] is defined and purchasePrice[entity.id] is not empty %}{{ (entity.total - purchasePrice[entity.id])|number_format }}{% endif %}</th>
+                                    <td class="numeric" >{% if purchasePrice[entity.id] is defined and purchasePrice[entity.id] is not empty %}{{ (((entity.total|default(0) - purchasePrice[entity.id]|default(0))*100)/entity.total|default(0))|number_format }}%{% endif %}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
