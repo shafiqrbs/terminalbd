@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\BusinessBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
@@ -70,5 +72,32 @@ class BusinessInvoiceReturnRepository extends EntityRepository
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function checkInvoiceReturnCreate(BusinessInvoice $invoice)
+    {
+        $em = $this->_em;
+        $exist = $this->findOneBy(array('businessConfig'=>$invoice->getBusinessConfig(),'businessInvoice' => $invoice));
+        if(empty($exist)){
+            $entity = new BusinessInvoiceReturn();
+            $entity->setBusinessConfig($invoice->getBusinessConfig());
+            $entity->setBusinessInvoice($invoice);
+            $entity->setCustomer($invoice->getCustomer());
+            $time = time();
+            $timebd = (string)($time);
+            $entity->setInvoice($timebd);
+            $entity->setAdjustment(0);
+            $entity->setPayment(0);
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }else{
+            $exist->setCustomer($invoice->getCustomer());
+            $exist->setAdjustment(0);
+            $exist->setPayment(0);
+            $em->persist($exist);
+            $em->flush();
+            return $exist;
+        }
     }
 }

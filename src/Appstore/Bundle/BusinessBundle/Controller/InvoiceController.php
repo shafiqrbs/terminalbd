@@ -522,6 +522,11 @@ class InvoiceController extends Controller
 		$this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->accountBusinessSalesReverse($sales);
 		$this->getDoctrine()->getRepository('BusinessBundle:BusinessStoreLedger')->storeInvoiceReverse($sales);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($sales);
+        if($sales->getInvoiceReturn()){
+            foreach ($sales->getInvoiceReturnItems() as $row){
+                $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceReturn')->removeSalesReturnItem($row);
+            }
+        }
         $sales->setIsReversed(true);
 		$sales->setProcess('Created');
 		$sales->setApprovedBy(NULL);
@@ -936,11 +941,15 @@ class InvoiceController extends Controller
                     }
                 }
             }
-            if($entity->getInvoiceReturnItems()){
+            if($entity->getInvoiceReturn() and $entity->getSalesReturn() > 0){
                 /* @var $row BusinessInvoiceReturnItem */
                 foreach ($entity->getInvoiceReturnItems() as $row){
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->approveSalesReturnItem($row);
                 }
+                $invoiceReturn = $entity->getInvoiceReturn();
+                $invoiceReturn->setAdjustment($entity->getSalesReturn());
+                $invoiceReturn->setProcess('Approved');
+                $em->flush();
             }
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess("Done");

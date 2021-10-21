@@ -107,10 +107,27 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $mode  = strtolower($store->getItemProcess());
         if($mode == 'stock-return'){
             $arrs = array("damage-return",'stock-return');
-            $qty = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
-            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$qty);
+            $returnQuantity = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
+            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$returnQuantity);
         }elseif($mode == "damage-return"){
-            $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->insertDamageReturnItem($store);
+            $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->insertSalesDamageReturnItem($store);
+        }elseif($mode == "damage"){
+            $em->getRepository("BusinessBundle:BusinessDamage")->insertSalesReturn($store);
+        }
+    }
+
+    public function removeSalesReturnItem(BusinessInvoiceReturnItem $store)
+    {
+        $em = $this->_em;
+        $store->setStatus(0);
+        $em->flush();
+        $mode  = strtolower($store->getItemProcess());
+        if($mode == 'stock-return'){
+            $arrs = array("damage-return",'stock-return');
+            $returnQuantity = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
+            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$returnQuantity);
+        }elseif($mode == "damage-return"){
+            $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->deleteSalesDamageReturnItem($store);
         }elseif($mode == "damage"){
             $em->getRepository("BusinessBundle:BusinessDamage")->insertSalesReturn($store);
         }

@@ -50,6 +50,11 @@ class BusinessInvoice
      **/
     private $businessReverse;
 
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn", mappedBy="businessInvoice")
+     **/
+    private $invoiceReturn;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular", mappedBy="businessInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
@@ -1161,6 +1166,14 @@ class BusinessInvoice
     public function setSrCommission($srCommission)
     {
         $this->srCommission = $srCommission;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceReturn()
+    {
+        return $this->invoiceReturn;
     }
 
 

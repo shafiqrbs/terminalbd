@@ -489,10 +489,10 @@ class BusinessParticularRepository extends EntityRepository
 
 	}
 
-    public function updateSalesReturnQuantity(BusinessParticular $particular,$quantity){
+    public function updateSalesReturnQuantity(BusinessParticular $particular,$returnQuantity){
 
-        $quantity = $qty['quantity'];
-        $bonus = $qty['bonus'];
+        $quantity = $returnQuantity['quantity'];
+        $bonus = $returnQuantity['bonus'];
         $em = $this->_em;
         $particular->setSalesReturnQuantity($quantity);
         $particular->setReturnBonusQuantity($bonus);

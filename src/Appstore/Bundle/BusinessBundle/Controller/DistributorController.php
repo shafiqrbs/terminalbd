@@ -191,16 +191,21 @@ class DistributorController extends Controller
         $quantity = $data['quantity'];
         $amount = $data['salesPrice'];
         $itemProcess = $data['itemProcess'];
+        $invoiceReturn = $em->getRepository("BusinessBundle:BusinessInvoiceReturn")->checkInvoiceReturnCreate($invoice);
         $item = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->find($itemId);
-        $entity = new BusinessInvoiceReturnItem();
-        $entity->setInvoice($invoice);
-        $entity->setParticular($item);
-        $entity->setQuantity($quantity);
-        $entity->setItemProcess($itemProcess);
-        $entity->setPrice($amount/$quantity);
-        $entity->setSubTotal($amount);
-        $em->persist($entity);
-        $em->flush();
+        $existItem = $em->getRepository("BusinessBundle:BusinessInvoiceParticular")->getProductCount($invoice->getCustomer()->getId(),$itemId);
+        if($existItem > 0 and $existItem >= $quantity ){
+            $entity = new BusinessInvoiceReturnItem();
+            $entity->setInvoice($invoice);
+            $entity->setInvoiceReturn($invoiceReturn);
+            $entity->setParticular($item);
+            $entity->setQuantity($quantity);
+            $entity->setItemProcess($itemProcess);
+            $entity->setPrice($amount/$quantity);
+            $entity->setSubTotal($amount);
+            $em->persist($entity);
+            $em->flush();
+        }
         $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->updateInvoiceDistributionTotalPrice($invoice);
         $res = $this->returnResultData($invoice);
         return new Response(json_encode($res));

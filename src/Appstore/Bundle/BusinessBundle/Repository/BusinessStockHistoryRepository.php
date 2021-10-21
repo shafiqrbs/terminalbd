@@ -57,11 +57,11 @@ class BusinessStockHistoryRepository extends EntityRepository
     public function processStockQuantity($item , $fieldName = ''){
 
         $em = $this->_em;
-        $opningQnt = 0;
+        $openingQnt = 0;
         if($fieldName == "opening"){
-            $opningQnt = $this->getItemOpeningQuantity($item);
+            $openingQnt = $this->getItemOpeningQuantity($item);
         }else{
-            $opningQnt = $this->getItemOpeningQuantity($item->getBusinessParticular());
+            $openingQnt = $this->getItemOpeningQuantity($item->getBusinessParticular());
         }
 
         /* @var  $entity BusinessParticular */

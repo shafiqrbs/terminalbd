@@ -897,13 +897,26 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         return  $result;
     }
 
+    public function getProductCount($vendor,$item)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->select('SUM(pi.totalQuantity) as quantity');
+        $qb->join('pi.businessInvoice','e');
+        $qb->join('pi.businessParticular','p');
+        $qb->where('e.customer = :vendorId')->setParameter('vendorId', $vendor) ;
+        $qb->andWhere('p.id = :pId')->setParameter('pId', $item) ;
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result['quantity'];
+    }
+
 
 
     public function getCurrentStock($stock)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.businessInvoice', 'mp');
-        $qb->select('SUM(e.totalQuantity) AS quantity');
+        $qb->select('SUM(e.totalQuantity) AS quantity','SUM(pi.bonusQnt) as bonusQuantity');
         $qb->where('e.businessParticular = :particular')->setParameter('particular', $stock);
         $qb->andWhere('e.process IN (:process)');
         $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));

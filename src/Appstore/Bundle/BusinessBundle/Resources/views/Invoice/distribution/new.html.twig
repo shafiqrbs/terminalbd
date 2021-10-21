@@ -310,7 +310,7 @@
                                                                 </div>
                                                                 <div class="span2">
                                                                     <select class="span12 m-wrap input" name="itemProcess" id="itemProcess">
-                                                                        {% set itemProcesses = ['Stock-Return','Purchase-Return','Damage'] %}
+                                                                        {% set itemProcesses = ['Stock-Return','Damage-Return','Damage'] %}
                                                                         {% for itemProcesse in itemProcesses %}
                                                                             <option value="{{ itemProcesse }}">{{ itemProcesse }}</option>
                                                                         {% endfor %}
@@ -344,6 +344,7 @@
                                                         <th>Price</th>
                                                         <th>Quantity</th>
                                                         <th>SubTotal</th>
+                                                        <th>Mode</th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -361,6 +362,7 @@
                                                                 <td class="">{{ item.price }}</td>
                                                                 <td class="">{{ item.quantity }}</td>
                                                                 <td class="salesReturnSubTotal-{{ item.id }}">{{ (item.quantity * item.price) }}</td>
+                                                                <td>{{ item.itemProcess }}</td>
                                                                 <td>
                                                                     {% if item.status != 1 %}
                                                                     <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('business_invoice_distribution_return_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini returnItemDelete" ><i class="icon-trash"></i></a>
@@ -374,6 +376,7 @@
                                                         <tr>
                                                             <td colspan="5" class=""><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                                             <td class=""><strong>{{ entity.salesReturn|number_format(2) }}</strong></td>
+                                                            <td class=""></td>
                                                             <td class=""></td>
                                                         </tr>
                                                     {% endif %}

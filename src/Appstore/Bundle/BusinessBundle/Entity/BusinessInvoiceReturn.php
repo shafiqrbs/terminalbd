@@ -28,8 +28,15 @@ class BusinessInvoiceReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessPurchasesReturns" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessConfig;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceReturn")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $businessInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem", mappedBy="invoiceReturn" , cascade={"remove"})
@@ -335,6 +342,22 @@ class BusinessInvoiceReturn
     public function setPayment($payment)
     {
         $this->payment = $payment;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessInvoice()
+    {
+        return $this->businessInvoice;
+    }
+
+    /**
+     * @param mixed $businessInvoice
+     */
+    public function setBusinessInvoice($businessInvoice)
+    {
+        $this->businessInvoice = $businessInvoice;
     }
 
 

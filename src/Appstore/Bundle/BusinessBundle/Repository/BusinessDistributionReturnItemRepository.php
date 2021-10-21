@@ -96,7 +96,7 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
         endforeach;
     }
 
-    public function insertDamageReturnItem(BusinessInvoiceReturnItem $entity)
+    public function insertSalesDamageReturnItem(BusinessInvoiceReturnItem $entity)
     {
         $em = $this->_em;
         $exist = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->findOneBy(array('invoiceReturnItem' => $entity));
@@ -110,6 +110,17 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
             $item->setPurchasePrice($entity->getParticular()->getPurchasePrice());
             $item->setSubTotal($entity->getQuantity() * $entity->getParticular()->getPurchasePrice());
             $em->persist($item);
+            $em->flush();
+        }
+
+    }
+
+    public function deleteSalesDamageReturnItem(BusinessInvoiceReturnItem $invoiceParticular)
+    {
+        $em = $this->_em;
+        $entity = $this->findOneBy(array('invoiceReturnItem' => $invoiceParticular->getId()));
+        if($entity){
+            $em->remove($entity);
             $em->flush();
         }
 

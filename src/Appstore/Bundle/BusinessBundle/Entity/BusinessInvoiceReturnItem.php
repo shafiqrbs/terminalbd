@@ -49,14 +49,14 @@ class BusinessInvoiceReturnItem
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity", type="float")
+     * @ORM\Column(name="quantity", type="float", nullable=true)
      */
     private $quantity;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="bonusQuantity", type="float")
+     * @ORM\Column(name="bonusQuantity", type="float",nullable=true)
      */
     private $bonusQuantity;
 
@@ -65,7 +65,7 @@ class BusinessInvoiceReturnItem
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="float",nullable=true)
      */
     private $price;
 
