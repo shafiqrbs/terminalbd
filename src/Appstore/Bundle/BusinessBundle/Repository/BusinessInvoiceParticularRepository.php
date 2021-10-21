@@ -891,6 +891,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->join('pi.businessParticular','p');
         $qb->where('p.businessConfig = :config')->setParameter('config', $configId) ;
         $qb->andWhere('e.customer = :vendorId')->setParameter('vendorId', $vendorId) ;
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $qb->groupBy('p.name');
         $qb->orderBy('p.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -906,6 +908,8 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->join('pi.businessParticular','p');
         $qb->where('e.customer = :vendorId')->setParameter('vendorId', $vendor) ;
         $qb->andWhere('p.id = :pId')->setParameter('pId', $item) ;
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['quantity'];
     }
