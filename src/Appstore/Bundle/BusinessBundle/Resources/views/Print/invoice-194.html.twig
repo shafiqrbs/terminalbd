@@ -16,49 +16,52 @@
                             <div class="col" style="float: left">
                             <span>
                               {% if config.webPath is not empty %}
-                                  <img  src="{{ image(config.webPath).resize(180,102, 'white') }}">
+                                  <img  src="{{ image(config.webPath).resize(180,120, 'white') }}">
                               {% endif %}
                             </span>
                             </div>
-                            <div class="col invoice-details" style="float: right;">
-                                {{ config.address|raw }}
+                            <div style="float: right;display: flex;
+    align-items: center; height: 120px" >
+                                <div class="col invoice-details" >
+                                    <img width="220" height="" src="{{ asset('assets/logo/yummy-cafe/yummy-famous.png') }}">
+                                </div>
+                                <div class="col invoice-details" >
+                                    <img width="120" height="120" src="{{ asset('assets/logo/yummy-cafe/yummy-qr.png') }}">
+                                </div>
                             </div>
+
                         </div>
                     {% endif %}
-                    <div class="row">
-                        {% if entity.process == 'Chalan' %}
-                            <div class="caption"><strong>CHALAN</strong></div>
-                        {% elseif entity.process == 'Quotation' %}
-                            <div class="caption"><strong>QUOTATION</strong></div>
-                        {% else %}
-                            <div class="caption"><strong>INVOICE/BILL</strong></div>
-                        {% endif %}
-                    </div>
+                    <div class="row"></div>
                     <div style="clear: both; display: flex"></div>
                 </header>
                 <main style="margin-bottom: 0!important;">
-                    <div class="row contacts">
-                        <div class="col invoice-to" style="margin-right: 30px">
+                    <div class="row contacts" style="display: flex;align-items: center;">
+                        <div class="col invoice-to" style="margin-right: 30px; width: 30%; float: left">
                             <div class="text-gray-light">INVOICE TO</div>
                             {% if entity.customer %}
                                 {% if  entity.customer.name is not empty  %}
-                                    <h4 class="to">{{ entity.customer.name }}</h4>
+                                    <h4 class="to">Customer : {{ entity.customer.name }}</h4>
                                 {% endif %}
                                 {% if  entity.customer.mobile is not empty %}
-                                    <div class="address">{{ entity.customer.mobile }}</div>
+                                    <div class="address">Mobile : {{ entity.customer.mobile }}</div>
                                 {% endif %}
                                 {% if  entity.customer.address is not empty  %}
-                                    <div class="address"><i class=" icon-map-marker"></i>&nbsp;{{ entity.customer.address|raw }}</div>
+                                    <div class="address">Address&nbsp;: {{ entity.customer.address|raw }}</div>
                                 {% endif %}
                             {% endif %}
                         </div>
-                        {#<div class="col invoice-to">
-                            <div class="text-gray-light">Marketing BY</div>
-                            <h4 class="to">S.R. {% if  entity.marketing is not empty %}{{ entity.marketing.name }}{% endif %}</h4>
-                            <div class="address">Area. {% if  entity.area is not empty %}{{ entity.area.name }},{{ entity.area.location.name }}{% endif %}</div>
-                        </div>#}
-                        <div class="col invoice-details">
-                            <h5 class="invoice-id">INVOICE {{ entity.invoice }}</h5>
+                        <div class="col" style="width: 40%;text-align: center; float: left">
+                            {% if entity.process == 'Chalan' %}
+                                <div><strong>CHALAN</strong></div>
+                            {% elseif entity.process == 'Quotation' %}
+                                <div><strong>QUOTATION</strong></div>
+                            {% else %}
+                                <div><strong>INVOICE/BILL</strong></div>
+                            {% endif %}
+                        </div>
+                        <div class="col invoice-details" style="width: 30%; float: right">
+                            <h5 class="invoice-id">INVOICE No. {{ entity.invoice }}</h5>
                             <div class="date">Date of Invoice: {{ entity.created|date('d-m-Y') }}</div>
                             {% if entity.transactionMethod is not empty %}<div class="date">Method: {{ entity.transactionMethod.name }}</div>{% endif %}
                             {% if entity.paymentMobile is not empty %}<div class="date">{{ entity.paymentMobile }}/{{ entity.transactionId }}</div>{% endif %}
@@ -93,7 +96,7 @@
                                     <td class="">{{ item.bonusQnt }}</td>
                                     <td class="">{{ (item.quantity+item.bonusQnt) }}</td>
                                     <td class="text-right">{{ item.unit }}</td>
-                                    <td class="text-right">{{ item.price|number_format(2) }}</td>
+                                    <td class="text-left">{{ item.price|number_format(2) }}</td>
                                     <td class="text-right" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
                                 </tr>
                                 {% set i = i + 1 %}
@@ -108,7 +111,9 @@
                         </tr>
                         <tr><td colspan="7"><strong class="pull-right">DISCOUNT(-)</strong></td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
                         <tr><td colspan="7"><strong class="pull-right">NET AMOUNT</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format(2) }}</strong></td></tr>
+                        {% if entity.printPreviousDue == 1  %}
                         <tr><td colspan="7"><strong class="pull-right">PREVIOUS DUE</strong></td><td><strong  class="pull-right">{% if balance > 0 %} {{ (balance-entity.total) |number_format(2) }}{% endif %}</strong></td></tr>
+                        {% endif %}
                         <tr><td colspan="7"><strong class="pull-right">RECEIVED</strong></td><td><strong  class="pull-right">{{ (entity.received)|number_format(2) }}</strong></td></tr>
                         <tr><td colspan="7" style="text-align: left!important;"><strong class="pull-right" >TOTAL DUE</strong></td><td><strong  class="pull-right">{{ balance|number_format(2) }}</strong></td></tr>
                         <tr><td colspan="8">In words: {{ balanceWords|raw }} </td></tr>
@@ -137,10 +142,10 @@
         .invoice table th {
             white-space: nowrap;
             font-weight: 400;
-            font-size: 10px;
+            font-size: 14px;
         }
         .invoice table{
-            font-size: 12px;
+            font-size: 14px;
         }
         .caption{
             text-align: center;
@@ -167,7 +172,7 @@
             padding-left: 6px;
             border-left: 6px solid #3989c6;
             margin-top: 15px;
-            font-size: 12px;
+            font-size: 14px;
         }
     </style>
 {% endblock %}

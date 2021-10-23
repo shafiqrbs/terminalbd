@@ -34,6 +34,11 @@ business_report_monthly_sales_stock:
     path:     /monthly-item-sales
     defaults: { _controller: "BusinessBundle:Report:monthlyProductSales" }
 
+business_report_customer_monthly_sales_stock:
+    path:     /customer-monthly-item-sales
+    defaults: { _controller: "BusinessBundle:Report:customerMonthlyProductSales" }
+
+
 business_report_purchase_stock_price:
     path:     /purchase-stock-price
     defaults: { _controller: "BusinessBundle:Report:purchaseVendorSales" }
@@ -121,6 +126,10 @@ business_report_sales_courier_details:
 business_report_sales_user_monthly:
     path:     /sales-user-monthly
     defaults: { _controller: "BusinessBundle:Report:monthlyUserSales" }
+
+business_report_customer_sales_item_monthly:
+    path:     /customer-sales-item-monthly
+    defaults: { _controller: "BusinessBundle:Report:customerMonthlyProductSales" }
 
 business_report_vendor_commission_sales:
     path:     /vendor-commission-sales

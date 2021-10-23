@@ -257,6 +257,11 @@ class Builder extends ContainerAware
                 )->setAttribute('icon', 'icon-th-list');
 
                 $menu[$business]['Reports']['Sales']->addChild(
+                    'Customer Daily Item Sales',
+                    array('route' => 'business_report_customer_monthly_sales_stock')
+                )->setAttribute('icon', 'icon-th-list');
+
+                $menu[$business]['Reports']['Sales']->addChild(
                     'Daily Sales Stock',
                     array('route' => 'business_report_monthly_sales_stock')
                 )->setAttribute('icon', 'icon-th-list');

@@ -875,6 +875,86 @@ class BusinessInvoiceRepository extends EntityRepository
         return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr);
     }
 
+    public function customerDailyProductSalesReport(User $user , $data = array())
+    {
+        $customer       = isset($data['mobile'])? $data['mobile'] :'';
+        if($customer){
+            $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+            $compare    = new \DateTime('now');
+            $process = "Done";
+            $year       =  $compare->format('Y');
+
+            $year       = isset($data['year'])? $data['year'] :$year;
+            $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+            $sql = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS quantity,SUM(salesItem.bonusQnt) AS bonus, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                JOIN Customer as c ON c.id = sales.customer_id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process AND c.mobile = :customer  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('process', $process);
+            $stmt->bindValue('customer', $customer);
+            $stmt->bindValue('year', $year);
+            $stmt->bindValue('month', $month);
+            $stmt->execute();
+            $result =  $stmt->fetchAll();
+            $dailySalesArr = array();
+            foreach($result as $row) {
+                $id = "{$row['day']}-{$row['stockId']}";
+                $dailySalesArr[$id] = $row;
+            }
+
+            $sql = "SELECT SUM(salesItem.quantity) AS quantity,SUM(salesItem.bonusQnt) AS bonus, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                JOIN Customer as c ON c.id = sales.customer_id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process AND c.mobile = :customer  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY salesItem.businessParticular_id";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('process',$process);
+            $stmt->bindValue('customer', $customer);
+            $stmt->bindValue('year', $year);
+            $stmt->bindValue('month',$month);
+            $stmt->execute();
+            $result =  $stmt->fetchAll();
+            $salesItemTotal = array();
+            foreach($result as $row1) {
+                $salesItemTotal[$row1['stockId']] = $row1;
+            }
+
+            $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+            $compare    = new \DateTime('now');
+            $year       =  $compare->format('Y');
+            $year       = isset($data['year'])? $data['year'] :$year;
+            $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+            $sql = "SELECT DAY (sales.created) as day, SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS total, SUM(sales.received) AS receive, SUM(sales.due) AS due
+                FROM business_invoice as sales
+                JOIN Customer as c ON c.id = sales.customer_id
+                WHERE sales.businessConfig_id = :config AND  sales.process = :process AND c.mobile = :customer  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day ORDER BY day ASC";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('process',$process);
+            $stmt->bindValue('customer', $customer);
+            $stmt->bindValue('year', $year);
+            $stmt->bindValue('month', $month);
+            $stmt->execute();
+            $result =  $stmt->fetchAll();
+            $dailySalesSummaryArr = array();
+            foreach($result as $row) {
+                $id = "{$row['day']}";
+                $dailySalesSummaryArr[$id] = $row;
+            }
+            return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr,'dailySalesSummaryArr' => $dailySalesSummaryArr);
+
+        }
+        return array('salesItemTotal' => '','dailySalesArr' => '','dailySalesSummaryArr'=>'');
+
+    }
+
     public function salesCourierReport( User $user , $data)
     {
 

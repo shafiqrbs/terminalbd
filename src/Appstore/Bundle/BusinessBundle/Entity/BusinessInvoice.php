@@ -348,6 +348,12 @@ class BusinessInvoice
     private $isCondition;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="printPreviousDue", type="boolean", nullable=true)
+     */
+    private $printPreviousDue = true;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="endDate", type="datetime",  nullable=true)
      */
@@ -1174,6 +1180,22 @@ class BusinessInvoice
     public function getInvoiceReturn()
     {
         return $this->invoiceReturn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintPreviousDue()
+    {
+        return $this->printPreviousDue;
+    }
+
+    /**
+     * @param bool $printPreviousDue
+     */
+    public function setPrintPreviousDue($printPreviousDue)
+    {
+        $this->printPreviousDue = $printPreviousDue;
     }
 
 

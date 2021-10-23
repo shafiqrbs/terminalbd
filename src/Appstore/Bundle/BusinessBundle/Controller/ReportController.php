@@ -109,7 +109,6 @@ class ReportController extends Controller
 		$data = $_REQUEST;
 		$user = $this->getUser();
 		$cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
-
 		$salesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		$purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 
@@ -516,6 +515,39 @@ class ReportController extends Controller
             'totalItemSales'       => $entities['salesItemTotal'] ,
             'stocks'         => $stocks ,
             'searchForm'     => $data ,
+        ));
+
+    }
+
+    public function customerMonthlyProductSalesAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+        $stocks ="";
+        $dailySalesArr ="";
+        $salesItemTotal ="";
+        $dailySalesSummaryArr ="";
+        $customer = "";
+        if (isset($_REQUEST['mobile']) and $_REQUEST['mobile']) {
+            $mobile = $_REQUEST['mobile'];
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'mobile' => $mobile));
+            $stocks = $em->getRepository('BusinessBundle:BusinessParticular')->getStockItemReport($config);
+            $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->customerDailyProductSalesReport($user, $data);
+            $dailySalesArr = $entities['dailySalesArr'];
+            $salesItemTotal = $entities['dailySalesArr'];
+            $dailySalesSummaryArr = $entities['dailySalesSummaryArr'];
+        }
+        return $this->render('BusinessBundle:Report:sales/customerSalesDailyStock.html.twig', array(
+            'inventory'             => $config ,
+            'customer'             => $customer ,
+            'entities'              => $dailySalesArr ,
+            'totalItemSales'        => $salesItemTotal ,
+            'dailySalesSummaryArr'        => $dailySalesSummaryArr ,
+            'stocks'                => $stocks ,
+            'searchForm'            => $data ,
         ));
 
     }
