@@ -19,6 +19,7 @@
                                   <img  src="{{ image(config.webPath).resize(180,120, 'white') }}">
                               {% endif %}
                             </span>
+                            <span style="display: block;font-weight: bold">Hotline : 01670-167000,01911-117659</span>
                             </div>
                             <div style="float: right;display: flex;
     align-items: center; height: 120px" >
@@ -127,8 +128,26 @@
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
              <footer>
-                 <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
-                 <span class="right">Developed by: {{ portal_design_development }}</span>
+                 <div class="row contacts" style="display: flex;align-items: center;">
+                     <div class="col invoice-to" style="margin-right: 30px; width: 30%; float: left">
+                         <br/>
+                         <br/>
+                         <br/>
+                        <p><strong>Customer Signature</strong></p>
+                     </div>
+                     <div class="col" style="width: 40%;text-align: center; float: left">
+                         <br/>
+                         <br/>
+                         <br/>
+                         <p><strong>Delivery Signature</strong></p>
+                     </div>
+                     <div class="col invoice-details" style="width: 30%; float: right; text-align: center">
+                         <br/>
+                         <br/>
+                         {{ entity.salesBy.profile.name }}
+                         <p><strong>Authorised By</strong></p>
+                     </div>
+                 </div>
              </footer>
         </div>
     </div>
