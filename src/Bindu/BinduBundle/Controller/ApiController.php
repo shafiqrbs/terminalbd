@@ -111,7 +111,7 @@ class ApiController extends Controller
                     'email' => $entity->getEmail(),
                     'locationId' => $entity->getLocation()->getId(),
                     'address' => $address,
-                    'locationName' => $printFooter,
+                    'locationName' => $entity->getLocation()->getname(),
                     'main_app' => $entity->getMainApp()->getId(),
                     'main_app_name' => $entity->getMainApp()->getSlug(),
                     'appsManual' => $entity->getMainApp()->getApplicationManual(),
