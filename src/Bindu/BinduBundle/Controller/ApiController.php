@@ -61,7 +61,7 @@ class ApiController extends Controller
                     $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
                     $vatRegNo = $entity->getMedicineConfig()->getVatRegNo();
                     $vatEnable = $entity->getMedicineConfig()->isVatEnable();
-                    $footerMessage = $entity->getMedicineConfig()->getPrintFooterMessage();
+                    $footerMessage = $entity->getMedicineConfig()->getPrintFooterText();
                     if($footerMessage){
                         $printFooter = $footerMessage;
                     }else{
@@ -72,7 +72,7 @@ class ApiController extends Controller
                     $vatPercentage = $entity->getBusinessConfig()->getVatPercentage();
                     $vatRegNo = $entity->getBusinessConfig()->getVatRegNo();
                     $vatEnable = $entity->getBusinessConfig()->getVatEnable();
-                    $footerMessage = $entity->getBusinessConfig()->getPrintFooterMessage();
+                    $footerMessage = $entity->getBusinessConfig()->getPrintFooterText();
                     if($footerMessage){
                         $printFooter = $footerMessage;
                     }else{
@@ -83,7 +83,7 @@ class ApiController extends Controller
                     $vatPercentage = $entity->getRestaurantConfig()->getVatPercentage();
                     $vatRegNo = $entity->getRestaurantConfig()->getVatRegNo();
                     $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
-                    $footerMessage = $entity->getRestaurantConfig()->getPrintFooterMessage();
+                    $footerMessage = $entity->getRestaurantConfig()->getPrintFooterText();
                     if($footerMessage){
                         $printFooter = $footerMessage;
                     }else{
@@ -94,7 +94,7 @@ class ApiController extends Controller
                     $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
                     $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
                     $vatEnable = $entity->getInventoryConfig()->getVatEnable();
-                    $footerMessage = $entity->getInventoryConfig()->getPrintFooterMessage();
+                    $footerMessage = $entity->getInventoryConfig()->getPrintFooterText();
                     if($footerMessage){
                         $printFooter = $footerMessage;
                     }else{
@@ -111,7 +111,7 @@ class ApiController extends Controller
                     'email' => $entity->getEmail(),
                     'locationId' => $entity->getLocation()->getId(),
                     'address' => $address,
-                    'locationName' => $entity->getLocation()->getname(),
+                    'locationName' => $printFooter,
                     'main_app' => $entity->getMainApp()->getId(),
                     'main_app_name' => $entity->getMainApp()->getSlug(),
                     'appsManual' => $entity->getMainApp()->getApplicationManual(),
