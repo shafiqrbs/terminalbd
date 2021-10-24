@@ -270,12 +270,19 @@ class MedicineConfig
     private $currency="৳";
 
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="address", type="text",  nullable=true)
      */
     private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="printFooterText", type="text",  nullable=true)
+     */
+    private $printFooterText;
 
 
     /**
@@ -867,6 +874,22 @@ class MedicineConfig
     public function setSearchSlug($searchSlug)
     {
         $this->searchSlug = $searchSlug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintFooterText()
+    {
+        return $this->printFooterText;
+    }
+
+    /**
+     * @param string $printFooterText
+     */
+    public function setPrintFooterText($printFooterText)
+    {
+        $this->printFooterText = $printFooterText;
     }
 
 

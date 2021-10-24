@@ -408,6 +408,13 @@ class RestaurantConfig
      /**
      * @var string
      *
+     * @ORM\Column(name="printFooterText", type="text", nullable = true)
+     */
+    private $printFooterText;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="templateCss", type="text", nullable = true)
      */
     private $templateCss;
@@ -1453,6 +1460,22 @@ class RestaurantConfig
     public function setVatMode($vatMode)
     {
         $this->vatMode = $vatMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintFooterText()
+    {
+        return $this->printFooterText;
+    }
+
+    /**
+     * @param string $printFooterText
+     */
+    public function setPrintFooterText($printFooterText)
+    {
+        $this->printFooterText = $printFooterText;
     }
 
 

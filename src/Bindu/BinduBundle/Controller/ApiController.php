@@ -55,26 +55,51 @@ class ApiController extends Controller
                 $vatRegNo = '';
                 $vatPercentage = '';
                 $vatEnable = '';
+                $printFooter = "";
                 if ($entity->getMainApp()->getSlug() == "miss") {
                     $address = $entity->getMedicineConfig()->getAddress();
                     $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
                     $vatRegNo = $entity->getMedicineConfig()->getVatRegNo();
                     $vatEnable = $entity->getMedicineConfig()->isVatEnable();
+                    $footerMessage = $entity->getMedicineConfig()->getPrintFooterMessage();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our pharmacy";
+                    }
                 } elseif ($entity->getMainApp()->getSlug() == "business") {
                     $address = $entity->getBusinessConfig()->getAddress();
                     $vatPercentage = $entity->getBusinessConfig()->getVatPercentage();
                     $vatRegNo = $entity->getBusinessConfig()->getVatRegNo();
                     $vatEnable = $entity->getBusinessConfig()->getVatEnable();
+                    $footerMessage = $entity->getBusinessConfig()->getPrintFooterMessage();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our business store";
+                    }
                 } elseif ($entity->getMainApp()->getSlug() == "restaurant") {
                     $address = $entity->getRestaurantConfig()->getAddress();
                     $vatPercentage = $entity->getRestaurantConfig()->getVatPercentage();
                     $vatRegNo = $entity->getRestaurantConfig()->getVatRegNo();
                     $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+                    $footerMessage = $entity->getRestaurantConfig()->getPrintFooterMessage();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our restaurant";
+                    }
                 } elseif ($entity->getMainApp()->getSlug() == "inventory") {
                     $address = $entity->getInventoryConfig()->getAddress();
                     $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
                     $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
                     $vatEnable = $entity->getInventoryConfig()->getVatEnable();
+                    $footerMessage = $entity->getInventoryConfig()->getPrintFooterMessage();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our shop";
+                    }
                 }
                 $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
                 $data = array(
@@ -86,7 +111,7 @@ class ApiController extends Controller
                     'email' => $entity->getEmail(),
                     'locationId' => $entity->getLocation()->getId(),
                     'address' => $address,
-                    'locationName' => $entity->getLocation()->getName(),
+                    'locationName' => $printFooter,
                     'main_app' => $entity->getMainApp()->getId(),
                     'main_app_name' => $entity->getMainApp()->getSlug(),
                     'appsManual' => $entity->getMainApp()->getApplicationManual(),

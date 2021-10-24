@@ -21,7 +21,8 @@ class ConfigType extends AbstractType
     {
         $builder
 
-            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 8,'placeholder'=>'Enter company address')))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 3,'placeholder'=>'Enter company address')))
+            ->add('printFooterText','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 3,'placeholder'=>'Enter print footer')))
             ->add('invoiceComment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 3,'placeholder'=>'Enter invoice comment')))
             ->add('bodyFontSize', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),

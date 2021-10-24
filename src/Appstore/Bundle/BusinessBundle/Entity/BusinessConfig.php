@@ -115,6 +115,13 @@ class BusinessConfig
      */
     private $address;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="printFooterText", type="text", nullable = true)
+     */
+    private $printFooterText;
+
     /**
      * @var string
      *
@@ -1478,6 +1485,22 @@ class BusinessConfig
     public function setSrCommission($srCommission)
     {
         $this->srCommission = $srCommission;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintFooterText()
+    {
+        return $this->printFooterText;
+    }
+
+    /**
+     * @param string $printFooterText
+     */
+    public function setPrintFooterText($printFooterText)
+    {
+        $this->printFooterText = $printFooterText;
     }
 
 

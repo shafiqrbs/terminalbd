@@ -188,6 +188,14 @@ class InventoryConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="printFooterText", type="text", nullable = true)
+     */
+    private $printFooterText;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="printer", type="string", length=50,nullable = true)
      */
     private $printer;
@@ -1760,6 +1768,22 @@ class InventoryConfig
     public function setIsInvoice($isInvoice)
     {
         $this->isInvoice = $isInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintFooterText()
+    {
+        return $this->printFooterText;
+    }
+
+    /**
+     * @param string $printFooterText
+     */
+    public function setPrintFooterText($printFooterText)
+    {
+        $this->printFooterText = $printFooterText;
     }
 
 
