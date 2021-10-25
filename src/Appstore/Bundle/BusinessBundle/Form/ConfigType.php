@@ -66,6 +66,7 @@ class ConfigType extends AbstractType
             ))
             ->add('borderWidth','text',array('attr'=>array('class'=>'m-wrap numeric span8','maxLength'=>2)))
             ->add('isPowered')
+            ->add('isUnitPrice')
 	        ->add('invoicePrintLogo')
             ->add('customInvoicePrint')
             ->add('customInvoice')

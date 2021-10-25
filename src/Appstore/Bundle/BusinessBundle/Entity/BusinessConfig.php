@@ -395,6 +395,13 @@ class BusinessConfig
     private $leftTopMargin = 0;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isUnitPrice", type="boolean", nullable = true)
+     */
+    private $isUnitPrice = 0;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="bodyTopMargin", type="integer", nullable = true)
@@ -1501,6 +1508,22 @@ class BusinessConfig
     public function setPrintFooterText($printFooterText)
     {
         $this->printFooterText = $printFooterText;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnitPrice()
+    {
+        return $this->isUnitPrice;
+    }
+
+    /**
+     * @param bool $isUnitPrice
+     */
+    public function setIsUnitPrice($isUnitPrice)
+    {
+        $this->isUnitPrice = $isUnitPrice;
     }
 
 

@@ -141,11 +141,16 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     public function insertPurchaseItems($invoice, $data)
     {
-
+        /* @var $particular BusinessParticular */
     	$particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
-	    $purchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
-        $entity = new BusinessPurchaseItem();
+        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $purchasePrice = $totalPurchasePrice;
+        }else{
+            $purchasePrice = ($totalPurchasePrice/$data['quantity']);
+        }
+	    $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);
         if(!empty($particular->getPrice())){
@@ -164,11 +169,15 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     public function insertPurchaseDistributionItems($invoice, $data)
     {
-
+        /* @var $particular BusinessParticular */
         $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
         $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
-        $purchasePrice = ($totalPurchasePrice/$data['quantity']);
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $purchasePrice = $totalPurchasePrice;
+        }else{
+            $purchasePrice = ($totalPurchasePrice/$data['quantity']);
+        }
         $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);
@@ -218,20 +227,29 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     public function insertSignPurchaseItems($invoice, $data)
     {
-	    $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
-	    $em = $this->_em;
-	    $entity = new BusinessPurchaseItem();
-	    $purchasePrice = $data['purchasePrice'];
-	    $quantity = 0;
+        /* @var $particular BusinessParticular */
+        $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
+        $em = $this->_em;
+        $entity = new BusinessPurchaseItem();
+        $totalPurchasePrice = (isset($data['purchasePrice']) and !empty($data['purchasePrice']))? $data['purchasePrice']:0;
+        $quantity = 0;
+        $purchasePrice = 0;
 	    if(!empty($data['height']) and !empty($data['width'])){
 		    $entity->setHeight($data['height']);
 		    $entity->setWidth($data['width']);
-		    $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
-		    $entity->setQuantity($quantity);
 		    $entity->setSubQuantity($data['quantity']);
 	    }else{
 		    $entity->setQuantity($data['quantity']);
 	    }
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $purchasePrice = $totalPurchasePrice;
+            $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
+            $entity->setQuantity($quantity);
+        }else{
+            $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
+            $purchasePrice = ($totalPurchasePrice/$quantity);
+            $entity->setQuantity($quantity);
+        }
 		$entity->setBusinessPurchase($invoice);
 	    $entity->setBusinessParticular($particular);
 	    if(!empty($particular->getPrice())){

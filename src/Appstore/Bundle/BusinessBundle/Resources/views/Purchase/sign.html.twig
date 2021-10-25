@@ -46,7 +46,25 @@
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
             <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_sign',{'invoice':entity.id}) }}">
-            <div class="row-fluid">
+                <div class="row-fluid particular-info" >
+                    <div class="span6" style="margin-left:15px">
+                        <label>Select Stock Item Name</label>
+                    </div>
+                    <div class="span1">
+                        <label>Height</label>
+                    </div>
+                    <div class="span1">
+                        <label>Width</label>
+                    </div>
+                    <div class="span2">
+                        {% if entity.businessConfig.isUnitPrice == 1 %}
+                            <label>Unit Price</label>
+                        {% else %}
+                            <label>Total Amount</label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
                         <div class="span6" style="margin-left:15px">
@@ -63,7 +81,11 @@
                                     <input type="text" class="m-wrap span3" id="height"  name="height" placeholder="height" value="" maxlength="8" autocomplete="off">
                                     <input type="text" class="m-wrap span3" id="width"  name="width" placeholder="width" value="" maxlength="8" autocomplete="off">
                                     <input type="text" class="m-wrap span2" id="quantity"  name="quantity" placeholder="Quantity" value="" maxlength="8" autocomplete="off">
+                                    {% if entity.businessConfig.isUnitPrice == 1 %}
                                     <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                    {% else %}
+                                    <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Total price" value="" maxlength="8" autocomplete="off">
+                                    {% endif %}
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>
                                     <button type="submit" class="btn blue" id="addParticular" ><i class="icon-save"></i> Add</button>
@@ -291,6 +313,13 @@
     </div>
     </div>
     </div>
+    <style>
+        .particular-info label{
+            color: #ffffff;
+            font-size: 15px;
+            font-weight:bold;
+        }
+    </style>
 {% endblock %}
 
 {% block cssBlock %}
