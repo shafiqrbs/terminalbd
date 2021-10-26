@@ -77,9 +77,9 @@
                                 <div class="input-group">
                                     <input type="number" class="m-wrap span4 form-control input-number" id="quantity" name="quantity" value="1" min="1" autocomplete="off">
                                     {% if entity.businessConfig.isUnitPrice == 1 %}
-                                    <input type="text" class="m-wrap span8" id="purchasePrice"  name="purchasePrice" placeholder="Unit price" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span8 purchasePrice" id="unitPrice"  name="unitPrice" placeholder="Unit price" value="" maxlength="8" autocomplete="off">
                                     {% else %}
-                                    <input type="text" class="m-wrap span8" id="purchasePrice"  name="purchasePrice" placeholder="Total purchase price" value="" maxlength="8" autocomplete="off">
+                                    <input type="text" class="m-wrap span8 purchasePrice" id="purchasePrice"  name="purchasePrice" placeholder="Total purchase price" value="" maxlength="8" autocomplete="off">
                                     {% endif %}
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>

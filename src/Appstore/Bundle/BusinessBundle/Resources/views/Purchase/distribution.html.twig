@@ -63,9 +63,9 @@
                                     <input type="text" class="m-wrap span3 form-control input-number tooltips stockInput"
                                            data-original-title="Enter Purchase Quantity" placeholder="Quantity"  data-trigger="hover" id="quantity" name="quantity" value="" min="1" autocomplete="off">
                                     {% if entity.businessConfig.isUnitPrice == 1 %}
-                                        <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Unit price" value="" maxlength="8" autocomplete="off">
+                                        <input type="text" class="m-wrap span4 purchasePrice" id="unitPrice"  name="unitPrice" placeholder="Unit price" value="" maxlength="8" autocomplete="off">
                                     {% else %}
-                                        <input type="text" class="m-wrap span4" id="purchasePrice"  name="purchasePrice" placeholder="Total purchase price" value="" maxlength="8" autocomplete="off">
+                                        <input type="text" class="m-wrap span4 purchasePrice" id="purchasePrice"  name="purchasePrice" placeholder="Total purchase price" value="" maxlength="8" autocomplete="off">
                                     {% endif %}
                                     <input type="text" class="m-wrap span3 form-control input-number tooltips stockInput"
                                            data-original-title="Enter Bonus Quantity"  data-trigger="hover" placeholder="Bonus QTY" id="bonusQuantity" name="bonusQuantity" value="" min="0" autocomplete="off">

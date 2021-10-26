@@ -144,23 +144,23 @@ class BusinessPurchaseItemRepository extends EntityRepository
         /* @var $particular BusinessParticular */
     	$particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
-        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
-        if($particular->getBusinessConfig()->isUnitPrice() == 1){
-            $purchasePrice = $totalPurchasePrice;
-        }else{
-            $purchasePrice = ($totalPurchasePrice/$data['quantity']);
-        }
-	    $entity = new BusinessPurchaseItem();
+        $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);
         if(!empty($particular->getPrice())){
 	        $entity->setSalesPrice($particular->getPrice());
         }
-        $pp = ($purchasePrice / (int)$data['quantity']);
+        $entity->setQuantity((int)$data['quantity']);
+        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $pp = $totalPurchasePrice;
+        }else{
+            $pp = ($totalPurchasePrice/$entity->getQuantity());
+        }
         $entity->setPurchasePrice($pp);
         $entity->setActualPurchasePrice($pp);
-        $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($purchasePrice);
+        $subTotal = round($entity->getQuantity() * $entity->getPurchasePrice(),2);
+        $entity->setPurchaseSubTotal($subTotal);
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);
@@ -172,25 +172,23 @@ class BusinessPurchaseItemRepository extends EntityRepository
         /* @var $particular BusinessParticular */
         $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
-        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
-        if($particular->getBusinessConfig()->isUnitPrice() == 1){
-            $purchasePrice = $totalPurchasePrice;
-        }else{
-            $purchasePrice = ($totalPurchasePrice/$data['quantity']);
-        }
+
         $entity = new BusinessPurchaseItem();
         $entity->setBusinessPurchase($invoice);
         $entity->setBusinessParticular($particular);
         if(!empty($particular->getPrice())){
             $entity->setSalesPrice($particular->getPrice());
         }
-        $entity->setPurchasePrice($purchasePrice);
-        $entity->setActualPurchasePrice($purchasePrice);
-        $entity->setQuantity($data['quantity']);
-        if($data['bonusQuantity']){
-            $entity->setBonusQuantity($data['bonusQuantity']);
+        $entity->setQuantity((int)$data['quantity']);
+        $totalPurchasePrice = (isset($data['price']) and !empty($data['price']))? $data['price']:0;
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $pp = $totalPurchasePrice;
+        }else{
+            $pp = ($totalPurchasePrice/$entity->getQuantity());
         }
-        $subTotal = round($data['quantity'] * $entity->getPurchasePrice(),2);
+        $entity->setPurchasePrice($pp);
+        $entity->setActualPurchasePrice($pp);
+        $subTotal = round($entity->getQuantity() * $entity->getPurchasePrice(),2);
         $entity->setPurchaseSubTotal($subTotal);
         $em->persist($entity);
         $em->flush();
@@ -231,7 +229,11 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new BusinessPurchaseItem();
-        $totalPurchasePrice = (isset($data['purchasePrice']) and !empty($data['purchasePrice']))? $data['purchasePrice']:0;
+        if($particular->getBusinessConfig()->isUnitPrice() == 1){
+            $totalPurchasePrice = (isset($data['unitPrice']) and !empty($data['unitPrice']))? $data['unitPrice']:0;
+        }else{
+            $totalPurchasePrice = (isset($data['purchasePrice']) and !empty($data['purchasePrice']))? $data['purchasePrice']:0;
+        }
         $quantity = 0;
         $purchasePrice = 0;
 	    if(!empty($data['height']) and !empty($data['width'])){
@@ -262,7 +264,7 @@ class BusinessPurchaseItemRepository extends EntityRepository
 	    $em->flush();
     }
 
-    public function     getPurchaseItems(BusinessPurchase $sales)
+    public function getPurchaseItems(BusinessPurchase $sales)
     {
         $entities = $sales->getPurchaseItems();
         $data = '';

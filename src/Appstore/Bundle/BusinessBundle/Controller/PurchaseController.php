@@ -230,7 +230,11 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
-        $price = $request->request->get('purchasePrice');
+        if($invoice->getBusinessConfig()->isUnitPrice() == 1){
+            $price = $request->request->get('unitPrice');
+        }else{
+            $price = $request->request->get('purchasePrice');
+        }
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
@@ -262,7 +266,11 @@ class PurchaseController extends Controller
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
         $bonusQuantity = $request->request->get('bonusQuantity');
-        $price = $request->request->get('purchasePrice');
+        if($invoice->getBusinessConfig()->isUnitPrice() == 1){
+            $price = $request->request->get('unitPrice');
+        }else{
+            $price = $request->request->get('purchasePrice');
+        }
         $invoiceItems = array('particularId' => $particularId ,'quantity' => $quantity,'bonusQuantity' => $bonusQuantity,'price' => $price);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseDistributionItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);

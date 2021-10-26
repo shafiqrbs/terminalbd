@@ -82,9 +82,9 @@
                                     <input type="text" class="m-wrap span3" id="width"  name="width" placeholder="width" value="" maxlength="8" autocomplete="off">
                                     <input type="text" class="m-wrap span2" id="quantity"  name="quantity" placeholder="Quantity" value="" maxlength="8" autocomplete="off">
                                     {% if entity.businessConfig.isUnitPrice == 1 %}
-                                    <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Purchase price" value="" maxlength="8" autocomplete="off">
+                                        <input type="text" class="m-wrap span3 purchasePrice" id="unitPrice"  name="unitPrice" placeholder="Unit price" value="" maxlength="8" autocomplete="off">
                                     {% else %}
-                                    <input type="text" class="m-wrap span3" id="purchasePrice"  name="purchasePrice" placeholder="Total price" value="" maxlength="8" autocomplete="off">
+                                        <input type="text" class="m-wrap span3 purchasePrice" id="purchasePrice"  name="purchasePrice" placeholder="Total purchase price" value="" maxlength="8" autocomplete="off">
                                     {% endif %}
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn yellow"  id="unit" >Unit</button>

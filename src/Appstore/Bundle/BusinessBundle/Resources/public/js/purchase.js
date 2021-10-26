@@ -42,6 +42,7 @@ $(document).on('change', '#particular', function() {
            // $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
             $('#purchasePrice').val(obj['purchasePrice']);
+            $('#unitPrice').val(obj['purchasePrice']);
             $('#unit').html(obj['unit']);
         }
     })
