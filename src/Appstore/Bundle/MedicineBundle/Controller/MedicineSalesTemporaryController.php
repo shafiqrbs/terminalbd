@@ -4,6 +4,7 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
@@ -291,6 +292,7 @@ class MedicineSalesTemporaryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
+        /* @var $config MedicineConfig */
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
 
         $vatRegNo       = $config->getVatRegNo();
@@ -311,7 +313,7 @@ class MedicineSalesTemporaryController extends Controller
         $payment            = $entity->getReceived();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getSalesBy()->getProfile()->getName();
-        $printMessage       = $entity->getPrintMessage();
+        $printMessage       = $config->getPrintFooterText();
         if($entity->getCustomer()->getName() != "Default"){
         $customer           = "Customer: {$entity->getCustomer()->getName()},Mobile: {$entity->getCustomer()->getMobile()}\n";
         }
@@ -337,13 +339,25 @@ class MedicineSalesTemporaryController extends Controller
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }*/
+        $discountPercent = $config->isPrintDiscountPercent();
+        $prevDue = $config->isPrintPreviousDue();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
       //  $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
-        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        if($discountPercent == 1 and $entity->getDiscountType() =="Percentage"){
+            $percent = $entity->getDiscountCalculation();
+            $discount       = new PosItemManager('Discount: ('.$percent.'%)','Tk.',number_format($discount));
+        }else{
+            $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        }
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
+        if($prevDue == 1 and $entity->getCustomer()->getName() != "Default"){
+            $previous = ($previousDue - $entity->getDue());
+            $previousBalance       = new PosItemManager('Previous Due: ','Tk.',number_format($previous));
+        }
         $payment        = new PosItemManager('Paid: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($previousDue));
 
         /* Title of receipt */
         $printer -> feed();
@@ -399,13 +413,17 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($grandTotal);
+         $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> text($previousBalance);
         $printer -> setEmphasis(true);
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($payment);
         $printer -> setEmphasis(true);
-      //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text($due);
+        if($previousDue > 0 and $entity->getCustomer()->getName() != "Default") {
+            $printer->text($due);
+        }
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->text("\n");
         //$printer -> feed();
@@ -416,7 +434,6 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
-        $printer -> text("Thanks for being here\n");
         /*if($website){
             $printer -> text("Please visit www.".$website."\n");
         }*/

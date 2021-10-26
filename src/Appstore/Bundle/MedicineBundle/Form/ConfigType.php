@@ -34,6 +34,8 @@ class ConfigType extends AbstractType
                 ),
             ))
             ->add('invoiceActualPrice')
+            ->add('printPreviousDue')
+            ->add('printDiscountPercent')
             ->add('customPrint')
             ->add('printOutstanding')
             ->add('posPrint')

@@ -302,6 +302,20 @@ class MedicineConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="printDiscountPercent",  type="boolean",  nullable=true)
+     */
+    private $printDiscountPercent;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="printPreviousDue",  type="boolean",  nullable=true)
+     */
+    private $printPreviousDue;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isBarcode",  type="boolean",  nullable=true)
      */
     private $isBarcode;
@@ -892,6 +906,37 @@ class MedicineConfig
         $this->printFooterText = $printFooterText;
     }
 
+    /**
+     * @return bool
+     */
+    public function isPrintDiscountPercent()
+    {
+        return $this->printDiscountPercent;
+    }
+
+    /**
+     * @param bool $printDiscountPercent
+     */
+    public function setPrintDiscountPercent($printDiscountPercent)
+    {
+        $this->printDiscountPercent = $printDiscountPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintPreviousDue()
+    {
+        return $this->printPreviousDue;
+    }
+
+    /**
+     * @param bool $printPreviousDue
+     */
+    public function setPrintPreviousDue($printPreviousDue)
+    {
+        $this->printPreviousDue = $printPreviousDue;
+    }
 
 }
 

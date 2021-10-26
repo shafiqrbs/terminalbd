@@ -184,14 +184,16 @@
                                 <div class="row-fluid particular-label" >
                                     <div class="span4">Select Stock Item </div>
                                     <div class="span2 pull-center">Opening QTY</div>
-                                    <div class="span3 pull-center">Pack & Quantity</div>
-                                    <div class="span1 pull-center">Total MRP</div>
+                                    <div class="span2 pull-left">Quantity & Bonus QTY</div>
+                                    <div class="span1 pull-center">Min Qty</div>
+                                    <div class="span1 pull-left">Total MRP</div>
                                 </div>
                             {% else %}
                                 <div class="row-fluid particular-label" >
-                                    <div class="span4">Select Stock Item </div>
-                                    <div class="span4 pull-center">Pack & Quantity</div>
-                                    <div class="span2 pull-center">Total MRP</div>
+                                    <div class="span6">Select Stock Item </div>
+                                    <div class="span2 pull-left">Quantity & Bonus QTY</div>
+                                    <div class="span1 pull-center">Min Qty</div>
+                                    <div class="span2 pull-left">Total MRP</div>
                                 </div>
                             {% endif %}
                             {% if entity.medicineConfig.openingQuantity == 1 %}
@@ -214,16 +216,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span6">
                                         <div class="input-append">
                                             <div class="input-group">
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
-                                                <button class="btn yellow">x</button>
                                                 {{ form_widget(purchaseItem.quantity) }}
                                                 {{ form_widget(purchaseItem.bonusQuantity) }}
-                                                <button class="btn red">=</button>
-                                                <button class="btn green" id="totalQnt">Total</button>
-                                                <button class="btn" id="unit">Unit</button>
+                                                <button class="btn" id="unit green">Unit</button>
+                                                <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input span2" placeholder="Min QTY" autocomplete="off">
                                                 {{ form_widget(purchaseItem.salesPrice) }}
                                                 {{ form_widget(purchaseItem.expirationEndDate) }}
                                                 <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
@@ -235,20 +234,17 @@
                                 </div>
                             {% else %}
                                 <div class="row-fluid particular-info" >
-                                    <div class="span4" style="padding-left:15px">
+                                    <div class="span6" style="padding-left:15px">
                                         {{ form_widget(purchaseItem.stockName) }}
                                         {{ form_errors(purchaseItem.stockName) }}
                                     </div>
                                     <div class="span6">
                                         <div class="input-append">
                                             <div class="input-group">
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span3" placeholder="Pack qnt" autocomplete="off" value="1" aria-required="true" aria-invalid="false">
-                                                <button class="btn yellow">x</button>
                                                 {{ form_widget(purchaseItem.quantity) }}
                                                 {{ form_widget(purchaseItem.bonusQuantity) }}
-                                                <button class="btn red">=</button>
-                                                <button class="btn green" id="totalQnt">Total</button>
-                                                <button class="btn" id="unit">Unit</button>
+                                                <button class="btn green" id="unit">Unit</button>
+                                                <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input span2" placeholder="Min QTY" autocomplete="off">
                                                 {{ form_widget(purchaseItem.salesPrice) }}
                                                 {{ form_widget(purchaseItem.expirationEndDate) }}
                                                 <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
@@ -466,6 +462,9 @@
         }
         input#medicinepurchase_memo {
             height: 30px!important;
+        }
+        .red-border{
+            border: 3px solid red!important;
         }
         .form-horizontal .payment-info .control-label {
             float: left;

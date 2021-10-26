@@ -176,7 +176,7 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere('e.salesQuantity = 0');
         }
         if($process == 'Sales' and $startQuantity == 0 and $endQuantity == 0){
-            $qb->andWhere('e.remainingQuantity  <= 0');
+            $qb->andWhere('e.salesQuantity  <= 0');
         }elseif ($process == 'Sales'  and $startQuantity >= 0 and $endQuantity > 0){
             $qb->andWhere("e.salesQuantity  >= {$startQuantity}");
             $qb->andWhere("e.salesQuantity  <= {$endQuantity}");
@@ -320,7 +320,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $pack = 1, $openStock = 0 ){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $minQuantity = 0, $openStock = 0 ){
 
     	$em = $this->_em;
         if($fieldName == 'sales'){
@@ -341,7 +341,7 @@ class MedicineStockRepository extends EntityRepository
             if($openStock > 0){
                 $stock->setOpeningQuantity($openStock);
             }
-            $stock->setPack($pack);
+            $stock->setMinQuantity($minQuantity);
             $stock->setBonusQuantity($bonusQnt);
             $stock->setPurchaseQuantity($qnt);
         }

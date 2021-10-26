@@ -93,7 +93,7 @@
                                     <div class="span2">
                                         <select name="process" id="process" class="span12 m-wrap">
                                             <option  value="">Mode</option>
-                                            {% set process = ['Current Stock','Empty Stock','Empty Sales','Sales Minus','Opening Quantity','Min Quantity'] %}
+                                            {% set process = ['Current Stock','Empty Stock','Sales','Empty Sales','Sales Minus','Opening Quantity','Min Quantity'] %}
                                             {% set pro = searchForm.process is defined and searchForm.process is not empty ? searchForm.process : '' %}
                                             {% for process in process %}
                                             <option {% if pro == process %} selected="selected" {% endif %}  value="{{ process }}">{{ process }}</option>
@@ -165,9 +165,9 @@
                                             </td>
                                         {% endif %}
                                         {% if entity.mode == 'medicine' %}
-                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                            <td class="numeric" ><a class="editable" data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% else %}
-                                            <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                            <td class="numeric" ><a class="editable" data-url="{{ path('medicine_stock_inline') }}"  data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         {% endif %}
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>

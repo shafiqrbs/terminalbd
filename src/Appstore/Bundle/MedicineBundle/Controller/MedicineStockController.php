@@ -407,10 +407,8 @@ class MedicineStockController extends Controller
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
-            if(empty($entity->getMedicineBrand())) {
-                $slug = str_replace(" ",'',$entity->getName());
-                $entity->setSlug(strtolower($slug));
-            }
+            $slug = str_replace(" ",'',$entity->getName());
+            $entity->setSlug(trim(strtolower($slug)));
             $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -529,6 +527,7 @@ class MedicineStockController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
+        /* @var $entity MedicineStock */
         $entity = $em->getRepository('MedicineBundle:MedicineStock')->find($data['pk']);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
@@ -537,11 +536,16 @@ class MedicineStockController extends Controller
             $setField = 'set' . $data['name'];
             $quantity = abs($data['value']);
             $entity->$setField($quantity);
-            $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
+          //  $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->remainingQnt($entity);
         }elseif('rackNo' == $data['name']){
             $rackNo = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($data['value']);
             $entity->setRackNo($rackNo);
+        }elseif('itemName' == $data['name']){
+            $entity->setName($data['value']);
+            $name =  str_replace(' ','',$data['value']);
+            $slug = trim(strtolower($name));
+            $entity->setSlug($slug);
         }else{
             $setField = 'set' . $data['name'];
             $entity->$setField(abs($data['value']));
