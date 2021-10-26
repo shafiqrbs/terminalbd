@@ -73,7 +73,7 @@ class BusinessInvoice
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor", inversedBy="businessInvoices" ,cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor",cascade={"persist"} )
      **/
     private  $vendor;
 

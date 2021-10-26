@@ -59,7 +59,7 @@ class Category
     protected $masterProducts;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\ItemGroup", inversedBy="category" )
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\ItemGroup")
      **/
     protected $itemGroup;
 

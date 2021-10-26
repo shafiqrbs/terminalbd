@@ -63,11 +63,6 @@ class ItemSize
      */
     protected $goodsItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="size")
-     */
-    protected $orderItem;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="size" )

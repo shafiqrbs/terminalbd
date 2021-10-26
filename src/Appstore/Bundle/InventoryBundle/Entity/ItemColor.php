@@ -44,10 +44,6 @@ class ItemColor
      */
     protected $goodsItem;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="color")
-     */
-    protected $orderItem;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="itemColors")

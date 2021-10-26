@@ -139,12 +139,6 @@ class AccountMobileBank
      **/
     private  $orderPayments;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="accountMobileBank"  )
-     **/
-    private  $orders;
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountMobileBank"  )
      **/

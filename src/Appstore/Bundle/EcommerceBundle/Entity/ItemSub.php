@@ -33,11 +33,6 @@ class ItemSub
     private  $item;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="itemSub" )
-     **/
-    private  $orderItems;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="itemSub")
      */
     protected $size;

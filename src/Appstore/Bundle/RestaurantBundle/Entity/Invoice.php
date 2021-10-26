@@ -74,12 +74,12 @@ class Invoice
     private  $tokenNo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceTable", cascade={"persist","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", cascade={"persist","remove"}  )
      **/
     private  $table;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceModes", cascade={"persist","remove"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular",cascade={"persist","remove"}  )
      **/
     private  $invoiceMode;
 
