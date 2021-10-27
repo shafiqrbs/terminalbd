@@ -281,7 +281,7 @@ class BusinessInvoiceRepository extends EntityRepository
 		$qb->where('e.medicineConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process = :process');
-		$qb->setParameter('process', 'Done');
+		$qb->setParameter('process', 'Delivered');
 		$qb->groupBy('si.medicineStock');
 		$qb->orderBy('mde.name','ASC');
 		return $qb->getQuery()->getArrayResult();
@@ -304,7 +304,7 @@ class BusinessInvoiceRepository extends EntityRepository
 		$qb->where('s.medicineConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('s.process = :process');
-		$qb->setParameter('process', 'Done');
+		$qb->setParameter('process', 'Delivered');
 		if($group == 'medicinePurchaseItem') {
 			$qb->addSelect('item.barcode AS barcode');
 		}
@@ -318,102 +318,6 @@ class BusinessInvoiceRepository extends EntityRepository
 		return $qb;
 	}
 
-	public function findWithOverview(User $user , $data , $mode='')
-    {
-
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
-       // $this->handleSearchBetween($qb,$data);
-        $this->handleDateRangeFind($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Released','Death','Dead'));
-        $result = $qb->getQuery()->getOneOrNullResult();
-
-        $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
-        $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
-        $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
-        $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
-        $discount = !empty($result['discount']) ? $result['discount'] :0;
-        $vat = !empty($result['vat']) ? $result['vat'] :0;
-        $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
-        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
-
-        return $data;
-    }
-
-    public function findWithSalesOverview(User $user , $data , $mode='')
-    {
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
-        $this->handleDateRangeFind($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $result = $qb->getQuery()->getOneOrNullResult();
-        $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
-        $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
-        $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
-        $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
-        $discount = !empty($result['discount']) ? $result['discount'] :0;
-        $vat = !empty($result['vat']) ? $result['vat'] :0;
-        $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
-        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
-
-        return $data;
-    }
-
-    public function findWithServiceOverview(User $user, $data)
-    {
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->leftJoin('e.invoiceParticulars','ip');
-        $qb->leftJoin('ip.particular','p');
-        $qb->leftJoin('p.service','s');
-        $qb->select('sum(ip.subTotal) as subTotal');
-        $qb->addSelect('s.name as serviceName');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death','Released','Dead'));
-        $this->handleDateRangeFind($qb,$data);
-        $qb->groupBy('s.id');
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
-    }
-
-    public function findWithTransactionOverview(User $user, $data)
-    {
-        $config = $user->getGlobalOption()->getBusinessConfig()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->leftJoin('ip.transactionMethod','p');
-        $qb->select('sum(ip.payment) as paymentTotal');
-        $qb->addSelect('p.name as transName');
-        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
-        $this->handleDateRangeFind($qb,$data);
-        $qb->groupBy('p.id');
-        $result = $qb->getQuery()->getArrayResult();
-        return $result;
-    }
 
     public function findWithCommissionOverview(User $user, $data)
     {
@@ -496,7 +400,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY month ORDER BY month ASC";
 		$stmt = $this->getEntityManager()->getConnection()->prepare($sql);
 		$stmt->bindValue('config', $config);
-		$stmt->bindValue('process', 'Done');
+		$stmt->bindValue('process', 'Delivered');
 		$stmt->bindValue('year', $year);
 		$stmt->execute();
 		$result =  $stmt->fetchAll();
@@ -678,7 +582,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY month , salesBy ORDER BY salesBy ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -785,7 +689,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $invoice = new BusinessInvoice();
         $invoice->setBusinessConfig($customer->getGlobalOption()->getBusinessConfig());
         $invoice->setCustomer($customer);
-        $invoice->setProcess("Done");
+        $invoice->setProcess("Deliverd");
         $invoice->setEndDate($customer->getCreated());
         $em->persist($invoice);
         $em->flush();
@@ -818,7 +722,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -836,7 +740,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY salesItem.businessParticular_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -853,7 +757,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY day  ORDER BY day ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -882,7 +786,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -981,7 +885,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month', $month);
         $stmt->execute();
@@ -999,7 +903,7 @@ class BusinessInvoiceRepository extends EntityRepository
                 GROUP BY salesItem.businessParticular_id";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
-        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('process', 'Delivered');
         $stmt->bindValue('year', $year);
         $stmt->bindValue('month',$month);
         $stmt->execute();
@@ -1018,7 +922,7 @@ class BusinessInvoiceRepository extends EntityRepository
         if($customer){
             $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
             $compare    = new \DateTime('now');
-            $process = "Done";
+            $process = "Delivered";
             $year       =  $compare->format('Y');
 
             $year       = isset($data['year'])? $data['year'] :$year;
@@ -1154,8 +1058,6 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->groupBy('c.name');
         $qb->orderBy('c.name','DESC');
         $result = $qb->getQuery()->getArrayResult();
-        var_dump($result);
-            exit;
         return $result;
 
     }
