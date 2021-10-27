@@ -126,6 +126,7 @@ class ReportController extends Controller
         $user = $this->getUser();
         $cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
         $sales = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
+        $customerSalesSummary = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportCustomerSales($user,$data);
         $purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 
 
@@ -134,8 +135,8 @@ class ReportController extends Controller
             return $this->render('BusinessBundle:Report:sales/salesSummary.html.twig', array(
                 'option'                    => $user->getGlobalOption() ,
                 'cashOverview'              => $cashOverview ,
-                'salesPrice'                => $sales['summary'] ,
-                'customerSalesSummary'      => $sales['customerSalesSummary'] ,
+                'salesPrice'                => $sales ,
+                'customerSalesSummary'      => $customerSalesSummary ,
                 'purchasePrice'             => $purchasePrice ,
                 'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
                 'searchForm'                => $data ,

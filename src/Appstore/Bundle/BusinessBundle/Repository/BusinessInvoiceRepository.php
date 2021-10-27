@@ -138,9 +138,22 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->andWhere("e.created <= :createdEnd");
         $qb->setParameter('createdEnd', $end);
         $summary =  $qb->getQuery()->getOneOrNullResult();
+        return $summary;
 
+    }
 
+    public function reportCustomerSales(User $user ,$data)
+    {
 
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $end = date('Y-m-d',strtotime($data['endDate']));
+        }
         $process = "Delivered";
         $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
         $sql = "SELECT sales.customer_id as customer,c.name as customerName,c.mobile as customerMobile,c.address as customerAddress, SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS discount, SUM(sales.received) AS receive, SUM(sales.due) AS due
@@ -160,8 +173,7 @@ class BusinessInvoiceRepository extends EntityRepository
             $id = "{$row['customer']}";
             $customerSalesSummary[$id] = $row;
         }
-        $data = array('summary' => $summary,'customerSalesSummary'=>$customerSalesSummary);
-        return $data;
+        return $customerSalesSummary;
 
     }
 
