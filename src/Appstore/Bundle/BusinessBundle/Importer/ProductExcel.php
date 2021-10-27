@@ -53,13 +53,23 @@ class ProductExcel
                 $product->setSalesPrice($salesPrice);
                 $product->setPurchasePrice($purchasePrice);
                 $product->setOpeningQuantity($quantity);
-                $pQTY = ($product->getPurchaseQuantity() > 0 ) ? $product->getPurchaseQuantity() :0;
-                $remin = ($quantity+$pQTY);
-                $product->setRemainingQuantity($remin);
+                $product->setRemainingQuantity($product->getOpeningQuantity());
                 if ($category) {
                     $cat = $this->getCategory($category);
                     $product->setCategory($cat);
                 }
+                $this->save($product);
+
+            }else{
+
+                $product = $productOld;
+                $salesPrice = floatval(empty($item['SalesPrice']) ? 0 : $item['SalesPrice']);
+                $purchasePrice = floatval(empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice']);
+                $quantity = (int) empty($item['OpeningQuantity']) ? 0 : trim($item['OpeningQuantity']);
+                $product->setSalesPrice($salesPrice);
+                $product->setPurchasePrice($purchasePrice);
+                $product->setOpeningQuantity($quantity);
+                $product->setRemainingQuantity($product->getOpeningQuantity());
                 $this->save($product);
             }
 

@@ -28,22 +28,28 @@ class BusinessConfigRepository extends EntityRepository
         $ledger = $em->createQuery("DELETE BusinessBundle:BusinessStoreLedger e WHERE e.businessConfig = {$config}");
         $ledger->execute();
 
-        //$store = $em->createQuery("DELETE BusinessBundle:BusinessStore e WHERE e.businessConfig = {$config}");
-        //$store->execute();
-
         $history = $em->createQuery('DELETE BusinessBundle:BusinessStockHistory e WHERE e.businessConfig = '.$config);
         $history->execute();
+
+        $damage = $em->createQuery("DELETE BusinessBundle:BusinessDamage e WHERE e.businessConfig = {$config}");
+        $damage->execute();
 
         $DistributionReturnItem = $em->createQuery('DELETE BusinessBundle:BusinessDistributionReturnItem e WHERE e.businessConfig = '.$config);
         $DistributionReturnItem->execute();
 
-        $PurchaseReturn = $em->createQuery('DELETE BusinessBundle:BusinessPurchaseReturn e WHERE e.businessConfig = '.$config);
-        $PurchaseReturn->execute();
+        $salesReturn = $em->createQuery('DELETE BusinessBundle:BusinessInvoiceReturn e WHERE e.businessConfig = '.$config);
+        $salesReturn->execute();
 
         $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
         $sales->execute();
 
+        $PurchaseReturn = $em->createQuery('DELETE BusinessBundle:BusinessPurchaseReturn e WHERE e.businessConfig = '.$config);
+        $PurchaseReturn->execute();
+
 	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessVendorStock e WHERE e.businessConfig = '.$config);
+	    $purchase->execute();
+
+	    $purchase = $em->createQuery('DELETE BusinessBundle:BusinessPurchase e WHERE e.businessConfig = '.$config);
 	    $purchase->execute();
 
 	    $items = $this->_em->getRepository('BusinessBundle:BusinessParticular')->findBy(array('businessConfig'=>$config));

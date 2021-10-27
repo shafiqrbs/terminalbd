@@ -83,7 +83,7 @@ function ApproveProcessInt(){
             top: '25%',
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
-                    location.reload();
+                    alert("This domain data reset successfully")
                 });
             }
         });
