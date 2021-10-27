@@ -282,7 +282,7 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 	    $invoiceItems = $request->request->all();
-        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertSignPurchaseItems($invoice, $invoiceItems);
+	    $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertSignPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));

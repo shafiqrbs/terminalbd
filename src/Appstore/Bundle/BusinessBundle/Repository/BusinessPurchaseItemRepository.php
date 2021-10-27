@@ -229,30 +229,29 @@ class BusinessPurchaseItemRepository extends EntityRepository
         $particular = $this->_em->getRepository('BusinessBundle:BusinessParticular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new BusinessPurchaseItem();
+        $quantity = 0;
+        $purchasePrice = 0;
         if($particular->getBusinessConfig()->isUnitPrice() == 1){
             $totalPurchasePrice = (isset($data['unitPrice']) and !empty($data['unitPrice']))? $data['unitPrice']:0;
         }else{
             $totalPurchasePrice = (isset($data['purchasePrice']) and !empty($data['purchasePrice']))? $data['purchasePrice']:0;
         }
-        $quantity = 0;
-        $purchasePrice = 0;
-	    if(!empty($data['height']) and !empty($data['width'])){
+        if(!empty($data['height']) and !empty($data['width'])){
 		    $entity->setHeight($data['height']);
 		    $entity->setWidth($data['width']);
 		    $entity->setSubQuantity($data['quantity']);
+            $quantity = round((($entity->getHeight() * $entity->getWidth()) * $entity->getSubQuantity()),2);
+            $entity->setQuantity($quantity);
 	    }else{
 		    $entity->setQuantity($data['quantity']);
 	    }
         if($particular->getBusinessConfig()->isUnitPrice() == 1){
             $purchasePrice = $totalPurchasePrice;
-            $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
-            $entity->setQuantity($quantity);
+
         }else{
-            $quantity = round((($entity->getHeight() * $entity->getWidth()) * $data['quantity']),2);
-            $purchasePrice = ($totalPurchasePrice/$quantity);
-            $entity->setQuantity($quantity);
+            $purchasePrice = ($totalPurchasePrice/$entity->getQuantity());
         }
-		$entity->setBusinessPurchase($invoice);
+      	$entity->setBusinessPurchase($invoice);
 	    $entity->setBusinessParticular($particular);
 	    if(!empty($particular->getPrice())){
 		    $entity->setSalesPrice($particular->getPrice());
