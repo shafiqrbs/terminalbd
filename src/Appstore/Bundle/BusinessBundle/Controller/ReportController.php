@@ -75,8 +75,88 @@ class ReportController extends Controller
             ));
             $this->downloadPdf($html,'systemOverview.pdf');
         }
+    }
+
+    public function purchaseOverviewAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+
+        $purchaseCashOverview   = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
+        $transactionCash        = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseTransactionOverview($user,$data);
+        $vendors        = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseVendor($user,$data);
+        $purchaseMode           = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseModeOverview($user,$data);
+
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:purchase/overview.html.twig', array(
+                'option'                            => $user->getGlobalOption() ,
+                'purchaseCashOverview'              => $purchaseCashOverview ,
+                'transactionCash'                   => $transactionCash ,
+                'vendors'                           => $vendors ,
+                'purchaseMode'                      => $purchaseMode ,
+                'stockMode'                         => '' ,
+                'searchForm'                        => $data,
+
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:purchase/overviewPdf.html.twig', array(
+                'globalOption'                            => $user->getGlobalOption() ,
+                'purchaseCashOverview'              => $purchaseCashOverview ,
+                'transactionCash'                   => $transactionCash ,
+                'vendors'                           => $vendors ,
+                'purchaseMode'                      => $purchaseMode ,
+                'stockMode'                         => '' ,
+                'searchForm'                        => $data,
+            ));
+            $this->downloadPdf($html,'systemOverview.pdf');
+        }
+    }
+
+    public function salesOverviewAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
+        $sales = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
+        $purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 
 
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:sales/salesSummary.html.twig', array(
+                'option'                    => $user->getGlobalOption() ,
+                'cashOverview'              => $cashOverview ,
+                'salesPrice'                => $sales['summary'] ,
+                'customerSalesSummary'      => $sales['customerSalesSummary'] ,
+                'purchasePrice'             => $purchasePrice ,
+                'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+                'searchForm'                => $data ,
+            ));
+
+        }else{
+
+            $html = $this->renderView(
+                'BusinessBundle:Report:sales/salesSummaryPdf.html.twig', array(
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'option'                    => $user->getGlobalOption() ,
+                    'cashOverview'              => $cashOverview ,
+                    'salesPrice'                => $sales['summary'] ,
+                    'customerSalesSummary'      => $sales['customerSalesSummary'] ,
+                    'purchasePrice'             => $purchasePrice ,
+                    'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+                    'searchForm'                => $data ,
+                )
+            );
+            $this->downloadPdf($html,'salesSummaryPdf.pdf');
+        }
 
     }
 
@@ -103,44 +183,7 @@ class ReportController extends Controller
 
     }
 
-	public function salesOverviewAction()
-	{
-		$em = $this->getDoctrine()->getManager();
-		$data = $_REQUEST;
-		$user = $this->getUser();
-		$cashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
-		$salesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
-		$purchasePrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 
-
-        if(empty($data['pdf'])){
-
-            return $this->render('BusinessBundle:Report:sales/salesSummary.html.twig', array(
-                'option'                    => $user->getGlobalOption() ,
-                'cashOverview'              => $cashOverview ,
-                'salesPrice'                => $salesPrice ,
-                'purchasePrice'             => $purchasePrice ,
-                'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
-                'searchForm'                => $data ,
-            ));
-
-        }else{
-
-            $html = $this->renderView(
-                'BusinessBundle:Report:sales/salesSummaryPdf.html.twig', array(
-                    'globalOption'                  => $this->getUser()->getGlobalOption(),
-                    'option'                    => $user->getGlobalOption() ,
-                    'cashOverview'              => $cashOverview ,
-                    'salesPrice'                => $salesPrice ,
-                    'purchasePrice'             => $purchasePrice ,
-                    'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
-                    'searchForm'                => $data ,
-                )
-            );
-            $this->downloadPdf($html,'salesSummaryPdf.pdf');
-        }
-
-	}
 
 	public function salesDetailsAction()
 	{
@@ -429,6 +472,8 @@ class ReportController extends Controller
 
     public function courierDetailsAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -461,7 +506,8 @@ class ReportController extends Controller
     }
 
 	public function monthlyUserSalesAction(){
-
+        set_time_limit(0);
+        ignore_user_abort(true);
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
@@ -483,7 +529,8 @@ class ReportController extends Controller
 	}
 
     public function monthlyProductSalesPriceAction(){
-
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -502,7 +549,8 @@ class ReportController extends Controller
     }
 
     public function monthlyProductSalesAction(){
-
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -519,9 +567,33 @@ class ReportController extends Controller
 
     }
 
+    public function monthlyProductSummaryAction(){
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getBusinessConfig();
+        $stocks = $em->getRepository('BusinessBundle:BusinessParticular')->getStockItemReport($config);
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->monthlyProductSummaryReport($user,$data);
+        return $this->render('BusinessBundle:Report:MonthlyStockSummary.html.twig', array(
+            'inventory'      => $config ,
+            'dailySalesArr'  => $entities['dailySalesArr'] ,
+            'dailyPurchaseArr'  => $entities['dailyPurchaseArr'] ,
+            'dailyPurchaseReturnArr'  => $entities['dailyPurchaseReturnArr'] ,
+            'dailySalesReturnArr'  => $entities['dailySalesReturnArr'] ,
+            'damageArr'  => $entities['damageArr'] ,
+            'stocks'         => $stocks ,
+            'searchForm'     => $data ,
+        ));
+
+    }
+
     public function customerMonthlyProductSalesAction()
     {
-
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -537,42 +609,22 @@ class ReportController extends Controller
             $stocks = $em->getRepository('BusinessBundle:BusinessParticular')->getStockItemReport($config);
             $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->customerDailyProductSalesReport($user, $data);
             $dailySalesArr = $entities['dailySalesArr'];
-            $salesItemTotal = $entities['dailySalesArr'];
+            $salesItemTotal = $entities['salesItemTotal'];
             $dailySalesSummaryArr = $entities['dailySalesSummaryArr'];
+            $monthlySalesSummary = $entities['monthlySalesSummary'];
         }
         return $this->render('BusinessBundle:Report:sales/customerSalesDailyStock.html.twig', array(
             'inventory'             => $config ,
-            'customer'             => $customer ,
+            'customer'              => $customer ,
             'entities'              => $dailySalesArr ,
             'totalItemSales'        => $salesItemTotal ,
-            'dailySalesSummaryArr'        => $dailySalesSummaryArr ,
+            'dailySalesSummaryArr'  => $dailySalesSummaryArr ,
+            'monthlySalesSummary'   => $monthlySalesSummary ,
             'stocks'                => $stocks ,
             'searchForm'            => $data ,
         ));
 
     }
-
-
-	public function purchaseOverviewAction(){
-
-		$em = $this->getDoctrine()->getManager();
-		$data = $_REQUEST;
-		$user = $this->getUser();
-
-		$purchaseCashOverview   = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseOverview($user,$data);
-		$transactionCash        = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseTransactionOverview($user,$data);
-		$purchaseMode           = $em->getRepository('BusinessBundle:BusinessPurchase')->reportPurchaseModeOverview($user,$data);
-
-		return $this->render('BusinessBundle:Report:purchase/overview.html.twig', array(
-			'option'                            => $user->getGlobalOption() ,
-			'purchaseCashOverview'              => $purchaseCashOverview ,
-			'transactionCash'                   => $transactionCash ,
-			'purchaseMode'                      => $purchaseMode ,
-			'stockMode'                         => '' ,
-			'searchForm'                        => $data,
-
-		));
-	}
 
 	public function purchaseVendorAction()
 	{

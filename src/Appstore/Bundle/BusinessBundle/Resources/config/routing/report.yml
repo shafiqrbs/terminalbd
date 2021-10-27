@@ -34,6 +34,10 @@ business_report_monthly_sales_stock:
     path:     /monthly-item-sales
     defaults: { _controller: "BusinessBundle:Report:monthlyProductSales" }
 
+business_report_monthly_stock_summary:
+    path:     /monthly-item-summary
+    defaults: { _controller: "BusinessBundle:Report:monthlyProductSummary" }
+
 business_report_customer_monthly_sales_stock:
     path:     /customer-monthly-item-sales
     defaults: { _controller: "BusinessBundle:Report:customerMonthlyProductSales" }

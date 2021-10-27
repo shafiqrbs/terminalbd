@@ -78,42 +78,61 @@
     </tr>
     </thead>
 </table>
-<table class="table">
+<table class="table table-bordered table-striped table-condensed flip-content ">
+    <tr><th colspan="2">Purchase Cash Overview</th></tr>
     <tr>
-        <td colspan="2" class="pull-left"><h3><strong>Sales  Overview</strong></h3></td>
-    </tr>
-    <tr>
-        <th class="numeric" >Net Total</th>
-        <td class="" >{{ cashOverview.totalAmount|number_format }}</td>
+        <th class="numeric" >Total Amount</th>
+        <td class="numeric" >{{ purchaseCashOverview.total|number_format }}</td>
     </tr>
     <tr>
         <th class="numeric" >Payment</th>
-        <td class="" >{{ cashOverview.receiveAmount|number_format }}</td>
+        <td class="numeric" >{{ purchaseCashOverview.totalPayment|number_format }}</td>
     </tr>
     <tr>
-        <th class="numeric" >Due</th>
-        <td class="" >{{ (cashOverview.totalAmount - cashOverview.receiveAmount)|number_format }}</td>
-    </tr>
-</table>
-<table class="table table-bordered table-striped table-condensed flip-content ">
-
-    <tr>
-        <td colspan="2" class="pull-left"><h3><strong>Sales Profit/Loss</strong></h3></td>
-    </tr>
-    <tr>
-        <th class="numeric" >Sales Price</th>
-        <td class="" >{{ salesPrice.total|number_format }}</td>
-    </tr>
-    <tr>
-        <th class="numeric" >Purchase Price</th>
-        <td class="" >{{ purchasePrice.totalPurchase|number_format }}</td>
-    </tr>
-    <tr>
-        <th class="numeric" >Profit/Loss</th>
-        <td class="numeric" >{{ (salesPrice.total - purchasePrice.totalPurchase)|number_format }}</td>
+        {% set due = (purchaseCashOverview.total - purchaseCashOverview.totalPayment) %}
+        <th class="numeric" >{% if due > 0 %}Payable {% else %}Receivable{% endif %}</th>
+        <th class="numeric" >{{ due|number_format }}</th>
     </tr>
 </table>
 <table class="table">
+    <tr><th colspan="4">Transaction Method wise Purchase</th></tr>
+    <tr>
+        <th class="numeric" >Transaction Method</th>
+        <th class="numeric" >Net Total</th>
+        <th class="numeric" >Payment</th>
+        <th class="numeric" >Payable/Receivable</th>
+    </tr>
+    {% for transaction in transactionCash %}
+        <tr>
+            {% set due = (transaction.total - transaction.totalPayment) %}
+            <td class="numeric" >{{ transaction.transactionName|default }}</td>
+            <td class="numeric" >{{ transaction.total|default|number_format }}</td>
+            <td class="numeric" >{{ transaction.totalPayment|default|number_format }}</td>
+            <td class="numeric" >{{ due|number_format }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<div class="clearfix">&nbsp;</div>
+<table class="table">
+    <tr><th colspan="4">Vendor/Supplier Purchase Summaryt</th></tr>
+    <tr>
+        <th class="numeric" >Purchase Mode</th>
+        <th class="numeric" >Net Total</th>
+        <th class="numeric" >Payment</th>
+        <th class="numeric" >Payable/Receivable</th>
+    </tr>
+    {% for process in purchaseMode %}
+        <tr>
+            <td class="numeric" >{{ process.name|capitalize|default }}</td>
+            <td class="numeric" >{{ process.total|default|number_format }}</td>
+            <td class="numeric" >{{ process.totalPayment|default|number_format }}</td>
+            <td class="numeric" >{{ process.totalDue|default|number_format }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<div class="clearfix">&nbsp;</div>
+<table class="table">
+    <tr><th colspan="7">Vendor/Supplier Purchase Summary</th></tr>
     <tr>
         <th class="numeric" >Customer</th>
         <th class="numeric" >Mobile</th>
@@ -128,7 +147,7 @@
     {% set totalTotal = 0 %}
     {% set totalreceive = 0 %}
     {% set totalDue = 0 %}
-    {% for transaction in customerSalesSummary %}
+    {% for transaction in vendors %}
         {% set totalSubTotal = totalSubTotal + transaction.subTotal  %}
         {% set totalTotal = totalTotal + transaction.total  %}
         {% set totalDiscount = totalDiscount + transaction.discount %}
@@ -150,6 +169,6 @@
         <th>{{ totalDiscount|number_format(2) }}</th>
         <th>{{ totalTotal|number_format(2) }}</th>
         <th>{{ totalreceive|number_format(2) }}</th>
-        <th>{{ totalSubTotal|number_format(2) }}</th>
+        <th>{{ totalDue|number_format(2) }}</th>
     </tr>
 </table>

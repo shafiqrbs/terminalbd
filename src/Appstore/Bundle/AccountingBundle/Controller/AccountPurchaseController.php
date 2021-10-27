@@ -152,7 +152,7 @@ class AccountPurchaseController extends Controller
                 $entity->setProcessHead('accounting');
             }
 
-            if($entity->getPayment() < 0 or $entity->getProcessType() == "Outstanding"){
+            if(in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment"))){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
                 $entity->setTransactionMethod(null);
@@ -204,7 +204,6 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setAccountVendor($entity->getAccountVendor());
             }elseif($global->getMainApp()->getSlug() == 'business'){
-
                 if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
                     $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                     $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
@@ -227,12 +226,11 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setProcessHead('accounting');
             }
-            if( in_array($entity->getProcessType(),array("Outstanding","Opening"))  or $entity->getPayment() < 0 ){
+            if( in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment"))  or $entity->getPayment() < 0 ){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
                 $entity->setTransactionMethod(null);
             }
-
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 23:30:30");

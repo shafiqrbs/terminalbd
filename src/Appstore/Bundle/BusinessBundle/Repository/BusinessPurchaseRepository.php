@@ -170,6 +170,14 @@ class BusinessPurchaseRepository extends EntityRepository
 	{
 
 		$global =  $user->getGlobalOption()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $end = date('Y-m-d',strtotime($data['endDate']));
+        }
 
 		$qb = $this->_em->createQueryBuilder();
 		$qb->from('AccountingBundle:AccountPurchase','e');
@@ -182,7 +190,40 @@ class BusinessPurchaseRepository extends EntityRepository
 		$this->handleSearchBetween($qb,$data);
 		$qb->groupBy("e.transactionMethod");
 		$res = $qb->getQuery();
-		return $result = $res->getArrayResult();
+		return $summary = $res->getArrayResult();
+	}
+
+	public function reportPurchaseVendor(User $user , $data = array())
+	{
+
+		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $end = date('Y-m-d',strtotime($data['endDate']));
+        }
+        $process = "Approved";
+        $sql = "SELECT sales.vendor_id as customer,c.name as customerName,c.mobile as customerMobile,c.address as customerAddress, SUM(sales.subTotal) AS subTotal, SUM(sales.netTotal) AS total, SUM(sales.discount) AS discount, SUM(sales.payment) AS receive, SUM(sales.due) AS due
+                FROM business_purchase as sales
+                JOIN account_vendor as c ON c.id = sales.vendor_id
+                WHERE sales.businessConfig_id = :config AND  sales.process = :process AND date (sales.created) >=:start AND date(sales.created) <=:end
+                GROUP BY customer ORDER BY customer ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process',$process);
+        $stmt->bindValue('start', $start);
+        $stmt->bindValue('end', $end);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $customerSalesSummary = array();
+        foreach($result as $row) {
+            $id = "{$row['customer']}";
+            $customerSalesSummary[$id] = $row;
+        }
+       return $customerSalesSummary;
 
 	}
 
@@ -203,7 +244,7 @@ class BusinessPurchaseRepository extends EntityRepository
 	{
 		$config =  $user->getGlobalOption()->getBusinessConfig()->getId();
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('sum(e.netTotal) as total , sum(e.payment) as totalPayment ,  sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
+		$qb->select('e.mode as name ,sum(e.netTotal) as total , sum(e.payment) as totalPayment ,  sum(e.due) as totalDue, sum(e.discount) as totalDiscount');
 		$qb->where('e.businessConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process = :process');

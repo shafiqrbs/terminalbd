@@ -71,6 +71,7 @@
                                 </div>
                             </form>
                         </div>
+                        {% if customer is defined and customer is not empty %}
                         <div class="row-fluid">
                             <ul>
                                 <li>Customer : {{ customer.name }}</li>
@@ -78,6 +79,7 @@
                                 <li>Address : {{ customer.address|raw }}</li>
                             </ul>
                         </div>
+                        {% endif %}
                         <div class="row-fluid">
                             <div class="span12">
                                 {% set start_date = "now"|date('01-m-Y') %}
@@ -100,7 +102,9 @@
                                     {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
                                         <td>
                                             {% set id =  loop.index~'-'~stock.id %}
-                                            {% if entities[id] is defined and entities[id] is not empty %}{{ entities[id].quantity|default(0)|number_format }} {% else %}-{% endif %}
+                                            {% if entities[id] is defined and entities[id] is not empty %}
+                                                {{ entities[id].quantity|default(0) }}
+                                            {% endif %}
                                         </td>
                                     {% endfor %}
                                     <th>
@@ -112,47 +116,55 @@
                                     <th>
 
                                         {% if totalItemSales[stock.id] is defined and totalItemSales[stock.id] is not empty %}
-                                            {{ totalItemSales[stock.id].bonus|default(0)|number_format }}{% endif %}
+                                            {{ totalItemSales[stock.id].bonus|default(0)|number_format }}
+                                        {% endif %}
                                     </th>
                                 </tr>
                             {% endfor %}
                             <tr>
                                 <th>SubTotal</th>
                                 {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
-                                    <th>{% if totalItemSales[x] is defined and totalItemSales[x] is not empty %}
-                                            {{ totalItemSales[x].subTotal|default(0)|number_format }}{% endif %}
+                                    <th>{% if dailySalesSummaryArr[loop.index] is defined and dailySalesSummaryArr[loop.index] is not empty %}
+                                            {{ dailySalesSummaryArr[loop.index].subTotal|default(0)|number_format }}{% endif %}
                                     </th>
                                 {% endfor %}
-                            </tr>
-                            <tr>
-                                <th>Total</th>
-                                {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
-                                    <th>{% if totalItemSales[x] is defined and totalItemSales[x] is not empty %}
-                                            {{ totalItemSales[x].total|default(0)|number_format }}{% endif %}</th>
-                                {% endfor %}
+                                <th colspan="2">{{ monthlySalesSummary.subTotal|default(0)|number_format }}</th>
                             </tr>
                             <tr>
                                 <th>Discount</th>
                                 {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
-                                    <th>{% if totalItemSales[x] is defined and totalItemSales[x] is not empty %}
-                                            {{ totalItemSales[x].discount|default(0)|number_format }}{% endif %}</th>
+                                    <th>{% if dailySalesSummaryArr[loop.index] is defined and dailySalesSummaryArr[loop.index] is not empty %}
+                                            {{ dailySalesSummaryArr[loop.index].discount|default(0)|number_format }}{% endif %}</th>
                                 {% endfor %}
+                                <th colspan="2">{{ monthlySalesSummary.discount|default(0)|number_format }}</th>
                             </tr>
+                            <tr>
+                                <th>Total</th>
+                                {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
+                                    <th>{% if dailySalesSummaryArr[loop.index] is defined and dailySalesSummaryArr[loop.index] is not empty %}
+                                            {{ dailySalesSummaryArr[loop.index].total|default(0)|number_format }}{% endif %}</th>
+                                {% endfor %}
+                                <th colspan="2">{{ monthlySalesSummary.total|default(0)|number_format }}</th>
+                            </tr>
+
                             <tr>
                                 <th>Receive</th>
                                 {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
-                                    <th>{% if totalItemSales[x] is defined and totalItemSales[x] is not empty %}
-                                            {{ totalItemSales[x].receive|default(0)|number_format }}{% endif %}</th>
+                                    <th>{% if dailySalesSummaryArr[loop.index] is defined and dailySalesSummaryArr[loop.index] is not empty %}
+                                            {{ dailySalesSummaryArr[loop.index].receive|default(0)|number_format }}{% endif %}</th>
                                 {% endfor %}
+                                <th colspan="2">{{ monthlySalesSummary.receive|default(0)|number_format }}</th>
                             </tr>
                             <tr>
                                 <th>Due</th>
                                 {% for key,x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
-                                    <th>{% if totalItemSales[x] is defined and totalItemSales[x] is not empty %}
-                                            {{ totalItemSales[x].due|default(0)|number_format }}{% endif %}</th>
+                                    <th>
+                                        {% if dailySalesSummaryArr[loop.index] is defined and dailySalesSummaryArr[loop.index] is not empty %}
+                                            {{ dailySalesSummaryArr[loop.index].due|default(0)|number_format }}{% endif %}
+                                    </th>
                                 {% endfor %}
+                                <th colspan="2">{{ monthlySalesSummary.due|default(0)|number_format }}</th>
                             </tr>
-
                             </tbody>
                          </table>
                             </div>

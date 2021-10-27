@@ -118,29 +118,65 @@ class BusinessInvoiceRepository extends EntityRepository
     public function reportSalesOverview(User $user ,$data)
     {
 
-
-        $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
-
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $end = date('Y-m-d',strtotime($data['endDate']));
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.subTotal) as subTotal , sum(e.total) as total ,sum(e.received) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount, sum(e.vat) as totalVat');
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process IN (:process)');
         $qb->setParameter('process', array('Done','Delivered','Chalan'));
-        $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("e.branch = :branch");
-            $qb->setParameter('branch', $userBranch);
+        $qb->andWhere("e.created >= :created");
+        $qb->setParameter('created', $start);
+        $qb->andWhere("e.created <= :createdEnd");
+        $qb->setParameter('createdEnd', $end);
+        $summary =  $qb->getQuery()->getOneOrNullResult();
+
+
+
+        $process = "Delivered";
+        $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $sql = "SELECT sales.customer_id as customer,c.name as customerName,c.mobile as customerMobile,c.address as customerAddress, SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS discount, SUM(sales.received) AS receive, SUM(sales.due) AS due
+                FROM business_invoice as sales
+                JOIN Customer as c ON c.id = sales.customer_id
+                WHERE sales.businessConfig_id = :config AND  sales.process = :process AND date (sales.created) >=:start AND date(sales.created) <=:end
+                GROUP BY customer ORDER BY customer ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process',$process);
+        $stmt->bindValue('start', $start);
+        $stmt->bindValue('end', $end);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $customerSalesSummary = array();
+        foreach($result as $row) {
+            $id = "{$row['customer']}";
+            $customerSalesSummary[$id] = $row;
         }
-        return $qb->getQuery()->getOneOrNullResult();
+        $data = array('summary' => $summary,'customerSalesSummary'=>$customerSalesSummary);
+        return $data;
+
     }
 
     public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
 
-        $userBranch = $user->getProfile()->getBranches();
-        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
 
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $start = $datetime->format('Y-m-d 00:00:00');
+            $end = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $end = date('Y-m-d',strtotime($data['endDate']));
+        }
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.businessInvoiceParticulars','si');
         $qb->select('SUM(si.quantity) AS quantity');
@@ -151,11 +187,10 @@ class BusinessInvoiceRepository extends EntityRepository
         $qb->setParameter('config', $config);
 	    $qb->andWhere('e.process IN (:process)');
 	    $qb->setParameter('process', array('Done','Delivered','Chalan'));
-        $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
+        $qb->andWhere("e.created >= :created");
+        $qb->setParameter('created', $start);
+        $qb->andWhere("e.created <= :createdEnd");
+        $qb->setParameter('createdEnd', $end);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
     }
@@ -830,6 +865,107 @@ class BusinessInvoiceRepository extends EntityRepository
         return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr,'dailyTotalSalesArr' => $dailyTotalSalesArr);
     }
 
+    public function monthlyProductSummaryReport(User $user , $data = array())
+    {
+
+        $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $compare    = new \DateTime('now');
+        $year       =  $compare->format('Y');
+        $year       = isset($data['year'])? $data['year'] :$year;
+        $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+
+
+        $sql = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS total,SUM(salesItem.bonusQnt) AS bonus, salesItem.businessParticular_id as stockId  
+                FROM business_invoice_particular as salesItem
+                JOIN business_invoice as sales ON salesItem.businessInvoice_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Done');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailySalesArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailySalesArr[$id] = $row['total'];
+        }
+
+        $purchase = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS total,SUM(salesItem.bonusQuantity) AS bonus, salesItem.businessParticular_id as stockId  
+                FROM business_purchase_item as salesItem
+                JOIN business_purchase as sales ON salesItem.businessPurchase_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($purchase);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailyPurchaseArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailyPurchaseArr[$id] = $row['total'];
+        }
+
+        $purchaseReturn = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_purchase_return_item as salesItem
+                JOIN business_purchase_return as sales ON salesItem.businessPurchaseReturn_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($purchaseReturn);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailyPurchaseReturnArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailyPurchaseReturnArr[$id] = $row['total'];
+        }
+
+        $salesReturn = "SELECT DAY (sales.created) as day, SUM(salesItem.quantity) AS total,SUM(salesItem.bonusQuantity) AS bonus, salesItem.particular_id as stockId  
+                FROM business_invoice_return_item as salesItem
+                JOIN business_invoice_return as sales ON salesItem.invoiceReturn_id = sales.id
+                WHERE sales.businessConfig_id = :config AND sales.process = :process  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                GROUP BY day , salesItem.particular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($salesReturn);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $dailySalesReturnArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $dailySalesReturnArr[$id] = $row['total'];
+        }
+
+        $damage = "SELECT DAY (salesItem.created) as day, SUM(salesItem.quantity) AS total, salesItem.businessParticular_id as stockId  
+                FROM business_damage as salesItem
+                WHERE salesItem.businessConfig_id = :config AND salesItem.process = :process  AND YEAR(salesItem.created) =:year AND MONTH(salesItem.created) =:month
+                GROUP BY day , salesItem.businessParticular_id  ORDER BY day ASC";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($damage);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'Approved');
+        $stmt->bindValue('year', $year);
+        $stmt->bindValue('month', $month);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        $damageArr = array();
+        foreach($result as $row) {
+            $id = "{$row['day']}-{$row['stockId']}";
+            $damageArr[$id] = $row['total'];
+        }
+        return array('dailySalesArr' => $dailySalesArr,'dailyPurchaseArr' => $dailyPurchaseArr,'dailyPurchaseReturnArr' => $dailyPurchaseReturnArr,'dailySalesReturnArr' => $dailySalesReturnArr,'damageArr' => $damageArr);
+    }
+
     public function dailyProductSalesReport(User $user , $data = array())
     {
 
@@ -874,6 +1010,7 @@ class BusinessInvoiceRepository extends EntityRepository
         }
         return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr);
     }
+
 
     public function customerDailyProductSalesReport(User $user , $data = array())
     {
@@ -930,7 +1067,7 @@ class BusinessInvoiceRepository extends EntityRepository
             $year       =  $compare->format('Y');
             $year       = isset($data['year'])? $data['year'] :$year;
             $month      = isset($data['month'])? $data['month'] : $compare->format('m');
-            $sql = "SELECT DAY (sales.created) as day, SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS total, SUM(sales.received) AS receive, SUM(sales.due) AS due
+            $sql = "SELECT DAY (sales.created) as day, SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS discount, SUM(sales.received) AS receive, SUM(sales.due) AS due
                 FROM business_invoice as sales
                 JOIN Customer as c ON c.id = sales.customer_id
                 WHERE sales.businessConfig_id = :config AND  sales.process = :process AND c.mobile = :customer  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
@@ -948,7 +1085,26 @@ class BusinessInvoiceRepository extends EntityRepository
                 $id = "{$row['day']}";
                 $dailySalesSummaryArr[$id] = $row;
             }
-            return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr,'dailySalesSummaryArr' => $dailySalesSummaryArr);
+
+            $config     =  $user->getGlobalOption()->getBusinessConfig()->getId();
+            $compare    = new \DateTime('now');
+            $year       =  $compare->format('Y');
+            $year       = isset($data['year'])? $data['year'] :$year;
+            $month      = isset($data['month'])? $data['month'] : $compare->format('m');
+            $sql = "SELECT SUM(sales.subTotal) AS subTotal, SUM(sales.total) AS total, SUM(sales.discount) AS discount, SUM(sales.received) AS receive, SUM(sales.due) AS due
+                FROM business_invoice as sales
+                JOIN Customer as c ON c.id = sales.customer_id
+                WHERE sales.businessConfig_id = :config AND  sales.process = :process AND c.mobile = :customer  AND YEAR(sales.created) =:year AND MONTH(sales.created) =:month
+                ";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('process',$process);
+            $stmt->bindValue('customer', $customer);
+            $stmt->bindValue('year', $year);
+            $stmt->bindValue('month', $month);
+            $stmt->execute();
+            $monthlySalesSummary =  $stmt->fetch();
+            return array('salesItemTotal' => $salesItemTotal,'dailySalesArr' => $dailySalesArr,'dailySalesSummaryArr' => $dailySalesSummaryArr,'monthlySalesSummary'=>$monthlySalesSummary);
 
         }
         return array('salesItemTotal' => '','dailySalesArr' => '','dailySalesSummaryArr'=>'');

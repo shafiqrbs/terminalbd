@@ -35,7 +35,6 @@
                                 {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
                                 {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
                                 <a target="_blank" href="{{ path('business_report_sales_summary',{'pdf':'pdf','startDate':startDate,'endDate':endDate}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
-
                             </div>
                         </div>
                     </div>
@@ -111,59 +110,52 @@
                                     <td class="numeric" >{{ (salesPrice.total - purchasePrice.totalPurchase)|number_format }}</td>
                                 </tr>
                             </table>
-                            {#
                             <div class="form-actions portlet box purple">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Transaction wise cash Overview</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Customer Sales Summary</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <tr>
-                                    <th class="numeric" >Transaction Method</th>
+                                    <th class="numeric" >Customer</th>
+                                    <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Sub-total</th>
                                     <th class="numeric" >Discount</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                 </tr>
-                                {% for transaction in transactionCash %}
+                                {% set totalSubTotal = 0 %}
+                                {% set totalDiscount = 0 %}
+                                {% set totalTotal = 0 %}
+                                {% set totalreceive = 0 %}
+                                {% set totalDue = 0 %}
+                                {% for transaction in customerSalesSummary %}
+                                    {% set totalSubTotal = totalSubTotal + transaction.subTotal  %}
+                                    {% set totalTotal = totalTotal + transaction.total  %}
+                                    {% set totalDiscount = totalDiscount + transaction.discount %}
+                                    {% set totalreceive = totalreceive + transaction.receive %}
+                                    {% set totalDue = totalDue + transaction.due  %}
                                     <tr>
-                                        <td class="numeric" >{{ transaction.transactionName|default }}</td>
+                                        <td class="numeric" >{{ transaction.customerName|default }}</td>
+                                        <td class="numeric" >{{ transaction.customerMobile|default }}</td>
                                         <td class="numeric" >{{ transaction.subTotal|default|number_format }}</td>
-                                        <td class="numeric" >{{ transaction.totalDiscount|default|number_format }}</td>
+                                        <td class="numeric" >{{ transaction.discount|default|number_format }}</td>
                                         <td class="numeric" >{{ transaction.total|default|number_format }}</td>
-                                        <td class="numeric" >{{ transaction.totalPayment|default|number_format }}</td>
-                                        <td class="numeric" >{{ transaction.totalDue|default|number_format }}</td>
+                                        <td class="numeric" >{{ transaction.receive|default|number_format }}</td>
+                                        <td class="numeric" >{{ transaction.due|default|number_format }}</td>
                                     </tr>
                                 {% endfor %}
-                            </table>
-                           <div class="form-actions portlet box yellow">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Sales Process</div>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <tr>
-                                    <th class="numeric" >Process</th>
-                                    <th class="numeric" >Sub-total</th>
-                                    <th class="numeric" >Discount</th>
-                                    <th class="numeric" >Net Total</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
+                                    <th colspan="2">Grand Total</th>
+                                    <th>{{ totalSubTotal|number_format(2) }}</th>
+                                    <th>{{ totalDiscount|number_format(2) }}</th>
+                                    <th>{{ totalTotal|number_format(2) }}</th>
+                                    <th>{{ totalreceive|number_format(2) }}</th>
+                                    <th>{{ totalSubTotal|number_format(2) }}</th>
                                 </tr>
-                                {% for process in salesProcess %}
-                                    <tr>
-                                        <td class="numeric" >{{ process.name|capitalize|default }}</td>
-                                        <td class="numeric" >{{ process.subTotal|default|number_format }}</td>
-                                        <td class="numeric" >{{ process.totalDiscount|default|number_format }}</td>
-                                         <td class="numeric" >{{ process.total|default|number_format }}</td>
-                                        <td class="numeric" >{{ process.totalPayment|default|number_format }}</td>
-                                        <td class="numeric" >{{ process.totalDue|default|number_format }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </table>#}
+                            </table>
                         </div>
                     </div>
                 </div>
