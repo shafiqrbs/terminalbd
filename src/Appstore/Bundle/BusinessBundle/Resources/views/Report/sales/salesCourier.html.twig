@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Area Base Sales Report
+                    Courier Base Sales Report
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Area Base Sales Report</a></li>
+                    <li><a href="#">Courier Base Sales Report</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -27,7 +27,7 @@
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Area Base Sales Report</div>
+                        <div class="caption"><i class="icon-reorder"></i>Courier Base Sales Report</div>
                         <div class="actions">
                             <div class="btn-group">
                                 {% set area = searchForm.area is defined ? searchForm.area :'' %}
@@ -45,7 +45,7 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <select name="area" id="area" class="span12 m-wrap">
-                                            <option value=""> ---Select Area --- </option>
+                                            <option value=""> ---Select Courier Service --- </option>
                                             {% for executive in executives %}
                                                 <option {% if searchForm.area is defined and searchForm.area == executive.id %} selected="selected" {% endif %} value="{{ executive.id }}">{{ executive.name }}</option>
                                             {% endfor %}
@@ -71,11 +71,11 @@
                             <thead class="flip-content ">
                             <tr class="head-blue">
                                 <th class="numeric" >S/N</th>
-                                <th class="numeric" >Name</th>
-                                <th class="numeric" >Invoice</th>
+                                <th class="numeric" >Name of Courier</th>
                                 <th class="numeric" >Total</th>
                                 <th class="numeric" >Received</th>
                                 <th class="numeric" >Balance</th>
+                                <th class="numeric" ></th>
                             </tr>
                             </thead>
                             <tbody id="sales">
@@ -89,20 +89,20 @@
                                 <tr>
                                     <td class="numeric" >{{ loop.index }}.</td>
                                     <td class="numeric" >{{ entity.name }}</td>
-                                    <td class="numeric" >{{ entity.invoice }}</td>
                                     <td class="numeric" >{{ entity.total|number_format(2)  }}</td>
                                     <td class="numeric" >{{ entity.received|number_format(2)  }}</td>
-                                    <td class="numeric" >{{ (entity.total-entity.received)|number_format(2)  }}</td>
-
+                                    <td class="numeric" >{{ (entity.total - entity.received)|number_format(2)  }}</td>
+                                    <td class="numeric" ><a href="{{ path('business_report_sales_courier_details',{'courier':entity.id}) }}"></a> </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <tfoot><tr><th colspan="2">Grand Total</th>
-                                <th>{{ totalInvoice }}</th>
+                            <tfoot>
+                            <tr>
+                                <th colspan="2">Grand Total</th>
                                 <th>{{ subTotal|number_format(2) }}</th>
                                 <th>{{ totalReceived|number_format(2) }}</th>
-                                <th>{{ (subTotal-totalReceived)|number_format(2) }}</th>
-                               </tr>
+                                <th>{{ (subTotal - totalReceived)|number_format(2) }}</th>
+                            </tr>
                             </tfoot>
                         </table>
 

@@ -702,6 +702,7 @@ class BusinessParticularRepository extends EntityRepository
 
     }
 
+
     public function sumOpeningQuantity($data)
     {
         $qb = $this->createQueryBuilder('e');

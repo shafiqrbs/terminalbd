@@ -446,22 +446,18 @@ class ReportController extends Controller
         $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesCourierReport($user,$data);
         $executives = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
         if(empty($data['pdf'])){
-
-            return $this->render('BusinessBundle:Report:sales/salesArea.html.twig', array(
+            return $this->render('BusinessBundle:Report:sales/salesCourier.html.twig', array(
                 'option'            => $user->getGlobalOption() ,
                 'entities'          => $entities,
                 'executives'        => $executives,
-                'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
                 'searchForm'        => $data,
             ));
 
         }else{
 
-            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['area']);
             $html = $this->renderView(
-                'BusinessBundle:Report:sales/salesAreaPdf.html.twig', array(
+                'BusinessBundle:Report:sales/salesCourierPdf.html.twig', array(
                     'option'        => $user->getGlobalOption(),
-                    'marketing'     => $customer,
                     'entities'      => $entities,
                     'searchForm'    => $data,
                 )
@@ -471,18 +467,18 @@ class ReportController extends Controller
         }
     }
 
-    public function courierDetailsAction()
+    public function courierInvoiceAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('BusinessBundle:BusinessParticular')->salesSrReport($user,$data);
-        $executives = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesCourierDetailsReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('BusinessBundle:BusinessCourier')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
         if(empty($data['pdf'])){
 
-            return $this->render('BusinessBundle:Report:sales/salesArea.html.twig', array(
+            return $this->render('BusinessBundle:Report:sales/salesCourierDetails.html.twig', array(
                 'option'            => $user->getGlobalOption() ,
                 'entities'          => $entities,
                 'executives'        => $executives,
@@ -492,9 +488,9 @@ class ReportController extends Controller
 
         }else{
 
-            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['area']);
+            $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['courier']);
             $html = $this->renderView(
-                'BusinessBundle:Report:sales/salesAreaPdf.html.twig', array(
+                'BusinessBundle:Report:sales/salesCourierDetailsPdf.html.twig', array(
                     'option'        => $user->getGlobalOption(),
                     'marketing'     => $customer,
                     'entities'      => $entities,

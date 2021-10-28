@@ -19,10 +19,10 @@ $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
 
-    if( paymentMethod == 2){
+    if( paymentMethod === 2){
         $('#cartMethod').show();
         $('#bkashMethod').hide();
-    }else if( paymentMethod == 3){
+    }else if( paymentMethod === 3){
         $('#bkashMethod').show();
         $('#cartMethod').hide();
     }else{

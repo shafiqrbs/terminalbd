@@ -1029,7 +1029,6 @@ class BusinessInvoiceRepository extends EntityRepository
 
     public function salesCourierReport( User $user , $data)
     {
-
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.courier', 'i');
@@ -1049,7 +1048,7 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
-    public function salesCourierSummaryReport( User $user , $data)
+    public function salesCourierDetailsReport( User $user , $data)
     {
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
         $courier = isset($data['courier'])? $data['courier'] :'';
@@ -1073,6 +1072,9 @@ class BusinessInvoiceRepository extends EntityRepository
         return $result;
 
     }
+
+
+
 
 
 }
