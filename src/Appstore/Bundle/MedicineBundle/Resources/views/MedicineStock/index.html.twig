@@ -186,13 +186,11 @@
                                             {% endif %}
                                         </td>
                                          <td class="numeric">
-                                             {% if entity.medicineConfig.openingQuantity == 1 %}
-                                                {% if ( (app.user.granted("ROLE_MEDICINE_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN")) and entity.openingApprove != 1) %}
+                                                {% if (entity.medicineConfig.openingQuantity == 1 and app.user.granted("ROLE_MEDICINE_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN") and entity.medicineConfig.openingQuantity == 1) %}
                                                     <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                                 {% else %}
                                                     {{ entity.openingQuantity }}
                                                 {% endif %}
-                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>

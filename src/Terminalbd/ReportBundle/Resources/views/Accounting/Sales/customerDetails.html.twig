@@ -67,9 +67,9 @@
                     {% set sales = 0 %}
                     {% set receive = 0 %}
                     {% for entity in entities %}
+                        {% set sales = sales + entity.debit %}
+                        {% set receive = receive + entity.credit %}
                         {% set balance = balance + entity.balance %}
-                        {% set sales = sales + entity.balance %}
-                        {% set receive = receive + entity.balance %}
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
