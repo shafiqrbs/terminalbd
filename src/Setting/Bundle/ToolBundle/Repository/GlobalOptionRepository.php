@@ -452,21 +452,6 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
-
-        $officeConfig = $this->_em->getRepository('OfficeBundle:OfficeConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($officeConfig)){
-            $config = new OfficeConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-
-         $ticketConfig = $this->_em->getRepository('TicketBundle:TicketConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($ticketConfig)){
-            $config = new TicketConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-
         $this->_em->flush();
 
     }
