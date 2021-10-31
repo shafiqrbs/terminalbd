@@ -67,7 +67,7 @@ class AppKernel extends Kernel
             new Appstore\Bundle\AssetsBundle\AssetsBundle(),
             new Appstore\Bundle\ProcurementBundle\ProcurementBundle(),
             new Terminalbd\PosBundle\PosBundle(),
-            new Terminalbd\ReportBundle\ReportBundle(),
+            new Terminalbd\ReportBundle\ReportBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
