@@ -1,5 +1,8 @@
 
 <ul class="nav pull-right">
+    <li class="" id="header_notification_bar">
+        <a href="{{ path('dashboard_report') }}" class="btn red mini"><i class="icon-bar-chart"></i> MIS Reports</a>
+    </li>
     {% if app.user.granted("ROLE_DOMAIN") and app.user.granted('ROLE_DOMAIN_WEBSITE_SETTING') %}
         <li class="" id="header_notification_bar">
             <a href="{{ path('globaloption_modify') }}" class="btn blue mini"><i class="icon-cogs"></i> Settings</a>

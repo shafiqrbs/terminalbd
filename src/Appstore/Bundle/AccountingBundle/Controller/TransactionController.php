@@ -157,14 +157,16 @@ class TransactionController extends Controller
             $end = $date->format('d-m-Y');
             $data = array('startDate'=> $start , 'endDate' => $end);
         }
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
         $todayCustomerSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->dailySalesReceive($this->getUser(),$data);
         $todayVendorSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->dailyPurchasePayment($this->getUser(),$data);
         $todayExpense = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->dailyPurchasePayment($this->getUser(),$data);
         $todayJournal = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournalItem')->dailyJournal($this->getUser(),$data);
-         $todayLoan = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->dailyLoan($this->getUser(),$data);
+        $todayLoan = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->dailyLoan($this->getUser(),$data);
 
         $transactionMethods = array(1,4);
-        $globalOption = $this->getUser()->getGlobalOption();
+
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
@@ -182,6 +184,7 @@ class TransactionController extends Controller
                 'todayExpense'       => $todayExpense,
                 'todayJournal'       => $todayJournal,
                 'todayLoan'       => $todayLoan,
+                'employees'=> $employees,
                 'searchForm' => $data,
             ));
 

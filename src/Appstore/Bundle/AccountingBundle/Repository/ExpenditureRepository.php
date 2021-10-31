@@ -29,6 +29,7 @@ class ExpenditureRepository extends EntityRepository
         $startDate      = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate']:'';
         $endDate        = isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate']:'';
         $toUser         = isset($data['toUser'])? $data['toUser'] :'';
+        $user =    isset($data['user'])? $data['user'] :'';
         $accountHead    = isset($data['accountHead'])? $data['accountHead'] :'';
         $transactionMethod    = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $category       = isset($data['category'])? $data['category'] :'';
@@ -45,9 +46,13 @@ class ExpenditureRepository extends EntityRepository
         }
 
         if (!empty($toUser)) {
-
             $qb->join("e.toUser",'u');
             $qb->andWhere($qb->expr()->like("u.username", "'%$toUser%'" ));
+        }
+
+        if (!empty($user)) {
+            $qb->join('e.createdBy','u');
+            $qb->andWhere("u.id = :user")->setParameter('user', $user);
         }
 
         if (!empty($device)) {

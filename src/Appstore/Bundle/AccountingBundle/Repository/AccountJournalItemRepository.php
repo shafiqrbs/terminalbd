@@ -38,12 +38,17 @@ class AccountJournalItemRepository extends EntityRepository
             $accountSubHead = isset($data['accountSubHead']) ? $data['accountSubHead'] :'';
             $startDate = isset($data['startDate']) ? $data['startDate'] : '';
             $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
-
+            $user =    isset($data['user'])? $data['user'] :'';
 
             if (!empty($toUser)) {
                 $qb->join('e.toUser','u');
                 $qb->andWhere("u.username = :toUser");
                 $qb->setParameter('toUser', $toUser);
+            }
+
+            if (!empty($user)) {
+                $qb->join('j.createdBy','user');
+                $qb->andWhere("user.id = :user")->setParameter('user', $user);
             }
 
             if (!empty($accountHead)) {

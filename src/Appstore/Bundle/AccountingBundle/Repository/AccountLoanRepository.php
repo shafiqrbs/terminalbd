@@ -30,11 +30,16 @@ class AccountLoanRepository extends EntityRepository
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $employee =    isset($data['employee'])? $data['employee'] :'';
             $process =    isset($data['process'])? $data['process'] :'';
+            $user =    isset($data['user'])? $data['user'] :'';
             if (!empty($employee)) {
                 $qb->andWhere("e.employee = :employee")->setParameter('employee', $employee);
             }
             if (!empty($process)) {
                 $qb->andWhere("e.process = :process")->setParameter('process', $process);
+            }
+            if (!empty($user)) {
+                $qb->join('e.createdBy','user');
+                $qb->andWhere("user.id = :user")->setParameter('user', $user);
             }
             if (!empty($startDate) ) {
                 $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));

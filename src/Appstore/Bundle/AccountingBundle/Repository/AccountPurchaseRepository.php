@@ -383,7 +383,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
                 $processHead =    isset($data['processHead'])? $data['processHead'] :'';
 	            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
-
+                $user =    isset($data['user'])? $data['user'] :'';
                 $globalOption->getMainApp()->getSlug();
                /* if($globalOption->getMainApp()->getSlug() == 'miss'){
                     $qb->leftJoin('e.medicineVendor','v');
@@ -417,7 +417,10 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
                    $qb->andWhere("e.processHead = :process");
                    $qb->setParameter('process', $processHead);
                 }
-
+                if (!empty($user)) {
+                    $qb->join('e.createdBy','u');
+                    $qb->andWhere("u.id = :user")->setParameter('user', $user);
+                }
 	            if (!empty($transactionMethod)) {
 		        $qb->andWhere("e.transactionMethod = :transactionMethod");
 		        $qb->setParameter('transactionMethod', $transactionMethod);

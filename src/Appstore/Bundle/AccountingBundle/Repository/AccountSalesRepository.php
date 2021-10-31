@@ -43,6 +43,7 @@ class AccountSalesRepository extends EntityRepository
 			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
 			$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 			$mobile =    isset($data['mobile'])? $data['mobile'] :'';
+			$user =    isset($data['user'])? $data['user'] :'';
 			$customer =    isset($data['customer'])? $data['customer'] :'';
 			$customerId =    isset($data['customerId'])? $data['customerId'] :'';
 			$invoice =    isset($data['invoice'])? $data['invoice'] :'';
@@ -68,12 +69,15 @@ class AccountSalesRepository extends EntityRepository
 				$qb->andWhere("e.accountRefNo = :accountRefNo");
 				$qb->setParameter('accountRefNo', $accountRefNo);
 			}
-
 			if (!empty($transaction)) {
 				$qb->andWhere("e.transactionMethod = :transaction");
 				$qb->setParameter('transaction', $transaction);
 			}
-
+            if (!empty($user)) {
+                $qb->join('e.createdBy','u');
+                $qb->andWhere("u.id = :user");
+                $qb->setParameter('user', $user);
+            }
 			if (!empty($mobile)) {
 				$qb->join('e.customer','c');
 				$qb->andWhere("c.mobile = :mobile");
