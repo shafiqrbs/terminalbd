@@ -89,6 +89,7 @@ class AccountingController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = '';
+        $customer = "";
         if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['customer']) and $data['customer']) {
             if(isset($data['mobile']) and !empty($data['mobile'])){
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
@@ -116,10 +117,7 @@ class AccountingController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = '';
-        if(isset($data['submit']) and $data['submit'] == 'print' and isset($data['employee']) and $data['employee']) {
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userSummary($globalOption,$data);
-        }
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userSummary($globalOption,$data);
         return $this->render('ReportBundle:Accounting/Sales:userSummary.html.twig', array(
                 'entities' => $entities,
                 'option' => $globalOption,
@@ -139,11 +137,13 @@ class AccountingController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = "";
-        if(isset($data['submit']) and $data['submit'] == 'print' and isset($data['employee']) and $data['employee']) {
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userSummary($globalOption,$data);
+        if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['user']) and $data['user']) {
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
         }
-        return $this->render('ReportBundle:Accounting/Sales:userSummary.html.twig', array(
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Sales:customerDetails.html.twig', array(
             'entities' => $entities,
+            'employees' => $employees,
             'option' => $globalOption,
             'searchForm' => $data,
         ));

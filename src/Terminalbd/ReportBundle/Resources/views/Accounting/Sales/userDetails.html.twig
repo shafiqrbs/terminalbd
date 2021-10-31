@@ -5,6 +5,13 @@
             <form action="" method="get">
                 <div class="row">
                     <div class="col-md-5 margin-top">
+                        <label>Customer</label>
+                        <select class="search-input span12 m-wrap" id="user" name="user">
+                            <option value="">--Select System User--</option>
+                            {% for employee in employees %}
+                                <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="col-md-3 margin-top">
                         <label>Start Date</label>
@@ -16,7 +23,7 @@
                     </div>
                     <div class="col-md-1 margin-top">
                         <label>&nbsp;</label>
-                        <button class='btn btn-download btn-margin-left' ><i class='fa fa-search'></i> Search</button>
+                        <button class='btn btn-download btn-margin-left' value="search" name="submit" ><i class='fa fa-search'></i> Search</button>
                     </div>
                 </div>
             </form>

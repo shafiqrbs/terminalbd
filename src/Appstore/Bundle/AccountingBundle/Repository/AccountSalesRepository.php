@@ -40,7 +40,8 @@ class AccountSalesRepository extends EntityRepository
 
 		if(!empty($data))
 		{
-			$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+
+		    $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
 			$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 			$mobile =    isset($data['mobile'])? $data['mobile'] :'';
 			$user =    isset($data['user'])? $data['user'] :'';
