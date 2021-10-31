@@ -15,22 +15,17 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Divi\AjaxLoginBundle\DiviAjaxLoginBundle(),
-
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-
             new FOS\UserBundle\FOSUserBundle(),
 	        new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-
             new Knp\Bundle\TimeBundle\KnpTimeBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-
             new Core\UserBundle\UserBundle(),
             new Setting\Bundle\LocationBundle\SettingLocationBundle(),
             new Setting\Bundle\MediaBundle\SettingMediaBundle(),
@@ -49,8 +44,7 @@ class AppKernel extends Kernel
             new Bindu\BinduBundle\BinduBundle(),
             new Appstore\Bundle\EcommerceBundle\EcommerceBundle(),
             new Appstore\Bundle\InventoryBundle\InventoryBundle(),
-           new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
-           /* new SunCat\MobileDetectBundle\MobileDetectBundle(),*/
+            new Appstore\Bundle\DomainUserBundle\DomainUserBundle(),
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),
@@ -75,7 +69,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
-
         return $bundles;
     }
 
