@@ -59,17 +59,15 @@ class AppKernel extends Kernel
             new Appstore\Bundle\DmsBundle\DmsBundle(),
             new Appstore\Bundle\RestaurantBundle\RestaurantBundle(),
             new Appstore\Bundle\MedicineBundle\MedicineBundle(),
-            new Appstore\Bundle\OfficeBundle\OfficeBundle(),
             new Appstore\Bundle\BusinessBundle\BusinessBundle(),
             new Appstore\Bundle\EducationBundle\EducationBundle(),
             new Appstore\Bundle\DoctorPrescriptionBundle\DoctorPrescriptionBundle(),
             new Appstore\Bundle\HotelBundle\HotelBundle(),
             new Appstore\Bundle\ElectionBundle\ElectionBundle(),
             new Appstore\Bundle\AssetsBundle\AssetsBundle(),
-            new Appstore\Bundle\ServiceBundle\ServiceBundle(),
             new Appstore\Bundle\ProcurementBundle\ProcurementBundle(),
-            new Appstore\Bundle\TicketBundle\TicketBundle(),
             new Terminalbd\PosBundle\PosBundle(),
+            new Terminalbd\ReportBundle\ReportBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

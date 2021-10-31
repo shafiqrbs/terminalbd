@@ -331,14 +331,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('customer.id');
-        if($amount){
-            $qb->having('customerBalance >= :balance')->setParameter('balance', $amount);
-            $qb->orderBy('customerBalance','ASC');
-        }else{
-            $qb->having('customerBalance > :balance')->setParameter('balance', 0);
-            $qb->orHaving('customerBalance < :balance')->setParameter('balance', 0);
-            $qb->orderBy('customer.name','ASC');
-        }
+        $qb->having('customerBalance > 0');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
@@ -348,15 +341,29 @@ class AccountSalesRepository extends EntityRepository
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
         $qb = $this->createQueryBuilder('e');
-        $qb->select('customer.id as customerId ,customer.name as customerName , customer.mobile as customerMobile,COALESCE(SUM(e.totalAmount),0) as totalAmount, COALESCE(SUM(e.amount),0) as amount,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as customerBalance ');
+        $qb->select('customer.id as customerId ,customer.name as name , customer.mobile as mobile,COALESCE(SUM(e.totalAmount),0) as debit, COALESCE(SUM(e.amount),0) as credit,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as balance ');
         $qb->join('e.customer','customer');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('customer.id');
-        if($amount) {
-            $qb->having('totalAmount >= :balance')->setParameter('balance', $amount);
-        }
-        $qb->orderBy('totalAmount', 'DESC');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('balance', 'DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function userSummary($globalOption, $data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('profile.id as customerId ,profile.name as name , profile.mobile as mobile,COALESCE(SUM(e.totalAmount),0) as debit, COALESCE(SUM(e.amount),0) as credit,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as balance ');
+        $qb->join('e.createdBy','u');
+        $qb->leftJoin('u.profile','profile');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->groupBy('u.id');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('balance', 'DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

@@ -1,7 +1,0 @@
-service_serviceinvoice:
-    resource: "@ServiceBundle/Resources/config/routing/serviceinvoice.yml"
-    prefix:   /invoice
-
-service_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: ServiceBundle:Default:index }

@@ -31,14 +31,12 @@ class AccountSalesController extends Controller
         return $pagination;
     }
 
-
     /**
-     * Lists all AccountSales entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES, ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
-
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -56,8 +54,7 @@ class AccountSalesController extends Controller
     }
 
     /**
-     * Lists all AccountSales entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES_REPORT, ROLE_DOMAIN")
      */
     public function customerOutstandingAction()
     {
@@ -70,6 +67,50 @@ class AccountSalesController extends Controller
             'entities' => $pagination,
             'searchForm' => $data,
         ));
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES_REPORT, ROLE_DOMAIN")
+     */
+
+    public function customerSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
+        return $this->render('AccountingBundle:AccountSales/Report:customerReport.html.twig', array(
+            'entities' => $entities,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES_REPORT, ROLE_DOMAIN")
+     */
+
+    public function userSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userSummary($globalOption,$data);
+        if(isset($data['submit']) and $data['submit'] == 'print' and isset($data['employee']) and $data['employee']){
+            return $this->render('AccountingBundle:AccountSales/Report:userSummary.html.twig', array(
+                'entities' => $entities,
+                'option' => $globalOption,
+                'searchForm' => $data,
+            ));
+        }else{
+            return $this->render('AccountingBundle:AccountSales/Report:userSummary.html.twig', array(
+                'entities' => $entities,
+                'option' => $globalOption,
+                'searchForm' => $data,
+            ));
+        }
     }
 
 
@@ -217,8 +258,7 @@ class AccountSalesController extends Controller
     }
 
     /**
-     * Displays a form to create a new AccountSales entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
      */
     public function newAction()
     {
@@ -369,6 +409,10 @@ class AccountSalesController extends Controller
         $em->flush();
         exit;
     }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES")
+     */
 
     public function approveAction(AccountSales $entity)
     {

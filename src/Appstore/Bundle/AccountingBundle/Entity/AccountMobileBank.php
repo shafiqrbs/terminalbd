@@ -205,10 +205,6 @@ class AccountMobileBank
      */
     protected $medicineSales;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="accountMobileBank" )
-     */
-    protected $customerInvoice;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountMobileBank" )

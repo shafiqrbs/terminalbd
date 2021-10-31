@@ -70,3 +70,14 @@ report_purchase_expenditure_details:
     path:     /expenditure-purchase
     defaults: { _controller: "AccountingBundle:Report:expenditurePurchaseDetails" }
 
+report_sales_board:
+    path:     /sales-board
+    defaults: { _controller: "AccountingBundle:Report:salesBoard" }
+
+report_sales_customer_summary:
+    path:     /customer-summary
+    defaults: { _controller: "AccountingBundle:Report:customerSales" }
+
+report_sales_user_summary:
+    path:     /user-outstanding
+    defaults: { _controller: "AccountingBundle:Report:userSummary" }

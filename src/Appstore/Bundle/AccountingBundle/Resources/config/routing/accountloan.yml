@@ -3,8 +3,8 @@ account_loan:
     defaults: { _controller: "AccountingBundle:AccountLoan:index" }
 
 account_loan_outstanding:
-    path:     /customer-outstanding
-    defaults: { _controller: "AccountingBundle:AccountLoan:customerOutstanding" }
+    path:     /loan-outstanding
+    defaults: { _controller: "AccountingBundle:AccountLoan:loanOutstanding" }
 
 account_loan_new:
     path:     /new

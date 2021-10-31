@@ -71,3 +71,8 @@
 .editable-input input.m-wrap{
     height: 20px!important;
 }
+
+.search-form .search-input {
+    height: 38px !important;
+    min-height: 38px!important;
+}

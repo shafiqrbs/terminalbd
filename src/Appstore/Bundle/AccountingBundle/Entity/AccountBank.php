@@ -216,10 +216,6 @@ class AccountBank
      */
     protected $restaurantPurchase;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="accountBank" )
-     */
-    protected $customerInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountBank" )

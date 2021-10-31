@@ -6,6 +6,14 @@ account_sales_outstanding:
     path:     /customer-outstanding
     defaults: { _controller: "AccountingBundle:AccountSales:customerOutstanding" }
 
+account_sales_customer_summary:
+    path:     /customer-summary
+    defaults: { _controller: "AccountingBundle:AccountSales:customerSummary" }
+
+account_sales_user_summary:
+    path:     /user-outstanding
+    defaults: { _controller: "AccountingBundle:AccountSales:userSummary" }
+
 account_sales_return:
     path:     /return
     defaults: { _controller: "AccountingBundle:AccountSales:salesReturn" }

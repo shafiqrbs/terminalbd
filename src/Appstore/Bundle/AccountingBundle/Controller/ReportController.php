@@ -613,7 +613,56 @@ class ReportController extends Controller
 
 	}
 
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function customerSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
+        return $this->render('AccountingBundle:Report/Sales:customerSummary.html.twig', array(
+            'entities' => $entities,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
 
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function salesBoardAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
+        return $this->render('AccountingBundle:Report/Sales:salesBoard.html.twig', array(
+            'entities' => $entities,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * Lists all AccountSales entities.
+     *
+     */
+    public function userSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userSummary($globalOption,$data);
+        return $this->render('AccountingBundle:Report/Sales:userSummary.html.twig', array(
+            'entities' => $entities,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
     public function downloadPdf($html,$fileName = '')
     {
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';

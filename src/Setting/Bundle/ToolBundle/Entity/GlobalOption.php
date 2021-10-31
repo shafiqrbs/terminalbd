@@ -29,11 +29,8 @@ use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
-use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
-use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -116,10 +113,6 @@ class GlobalOption
     protected $procurementConfig;
 
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\TicketBundle\Entity\TicketConfig", mappedBy="globalOption" )
-     **/
-    protected $ticketConfig;
 
 
     /**
@@ -411,11 +404,6 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Attendance", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $attendance;
-
-/**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\OfficeBundle\Entity\OfficeConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $officeConfig;
 
 
     /**
@@ -779,18 +767,6 @@ class GlobalOption
      **/
     private $restaurantConfig;
 
-
-    /*================================= OFFICE BUNDLE===========================================*/
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $customerInvoice;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="domainCustomer" , cascade={"persist", "remove"})
-     **/
-    private $domainCustomerInvoice;
 
 
     /*================================= HOTEL BUNDLE===========================================*/
@@ -1927,21 +1903,7 @@ class GlobalOption
         return $this->dailyAttendance;
     }
 
-    /**
-     * @return CustomerInvoice
-     */
-    public function getCustomerInvoice()
-    {
-        return $this->customerInvoice;
-    }
 
-    /**
-     * @return mixed
-     */
-    public function getDomainCustomerInvoice()
-    {
-        return $this->domainCustomerInvoice;
-    }
 
     /**
      * @return BusinessConfig
@@ -2157,21 +2119,6 @@ class GlobalOption
         return $this->assetsConfig;
     }
 
-    /**
-     * @return OfficeConfig
-     */
-    public function getOfficeConfig()
-    {
-        return $this->officeConfig;
-    }
-
-    /**
-     * @return TicketConfig
-     */
-    public function getTicketConfig()
-    {
-        return $this->ticketConfig;
-    }
 
     /**
      * @return string

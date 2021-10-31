@@ -30,7 +30,6 @@ class ProductExcel
         $this->data = $data;
         $inventory = $this->itemImport->getBusinessConfig();
         foreach($this->data as $key => $item) {
-
             $name = ucfirst(strtolower(trim($item['Name'])));
             $category = ucfirst(strtolower(trim($item['Category'])));
             $productOld = $this->getDoctrain()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $inventory,'name' => $name));

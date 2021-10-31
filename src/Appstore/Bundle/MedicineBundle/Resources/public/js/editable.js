@@ -25,6 +25,8 @@ var EditableInit = function () {
 }
 
 
+
+
 $(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);
 });

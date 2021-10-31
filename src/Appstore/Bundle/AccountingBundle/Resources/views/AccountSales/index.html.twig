@@ -36,7 +36,24 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('account_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp; New Receive</a>
+                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                        Reports
+                                        <i class="icon-tasks"></i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <ul>
+                                            <li>
+                                                <a href="{{ path('account_sales_customer_summary') }}"><i class="icon-list"></i>&nbsp; Customer base Sales </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('account_sales_user_summary') }}"><i class="icon-list"></i>&nbsp; User base Sales</a>
+                                            </li>
+                                        </ul>
+                                    </ul>
+                                {% endif %}
                             </div>
+
                         </div>
                     </div>
 

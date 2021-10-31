@@ -224,10 +224,6 @@ class TransactionMethod
      */
     protected $businessInvoice;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="transactionMethod" )
-     */
-    protected $customerInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="transactionMethod" )

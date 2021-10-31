@@ -33,7 +33,6 @@ use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
-use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -261,22 +260,6 @@ class User extends BaseUser
 	 */
 	protected $branches;
 
-	/* ----------------------------------CustomerInvoice --------------------------*/
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 **/
-	protected $customerInvoice;
-
-
-	/* ----------------------------------CustomerInvoice --------------------------*/
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 **/
-	protected $purchaseOrder;
 
 
 	/**
@@ -289,9 +272,6 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="approvedBy" , cascade={"persist", "remove"})
 	 **/
 	protected $purchaseOrderApprovedBy;
-
-
-	/* ----------------------------------CustomerInvoice --------------------------*/
 
 
 	/**

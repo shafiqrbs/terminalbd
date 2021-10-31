@@ -5,17 +5,13 @@ app_pos:
     resource: "@PosBundle/Resources/config/routing.yml"
     prefix:   /app-pos
 
-ticket:
-    resource: "@TicketBundle/Resources/config/routing.yml"
-    prefix:   /ticket
+app_report:
+    resource: "@ReportBundle/Resources/config/routing.yml"
+    prefix:   /app-report
 
 assests:
     resource: "@AssetsBundle/Resources/config/routing.yml"
     prefix:   /assets
-
-assets_service:
-    resource: "@ServiceBundle/Resources/config/routing.yml"
-    prefix:   /asset-maintenance
 
 site_domain_control:
     resource: "dynamic/sites.yml"
@@ -60,10 +56,6 @@ education:
 business:
     resource: "@BusinessBundle/Resources/config/routing.yml"
     prefix:   /business
-
-office:
-    resource: "@OfficeBundle/Resources/config/routing.yml"
-    prefix:   /office
 
 medicine:
     resource: "@MedicineBundle/Resources/config/routing.yml"

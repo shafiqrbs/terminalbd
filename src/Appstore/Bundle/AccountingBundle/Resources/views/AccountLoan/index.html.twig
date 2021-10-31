@@ -34,6 +34,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('account_loan_new') }}"><i class="icon-plus-sign"></i>&nbsp; Loan Receive/Payment</a>
+                                <a class="btn yellow" target="_blank" href="{{ path('account_loan_outstanding') }}"><i class="icon-print"></i>&nbsp; Loan Summary</a>
                             </div>
                         </div>
                     </div>
@@ -43,16 +44,14 @@
                             {% include('flash-message.html.twig') %}
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span2">
-                                        <select class="search-input span12 m-wrap" id="employee" name="employee">
+                                    <div class="span2"></div>
+                                    <div class="span4">
+                                        <select class="search-input span12 m-wrap select2" id="employee" name="employee">
                                             <option value="">--Select Loan User--</option>
                                             {% for employee in employees %}
                                                 <option {% if searchForm.employee is defined and searchForm.employee == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
                                             {% endfor %}
                                         </select>
-                                    </div>
-                                    <div class="span2">
-                                        <input type="text" id="accountRefNo" name="accountRefNo"  class="span12 search-input  m-wrap" value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="Enter reference no">
                                     </div>
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input  dateCalendar m-wrap" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
@@ -62,8 +61,8 @@
                                             <div class="input-append span11">
                                                 <input type="text" id="endDate" name="endDate"  class="span10 search-input dateCalendar m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
-                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                                    <button class="btn purple" type="submit"><i class="icon-download"></i> Download</button>
+                                                    <button class="btn blue" type="submit" name="submit" value="submit"><i class="icon-search"></i></button>
+                                                    <button class="btn purple" type="submit" name="submit" value="print"><i class="icon-print"></i> Print</button>
                                                 </div>
                                             </div>
                                         </div>

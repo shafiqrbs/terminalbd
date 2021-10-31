@@ -36,24 +36,53 @@ class AccountLoanController extends Controller
      * Lists all AccountLoan entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $option = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('AccountingBundle:AccountLoan')->findWithSearch($option,$data);
-        $pagination = $this->paginate($entities);
-        //$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->receiveModeOverview($option,$data);
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         $employees = $em->getRepository('UserBundle:User')->getEmployees($option);
-        return $this->render('AccountingBundle:AccountLoan:index.html.twig', array(
-            'entities' => $pagination,
-            'transactionMethods' => $transactionMethods,
-            'employees' => $employees,
-            'searchForm' => $data,
-            'overview' => '',
+        if(isset($data['submit']) and $data['submit'] == 'print' and isset($data['employee']) and $data['employee']){
+            $data[] = array('process'=>'Approved');
+            $entities = $em->getRepository('AccountingBundle:AccountLoan')->findWithSearch($option,$data);
+            $pagination = $entities->getQuery()->getResult();
+            $employee = $data['employee'];
+            $user = $this->getDoctrine()->getRepository("UserBundle:User")->find($employee);
+            return $this->render('AccountingBundle:AccountLoan:print.html.twig', array(
+                'entities' => $pagination,
+                'user' => $user,
+                'data' => $data,
+            ));
+        }else{
+            $entities = $em->getRepository('AccountingBundle:AccountLoan')->findWithSearch($option,$data);
+            $pagination = $this->paginate($entities);
+            return $this->render('AccountingBundle:AccountLoan:index.html.twig', array(
+                'entities' => $pagination,
+                'transactionMethods' => $transactionMethods,
+                'employees' => $employees,
+                'searchForm' => $data,
+                'overview' => '',
+            ));
+        }
+
+    }
+
+     /**
+     * Lists all AccountLoan entities.
+     *
+     */
+    public function loanOutstandingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:AccountLoan')->outstandingLoan($option->getId());
+        return $this->render('AccountingBundle:AccountLoan:loanOutstanding.html.twig', array(
+            'entities' => $entities,
+            'option' => $option
         ));
+
     }
 
     /**

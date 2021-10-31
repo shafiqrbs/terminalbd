@@ -3,6 +3,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountLoan;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -27,17 +28,13 @@ class AccountLoanRepository extends EntityRepository
         {
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
-            $name =    isset($data['name'])? $data['name'] :'';
-            $companyName =    isset($data['companyName'])? $data['companyName'] :'';
-            if (!empty($mobile)) {
-                $qb->andWhere($qb->expr()->like("s.mobile", "'%$$mobile%'"  ));
+            $employee =    isset($data['employee'])? $data['employee'] :'';
+            $process =    isset($data['process'])? $data['process'] :'';
+            if (!empty($employee)) {
+                $qb->andWhere("e.employee = :employee")->setParameter('employee', $employee);
             }
-            if (!empty($name)) {
-                $qb->andWhere($qb->expr()->like("s.name", "'%$$name%'"  ));
-            }
-            if (!empty($companyName)) {
-                $qb->andWhere($qb->expr()->like("s.companyName", "'%$companyName%'"  ));
+            if (!empty($process)) {
+                $qb->andWhere("e.process = :process")->setParameter('process', $process);
             }
             if (!empty($startDate) ) {
                 $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
@@ -55,12 +52,12 @@ class AccountLoanRepository extends EntityRepository
 
     public function findWithSearch(GlobalOption $globalOption, $data)
     {
+
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.globalOption = :config')->setParameter('config', $globalOption->getId()) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
-        $result = $qb->getQuery();
-        return  $result;
+        return  $qb;
     }
 
     public function getLastBalance(GlobalOption $global)
@@ -77,117 +74,6 @@ class AccountLoanRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete($q, GlobalOption $global)
-    {
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('e.companyName as id');
-        $qb->addSelect('e.companyName as text');
-        $qb->where($qb->expr()->like("e.companyName", "'$q%'" ));
-        $qb->orWhere($qb->expr()->like("e.name", "'$q%'" ));
-        $qb->andWhere("e.globalOption = :global");
-        $qb->setParameter('global', $global->getId());
-        $qb->groupBy('e.id');
-        $qb->orderBy('e.companyName', 'ASC');
-        $qb->setMaxResults( '30' );
-        return $qb->getQuery()->getResult();
-
-    }
-
-    public function insertVendor(MedicineVendor $vendor)
-    {
-    	$em = $this->_em;
-    	$entity = new AccountVendor();
-	    $entity->setCompanyName($vendor->getCompanyName());
-	    $entity->setName($vendor->getName());
-	    $entity->setMobile($vendor->getMobile());
-	    $entity->setEmail($vendor->getEmail());
-	    $entity->setEmail($vendor->getAddress());
-	    $entity->setModule('medicine');
-	    $entity->setMode($vendor->getMode());
-	    $entity->setOldId($vendor->getId());
-	    $entity->setGlobalOption($vendor->getMedicineConfig()->getGlobalOption());
-	    $em->persist($entity);
-	    $em->flush();
-    }
-
-    public function getApiVendor(GlobalOption $entity)
-    {
-
-        $config = $entity->getId();
-        $qb = $this->createQueryBuilder('s');
-        $qb->where('s.globalOption = :config')->setParameter('config', $config) ;
-        $qb->orderBy('s.companyName','ASC');
-        $result = $qb->getQuery()->getResult();
-
-        $data = array();
-
-        /* @var $row MedicineVendor */
-
-        foreach($result as $key => $row) {
-            $data[$key]['vendor_id']    = (int) $row->getId();
-            $data[$key]['name']           = $row->getCompanyName();
-        }
-
-        return $data;
-    }
-
-    public function newVendorCreate($globalOption,$mobile,$data)
-    {
-        $em = $this->_em;
-        $name = $data['companyName'];
-        $address = isset($data['companyAddress']) ? $data['companyAddress']:'';
-        $entity = $this->findOneBy(array('globalOption' => $globalOption ,'companyName' => $name ,'mobile' => $mobile));
-        if($entity){
-            return $entity;
-        }elseif(!empty($mobile) and !empty($name)){
-            $entity = new AccountVendor();
-            $entity->setCompanyName($name);
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setAddress($address);
-            $entity->setGlobalOption($globalOption);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-        return false;
-    }
-
-    public function updateVendorCompanyName(AccountVendor $vendor)
-    {
-        $com = $vendor->getCompanyName();
-        $em = $this->_em;
-        $qb = $em->createQueryBuilder();
-        $qb->update('AccountingBundle:AccountPurchase', 'mg')
-            ->set('mg.companyName', ':companyName')
-            ->where('mg.accountVendor = :id')
-            ->setParameter('companyName',$com)
-            ->setParameter('id', $vendor->getId())
-            ->getQuery()
-            ->execute();
-
-    }
-
-
-    public function updateCustomerBalance(AccountLoan $accountSales){
-        $em = $this->_em;
-        $customer = $accountSales->getEmployee()->getId();
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('(COALESCE(SUM(e.amount),0)) AS balance');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $accountSales->getGlobalOption()->getId());
-        $qb->andWhere("e.process = 'approved'");
-        $qb->andWhere("e.employee = :employee");
-        $qb->setParameter('employee', $customer);
-        $result = $qb->getQuery()->getSingleResult();
-        $balance = $result['balance'];
-        $accountSales->setBalance($balance);
-        $accountSales->setUpdated($accountSales->getCreated());
-        $em->persist($accountSales);
-        $em->flush();
-        return $accountSales;
-
-    }
 
     public function dailyLoan($user,$data)
     {
@@ -199,6 +85,20 @@ class AccountLoanRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('p.name');
+        $qb->orderBy('p.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function outstandingLoan($option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('p.name as name','p.mobile as mobile','SUM(e.debit) as debit','SUM(e.credit) as credit','(SUM(e.credit) + SUM(e.debit)) as balance');
+        $qb->join('e.employee','u');
+        $qb->join('u.profile','p');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $option);
+        $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('p.name');
         $qb->orderBy('p.name','ASC');
         $result = $qb->getQuery()->getArrayResult();

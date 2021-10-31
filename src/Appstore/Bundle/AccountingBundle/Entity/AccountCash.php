@@ -7,7 +7,6 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
-use Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -121,11 +120,6 @@ class AccountCash
      */
     protected $accountSalesReturn;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\OfficeBundle\Entity\CustomerInvoice", inversedBy="accountCash")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    protected $customerInvoice;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", inversedBy="accountCash" )
@@ -659,21 +653,7 @@ class AccountCash
         $this->orderPayments = $orderPayments;
     }
 
-    /**
-     * @return CustomerInvoice
-     */
-    public function getCustomerInvoice()
-    {
-        return $this->customerInvoice;
-    }
 
-    /**
-     * @param CustomerInvoice $customerInvoice
-     */
-    public function setCustomerInvoice($customerInvoice)
-    {
-        $this->customerInvoice = $customerInvoice;
-    }
 
 
     /**

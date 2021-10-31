@@ -1,0 +1,91 @@
+{% extends '::base-report.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 print-bar">
+            <form action="" method="get">
+                <div class="row">
+                    <div class="col-md-5 margin-top">
+                        <label>Customer</label>
+                        <input type="text" class="m-wrap select2Customer select2" id="mobile" name="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}" placeholder="Select Customer">
+                    </div>
+                    <div class="col-md-3 margin-top">
+                        <label>Start Date</label>
+                        <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                    </div>
+                    <div class="col-md-3 margin-top">
+                        <label>End Date</label>
+                        <input type="date" class="m-wrap" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                    </div>
+                    <div class="col-md-1 margin-top">
+                        <label>&nbsp;</label>
+                        <button class='btn btn-download btn-margin-left' ><i class='fa fa-search'></i> Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="print-area">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 text-center">
+                <p><strong style="font-size: 16px">{{ option.name }}</strong></p>
+                <p>Name of Report: Customer Outstanding</p>
+            </div>
+            <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table even" border="1">
+                    <colgroup>
+                        <col class="w">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <tr>
+                        <th class="" ><i class="icon-reorder"></i></th>
+                        <th class="" >Customer Name</th>
+                        <th class="" >Mobile</th>
+                        <th class="text-right" >Sales</th>
+                        <th class="text-right" >Receive</th>
+                        <th class="text-right" >Outstanding</th>
+                    </tr>
+                    <tbody>
+                    {% set balance = 0 %}
+                    {% for entity in entities %}
+                        {% set balance = balance + entity.customerBalance %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="numeric" >
+                                <a href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}">
+                                {{ entity.customerName|capitalize }}
+                                </a>
+                            </td>
+                            <td class="numeric" >{{ entity.customerMobile }}</td>
+                            <td class="text-right" >{{ entity.totalAmount|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.amount|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.customerBalance|number_format(2) }}</td>
+                            {#<td class="numeric" >
+                                <a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
+                                <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
+                            </td>#}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th class="text-right" colspan="5">Grand Balance</th>
+                        <th class="text-right">{{ balance|number_format(2) }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
