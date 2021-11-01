@@ -224,4 +224,103 @@ class ReportController extends Controller
         ));
     }
 
+    /**
+     * @Route("/hospital-diagnostic-invoice", methods={"GET", "POST"}, name="hms_report_diagnostic_invoice")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsDiagnosticInvoiceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportInvoiceLists($user , $mode = 'diagnostic' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:diagnostic-invoice.html.twig', array(
+            'entities' => $entities,
+            'employees' => $employees,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-visit-invoice", methods={"GET", "POST"}, name="hms_report_visit_invoice")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsVisitInvoiceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportVisitLists($user , $mode = 'visit' , $data);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Hospital/Sales:visit-invoice.html.twig', array(
+            'employees' => $employees,
+            'assignDoctors' => $assignDoctors,
+            'entities' => $entities,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-admission-invoice", methods={"GET", "POST"}, name="hms_report_admission_invoice")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsAdmissionInvoiceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportAdmissionLists($user , $mode = 'admission' , $data);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $anesthesiaDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAanesthesiaDoctor($hospital);
+        $assistantDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssistantDoctor($hospital);
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Hospital/Sales:admission-invoice.html.twig', array(
+            'employees' => $employees,
+            'anesthesiaDoctor' => $anesthesiaDoctor,
+            'assignDoctors' => $assignDoctors,
+            'assistantDoctor' => $assistantDoctor,
+            'departments' => $departments,
+            'entities' => $entities,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
 }

@@ -586,5 +586,170 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function reportInvoiceLists(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $user = isset($data['user'])? $data['user'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
+        $qb->select('e.created as created','e.invoice as invoice','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
+        $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', "Done") ;
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        $qb->orderBy('e.created','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportVisitLists(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
+        $qb->leftJoin('e.assignDoctor','d');
+        $qb->select('e.created as created','e.invoice as invoice','e.payment as receive');
+        $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('d.name as doctor');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', "In-progress") ;
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        $qb->orderBy('e.created','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportAdmissionLists(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
+        $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
+        $qb->leftJoin('e.assignDoctor','d');
+        $qb->leftJoin('e.anesthesiaDoctor','ad');
+        $qb->leftJoin('e.assistantDoctor','assist');
+        $qb->select('e.created as created','e.invoice as invoice','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
+        $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('d.name as assignDoctor');
+        $qb->addSelect('ad.name as anesthesiaDoctor');
+        $qb->addSelect('assist.name as assistantDoctor');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Release','Released','Dead','Death','Admitted'));
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($assistantDoctor)){
+            $qb->andWhere("e.assistantDoctor = :assistantDoctor");
+            $qb->setParameter('assistantDoctor', $assistantDoctor);
+        }
+        if(!empty($anesthesiaDoctor)){
+            $qb->andWhere("e.anesthesiaDoctor = :anesthesiaDoctor");
+            $qb->setParameter('anesthesiaDoctor', $anesthesiaDoctor);
+        }
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        $qb->orderBy('e.created','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function getAssignDoctor($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.assignDoctor','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+    public function getAanesthesiaDoctor($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.anesthesiaDoctor','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode','admission') ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+    public function getAssistantDoctor($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.assistantDoctor','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode','admission') ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function getDepartments($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.department','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode','admission') ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
 
 }

@@ -7,7 +7,7 @@
                     <div class="col-md-5 margin-top">
                         <label>Customer</label>
                         <select class="search-input span12 m-wrap" id="user" name="user">
-                            <option value="">--Select System User--</option>
+                            <option value="">--Select Created User--</option>
                             {% for employee in employees %}
                                 <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
                             {% endfor %}
@@ -15,11 +15,11 @@
                     </div>
                     <div class="col-md-3 margin-top">
                         <label>Start Date</label>
-                        <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                        <input type="date" class="m-wrap" required="required" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
                     <div class="col-md-3 margin-top">
                         <label>End Date</label>
-                        <input type="date" class="m-wrap" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                        <input type="date" class="m-wrap" required="required" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
                     <div class="col-md-1 margin-top">
                         <label>&nbsp;</label>
@@ -34,11 +34,11 @@
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
                 <p><strong style="font-size: 16px">{{ option.name }}</strong></p>
-                <p>Name of Report: User base Sales & Collection</p>
+                <p>Name of Report: Diagnostic Invoice</p>
             </div>
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}
-                <p><strong>Start Date:&nbsp;</strong><strong>{% if data['startDate'] is defined and data['startDate'] is not empty %}{{ data['startDate']|date('d-m-Y') }}{% endif %}</strong>
-                    <strong>End Date:&nbsp;<strong>{% if data['endDate'] is defined and data['endDate'] is not empty %}{{ data['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
+                <p><strong>Start Date:&nbsp;</strong><strong>{% if searchForm['startDate'] is defined and searchForm['startDate'] is not empty %}{{ searchForm['startDate']|date('d-m-Y') }}{% endif %}</strong>
+                    <strong>End Date:&nbsp;<strong>{% if searchForm['endDate'] is defined and searchForm['endDate'] is not empty %}{{ searchForm['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
                 </p>
                 <p></p>
             </div>
@@ -56,10 +56,13 @@
                     </colgroup>
                     <tbody><tr>
                         <th>SI.</th>
+                        <th>Created</th>
+                        <th>Invoice</th>
                         <th>Name</th>
                         <th>Mobile</th>
-                        <th class="text-right">Opening</th>
-                        <th class="text-right">Sales</th>
+                        <th class="text-right">SubTotal</th>
+                        <th class="text-right">Discount</th>
+                        <th class="text-right">Total</th>
                         <th class="text-right">Receive</th>
                         <th class="text-right">Balance</th>
                     </tr>
@@ -68,22 +71,26 @@
                     {% set sales = 0 %}
                     {% set receive = 0 %}
                     {% for entity in entities %}
-                        {% set sales = sales + entity.debit %}
-                        {% set receive = receive + entity.credit %}
-                        {% set balance = balance + entity.balance %}
+                        {% set sales = sales + entity.total %}
+                        {% set receive = receive + entity.receive %}
+                        {% set balance = (sales + entity.total) - (receive + entity.receive) %}
                         <tr>
                             <td>{{ loop.index }}</td>
+                            <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                            <td class="numeric" >{{ entity.invoice }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
-                            <td class="text-right" >{{ entity.debit|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.credit|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.balance|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.subTotal|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.discount|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.total|number_format(2) }}</td>
+                            <td class="text-right" >{{ entity.receive|number_format(2) }}</td>
+                            <td class="text-right" >{{ (entity.total-entity.receive)|number_format(2) }}</td>
                         </tr
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="3">Grand Balance</th>
+                        <th class="text-right" colspan="6">Grand Balance</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
                         <th class="text-right">{{ receive|number_format(2) }}</th>
                         <th class="text-right">{{ balance|number_format(2) }}</th>

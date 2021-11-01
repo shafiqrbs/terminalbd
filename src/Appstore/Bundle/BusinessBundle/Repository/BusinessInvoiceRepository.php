@@ -124,8 +124,8 @@ class BusinessInvoiceRepository extends EntityRepository
             $start = $datetime->format('Y-m-d 00:00:00');
             $end = $datetime->format('Y-m-d 23:59:59');
         }else{
-            $start = date('Y-m-d',strtotime($data['startDate']));
-            $end = date('Y-m-d',strtotime($data['endDate']));
+            $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+            $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
         }
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.subTotal) as subTotal , sum(e.total) as total ,sum(e.received) as totalPayment , count(e.id) as totalVoucher, sum(e.due) as totalDue, sum(e.discount) as totalDiscount, sum(e.vat) as totalVat');

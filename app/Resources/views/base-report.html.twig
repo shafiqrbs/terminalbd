@@ -10,7 +10,7 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 </head>
-<title>Terminalbd | {{ app.user.globalOption.name }}</title>
+<title>{{ app.user.globalOption.name }} | MIS Reports</title>
 <body class="body">
 <!-- START: RUBY DEMO HEADER -->
 <div class="ruby-menu-demo-header">
@@ -97,7 +97,9 @@
                                     <h3 class="ruby-list-heading">List of Sales Reports</h3>
                                     <ul>
                                         <li><a href="{{ path('hms_report_dashboard') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Dashboard</a></li>
-                                        <li><a href="{{ path('hms_report_dashboard') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Outstanding</a></li>
+                                        <li><a href="{{ path('hms_report_diagnostic_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Diagnoestic Invoice</a></li>
+                                        <li><a href="{{ path('hms_report_visit_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Visit Invoice</a></li>
+                                        <li><a href="{{ path('hms_report_admission_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Admission Invoice</a></li>
                                         <li><a href="{{ path('hms_report_dashboard') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Summary</a></li>
                                     </ul>
                                 </div>
