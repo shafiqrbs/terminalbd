@@ -360,13 +360,20 @@ class AccountSalesRepository extends EntityRepository
     public function reportCustomerDetails($globalOption, $data = array())
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
+        $mode = isset($data['mode']) ? $data['mode']:0;
         $qb = $this->createQueryBuilder('e');
-        $qb->select('customer.id as customerId ,customer.name as name , customer.mobile as mobile,COALESCE(e.totalAmount) as debit, COALESCE(e.amount,0) as credit,(COALESCE(e.totalAmount,0) - COALESCE(e.amount,0)) as balance ');
         $qb->join('e.customer','customer');
+        $qb->leftJoin('e.transactionMethod','m');
+        $qb->select('e.created as created','m.name as method','customer.id as customerId ,customer.name as name , customer.mobile as mobile,COALESCE(e.totalAmount) as debit, COALESCE(e.amount,0) as credit,(COALESCE(e.totalAmount,0) - COALESCE(e.amount,0)) as balance ');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        if($mode == "Sales"){
+            $qb->andWhere("e.totalAmount > 0 ");
+        }elseif($mode == "Receive"){
+            $qb->andWhere("e.amount > 0");
+        }
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('balance', 'DESC');
+        $qb->orderBy('created', 'DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

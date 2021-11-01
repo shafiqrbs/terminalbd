@@ -4,12 +4,22 @@
         <div class="col-md-12 print-bar">
             <form action="" method="get">
                 <div class="row">
-                    <div class="col-md-5 margin-top">
+                    <div class="col-md-3 margin-top">
                         <label>Customer</label>
                         <select class="search-input span12 m-wrap" id="user" name="user">
                             <option value="">--Select System User--</option>
                             {% for employee in employees %}
                                 <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 margin-top">
+                        <label>Mode</label>
+                        <select class="search-input span12 m-wrap" id="mode" name="mode">
+                            <option value="">--Process All--</option>
+                            {% set mods = ['Sales','Receive'] %}
+                            {% for mode in mods %}
+                                <option {% if searchForm.mode is defined and searchForm.mode == mode %} selected="selected" {% endif %}  value="{{ mode }}">{{ mode }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -53,11 +63,14 @@
                         <col>
                         <col>
                         <col>
+                        <col>
                     </colgroup>
                     <tbody><tr>
                         <th>SI.</th>
+                        <th>Created</th>
                         <th>Name</th>
                         <th>Mobile</th>
+                        <th class="" >Method</th>
                         <th class="text-right">Sales</th>
                         <th class="text-right">Receive</th>
                     </tr>
@@ -71,8 +84,10 @@
                         {% set balance = balance + entity.balance %}
                         <tr>
                             <td>{{ loop.index }}</td>
+                            <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
+                            <td class="numeric" >{{ entity.method }}</td>
                             <td class="text-right" >{{ entity.debit|number_format(2) }}</td>
                             <td class="text-right" >{{ entity.credit|number_format(2) }}</td>
                          </tr
@@ -80,7 +95,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="3">Grand Balance</th>
+                        <th class="text-right" colspan="5">Grand Balance</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
                         <th class="text-right">{{ receive|number_format(2) }}</th>
                     </tr>
