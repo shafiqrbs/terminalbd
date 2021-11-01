@@ -357,6 +357,20 @@ class AccountSalesRepository extends EntityRepository
         return $result;
     }
 
+    public function reportCustomerDetails($globalOption, $data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('customer.id as customerId ,customer.name as name , customer.mobile as mobile,COALESCE(e.totalAmount) as debit, COALESCE(e.amount,0) as credit,(COALESCE(e.totalAmount,0) - COALESCE(e.amount,0)) as balance ');
+        $qb->join('e.customer','customer');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('balance', 'DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function userSummary($globalOption, $data = array())
     {
         $amount = isset($data['amount']) ? $data['amount']:0;

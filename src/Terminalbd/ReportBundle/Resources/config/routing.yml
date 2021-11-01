@@ -1,7 +1,4 @@
 report_controllers:
-    resource: '@ReportBundle/Controller/DefaultController.php'
+    resource: '@ReportBundle/Controller/ReportController.php'
     type: annotation
 
-report_accounting_controllers:
-    resource: '@ReportBundle/Controller/AccountingController.php'
-    type: annotation

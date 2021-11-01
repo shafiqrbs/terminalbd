@@ -395,6 +395,24 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $array['Reports'] = array(
+            'ROLE_REPORT'                                       => 'Reports',
+            'ROLE_REPORT_OPERATION_ADMIN'                       => 'Admin',
+            'ROLE_REPORT_OPERATION_MANAGER'                     => 'Manager',
+            'ROLE_REPOTRT_ACCOUNTING'                           => 'Accounting',
+            'ROLE_REPORT_ACCOUNTING_SALES'                      => 'Accounting Sales',
+            'ROLE_REPORT_ACCOUNTING_PURCHASE'                   => 'Accounting Purchase',
+            'ROLE_REPORT_ACCOUNTING_EXPENDITURE'                => 'Accounting Expenditure',
+            'ROLE_REPORT_ACCOUNTING_FINANCIAL'                  => 'Accounting Financial',
+            'ROLE_REPORT_OPERATION'                             => 'Operation',
+            'ROLE_REPORT_OPERATION_SALES'                       => 'Sales',
+            'ROLE_REPORT_OPERATION_PURCHASE'                    => 'Purchase',
+            'ROLE_REPORT_OPERATION_STOCK'                       => 'Stock',
+            'ROLE_REPORT_OPERATION_OTHERS'                      => 'Others',
+
+
+        );
+
 	    $array['SMS'] = array(
             'ROLE_SMS'                                          => 'Sms/E-mail',
             'ROLE_SMS_MANAGER'                                  => 'Sms/E-mail Manager',

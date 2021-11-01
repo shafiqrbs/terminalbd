@@ -9,10 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/accounting")
+ * @Route("/mis")
  * @Security("is_granted('ROLE_DOMAIN') or is_granted('ROLE_REPOTRT_ACCOUNTING')")
  */
-class AccountingController extends Controller
+class ReportController extends Controller
 {
 
 
@@ -29,16 +29,45 @@ class AccountingController extends Controller
     }
 
     /**
-     * @Route("/dashboard", name="accounting_report_sales_dashboard")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES,ROLE_DOMAIN")
+     * @Route("/dashboard", methods={"GET", "POST"}, name="report_dashboard")
+     * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN")
      */
-    public function dashboardAction()
+    public function indexAction()
     {
-        echo "Test";
-        exit;
-       // return $this->render('ReportBundle:Default:index.html.twig', array('name' => $name));
-    }
 
+        $data = $_REQUEST;
+        if(empty($data)){
+            $date = new \DateTime("now");
+            $start = $date->format('d-m-Y');
+            $end = $date->format('d-m-Y');
+            $data = array('startDate'=> $start , 'endDate' => $end);
+        }
+        $todayCustomerSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->dailySalesReceive($this->getUser(),$data);
+        $todayVendorSales = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->dailyPurchasePayment($this->getUser(),$data);
+        $todayExpense = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->dailyPurchasePayment($this->getUser(),$data);
+        $todayJournal = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournalItem')->dailyJournal($this->getUser(),$data);
+        $todayLoan = $this->getDoctrine()->getRepository('AccountingBundle:AccountLoan')->dailyLoan($this->getUser(),$data);
+        $transactionMethods = array(1,4);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
+        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
+        return $this->render('ReportBundle:Default:index.html.twig', array(
+            'transactionCashOverviews'                  => $transactionCashOverview,
+            'transactionBankCashOverviews'              => $transactionBankCashOverviews,
+            'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
+            'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
+            'todayCustomerSales'       => $todayCustomerSales,
+            'todayVendorSales'       => $todayVendorSales,
+            'todayExpense'       => $todayExpense,
+            'todayJournal'       => $todayJournal,
+            'todayLoan'       => $todayLoan,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+
+    }
 
     /**
      * @Route("/customer-outstanding", methods={"GET", "POST"}, name="accounting_report_sales_outstanding")
@@ -138,7 +167,7 @@ class AccountingController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = "";
         if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['user']) and $data['user']) {
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportCustomerDetails($globalOption,$data);
         }
         $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
         return $this->render('ReportBundle:Accounting/Sales:customerDetails.html.twig', array(
@@ -146,6 +175,52 @@ class AccountingController extends Controller
             'employees' => $employees,
             'option' => $globalOption,
             'searchForm' => $data,
+        ));
+    }
+
+
+    /**
+     * @Route("/hospital-dashboard", methods={"GET", "POST"}, name="hms_report_dashboard")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsDashboardAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (!empty($data['date'])) {
+            $datetime = new \DateTime($data['date']);
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+
+       // $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data);
+       // $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'false', array('diagnostic', 'admission'));
+      //  $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'true', array('diagnostic', 'admission'));
+
+        $summary = $em->getRepository('HospitalBundle:Invoice')->salesSummary($user, $data);
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'admission');
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user, $data);
+        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
+        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
+
+        return $this->render('ReportBundle:Hospital:index.html.twig', array(
+
+           // 'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
+         //   'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
+           // 'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+            'diagnosticOverview' => $diagnosticOverview,
+            'admissionOverview' => $admissionOverview,
+            'serviceOverview' => $serviceOverview,
+            'transactionOverview' => $transactionOverview,
+            'commissionOverview' => $commissionOverview,
+            'summary' => $summary,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
         ));
     }
 

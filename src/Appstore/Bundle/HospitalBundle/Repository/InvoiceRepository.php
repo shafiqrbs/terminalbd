@@ -155,6 +155,22 @@ class InvoiceRepository extends EntityRepository
     }
 
 
+    public function salesSummary(User $user,$data)
+    {
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoiceTransactions','it');
+        $qb->select('e.invoiceMode,sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment, sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $this->handleDateRangeFind($qb,$data);
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Released','Death','Dead'));
+        $qb->groupBy("e.invoiceMode");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function findWithOverview(User $user , $data , $mode='')
     {
 

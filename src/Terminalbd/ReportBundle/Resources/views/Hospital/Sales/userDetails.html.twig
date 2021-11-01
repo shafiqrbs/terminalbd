@@ -60,14 +60,11 @@
                         <th>Mobile</th>
                         <th class="text-right">Sales</th>
                         <th class="text-right">Receive</th>
+                        <th class="text-right">Balance</th>
                     </tr>
                     <tbody>
                     {% set balance = 0 %}
-                    {% set sales = 0 %}
-                    {% set receive = 0 %}
                     {% for entity in entities %}
-                        {% set sales = sales + entity.debit %}
-                        {% set receive = receive + entity.credit %}
                         {% set balance = balance + entity.balance %}
                         <tr>
                             <td>{{ loop.index }}</td>
@@ -75,14 +72,14 @@
                             <td class="numeric" >{{ entity.mobile }}</td>
                             <td class="text-right" >{{ entity.debit|number_format(2) }}</td>
                             <td class="text-right" >{{ entity.credit|number_format(2) }}</td>
-                         </tr
+                            <td class="text-right" >{{ entity.balance|number_format(2) }}</td>
+                        </tr
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="3">Grand Balance</th>
-                        <th class="text-right">{{ sales|number_format(2) }}</th>
-                        <th class="text-right">{{ receive|number_format(2) }}</th>
+                        <th class="text-right" colspan="5">Grand Balance</th>
+                        <th class="text-right">{{ balance|number_format(2) }}</th>
                     </tr>
                     </tfoot>
                 </table>
