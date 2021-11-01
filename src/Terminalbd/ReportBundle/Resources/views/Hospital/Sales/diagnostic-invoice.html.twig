@@ -67,10 +67,14 @@
                         <th class="text-right">Balance</th>
                     </tr>
                     <tbody>
+                    {% set subTotal = 0 %}
+                    {% set discount = 0 %}
                     {% set balance = 0 %}
                     {% set sales = 0 %}
                     {% set receive = 0 %}
                     {% for entity in entities %}
+                        {% set subTotal = subTotal + entity.subTotal %}
+                        {% set discount = discount + entity.discount %}
                         {% set sales = sales + entity.total %}
                         {% set receive = receive + entity.receive %}
                         {% set balance = (sales + entity.total) - (receive + entity.receive) %}
@@ -90,7 +94,9 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="6">Grand Balance</th>
+                        <th class="text-right" colspan="5">Grand Balance</th>
+                        <th class="text-right">{{ subTotal|number_format(2) }}</th>
+                        <th class="text-right">{{ discount|number_format(2) }}</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
                         <th class="text-right">{{ receive|number_format(2) }}</th>
                         <th class="text-right">{{ balance|number_format(2) }}</th>
