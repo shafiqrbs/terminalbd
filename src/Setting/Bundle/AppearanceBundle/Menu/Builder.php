@@ -708,7 +708,7 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']['Asset Ledger']->addChild("Branch", array('route' => 'assets_ledger_branch'))->setAttribute('icon', 'icon-th-list');
 
         $menu['Fixed Assets']->addChild('Asset Maintenance')->setAttribute('icon', 'icon icon-cogs')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Asset Maintenance']->addChild("Asset Maintenance", array('route' => 'serviceinvoice'))->setAttribute('icon', 'icon-th-list');
+/*        $menu['Fixed Assets']['Asset Maintenance']->addChild("Asset Maintenance", array('route' => 'serviceinvoice'))->setAttribute('icon', 'icon-th-list');*/
         $menu['Fixed Assets']->addChild('Asset Disposal')->setAttribute('icon', 'icon icon-archive')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'))->setAttribute('icon', 'icon-th-list');
         $menu['Fixed Assets']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'))->setAttribute('icon', 'icon-th-list');

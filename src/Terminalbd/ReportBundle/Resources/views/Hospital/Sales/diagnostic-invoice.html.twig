@@ -1,6 +1,13 @@
 {% extends '::base-report.html.twig' %}
 {% block body %}
     <div class="row">
+        <style>
+            table { page-break-after:auto }
+            tr    { page-break-inside:avoid; page-break-after:auto }
+            td    { page-break-inside:avoid; page-break-after:auto }
+            thead { display: table-row-group; }
+            tfoot { display:table-footer-group }
+        </style>
         <div class="col-md-12 print-bar">
             <form action="" method="get">
                 <div class="row">
@@ -54,7 +61,8 @@
                         <col>
                         <col>
                     </colgroup>
-                    <tbody><tr>
+                    <thead>
+                    <tr>
                         <th>SI.</th>
                         <th>Created</th>
                         <th>Invoice</th>
@@ -66,6 +74,7 @@
                         <th class="text-right">Receive</th>
                         <th class="text-right">Balance</th>
                     </tr>
+                    </thead>
                     <tbody>
                     {% set subTotal = 0 %}
                     {% set discount = 0 %}
