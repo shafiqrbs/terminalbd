@@ -2,6 +2,10 @@ hospital_report:
     resource: "@HospitalBundle/Resources/config/routing/report.yml"
     prefix:   /report
 
+hospital_prescription:
+    resource: "@HospitalBundle/Resources/config/routing/prescription.yml"
+    prefix:   /prescription
+
 hospital_purchase:
     resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase

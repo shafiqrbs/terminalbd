@@ -1,57 +1,45 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <script type="text/javascript">
-        window.print();
-        setTimeout(function () {
-            window.open('', '_self', '');
-            window.close();
-        }, 2000);
+        // window.print();
+        // setTimeout(function () {
+        //     window.open('', '_self', '');
+        //     window.close();
+        // }, 2000);
     </script>
+    <style>
+        .invoice ,#invoice{
+            padding: 0!important;
+        }
+        .td-width{
+            width: 5%!important;
+        }
+        .invoice .invoice-to{
+            font-size: 20px;
+        }
+    </style>
     <div id="invoice" style="margin-bottom: 0; padding-bottom: 0">
         <div class="invoice overflow-auto" style="margin-top:{{ config.printTopMargin }}px!important;">
             <div>
                 <header>
-                    {% if config.isPrintHeader == 1 %}
-                        <div class="row">
-                            <div class="col" style="float: left">
-                            <span>
-                              {% if config.webPath is not empty %}
-                                  <img  src="{{ image(config.webPath).resize(180,120, 'white') }}">
-                              {% endif %}
-                            </span>
-                            </div>
-                            <div style="float: right;display: flex;
-    align-items: center; height: 120px" >
-                                <div class="col invoice-details" >
-                                    <img width="220" height="" src="{{ asset('assets/logo/yummy-cafe/yummy-famous.png') }}">
-                                </div>
-                                <div class="col invoice-details" >
-                                    <img width="120" height="120" src="{{ asset('assets/logo/yummy-cafe/yummy-qr.png') }}">
-                                </div>
-                            </div>
-
-                        </div>
-                    {% endif %}
-                    <div class="row"></div>
-                    <div style="clear: both; display: flex"></div>
+                    <img style="height: 70px; width: 100%!important;" src="{{ asset('assets/logo/yummy-cafe/yummy-famous.png') }}">
                 </header>
                 <main style="margin-bottom: 0!important;">
                     <div class="row contacts" style="display: flex;align-items: center;">
-                        <div class="col invoice-to" style="margin-right: 30px; width: 30%; float: left">
-                            <div class="text-gray-light">INVOICE TO</div>
+                        <div class="col invoice-to" style="margin-right: 30px; width: 40%; float: left">
                             {% if entity.customer %}
                                 {% if  entity.customer.name is not empty  %}
                                     <h4 class="to">Customer : {{ entity.customer.name }}</h4>
                                 {% endif %}
-                                {% if  entity.customer.mobile is not empty %}
-                                    <div class="address">Mobile : {{ entity.customer.mobile }}</div>
-                                {% endif %}
                                 {% if  entity.customer.address is not empty  %}
                                     <div class="address">Address&nbsp;: {{ entity.customer.address|raw }}</div>
                                 {% endif %}
+                                {% if  entity.customer.mobile is not empty %}
+                                    <div class="address">Mobile : {{ entity.customer.mobile }}</div>
+                                {% endif %}
                             {% endif %}
                         </div>
-                        <div class="col" style="width: 40%;text-align: center; float: left">
+                        <div class="col" style="width: 20%;text-align: center; float: left">
                             {% if entity.process == 'Chalan' %}
                                 <div><strong>CHALAN</strong></div>
                             {% elseif entity.process == 'Quotation' %}
@@ -60,10 +48,10 @@
                                 <div><strong>INVOICE/BILL</strong></div>
                             {% endif %}
                         </div>
-                        <div class="col invoice-details" style="width: 30%; float: right">
+                        <div class="col invoice-details" style="width: 40%; float: right">
                             <h5 class="invoice-id">INVOICE No. {{ entity.invoice }}</h5>
                             <div class="date">Date of Invoice: {{ entity.created|date('d-m-Y') }}</div>
-                            {% if entity.transactionMethod is not empty %}<div class="date">Method: {{ entity.transactionMethod.name }}</div>{% endif %}
+                            {% if entity.transactionMethod is not empty and entity.received > 0 %}<div class="date">Method: {{ entity.transactionMethod.name }}</div>{% endif %}
                             {% if entity.paymentMobile is not empty %}<div class="date">{{ entity.paymentMobile }}/{{ entity.transactionId }}</div>{% endif %}
                             {% if entity.cardNo is not empty %}<div class="date">{{ entity.bank.name  }}/{{ entity.cardNo }}</div>{% endif %}
                         </div>
@@ -71,14 +59,12 @@
                     <table class="main-table" border="0" cellspacing="0" cellpadding="0" style="border: 1px solid #999;">
                         <thead>
                         <tr>
-                            <th style="width: 1%">S/N</th>
                             <th class="text-left">Product Name</th>
-                            <th>QTY</th>
-                            <th>Free QTY</th>
-                            <th>Total QTY</th>
-                            <th>Unit</th>
-                            <th>Rate</th>
-                            <th style="width: 8%" class="text-right">Total</th>
+                            <th class="td-width">QTY</th>
+                            <th class="td-width">Free</th>
+                            <th class="td-width">Unit</th>
+                            <th class="td-width text-right">Rate</th>
+                            <th class="td-width text-right">Total</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -90,13 +76,11 @@
                                 {% set totalQunt = totalQunt + item.quantity %}
                                 {% set totalBonus = totalBonus + item.bonusQnt %}
                                 <tr>
-                                    <td class="">{{ i }}</td>
                                     <td class="">{{ item.particular }}</td>
                                     <td class="">{{ item.quantity }}</td>
                                     <td class="">{{ item.bonusQnt }}</td>
-                                    <td class="">{{ (item.quantity+item.bonusQnt) }}</td>
-                                    <td class="text-right">{{ item.unit }}</td>
-                                    <td class="text-left">{{ item.price|number_format(2) }}</td>
+                                    <td class="text-left">{{ item.unit }}</td>
+                                    <td class="text-right">{{ item.price|number_format(2) }}</td>
                                     <td class="text-right" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</td>
                                 </tr>
                                 {% set i = i + 1 %}
@@ -105,49 +89,48 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="7"><strong class="pull-right">TOTAL</strong></td>
+                            <td colspan="5"><strong class="pull-right">TOTAL</strong></td>
                             <td class="text-right">{{ entity.subTotal|number_format(2) }}</td>
                         </tr>
-                        <tr><td colspan="7"><strong class="pull-right">DISCOUNT(-)</strong></td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
-                        <tr><td colspan="7"><strong class="pull-right">NET AMOUNT</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format(2) }}</strong></td></tr>
-                        {% if entity.printPreviousDue == 1  %}
-                        <tr><td colspan="7"><strong class="pull-right">PREVIOUS DUE</strong></td><td><strong  class="pull-right">{% if balance > 0 %} {{ (balance-entity.total) |number_format(2) }}{% endif %}</strong></td></tr>
+                        {% if entity.discount > 0 %}
+                        <tr><td colspan="5"><strong class="pull-right">DISCOUNT(-)</strong></td><td><strong  class="pull-right">{{ entity.discount|number_format(2) }}</strong></td></tr>
                         {% endif %}
-                        <tr><td colspan="7"><strong class="pull-right">RECEIVED</strong></td><td><strong  class="pull-right">{{ (entity.received)|number_format(2) }}</strong></td></tr>
-                        <tr><td colspan="7" style="text-align: left!important;"><strong class="pull-right" >TOTAL DUE</strong></td><td><strong  class="pull-right">{{ balance|number_format(2) }}</strong></td></tr>
-                        <tr><td colspan="8">In words: {{ balanceWords|raw }} </td></tr>
+                        <tr><td colspan="5"><strong class="pull-right">NET AMOUNT</strong></td><td ><strong class="pull-right" >{{ (entity.total)|number_format(2) }}</strong></td></tr>
+                        {% if entity.printPreviousDue == 1  %}
+                        <tr><td colspan="5"><strong class="pull-right">PREVIOUS DUE</strong></td><td><strong  class="pull-right">{% if balance > 0 %} {{ (balance-entity.total) |number_format(2) }}{% endif %}</strong></td></tr>
+                        {% endif %}
+                        {% if entity.received > 0 %}
+                        <tr><td colspan="5"><strong class="pull-right">RECEIVED</strong></td><td><strong  class="pull-right">{{ (entity.received)|number_format(2) }}</strong></td></tr>
+                        {% endif %}
+                        <tr>
+                            <td colspan="4">{{ entity.comment }}fsgsd sdfsdf 023523423 234234 dfsdfsdfd </td>
+                            <td  style="text-align: left!important;"><strong class="pull-right" >TOTAL DUE</strong></td><td><strong  class="pull-right">{{ balance|number_format(2) }}</strong></td></tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="row contacts" style="display: flex;align-items: center; margin-bottom: 0!important;">
+                                    <div class="col" style="margin-right: 30px; width: 30%; float: left">
+                                        <br/>
+                                        <br/>
+                                        <span><strong>Customer Signature</strong></span>
+                                    </div>
+                                    <div class="col" style="width: 40%;text-align: center; float: left">
+                                        <br/>
+                                        <br/>
+                                        <span><strong>Delivery Signature</strong></span>
+                                    </div>
+                                    <div class="col invoice-details" style="width: 30%; float: right; text-align: center">
+                                        <br/>
+                                        {{ entity.salesBy.profile.name }}<br/>
+                                        <span><strong>Authorised By</strong></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         </tfoot>
                     </table>
-                    <div style="clear: both; display: flex"></div>
-                    <div class="notices">
-                        <div>NOTICE:</div>
-                        <div class="notice">{{ entity.comment }}</div>
-                    </div>
                 </main>
             </div>
-            <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
-             <footer>
-                 <div class="row contacts" style="display: flex;align-items: center;">
-                     <div class="col invoice-to" style="margin-right: 30px; width: 30%; float: left">
-                         <br/>
-                         <br/>
-                         <br/>
-                        <p><strong>Customer Signature</strong></p>
-                     </div>
-                     <div class="col" style="width: 40%;text-align: center; float: left">
-                         <br/>
-                         <br/>
-                         <br/>
-                         <p><strong>Delivery Signature</strong></p>
-                     </div>
-                     <div class="col invoice-details" style="width: 30%; float: right; text-align: center">
-                         <br/>
-                         <br/>
-                         {{ entity.salesBy.profile.name }}
-                         <p><strong>Authorised By</strong></p>
-                     </div>
-                 </div>
-             </footer>
+
         </div>
     </div>
     <style>

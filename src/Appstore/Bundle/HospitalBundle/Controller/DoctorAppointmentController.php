@@ -25,6 +25,45 @@ use Symfony\Component\HttpFoundation\Response;
 class DoctorAppointmentController extends Controller
 {
 
+
+
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
+    /**
+     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
+     */
+
+    public function appointmentInvoiceAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
+        $pagination = $this->paginate($entities);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
+        return $this->render('HospitalBundle:Prescription:index.html.twig', array(
+            'entities'                          => $pagination,
+            'assignDoctors'                     => $assignDoctors,
+            'searchForm'                        => $data,
+        ));
+
+    }
+
+
+
     public function newAction()
     {
         $user = $this->getUser();
@@ -45,7 +84,8 @@ class DoctorAppointmentController extends Controller
     private function createInvoiceCustomerForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new DoctorAppointmentType($globalOption), $entity, array(
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $form = $this->createForm(new DoctorAppointmentType($globalOption,$category), $entity, array(
             'action' => $this->generateUrl('hms_doctor_visit_create'),
             'method' => 'POST',
             'attr' => array(

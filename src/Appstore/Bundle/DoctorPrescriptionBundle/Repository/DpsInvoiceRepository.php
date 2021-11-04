@@ -242,7 +242,6 @@ class DpsInvoiceRepository extends EntityRepository
     public function invoiceLists(User $user, $data)
     {
         $config = $user->getGlobalOption()->getDpsConfig()->getId();
-
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.dpsConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);

@@ -67,6 +67,8 @@ class AccountSalesType extends AbstractType
 			        'Due' => 'Due',
 			        'Advance' => 'Advance',
 			        'Discount' => 'Discount',
+			        'Adjustment' => 'Adjustment',
+			        'Commission' => 'Commission',
 			        'Opening' => 'Opening',
 		        ),
 	        ))

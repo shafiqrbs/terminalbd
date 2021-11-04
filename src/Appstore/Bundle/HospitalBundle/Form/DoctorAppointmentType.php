@@ -24,10 +24,14 @@ class DoctorAppointmentType extends AbstractType
     /** @var  GlobalOption */
     private $globalOption;
 
+    /** @var  HmsCategoryRepository */
+    private $emCategory;
 
-    function __construct(GlobalOption $globalOption )
+
+    function __construct(GlobalOption $globalOption,HmsCategoryRepository $emCategory)
     {
         $this->globalOption     = $globalOption;
+        $this->emCategory       = $emCategory;
     }
 
 
@@ -57,6 +61,14 @@ class DoctorAppointmentType extends AbstractType
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
+            ))
+            ->add('department', 'entity', array(
+                'required'    => true,
+                'empty_value' => '---Select department---',
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
+                'property' => 'nestedLabel',
+                'choices'=> $this->DepartmentChoiceList()
             ))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 textarea','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
@@ -130,6 +142,15 @@ class DoctorAppointmentType extends AbstractType
     public function getName()
     {
         return 'appointment_invoice';
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function DepartmentChoiceList()
+    {
+        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
+
     }
 
 }

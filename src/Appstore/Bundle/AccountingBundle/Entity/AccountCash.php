@@ -157,6 +157,13 @@ class AccountCash
 	private  $toUser;
 
     /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountPurchases" )
+     **/
+    private  $createdBy;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="processHead", type="string", length=50, nullable=true)
@@ -722,6 +729,22 @@ class AccountCash
     public function setAccountLoan($accountLoan)
     {
         $this->accountLoan = $accountLoan;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
     }
 
 

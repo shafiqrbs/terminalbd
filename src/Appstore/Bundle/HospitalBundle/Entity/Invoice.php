@@ -189,6 +189,13 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="prescriptionMode", type="string", length=50, nullable=true)
+     */
+    private $prescriptionMode = "new";
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
     private $process ='Created';
@@ -1510,6 +1517,22 @@ class Invoice
     public function setAssistantDoctor($assistantDoctor)
     {
         $this->assistantDoctor = $assistantDoctor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrescriptionMode()
+    {
+        return $this->prescriptionMode;
+    }
+
+    /**
+     * @param string $prescriptionMode
+     */
+    public function setPrescriptionMode($prescriptionMode)
+    {
+        $this->prescriptionMode = $prescriptionMode;
     }
 
 

@@ -28,31 +28,34 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
+
                 <div class="portlet box green tabbable">
+
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Doctor Visit</div>
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn yellow" href="{{ path('hms_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
+                                <a class="btn purple" href="{{ path('hms_report_sales_summary') }}"><i class="icon-cart"></i> Sales Summary</a>
                                 <a class="btn red addAppointment" href="javascript:"><i class="icon-plus-sign"></i> Add Visit</a>
                             </div>
                         </div>
                     </div>
+
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
                                 <form action="{{ path('hms_invoice_admission_old_patient') }}" method="post">
                                     <div class="row-fluid">
+                                        <div class="span1"></div>
                                         <div class="span9">
                                             <input type="text" id="customer" required name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
                                         </div>
-                                        <div class="span3">
-                                            <div class="controls">
-                                                <div class="input-append span12">
-                                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
-                                                    <div class="btn-group">
-                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                                    </div>
+                                        <div class="span2">
+                                            <div class="control-group">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-plus-sign"></i> Admission</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,7 +123,6 @@
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -131,6 +133,8 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Discount</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
@@ -147,19 +151,33 @@
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.total }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != "Done" %}
-                                            <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn black mini confirm"><i class="icon-retweet"></i> Closed</a>
+                                                <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn black mini confirm"><i class="icon-retweet"></i> Closed</a>
                                             {% else %}
                                                 <span class="btn green mini">{{ entity.process }}</span>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                <a  href="{{ path('hms_invoice_new',{'patient':entity.customer.id}) }}"  class="btn green mini"><i class="icon-plus-sign-alt"></i> Add Diagnostic</a>
-                                                <a  href="{{ path('hms_invoice_admitted_patient',{'id':entity.id}) }}"  class="btn yellow mini tooltips" data-trigger = "hover" data-original-title = "New Patient Admission"><i class="icon-plus-sign-alt"></i> Add Admission</a>
-                                                <a target="_blank"  href="{{ path('hms_invoice_appointment_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
+                                                {% set processArr = {'Admitted': 'Admitted' ,'Revised':'Revised','Release':'Release','Death':'Death'} %}
+                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
+                                                <a  href="{{ path('hms_invoice_admitted_patient',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Prescription</a>
+                                                <a target="_blank"  href="{{ path('hms_invoice_appointment_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Print</a>
+                                                <a class="btn purple mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                    More <i class="icon-tasks"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    {% if entity.process in  processEdit or app.user.granted("ROLE_DOMAIN") %}
+                                                        <li><a href="{{ path('hms_prescription_edit', { 'id': entity.id }) }}" class="btn"><i class="icon-pencil"></i> Edit</a></li>
+                                                    {% endif %}
+                                                    <li><a  href="{{ path('hms_invoice_admitted_patient',{'id':entity.id}) }}"  class="btn" ><i class="icon-plus-sign-alt"></i> Admission</a></li>
+                                                    <li><a  href="{{ path('hms_invoice_new',{'patient':entity.customer.id}) }}"  class="btn"><i class="icon-plus-sign-alt"></i> Diagnostic</a></li>
+                                                    <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn"><i class="icon-eye-open"></i> View</a></li>
+                                                </ul>
                                             </div>
                                         </td>
                                     </tr>
@@ -175,27 +193,24 @@
             </div>
         </div>
     </div>
- <style>
-
-
- </style>
+    <style>
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
-    '@HospitalBundle/Resources/public/css/invoice.css'
+        '@InventoryBundle/Resources/public/css/jquery-ui.css'
+        '@HospitalBundle/Resources/public/css/invoice.css'
     %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
+        <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/appointment.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
-    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+        '@HospitalBundle/Resources/public/js/appointment.js'
+        '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
