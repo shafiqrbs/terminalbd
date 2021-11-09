@@ -121,18 +121,16 @@ class DoctorAppointmentController extends Controller
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
         }
-        if($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() ){
-	        $entity->setPayment($entity->getTotal());
-	        $entity->setPaymentStatus("Paid");
-	        $entity->setDue(0);
-        }
+        $entity->setSubTotal($assignDoctor->getPrice());
+        $entity->setTotal($assignDoctor->getPrice());
+        $entity->setPaymentStatus("Paid");
+        $entity->setDue(0);
 	    $entity->setProcess('In-progress');
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
         $em->flush();
         return new Response($entity->getId());
-        exit;
 
     }
 

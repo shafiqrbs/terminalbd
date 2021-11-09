@@ -90,7 +90,7 @@ class AccountSalesRepository extends EntityRepository
 				$qb->setParameter('name', $customer);
 			}
 			if (!empty($customerId)) {
-				$qb->andWhere("customer.id = :cid");
+				$qb->andWhere("e.customer = :cid");
 				$qb->setParameter('cid', $customerId);
 			}
 			if (!empty($invoice)) {
@@ -293,6 +293,33 @@ class AccountSalesRepository extends EntityRepository
 		return $result;
 
 	}
+
+    public function reportCustomerLedger($globalOption,$data = '')
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate   = isset($data['endDate'])  ? $data['endDate'] : '';
+        $customer  = isset($data['customerId'])? $data['customerId'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.customer = :mobile");
+        $qb->setParameter('mobile', $customer);
+        if (!empty($startDate) ) {
+            $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $start);
+        }
+        if (!empty($endDate)) {
+            $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+        $qb->orderBy('e.id','ASC');
+        $result = $qb->getQuery()->getResult();
+        return $result;
+
+    }
 
     public function lastInsertSales($globalOption,$entity)
     {

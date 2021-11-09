@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCondition;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
@@ -243,6 +244,30 @@ class AccountHeadRepository extends EntityRepository
             $head->setSource('customer');
             $head->setParent($parent);
             $head->setCustomer($entity);
+            $this->_em->persist($head);
+            $this->_em->flush();
+            return $head;
+        }
+    }
+
+    public function insertConditionAccount(AccountCondition $entity)
+    {
+
+        /* @var $exist AccountHead */
+
+        $exist = $this->findOneBy(array('accountCondition' => $entity));
+        if ($exist) {
+            $exist->setName($entity->getName());
+            $this->_em->flush();
+            return $exist;
+        } else {
+            $head = new AccountHead();
+            $parent = $this->findOneBy(array('slug' => 'account-receivable'));
+            $head->setGlobalOption($entity->getGlobalOption());
+            $head->setName($entity->getName());
+            $head->setSource('condition');
+            $head->setParent($parent);
+            $head->setAccountCondition($entity);
             $this->_em->persist($head);
             $this->_em->flush();
             return $head;

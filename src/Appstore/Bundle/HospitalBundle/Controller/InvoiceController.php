@@ -49,13 +49,12 @@ class InvoiceController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
-
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
             'entities'                          => $pagination,
-            'assignDoctors'                     => $assignDoctors,
-            'referredDoctors'                   => $referredDoctors,
+            'assignDoctors'                     => $referredDoctors,
+            'employees'                         => $employees,
             'searchForm'                        => $data,
         ));
 
@@ -74,11 +73,11 @@ class InvoiceController extends Controller
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
-
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         return $this->render('HospitalBundle:Invoice:appointmentIndex.html.twig', array(
             'entities'                          => $pagination,
             'assignDoctors'                     => $assignDoctors,
+            'employees'                     => $employees,
             'searchForm'                        => $data,
         ));
 

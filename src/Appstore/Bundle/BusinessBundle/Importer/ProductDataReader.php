@@ -56,9 +56,7 @@ class ProductDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-
                 $key = $dataArray['Name'];
-
                 $namedDataArray[$key] = $dataArray;
 
             }

@@ -87,10 +87,10 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="referred" id="referred" class="m-wrap span12">
-                                                <option value="" >--Patient Referred--</option>
-                                                {% for referred in referredDoctors %}
-                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                            <select name="user" id="user" class="m-wrap span12">
+                                                <option value="" >--Created User By--</option>
+                                                {% for employee in employees %}
+                                                    <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}" >{{ employee.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

@@ -61,6 +61,49 @@ class BusinessDistributionReturnItemRepository extends EntityRepository
 
     }
 
+    public function returnRemainingStock($config)
+    {
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.remainingQnt) AS quantity');
+        $qb->addSelect('s.id AS id');
+        $qb->join('e.businessParticular','s');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
+        $qb->having('quantity > 0');
+        $qb->groupBy('s.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $remains = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->remainingStock($config);
+        $data = array();
+        foreach ($result as $row){
+            if($remains and isset($remains[$row['id']]) and $remains[$row['id']]['quantity'] > 0){
+                $data[$row['id']] = (int) ($row['quantity'] - $remains[$row['id']]['quantity']);
+            }else{
+                $data[$row['id']] = (int) $row['quantity'];
+            }
+        }
+        return  $data;
+
+    }
+
+    public function returnRemainingStockItem($config,$item)
+    {
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.remainingQnt) AS quantity');
+        $qb->join('e.businessParticular','s');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.businessParticular = :item')->setParameter('item', $item);
+        $row = $qb->getQuery()->getSingleScalarResult();
+        $remains = $em->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->remainingStockItem($config,$item);
+        if($remains  > 0){
+            $quantity = (int) ($row - $remains);
+        }else{
+            $quantity = (int) $row;
+        }
+        return  $quantity;
+
+    }
+
     public function purchaseReturnStockUpdate(BusinessParticular $item)
     {
         $qb = $this->createQueryBuilder('e');

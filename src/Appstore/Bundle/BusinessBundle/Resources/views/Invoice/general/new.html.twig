@@ -60,9 +60,9 @@
                                                                         <option value="">--- Select Stock Product ---- </option>
                                                                         {% for particular in particulars %}
                                                                             {% if particular.category is not empty %}
-                                                                            <option value="{{ particular.id }}">{{ particular.category.name }} - {{ particular.name }} => QTY {{ (particular.remainingQuantity + particular.bonusQuantity) }}</option>
+                                                                            <option value="{{ particular.id }}">{{ particular.name }} - {{ particular.name }} => {{ (particular.remainingQuantity) }} {{ particular.unit }}</option>
                                                                             {% else %}
-                                                                            <option value="{{ particular.id }}">{{ particular.name }} => QTY {{ (particular.remainingQuantity + particular.bonusQuantity) }}</option>
+                                                                            <option value="{{ particular.id }}">{{ particular.name }} => QTY {{ (particular.remainingQuantity) }} {{ particular.unit }}</option>
                                                                             {% endif %}
                                                                         {% endfor %}
                                                                     </select>
@@ -242,18 +242,20 @@
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
-                                    <div class="row-fluid" {#id="condition"#} {#style="{% if entity.isCondition == 1 %}display: block {% else %} display: none {% endif %}"#}>
+                                    {% if entity.businessConfig.isConditionSales == 1 %}
+                                    <div class="row-fluid">
                                         <div class="span12" >
-                                            <select name="courier" id="courier" class="span12 m-wrap">
-                                                <option>--Select one Courier Service</option>
+                                            <select name="condition" id="condition" class="span12 m-wrap">
+                                                <option>--Select one Condition Sales</option>
                                                 {% if couriers is not empty %}
                                                     {% for courier in couriers %}
-                                                        <option {% if entity.courier is not empty and entity.courier.id ==  courier.id %} selected="selected" {% endif %} value="{{ courier.id }}">{{ courier.companyName }}</option>
+                                                        <option {% if entity.condition is not empty and entity.condition.id ==  courier.id %} selected="selected" {% endif %} value="{{ courier.id }}">{{ courier.name }}</option>
                                                     {% endfor %}
                                                 {% endif %}
                                             </select>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span12">

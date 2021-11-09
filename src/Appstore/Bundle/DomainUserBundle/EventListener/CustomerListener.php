@@ -22,7 +22,6 @@ class CustomerListener
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
             $entity->setCustomerId(sprintf("%s%s", $datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
-
         }
     }
 
@@ -38,7 +37,6 @@ class CustomerListener
 
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
-
         $entityManager = $args->getEntityManager();
         $qb = $entityManager->getRepository('DomainUserBundle:Customer')->createQueryBuilder('s');
 
@@ -51,7 +49,6 @@ class CustomerListener
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();
-
         if (empty($lastCode)) {
             return 0;
         }

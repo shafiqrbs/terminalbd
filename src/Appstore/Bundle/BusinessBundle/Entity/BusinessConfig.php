@@ -181,6 +181,20 @@ class BusinessConfig
      */
     private $vatEnable = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="conditionSales", type="boolean",  nullable=true)
+     */
+    private $conditionSales = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="zeroStock", type="boolean",  nullable=true)
+     */
+    private $zeroStock = true;
+
     /**
      * @var boolean
      *
@@ -1524,6 +1538,39 @@ class BusinessConfig
     public function setIsUnitPrice($isUnitPrice)
     {
         $this->isUnitPrice = $isUnitPrice;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isZeroStock()
+    {
+        return $this->zeroStock;
+    }
+
+    /**
+     * @param bool $zeroStock
+     */
+    public function setZeroStock($zeroStock)
+    {
+        $this->zeroStock = $zeroStock;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConditionSales()
+    {
+        return $this->conditionSales;
+    }
+
+    /**
+     * @param bool $conditionSales
+     */
+    public function setConditionSales($conditionSales)
+    {
+        $this->conditionSales = $conditionSales;
     }
 
 

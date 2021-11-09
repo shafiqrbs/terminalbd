@@ -123,8 +123,6 @@ class StockController extends Controller
             }
             $daily = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->monthlyStockLedger($config,$data);
         }
-       // var_dump($openingBalance);
-       // exit;
         if(empty($data['pdf'])){
             return $this->render('BusinessBundle:Stock:productLedger.html.twig', array(
                 'globalOption'                  => $this->getUser()->getGlobalOption(),

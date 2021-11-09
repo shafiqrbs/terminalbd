@@ -599,6 +599,7 @@ class ReportController extends Controller
         $dailySalesArr ="";
         $salesItemTotal ="";
         $dailySalesSummaryArr ="";
+        $monthlySalesSummary ="";
         $customer = "";
         if (isset($_REQUEST['mobile']) and $_REQUEST['mobile']) {
             $mobile = $_REQUEST['mobile'];
@@ -820,6 +821,103 @@ class ReportController extends Controller
     }
 
 
+    /**
+     * Lists all Particular entities.
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+    public function monthlyStockLedgerAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if(empty($data)){
+            $compare = new \DateTime();
+            $end =  $compare->format('j');
+            $data['monthYear'] = $compare->format('Y-m-d');
+            $data['month'] =  $compare->format('F');
+            $data['year'] = $compare->format('Y');
+        }else{
+            $month = $data['month'];
+            $year = $data['year'];
+            $compare = new \DateTime("{$year}-{$month}-01");
+            $end =  $compare->format('t');
+            $data['monthYear'] = $compare->format('Y-m-d');
+        }
+        $openingBalance = array();
+        $daily = '';
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getProducts($config->getId());
+        if(isset($data['name']) and !empty($data['name'])){
+            for ($i = 1; $end >= $i ; $i++ ){
+                $no = sprintf("%s", str_pad($i,2, '0', STR_PAD_LEFT));
+                $start =  $compare->format("Y-m-{$no}");
+                $day =  $compare->format("{$no}-m-Y");
+                $data['startDate'] = $start;
+                $openingBalance[$day] = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->openingDailyQuantity($config,$data);
+            }
+            $daily = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->monthlyStockLedger($config,$data);
+        }
+        if(empty($data['pdf'])){
+            return $this->render('BusinessBundle:Stock:productLedger.html.twig', array(
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
+                'openingBalance'                => $openingBalance,
+                'particulars'                   => $particulars,
+                'entity'                        => $daily,
+                'searchForm'                    => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'BusinessBundle:Stock:productLedgerPdf.html.twig', array(
+                    'option'                  => $this->getUser()->getGlobalOption(),
+                    'openingBalance'                => $openingBalance,
+                    'particulars'                => $particulars,
+                    'entity'                        => $daily,
+                    'searchForm'                    => $data,
+                )
+            );
+            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+        }
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_STOCK,ROLE_DOMAIN");
+     */
+    public function stockLedgerAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $pagination = '';
+        $entity = '';
+        if(isset($data['particular']) and !empty($data['particular'])){
+            $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $config,'id'=> $data['particular']));
+            $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->getStockHistoryLedger($config,$data);
+        }
+        $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getProducts($config->getId());
+        if(empty($data['pdf'])){
+            return $this->render('BusinessBundle:Report/stock:productLedger.html.twig', array(
+                'entity' => $entity,
+                'pagination' => $entities,
+                'particulars' => $particulars,
+                'searchForm' => $data,
+            ));
+        }else{
+            $html = $this->renderView(
+                'BusinessBundle:Report/stock:productLedgerPdf.html.twig', array(
+                    'option' => $this->getUser()->getGlobalOption(),
+                    'entity' => $entity,
+                    'pagination' => $entities,
+                    'particulars' => $particulars,
+                    'searchForm' => $data,
+                )
+            );
+            $this->downloadPdf($html,'productLedgerPdf.pdf');
+        }
+    }
 
     public function downloadPdf($html,$fileName = '')
     {

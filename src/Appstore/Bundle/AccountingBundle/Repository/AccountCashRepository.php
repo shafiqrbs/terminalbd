@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCondition;
+use Appstore\Bundle\AccountingBundle\Entity\AccountConditionLedger;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
 use Appstore\Bundle\AccountingBundle\Entity\AccountLoan;
@@ -341,12 +343,17 @@ class AccountCashRepository extends EntityRepository
         $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
         $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
         $process =    isset($data['processHead'])? $data['processHead'] :'';
+        $user =    isset($data['user'])? $data['user'] :'';
         $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
         $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
 
         if (!empty($process)) {
             $qb->andWhere("e.processHead = :process");
             $qb->setParameter('process', $process);
+        }
+        if (!empty($user)) {
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
         }
         if (!empty($accountRefNo)) {
             $qb->andWhere("e.accountRefNo = :accountRefNo");
@@ -418,6 +425,7 @@ class AccountCashRepository extends EntityRepository
             $cash->setGlobalOption($entity->getGlobalOption());
             $cash->setAccountJournal($entity);
             $cash->setToUser($entity->getToUser());
+            $cash->setCreatedBy($entity->getCreatedBy());
             $cash->setTransactionMethod($entity->getTransactionMethod());
             $cash->setProcessHead($processHead);
             $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -467,6 +475,7 @@ class AccountCashRepository extends EntityRepository
 		}else{
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
 		}
+        $cash->setCreatedBy($entity->getCreatedBy());
 		$cash->setCredit($entity->getAmount());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getUpdated());
@@ -496,6 +505,7 @@ class AccountCashRepository extends EntityRepository
 		}else{
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
 		}
+        $cash->setCreatedBy($entity->getCreatedBy());
 		$cash->setDebit($entity->getAmount());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getUpdated());
@@ -521,6 +531,7 @@ class AccountCashRepository extends EntityRepository
 		}else{
 			$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
 		}
+        $cash->setCreatedBy($entity->getCreatedBy());
 		$cash->setDebit($entity->getAmount());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getUpdated());
@@ -553,6 +564,7 @@ class AccountCashRepository extends EntityRepository
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
         }
         $cash->setBalance($balance - $entity->getPayment() );
+        $cash->setCreatedBy($entity->getCreatedBy());
         $cash->setCredit($entity->getPayment());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
@@ -590,6 +602,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setCredit($entity->getPayment());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
+        $cash->setCreatedBy($entity->getCreatedBy());
         $em->persist($cash);
         $em->flush();
 
@@ -636,6 +649,7 @@ class AccountCashRepository extends EntityRepository
         }
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
+        $cash->setCreatedBy($entity->getCreatedBy());
         $em->persist($cash);
         $em->flush();
     }
@@ -665,10 +679,10 @@ class AccountCashRepository extends EntityRepository
         }
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);
-        if(!empty($entity->getBranches())){
+        if($entity->getBranches()){
             $cash->setBranches($entity->getBranches());
         }
-        if(!empty($entity->getTransactionMethod())){
+        if($entity->getTransactionMethod()){
 	        $cash->setTransactionMethod($entity->getTransactionMethod());
         }else{
 	        $method = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
@@ -681,10 +695,52 @@ class AccountCashRepository extends EntityRepository
         $cash->setDebit($entity->getAmount());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
+        $cash->setCreatedBy($entity->getCreatedBy());
         $em->persist($cash);
         $em->flush();
     }
 
+    public function insertAccountConditionCash(AccountConditionLedger $entity , $processHead ='condition')
+    {
+
+        $balance = $this->lastInsertCash($entity,$processHead);
+        $em = $this->_em;
+        $cash = new AccountCash();
+
+        /* Cash - Cash various */
+
+        if($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "bank" and $entity->getAccountBank() ){
+            /* Current Asset Bank Cash Debit */
+            $cash->setAccountBank($entity->getAccountBank());
+        }elseif($entity->getTransactionMethod() and $entity->getTransactionMethod()->getSlug() == "mobile" and $entity->getAccountMobileBank()){
+            /* Current Asset Mobile Account Debit */
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+            $account = $em->getRepository('AccountingBundle:AccountHead')->find(10);
+            $cash->setAccountHead($account);
+
+        }else{
+
+            /* Cash - Cash Debit */
+            $cash->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(30));
+        }
+        $cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setConditionLedger($entity);
+        if($entity->getTransactionMethod()){
+            $cash->setTransactionMethod($entity->getTransactionMethod());
+        }else{
+            $method = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $cash->setTransactionMethod($method);
+        }
+        $cash->setProcessHead($processHead);
+        $cash->setUpdated($entity->getUpdated());
+        $cash->setBalance($balance + $entity->getAmount() );
+        $cash->setDebit($entity->getAmount());
+        $cash->setCreated($entity->getCreated());
+        $cash->setUpdated($entity->getCreated());
+        $cash->setCreatedBy($entity->getCreatedBy());
+        $em->persist($cash);
+        $em->flush();
+    }
 
     public function resetSalesCash(AccountSales $entity)
     {
@@ -826,6 +882,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setCredit($entity->getAmount());
         $cash->setCreated($entity->getCreated());
         $cash->setUpdated($entity->getCreated());
+        $cash->setCreatedBy($entity->getCreatedBy());
         $em->persist($cash);
         $em->flush();
     }
@@ -1059,6 +1116,7 @@ class AccountCashRepository extends EntityRepository
         }
         $cash->setCreated($journal->getCreated());
         $cash->setUpdated($journal->getCreated());
+        $cash->setCreatedBy($journal->getCreatedBy());
         $em->persist($cash);
         $em->flush();
     }

@@ -15,10 +15,6 @@ hms_prescription_old_patient:
     defaults: { _controller: "HospitalBundle:Prescription:oldPatient" }
     methods:  [POST, PUT]
 
-hms_invoice_admitted_create:
-    path:     /create
-    defaults: { _controller: "HospitalBundle:Prescription:create" }
-    methods:  [POST, PUT]
 
 hms_prescription_edit:
     path:     /{id}/edit

@@ -135,7 +135,7 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setOpeningQuantity(0);
         }
         $closingQuantity = $entity->getQuantity() + $entity->getOpeningQuantity();
-        $entity ->setClosingQuantity(floatval($closingQuantity));
+        $entity->setClosingQuantity(floatval($closingQuantity));
         $entity->setBusinessConfig($item->getBusinessParticular()->getBusinessConfig());
         $em->persist($entity);
         $em->flush();
@@ -300,5 +300,70 @@ class BusinessStockHistoryRepository extends EntityRepository
         }
         return $arrays;
     }
+
+    public function getStockHistoryLedger($config,$data)
+    {
+        $config = $config->getId();
+        $compare = new \DateTime();
+        $date = $compare->format('Y-m-d');
+        $startDa = isset($data['startDate']) ? $data['startDate'] : $date;
+        $start = new \DateTime($startDa);
+        $startDate = $start->format('Y-m-d');
+        $endDa = isset($data['endDate']) ? $data['endDate'] : $date;
+        $end = new \DateTime($endDa);
+        $endDate = $end->format('Y-m-d');
+        $item = isset($data['particular']) ? $data['particular'] : '';
+        $process = isset($data['process']) ? $data['process'] : '';
+        if(empty($process)){
+            $sql = "SELECT e.*,i.invoice as salesInvoice,c.name as customer,p.grn as grn,fu.username as createdBy
+                FROM business_stock_history as e
+                JOIN business_particular ON e.item_id = business_particular.id 
+                LEFT JOIN fos_user as fu  ON e.createdBy_id = fu.id
+                LEFT JOIN business_purchase_item as pi  ON e.purchaseItem_id = pi.id
+                LEFT JOIN business_purchase as p  ON pi.businessPurchase_id = p.id
+                LEFT JOIN business_purchase_return_item as pri  ON e.purchaseReturnItem_id = pri.id
+                LEFT JOIN business_purchase_return as bpr  ON pri.businessPurchaseReturn_id = bpr.id
+                LEFT JOIN business_invoice_particular as ip  ON e.salesItem_id = ip.id
+                LEFT JOIN business_invoice as i  ON ip.businessInvoice_id = i.id
+                LEFT JOIN Customer as c  ON i.customer_id = c.id
+                LEFT JOIN business_invoice_return_item as sri  ON e.salesReturnItem_id  = sri.id
+                LEFT JOIN business_invoice_return as bir  ON sri.invoiceReturn_id = bir.id
+                LEFT JOIN business_damage as d  ON e.damageItem_id  = d.id
+                WHERE e.businessConfig_id = :config AND business_particular.id = :item  AND e.created BETWEEN '{$startDate}' AND '{$endDate}' 
+                ORDER BY e.created ASC";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('item', "{$item}");
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+            return $results;
+        }else{
+            $sql = "SELECT e.*,i.invoice as salesInvoice,c.name as customer,p.grn as grn,fu.username as createdBy
+                FROM business_stock_history as e
+                JOIN business_particular ON e.item_id = business_particular.id 
+                LEFT JOIN fos_user as fu  ON e.createdBy_id = fu.id
+                LEFT JOIN business_purchase_item as pi  ON e.purchaseItem_id = pi.id
+                LEFT JOIN business_purchase as p  ON pi.businessPurchase_id = p.id
+                LEFT JOIN business_purchase_return_item as pri  ON e.purchaseReturnItem_id = pri.id
+                LEFT JOIN business_purchase_return as bpr  ON pri.businessPurchaseReturn_id = bpr.id
+                LEFT JOIN business_invoice_particular as ip  ON e.salesItem_id = ip.id
+                LEFT JOIN business_invoice as i  ON ip.businessInvoice_id = i.id
+                LEFT JOIN Customer as c  ON i.customer_id = c.id
+                LEFT JOIN business_invoice_return_item as sri  ON e.salesReturnItem_id  = sri.id
+                LEFT JOIN business_invoice_return as bir  ON sri.invoiceReturn_id = bir.id
+                LEFT JOIN business_damage as d  ON e.damageItem_id  = d.id
+                WHERE e.businessConfig_id = :config AND business_particular.id = :item  AND e.created BETWEEN '{$startDate}' AND '{$endDate}' 
+                AND e.process='{$process}' ORDER BY e.created ASC ";
+            $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+            $stmt->bindValue('config', $config);
+            $stmt->bindValue('item', "{$item}");
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+            return $results;
+        }
+
+
+    }
+
 
 }

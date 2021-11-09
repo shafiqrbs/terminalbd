@@ -147,5 +147,13 @@ business_report_product_commission_sales:
     path:     /vendor-commission-sales
     defaults: { _controller: "BusinessBundle:Report:vendorCommissionBaseSales" }
 
+business_report_stock_ledger:
+    path:     /stock-item-ledger
+    defaults: { _controller: "BusinessBundle:Report:stockLedger" }
+
+business_report_monthly_stock_ledger:
+    path:     /monthly-stock-ledger
+    defaults: { _controller: "BusinessBundle:Report:monthlyStockLedger" }
+
 
 

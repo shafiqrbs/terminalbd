@@ -251,7 +251,6 @@ class User extends BaseUser
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\UserInbox", mappedBy="user" , cascade={"persist", "remove"})
 	 **/
-
 	protected $userInbox;
 
 
@@ -259,20 +258,6 @@ class User extends BaseUser
 	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="branchManager"  , cascade={"persist", "remove"})
 	 */
 	protected $branches;
-
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="checkedBy" , cascade={"persist", "remove"})
-	 **/
-	protected $purchaseOrderCheckedBy;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 **/
-	protected $purchaseOrderApprovedBy;
-
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="createdBy" , cascade={"persist", "remove"})

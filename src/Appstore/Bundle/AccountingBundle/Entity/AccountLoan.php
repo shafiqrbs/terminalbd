@@ -28,7 +28,7 @@ class AccountLoan
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountLoan")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      **/
 
     protected $globalOption;
@@ -42,40 +42,40 @@ class AccountLoan
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountLoan" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountLoan" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $employee;
     
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountLoan" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer")
      **/
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountLoan" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod")
      **/
     private  $transactionMethod;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountLoans" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank")
      **/
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountLoans" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank")
      **/
     private  $accountMobileBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountLoanApprove" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $approvedBy;
 

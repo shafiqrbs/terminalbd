@@ -278,17 +278,39 @@ class BusinessParticularRepository extends EntityRepository
         return $_SERVER['HTTP_HOST'].$path;
     }
 
-    public function getFindWithParticular($config,$type){
+    public function getFindWithParticular(BusinessConfig $config,$type){
 
-        $qb = $this->createQueryBuilder('e')
-            ->join('e.businessParticularType','p')
-            ->where('e.businessConfig = :config')->setParameter('config', $config)
-            ->andWhere('e.status = :status')->setParameter('status', 1)
-            ->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type))
-            ->orderBy('e.sorting','ASC')
-            ->orderBy('e.name','ASC')
-            ->getQuery()->getResult();
-            return  $qb;
+        $zero = $config->isZeroStock();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.businessParticularType','p');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.status = :status')->setParameter('status', 1);
+        $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));
+        $qb->orderBy('e.sorting','ASC');
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getResult();
+        return  $result;
+    }
+
+    public function getFindStockItem(BusinessConfig $config,$type){
+
+        $zero = $config->isZeroStock();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id','e.salesPrice as salesPrice','e.remainingQuantity as remainingQuantity','e.particularCode as particularCode','e.name as name');
+        $qb->addSelect('c.name as category');
+        $qb->addSelect('u.name as unit');
+        $qb->join('e.businessParticularType','p');
+        $qb->leftJoin('e.category','c');
+        $qb->leftJoin('e.unit','u');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.status = :status')->setParameter('status', 1);
+        if($zero != 1){
+            $qb->andWhere('e.remainingQuantity > 0');
+        }
+        $qb->andWhere('p.slug IN(:type)')->setParameter('type',array_values($type));
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
     }
 
     public function getProducts($config){

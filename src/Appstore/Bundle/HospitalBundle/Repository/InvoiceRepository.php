@@ -42,6 +42,7 @@ class InvoiceRepository extends EntityRepository
         $service = isset($data['service'])? $data['service'] :'';
         $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
         $cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -78,7 +79,11 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('deliveryDate', $created.'%');
         }
 
-        if(!empty($commission)){
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+         if(!empty($commission)){
             $qb->andWhere("e.hmsCommission = :commission");
             $qb->setParameter('commission', $commission);
         }
@@ -154,6 +159,19 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
+
+    public function getFindEmployees($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.createdBy','u');
+        $qb->join('u.profile','p');
+        $qb->select('u.id as id, p.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('p.name IS NOT NULL');
+        $qb->groupBy("u.id");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
 
     public function salesSummary(User $user,$data)
     {
@@ -590,6 +608,7 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
         $qb->select('e.created as created','e.invoice as invoice','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
@@ -609,6 +628,10 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
         $qb->orderBy('e.created','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
@@ -619,7 +642,7 @@ class InvoiceRepository extends EntityRepository
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $user = isset($data['user'])? $data['user'] :'';
-
+        $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
         $qb->leftJoin('e.assignDoctor','d');
@@ -645,6 +668,10 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
         $qb->orderBy('e.created','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
@@ -657,7 +684,7 @@ class InvoiceRepository extends EntityRepository
         $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
         $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
         $user = isset($data['user'])? $data['user'] :'';
-
+        $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
         $qb->leftJoin('e.assignDoctor','d');
@@ -695,6 +722,10 @@ class InvoiceRepository extends EntityRepository
         if (!empty($data['endDate'])) {
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
         }
         $qb->orderBy('e.created','ASC');
         $result = $qb->getQuery()->getArrayResult();

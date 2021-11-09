@@ -36,7 +36,8 @@
                 <p><strong style="font-size: 16px">{{ option.name }}</strong></p>
                 <p>Name of Report: User base Sales & Collection</p>
             </div>
-            <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}
+            <div class="col-md-4 text-right">
+                Printed: {{ "now"|date('d-m-Y') }}
                 <p><strong>Start Date:&nbsp;</strong><strong>{% if data['startDate'] is defined and data['startDate'] is not empty %}{{ data['startDate']|date('d-m-Y') }}{% endif %}</strong>
                     <strong>End Date:&nbsp;<strong>{% if data['endDate'] is defined and data['endDate'] is not empty %}{{ data['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
                 </p>

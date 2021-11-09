@@ -79,6 +79,8 @@ class ConfigType extends AbstractType
             ->add('tloCommission')
             ->add('salesReturn')
             ->add('storeLedger')
+            ->add('zeroStock')
+            ->add('conditionSales')
             ->add('printOutstanding')
             ->add('removeImage')
             ->add('file')

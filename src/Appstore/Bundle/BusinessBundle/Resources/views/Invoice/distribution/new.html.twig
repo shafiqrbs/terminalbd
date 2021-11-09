@@ -54,8 +54,8 @@
                                                         <th style="width: 30%">Item Name</th>
                                                         <th>Remain</th>
                                                         <th>Unit</th>
-                                                        <th>Price</th>
                                                         <th>Quantity</th>
+                                                        <th>Price</th>
                                                         <th>Sales</th>
                                                         <th>Sub-total</th>
                                                         {% if entity.businessConfig.tloCommission == 1 %}
@@ -76,17 +76,22 @@
                                                             <select id="particular" name="particular" class="span12 m-wrap select2">
                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                 {% for particular in particulars %}
-                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => Stock {{ particular.remainingQuantity }} {% if  particular.unit is defined and  particular.unit is not empty %}{{ particular.unit.name|default('---') }}{% endif %}</option>
+                                                                    {% if returnQty[particular.id] is defined and returnQty[particular.id] is not empty  %}
+                                                                        {% set remaining = particular.remainingQuantity - returnQty[particular.id] %}
+                                                                    {% else %}
+                                                                        {% set remaining = particular.remainingQuantity %}
+                                                                    {% endif %}
+                                                                    <option value="{{ particular.id }}">{{ particular.particularCode }} - {{ particular.name }} => {{ remaining }} {{ particular.unit }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </td>
                                                         <td id="remainQnt"></td>
                                                         <td id="unit"></td>
-                                                        <td id="">
-                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="salesPrice" name="salesPrice" value="" placeholder="0">
-                                                        </td>
                                                         <td class="">
                                                             <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="quantity" name="quantity" value="" placeholder="0">
+                                                        </td>
+                                                        <td id="">
+                                                            <input type="text" class="numeric td-inline-input-qnt"  autocomplete="off"  id="salesPrice" name="salesPrice" value="" placeholder="0">
                                                         </td>
                                                         <td class="">
                                                             <strong id="totalQuantity">0</strong>
@@ -299,7 +304,7 @@
                                                                                 <option value="">--- Select Stock Product ---- </option>
                                                                                 {% for particular in particulars %}
                                                                                     {% if particular.category is not empty %}
-                                                                                        <option value="{{ particular.id }}">{{ particular.category.name }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
+                                                                                        <option value="{{ particular.id }}">{{ particular.category }} - {{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
                                                                                     {% else %}
                                                                                         <option value="{{ particular.id }}">{{ particular.name }} => BDT. {{ particular.salesPrice }}</option>
                                                                                     {% endif %}

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
@@ -68,6 +69,13 @@ class BusinessStockHistory
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $damageItem;
+
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $createdBy;
 
 
     /**
@@ -481,6 +489,22 @@ class BusinessStockHistory
     public function setOpening($opening)
     {
         $this->opening = $opening;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
     }
 
 

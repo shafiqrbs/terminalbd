@@ -73,7 +73,10 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border">&nbsp;</td>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.customer.address|raw }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ inWords }}</td>
@@ -211,11 +214,11 @@
 
     </style>
     <script>
-        window.print();
+       /* window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
-        }, 2000);
+        }, 2000);*/
     </script>
 {% endblock %}
 {% block cssBlock %}

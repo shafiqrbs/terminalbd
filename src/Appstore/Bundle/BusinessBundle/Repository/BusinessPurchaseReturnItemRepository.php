@@ -46,6 +46,18 @@ class BusinessPurchaseReturnItemRepository extends EntityRepository
         return  $arrs;
     }
 
+    public function remainingStockItem($config,$item)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->join('e.businessPurchaseReturn','pr');
+        $qb->join('e.businessParticular','s');
+        $qb->where('pr.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('s.id = :item')->setParameter('item',$item) ;
+        $result = $qb->getQuery()->getSingleScalarResult();
+        return  (int)$result;
+    }
+
     public function insertPurchaseReturnItem(BusinessPurchaseReturn $entity, $data)
     {
         $em = $this->_em;

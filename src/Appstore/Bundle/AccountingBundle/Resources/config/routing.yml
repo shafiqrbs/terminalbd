@@ -26,6 +26,10 @@ accounting_customer:
     resource: "@AccountingBundle/Resources/config/routing/accountcustomer.yml"
     prefix:   /account-customer
 
+accounting_condition:
+    resource: "@AccountingBundle/Resources/config/routing/condition.yml"
+    prefix:   /account-condition
+
 accounting_user:
     resource: "@AccountingBundle/Resources/config/routing/accountuser.yml"
     prefix:   /account-user

@@ -19,6 +19,10 @@ dps_invoice:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+dps_prescription:
+    resource: "@DoctorPrescriptionBundle/Resources/config/routing/prescription.yml"
+    prefix:   /prescription
+
 dps_particular:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing/particular.yml"
     prefix:   /particular

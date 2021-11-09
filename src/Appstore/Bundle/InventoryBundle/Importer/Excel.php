@@ -111,7 +111,6 @@ class Excel
             $stockItem->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
             $stockItem->setVendor($purchaseItem->getPurchase()->getVendor());
             $stockItem->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
             if(!empty($purchaseItem->getItem()->getMasterItem()->getCategory())){
                 $stockItem->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
                 $stockItem->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());

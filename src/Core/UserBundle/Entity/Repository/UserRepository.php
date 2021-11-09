@@ -171,6 +171,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ACCOUNTING_SALES'                  => 'Sales',
                 'ROLE_DOMAIN_ACCOUNTING_ECOMMERCE'              => 'Online Sales',
                 'ROLE_DOMAIN_ACCOUNTING_JOURNAL'                => 'Journal',
+                'ROLE_DOMAIN_ACCOUNTING_CONDITION'              => 'Condition Account',
                 'ROLE_DOMAIN_ACCOUNTING_BANK'                   => 'Bank & Mobile',
                 'ROLE_DOMAIN_FINANCE_APPROVAL'                  => 'Approval',
                 'ROLE_DOMAIN_ACCOUNTING_TRANSACTION'            => 'Transaction',

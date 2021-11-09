@@ -5,19 +5,10 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
-use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\PatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,9 +46,8 @@ class InvoiceAdmissionController extends Controller
 
         $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
         $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
-
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
         $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
 
@@ -65,8 +55,8 @@ class InvoiceAdmissionController extends Controller
             'entities' => $pagination,
             'salesTransactionOverview' => $salesTransactionOverview,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'assignDoctors' => $assignDoctors,
-            'referredDoctors' => $referredDoctors,
+            'assignDoctors'                     => $referredDoctors,
+            'employees'                         => $employees,
             'cabinGroups' => $cabinGroups,
             'cabins' => $cabins,
             'option' => $user->getGlobalOption(),
@@ -135,6 +125,7 @@ class InvoiceAdmissionController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $entity->setHospitalConfig($hospital);
+            $entity->getCustomer()->setGlobalOption($user->getGlobalOption());
             $entity->setProcess('Admitted');
             $entity->setInvoiceMode('admission');
             $em->persist($entity);

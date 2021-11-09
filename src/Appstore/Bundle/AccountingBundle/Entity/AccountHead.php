@@ -79,6 +79,12 @@ class AccountHead
 
 
      /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCondition")
+     **/
+    private  $accountCondition;
+
+
+     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountHead" )
      **/
     private  $medicineVendor;
@@ -678,6 +684,22 @@ class AccountHead
     public function setAssetsItem($assetsItem)
     {
         $this->assetsItem = $assetsItem;
+    }
+
+    /**
+     * @return AccountCondition
+     */
+    public function getAccountCondition()
+    {
+        return $this->accountCondition;
+    }
+
+    /**
+     * @param AccountCondition $accountCondition
+     */
+    public function setAccountCondition($accountCondition)
+    {
+        $this->accountCondition = $accountCondition;
     }
 
 

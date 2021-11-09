@@ -54,6 +54,11 @@ class CustomerForDpsType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
+            ->add('bloodGroup', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '--- Select Blood Group ---',
+                'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
+            ))
             ->add('gender', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom inputs gender'),
                 'expanded'      =>false,

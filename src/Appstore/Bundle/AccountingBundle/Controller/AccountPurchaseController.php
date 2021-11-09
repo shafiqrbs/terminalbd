@@ -151,8 +151,7 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setProcessHead('accounting');
             }
-
-            if(in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment"))){
+            if(in_array($entity->getProcessType(),array("Credit"))){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
                 $entity->setTransactionMethod(null);
@@ -392,20 +391,16 @@ class AccountPurchaseController extends Controller
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($data['pk']);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Account Purchase entity.');
         }
-        if($data['value'] < 0){
+        if($data['name'] == 'PurchaseAmount'){
             $entity->setPurchaseAmount(abs($data['value']));
             $entity->setPayment(0);
         }else{
             $entity->setPayment($data['value']);
         }
-        //$currentBalance = $entity->getBalance() + $entity->getPayment();
-        //$entity->setBalance($currentBalance - floatval($data['value']));
         $em->flush();
-
         exit;
 
     }

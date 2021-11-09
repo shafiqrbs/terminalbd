@@ -108,28 +108,63 @@ class ReportController extends Controller
     }
 
     /**
+     * @Route("/cash-flow", methods={"GET", "POST"}, name="accounting_report_cash_flow")
+     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_DOMAIN")
+     */
+
+    public function cashFlowAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+
+
+
+    }
+
+    /**
      * @Route("/customer-ledger", methods={"GET", "POST"}, name="accounting_report_sales_customer_ledger")
      * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
      */
 
     public function customerLedgerAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = '';
         $customer = "";
-        if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['customer']) and $data['customer']) {
-            if(isset($data['mobile']) and !empty($data['mobile'])){
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
-                $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
-            }
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile'=> $customerId));
-            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerLedger($globalOption,$data);
+        $overview = "";
+        $customers = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerOutstanding($globalOption);
+        if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['customerId']) and $data['customerId']) {
+            $customerId = $data['customerId'];
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'id'=> $customerId));
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportCustomerLedger($globalOption->getId(),$data);
+            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser(),$data);
+
         }
         return $this->render('ReportBundle:Accounting/Sales:ledger.html.twig', array(
                 'entities' => $entities,
+                'overview' => $overview,
                 'customer' => $customer,
+                'customers' => $customers,
                 'option' => $globalOption,
                 'searchForm' => $data,
         ));
@@ -143,6 +178,8 @@ class ReportController extends Controller
 
     public function userSummaryAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
@@ -162,6 +199,8 @@ class ReportController extends Controller
 
     public function userSalesDetailsAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
@@ -186,6 +225,8 @@ class ReportController extends Controller
 
     public function hmsDashboardAction()
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
@@ -236,13 +277,15 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
+
         $globalOption = $this->getUser()->getGlobalOption();
+        $hospital = $globalOption->getHospitalConfig();
         if (empty($data)) {
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d');
             $data['endDate'] = $datetime->format('Y-m-d');
         }
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         $entities = $em->getRepository('HospitalBundle:Invoice')->reportInvoiceLists($user , $mode = 'diagnostic' , $data);
         return $this->render('ReportBundle:Hospital/Sales:diagnostic-invoice.html.twig', array(
             'entities' => $entities,
@@ -274,7 +317,7 @@ class ReportController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $entities = $em->getRepository('HospitalBundle:Invoice')->reportVisitLists($user , $mode = 'visit' , $data);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         return $this->render('ReportBundle:Hospital/Sales:visit-invoice.html.twig', array(
             'employees' => $employees,
             'assignDoctors' => $assignDoctors,
@@ -309,7 +352,7 @@ class ReportController extends Controller
         $anesthesiaDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAanesthesiaDoctor($hospital);
         $assistantDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssistantDoctor($hospital);
         $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         return $this->render('ReportBundle:Hospital/Sales:admission-invoice.html.twig', array(
             'employees' => $employees,
             'anesthesiaDoctor' => $anesthesiaDoctor,

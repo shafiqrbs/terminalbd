@@ -89,6 +89,11 @@ class DpsInvoice
     private  $assignDoctor;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
+     **/
+    private  $hmsAssignDoctor;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dpsInvoiceCreatedBy" )
      **/
@@ -858,6 +863,21 @@ class DpsInvoice
         return $this->medicineDoctorPrescribes;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getHmsAssignDoctor()
+    {
+        return $this->hmsAssignDoctor;
+    }
+
+    /**
+     * @param mixed $hmsAssignDoctor
+     */
+    public function setHmsAssignDoctor($hmsAssignDoctor)
+    {
+        $this->hmsAssignDoctor = $hmsAssignDoctor;
+    }
 
 
 }

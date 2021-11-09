@@ -14,21 +14,6 @@
              </div>
         </div>
     </div>
-    <form action="{{ path('hms_invoice_admission_old_patient') }}" method="post">
-        <div class="row-fluid">
-            <div class="span1"></div>
-            <div class="span9">
-                <input type="text" id="customer" required name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
-            </div>
-            <div class="span2">
-                <div class="control-group">
-                    <div class="btn-group">
-                        <button class="btn blue" type="submit"><i class="icon-plus-sign"></i> Admission</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
     <div class="row-fluid particular-info" style="padding-left: 15px" >
         <div class="row-fluid">
             <div class="span3">
@@ -297,7 +282,7 @@
         color: red;
         line-height: 30px;
     }
-    .textarea{
+    textarea[class*="span"].m-wrap{
         background: #ffffff;
     }
 </style>

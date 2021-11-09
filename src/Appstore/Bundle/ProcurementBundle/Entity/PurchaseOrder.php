@@ -39,17 +39,17 @@ class PurchaseOrder
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrder" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrderCheckedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $checkedBy;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseOrderApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $approvedBy;
 

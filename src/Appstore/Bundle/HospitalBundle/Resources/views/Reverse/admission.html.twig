@@ -18,7 +18,7 @@
                     <ul class="unstyled">
                         {% if entity.customer is not empty %}<li><strong>Patient ID #:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
                         <li><strong>Age:</strong>&nbsp;{{ entity.customer.age }} {{ entity.customer.ageType }}</li>
-                        <li><strong>Date of Birth:</strong>&nbsp;{{ entity.customer.dob }}</li>
+                        <li><strong>Date of Birth:</strong>&nbsp;{{ entity.customer.dob|date('d-m-Y') }}</li>
                         <li><strong>Marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
                         <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
                     </ul>

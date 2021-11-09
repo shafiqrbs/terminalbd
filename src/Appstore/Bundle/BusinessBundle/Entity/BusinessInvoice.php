@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCondition;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
@@ -128,10 +129,21 @@ class BusinessInvoice
      **/
     private  $marketing;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Courier", inversedBy="invoices" )
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Courier")
      **/
     private  $courier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCondition")
+     **/
+    private  $condition;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountConditionLedger", mappedBy="invoice" )
+     **/
+    private  $conditionLedger;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="invoice", cascade={"remove"} )
@@ -1198,6 +1210,29 @@ class BusinessInvoice
         $this->printPreviousDue = $printPreviousDue;
     }
 
+    /**
+     * @return AccountCondition
+     */
+    public function getCondition()
+    {
+        return $this->condition;
+    }
+
+    /**
+     * @param AccountCondition $condition
+     */
+    public function setCondition($condition)
+    {
+        $this->condition = $condition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConditionLedger()
+    {
+        return $this->conditionLedger;
+    }
 
 }
 

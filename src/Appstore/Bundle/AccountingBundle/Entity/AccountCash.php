@@ -109,6 +109,12 @@ class AccountCash
     protected $accountSalesAdjustment;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountConditionLedger")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $conditionLedger;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
@@ -157,7 +163,6 @@ class AccountCash
 	private  $toUser;
 
     /**
-     * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountPurchases" )
      **/
     private  $createdBy;
@@ -745,6 +750,22 @@ class AccountCash
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return AccountConditionLedger
+     */
+    public function getConditionLedger()
+    {
+        return $this->conditionLedger;
+    }
+
+    /**
+     * @param AccountConditionLedger $conditionLedger
+     */
+    public function setConditionLedger($conditionLedger)
+    {
+        $this->conditionLedger = $conditionLedger;
     }
 
 

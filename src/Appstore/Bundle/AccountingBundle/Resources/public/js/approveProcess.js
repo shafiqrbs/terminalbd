@@ -34,7 +34,7 @@ function AccountingApproveProcess(){}
     });
 
     $(document).on("click", ".editable-submit", function() {
-        setTimeout(pageReload, 1000);
+       // setTimeout(pageReload, 1000);
     });
 
     function pageReload() {

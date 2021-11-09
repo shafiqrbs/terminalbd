@@ -160,7 +160,8 @@ class AccountSalesController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-            if( in_array($entity->getProcessHead(),array("Outstanding","Opening"))){
+
+            if( in_array($entity->getProcessHead(),array("Debit"))){
                 $entity->setTotalAmount(abs($entity->getAmount()));
                 $entity->setAmount(0);
                 $entity->setTransactionMethod(null);
@@ -202,10 +203,10 @@ class AccountSalesController extends Controller
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option, 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }
-            if( in_array($entity->getProcessHead(),array("Outstanding","Opening"))){
-	            $entity->setTotalAmount(abs($entity->getAmount()));
-		        $entity->setAmount(0);
-		        $entity->setTransactionMethod(null);
+            if( in_array($entity->getProcessHead(),array("Debit"))){
+                $entity->setTotalAmount(abs($entity->getAmount()));
+                $entity->setAmount(0);
+                $entity->setTransactionMethod(null);
             }else{
                 $entity->setAmount(abs($entity->getAmount()));
             }
@@ -403,8 +404,11 @@ class AccountSalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        if($data['value'] > 0 ){
-	        $entity->setAmount($data['value']);
+        if($data['name'] == 'TotalAmount'){
+            $entity->setTotalAmount(abs($data['value']));
+            $entity->setAmount(0);
+        }else{
+            $entity->setAmount($data['value']);
         }
         $em->flush();
         exit;

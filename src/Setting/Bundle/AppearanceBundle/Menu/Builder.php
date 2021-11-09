@@ -212,7 +212,8 @@ class Builder extends ContainerAware
         /* @var $config BusinessConfig */
 
         $config = $securityContext->getGlobalOption()->getBusinessConfig();
-        $business = empty($config->getBusinessModel()) ? "Business" : ucfirst($config->getBusinessModel());
+       // $business = empty($config->getBusinessModel()) ? "Business" : ucfirst($config->getBusinessModel());
+        $business = 'Inventory & Sales';
 
         $menu
             ->addChild("{$business}")
@@ -222,6 +223,8 @@ class Builder extends ContainerAware
             $menu[$business]->addChild('Reports')->setAttribute('icon', 'icon icon-bar-chart')->setAttribute('dropdown', true);
             $menu[$business]['Reports']->addChild( 'System Overview', array( 'route' => 'business_report_system_overview' ) )->setAttribute( 'icon', 'icon-th-list' );
             $menu[$business]['Reports']->addChild( 'Stock Price', array( 'route' => 'business_report_stock_price' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu[$business]['Reports']->addChild( 'Item Ledger', array( 'route' => 'business_report_stock_ledger' ) )->setAttribute( 'icon', 'icon-th-list' );
+            $menu[$business]['Reports']->addChild( 'Item Monthly Ledger', array( 'route' => 'business_report_monthly_stock_ledger' ) )->setAttribute( 'icon', 'icon-th-list' );
             $menu[$business]['Reports']->addChild( 'Monthly Stock Summary', array( 'route' => 'business_report_monthly_stock_summary' ) )->setAttribute( 'icon', 'icon-th-list' );
             if($securityContext->isGranted('ROLE_BUSINESS_REPORT') and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
                 $menu[$business]['Reports']->addChild('Sales')
@@ -290,20 +293,20 @@ class Builder extends ContainerAware
             }
 
         }
-
         if ($securityContext->isGranted('ROLE_BUSINESS_INVOICE') and $config->getBusinessModel() != "association") {
 	        $menu[$business]->addChild('Manage Sales')->setAttribute('icon', 'icon icon-shopping-cart')->setAttribute('dropdown', true);
-
+            $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
+                ->setAttribute('icon', 'icon-plus-sign');
             $menu[$business]['Manage Sales']->addChild('Sales', array('route' => 'business_invoice'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu[$business]['Manage Sales']->addChild('Condition Sales', array('route' => 'business_invoice_condition'))
-                ->setAttribute('icon', 'icon-th-list');
+            if($config->isConditionSales() == 1){
+                $menu[$business]['Manage Sales']->addChild('Condition Sales', array('route' => 'business_invoice_condition'))
+                    ->setAttribute('icon', 'icon-th-list');
+            }
             $menu[$business]['Manage Sales']->addChild('Sales Return', array('route' => 'business_invoice_return'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Manage Sales']->addChild('Sales Return Item', array('route' => 'business_invoice_return_item'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu[$business]['Manage Sales']->addChild('Add Sales', array('route' => 'business_invoice_new'))
-                ->setAttribute('icon', 'icon-plus-sign');
             if($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
                 $menu[$business]['Manage Sales']->addChild('Customer ', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
             }
@@ -313,7 +316,7 @@ class Builder extends ContainerAware
             $menu[$business]['Store Customer']->addChild('Store Ledger', array('route' => 'business_store_ledger'))->setAttribute('icon', 'icon-th-list');
             $menu[$business]['Store Customer']->addChild('Store', array('route' => 'business_store'))->setAttribute('icon', 'icon-th-list');
         }
-            if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
+        if( ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_CRM')) or ($config->getBusinessModel() == "association" and $securityContext->isGranted('ROLE_DOMAIN'))) {
             $menu[$business]->addChild('Manage Member', array('route' => 'domain_association'))->setAttribute('icon', 'fa fa-group');
             $menu[$business]->addChild('Member Invoice', array('route' => 'business_invoice'))->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_BUSINESS_ASSOCIATION_REPORT')){
@@ -348,7 +351,6 @@ class Builder extends ContainerAware
 		    $menu[$business]['Manage Purchase']->addChild('Vendor', array('route' => 'business_vendor'));
 
 	    }
-
         if ($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
             $menu[$business]->addChild('Manage Stock')->setAttribute('icon', 'icon icon-building')->setAttribute('dropdown', true);
             $menu[$business]['Manage Stock']->addChild('Stock Item', array('route' => 'business_stock'))->setAttribute('icon', 'icon-th-list');
@@ -375,7 +377,7 @@ class Builder extends ContainerAware
                         ->setAttribute( 'icon', 'icon-th-list' );
             }
         }
-        $menu[$business]->addChild('Notepad ', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
+        $menu[$business]->addChild( 'Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
 	    if ($securityContext->isGranted('ROLE_BUSINESS_MANAGER')) {
 
 		    $menu[$business]->addChild('Master Data')
@@ -584,13 +586,21 @@ class Builder extends ContainerAware
             $menu['Accounting']['Cash']['Reports']->addChild('Monthly Cash',array('route' => 'account_transaction_monthly'));
             $menu['Accounting']['Cash']['Reports']->addChild('Yearly Cash',array('route' => 'account_transaction_yearly'));
         }
-        if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
+        if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_LOAN')){
             $menu['Accounting']->addChild('Manage Loan', array('route' => 'account_loan'))
                 ->setAttribute('icon', 'fa fa-money')
                 ->setAttribute('dropdown', true);
             $menu['Accounting']['Manage Loan']->addChild('Loan', array('route' => 'account_loan'));
             $menu['Accounting']['Manage Loan']->addChild('Loan New', array('route' => 'account_loan_new'));
         }
+         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_CONDITION')){
+            $menu['Accounting']->addChild('Condition Account', array('route' => 'account_condition'))
+                ->setAttribute('icon', 'fa fa-money')
+                ->setAttribute('dropdown', true);
+            $menu['Accounting']['Condition Account']->addChild('New Ledger Voucher', array('route' => 'account_condition_ledger_new'));
+            $menu['Accounting']['Condition Account']->addChild('Condition Ledger', array('route' => 'account_condition_ledger'));
+            $menu['Accounting']['Condition Account']->addChild('Condition Account', array('route' => 'account_condition'));
+         }
 
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Journal', array('route' => 'account_transaction'))
@@ -1267,19 +1277,27 @@ class Builder extends ContainerAware
     {
 
         $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $mainApp = $securityContext->getGlobalOption()->getMainApp()->getModuleClass();
         $menu
             ->addChild('Doctor Prescription')
             ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
-        $menu['Doctor Prescription']->addChild('Patient', array('route' => 'dps_invoice'))
-            ->setAttribute('icon', 'fa fa-medkit');
-        $menu['Doctor Prescription']->addChild('Expense')
-            ->setAttribute('icon', 'icon icon-money')
-            ->setAttribute('dropdown', true);
-        $menu['Doctor Prescription']['Expense']->addChild('Expenditure', array('route' => 'dps_account_expenditure'))
-            ->setAttribute('icon', 'fa fa-indent');
-        $menu['Doctor Prescription']['Expense']->addChild('Expense Category', array('route' => 'dps_expensecategory'))
-            ->setAttribute('icon', 'icon-tags');
+
+        //if($mainApp == "Hospital" and $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR')){
+        if($mainApp == "Hospital"){
+            $menu['Doctor Prescription']->addChild('Prescription', array('route' => 'dps_prescription'))
+                ->setAttribute('icon', 'fa fa-medkit');
+        }else{
+            $menu['Doctor Prescription']->addChild('Patient', array('route' => 'dps_invoice'))
+                ->setAttribute('icon', 'fa fa-medkit');
+            $menu['Doctor Prescription']->addChild('Expense')
+                ->setAttribute('icon', 'icon icon-money')
+                ->setAttribute('dropdown', true);
+            $menu['Doctor Prescription']['Expense']->addChild('Expenditure', array('route' => 'dps_account_expenditure'))
+                ->setAttribute('icon', 'fa fa-indent');
+            $menu['Doctor Prescription']['Expense']->addChild('Expense Category', array('route' => 'dps_expensecategory'))
+                ->setAttribute('icon', 'icon-tags');
+        }
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
 
             $menu['Doctor Prescription']->addChild('Master Data')->setAttribute('icon', 'icon icon-cog')
@@ -1288,8 +1306,10 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Doctor Prescription']['Master Data']->addChild('Service', array('route' => 'dps_service'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Doctor Prescription']['Master Data']->addChild('Doctor', array('route' => 'dps_doctor'))
-                ->setAttribute('icon', 'icon-th-list');
+            if($mainApp != "Hospital") {
+                $menu['Doctor Prescription']['Master Data']->addChild('Doctor', array('route' => 'dps_doctor'))
+                    ->setAttribute('icon', 'icon-th-list');
+            }
             if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
                 $menu['Doctor Prescription']['Master Data']->addChild('Configuration', array('route' => 'dps_config_manage'))
                     ->setAttribute('icon', 'icon-cog');

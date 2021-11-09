@@ -49,10 +49,10 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span3">
-                                        <input type="text" id="mobile" name="mobile"  class="span12 select2Patient" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Patient mobile">
+                                        <input type="text" id="mobile" name="mobile"  class="span12 m-wrap select2Patient" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Patient mobile">
                                     </div>
                                     <div class="span3">
-                                        <input type="text" id="location" name="location"  class="span12 select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="Patient location">
+                                        <input type="text" id="location" name="location"  class="span12 m-wrap select2Location" value="{% if searchForm.location is defined %}{{ searchForm.location }}{% endif %}"  autocomplete="off" placeholder="Patient location">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Enter Patient name{% endif %} ">

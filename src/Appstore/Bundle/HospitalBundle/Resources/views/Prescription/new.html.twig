@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="category-title">
-                Patient Admission
+                Doctor Visit
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -15,10 +15,10 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_invoice_admission') }}">Patient Admission</a>
+                    <a href="{{ path('hms_prescription') }}">Doctor Visit</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">Manage Patient Admission</a></li>
+                <li><a href="#">Manage Doctor Visit</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -33,11 +33,10 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Patient Admission Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Doctor Visit Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> New Admission</a>
-                    <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
+                    <a class="btn" href="{{ path('hms_prescription') }}"><i class="icon-th-list"></i> Doctor Visit</a>
                   {#  <a class="btn black patientShow"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>#}
                 </div>
             </div>
@@ -151,7 +150,10 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label" id="receive-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
+                                        <label class="control-label" id="receive-label" for="firstName">
+                                            <span class="label-custom" >Receivable TK. <strong id="visit"></strong></span>
+                                            <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span>
+                                        </label>
                                     </div>
                                 </div>
                                 <!--/span-->
@@ -247,8 +249,7 @@
                             <div class="row-fluid">
                                 <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="">
                                 <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
-                                <button type="submit" class="btn blue big" style="width: 100%!important;"   id="saveDiagnosticButton"><i class="icon-save"></i> Save</button>
-
+                                <button type="submit" class="btn blue big" style="width: 100%!important;"><i class="icon-save"></i> Save</button>
                             </div>
                             </div>
                     </div>
@@ -329,7 +330,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/appointment.js'
     '@HospitalBundle/Resources/public/js/approveProcess.js'
     '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'

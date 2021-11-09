@@ -54,11 +54,10 @@ class AccountPurchaseType extends AbstractType
 		        'expanded'      =>false,
 		        'multiple'      =>false,
 		        'choices' => array(
-			        'Due' => 'Due',
-			        'Discount' => 'Discount',
-			        'Advance' => 'Advance',
-			        'Opening' => 'Opening',
-			        'Adjustment' => 'Adjustment',
+			        'Due' => 'Payment of Due',
+			        'Advance' => 'Payment of Advance',
+			        'Debit' => 'Debit Adjustment',
+			        'Credit' => 'Credit Adjustment',
 		        ),
 	        ))
             ->add('accountBank', 'entity', array(
@@ -96,7 +95,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 m-wrap vendor-ledger-medicine select2'),
+                'attr'=>array('class'=>'span12 m-wrap vendor-ledger-medicine '),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -115,7 +114,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2 m-wrap vendor-ledger-inventory'),
+                'attr'=>array('class'=>'span12  m-wrap vendor-ledger-inventory'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -132,7 +131,7 @@ class AccountPurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
                 'empty_value' => '---Choose a vendor company---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span10 select2 vendor-ledger-business'),
+                'attr'=>array('class'=>'span10  vendor-ledger-business'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")

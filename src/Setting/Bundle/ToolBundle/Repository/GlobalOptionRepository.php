@@ -527,13 +527,6 @@ class GlobalOptionRepository extends EntityRepository
         $config->setGlobalOption($globalOption);
         $this->_em->persist($config);
 
-        $config = new OfficeConfig();
-        $config->setGlobalOption($globalOption);
-        $this->_em->persist($config);
-
-        $config = new TicketConfig();
-        $config->setGlobalOption($globalOption);
-        $this->_em->persist($config);
 
         $module = $this->_em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'page'));
         $about = new Page();
