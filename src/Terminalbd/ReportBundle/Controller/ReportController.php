@@ -53,6 +53,7 @@ class ReportController extends Controller
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
+        $employees = $this->getDoctrine()->getRepository('UserBundle:User')->getEmployees($globalOption);
         return $this->render('ReportBundle:Default:index.html.twig', array(
             'transactionCashOverviews'                  => $transactionCashOverview,
             'transactionBankCashOverviews'              => $transactionBankCashOverviews,
@@ -63,6 +64,7 @@ class ReportController extends Controller
             'todayExpense'       => $todayExpense,
             'todayJournal'       => $todayJournal,
             'todayLoan'       => $todayLoan,
+            'employees'       => $employees,
             'option' => $globalOption,
             'searchForm' => $data,
         ));

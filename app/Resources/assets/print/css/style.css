@@ -462,7 +462,7 @@ input[type=submit]:hover {
     color: #000;
 }
 
-.head-green {
+table tr.head-blue th{
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
     color: #ffffff;
@@ -471,4 +471,77 @@ input[type=submit]:hover {
     box-sizing: border-box;
     border: 1px solid #cacaca;
     background: #039be5;
+    height: 32px;
+}
+
+table tr.head-green th{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #00b22d;
+    height: 32px;
+}
+
+table tr.head-gray th{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #263238;
+    height: 32px;
+}
+
+table tr.head-feroza th{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #0052cc;
+    height: 32px;
+}
+
+table tr.head-yellow th{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #f4c22b;
+    height: 32px;
+}
+
+table tr.footer-gray th, table tr.footer-gray td{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #263238;
+    height: 32px;
+}
+
+table tr.footer-green th, table tr.footer-green td{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    color: #ffffff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid #cacaca;
+    background: #00b22d;
+    height: 32px;
 }

@@ -1,6 +1,35 @@
 {% extends '::base-report.html.twig' %}
 {% block body %}
     <div id="print-area">
+        <div class="row">
+            <div class="col-md-12 print-bar">
+                <form action="" method="get">
+                    <div class="row">
+                        <div class="col-md-5 margin-top">
+                            <label>Employee</label>
+                            <select class="search-input span12 m-wrap" id="user" name="user">
+                                <option value="">--Select System User--</option>
+                                {% for employee in employees %}
+                                    <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3 margin-top">
+                            <label>Start Date</label>
+                            <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                        </div>
+                        <div class="col-md-3 margin-top">
+                            <label>End Date</label>
+                            <input type="date" class="m-wrap" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                        </div>
+                        <div class="col-md-1 margin-top">
+                            <label>&nbsp;</label>
+                            <button class='btn btn-download btn-margin-left' value="search" name="submit" ><i class='fa fa-search'></i> Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="row print-header">
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
@@ -13,11 +42,11 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                     <tr class="head-blue">
-                        <th class="span6">Cash Account</th>
-                        <th class="span2 text-right" >Opening Balance</th>
-                        <th class="span1 text-right" >Receive</th>
-                        <th class="span1 text-right" >Payment</th>
-                        <th class="span2 text-right" >Closing Balance</th>
+                        <th class="span-8">Cash Account</th>
+                        <th class="span-1 text-right" >Opening Balance</th>
+                        <th class="span-1 text-right" >Receive</th>
+                        <th class="span-1 text-right" >Payment</th>
+                        <th class="span-1 text-right" >Closing Balance</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,7 +69,7 @@
                             <td class="text-right" >{{ ((open + debit)-credit)|number_format }}</td>
                         </tr>
                     {% endfor %}
-                    <tr>
+                    <tr class="footer-gray">
                         <th class="">Total Amount</th>
                         <th class="text-right">{{ totalOpen|number_format }}</th>
                         <th class="text-right">{{ totalDebit|number_format }}</th>
@@ -54,11 +83,11 @@
                     <table class="table table-bordered tatransactionCashOverviewsble-striped table-condensed flip-content ">
                         <thead class="flip-content ">
                         <tr class="head-green">
-                            <th class="span6">Bank Account</th>
-                            <th class="span2 text-right" >Opening Balance</th>
-                            <th class="span1 text-right" >Receive</th>
-                            <th class="span1 text-right" >Payment</th>
-                            <th class="span2 text-right" >Closing Balance</th>
+                            <th class="span-8">Bank Account</th>
+                            <th class="span-1 text-right" >Opening Balance</th>
+                            <th class="span-1 text-right" >Receive</th>
+                            <th class="span-1 text-right" >Payment</th>
+                            <th class="span-1 text-right" >Closing Balance</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -75,7 +104,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
-                        <tr>
+                        <tr class="footer-gray">
                             <td class="text-right" colspan="4"><span class="pull-right">Grand Total</span></td>
                             <td class="text-right" ><strong>{{ sumBank|number_format }}</strong></td>
                         </tr>
@@ -85,11 +114,11 @@
                     <table class="table table-bordered table-striped table-condensed flip-content ">
                         <thead class="flip-content ">
                         <tr class="head-grey">
-                            <th class="span6">Mobile Account</th>
-                            <th class="span2 text-right" >Opening Balance</th>
-                            <th class="span1 text-right" >Receive</th>
-                            <th class="span1 text-right" >Payment</th>
-                            <th class="span2 text-right" >Closing Balance</th>
+                            <th class="span-8">Mobile Account</th>
+                            <th class="span-1 text-right" >Opening Balance</th>
+                            <th class="span-1 text-right" >Receive</th>
+                            <th class="span-1 text-right" >Payment</th>
+                            <th class="span-1 text-right" >Closing Balance</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -106,7 +135,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
-                        <tr>
+                        <tr class="footer-gray">
                             <td class="text-right" colspan="4"><span class="pull-right">Grand Total</span></td>
                             <td class="text-right" ><strong>{{ sumTotal|number_format }}</strong></td>
                         </tr>
@@ -115,9 +144,9 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                     <tr class="head-yellow">
-                        <th class="span6">Account Head</th>
-                        <th class="span1 text-right"  >Receive</th>
-                        <th class="span1 text-right"  >Payment</th>
+                        <th class="span-6">Account Head</th>
+                        <th class="span-1 text-right"  >Receive</th>
+                        <th class="span-1 text-right"  >Payment</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -136,10 +165,10 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                     <tr class="head-purple">
-                        <th class="span9">Process Mode</th>
-                        <th class="span1">Receipts(TK)</th>
-                        <th class="span1" >Payment(TK)</th>
-                        <th class="span1" >Balance</th>
+                        <th class="span-9">Process Mode</th>
+                        <th class="text-right span-1">Receipts(TK)</th>
+                        <th class="text-right span-1">Payment(TK)</th>
+                        <th class="text-right span-1">Balance</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -148,14 +177,14 @@
                         <td class="text-right" >{{ (totalOpen)|number_format(2) }}</td>
                     </tr>
                     <tr>
-                        <td class="text-right" colspan="4"><strong>Receive From Customer</strong></td>
+                        <th class="text-left" colspan="4"><strong>Receive From Customer</strong></th>
                     </tr>
                     {% set sumTotal = 0 %}
                     {% set closingBlc = 0 %}
                     {% for row in todayCustomerSales %}
                         {% set sumTotal = sumTotal + row.amount %}
                         <tr>
-                            <td class="text-right" >{{ row.name }}</td>
+                            <td class="text-left" >{{ row.name }}</td>
                             <td class="text-right" >{{ row.amount|number_format(2) }}</td>
                             <td class="text-right" ></td>
                             <td class="text-right" >{{ (totalOpen + sumTotal)|number_format(2) }}</td>
@@ -168,7 +197,7 @@
                     {% for row in todayVendorSales %}
                         {% set sumTotal = sumTotal - row.amount %}
                         <tr>
-                            <td class="text-right" >{{ row.name }}</td>
+                            <td class="text-left" >{{ row.name }}</td>
                             <td class="text-right" ></td>
                             <td class="text-right" >{{ row.amount|number_format(2) }}</td>
                             <td class="text-right" >{{ (totalOpen+sumTotal)|number_format(2) }}</td>
@@ -215,7 +244,7 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                    <tr>
+                    <tr class="footer-gray">
                         <td class="text-right" colspan="3"><span class="pull-right">Grand Total</span></td>
                         <td class="text-right" ><strong>{{ (totalOpen+sumTotal)|number_format(2) }}</strong></td>
                     </tr>

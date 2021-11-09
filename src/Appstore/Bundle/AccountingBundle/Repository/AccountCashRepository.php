@@ -49,6 +49,7 @@ class AccountCashRepository extends EntityRepository
         $tillDate           = $date->format('Y-m-d 23:59:59');
         $accountBank        =    isset($data['accountBank'])? $data['accountBank'] :'';
         $accountMobileBank  =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
+        $user  =    isset($data['user'])? $data['user'] :'';
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
@@ -58,6 +59,10 @@ class AccountCashRepository extends EntityRepository
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
+        }
+        if (!empty($user)) {
+            $qb->join('e.createdBy','user');
+            $qb->andWhere("user.id = :user")->setParameter('user', $user);
         }
         if(!empty($transactionMethods)){
             $qb->andWhere("t.id IN(:transactionMethod)");
@@ -100,6 +105,11 @@ class AccountCashRepository extends EntityRepository
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
+        $user  =    isset($data['user'])? $data['user'] :'';
+        if (!empty($user)) {
+            $qb->join('e.createdBy','user');
+            $qb->andWhere("user.id = :user")->setParameter('user', $user);
+        }
         $qb->andWhere("e.updated <= :updated");
         $qb->setParameter('updated', $tillDate);
         $openingBalance = $qb->getQuery()->getOneOrNullResult()['balance'];
@@ -119,6 +129,11 @@ class AccountCashRepository extends EntityRepository
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
+        }
+        $user  =    isset($data['user'])? $data['user'] :'';
+        if (!empty($user)) {
+            $qb->join('e.createdBy','user');
+            $qb->andWhere("user.id = :user")->setParameter('user', $user);
         }
         $qb->andWhere("t.id IN(:transactionMethod)");
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
