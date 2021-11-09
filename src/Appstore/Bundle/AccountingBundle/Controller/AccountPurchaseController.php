@@ -430,8 +430,6 @@ class AccountPurchaseController extends Controller
         }else{
             return new Response('failed');
         }
-
-
     }
 
     /**
