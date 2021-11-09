@@ -130,7 +130,7 @@ class AccountCashRepository extends EntityRepository
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
-        $userId  =    isset($data['user'])? $data['user'] :'';
+        $userId  = isset($data['user'])? $data['user'] :'';
         if (!empty($userId)) {
             $qb->andWhere("e.createdBy = :user")->setParameter('user',$userId);
         }
