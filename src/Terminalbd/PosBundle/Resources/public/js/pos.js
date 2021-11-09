@@ -111,8 +111,8 @@ $(document).on( "click", ".btn-number-pos", function(e){
 
     e.preventDefault();
     url = $(this).attr('data-action');
-    var price = $(this).attr('data-title');
     fieldId = $(this).attr('data-id');
+    var price = $('#price-'+fieldId);
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
     var input = $('#quantity-'+fieldId);

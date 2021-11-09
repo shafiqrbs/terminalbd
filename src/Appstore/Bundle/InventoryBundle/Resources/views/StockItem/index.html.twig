@@ -222,11 +222,15 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/approveProcess.js' %}
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@InventoryBundle/Resources/public/js/editable.js'
+
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithOutReloadInit();
     ApproveProcess();
 {% endblock %}

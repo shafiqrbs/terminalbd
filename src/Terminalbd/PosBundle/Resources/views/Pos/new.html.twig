@@ -36,7 +36,7 @@
                                     <th class="numeric">&nbsp;</th>
                                     <th class="numeric span8 product-title-name">Product</th>
                                     <th class="numeric product-price">Price</th>
-                                    <td class="numeric span2">&nbsp;</td>
+                                    <td class="numeric span2">Quantity</td>
                                     <th class="numeric product-price">Total</th>
                                     <th class="numeric"></th>
                                 </tr>
@@ -47,7 +47,9 @@
                                         <tr id="remove-{{ item.rowid }}">
                                             <td>{{ loop.index }}.</td>
                                             <td class="numeric product-title">{{ item.name }}</td>
-                                            <td class="numeric product-price">{{ item.price|number_format(2) }}</td>
+                                            <td class="numeric product-price">
+                                                <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.rowid }}"  id="price-{{ item.rowid }}" name="price-{{ item.rowid }}"  value="{{ item.price }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.rowid}) }}" >
+                                            </td>
                                             <td class="product-quantity">
                                                 <div class="input-append" style="margin-bottom: 0!important;">
                                                     <span class="input-group-btn">
@@ -126,12 +128,14 @@
                                                             <tr id="remove-{{ item.rowid }}">
                                                                 <td>{{ loop.index }}.</td>
                                                                 <td class="numeric product-title">{{ item.name }}</td>
-                                                                <td class="numeric product-price">{{ item.price }}</td>
+                                                                <td class="numeric product-price">
+                                                                    <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.rowid }}"  id="price-{{ item.rowid }}" name="price-{{ item.rowid }}"  value="{{ item.price }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.rowid}) }}" >
+                                                                </td>
                                                                 <td class="product-quantity text-center">
                                                                     <div class="input-append" style="margin-bottom: 0!important;">
                                                                 <span class="input-group-btn">
-              <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn black btn-number-pos mini" data-type="minus" data-id="{{ item.rowid }}"  data-text="{{ item.rowid }}" data-title="{{ item.price }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
-                                                                   <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.rowid }}"  id="quantity-{{ item.rowid }}" name="quantity-{{ item.rowid }}" data-title="{{ item.price }}" value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.rowid}) }}" min="1" max="100">
+              <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn black btn-number-pos mini" data-type="minus" data-id="{{ item.rowid }}"  data-text="{{ item.rowid }}"   data-field="quantity"> <span class="fa fa-minus"></span> </a>
+                                                                   <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.rowid }}"  id="quantity-{{ item.rowid }}" name="quantity-{{ item.rowid }}"  value="{{ item.quantity }}" data-action="{{ path('restaurant_tableinvoice_product_update',{'product':item.rowid}) }}" min="1" max="100">
                                                                   <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn black btn-number-pos mini"  data-type="plus" data-id="{{ item.rowid }}" data-title="{{ item.price }}"  data-text="{{ item.rowid }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
                                                                     </div>
                                                                 </td>
@@ -386,6 +390,28 @@
         }(document, "script", "xiidea-epp-sdk"));
     </script>
 <style>
+
+    .product-price input[type="text"].inline-m-wrap{
+        width: 120px!important;
+        border: 2px solid #f0ad4e;
+        padding: 0!important;
+    }
+    .mini {
+        height: 20px;
+        font-size: 11px !important;
+        line-height: 20px;
+        padding: 4px 10px;
+    }
+    input[type="text"].inline-m-wrap {
+        width: 30px;
+        font-size: 12px;
+        border: 2px solid #c49f47;
+        margin-bottom: 0;
+        text-align: center;
+        font-weight: bold;
+        height: 16px;
+        margin-left: 0;
+    }
     input[type="checkbox"].isHold{
         font-size: 20px;
         width: 30px!important;

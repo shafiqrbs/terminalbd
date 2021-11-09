@@ -1,11 +1,11 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
     <script type="text/javascript">
-        // window.print();
-        // setTimeout(function () {
-        //     window.open('', '_self', '');
-        //     window.close();
-        // }, 2000);
+         window.print();
+         setTimeout(function () {
+             window.open('', '_self', '');
+             window.close();
+         }, 2000);
     </script>
     <style>
         .invoice ,#invoice{
@@ -103,7 +103,7 @@
                         <tr><td colspan="5"><strong class="pull-right">RECEIVED</strong></td><td><strong  class="pull-right">{{ (entity.received)|number_format(2) }}</strong></td></tr>
                         {% endif %}
                         <tr>
-                            <td colspan="4">{{ entity.comment }}fsgsd sdfsdf 023523423 234234 dfsdfsdfd </td>
+                            <td colspan="4">{{ entity.comment }}</td>
                             <td  style="text-align: left!important;"><strong class="pull-right" >TOTAL DUE</strong></td><td><strong  class="pull-right">{{ balance|number_format(2) }}</strong></td></tr>
                         <tr>
                             <td colspan="6">
