@@ -66,6 +66,12 @@ class AccountCash
      **/
     private  $accountLoan;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoanLedger")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $loanLedger;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountCashes" )
@@ -113,6 +119,8 @@ class AccountCash
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $conditionLedger;
+
+
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")

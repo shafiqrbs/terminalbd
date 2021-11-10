@@ -12,10 +12,10 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 /**
  * accountLoan
  *
- * @ORM\Table(name="account_loan")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountLoanRepository")
+ * @ORM\Table(name="account_loan_ledger")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountLoanLedgerRepository")
  */
-class AccountLoan
+class AccountLoanLedger
 {
     /**
      * @var integer
@@ -35,9 +35,9 @@ class AccountLoan
     
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountLoan" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoan")
      **/
-    private  $accountCash;
+    private  $accountLoan;
     
 
     /**
@@ -79,26 +79,6 @@ class AccountLoan
      **/
     private  $approvedBy;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string",  nullable = true)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mobile", type="string",  nullable = true)
-     */
-    private $mobile;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address", type="string",  nullable = true)
-     */
-    private $address;
 
     /**
      * @var float
@@ -535,54 +515,20 @@ class AccountLoan
     }
 
     /**
-     * @return string
+     * @return AccountLoan
      */
-    public function getName()
+    public function getAccountLoan()
     {
-        return $this->name;
+        return $this->accountLoan;
     }
 
     /**
-     * @param string $name
+     * @param AccountLoan $accountLoan
      */
-    public function setName($name)
+    public function setAccountLoan($accountLoan)
     {
-        $this->name = $name;
+        $this->accountLoan = $accountLoan;
     }
-
-    /**
-     * @return string
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * @param string $mobile
-     */
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param string $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    }
-
-
 
 
 }

@@ -126,7 +126,7 @@ dps_prescription_particular_delete:
     path:     /{Prescription}/{id}/particular-delete
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionParticularDelete" }
 
-dps_prescription_print_Prescription:
+dps_prescription_print:
     path:     /{id}/print
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionPrint" }
 

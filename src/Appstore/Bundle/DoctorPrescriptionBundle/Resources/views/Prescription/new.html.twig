@@ -271,6 +271,7 @@
                                                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <thead class="flip-content ">
                                                             <tr class="head-grey">
+                                                                <th class="numeric">Created</th>
                                                                 <th class="numeric">Procedure</th>
                                                                 <th class="numeric">Procedure Diseases</th>
                                                                 <th class="numeric">Action</th>
@@ -280,7 +281,8 @@
                                                             {% for invoiceParticular in entity.invoiceParticulars %}
                                                                 {% if invoiceParticular.dpsService is not empty and invoiceParticular.dpsService.slug|trim == service.slug %}
                                                                     <tr id="remove-{{ invoiceParticular.id }}">
-                                                                        <td  class="numeric" {% if invoiceParticular.teethNo[0] is empty %} colspan="2" {% endif %} >{{ invoiceParticular.metaValue }}</td>
+                                                                        <td  class="numeric">{{ invoiceParticular.created|date('d-m-Y') }}</td>
+                                                                        <td  class="numeric">{{ invoiceParticular.metaValue }}</td>
                                                                         <td class="numeric">{{ invoiceParticular.diseases|raw }}</td>
                                                                         <td class="numeric">
                                                                             <a href="javascript:" class="btn red mini particularDelete" data-id="{{ invoiceParticular.id }}" data-tab="{{ service.slug }}" id="{{ invoiceParticular.id }}" data-url="{{ path('dps_invoice_particular_delete',{'invoice':entity.invoice , 'id':invoiceParticular.id}) }}" ><i class="icon-trash"></i></a>
@@ -756,6 +758,9 @@
          width: 99.5%;
          font-size: 14px;
          border: 1px solid #1e7b85;
+     }
+     .tabbable-custom > .tab-content {
+         min-height: 350px;
      }
      .checkbox-custom{
          color:red;

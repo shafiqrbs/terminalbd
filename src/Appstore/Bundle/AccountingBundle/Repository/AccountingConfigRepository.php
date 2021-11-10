@@ -69,17 +69,11 @@ class AccountingConfigRepository extends EntityRepository
         $profit = $em->createQuery('DELETE AccountingBundle:AccountProfit e WHERE e.globalOption = '.$option);
         $profit->execute();
 
-        $loan = $em->createQuery('DELETE AccountingBundle:AccountLoan e WHERE e.globalOption = '.$option);
+        $loan = $em->createQuery('DELETE AccountingBundle:AccountLoanLedger e WHERE e.globalOption = '.$option);
         $loan->execute();
 
-
-        /*  $AccountMobileBank = $em->createQuery('DELETE AccountingBundle:AccountMobileBank e WHERE e.globalOption = '.$option);
-          $AccountMobileBank->execute();
-
-          $AccountBank = $em->createQuery('DELETE AccountingBundle:AccountBank e WHERE e.globalOption = '.$option);
-          $AccountBank->execute();*/
-
-
+        $condition = $em->createQuery('DELETE AccountingBundle:AccountConditionLedger e WHERE e.globalOption = '.$option);
+        $condition->execute();
 
     }
 }

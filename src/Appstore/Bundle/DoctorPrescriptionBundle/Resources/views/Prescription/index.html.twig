@@ -129,11 +129,7 @@
                                     <th class="numeric" >Patient No</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    {% if dpsConfig.showTransaction == 1 %}
-                                    <th class="numeric" >Net Total</th>
-                                    <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Balance</th>
-                                    {% endif %}
+                                    <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -146,25 +142,21 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        {% if dpsConfig.showTransaction == 1 %}
-                                        <td class="numeric" >{{ entity.total }}</td>
-                                        <td class="numeric" >{{ entity.payment }}</td>
-                                        <td class="numeric" >{{ entity.due }}</td>
-                                        {% endif %}
+                                        <td class="numeric" > {% if entity.hmsAssignDoctor %}{{ entity.hmsAssignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processIntArr = ['In-progress','Created','Pending','Revised'] %}
                                                 {% if entity.process in  processIntArr|keys %}
-                                                <a href="{{ path('dps_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
+                                                <a href="{{ path('dps_prescription_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
                                                 {% endif %}
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
-                                                <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
+                                                <a  id="{{ entity.id }}" data-url="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
                                                 {% if entity.process !='Created' %}
-                                                <a target="_blank"  href="{{ path('dps_invoice_print_invoice',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
+                                                <a target="_blank"  href="{{ path('dps_prescription_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
                                                 {% endif %}
-                                                <a href="{{ path('dps_invoice_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
+                                                <a href="{{ path('dps_prescription_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                             </div>
                                         </td>
                                     </tr>
