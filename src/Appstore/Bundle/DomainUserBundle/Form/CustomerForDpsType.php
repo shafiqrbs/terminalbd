@@ -28,16 +28,6 @@ class CustomerForDpsType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter patient name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient name')),
-                )
-            ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile inputs mobile','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient mobile no')),
-                )
-            ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Enter age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient age')),
@@ -55,8 +45,8 @@ class CustomerForDpsType extends AbstractType
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'empty_value' => '--- Select Blood Group ---',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'empty_value' => '-Blood Group-',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))
             ->add('gender', 'choice', array(
@@ -73,15 +63,7 @@ class CustomerForDpsType extends AbstractType
             ))
             ->add('address','textarea', array('attr'=>array('required'=>false ,'class'=>'m-wrap span12 resize inputs address','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
             ))
-            ->add('location', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12 location'),
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'choices'=> $this->LocationChoiceList(),
-                'choices_as_values' => true,
-                'choice_label' => 'nestedLabel',
-            ))
+
 
         ;
     }

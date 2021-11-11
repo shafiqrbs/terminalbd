@@ -554,8 +554,6 @@ $(document).on('click', '#received2Btn', function() {
 });
 
 
-
-
 $(document).on('click', '#addAccessories', function() {
 
     var accessories = $('#accessories').val();
@@ -726,6 +724,19 @@ $(document).on("click", ".saveButton", function() {
         }
     });
 
+});
+
+$(document).on("change", ".inputs", function() {
+
+    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+    $.ajax(url,{
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        data: formData,
+        success: function (response){}
+    });
 });
 
 $(document).on("change", ".invoiceProcess", function() {

@@ -169,6 +169,9 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
+                if (trim($item['Barcode'])){
+                    $itemObj->setBarcode($this->sentence_case($item['Barcode']));
+                }
                 if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
                 }
@@ -352,7 +355,7 @@ class Excel
         if($unit == NULL) {
 
             $unit = $unitRepository->findOneBy(array(
-                'name'                => $item['Unit']
+                'name'  => $item['Unit']
             ));
 
             if($unit == null) {

@@ -106,13 +106,25 @@ $(document).on( "click", "#btn-refresh", function(e){
     e.preventDefault();
 });
 
+$(document).on('change', '.updateProductPrice', function() {
+
+    var id = $(this).attr('data-id');
+    var price = $("#price-"+id).val();
+    var quantity = $("#quantity-"+id).val();
+    var url = $(this).attr('data-action');
+    $.get(url, {quantity: quantity,price: price} , function(response){
+            setTimeout(jsonResult(response),100);
+    });
+
+});
+
 
 $(document).on( "click", ".btn-number-pos", function(e){
 
     e.preventDefault();
     url = $(this).attr('data-action');
     fieldId = $(this).attr('data-id');
-    var price = $('#price-'+fieldId);
+    var price = financial($('#price-'+fieldId).val());
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
     var input = $('#quantity-'+fieldId);
@@ -122,7 +134,7 @@ $(document).on( "click", ".btn-number-pos", function(e){
             if(currentVal > input.attr('min')) {
                 var existVal = (currentVal - 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal})
+                $.get( url,{ quantity:existVal,price:price})
                     .done(function( response ) {
                         subTotal = financial(existVal * parseInt(price));
                         $('#subTotal-'+fieldId).html(subTotal);
@@ -138,7 +150,7 @@ $(document).on( "click", ".btn-number-pos", function(e){
             if(currentVal < input.attr('max')) {
                 var existVal = (currentVal + 1);
                 input.val(existVal).change();
-                $.get( url,{ quantity:existVal})
+                $.get( url,{ quantity:existVal,price:price})
                     .done(function( response ) {
                         subTotal = financial(existVal * parseInt(price));
                         $('#subTotal-'+fieldId).html(subTotal);

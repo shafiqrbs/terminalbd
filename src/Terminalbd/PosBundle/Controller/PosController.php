@@ -335,7 +335,7 @@ class PosController extends Controller
 
     public function searchItemAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         $user = $this->getUser();
         /* @var $terminal GlobalOption */
         $terminal = $user->getGlobalOption();
@@ -360,9 +360,11 @@ class PosController extends Controller
     {
 
         $cart = new Cart($request->getSession());
+        $price = (int)$_REQUEST['price'];
         $quantity = (int)$_REQUEST['quantity'];
         $data = array(
             'rowid' => $product,
+            'price' => $price,
             'quantity' => $quantity,
         );
         $cart->update($data);
@@ -483,8 +485,6 @@ class PosController extends Controller
         return new Response(json_encode($array));
 
     }
-
-
 
     private function returnCartSummaryAjaxData($cart)
     {
@@ -618,7 +618,7 @@ class PosController extends Controller
         $invoice = $this->getDoctrine()->getRepository('InventoryBundle:Pos')->find($id);
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Particular')->find($product);
         $invoiceItems = array('particularId' => $product , 'quantity' => 1,'price' => $entity->getPrice(),'process'=>'create');
-        $this->getDoctrine()->getRepository('InventoryBundle:Pos')->insertInvoiceItems($invoice, $invoiceItems);
+    //    $this->getDoctrine()->getRepository('InventoryBundle:Pos')->insertInvoiceItems($invoice, $invoiceItems);
         $result = $this->returnResultData($invoice);
         return new Response(json_encode($result));
     }

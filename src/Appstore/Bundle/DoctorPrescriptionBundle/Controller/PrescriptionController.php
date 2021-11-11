@@ -482,8 +482,12 @@ class PrescriptionController extends Controller
         if(!empty($medicine)  OR $medicineId > 0){
             $invoiceItems = array('medicine' => $medicine ,'medicineId' => $medicineId , 'generic' => $generic,'medicineQuantity' => $medicineQuantity,'medicineDose' => $medicineDose,'medicineDoseTime' => $medicineDoseTime ,'medicineDuration' => $medicineDuration,'medicineDurationType' => $medicineDurationType);
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->insertDpsInvoiceMedicine($invoice, $invoiceItems);
-            $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->getDpsInvoiceMedicines($invoice);
-            return new Response($result);
+            $html = $this->renderView('DoctorPrescriptionBundle:Prescription:medicine.html.twig',
+                array(
+                    'invoice' => $invoice,
+                )
+            );
+            return new Response($html);
         }
         exit;
 
@@ -613,7 +617,7 @@ class PrescriptionController extends Controller
 
     }
 
-    public function invoicePrintPreviewAction(DpsInvoice $entity)
+    public function previewAction(DpsInvoice $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -634,20 +638,19 @@ class PrescriptionController extends Controller
 
             $services = $em->getRepository('DoctorPrescriptionBundle:DpsService')->findBy(array('dpsConfig'=>$dpsConfig,'serviceShow'=> 1,'status'=> 1),array('serviceSorting'=>'ASC'));
             if($dpsConfig->isCustomPrescription() == 1){
-                $template = $dpsConfig->getGlobalOption()->getSlug();
+                $template = $dpsConfig->getGlobalOption()->getSubDomain();
             }else{
                 $template = 'print';
             }
-            $html =  $this->renderView('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
+            return  $this->render('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
-                    'print' => 'preview',
+                    'dpsConfig' => $dpsConfig,
+                    'print' => 'print',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
                 )
             );
-            return  New Response($html);
-            exit;
 
         }
 

@@ -75,9 +75,9 @@ dps_prescription_medicine_delete:
     path:     /{id}/medicine-delete
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:deleteMedicine" }
 
-dps_prescription_prescription_preview:
-    path:     /{id}/prescription-preview
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionPrintPreview" }
+dps_description_preview:
+    path:     /{id}/preview
+    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:preview" }
 
 
 

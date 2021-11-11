@@ -79,14 +79,14 @@
     </a>
     <!-- END LOGO -->
     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <ul class="nav pull-right">
+        <ul class="nav pull-right" style="margin-top: -5px!important;">
             <li class="" id="header_notification_bar">
                 <a href="{{ path('homepage') }}" class="btn blue mini"><i class="icon-th-large"></i> Dashboard</a>
             </li>
             <li class="" id="header_notification_bar">
                 <a  href="{{ path('inventory_salesonline') }}" class="btn purple mini"><i class="icon-th-large"></i> Sales</a>
             </li>
-            <li class="dropdown user">
+            <li class="dropdown user" style="margin-top: 11px!important;">
                 <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                    data-close-others="true">
                     <span class="username">{{ app.user }}</span>
@@ -144,7 +144,7 @@
 'assets/js/jquery.cookie-1.4.1.min.js'
 'assets/scripts/ui-jqueryui.js'
 'assets/scripts/input-box.js'
- 'assets/scripts/app.js'
+'assets/scripts/app.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -277,12 +277,5 @@
     }
 
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111963509-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-111963509-1');
-</script>
 </body>
 </html>

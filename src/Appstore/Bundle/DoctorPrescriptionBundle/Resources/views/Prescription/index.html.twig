@@ -146,14 +146,14 @@
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processIntArr = ['In-progress','Created','Pending','Revised'] %}
+                                                {% set processIntArr = ['In-progress','New','Done','Pending','Revised'] %}
                                                 {% if entity.process in  processIntArr|keys %}
-                                                <a href="{{ path('dps_prescription_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
+                                                    <a href="{{ path('dps_prescription_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
                                                 {% endif %}
-                                                {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
+                                                {% if entity.process =='New'  %}
                                                 <a  id="{{ entity.id }}" data-url="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
-                                                {% if entity.process !='Created' %}
+                                                {% if entity.process !='New' %}
                                                 <a target="_blank"  href="{{ path('dps_prescription_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
                                                 {% endif %}
                                                 <a href="{{ path('dps_prescription_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>

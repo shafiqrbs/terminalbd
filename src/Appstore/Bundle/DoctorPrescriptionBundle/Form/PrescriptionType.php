@@ -48,30 +48,16 @@ class PrescriptionType extends AbstractType
     {
         $builder
 
-            ->add('hmsAssignDoctor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'doctor',
-                'empty_value' => '---Select Assign Doctor---',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 5")
-                        ->andWhere("e.status = 1")
-                        ->orderBy("e.name","ASC");
-                }
-            ))
             ->add('process', 'choice', array(
-                'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
+                'attr'=>array('class'=>'m-wrap invoiceProcess inputs select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'empty_value' => '---Choose process---',
                 'choices' => array(
-                    'Created' => 'Created',
-                    'Appointment' => 'Appointment',
-                    'Visit' => 'Visit',
+                    'New' => 'New',
+                    'In-progress' => 'In-progress',
                     'Done' => 'Done',
+                    'Closed' => 'Closed',
                     'Canceled' => 'Canceled',
                 ),
             ))
@@ -79,7 +65,7 @@ class PrescriptionType extends AbstractType
             ->add('investigations', 'entity', array(
                 'required'    => true,
                 'multiple'      =>true,
-                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
                 'group_by'  => 'category.name',
                 'property'  => 'name',

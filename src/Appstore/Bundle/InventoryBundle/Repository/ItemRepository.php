@@ -433,6 +433,8 @@ class ItemRepository extends EntityRepository
 	    $query->addSelect('i.sku as sku');
         $query->where($query->expr()->like("i.name", "'%$search%'"  ));
 	    $query->orWhere($query->expr()->like("i.skuSlug", "'%$search%'"  ));
+	  //  $query->orWhere($query->expr()->like("i.sku", "'%$search%'"  ));
+	   // $query->orWhere($query->expr()->like("i.barcode", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');
