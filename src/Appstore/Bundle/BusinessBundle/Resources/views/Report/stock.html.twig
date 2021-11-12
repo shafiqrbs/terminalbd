@@ -76,8 +76,14 @@
                                     <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                     <td class="numeric" >{{ entity.bonusQuantity|number_format }}</td>
                                     <td class="numeric" >{{ entity.purchaseReturnQuantity|number_format }}</td>
-                                    <td class="numeric" >{{ damages[entity.id]|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.remainingQuantity + entity.bonusQuantity - damages[entity.id]) }}</td>
+                                    <td class="numeric" >{% if damages[entity.id] is defined and damages[entity.id] is not empty %}{{ damages[entity.id]|number_format }}{% endif %}</td>
+                                    <td class="numeric" >
+                                        {% if damages[entity.id] is defined and damages[entity.id] is not empty %}
+                                            {{ (entity.remainingQuantity + entity.bonusQuantity - damages[entity.id]) }}
+                                        {% else %}
+                                            {{ (entity.remainingQuantity + entity.bonusQuantity) }}
+                                        {% endif %}
+                                    </td>
                                     <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
                                 </tr>
                             {% endfor %}
