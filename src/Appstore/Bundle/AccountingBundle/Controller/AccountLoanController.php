@@ -227,7 +227,7 @@ class AccountLoanController extends Controller
 
     public function approveAction(AccountLoan $entity)
     {
-	    if (!empty($entity) and $entity->getProcess() != 'approved') {
+	   // if (!empty($entity) and $entity->getProcess() != 'approved') {
 		    $em = $this->getDoctrine()->getManager();
 		    $entity->setProcess('approved');
 		    $entity->setApprovedBy($this->getUser());
@@ -242,10 +242,10 @@ class AccountLoanController extends Controller
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertLoanCash($entity);
 		    return new Response('success');
 
-        } else {
+       // } else {
 
-            return new Response('failed');
-        }
+         //   return new Response('failed');
+       // }
     }
 
     /**

@@ -545,7 +545,8 @@ class PurchaseController extends Controller
             return new RedirectResponse($referer);
         }
         $amount = 0;
-        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($data);
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig()->getId();
+        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($config);
         $entity = new BusinessPurchase();
         $editForm = $this->createOpeningForm($entity);
         return $this->render('BusinessBundle:Purchase:opening.html.twig', array(
@@ -579,15 +580,15 @@ class PurchaseController extends Controller
 
     public function openingCreateAction(Request $request)
     {
-        $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+       /* $data = explode( ',', $request->cookies->get( 'barcodes' ) );
         $ids =  $request->cookies->get( 'barcodes');
         if ( is_null( $data ) ) {
             $referer = $request->headers->get('referer');
             return new RedirectResponse($referer);
-        }
-        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($data);
-        $em = $this->getDoctrine()->getManager();
+        }*/
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $amount = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->sumOpeningQuantity($config->getId());
+        $em = $this->getDoctrine()->getManager();
         $entity = new BusinessPurchase();
         $form = $this->createOpeningForm($entity);
         $form->handleRequest($request);
@@ -607,9 +608,7 @@ class PurchaseController extends Controller
                 'success',"Data has been added successfully"
             );
             $em->getRepository('AccountingBundle:AccountPurchase')->insertBusinessAccountPurchase($entity);
-            $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->updateOpeningQuantity($ids);
-            unset($_COOKIE['barcodes']);
-            setcookie('barcodes', '', time() - 3600, '/'); // empty value and old timestamp
+            $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->updateOpeningQuantity($config->getId());
             return $this->redirect($this->generateUrl('business_stock'));
         }
         $this->get('session')->getFlashBag()->add(

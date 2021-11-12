@@ -110,6 +110,25 @@ class AccountLoanRepository extends EntityRepository
         return $result;
     }
 
+    public function updateCustomerBalance(AccountLoan $accountSales){
+        $em = $this->_em;
+        $customer = $accountSales->getEmployee()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select(' COALESCE(SUM(e.amount),0) AS balance');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $accountSales->getGlobalOption()->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $qb->andWhere("e.employee = :customer");
+        $qb->setParameter('customer', $customer);
+        echo $balance = $qb->getQuery()->getSingleScalarResult();
+        $accountSales->setBalance($balance);
+        $accountSales->setUpdated($accountSales->getCreated());
+        $em->persist($accountSales);
+        $em->flush();
+        return $accountSales;
+
+    }
+
 
 
 }

@@ -725,29 +725,23 @@ class BusinessParticularRepository extends EntityRepository
     }
 
 
-    public function sumOpeningQuantity($data)
+    public function sumOpeningQuantity($config)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.purchasePrice * e.openingQuantity),0) as opening');
-        $qb->where('e.id IN(:ids)')->setParameter('ids', $data);
-        $qb->andWhere('e.id != 1');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
         $res = $qb->getQuery();
         $result = $res->getSingleScalarResult();
-        $this->updateOpeningQuantity($data);
         return $result;
 
     }
 
-    public function updateOpeningQuantity($data)
+
+
+    public function updateOpeningQuantity($config)
     {
-        $em = $this->_em;
-        $stockUpdate = "UPDATE business_particular SET openingApprove = 1 WHERE  id in ({$data})";
+        $stockUpdate = "UPDATE business_particular SET openingApprove = 1 WHERE  businessConfig_id = {$config} && openingQuantity IS NOT NULL";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->execute();
-        foreach ($data as $row){
-            $particualr = $this->find($row);
-            $em->getRepository("BusinessBundle:BusinessStockHistory")->processStockQuantity($particualr);
-        }
     }
-
 }
