@@ -56,6 +56,10 @@ inventory_online_sales_reverse:
     path:     /{invoice}/invoice-reverse
     defaults: { _controller: "InventoryBundle:SalesOnline:reverse" }
 
+inventory_online_invoice_group_approve:
+    path:     /invoice-group-approve
+    defaults: { _controller: "InventoryBundle:SalesOnline:invoiceGroupApproved" }
+
 inventory_salesonline_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "InventoryBundle:SalesOnline:deleteEmptyInvoice" }

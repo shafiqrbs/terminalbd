@@ -1275,20 +1275,21 @@ class SalesOnlineController extends Controller
     public function invoiceGroupApprovedAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $data = ['startDate' => '2019-07-04','endateDate' => '2019-07-04','process'=>"Revised"];
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='general-sales', $data);
+        $data = ['startDate' => '2021-11-12','endateDate' => '2021-11-12'];
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='pos', $data);
         $pagination = $entities->getResult();
-
         /* @var $entity Sales */
-
         foreach ($pagination as $entity):
-            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+             $entity->setPayment($entity->getTotal());
+             $method = $this->getDoctrine()->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+             $entity->setTransactionMethod($method);
+             $entity->setDue(0);
+             $em->flush();
+             $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
         endforeach;
         exit;
     }
+
+
 
 }

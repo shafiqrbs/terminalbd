@@ -767,37 +767,37 @@ class AccountSalesRepository extends EntityRepository
 
 	    $em = $this->_em;
         $purchasePrice = $em->getRepository('InventoryBundle:SalesItem')->getInvoicePurchasePrice($entity->getId());
-	    $accountSales = new AccountSales();
-	    $accountSales->setAccountBank( $entity->getAccountBank() );
-	    $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
-	    $accountSales->setGlobalOption( $entity->getInventoryConfig()->getGlobalOption() );
-	    $accountSales->setSales( $entity );
-	    $accountSales->setSourceInvoice( $entity->getInvoice() );
-	    $accountSales->setCustomer( $entity->getCustomer() );
-	    $accountSales->setTotalAmount( $entity->getTotal() );
-	    $accountSales->setPurchasePrice($purchasePrice);
-        if ($entity->getPayment() > 0){
-            $accountSales->setAmount($entity->getPayment());
-        }else{
-            $accountSales->setAmount(0);
+        if($entity->getAccountSales()){
+            $accountSales = new AccountSales();
+            $accountSales->setAccountBank( $entity->getAccountBank() );
+            $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
+            $accountSales->setGlobalOption( $entity->getInventoryConfig()->getGlobalOption() );
+            $accountSales->setSales( $entity );
+            $accountSales->setSourceInvoice( $entity->getInvoice() );
+            $accountSales->setCustomer( $entity->getCustomer() );
+            $accountSales->setTotalAmount( $entity->getTotal() );
+            $accountSales->setPurchasePrice($purchasePrice);
+            if ($entity->getPayment() > 0){
+                $accountSales->setAmount($entity->getPayment());
+            }else{
+                $accountSales->setAmount(0);
+            }
+            if ( $entity->getPayment() > 0 ) {
+                $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
+            }
+            $accountSales->setApprovedBy($entity->getApprovedBy());
+            $accountSales->setProcessHead('inventory');
+            $accountSales->setProcessType('Sales');
+            $accountSales->setProcess('approved');
+            $accountSales->setCreated($entity->getCreated());
+            $accountSales->setUpdated($entity->getCreated());
+            $em->persist($accountSales);
+            $em->flush();
+            $this->updateCustomerBalance($accountSales);
+            if($accountSales->getAmount() > 0 ){
+                $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+            }
         }
-        if ( $entity->getPayment() > 0 ) {
-		    $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
-	    }
-        $accountSales->setApprovedBy($entity->getApprovedBy());
-        $accountSales->setProcessHead('inventory');
-        $accountSales->setProcessType('Sales');
-        $accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-        $em->persist($accountSales);
-        $em->flush();
-        $sales = $this->updateCustomerBalance($accountSales);
-        if($accountSales->getAmount() > 0 ){
-	        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        }
-        return $sales;
-
     }
 
 	public function insertInventoryAccountSalesReturn(SalesReturn $entity)
