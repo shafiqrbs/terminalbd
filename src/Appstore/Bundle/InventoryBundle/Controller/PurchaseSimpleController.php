@@ -189,7 +189,7 @@ class PurchaseSimpleController extends Controller
                 $this->approveAction($entity);
                 return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $id)));
             }elseif($entity->getProcess() == 'complete' ){
-                return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
+                return $this->redirect($this->generateUrl('inventory_purchasesimple'));
             }else{
                 return $this->redirect($this->generateUrl('inventory_purchasesimple', array('id' => $id)));
             }

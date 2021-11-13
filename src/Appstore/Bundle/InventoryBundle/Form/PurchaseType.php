@@ -42,13 +42,11 @@ class PurchaseType extends AbstractType
                 },
             ))
             ->add('transactionMethod', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
+                'empty_value' => '---Choose payment method---',
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod purchaseInput'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -57,7 +55,7 @@ class PurchaseType extends AbstractType
             ))
 
             ->add('accountBank', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
@@ -70,7 +68,7 @@ class PurchaseType extends AbstractType
                 },
             ))
             ->add('accountMobileBank', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',

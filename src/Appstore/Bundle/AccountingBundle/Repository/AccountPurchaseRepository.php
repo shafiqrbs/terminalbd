@@ -547,7 +547,9 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         $em->persist($accountPurchase);
         $em->flush();
         $this->updateVendorBalance($accountPurchase);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        if($accountPurchase->getTransactionMethod()){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
         return $accountPurchase;
 
     }
