@@ -44,7 +44,7 @@ class BusinessStore
     private $area;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="stores")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="store")
      **/
     private $storeLedgers;
 

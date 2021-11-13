@@ -134,7 +134,7 @@ class InvoiceController extends Controller
 
     public function editAction($id)
     {
-
+        $balance = 0;
         $em = $this->getDoctrine()->getManager();
         $global = $this->getUser()->getGlobalOption();
         $config = $global->getBusinessConfig();
@@ -152,12 +152,17 @@ class InvoiceController extends Controller
         $couriers = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->findBy(array('globalOption' => $global,'status'=>1),array('name'=>"ASC"));
         $stores = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig' => $config,'status'=>1),array('name'=>"ASC"));
         $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $global),array('name'=>"ASC"));
+        if($entity->getCustomer()){
+            $outstanding = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
+            $balance = empty($outstanding) ? 0 : $outstanding;
+        }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindStockItem($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $returnQty = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->returnRemainingStock($config->getId());
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
             'entity' => $entity,
             'vendors' => $vendors,
+            'balance' => $balance,
             'customers' => $customers,
             'areas' => $areas,
             'marketings' => $marketings,
@@ -399,6 +404,20 @@ class InvoiceController extends Controller
         }
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseReturnItem')->removePurchaseReturn($entity);
         $em->remove($entity);
+        $em->flush();
+        return new Response(json_encode(array('success' => 'success')));
+    }
+
+    public function customerUpdateAction()
+    {
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->find($data['invoice']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->find($data['customer']);
+        $entity->setCustomer($customer);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
     }

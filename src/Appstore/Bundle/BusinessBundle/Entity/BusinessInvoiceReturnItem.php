@@ -26,7 +26,7 @@ class BusinessInvoiceReturnItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessPurchaseItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particular;

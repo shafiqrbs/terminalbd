@@ -31,24 +31,10 @@ class BusinessPurchaseReturnItem
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="businessPurchaseReturnItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessParticular;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", inversedBy="businessPurchaseReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $businessPurchaseItem;
-
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDistributionReturnItem", inversedBy="businessPurchaseReturnItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $distributionReturnItem;
 
 
     /**

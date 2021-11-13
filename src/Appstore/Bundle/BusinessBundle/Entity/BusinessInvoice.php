@@ -129,12 +129,6 @@ class BusinessInvoice
      **/
     private  $marketing;
 
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Courier")
-     **/
-    private  $courier;
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCondition")
      **/

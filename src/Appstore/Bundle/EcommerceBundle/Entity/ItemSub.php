@@ -33,17 +33,17 @@ class ItemSub
     private  $item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="itemSub")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize")
      */
     protected $size;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="itemSub")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor")
      */
     protected $colors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="itemSub" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit")
      **/
     private  $productUnit;
 

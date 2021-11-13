@@ -59,7 +59,7 @@ class Sales
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="sales"  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition")
      **/
     private $purchaseRequisition;
 

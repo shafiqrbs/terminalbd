@@ -39,56 +39,95 @@
                 </ul>
             </div>
         </div>
-        {% include('flash-message.html.twig')  %}
-        <div class="row-fluid box green">
-            {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-                <table class="table table-bordered table-striped table-condensed flip-content ">
-                    <thead class="flip-content ">
-                    <tr class="head-green">
-                        <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                        <th class="numeric" >Item</th>
-                        <th class="numeric" >Barcode</th>
-                        <th class="numeric" >Serial No</th>
-                        <th class="numeric" >Qnt</th>
-                        <th class="numeric" >Estimate price</th>
-                        <th class="numeric" >Sales price</th>
-                        <th class="numeric" >Sub-total</th>
-                        {% if inventoryConfig.isBranch == 1 %}
-                            <th class="numeric" >Branch Stock</th>
-                            <th class="numeric" ></th>
-                        {% endif %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for salesItem in entity.salesItems %}
-                        <tr>
-                            <td class="numeric" >{{ loop.index }}</td>
-                            <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                            <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                            <td class="numeric" >{{ salesItem.serialNo }}</td>
-                            <td class="numeric" >{{ salesItem.quantity }}</td>
-                            <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                            <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                            <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+        {% if inventoryConfig.salesMode == "stock" %}
+                <div class="row-fluid box green">
+                {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
+                    <table class="table table-bordered table-striped">
+                        <thead class="flip-content ">
+                        <tr class="head-black">
+                            <th>&nbsp;&nbsp;<i class="icon-reorder"></i></th>
+                            <th class="numeric" >SKU</th>
+                            <th class="numeric" >Description</th>
+                            <th class="numeric" >Qnt</th>
+                            <th class="numeric" >Unit</th>
+                            <th class="numeric" >Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for salesItem in entity.salesItems %}
+                            <tr>
+                                <td class="numeric" >{{ loop.index }}.</td>
+                                <td class="numeric" >{{ salesItem.item.sku }}</td>
+                                <td class="numeric" >{{ salesItem.item.name }}</td>
+                                <td class="numeric" >{{ salesItem.quantity }}</td>
+                                <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
+                                <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr><td colspan="5"><strong class="pull-right" >Total Amount</strong></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
+                        {% if entity.discount %}<tr><td colspan="5"><strong class="pull-right" >Discount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
+                        {% if entity.vat %}<tr><td colspan="5"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
+                        <tr><td colspan="5"><strong class="pull-right" >Delivery Charge</strong></td><td><strong>{{ entity.deliveryCharge|number_format() }}</strong></td></tr>
+                        <tr><td colspan="5"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
+                        <tr><td colspan="5"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
+                        {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
+                        </tfoot>
+                    </table>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="row-fluid box green">
+                {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
+                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <thead class="flip-content ">
+                        <tr class="head-green">
+                            <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                            <th class="numeric" >Item</th>
+                            <th class="numeric" >Barcode</th>
+                            <th class="numeric" >Serial No</th>
+                            <th class="numeric" >Qnt</th>
+                            <th class="numeric" >Estimate price</th>
+                            <th class="numeric" >Sales price</th>
+                            <th class="numeric" >Sub-total</th>
                             {% if inventoryConfig.isBranch == 1 %}
-                                <td class="numeric" >
-                                    {% if itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0)  is empty %}
-                                        Received NULL
-                                    {% else %}
-                                        {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
-                                    {% endif %}
-                                </td>
-                                <td class="numeric"  ><a href="javascript:" id="{{ salesItem.purchaseItem.barcode }}" data-url="{{ path('inventory_barcode_wise_branch_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" class="btn mini purple itemBranchPreview">Details</a></td>
+                                <th class="numeric" >Branch Stock</th>
+                                <th class="numeric" ></th>
                             {% endif %}
                         </tr>
-                        {% if inventoryConfig.isBranch == 1 %}
-                            <tr><td colspan="10" id="branchDetails-{{ salesItem.purchaseItem.barcode }}"></td></tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-        </div>
+                        </thead>
+                        <tbody>
+                        {% for salesItem in entity.salesItems %}
+                            <tr>
+                                <td class="numeric" >{{ loop.index }}</td>
+                                <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
+                                <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                <td class="numeric" >{{ salesItem.serialNo }}</td>
+                                <td class="numeric" >{{ salesItem.quantity }}</td>
+                                <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
+                                <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
+                                <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+                                {% if inventoryConfig.isBranch == 1 %}
+                                    <td class="numeric" >
+                                        {% if itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0)  is empty %}
+                                            Received NULL
+                                        {% else %}
+                                            {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="numeric"  ><a href="javascript:" id="{{ salesItem.purchaseItem.barcode }}" data-url="{{ path('inventory_barcode_wise_branch_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" class="btn mini purple itemBranchPreview">Details</a></td>
+                                {% endif %}
+                            </tr>
+                            {% if inventoryConfig.isBranch == 1 %}
+                                <tr><td colspan="10" id="branchDetails-{{ salesItem.purchaseItem.barcode }}"></td></tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="clearfix">&nbsp;</div>
         <div class="form-actions portlet box grey">
             <div class="span8" id="message"></div>

@@ -829,6 +829,7 @@ class SalesRepository extends EntityRepository
         $em->persist($sales);
         $em->flush();
         $this->insertPosSalesItem($sales,$cart);
+        $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($sales);
         return $sales->getId();
 
     }
@@ -865,7 +866,6 @@ class SalesRepository extends EntityRepository
     public function insertApiSales(GlobalOption $option,InventoryAndroidProcess $process)
     {
         $em = $this->_em;
-
         $items = json_decode($process->getJsonItem(),true);
         if($items){
             foreach ($items as $item):

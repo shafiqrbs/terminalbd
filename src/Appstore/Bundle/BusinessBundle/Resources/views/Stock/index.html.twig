@@ -85,9 +85,7 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-
-                                    <th class="numeric" >{#<input type="checkbox" {% if selected|length > 1 %} checked="checked" {% endif %} class="check">#}</th>
-                                    <th class="numeric" >Name</th>
+                                   <th class="numeric" >Name</th>
                                     {% if 'wearhouse' in config.stockFormat %}
                                     <th class="numeric" >Wearhouse</th>
                                     {% endif %}
@@ -112,9 +110,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr>
-                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %}checked="checked"{% endif %}  value="{{ entity.id }}"></td>
                                         <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-
                                         {% if 'wearhouse' in config.stockFormat %}
                                         <td class="numeric" >{% if entity.wearHouse is not empty %}{{ entity.wearHouse.name }}{% endif %}</td>
                                         {% endif %}
@@ -127,10 +123,9 @@
                                                 <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                         </td>
                                         <td class="numeric"><a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.salesPrice }}</a>
-
                                         </td>
                                         <td>
-                                        {% if ( (app.user.granted("ROLE_BUSINESS_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN")) and entity.openingApprove != 1) %}
+                                        {% if ( (app.user.granted("ROLE_BUSINESS_MANAGER") and  entity.openingApprove != 1) or (app.user.granted("ROLE_DOMAIN") and entity.openingApprove != 1)) %}
                                             <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                         {% else %}
                                             {{ entity.openingQuantity }}

@@ -48,10 +48,6 @@ class AccountCondition
      **/
     protected $globalOption;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="courier" )
-     */
-    protected $businessInvoice;
     
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountConditionLedger", mappedBy="condition" )

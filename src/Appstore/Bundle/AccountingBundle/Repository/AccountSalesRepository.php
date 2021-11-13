@@ -785,9 +785,6 @@ class AccountSalesRepository extends EntityRepository
 		    $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
 	    }
         $accountSales->setApprovedBy($entity->getApprovedBy());
-        if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
-            $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
-        }
         $accountSales->setProcessHead('inventory');
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');

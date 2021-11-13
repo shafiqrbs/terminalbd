@@ -11,6 +11,10 @@ function financial(val) {
     return Number.parseFloat(val).toFixed(2);
 }
 
+$('.invoice-change').click(function() {
+    $(this).attr('value', '');
+});
+
 $.ajax({
     url: Routing.generate('pos_stock_item'),
     beforeSend: function(){

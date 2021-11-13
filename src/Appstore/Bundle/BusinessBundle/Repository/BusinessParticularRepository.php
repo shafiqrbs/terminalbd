@@ -730,6 +730,7 @@ class BusinessParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.purchasePrice * e.openingQuantity),0) as opening');
         $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.openingApprove != 1');
         $res = $qb->getQuery();
         $result = $res->getSingleScalarResult();
         return $result;

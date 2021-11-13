@@ -89,7 +89,7 @@ class DpsInvoice
     private  $assignDoctor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
      **/
     private  $hmsAssignDoctor;
 

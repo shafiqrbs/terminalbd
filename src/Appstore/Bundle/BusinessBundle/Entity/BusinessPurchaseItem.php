@@ -33,12 +33,6 @@ class BusinessPurchaseItem
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessPurchaseItem" )
-     **/
-    private  $businessPurchaseReturnItems;
-
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="businessPurchaseItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/

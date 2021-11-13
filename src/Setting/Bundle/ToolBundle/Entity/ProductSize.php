@@ -25,21 +25,6 @@ class ProductSize
      */
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="size")
-     */
-    protected $items;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="size")
-     */
-    protected $itemSub;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="size")
-     */
-    protected $orderItem;
-
 
     /**
      * @var string

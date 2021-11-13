@@ -36,7 +36,7 @@ class BusinessParticular
     private $category;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessBrand", inversedBy="particulars" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessBrand")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $brand;
@@ -90,12 +90,6 @@ class BusinessParticular
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem", mappedBy="businessParticular" )
      **/
     private $businessPurchaseItems;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem", mappedBy="businessParticular" )
-     **/
-    private $businessPurchaseReturnItems;
-
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessDamage", mappedBy="businessParticular" )

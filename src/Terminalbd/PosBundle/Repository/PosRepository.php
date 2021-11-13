@@ -33,6 +33,8 @@ class PosRepository extends EntityRepository
             $config = $user->getGlobalOption()->getInventoryConfig();
             $entity = new Pos();
             $entity ->setCreatedBy($user);
+            $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
+            $entity ->setTransactionMethod($method);
             $entity ->setTerminal($user->getGlobalOption());
             if($config->getVatEnable() == 1){
                 $vatPercentage = $config->getVatPercentage();

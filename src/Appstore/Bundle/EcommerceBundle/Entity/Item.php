@@ -51,11 +51,6 @@ class Item
      **/
     private  $itemSubs;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="item" , cascade={"remove"}  )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $orderItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemMetaAttribute", mappedBy="item" , cascade={"remove"}  )
@@ -95,18 +90,18 @@ class Item
     protected $medicine;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor", inversedBy="items" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor")
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $itemColors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductSize")
      **/
     private  $size;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="sizeUnits" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit")
      **/
     private  $sizeUnit;
 

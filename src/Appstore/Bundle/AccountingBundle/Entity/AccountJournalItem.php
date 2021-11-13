@@ -32,12 +32,12 @@ class AccountJournalItem
     protected $accountJournal;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountHeadItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead")
      **/
     protected $accountHead;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountSubHeadItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead")
      **/
     protected $accountSubHead;
 

@@ -130,12 +130,12 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('Hotel'));
+          /*  $result = array_intersect($menuName, array('Hotel'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_HOTEL') or $securityContext->isGranted('ROLE_DOMAIN')){
 	                $menu = $this->ReservationMenu($menu);
                 }
-            }
+            }*/
 
 		    $result = array_intersect($menuName, array('Election'));
 		    if (!empty($result)) {
@@ -518,45 +518,65 @@ class Builder extends ContainerAware
             ->addChild('Accounting')
             ->setAttribute('icon', 'fa fa-building-o')
             ->setAttribute('dropdown', true);
-        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES') ||  ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR'))) {
 	    $menu['Accounting']->addChild('Manage Sales', array('route' => ''))
 	                       ->setAttribute('icon', 'fa fa-shopping-cart')
 	                       ->setAttribute('dropdown', true);
 
-		    $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES')) {
+                $menu['Accounting']['Manage Sales']->addChild('Sales', array('route' => 'account_sales'));
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES') ||  $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR')) {
+                $menu['Accounting']['Manage Sales']->addChild('Add Receive', array('route' => 'account_sales_new'));
+            }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES_ADJUSTMENT')) {
                 $menu['Accounting']['Manage Sales']->addChild('Sales Adjustment', array('route' => 'account_salesadjustment'));
             }
-		    $menu['Accounting']['Manage Sales']->addChild('Add Receive', array('route' => 'account_sales_new'));
-            $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
-		    $menu['Accounting']['Manage Sales']['Reports']->addChild('Summary', array('route' => 'report_customer_summary'));
-            $menu['Accounting']['Manage Sales']['Reports']->addChild('Ledger', array('route' => 'report_customer_ledger'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_SALES_REPORT')) {
+                $menu['Accounting']['Manage Sales']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
+                $menu['Accounting']['Manage Sales']['Reports']->addChild('Outstanding', array('route' => 'report_customer_outstanding'));
+                $menu['Accounting']['Manage Sales']['Reports']->addChild('Summary', array('route' => 'report_customer_summary'));
+                $menu['Accounting']['Manage Sales']['Reports']->addChild('Ledger', array('route' => 'report_customer_ledger'));
+            }
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE') || $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR')) {
 	    $menu['Accounting']->addChild('Manage Purchase', array('route' => ''))
 	                       ->setAttribute('icon', 'fa fa-truck')
 	                       ->setAttribute('dropdown', true);
-
-		    $menu['Accounting']['Manage Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
-		    $menu['Accounting']['Manage Purchase']->addChild('Add Payment', array('route' => 'account_purchase_new'));
-            $menu['Accounting']['Manage Purchase']->addChild('Commission', array('route' => 'account_purchasecommission'));
-            $menu['Accounting']['Manage Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
-            $menu['Accounting']['Manage Purchase']['Reports']->addChild('Outstanding', array('route' => 'report_vendor_outstanding'));
-            $menu['Accounting']['Manage Purchase']['Reports']->addChild('Summary', array('route' => 'report_vendor_summary'));
-            $menu['Accounting']['Manage Purchase']['Reports']->addChild('Ledger', array('route' => 'report_vendor_ledger'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')){
+                $menu['Accounting']['Manage Purchase']->addChild('Purchase', array('route' => 'account_purchase'));
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE') || $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR')) {
+                $menu['Accounting']['Manage Purchase']->addChild('Add Payment', array('route' => 'account_purchase_new'));
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE')) {
+                $menu['Accounting']['Manage Purchase']->addChild('Commission', array('route' => 'account_purchasecommission'));
+                if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_PURCHASE_REPORT')) {
+                    $menu['Accounting']['Manage Purchase']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
+                    $menu['Accounting']['Manage Purchase']['Reports']->addChild('Outstanding', array('route' => 'report_vendor_outstanding'));
+                    $menu['Accounting']['Manage Purchase']['Reports']->addChild('Summary', array('route' => 'report_vendor_summary'));
+                    $menu['Accounting']['Manage Purchase']['Reports']->addChild('Ledger', array('route' => 'report_vendor_ledger'));
+                }
+            }
 	    }
-	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')){
+	    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE') || $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
 		    $menu['Accounting']->addChild('Bill & Expenditure', array('route' => ''))
 		                       ->setAttribute('icon', 'fa  icon-table')
 		                       ->setAttribute('dropdown', true);
-		    $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'));
-            $menu['Accounting']['Bill & Expenditure']->addChild('Android Process', array('route' => 'account_expenditure_android'));
-            $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'));
-            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
-                $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'));
-                $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')) {
+                $menu['Accounting']['Bill & Expenditure']->addChild('Expense', array('route' => 'account_expenditure'));
+            }
+		    if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE') || $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_OPERATOR')) {
+                $menu['Accounting']['Bill & Expenditure']->addChild('Add Expense', array('route' => 'account_expenditure_new'));
+            }
+            if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE')) {
+                $menu['Accounting']['Bill & Expenditure']->addChild('Android Process', array('route' => 'account_expenditure_android'));
+                $menu['Accounting']['Bill & Expenditure']->addChild('Expense Category', array('route' => 'expensecategory'));
+                if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
+                    $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'));
+                    $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'));
 
+                }
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
                 $menu['Accounting']['Bill & Expenditure']->addChild('Reports', array('route' => ''))->setAttribute('dropdown', true);
@@ -567,7 +587,7 @@ class Builder extends ContainerAware
 
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_TRANSACTION')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_TRANSACTION') || $securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_CASH')) {
 
             $menu['Accounting']->addChild('Cash', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-money')

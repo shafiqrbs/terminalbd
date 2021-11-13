@@ -23,30 +23,12 @@ class ProductColor
      */
     private $id;
 
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="itemColors")
-     */
-    protected $items;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="color")
-     */
-    protected $orderItem;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemSub", mappedBy="colors")
-     */
-    protected $itemSub;
-
     /**
      * @var string
      *
      * @ORM\Column(name="colorPlate", type="string", length=50, nullable = true)
      */
     private $colorPlate;
-
-
 
 
     /**

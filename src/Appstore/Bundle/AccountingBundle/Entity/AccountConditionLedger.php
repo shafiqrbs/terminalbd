@@ -29,7 +29,7 @@ class AccountConditionLedger
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="conditionLedger")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      **/
     protected $globalOption;
 

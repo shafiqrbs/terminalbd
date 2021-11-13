@@ -27,21 +27,9 @@ class ItemGroup
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="itemGroup" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig")
      **/
     private  $inventoryConfig;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="itemGroup" )
-     **/
-    private  $items;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", mappedBy="itemGroup" )
-     **/
-    private  $categories;
-
 
     /**
      * @var string

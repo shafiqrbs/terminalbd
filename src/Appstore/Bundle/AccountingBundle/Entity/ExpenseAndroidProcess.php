@@ -26,7 +26,7 @@ class ExpenseAndroidProcess
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="androidProcesses")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      */
     protected $globalOption;
 

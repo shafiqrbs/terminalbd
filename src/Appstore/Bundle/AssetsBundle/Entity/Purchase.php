@@ -29,7 +29,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private $id;
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="purchase" )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig")
          * @ORM\JoinColumn(onDelete="CASCADE")
          **/
         private $config;
@@ -49,7 +49,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
          /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="purchases"  )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder")
          **/
         private  $purchaseOrder;
 

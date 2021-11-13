@@ -237,7 +237,7 @@ class ReportController extends Controller
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
-        $damages = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportDamageStockItem($pagination);
+        $damages = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->returnRemainingStock($config);
         $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
         return $this->render('BusinessBundle:Report:stock.html.twig', array(
             'pagination' => $pagination,

@@ -318,9 +318,6 @@ class SalesController extends Controller
 
     }
 
-
-
-
     public function resetAction(Sales $sales)
     {
         $em = $this->getDoctrine()->getManager();
@@ -427,9 +424,9 @@ class SalesController extends Controller
 
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-                $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+               // $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+                $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+              //  $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                 return $this->redirect($this->generateUrl('inventory_sales_new'));
             }
         }

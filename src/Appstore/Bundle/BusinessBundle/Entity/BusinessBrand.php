@@ -24,14 +24,9 @@ class BusinessBrand
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="brand" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", cascade={"detach","merge"} )
      **/
     private  $businessConfig;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessBrand", mappedBy="brand")
-     **/
-    private $particulars;
 
     /**
      * @var string

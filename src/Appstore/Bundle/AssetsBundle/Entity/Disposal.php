@@ -27,7 +27,7 @@ class Disposal
     private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="disposals" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig")
 	 **/
 	private  $config;
 
@@ -46,19 +46,19 @@ class Disposal
 
 	/**
 	 * @Gedmo\Blameable(on="create")
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="disposalCreate" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
 	 **/
 	private  $createdBy;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="disposalApprovedBy" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
 	 **/
 	private  $approvedBy;
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="disposalCheckedBy" )
+	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
 	 **/
 	private  $checkedBy;
 

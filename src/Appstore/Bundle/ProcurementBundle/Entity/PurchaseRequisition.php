@@ -33,51 +33,37 @@ class PurchaseRequisition
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="purchaseRequisitions" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
      **/
     private  $globalOption;
 
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="purchaseRequisition" , cascade={"detach","merge"} )
-     **/
-    private  $sales;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="purchaseRequisition" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches")
      **/
     private  $branch;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Department", inversedBy="purchaseRequisition" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Department")
      **/
     private  $department;
 
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseRequisition" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseRequisitionCheckedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $checkedBy;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseRequisitionApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $approvedBy;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="purchase" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private  $purchaseItems;
-
 
     /**
      * @var string

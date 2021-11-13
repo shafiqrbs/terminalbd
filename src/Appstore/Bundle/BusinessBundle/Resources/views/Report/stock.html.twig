@@ -63,6 +63,7 @@
                                 <th class="numeric" >Bonus</th>
                                 <th class="numeric" >Pur Return</th>
                                 <th class="numeric" >Sales Return</th>
+                                <th class="numeric" >Sales Damage</th>
                                 <th class="numeric" >Damage</th>
                                 <th class="numeric" >Remain</th>
                                 <th class="numeric" >Unit</th>
@@ -73,12 +74,13 @@
                                 <tr>
                                     <td class="numeric" >{{ entity.particularCode }}</td>
                                     <td class="numeric" >{{ entity.name }}</td>
-                                    <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
-                                    <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
-                                    <td class="numeric" >{{ entity.bonusQuantity|number_format }}</td>
-                                    <td class="numeric" >{{ entity.purchaseReturnQuantity|number_format }}</td>
-                                    <td class="numeric" >{{ entity.salesReturnQuantity|number_format }}</td>
-                                    <td class="numeric" >{% if damages[entity.id] is defined and damages[entity.id] is not empty %}{{ damages[entity.id]|number_format }}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.purchaseQuantity }}</td>
+                                    <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                    <td class="numeric" >{{ entity.bonusQuantity }}</td>
+                                    <td class="numeric" >{{ entity.purchaseReturnQuantity }}</td>
+                                    <td class="numeric" >{{ entity.salesReturnQuantity }}</td>
+                                    <td class="numeric" >{% if damages[entity.id] is defined and damages[entity.id] is not empty %}{{ damages[entity.id] }}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.damageQuantity }}</td>
                                     <td class="numeric" >
                                         {% if damages[entity.id] is defined and damages[entity.id] is not empty %}
                                             {{ (entity.remainingQuantity + entity.bonusQuantity - damages[entity.id]) }}

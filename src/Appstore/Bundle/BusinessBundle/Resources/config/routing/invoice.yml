@@ -18,6 +18,12 @@ business_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "BusinessBundle:Invoice:edit" }
 
+business_invoice_customer_update:
+    path:     /invoice-customer-update
+    defaults: { _controller: "BusinessBundle:Invoice:customerUpdate" }
+    options:
+            expose: true
+
 business_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "BusinessBundle:Invoice:particularSearch" }
