@@ -12,7 +12,7 @@ function AccountingApproveProcess(){}
     }).toggle( function() {
         $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
     }, function() {
-        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-plus"></i> Add New');
     });
 
     $( ".date-picker" ).datepicker({

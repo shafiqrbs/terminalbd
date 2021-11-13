@@ -36,11 +36,13 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Vendor Payment Information</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn red" href="{{ path('account_purchase') }}"><i class="icon-tb-list"></i>&nbsp; Purchase</a>
+                        {% if app.user.granted("ROLE_DOMAIN_ACCOUNTING_PURCHASE") or app.user.granted("ROLE_DOMAIN") %}
+                            <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn red" href="{{ path('account_purchase') }}"><i class="icon-tb-list"></i>&nbsp; Purchase</a>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
@@ -60,7 +62,7 @@
                                                         {{ form_widget(form.medicineVendor) }}
                                                         {{ form_errors(form.medicineVendor) }}
                                                         <div class="btn-group">
-                                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> New Vendor</a>
+                                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> Add New</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,7 +81,7 @@
                                                         {{ form_widget(form.vendor) }}
                                                         {{ form_errors(form.vendor) }}
                                                         <div class="btn-group">
-                                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> New Vendor</a>
+                                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> Add New</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -98,7 +100,7 @@
                                                     {{ form_widget(form.accountVendor) }}
                                                     {{ form_errors(form.accountVendor) }}
                                                     <div class="btn-group">
-                                                        <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> New Vendor</a>
+                                                        <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-plus"></i> Add New</a>
                                                     </div>
                                                 </div>
                                             </div>

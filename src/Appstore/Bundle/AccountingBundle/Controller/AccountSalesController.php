@@ -283,7 +283,6 @@ class AccountSalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountSales();
-
         $entity->setGlobalOption( $this->getUser()->getGlobalOption());
         $entity->setSales($sales);
         $entity->setCustomer($sales->getCustomer());
