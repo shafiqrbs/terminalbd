@@ -820,7 +820,7 @@ class SalesRepository extends EntityRepository
         $created = new \DateTime('now');
         $sales->setCreated($created);
         $sales->setUpdated($created);
-        $sales->setProcess("POS");
+        $sales->setProcess("Done");
         $sales->setPaymentStatus("Paid");
         $sales->setPaymentStatus($pos->getPaymentStatus());
         $em->persist($sales);
