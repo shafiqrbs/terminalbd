@@ -248,14 +248,16 @@ class PosController extends Controller
             if(in_array($mode,array('save','print','pos'))){
                 $cart = new Cart($request->getSession());
                 $pos = $this->getDoctrine()->getRepository("PosBundle:Pos")->insert($this->getUser());
-                if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
-                   $sales =  $this->getDoctrine()->getRepository("InventoryBundle:Sales")->insertPosSales($terminal,$pos,$cart);
-                }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
-                    $sales = $this->getDoctrine()->getRepository("RestaurantBundle:Particular")->getApiStock($terminal);
-                }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') and $mainApp == 'miss') {
-                    $sales = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->getApiStock($terminal);
-                }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
-                    $sales = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->getApiStock($terminal);
+                if($pos->getTotal() > 0){
+                    if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
+                        $sales =  $this->getDoctrine()->getRepository("InventoryBundle:Sales")->insertPosSales($terminal,$pos,$cart);
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
+                        $sales = $this->getDoctrine()->getRepository("RestaurantBundle:Particular")->getApiStock($terminal);
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') and $mainApp == 'miss') {
+                        $sales = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->getApiStock($terminal);
+                    }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
+                        $sales = $this->getDoctrine()->getRepository("BusinessBundle:BusinessParticular")->getApiStock($terminal);
+                    }
                 }
             }elseif ($mode == "save-hold"){
                 $this->getDoctrine()->getRepository("PosBundle:Pos")->insertHold($entity,$cart);
