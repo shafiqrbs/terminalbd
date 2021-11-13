@@ -550,6 +550,7 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
         if($accountPurchase->getTransactionMethod()){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         }
+
         return $accountPurchase;
 
     }
