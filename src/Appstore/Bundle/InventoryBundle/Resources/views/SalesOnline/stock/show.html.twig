@@ -127,7 +127,7 @@
                                         <a href="{{ path('inventory_salesonline_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green" ><i class="icon-print"></i> Print</a>
                                     {% endif %}
                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
-                                    {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in ['Done','Deliverd','POS'] and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process in ['Done','Delivered'] and app.user.granted("ROLE_DOMAIN")) %}
+                                    {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in ['Done','Deliverd','POS'] and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process in ['Done','Delivered','POS'] and app.user.granted("ROLE_DOMAIN")) %}
                                     <a href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}"  class="btn purple" ><i class="icon-refresh"></i> Reverse</a>
                                     {% endif %}
                                 </div>
