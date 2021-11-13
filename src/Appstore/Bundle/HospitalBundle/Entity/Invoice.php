@@ -54,6 +54,12 @@ class Invoice
     private $service;
 
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     **/
+    private $diseasesProfile;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="hmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
@@ -1533,6 +1539,22 @@ class Invoice
     public function setPrescriptionMode($prescriptionMode)
     {
         $this->prescriptionMode = $prescriptionMode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiseasesProfile()
+    {
+        return $this->diseasesProfile;
+    }
+
+    /**
+     * @param mixed $diseasesProfile
+     */
+    public function setDiseasesProfile($diseasesProfile)
+    {
+        $this->diseasesProfile = $diseasesProfile;
     }
 
 

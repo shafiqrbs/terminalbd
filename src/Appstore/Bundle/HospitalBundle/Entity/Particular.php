@@ -120,10 +120,16 @@ class Particular
      **/
     private  $assignOperator;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     **/
+    private  $surgeryDepartment;
+
     /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
      **/
     private  $assignDoctor;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="particulars" )
@@ -1418,6 +1424,22 @@ class Particular
     public function setDoctorSignature($doctorSignature)
     {
         $this->doctorSignature = $doctorSignature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSurgeryDepartment()
+    {
+        return $this->surgeryDepartment;
+    }
+
+    /**
+     * @param mixed $surgeryDepartment
+     */
+    public function setSurgeryDepartment($surgeryDepartment)
+    {
+        $this->surgeryDepartment = $surgeryDepartment;
     }
 
 }

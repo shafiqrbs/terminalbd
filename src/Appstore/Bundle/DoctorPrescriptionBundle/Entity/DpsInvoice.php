@@ -94,6 +94,16 @@ class DpsInvoice
     private  $hmsAssignDoctor;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular")
+     **/
+    private  $diseasesProfile;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     **/
+    private  $hmsDiseasesProfile;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dpsInvoiceCreatedBy" )
      **/
@@ -877,6 +887,38 @@ class DpsInvoice
     public function setHmsAssignDoctor($hmsAssignDoctor)
     {
         $this->hmsAssignDoctor = $hmsAssignDoctor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHmsDiseasesProfile()
+    {
+        return $this->hmsDiseasesProfile;
+    }
+
+    /**
+     * @param mixed $hmsDiseasesProfile
+     */
+    public function setHmsDiseasesProfile($hmsDiseasesProfile)
+    {
+        $this->hmsDiseasesProfile = $hmsDiseasesProfile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiseasesProfile()
+    {
+        return $this->diseasesProfile;
+    }
+
+    /**
+     * @param mixed $diseasesProfile
+     */
+    public function setDiseasesProfile($diseasesProfile)
+    {
+        $this->diseasesProfile = $diseasesProfile;
     }
 
 

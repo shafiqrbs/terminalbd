@@ -46,7 +46,16 @@
                                 {{ form_row(form._token) }}
                                 <div class="row-fluid">
                                     <!--/span-->
-                                    <div class="span12">
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="name">Surgery Departmment <span class="required">*</span></label>
+                                            <div class="controls">
+                                                {{ form_widget(form.surgeryDepartment) }}
+                                                {{ form_errors(form.surgeryDepartment) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span8">
                                         <div class="control-group">
                                             <label class="control-label" for="name">Surgery <span class="required">*</span></label>
                                             <div class="controls">
@@ -135,6 +144,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
+                                    <th class="numeric" >Surgery Department</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Min Price</th>
@@ -146,6 +156,7 @@
                                 {% for entity in pagination %}
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
+                                        <td class="numeric" >{% if entity.surgeryDepartment %}{{ entity.surgeryDepartment.name }}{% endif %}</td>
                                         <td class="numeric" ><a href="{{ path('hms_surgery_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
                                         <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>

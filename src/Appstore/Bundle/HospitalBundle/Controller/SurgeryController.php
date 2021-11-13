@@ -95,7 +95,8 @@ class SurgeryController extends Controller
     private function createCreateForm(Particular $entity)
     {
 
-        $form = $this->createForm(new SurgeryType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $form = $this->createForm(new SurgeryType($config), $entity, array(
             'action' => $this->generateUrl('hms_surgery_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -139,7 +140,8 @@ class SurgeryController extends Controller
     private function createEditForm(Particular $entity)
     {
 
-        $form = $this->createForm(new SurgeryType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $form = $this->createForm(new SurgeryType($config), $entity, array(
             'action' => $this->generateUrl('hms_surgery_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

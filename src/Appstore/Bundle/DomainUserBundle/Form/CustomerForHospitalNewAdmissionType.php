@@ -30,12 +30,12 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 patientName','autocomplete'=>'off','placeholder'=>'patient name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'patient name')),
+                    new NotBlank(array('message'=>'Enter patient full name')),
                 )
             ))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span6 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'patient mobile no')),
+                    new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
             ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'father/spouse name'),

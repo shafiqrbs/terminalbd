@@ -65,6 +65,23 @@ class PatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('diseasesProfile', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'name',
+                'empty_value' => '---Select diseases profile---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select diseases profile')),
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                        ->andWhere("e.service = 11")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('department', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select department---',

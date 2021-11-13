@@ -47,10 +47,7 @@ class NewPatientAdmissionType extends AbstractType
     {
         $builder
 
-            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
+            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 6,'placeholder'=>'Disease description'),
             ))
             ->add('cabin', 'entity', array(
                 'required'    => false,
@@ -59,7 +56,7 @@ class NewPatientAdmissionType extends AbstractType
                 'attr'=>array('class'=>'span12 invoiceCabinBooking m-wrap'),
                 'empty_value' => '---Select cabin/ward no---',
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
+                    new NotBlank(array('message'=>'Please select cabin/ward no'))
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -69,9 +66,26 @@ class NewPatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('diseasesProfile', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'name',
+                'empty_value' => '---Choose a diseases profile---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select diseases profile')),
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                        ->andWhere("e.service = 11")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('department', 'entity', array(
                 'required'    => true,
-                'empty_value' => '---Select department---',
+                'empty_value' => '---Choose a department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',

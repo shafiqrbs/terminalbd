@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\Category;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
@@ -14,6 +15,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SurgeryType extends AbstractType
 {
+
+    /** @var  HospitalConfig */
+    private $config;
+    function __construct(HospitalConfig $config )
+    {
+        $this->config     = $config;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -34,6 +42,23 @@ class SurgeryType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
+            ))
+            ->add('surgeryDepartment', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'name',
+                'empty_value' => '---Select surgery department---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select surgery department')),
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->config->getId())
+                        ->andWhere("e.service = 10")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
             ))
             ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum price')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter commission')))
