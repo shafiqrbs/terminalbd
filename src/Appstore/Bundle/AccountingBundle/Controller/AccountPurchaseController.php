@@ -33,9 +33,9 @@ class AccountPurchaseController extends Controller
 
 
     /**
-     * Lists all AccountPurchase entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCAHSE,ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -57,9 +57,9 @@ class AccountPurchaseController extends Controller
     }
 
     /**
-     * Lists all AccountSales entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCAHSE,ROLE_DOMAIN")
      */
+
     public function vendorOutstandingAction()
     {
 
@@ -244,7 +244,7 @@ class AccountPurchaseController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchase'));
+            return $this->redirect($this->generateUrl('account_purchase_new'));
         }
         $this->get('session')->getFlashBag()->add(
             'notice',"May be you are missing to select bank or mobile account"
@@ -278,8 +278,7 @@ class AccountPurchaseController extends Controller
     }
 
     /**
-     * Displays a form to create a new AccountPurchase entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN_ACCOUNTING_OPERATOR,ROLE_DOMAIN")
      */
     public function newAction()
     {

@@ -163,6 +163,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or app.user.granted("ROLE_DOMAIN") %}
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
@@ -173,6 +174,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">

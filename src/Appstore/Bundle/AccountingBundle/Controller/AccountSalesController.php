@@ -131,6 +131,7 @@ class AccountSalesController extends Controller
             'overview' => $overview,
         ));
     }
+
     /**
      * Creates a new AccountSales entity.
      *
@@ -225,7 +226,7 @@ class AccountSalesController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_sales'));
+            return $this->redirect($this->generateUrl('account_sales_new'));
         }
 
         $this->get('session')->getFlashBag()->add(
@@ -259,7 +260,7 @@ class AccountSalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_SALES,ROLE_DOMAIN_ACCOUNTING_OPERATOR,ROLE_DOMAIN")
      */
     public function newAction()
     {

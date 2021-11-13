@@ -38,6 +38,7 @@
         <div class="row-fluid">
             <div class="span8">
                 <div class="row-fluid">
+                    {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_CASH"))  %}
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
                             <div class="display">
@@ -66,6 +67,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     {% if (app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE"))  %}
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
