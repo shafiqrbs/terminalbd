@@ -55,7 +55,7 @@ class Invoice
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
      **/
     private $diseasesProfile;
 
