@@ -121,7 +121,7 @@ class Particular
     private  $assignOperator;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
      **/
     private  $surgeryDepartment;
 

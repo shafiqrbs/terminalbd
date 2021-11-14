@@ -248,6 +248,7 @@ class ItemRepository extends EntityRepository
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $brand = isset($data['brand'])? $data['brand'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
+        $barcode = isset($data['barcode'])? $data['barcode'] :'';
         $category = isset($data['category'])? $data['category'] :'';
         $unit = isset($data['unit'])? $data['unit'] :'';
 
@@ -259,8 +260,10 @@ class ItemRepository extends EntityRepository
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
         }
+        if (!empty($barcode)) {
+            $qb->andWhere($qb->expr()->like("item.barcode", "'%$barcode%'"  ));
+        }
         if (!empty($item)) {
-
             $qb->andWhere("m.name = :name");
             $qb->setParameter('name', $item);
         }

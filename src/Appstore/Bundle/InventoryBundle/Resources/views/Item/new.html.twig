@@ -51,7 +51,7 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid" >
                             <!--/span-->
-                            <div class="span9">
+                            <div class="span8">
                                 <div class="row-fluid">
                                     <div class="row-fluid">
                                         <div class="span9">
@@ -181,12 +181,23 @@
 
                                     </div>
                                 {% endif %}
+                                <div class="row-fluid">
+                                    <div class="span9">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Barcode</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.barcode) }}
+                                                {{ form_errors(form.barcode) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="control-group">
-                                        <label class="control-label" >Feature image</label>
-                                        <div class="controls">
+                                        <div class="">
+                                            <p><strong>Feature Image</strong></p>
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
                                                 <div  class="fileupload-new thumbnail">
                                                     {% if(entity.webPath) %}

@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\ItemRepository")
  * @UniqueEntity(fields={"name","inventoryConfig"}, message="This name must be unique")
+ * @UniqueEntity(fields={"barcode","inventoryConfig"}, message="This barcode must be unique")
  * @ORM\HasLifecycleCallbacks
  */
 
@@ -287,7 +288,7 @@ class Item
      *
      * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
-    private $salesPrice;
+    private $salesPrice = 1;
 
 
     /**

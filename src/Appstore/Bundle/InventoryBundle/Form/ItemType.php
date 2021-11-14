@@ -11,6 +11,7 @@ use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Product\Bundle\ProductBundle\Entity\ItemGroup;
 use Product\Bundle\ProductBundle\Entity\ItemGroupRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Length;
@@ -55,6 +56,10 @@ class ItemType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
+            ->add('inventoryConfig','hidden',
+                array(
+                    'mapped'    => false,
+                    'attr' => array('value' => $this->inventoryConfig->getId())))
 
             ->add('itemGroup', 'entity', array(
                 'required'    => false,
@@ -91,7 +96,10 @@ class ItemType extends AbstractType
                 'required'    => false,
                 'attr'=>array('class'=>'span12')
             ))
-
+            ->add('barcode', 'text', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12')
+            ))
             ->add('purchasePrice', 'text', array(
                 'required'    => false,
                 'attr'=>array('class'=>'span12')

@@ -45,7 +45,7 @@ class SurgeryType extends AbstractType
             ))
             ->add('surgeryDepartment', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '---Select surgery department---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
