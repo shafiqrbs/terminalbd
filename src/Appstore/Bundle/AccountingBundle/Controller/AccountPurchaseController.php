@@ -170,7 +170,7 @@ class AccountPurchaseController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchase'));
+            return $this->redirect($this->generateUrl('account_purchase_new'));
         }elseif(($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
