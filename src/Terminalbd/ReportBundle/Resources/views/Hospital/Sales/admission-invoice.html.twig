@@ -105,6 +105,7 @@
                     <tbody><tr>
                         <th>SI.</th>
                         <th>Created</th>
+                        <th>Updated</th>
                         <th>Invoice</th>
                         <th>Name</th>
                         <th>Mobile</th>
@@ -132,6 +133,7 @@
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                             <td class="numeric" >{{ entity.invoice }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>

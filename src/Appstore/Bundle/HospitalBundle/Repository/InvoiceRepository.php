@@ -690,7 +690,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
         $qb->leftJoin('e.assistantDoctor','assist');
-        $qb->select('e.created as created','e.invoice as invoice','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
+        $qb->select('e.created as created','e.updated as updated','e.invoice as invoice','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as assignDoctor');
         $qb->addSelect('ad.name as anesthesiaDoctor');
