@@ -940,13 +940,14 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Reports')
                 ->setAttribute('icon', 'icon-bar-chart')
                 ->setAttribute('dropdown', true);
-            $menu['Inventory']['Reports']->addChild('Summary Overview', array('route' => 'inventory_report_overview'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('System Overview', array('route' => 'inventory_report_overview'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Item Overview', array('route' => 'inventory_report_stock_item'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Till Stock', array('route' => 'inventory_report_till_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Periodic Stock', array('route' => 'inventory_report_periodic_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Operational Stock', array('route' => 'inventory_report_operational_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Group Stock', array('route' => 'inventory_report_group_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'))->setAttribute('icon', 'icon-bar-chart');
+
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
             if ($inventory->getIsBranch() == 1) {

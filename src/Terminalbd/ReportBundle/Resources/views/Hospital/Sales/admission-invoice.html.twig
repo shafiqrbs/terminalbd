@@ -62,12 +62,12 @@
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Start Date</label>
-                        <input type="date" class="m-wrap" required="required" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                        <label>Created Start Date</label>
+                        <input type="date" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
                     <div class="col-md-2 margin-top">
-                        <label>End Date</label>
-                        <input type="date" class="m-wrap" required="required" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                        <label>Created End Date</label>
+                        <input type="date" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
                     <div class="col-md-1 margin-top">
                         <label>&nbsp;</label>

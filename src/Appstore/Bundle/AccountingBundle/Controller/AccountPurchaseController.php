@@ -33,7 +33,7 @@ class AccountPurchaseController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCAHSE,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -57,7 +57,7 @@ class AccountPurchaseController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCAHSE,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN")
      */
 
     public function vendorOutstandingAction()

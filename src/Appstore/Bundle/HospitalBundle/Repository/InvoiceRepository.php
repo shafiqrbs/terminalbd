@@ -723,6 +723,14 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
+        if (!empty($data['startUpdated']) ) {
+            $qb->andWhere("e.updated >= :startUpdated");
+            $qb->setParameter('startUpdated', $data['startUpdated'].' 00:00:00');
+        }
+        if (!empty($data['endUpdated'])) {
+            $qb->andWhere("e.updated <= :endUpdated");
+            $qb->setParameter('endUpdated', $data['endUpdated'].' 23:59:59');
+        }
         if(!empty($process)){
             $qb->andWhere("e.process = :process");
             $qb->setParameter('process', $process);
