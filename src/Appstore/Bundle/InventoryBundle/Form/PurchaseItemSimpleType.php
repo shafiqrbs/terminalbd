@@ -38,11 +38,6 @@ class PurchaseItemSimpleType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add item quantity')))))
 
-            ->add('barcode','text', array(
-                'attr'=>array('class'=>'itemInput m-wrap span12 stockBarcode','placeholder'=>'Item Barcode'),
-                'mapped'=>'false'
-                ))
-
             ->add('salesPrice','text', array('attr'=>array('class'=>'itemInput m-wrap span6','placeholder'=>'Sales price'),
                 ))
 

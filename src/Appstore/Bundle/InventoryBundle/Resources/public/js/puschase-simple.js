@@ -93,15 +93,37 @@ function InventoryPurchasePage(){
         }
     });
 
+    $('#barcode').focus();
 
+    $(document).on('change', '#barcode', function() {
+
+        var barcode = $('#barcode').val();
+        var id = $(this).attr('data-id');
+        if(barcode === ''){
+            $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_purchasesimple_barcode_insert',{'id':id}),
+            type: 'POST',
+            data:'barcode='+barcode,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#purchaseItem').html(obj['invoiceItems']);
+                $('.subTotal').html(obj['subTotal']);
+                $('#due').html(obj['due']);
+                $('#barcode').focus().val('');
+            },
+
+        })
+    });
 
     var validator =  $('form#purchaseItemForm').validate({
 
         rules: {
 
-            "purchaseitem[item]": {required: false},
-            "purchaseitem[barcode]": {required: false},
-            "purchaseitem[purchaseSubTotal]": {required: true},
+            "purchaseitem[item]": {required: true},
+            "purchaseitem[purchaseSubTotal]": {required: false},
             "purchaseitem[salesPrice]": {required: false},
             "purchaseitem[quantity]": {required: true},
         },

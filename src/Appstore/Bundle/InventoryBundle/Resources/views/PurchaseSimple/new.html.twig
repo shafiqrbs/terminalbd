@@ -111,18 +111,19 @@
                         </div>
                         </form> <!--/span-->
                         <div class="clearfix"><br/></div>
-                        {{ form_start(purchaseItemForm) }}
-                        {{ form_row(purchaseItemForm._token) }}
+
                         <div class="row-fluid">
+
                             <div class="span2">
                                 <div class="control-group">
                                     <label class="control-label" for="name">Barcode</label>
                                     <div class="controls">
-                                        {{ form_widget(purchaseItemForm.barcode) }}
-                                        {{ form_errors(purchaseItemForm.barcode) }}
+                                        <input type="text" id="barcode" name="barcode" data-id="{{ entity.id }}" class="itemInput m-wrap span12" placeholder="Barcode" aria-required="true">
                                     </div>
                                 </div>
                             </div>
+                            {{ form_start(purchaseItemForm) }}
+                            {{ form_row(purchaseItemForm._token) }}
                             <div class="span5">
                                 <div class="control-group">
                                     <label class="control-label" for="name">Inventory Item</label>
@@ -144,7 +145,7 @@
                             </div>
                             <div class="span2">
                                 <div class="control-group">
-                                    <label class="control-label" for="salesPrice">Total<span class="required">*</span></label>
+                                    <label class="control-label" for="salesPrice">Total</label>
                                     <div class="controls">
                                         {{ form_widget(purchaseItemForm.purchaseSubTotal) }}
                                         {{ form_errors(purchaseItemForm.purchaseSubTotal) }}
@@ -163,9 +164,10 @@
                                     </div>
                                 </div>
                             </div>
+                            {{ form_end(purchaseItemForm) }}
                             <!-- END FORM-->
                         </div>
-                        {{ form_end(purchaseItemForm) }}
+
                         <div class="clearfix"><br/></div>
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title"> <div class="caption"><i class="icon-reorder"></i>Purchase Item List</div></div>

@@ -383,12 +383,15 @@ class PurchaseSimpleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all()['purchaseitem'];
-        $purchaseItem = new PurchaseItem();
-        $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
-        $purchaseItemForm->handleRequest($request);
-        $entity = $purchase;
-        if($purchaseItem->getItem()){
+        $item = $data['item'];
+        $stock = $this->getDoctrine()->getRepository("InventoryBundle:Item")->find($item);
+        $exist = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('purchase'=>$purchase,'item'=>$item));
+        if(empty($exist)){
+            $purchaseItem = new PurchaseItem();
+            $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
+            $purchaseItemForm->handleRequest($request);
             $purchaseItem->setPurchase($purchase);
+            $purchaseItem->setItem($stock);
             $purchaseItem->setName($purchaseItem->getItem()->getName());
             $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
             $purchaseItem->setPurchasePrice($purchasePrice);
@@ -396,19 +399,13 @@ class PurchaseSimpleController extends Controller
             $purchaseItem->setSalesSubTotal($salesSubTotal);
             $em->persist($purchaseItem);
             $em->flush();
-        }elseif (empty($purchaseItem->getItem()) and $data['barcode']){
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('barcode'=>$data['barcode']));
-            if($item){
-                $purchaseItem->setPurchase($purchase);
-                $purchaseItem->setItem($item);
-                $purchaseItem->setName($purchaseItem->getItem()->getName());
-                $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
-                $purchaseItem->setPurchasePrice($purchasePrice);
-                $salesSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
-                $purchaseItem->setSalesSubTotal($salesSubTotal);
-                $em->persist($purchaseItem);
-                $em->flush();
-            }
+        }elseif($exist){
+            $exist->setPurchase($purchase);
+            $quantity = ($exist->getquantity() + (int)$data['quantity']);
+            $exist->setQuantity($quantity);
+            $exist->setPurchaseSubTotal($quantity * $exist->getPurchasePrice());
+            $em->persist($exist);
+            $em->flush();
         }
         $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
         $entity = $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
@@ -427,6 +424,51 @@ class PurchaseSimpleController extends Controller
                 )
             )
         );
+    }
+
+    public function barcodeItemInsertAction(Request $request,$id)
+    {
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->find($id);
+        $item = $em->getRepository('InventoryBundle:Item')->findOneBy(array('barcode'=>$data['barcode']));
+        if (!$item) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $exist = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('purchase'=>$purchase,'item'=>$item));
+        if($exist){
+            $quantity = ($exist->getQuantity()+1);
+            $exist->setQuantity($quantity);
+            $exist->setPurchaseSubTotal($exist->getQuantity() * $exist->getPurchasePrice());
+            $em->flush();
+        }else{
+            $purchaseItem = new PurchaseItem();
+            $purchaseItem->setPurchase($purchase);
+            $purchaseItem->setItem($item);
+            $purchaseItem->setName($purchaseItem->getItem()->getName());
+            $purchaseItem->setQuantity(1);
+            $purchaseItem->setpurchasePrice(0);
+            $purchaseItem->setPurchaseSubTotal($purchaseItem->getQuantity() * $purchaseItem->getPurchasePrice());
+            $em->persist($purchaseItem);
+            $em->flush();
+        }
+        $entity = $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+        $html = $this->renderView(
+            'InventoryBundle:PurchaseSimple:purchase-item.html.twig', array(
+                'entity' => $entity,
+            )
+        );
+        return new Response(
+            json_encode(
+                array(
+                    'invoiceItems' => $html,
+                    'subTotal' => $entity->getTotalAmount(),
+                    'due' => ($entity->getTotalAmount() - $entity->getPaymentAmount()),
+
+                )
+            )
+        );
+
     }
 
     public function inlineUpdateAction(Request $request)

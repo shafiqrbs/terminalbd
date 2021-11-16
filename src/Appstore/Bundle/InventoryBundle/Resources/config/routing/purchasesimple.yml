@@ -79,3 +79,10 @@ inventory_purchasesimple_inline_item_update:
     methods:  POST
     options:
         expose: true
+
+inventory_purchasesimple_barcode_insert:
+    path:     /{id}/barcode-item-insert
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:barcodeItemInsert" }
+    methods:  POST
+    options:
+        expose: true
