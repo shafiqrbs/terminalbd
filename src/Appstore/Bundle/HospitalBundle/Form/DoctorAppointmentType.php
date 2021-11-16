@@ -64,7 +64,7 @@ class DoctorAppointmentType extends AbstractType
             ))
             ->add('diseasesProfile', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '---Select diseases profile---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),

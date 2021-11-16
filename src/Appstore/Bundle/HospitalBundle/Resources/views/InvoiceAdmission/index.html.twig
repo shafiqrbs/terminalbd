@@ -151,6 +151,7 @@
                                     <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Cabin</th>
+                                    <th class="numeric" >Diseases</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -168,6 +169,7 @@
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.cabin %}{{  entity.cabin.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.diseasesProfile is not empty %}{{ entity.diseasesProfile.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>

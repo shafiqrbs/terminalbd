@@ -137,6 +137,7 @@
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Diseases Profile</th>
                                     <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Process</th>
@@ -153,6 +154,7 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.diseasesProfile is not empty %}{{ entity.diseasesProfile.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >

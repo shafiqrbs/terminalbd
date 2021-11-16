@@ -1150,7 +1150,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setApprovedBy($sales->getCreatedBy());
         $em->persist($accountSales);
         $em->flush();
-      //  $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        $this->updateCustomerBalance($accountSales);
         return $accountSales;
     }
 
