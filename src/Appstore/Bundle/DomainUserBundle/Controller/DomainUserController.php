@@ -162,9 +162,8 @@ class DomainUserController extends Controller
 
         $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $designation = $this->getDoctrine()->getRepository('SettingToolBundle:Designation');
-        $form = $this->createForm(new DomainEditUserType($user,$globalOption,$location,$designation), $entity, array(
+        $form = $this->createForm(new DomainEditUserType($user,$globalOption,$designation), $entity, array(
             'action' => $this->generateUrl('domain_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

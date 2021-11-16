@@ -312,7 +312,7 @@
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $('.pull-right').find('button').removeAttr('disabled')
+                $("button[type='submit']", this).removeAttr('disabled')
             }, 3000);
             return true;
         });
@@ -323,7 +323,7 @@
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $('.pull-right').find('button').removeAttr('disabled')
+                $("button[type='submit']", this).removeAttr('disabled')
             }, 3000);
             return true;
         });

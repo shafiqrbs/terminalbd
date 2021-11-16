@@ -128,16 +128,32 @@ class ItemListener
         }else{
             $vendorSlug = '';
         }
+        $categorySlug = "";
+        $categoryName = '';
+        if($entity->getMasterItem()->getCategory() and !empty($entity->getInventoryConfig()->isCategory()) and $entity->getInventoryConfig()->isCategory() == 1 ){
 
-        $sku            = $masterItem.$color.$size.$brand.$vendor;
-        $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;
-        $skuSlug        = $masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
+            $category             = '';
+            $categorySlug         = $entity->getMasterItem()->getCategory()->getSlug();
+            $categoryName         = $entity->getMasterItem()->getCategory()->getName();
 
+        }elseif(!empty($entity->getMasterItem()->getCategory())){
+            $categorySlug           = $entity->getMasterItem()->getCategory()->getSlug();
+        }else{
+            $categorySlug = '';
+        }
+        if($entity->getMasterItem()->getCategory() and $entity->getInventoryConfig()->isCategory() == 1){
+            $sku            = $masterItem.$color.$size.$brand.$vendor;
+            $name           = $categoryName.' '.$masterName.$colorName.$sizeName.$brandName.$vendorName;
+            $skuSlug        = $categorySlug.$masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
 
+        }else{
+            $sku            = $masterItem.$color.$size.$brand.$vendor;
+            $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;
+            $skuSlug        = $masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
+
+        }
         $domainSlug     = $entity->getInventoryConfig()->getGlobalOption()->getSlug();
         $skuWeb         = $skuSlug.'_'.$domainSlug;
-
-
         $data = array('name'=> $name,'sku'=> $sku,'skuSlug'=> $skuSlug,'skuWeb'=> $skuWeb);
         return $data;
     }

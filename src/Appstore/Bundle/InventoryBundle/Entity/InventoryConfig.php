@@ -387,6 +387,13 @@ class InventoryConfig
      */
     private $isColor;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isCategory", type="boolean" ,  nullable=true)
+     */
+    private $isCategory;
+
 
     /**
      * @var boolean
@@ -1784,6 +1791,22 @@ class InventoryConfig
     public function setPrintFooterText($printFooterText)
     {
         $this->printFooterText = $printFooterText;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCategory()
+    {
+        return $this->isCategory;
+    }
+
+    /**
+     * @param bool $isCategory
+     */
+    public function setIsCategory($isCategory)
+    {
+        $this->isCategory = $isCategory;
     }
 
 

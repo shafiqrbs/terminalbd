@@ -82,7 +82,8 @@ function InventoryPurchasePage(){
 
         rules: {
 
-            "purchaseitem[item]": {required: true},
+            "purchaseitem[item]": {required: false},
+            "purchaseitem[barcode]": {required: false},
             "purchaseitem[purchaseSubTotal]": {required: true},
             "purchaseitem[salesPrice]": {required: false},
             "purchaseitem[quantity]": {required: true},
@@ -102,10 +103,49 @@ function InventoryPurchasePage(){
             "purchaseitem[quantity]": {placement:'top',html:true},
 
         },
-        submitHandler: function() {
-            $('#purchaseItemForm').submit();
+        submitHandler: function(validator) {
+            $.ajax({
+                url         : $('form#purchaseItemForm').attr( 'action' ),
+                type        : $('form#purchaseItemForm').attr( 'method' ),
+                data        : new FormData($('form#purchaseItemForm')[0]),
+                processData : false,
+                contentType : false,
+                success: function(response){
+                    obj = JSON.parse(response);
+                    $('#purchaseItem').html(obj['invoiceItems']);
+                    $('.subTotal').html(obj['subTotal']);
+                    $('#due').html(obj['due']);
+                    $("#purchaseitem_item").select2("val", "");
+                    $('#purchaseItemForm')[0].reset();
+                    $('#addPurchaseForm').html('<i class="fa fa-save"></i> Add').attr("disabled", true);
+                    $('.addPurchaseForm').prop("disabled", false);
+                }
+            });
         }
 
+    });
+
+    $(document).on('change', '.itemUpdate', function() {
+
+        var id = $(this).attr('data-id');
+        var quantity = parseFloat($('#quantity-'+id).val());
+        var price = parseFloat($('#price-'+id).val());
+        var subTotal  = (quantity * price);
+        $("#subTotal-"+id).html(subTotal);
+        $.ajax({
+            url: Routing.generate('inventory_purchasesimple_inline_item_update'),
+            type: 'POST',
+            data:'id='+id+'&quantity='+ quantity +'&price='+ price,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#purchaseItem').html(obj['invoiceItems']);
+                $('.subTotal').html(obj['subTotal']);
+                $('#due').html(obj['due']);
+                $("#salesTemporaryItem_stockName").select2("val", "");
+                $('#purchaseitem')[0].reset();
+            },
+
+        })
     });
 
     $('#addInventory').click(function(e) {

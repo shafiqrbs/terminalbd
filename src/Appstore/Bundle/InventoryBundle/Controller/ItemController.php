@@ -92,6 +92,11 @@ class ItemController extends Controller
             if($checkData['count'] == 0 ) {
                 $entity->setInventoryConfig($inventory);
                 $entity->setMasterItem($checkData['masterItem']);
+                if(empty($entity->getItemUnit())){
+                    $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                    $entity->setItemUnit($unit);
+                    $entity->getMasterItem()->setProductUnit($unit);
+                }
                 $entity->upload();
                 $em->persist($entity);
                 $em->flush();
@@ -292,6 +297,11 @@ class ItemController extends Controller
         $editForm->handleRequest($request);
         $erors = $editForm->getErrors();
         if ($editForm->isValid()) {
+            if(empty($entity->getItemUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setItemUnit($unit);
+                $entity->getMasterItem()->setProductUnit($unit);
+            }
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }

@@ -78,12 +78,9 @@ class ItemType extends AbstractType
                 )
             ))
             ->add('itemUnit', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Choose a item unit ---',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){

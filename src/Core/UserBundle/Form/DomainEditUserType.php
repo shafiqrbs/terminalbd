@@ -21,9 +21,6 @@ class DomainEditUserType extends AbstractType
     /** @var  GlobalOption */
     private $globalOption;
 
-    /** @var  LocationRepository */
-    private $location;
-
     /** @var  DesignationRepository */
     private $designation;
 
@@ -31,11 +28,10 @@ class DomainEditUserType extends AbstractType
     private $user;
 
 
-    function __construct(UserRepository $user , GlobalOption $globalOption, LocationRepository $location, DesignationRepository $designation)
+    function __construct(UserRepository $user , GlobalOption $globalOption,DesignationRepository $designation)
     {
         $this->user = $user;
         $this->globalOption = $globalOption;
-        $this->location = $location;
         $this->designation = $designation;
     }
 
@@ -70,7 +66,7 @@ class DomainEditUserType extends AbstractType
                     'choices'   => $this->getAppRoleGroup())
             )
             ->add('enabled');
-            $builder->add('profile', new DomainUserProfileType($this->globalOption, $this->location, $this->designation));
+            $builder->add('profile', new DomainUserProfileType($this->globalOption, $this->designation));
 
     }
 

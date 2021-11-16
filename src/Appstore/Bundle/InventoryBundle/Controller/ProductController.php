@@ -61,6 +61,10 @@ class ProductController extends Controller
             $em = $this->getDoctrine()->getManager();
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $entity->setInventoryConfig($inventory);
+            if(empty($entity->getItemUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setProductUnit($unit);
+            }
             $entity->upload();
             $em->persist($entity);
             $em->flush();

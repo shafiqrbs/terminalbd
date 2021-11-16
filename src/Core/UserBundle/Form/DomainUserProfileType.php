@@ -21,17 +21,14 @@ class DomainUserProfileType extends AbstractType
     /** @var  GlobalOption */
     private $globalOption;
 
-    /** @var  LocationRepository */
-    private $location;
 
     /** @var  DesignationRepository */
     private $designation;
 
 
-    function __construct(GlobalOption $globalOption, LocationRepository $location, DesignationRepository $designation)
+    function __construct(GlobalOption $globalOption, DesignationRepository $designation)
     {
         $this->globalOption = $globalOption;
-        $this->location = $location;
         $this->designation = $designation;
     }
 
@@ -60,7 +57,7 @@ class DomainUserProfileType extends AbstractType
             ))
 
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
-            ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
+            ->add('about','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('designation', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
@@ -76,12 +73,6 @@ class DomainUserProfileType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 },
             ))
-
-            ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
-            ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your additional phone ')))
-            ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
-            ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span12')))
-            ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
             ->add('branches', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
@@ -107,23 +98,6 @@ class DomainUserProfileType extends AbstractType
             ))
             ->add('branch','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4 ,'draggable' => 'false' ,'placeholder'=>'Enter your bank branch name')))
             ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your bank account no')))
-            ->add('location', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
-                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select user location'))
-                ),
-                'choices'=> $this->LocationChoiceList(),
-                'choices_as_values' => true,
-                'choice_label' => 'nestedLabel',
-            ))
-
-            ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12'),
-                'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
-            ))
             ->add('file');
     }
 

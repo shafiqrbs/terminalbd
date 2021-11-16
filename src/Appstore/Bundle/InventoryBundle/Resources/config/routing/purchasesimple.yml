@@ -72,3 +72,10 @@ inventory_grn_name:
     defaults: { _controller: "InventoryBundle:PurchaseSimple:searchName" }
     options:
            expose: true
+
+inventory_purchasesimple_inline_item_update:
+    path:     /inline-item-update
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:inlineUpdate" }
+    methods:  POST
+    options:
+        expose: true

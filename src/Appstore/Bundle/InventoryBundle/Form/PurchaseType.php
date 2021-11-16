@@ -87,6 +87,7 @@ class PurchaseType extends AbstractType
                 'view_timezone' => 'Asia/Dhaka'))
 
             ->add('paymentAmount','text', array('attr'=>array('class'=>'purchaseInput m-wrap span12 numeric','placeholder'=>'Net payment')))
+            /*
             ->add('totalQnt','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'No of Qnt'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total qnt'))
@@ -95,7 +96,7 @@ class PurchaseType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total item'))
                 )))
-            /*->add('purchaseTo', 'choice', array(
+            ->add('purchaseTo', 'choice', array(
                 'required'    => false,
                 'attr'=>array('class'=>'m-wrap span12 purchaseInput'),
                 'empty_value' => '---Choose a purchase To ---',

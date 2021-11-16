@@ -36,9 +36,6 @@ class PurchaseItemSimpleType extends AbstractType
                 'empty_value' => '---Choose a item ---',
                 'property' => 'getItemSKUName',
                 'attr'=>array('class'=>'span12 select2 itemInput'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -47,14 +44,19 @@ class PurchaseItemSimpleType extends AbstractType
                 },
             ))
 
-            ->add('quantity','text', array('attr'=>array('class'=>'itemInput m-wrap span8','placeholder'=>'Item quantity'),
+            ->add('quantity','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Quantity'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add item quantity')))))
 
-            ->add('salesPrice','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item sales price'),
+            ->add('barcode','text', array(
+                'attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item Barcode'),
+                'mapped'=>'false'
                 ))
 
-            ->add('purchaseSubTotal','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item purchase price'),
+            ->add('salesPrice','text', array('attr'=>array('class'=>'itemInput m-wrap span6','placeholder'=>'Sales price'),
+                ))
+
+            ->add('purchaseSubTotal','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Purchase price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add purchase price')))))
             ;

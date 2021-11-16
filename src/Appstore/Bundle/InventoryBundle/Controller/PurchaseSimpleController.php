@@ -382,12 +382,12 @@ class PurchaseSimpleController extends Controller
     public function createPurchaseItemAction(Request $request, Purchase $purchase)
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all();
+        $data = $request->request->all()['purchaseitem'];
         $purchaseItem = new PurchaseItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
-        $editForm = $this->createEditForm($purchase);
         $purchaseItemForm->handleRequest($request);
-        if ($purchaseItemForm->isValid()) {
+        $entity = $purchase;
+        if($purchaseItem->getItem()){
             $purchaseItem->setPurchase($purchase);
             $purchaseItem->setName($purchaseItem->getItem()->getName());
             $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
@@ -396,16 +396,68 @@ class PurchaseSimpleController extends Controller
             $purchaseItem->setSalesSubTotal($salesSubTotal);
             $em->persist($purchaseItem);
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
-            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
-            return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $purchase->getId())));
+        }elseif (empty($purchaseItem->getItem()) and $data['barcode']){
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('barcode'=>$data['barcode']));
+            if($item){
+                $purchaseItem->setPurchase($purchase);
+                $purchaseItem->setItem($item);
+                $purchaseItem->setName($purchaseItem->getItem()->getName());
+                $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
+                $purchaseItem->setPurchasePrice($purchasePrice);
+                $salesSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
+                $purchaseItem->setSalesSubTotal($salesSubTotal);
+                $em->persist($purchaseItem);
+                $em->flush();
+            }
         }
+        $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
+        $entity = $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+        $html = $this->renderView(
+            'InventoryBundle:PurchaseSimple:purchase-item.html.twig', array(
+                'entity' => $entity,
+            )
+        );
+        return new Response(
+            json_encode(
+                array(
+                    'invoiceItems' => $html,
+                    'subTotal' => $entity->getTotalAmount(),
+                    'due' => ($entity->getTotalAmount() - $entity->getPaymentAmount()),
 
-        return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
-            'entity' => $purchase,
-            'form'   => $editForm->createView(),
-            'purchaseItemForm'   => $purchaseItemForm->createView(),
-        ));
+                )
+            )
+        );
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data =$_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity PurchaseItem */
+        $item = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['id']);
+        if (!$item) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $item->setQuantity((int)$data['quantity']);
+        $item->setpurchasePrice((int)$data['price']);
+        $item->setPurchaseSubTotal($item->getQuantity() * $item->getPurchasePrice());
+        $em->flush();
+        $entity = $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($item->getPurchase());
+        $html = $this->renderView(
+            'InventoryBundle:PurchaseSimple:purchase-item.html.twig', array(
+                'entity' => $entity,
+            )
+        );
+        return new Response(
+            json_encode(
+                array(
+                    'invoiceItems' => $html,
+                    'subTotal' => $entity->getTotalAmount(),
+                    'due' => ($entity->getTotalAmount() - $entity->getPaymentAmount()),
+
+                )
+            )
+        );
 
     }
 

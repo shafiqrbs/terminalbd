@@ -246,6 +246,7 @@ class PurchaseRepository extends EntityRepository
         $purchase->setDueAmount($row['total'] - $purchase->getPaymentAmount());
         $this->_em->persist($purchase);
         $this->_em->flush($purchase);
+        return $purchase;
 
     }
 
