@@ -447,6 +447,26 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function searchBarcodeItem($item, InventoryConfig $inventory)
+    {
+
+        $search = strtolower($item);
+        $query = $this->createQueryBuilder('i');
+        $query->join('i.inventoryConfig', 'ic');
+        $query->select('i.id as id');
+        $query->addSelect('i.barcode AS name');
+        $query->addSelect('i.barcode AS text');
+        $query->where($query->expr()->like("i.barcode", "'%$search%'"  ));
+        $query->andWhere("ic.id = :inventory");
+        $query->andWhere("i.status = 1");
+        $query->setParameter('inventory', $inventory->getId());
+        $query->groupBy('i.id');
+        $query->orderBy('i.sku', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
     public function updateRemainingQuantity(Item $item)
     {
         $em = $this->_em;

@@ -69,6 +69,12 @@ item_search:
     options:
            expose: true
 
+inventory_itembarcode_search:
+    path:     /barcode-search
+    defaults: { _controller: "InventoryBundle:Item:autoBarcodeSearch" }
+    options:
+           expose: true
+
 item_search_all:
     path:     /all-search
     defaults: { _controller: "InventoryBundle:Item:autoSearchItemAll" }

@@ -447,6 +447,16 @@ class ItemController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoBarcodeSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchBarcodeItem($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
     public function autoSearchItemAllAction(Request $request)
     {
         $item = $_REQUEST['q'];

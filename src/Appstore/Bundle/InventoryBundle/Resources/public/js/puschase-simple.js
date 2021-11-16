@@ -31,6 +31,23 @@ function InventoryPurchasePage(){
         }
     });
 
+    $( ".select2barcode" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax( {
+                url: Routing.generate('inventory_product_masteritem_search'),
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+        }
+    });
+
     $('#addMasterItem').click(function(e) {
 
         var url =  $('#masterProduct').attr("action");
@@ -171,40 +188,38 @@ function InventoryPurchasePage(){
     $('#addStockItem').click(function(e) {
 
         var url =  $('#inventoryItem').attr("action");
-
         var masterItem = $('#masterItem').val();
-        if( masterItem == "" ){
+        if( masterItem === "" ){
             alert( "Please add  item name" );
             $('#masterItem').focus();
             return false;
         }
         var color = $('#color').val();
-        if( color == "" ){
+        if( color === "" ){
             alert( "Please add color name" );
             $('#color').focus();
             return false;
         }
         var size = $('#size').val();
-        if( size == "" ){
+        if( size === "" ){
             alert( "Please add size value" );
             $('#size').focus();
             return false;
         }
 
         var brand = $('#brand').val();
-        if( brand == "" ){
+        if( brand === "" ){
             alert( "Please add brand name" );
             $('#brand').focus();
             return false;
         }
 
         var vendor = $('#vendor').val();
-        if( vendor == "" ){
+        if( vendor === "" ){
             alert( "Please add vendor name" );
             $('#vendor').focus();
             return false;
         }
-
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',

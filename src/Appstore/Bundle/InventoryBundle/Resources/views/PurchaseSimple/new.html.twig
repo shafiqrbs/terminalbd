@@ -114,15 +114,6 @@
                         {{ form_start(purchaseItemForm) }}
                         {{ form_row(purchaseItemForm._token) }}
                         <div class="row-fluid">
-                            <div class="span5">
-                                <div class="control-group">
-                                    <label class="control-label" for="name">Inventory Item</label>
-                                    <div class="controls">
-                                        {{ form_widget(purchaseItemForm.item) }}
-                                        {{ form_errors(purchaseItemForm.item) }}
-                                    </div>
-                                </div>
-                            </div>
                             <div class="span2">
                                 <div class="control-group">
                                     <label class="control-label" for="name">Barcode</label>
@@ -132,6 +123,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="name">Inventory Item</label>
+                                    <div class="controls">
+                                        {{ form_widget(purchaseItemForm.item) }}
+                                        {{ form_errors(purchaseItemForm.item) }}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="span1">
                                 <div class="control-group">
                                     <label class="control-label" for="purchasePrice">Quantity <span class="required">*</span></label>
@@ -432,10 +433,21 @@
         #inventoryItem{
             display: none;
         }
+        input[type="text"].td-inline-input{
+            width: 80px;
+            border: 2px solid #27a9e3;
+        }
         input[class*="span"].purchaseInput{
             border: 2px solid red!important;
             background: #fff;
             height: 18px;
+        }
+        input[class*="span"].m-wrap,select[class*="span"].m-wrap, textarea[class*="span"].m-wrap, .purchaseInput select {
+            height: 33px!important;
+            border: 2px solid #2a2828!important;
+        }
+        .select2-container,.select2-search input {
+            border: 2px solid #2a2828!important;
         }
 
     </style>

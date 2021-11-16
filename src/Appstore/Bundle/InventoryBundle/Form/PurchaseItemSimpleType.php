@@ -29,19 +29,9 @@ class PurchaseItemSimpleType extends AbstractType
     {
         $builder
 
-    
-            ->add('item', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Item',
-                'empty_value' => '---Choose a item ---',
-                'property' => 'getItemSKUName',
-                'attr'=>array('class'=>'span12 select2 itemInput'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig ={$this->inventoryConfig->getId()}")
-                        ->orderBy("p.name","ASC");
-                },
+            ->add('item','text', array(
+                'attr'=>array('class'=>'itemInput m-wrap span12 select2Item','placeholder'=>'Select Item Name'),
+                'mapped'=>'false'
             ))
 
             ->add('quantity','text', array('attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Quantity'),
@@ -49,7 +39,7 @@ class PurchaseItemSimpleType extends AbstractType
                     new NotBlank(array('message'=>'Add item quantity')))))
 
             ->add('barcode','text', array(
-                'attr'=>array('class'=>'itemInput m-wrap span12','placeholder'=>'Item Barcode'),
+                'attr'=>array('class'=>'itemInput m-wrap span12 stockBarcode','placeholder'=>'Item Barcode'),
                 'mapped'=>'false'
                 ))
 

@@ -145,6 +145,36 @@ function ApproveProcess(){
     });
 
 
+    $(".stockBarcode").select2({
+
+        placeholder: "Enter specific barcode",
+        ajax: {
+
+            url: Routing.generate('inventory_itembarcode_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.text}, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength:2
+    });
+
     $("#barcodeNo").select2({
 
         placeholder: "Enter specific barcode",
