@@ -63,6 +63,19 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function getStockPriceOverview($inventory)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->addSelect('SUM(e.remainingQnt * e.purchaseAvgPrice) AS purchasePrice');
+        $qb->addSelect('SUM(e.remainingQnt * e.salesAvgPrice) AS salesPrice');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
     public function checkDuplicateSKU(InventoryConfig $inventory,$data)
     {
 
@@ -495,6 +508,10 @@ class ItemRepository extends EntityRepository
             if($purchaseItem->getSalesPrice() > 0 ){
                 $entity->setSalesPrice($purchaseItem->getSalesPrice());
             }
+            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
+            $avgPurchasePrice = $em->getRepository("InventoryBundle:PurchaseItem")->getItemAveragePrice($purchaseItem->getItem());
+            $entity->setPurchaseAvgPrice($avgPurchasePrice['purchaseAvg']);
+            $entity->setSalesAvgPrice($avgPurchasePrice['salesAvg']);
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
             $em->flush();

@@ -643,6 +643,7 @@ class StockItemRepository extends EntityRepository
                 $entity->setPurchaseItem($purchaseItem);
                 $entity->setItem($purchaseItem->getItem());
                 $entity->setQuantity($purchaseItem->getQuantity());
+                $entity->setPrice($purchaseItem->getPurchasePrice());
                 $entity->setCreatedBy($purchaseItem->getPurchase()->getCreatedBy());
                 $entity->setProduct($purchaseItem->getItem()->getMasterItem());
                 $entity->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
@@ -700,6 +701,7 @@ class StockItemRepository extends EntityRepository
                 $entity->setPurchaseItem($purchaseReturnItem->getPurchaseItem());
                 $entity->setPurchaseReturnItem($purchaseReturnItem);
                 $entity->setItem($purchaseReturnItem->getPurchaseItem()->getItem());
+                $entity->setPrice($purchaseReturnItem->getPurchaseItem()->getPurchasePrice());
                 $entity->setQuantity('-' . $purchaseReturnItem->getQuantity());
                 $entity->setCreatedBy($purchaseReturn->getCreatedBy());
 

@@ -42,7 +42,7 @@ class ReportController extends Controller
      //   exit;
 
         $purchaseOverview = $em->getRepository('InventoryBundle:Purchase')->purchaseOverview($inventory,$data);
-        $priceOverview = $em->getRepository('InventoryBundle:StockItem')->getStockPriceOverview($inventory,$data);
+        $priceOverview = $em->getRepository('InventoryBundle:Item')->getStockPriceOverview($inventory,$data);
         $salesPurchasePrice = $em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($this->getUser(),$data);
         $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
         return $this->render('InventoryBundle:Report:stockOverview.html.twig', array(

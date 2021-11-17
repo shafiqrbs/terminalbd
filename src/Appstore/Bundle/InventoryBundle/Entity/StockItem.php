@@ -178,6 +178,13 @@ class StockItem
     private $quantity;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float")
+     */
+    private $price;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="process", type="string")
@@ -687,6 +694,22 @@ class StockItem
     public function setCategoryName($categoryName)
     {
         $this->categoryName = $categoryName;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
     }
 
 }

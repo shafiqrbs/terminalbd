@@ -301,6 +301,14 @@ class Item
     /**
      * @var float
      *
+     * @ORM\Column(name="salesAvgPrice", type="float", nullable=true)
+     */
+    private $salesAvgPrice;
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
@@ -1208,6 +1216,22 @@ class Item
     public function setModel($model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesAvgPrice()
+    {
+        return $this->salesAvgPrice;
+    }
+
+    /**
+     * @param float $salesAvgPrice
+     */
+    public function setSalesAvgPrice($salesAvgPrice)
+    {
+        $this->salesAvgPrice = $salesAvgPrice;
     }
 
 }

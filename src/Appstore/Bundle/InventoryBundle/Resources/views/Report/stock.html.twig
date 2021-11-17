@@ -98,6 +98,8 @@
                                     <th class="numeric" >O.Return</th>
                                     <th class="numeric" >Damage</th>
                                     <th class="numeric" >Remaining</th>
+                                    <th class="numeric" >Avg Pur Price</th>
+                                    <th class="numeric" >Amount</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -115,6 +117,8 @@
                                             <td class="numeric" >{{ entity.onlineOrderQuantityReturn }}</td>
                                             <td class="numeric" >{{ entity.damageQuantity }}</td>
                                             <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.purchaseQuantityReplace + entity.onlineOrderQuantityReturn ) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity )  }}</td>
+                                            <td class="numeric" >{{ entity.purchaseAvgprice }}</td>
+                                            <td class="numeric" >{{ (((entity.purchaseQuantity + entity.salesQuantityReturn + entity.purchaseQuantityReplace + entity.onlineOrderQuantityReturn ) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity))*entity.purchaseAvgprice)|number_format(2)  }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

@@ -341,8 +341,7 @@ class PurchaseSimpleController extends Controller
                 $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($entity);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
             }
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity);
-            $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase);
+            $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity);
             $this->get('session')->getFlashBag()->add(
                 'success', "Purchase invoice approved successfully"
             );
