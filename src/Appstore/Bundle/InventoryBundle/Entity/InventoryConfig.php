@@ -1141,7 +1141,7 @@ class InventoryConfig
     /**
      * @return boolean
      */
-    public function getIsModel()
+    public function isModel()
     {
         return $this->isModel;
     }

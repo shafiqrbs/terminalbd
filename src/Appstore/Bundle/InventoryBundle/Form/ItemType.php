@@ -61,15 +61,14 @@ class ItemType extends AbstractType
                     'mapped'    => false,
                     'attr' => array('value' => $this->inventoryConfig->getId())))
 
-            ->add('itemGroup', 'entity', array(
+            /*->add('itemGroup', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select item group---',
                 'attr'=>array('class'=>'category m-wrap span12 select2'),
                 'class' => 'ProductProductBundle:ItemGroup',
                 'property' => 'nestedLabel',
                 'choices'=> $this->ItemGroupChoiceList()
-            ))
-
+            ))*/
             ->add('name', 'text', array(
                 'required'    => true,
                 'attr'=>array('class'=>'span12 select2','list'=>'masterItem'),
@@ -81,6 +80,7 @@ class ItemType extends AbstractType
                 'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
+                'data' => 47,
                 'empty_value' => '---Choose a item unit ---',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -95,7 +95,7 @@ class ItemType extends AbstractType
             ))
             ->add('barcode', 'text', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span12')
+                'attr'=>array('class'=>'span12 barcode')
             ))
             ->add('purchasePrice', 'text', array(
                 'required'    => false,
@@ -121,6 +121,18 @@ class ItemType extends AbstractType
 
                     },
                 )) ;
+
+            }
+            if($this->inventoryConfig->isModel() == 1 ){
+
+                $builder
+                    ->add('model', 'text', array(
+                        'required'    => true,
+                        'attr'=>array('class'=>'span12 model'),
+                        'constraints' =>array(
+                            new NotBlank(array('message'=>'Please input required'))
+                        )
+                    ));
 
             }
             if($this->inventoryConfig->getIsColor() == 1 ) {

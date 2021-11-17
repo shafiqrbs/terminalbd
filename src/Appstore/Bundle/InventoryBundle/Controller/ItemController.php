@@ -97,6 +97,9 @@ class ItemController extends Controller
                     $entity->setItemUnit($unit);
                     $entity->getMasterItem()->setProductUnit($unit);
                 }
+                if(empty($entity->getBarcode())){
+                    $entity->setBarcode($entity->getModel());
+                }
                 $entity->upload();
                 $em->persist($entity);
                 $em->flush();
@@ -439,7 +442,7 @@ class ItemController extends Controller
 
     public function autoSearchAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoComplete($item,$inventory);
@@ -449,7 +452,7 @@ class ItemController extends Controller
 
     public function autoBarcodeSearchAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchBarcodeItem($item,$inventory);
@@ -459,7 +462,7 @@ class ItemController extends Controller
 
     public function autoSearchItemAllAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+        $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoCompleteAllItem($item,$inventory);

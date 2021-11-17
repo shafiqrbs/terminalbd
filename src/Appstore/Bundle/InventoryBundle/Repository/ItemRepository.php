@@ -72,6 +72,8 @@ class ItemRepository extends EntityRepository
         $itemColor = isset ($data['item']['color']) ? $data['item']['color']:'NULL';
         $itemSize = isset($data['item']['size']) ? $data['item']['size'] : 'NULL';
         $itemBrand = isset($data['item']['brand']) ? $data['item']['brand']:'NULL';
+        $itemCategory = isset($data['item']['category']) ? $data['item']['category']:'NULL';
+        $itemModel = isset($data['item']['model']) ? $data['item']['model']:'NULL';
 
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.masterItem', 'm');
@@ -95,6 +97,10 @@ class ItemRepository extends EntityRepository
         if($inventory->getIsBrand() == 1) {
             $qb->andWhere('item.brand = :itemBrand');
             $qb->setParameter('itemBrand', $itemBrand);
+        }
+        if($inventory->isModel() == 1) {
+            $qb->andWhere('item.model = :itemModel');
+            $qb->setParameter('itemModel', $itemModel);
         }
         $count = $qb->getQuery()->getOneOrNullResult();
         $result = array('masterItem'=> $product , 'count' => $count['totalNumber']);
@@ -432,11 +438,11 @@ class ItemRepository extends EntityRepository
         $query->join('i.inventoryConfig', 'ic');
         $query->select('i.id as id');
 	    $query->addSelect('CONCAT(i.sku, \' - \', i.name) AS name');
-	    $query->addSelect('CONCAT(i.sku, \' - \', i.name) AS text');
+	   // $query->addSelect('CONCAT(i.sku, \' - \', i.name) AS text');
 	    $query->addSelect('i.sku as sku');
         $query->where($query->expr()->like("i.name", "'%$search%'"  ));
 	    $query->orWhere($query->expr()->like("i.skuSlug", "'%$search%'"  ));
-	  //  $query->orWhere($query->expr()->like("i.sku", "'%$search%'"  ));
+	   // $query->orWhere($query->expr()->like("i.sku", "'%$search%'"  ));
 	   // $query->orWhere($query->expr()->like("i.barcode", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());

@@ -430,8 +430,9 @@ class PurchaseSimpleController extends Controller
     {
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
+        $b = trim($data['barcode']);
         $purchase = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->find($id);
-        $item = $em->getRepository('InventoryBundle:Item')->findOneBy(array('barcode'=>$data['barcode']));
+        $item = $em->getRepository('InventoryBundle:Item')->findOneBy(array('barcode'=>$b));
         if (!$item) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }

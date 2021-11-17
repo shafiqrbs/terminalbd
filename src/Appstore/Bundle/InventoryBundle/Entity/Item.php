@@ -116,6 +116,13 @@ class Item
      */
     private $barcode;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="model", type="string", length=255,nullable = true)
+     */
+    private $model;
+
     /**
      * @var string
      *
@@ -1185,6 +1192,22 @@ class Item
     public function setModelYear($modelYear)
     {
         $this->modelYear = $modelYear;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
     }
 
 }

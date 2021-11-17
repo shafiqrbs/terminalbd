@@ -93,9 +93,11 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
-                                    <th {% if entities.isSorted('item.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Name', 'item.name') }}{% if( direction == 'desc' and sort == 'item.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
-                                    <th {% if entities.isSorted('item.sku') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'SKU', 'item.sku') }}{% if( direction == 'desc' and sort == 'item.sku') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th class="numeric" >Barcode</th>
+                                    <th {% if entities.isSorted('item.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'Name', 'item.name') }}{% if( direction == 'desc' and sort == 'item.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                {#    <th {% if entities.isSorted('item.sku') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(entities, 'SKU', 'item.sku') }}{% if( direction == 'desc' and sort == 'item.sku') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>#}
+                                    <th class="numeric" >Category</th>
+                                    <th class="numeric" >Brand</th>
                                     <th class="numeric" >P.Qnt</th>
                                     <th class="numeric" >Rmn.Qnt</th>
                                     <th class="numeric" >Min.Qnt</th>
@@ -111,12 +113,15 @@
                                 {% for entity in entities %}
                                     <tr {% if entity.minQnt >= entity.remainingQnt   %} class="min-qnt" aria-disabled="true" {% endif %}>
                                         <td>{% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                        <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="" >
-                                            <a class="editable" data-name="Sku" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product SKU">{{ entity.sku }}</a></td>
                                         <td class="" >
                                             <input id="action-{{ entity.id }}" {% if  entity.remainingQnt ==  0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="itemBarcode"   type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;
                                             <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product barcode">{{ entity.barcode }}</a></td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{% if entity.masterItem.category %}{{ entity.masterItem.category.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.brand %}{{ entity.brand.name }}{% endif %}</td>
+                                      {#  <td class="" >
+                                            <a class="editable" data-name="Sku" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change product SKU">{{ entity.sku }}</a></td>
+                                      #}
                                         <td class="" >{{ entity.purchaseQuantity }}</td>
                                         <td class="" >{{ entity.remainingQnt }}</td>
                                         <td class="" ><a class="editable" data-name="MinQnt" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product min quantity">{{ entity.minQnt }}</a></td>

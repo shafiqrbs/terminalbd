@@ -107,6 +107,43 @@ function ApproveProcess(){
         minimumInputLength:1
     });
 
+    $(".selectAllItem").select2({
+
+        placeholder: "Search item, color, size & brand name",
+        ajax: {
+            url: Routing.generate('item_search_all'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){
+
+            //return item.name +' => '+ (item.remainingQuantity)
+            return item.name
+
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name}, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        allowClear: true,
+        minimumInputLength:1
+    });
+
     $(".branchSales2Item").select2({
 
         placeholder: "Search item, color, size & brand name",

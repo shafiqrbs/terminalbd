@@ -77,6 +77,7 @@ class InventoryConfigType extends AbstractType
             ->add('isColor')
             ->add('isSize')
             ->add('isCategory')
+            ->add('isModel')
             ->add('barcodeColor')
             ->add('barcodePrint')
             ->add('barcodeSize')

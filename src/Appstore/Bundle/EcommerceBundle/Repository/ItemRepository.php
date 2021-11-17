@@ -800,7 +800,6 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
-
     public function getApiProductDetails(GlobalOption $option,$id)
     {
         $config =$option->getEcommerceConfig()->getId();

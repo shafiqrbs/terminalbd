@@ -30,7 +30,7 @@ class PurchaseItemSimpleType extends AbstractType
         $builder
 
             ->add('item','text', array(
-                'attr'=>array('class'=>'itemInput m-wrap span12 select2Item','placeholder'=>'Select Item Name'),
+                'attr'=>array('class'=>'itemInput m-wrap span12 selectAllItem','placeholder'=>'Select Item Name'),
                 'mapped'=>'false'
             ))
 

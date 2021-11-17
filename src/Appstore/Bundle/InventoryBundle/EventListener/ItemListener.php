@@ -102,7 +102,6 @@ class ItemListener
 
         $brand ='';
         $brandName = '';
-
         if(!empty($entity->getInventoryConfig()->getIsBrand()) and $entity->getInventoryConfig()->getIsBrand() == 1){
             $brand               = '-B'.$entity->getBrand()->getSTRPadCode();
             $brandSlug           = $entity->getBrand()->getSlug();
@@ -111,6 +110,15 @@ class ItemListener
             $brandSlug           = $entity->getBrand()->getSlug();
         }else{
             $brandSlug = '';
+        }
+
+        $model ='';
+        if(!empty($entity->getInventoryConfig()->isModel()) and $entity->getInventoryConfig()->isModel() == 1){
+            $model               = ' '.$entity->getModel();
+            $modelSlug           = '-'.$entity->getModel();
+        }else{
+            $model = '';
+            $modelSlug = '';
         }
 
 
@@ -141,15 +149,18 @@ class ItemListener
         }else{
             $categorySlug = '';
         }
+
+
         if($entity->getMasterItem()->getCategory() and $entity->getInventoryConfig()->isCategory() == 1){
-            $sku            = $masterItem.$color.$size.$brand.$vendor;
-            $name           = $categoryName.' '.$masterName.$colorName.$sizeName.$brandName.$vendorName;
-            $skuSlug        = $categorySlug.$masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
+            $sku            = $masterItem.$color.$size.$brand.$vendor.$model;
+            $name           = $categoryName.' '.$masterName.$colorName.$sizeName.$brandName.$vendorName.$model;
+            $skuSlug        = $categorySlug.$masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug.$modelSlug;
 
         }else{
-            $sku            = $masterItem.$color.$size.$brand.$vendor;
-            $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;
-            $skuSlug        = $masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug;
+
+            $sku            = $masterItem.$color.$size.$brand.$vendor.$model;
+            $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName.$model;
+            $skuSlug        = $masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug.$modelSlug;
 
         }
         $domainSlug     = $entity->getInventoryConfig()->getGlobalOption()->getSlug();

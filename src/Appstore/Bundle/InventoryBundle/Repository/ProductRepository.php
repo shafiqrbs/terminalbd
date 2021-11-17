@@ -113,7 +113,6 @@ class ProductRepository extends EntityRepository
     public function insertMasterItem(InventoryConfig $inventory,$data)
     {
         $em = $this->_em;
-
         $masterItem = $data['item']['name'];
         $find = $this->findOneBy(array('name' => $masterItem));
         if(empty($find)){
@@ -125,7 +124,7 @@ class ProductRepository extends EntityRepository
                 $cat = $em->getRepository("ProductProductBundle:Category")->find($category);
                 $entity->setCategory($cat);
             }
-            $itemUnit = isset($data['item']['itemUnit']) ? $data['item']['itemUnit'] :'';
+            $itemUnit = isset($data['item']['itemUnit']) ? $data['item']['itemUnit'] :4;
             if($itemUnit){
                 $unit = $em->getRepository("SettingToolBundle:ProductUnit")->find($itemUnit);
                 $entity->setProductUnit($unit);
