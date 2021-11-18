@@ -266,5 +266,9 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    $('form#item').on('keyup', '#item_model', function() {
+        var mrp = $(this).val();
+        $('#item_barcode').val(mrp);
+    });
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

@@ -88,11 +88,6 @@ var InventoryItemEditPage = function (item) {
 
     }
 
-    $(document).on("click", ".model", function() {
-        var id = $(this).val();
-        $('.barcode').val(id);
-    });
-
     $(document).on("click", ".barcode", function() {
 
         var id = $(this).attr("data-id");

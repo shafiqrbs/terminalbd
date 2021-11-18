@@ -65,6 +65,7 @@ class DoctorController extends Controller
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
             $entity->setService($service);
             $em->persist($entity);
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
@@ -192,6 +193,10 @@ class DoctorController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

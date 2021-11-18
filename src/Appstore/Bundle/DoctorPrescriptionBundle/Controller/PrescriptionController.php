@@ -642,6 +642,7 @@ class PrescriptionController extends Controller
             }else{
                 $template = 'print';
             }
+            $invoiceServices = $em->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->getInvoiceServices($entity);
             return  $this->render('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
@@ -649,6 +650,7 @@ class PrescriptionController extends Controller
                     'print' => 'print',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
+                    'invoiceServices' => $invoiceServices,
                 )
             );
 

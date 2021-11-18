@@ -1089,7 +1089,7 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
             }
             if (!empty($config) and in_array('visit', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_invoice_appointment'));
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_prescription'));
             }
             if (!empty($config) and in_array('admission', $config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));

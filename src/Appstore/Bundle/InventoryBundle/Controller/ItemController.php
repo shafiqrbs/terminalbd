@@ -148,6 +148,7 @@ class ItemController extends Controller
             'action' => $this->generateUrl('item_create'),
             'method' => 'POST',
             'attr' => array(
+                'id' => 'item',
                 'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
@@ -234,6 +235,7 @@ class ItemController extends Controller
             'action' => $this->generateUrl('item_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
+                'id' => 'item',
                 'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )

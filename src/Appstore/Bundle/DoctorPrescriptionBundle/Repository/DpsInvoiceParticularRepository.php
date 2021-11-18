@@ -76,6 +76,24 @@ class DpsInvoiceParticularRepository extends EntityRepository
 
     }
 
+    public function getInvoiceServices(DpsInvoice $invoice)
+    {
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('ip');
+        $qb->join('ip.dpsParticular','p');
+        $qb->join('p.service','ds');
+        $qb->select('ds.id AS serviceId');
+        $qb->where('ip.dpsInvoice = :hospital');
+        $qb->setParameter('hospital', $invoice->getid());
+        $qb->groupBy('p.service');
+        $res = $qb->getQuery()->getArrayResult();
+        $arrs = array();
+        foreach ($res as $re){
+            $arrs[] = $re['serviceId'];
+        }
+        return $arrs;
+    }
+
     public function insertInvoiceParticularReturn(DpsInvoice $invoice, $data)
     {
         $em = $this->_em;

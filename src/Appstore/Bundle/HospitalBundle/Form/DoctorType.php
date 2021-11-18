@@ -60,6 +60,7 @@ class DoctorType extends AbstractType
                 'choices' => array('Sunday' => 'Sunday',  'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday'),
             ))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
+            ->add('file')
             /*
              ->add('assignDoctor', 'entity', array(
                 'required'    => false,

@@ -35,8 +35,6 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Doctor Visit</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn yellow" href="{{ path('hms_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
-                                <a class="btn purple" href="{{ path('hms_report_sales_summary') }}"><i class="icon-cart"></i> Sales Summary</a>
                                 <a class="btn red addAppointment" href="javascript:"><i class="icon-plus-sign"></i> Add Visit</a>
                             </div>
                         </div>
@@ -166,7 +164,7 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processEdit = {'Created':'Created','Revised':'Revised'} %}
-                                                <a  href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Prescription</a>
+                                                    <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Prescription</a>
                                                 <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Print</a>
                                                 <a class="btn purple mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                     More <i class="icon-tasks"></i>
