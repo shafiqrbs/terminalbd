@@ -50,22 +50,32 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
-                                            <input class="m-wrap span12 select2Customer search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Customer mobile{% endif %}">
+                                            <select name="condition" id="condition" class="span12 m-wrap">
+                                                <option>--Select Courier</option>
+                                                {% if couriers is not empty %}
+                                                    {% for courier in couriers %}
+                                                        <option {% if searchForm.condition is defined and searchForm.condition is not empty and searchForm.condition ==  courier.id %} selected="selected" {% endif %} value="{{ courier.id }}">{{ courier.name }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
                                         </div>
                                         <div class="span3">
+                                            <input class="m-wrap span12 select2Customer search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Customer mobile{% endif %}">
+                                        </div>
+                                        <div class="span2">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
                                                 <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Start date{% endif %}" >
                                             </div>
                                         </div>
 
-                                        <div class="span3">
+                                        <div class="span2">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
                                                 <input class="m-wrap span12 search-input date-picker" name="createdEnd" id="createdEnd" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}End date{% endif %}">
                                             </div>
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <div class="controls">
                                                 <div class="input-append span12">
                                                     <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Invoice no{% endif %} ">
@@ -86,6 +96,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Received</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Courier</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Net Total</th>
@@ -103,6 +114,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.approvedBy is not empty %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.condition is not empty %}{{ entity.condition.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>

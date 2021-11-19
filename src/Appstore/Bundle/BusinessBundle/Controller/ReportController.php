@@ -438,15 +438,15 @@ class ReportController extends Controller
         }
     }
 
-    public function courierAction()
+    public function conditionAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesCourierReport($user,$data);
-        $executives = $this->getDoctrine()->getRepository('BusinessBundle:Courier')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesConditionReport($user,$data);
+        $executives = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->findBy(array('globalOption' => $user->getGlobalOption()));
         if(empty($data['pdf'])){
-            return $this->render('BusinessBundle:Report:sales/salesCourier.html.twig', array(
+            return $this->render('BusinessBundle:Report:condition/condition.html.twig', array(
                 'option'            => $user->getGlobalOption() ,
                 'entities'          => $entities,
                 'executives'        => $executives,
@@ -456,7 +456,7 @@ class ReportController extends Controller
         }else{
 
             $html = $this->renderView(
-                'BusinessBundle:Report:sales/salesCourierPdf.html.twig', array(
+                'BusinessBundle:Report:condition/conditionPdf.html.twig', array(
                     'option'        => $user->getGlobalOption(),
                     'entities'      => $entities,
                     'searchForm'    => $data,
@@ -467,21 +467,21 @@ class ReportController extends Controller
         }
     }
 
-    public function courierInvoiceAction()
+    public function conditionCustomerAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesCourierDetailsReport($user,$data);
-        $executives = $this->getDoctrine()->getRepository('BusinessBundle:BusinessCourier')->findBy(array('businessConfig' => $user->getGlobalOption()->getBusinessConfig()));
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesConditionCustomerReport($user,$data);
+        $conditions = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->findBy(array('globalOption' => $user->getGlobalOption(),'status'=>1),array('name'=>"ASC"));
         if(empty($data['pdf'])){
 
-            return $this->render('BusinessBundle:Report:sales/salesCourierDetails.html.twig', array(
+            return $this->render('BusinessBundle:Report:condition/customer.html.twig', array(
                 'option'            => $user->getGlobalOption() ,
                 'entities'          => $entities,
-                'executives'        => $executives,
+                'conditions'        => $conditions,
                 'branches'          => $this->getUser()->getGlobalOption()->getBranches(),
                 'searchForm'        => $data,
             ));
@@ -490,14 +490,50 @@ class ReportController extends Controller
 
             $customer = $this->getDoctrine()->getRepository('BusinessBundle:BusinessArea')->find($data['courier']);
             $html = $this->renderView(
-                'BusinessBundle:Report:sales/salesCourierDetailsPdf.html.twig', array(
+                'BusinessBundle:Report:condition/customerPdf.html.twig', array(
                     'option'        => $user->getGlobalOption(),
                     'marketing'     => $customer,
                     'entities'      => $entities,
                     'searchForm'    => $data,
                 )
             );
-            $this->downloadPdf($html,'sales-area.pdf');
+            $this->downloadPdf($html,'sales-courier.pdf');
+
+        }
+    }
+
+    public function conditionDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $entities = $em->getRepository('BusinessBundle:BusinessInvoice')->salesConditionDetailsReport($user,$data);
+        //$customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $user->getGlobalOption()),array('name'=>"ASC"));
+        $conditions = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->findBy(array('globalOption' => $user->getGlobalOption(),'status'=>1),array('name'=>"ASC"));
+        if(empty($data['pdf'])){
+
+            return $this->render('BusinessBundle:Report:condition/conditionDetails.html.twig', array(
+                'option'            => $user->getGlobalOption() ,
+                'entities'          => $entities,
+                'conditions'        => $conditions,
+                'searchForm'        => $data,
+            ));
+
+        }else{
+
+            $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->find($data['courier']);
+            $html = $this->renderView(
+                'BusinessBundle:Report:condition/detailsPdf.html.twig', array(
+                    'option'        => $user->getGlobalOption(),
+                    'marketing'     => $customer,
+                    'couriers'      => $couriers,
+                    'entities'      => $entities,
+                    'searchForm'    => $data,
+                )
+            );
+            $this->downloadPdf($html,'sales-courier.pdf');
 
         }
     }

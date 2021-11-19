@@ -46,6 +46,7 @@ class BusinessInvoiceRepository extends EntityRepository
         $startDate = isset($data['startDate'])? $data['startDate'] :'';
         $endDate = isset($data['endDate'])? $data['endDate'] :'';
         $createdBy = isset($data['createdBy'])? $data['createdBy'] :'';
+        $condition = isset($data['condition'])? $data['condition'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -61,6 +62,9 @@ class BusinessInvoiceRepository extends EntityRepository
         if (!empty($customerMobile)) {
             $qb->join('e.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
+        }
+        if (!empty($condition)) {
+            $qb->andWhere("e.condition = :condition")->setParameter('condition', $condition);
         }
         if (!empty($createdStart)) {
             $compareTo = new \DateTime($createdStart);
@@ -1027,11 +1031,11 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
-    public function salesCourierReport( User $user , $data)
+    public function salesConditionReport( User $user , $data)
     {
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.courier', 'i');
+        $qb->join('e.condition', 'i');
         $qb->select('i.id as courierId','i.name as name');
         $qb->addSelect('COUNT(e.id) as invoice');
         $qb->addSelect('SUM(e.total) as total');
@@ -1048,27 +1052,52 @@ class BusinessInvoiceRepository extends EntityRepository
 
     }
 
-    public function salesCourierDetailsReport( User $user , $data)
+    public function salesConditionCustomerReport( User $user , $data)
     {
         $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
-        $courier = isset($data['courier'])? $data['courier'] :'';
+        $condition = isset($data['condition'])? $data['condition'] :'';
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.courier', 'i');
+        $qb->join('e.condition', 'i');
         $qb->join('e.customer', 'c');
-        $qb->select('c.name as customer');
+        $qb->select('c.id as customerId','c.name as name','c.mobile as mobile');
         $qb->addSelect('COUNT(e.id) as invoice');
         $qb->addSelect('SUM(e.total) as total');
         $qb->addSelect('SUM(e.received) as received');
         $qb->where('e.businessConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere('e.process IN (:process)');
-        $qb->setParameter('process', array('Received','Condition'));
-        $qb->andWhere('i.id = :courier');
-        $qb->setParameter('courier',$courier);
+        $qb->setParameter('process', array('Received','Delivered','Condition'));
+        $qb->andWhere('e.condition = :condition');
+        $qb->setParameter('condition',$condition);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('c.name');
         $qb->orderBy('c.name','DESC');
         $result = $qb->getQuery()->getArrayResult();
+
+        return $result;
+
+    }
+
+    public function salesConditionDetailsReport( User $user , $data)
+    {
+        $config =  $user->getGlobalOption()->getBusinessConfig()->getId();
+        $condition = isset($data['condition'])? $data['condition'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.condition', 'i');
+        $qb->join('e.customer', 'c');
+        $qb->select('c.id as customerId','c.name as name','c.mobile as mobile');
+        $qb->addSelect('e.created as created,e.updated as updated,e.invoice as invoice,e.process as process,e.total as total,e.received as received');
+        $qb->addSelect('i.name as condition');
+        $qb->where('e.businessConfig = :config');
+        $qb->setParameter('config', $config);
+        $qb->andWhere('e.process IN (:process)');
+        $qb->setParameter('process', array('Received','Delivered','Condition'));
+        $qb->andWhere('e.condition = :condition');
+        $qb->setParameter('condition',$condition);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('c.name','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+
         return $result;
 
     }

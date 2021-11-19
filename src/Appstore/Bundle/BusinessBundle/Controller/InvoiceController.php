@@ -65,12 +65,15 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        $global = $this->getUser()->getGlobalOption();
+        $couriers = $this->getDoctrine()->getRepository('AccountingBundle:AccountCondition')->findBy(array('globalOption' => $global,'status'=>1),array('name'=>"ASC"));
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->invoiceConditionLists( $config->getId(),$data);
         $pagination = $this->paginate($entities);
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         return $this->render("BusinessBundle:Invoice/{$view}:condition.html.twig", array(
             'entities' => $pagination,
+            'couriers' => $couriers,
             'salesTransactionOverview' => '',
             'previousSalesTransactionOverview' => '',
             'searchForm' => $data,

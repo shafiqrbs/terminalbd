@@ -240,15 +240,6 @@ class Builder extends ContainerAware
                     )->setAttribute('icon', 'icon-th-list');
                 }
                 $menu[$business]['Reports']['Sales']->addChild(
-                    'Courier',
-                    array('route' => 'business_report_sales_courier')
-                )->setAttribute('icon', 'icon-th-list');
-
-                $menu[$business]['Reports']['Sales']->addChild(
-                    'Courier Details',
-                    array('route' => 'business_report_sales_courier_details')
-                )->setAttribute('icon', 'icon-th-list');
-                $menu[$business]['Reports']['Sales']->addChild(
                     'Daily Item Sales Price',
                     array('route' => 'business_report_monthly_sales_price')
                 )->setAttribute('icon', 'icon-th-list');
@@ -279,6 +270,22 @@ class Builder extends ContainerAware
                     )->setAttribute('icon', 'icon-th-list');
 
                 }
+                $menu[$business]['Reports']->addChild('Condition')
+                    ->setAttribute('dropdown', true)->setAttribute('icon', 'icon-th-list');
+
+                $menu[$business]['Reports']['Condition']->addChild(
+                    'Condition',
+                    array('route' => 'business_report_condition')
+                )->setAttribute('icon', 'icon-th-list');
+                $menu[$business]['Reports']['Condition']->addChild(
+                    'Condition Customer',
+                    array('route' => 'business_report_condition_customer')
+                )->setAttribute('icon', 'icon-th-list');
+                $menu[$business]['Reports']['Condition']->addChild(
+                    'Condition Details',
+                    array('route' => 'business_report_condition_details')
+                )->setAttribute('icon', 'icon-th-list');
+
             }
             if($securityContext->isGranted('ROLE_BUSINESS_REPORT') and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')){
                 $menu[$business]['Reports']['Sales']->addChild( 'User Monthly Invoice', array( 'route' => 'business_report_sales_user_monthly' ) )->setAttribute( 'icon', 'icon-th-list' );
