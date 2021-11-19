@@ -29,11 +29,11 @@ class PosRepository extends EntityRepository
 
         $em = $this->_em;
         $find = $this->findOneBy(array('createdBy' => $user , 'process' => 'Created'));
+        $config = $user->getGlobalOption()->getInventoryConfig();
+        $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
         if(empty($find)){
-            $config = $user->getGlobalOption()->getInventoryConfig();
             $entity = new Pos();
             $entity ->setCreatedBy($user);
-            $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
             $entity ->setTransactionMethod($method);
             $entity ->setTerminal($user->getGlobalOption());
             if($config->getVatEnable() == 1){
@@ -43,8 +43,18 @@ class PosRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
             return $entity;
+        }elseif(empty($find->getTransactionMethod())){
+            $find->setTransactionMethod($method);
+            if($config->getVatEnable() == 1){
+                $vatPercentage = $config->getVatPercentage();
+                $find->setVatPercent($vatPercentage);
+            }
+            $em->persist($find);
+            $em->flush();
+            return $find;
         }
         return $find;
+
     }
 
 

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -747,7 +748,7 @@ class Sales
 
 
     /**
-     * @return mixed
+     * @return AccountSales
      */
     public function getAccountSales()
     {

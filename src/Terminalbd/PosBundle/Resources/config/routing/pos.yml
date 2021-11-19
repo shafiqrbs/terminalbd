@@ -9,6 +9,13 @@ pos_create:
     options:
         expose: true
 
+pos_update_method:
+    path:     /update-method
+    defaults: { _controller: "PosBundle:Pos:updateTransactionMethod" }
+    methods:  [GET]
+    options:
+        expose: true
+
 pos_update:
     path:     /update
     defaults: { _controller: "PosBundle:Pos:update" }

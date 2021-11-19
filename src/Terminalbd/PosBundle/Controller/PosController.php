@@ -464,6 +464,19 @@ class PosController extends Controller
         return new Response(json_encode($array));
     }
 
+    public function updateTransactionMethodAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $id = $_REQUEST['method'];
+        $method = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('name'=>$id));
+        /* @var $entity Pos */
+        $entity = $this->getDoctrine()->getRepository("PosBundle:Pos")->insert($this->getUser());
+        $entity->setTransactionMethod($method);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
+    }
+
     public function updateAction(Request $request)
     {
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -472,6 +485,8 @@ class PosController extends Controller
         $cart = new Cart($request->getSession());
         /* @var $entity Pos */
         $entity = $this->getDoctrine()->getRepository("PosBundle:Pos")->insert($this->getUser());
+        $form = $this->createTemporaryForm($entity);
+        $form->handleRequest($request);
         $form = $data['pos'];
         $discountCal = (float)$form['discountCalculation'];
         $discountType = $form['discountType'];
@@ -482,6 +497,8 @@ class PosController extends Controller
         $entity->setDeliveryCharge($deliveryCharge);
         $entity->setPayment($payment);
         $entity->setReceive($payment);
+        $em->persist($entity);
+        $em->flush();
         $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
         $array = $this->returnCartSummaryAjaxData($cart);
         return new Response(json_encode($array));

@@ -1279,7 +1279,8 @@ class SalesOnlineController extends Controller
     public function invoiceGroupApprovedAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $data = ['startDate' => '2021-11-12','endateDate' => '2021-11-12'];
+        $data=$_REQUEST;
+      //  $data = ['startDate' => '2021-11-12','endateDate' => '2021-11-12'];
         $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='pos', $data);
         $pagination = $entities->getResult();
         /* @var $entity Sales */

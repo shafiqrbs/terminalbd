@@ -767,7 +767,8 @@ class AccountSalesRepository extends EntityRepository
 
 	    $em = $this->_em;
         $purchasePrice = $em->getRepository('InventoryBundle:SalesItem')->getInvoicePurchasePrice($entity->getId());
-        if($entity->getAccountSales()){
+        $exist = $this->findOneBy(array('globalOption'=>$entity->getInventoryConfig()->getGlobalOption(),'sales'=>$entity));
+        if(empty($exist)){
             $accountSales = new AccountSales();
             $accountSales->setAccountBank( $entity->getAccountBank() );
             $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );

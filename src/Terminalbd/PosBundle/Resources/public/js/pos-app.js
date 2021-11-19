@@ -11,11 +11,9 @@ function financial(val) {
     return Number.parseFloat(val).toFixed(2);
 }
 
-/*
 $('.invoice-change').click(function() {
     $(this).attr('value', '');
 });
-*/
 
 $.ajax({
     url: Routing.generate('pos_stock_item'),
@@ -270,7 +268,7 @@ $( "#stockItem" ).submit(function( event ) {
     event.preventDefault();
 });
 
-
+/*
 function afterSelect2Submit(){
 
     $('.select2StockItem').prepend('<option selected></option>').select2({
@@ -311,7 +309,7 @@ function afterSelect2Submit(){
     });
 
 }
-
+*/
 
 $(document).on('click', '.addToCart', function() {
 
@@ -499,9 +497,15 @@ $(document).on('click', '.method-process', function() {
         $('.bankHide').hide(500);
         $('.mobileBankHide').hide(500);
     }
-    $.get(Routing.generate('pos_update_method',{'method':method}),
-        function( response ) {
-         console.log(response);
+    $.ajax({
+        url         : Routing.generate('restaurant_tableinvoice_update'),
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        success     : function(response){
+
+        }
     });
 });
 
@@ -575,7 +579,7 @@ $(document).on("click", ".initialParticularDelete , .particularDelete", function
 $(document).on('click', '.invoice-input', function(e) {
 
     $.ajax({
-        url         : Routing.generate('pos_update'),
+        url         : Routing.generate('inventory_pos_update'),
         type        : 'POST',
         data        : new FormData($('form#invoiceForm')[0]),
         processData : false,
@@ -596,7 +600,7 @@ $(document).on('change', '.invoice-change', function(e) {
         processData : false,
         contentType : false,
         success     : function(response){
-           // setTimeout(jsonResult(response),100);
+            setTimeout(jsonResult(response),100);
         }
     });
     e.preventDefault();

@@ -775,6 +775,7 @@ class StockItemRepository extends EntityRepository
                     $entity->setInventoryConfig($sales->getInventoryConfig());
                     $entity->setSalesItem($row);
                     $entity->setPurchaseItem($row->getPurchaseItem());
+                    $entity->setPrice($row->getSalesPrice());
                     $entity->setItem($row->getItem());
                     $quantity = '-' . $row->getQuantity();
                     $entity->setQuantity($quantity);
