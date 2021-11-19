@@ -425,6 +425,21 @@ class InvoiceController extends Controller
         return new Response(json_encode(array('success' => 'success')));
     }
 
+    public function customerMobileUpdateAction()
+    {
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getDoctrine()->getRepository("BusinessBundle:BusinessInvoice")->find($data['invoice']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $option = $this->getUser()->getGlobalOption();
+        $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$option,'mobile'=>$data['customer']));
+        $entity->setCustomer($customer);
+        $em->flush();
+        return new Response(json_encode(array('success' => 'success')));
+    }
+
     public function particularSearchAction(BusinessParticular $particular)
     {
         $returnQty = $this->getDoctrine()->getRepository('BusinessBundle:BusinessDistributionReturnItem')->returnRemainingStockItem($particular->getBusinessConfig()->getId(),$particular->getId());

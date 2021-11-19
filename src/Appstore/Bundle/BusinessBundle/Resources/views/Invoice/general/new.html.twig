@@ -210,8 +210,9 @@
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Search customer name/mobile">
-                                            <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
+                                            <input type="hidden" name="customerId" id="customerId" value="{% if entity.customer %}{{ entity.customer.id }}{% endif %}">
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer customer2Invoice inputs" value="{% if entity.customer %}{{ entity.customer.mobile }}-{{ entity.customer.name }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                            <a href="javascript:" style="margin-top: 2px" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                         </div>
                                     </div>
                                     <div class="row-fluid customer" id="">
@@ -284,7 +285,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Previous Due</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" ></span></label>
+                                                <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Previous Due</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" >{{ balance|number_format(2) }}</span></label>
                                             </div>
                                         </div>
                                         <!--/span-->
@@ -449,5 +450,5 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('#particular').select2('open');
+   // $('#particular').select2('open');
 {% endblock %}

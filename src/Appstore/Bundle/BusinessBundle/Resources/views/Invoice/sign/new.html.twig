@@ -266,7 +266,7 @@
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12 input-append-border">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer inputs" value="{% if entity.customer.name != 'Default' %}{{ entity.customer.mobile }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer customer2Invoice inputs" value="{% if entity.customer %}{{ entity.customer.mobile }}-{{ entity.customer.name }}{% endif %}"  autocomplete="off" placeholder="Search customer name/mobile">
                                             <a href="javascript:" class="pull-right btn green addCustomer inputs"><i class="icon-user"></i></a>
                                         </div>
                                     </div>
@@ -319,7 +319,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Outstanding TK.</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" ></span></label>
+                                                <label class="control-label" style="background: #26a69a" for="firstName"><span class="label" style="color:#fff">Outstanding TK.</span> <span class="pull-right sales-right" id="outstanding" style="text-align:left;width:110px;color:#fff" >{{ balance|number_format(2) }}</span></label>
                                             </div>
                                         </div>
                                         <!--/span-->

@@ -24,6 +24,12 @@ business_invoice_customer_update:
     options:
             expose: true
 
+business_invoice_customermobile_update:
+    path:     /invoice-customer-mobile-update
+    defaults: { _controller: "BusinessBundle:Invoice:customerMobileUpdate" }
+    options:
+            expose: true
+
 business_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "BusinessBundle:Invoice:particularSearch" }
