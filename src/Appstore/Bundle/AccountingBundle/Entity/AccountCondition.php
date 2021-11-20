@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\InvoiceModule;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * accountCondition
@@ -30,6 +31,7 @@ use Setting\Bundle\ToolBundle\Entity\InvoiceModule;
  *
  * @ORM\Table(name="account_condition")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountConditionRepository")
+ * @UniqueEntity(fields={"mobile","globalOption"}, message="Mobile no already existing,Please try again.")
  */
 class AccountCondition
 {

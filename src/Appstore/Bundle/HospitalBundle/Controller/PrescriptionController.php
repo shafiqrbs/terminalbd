@@ -287,18 +287,22 @@ class PrescriptionController extends Controller
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'id' => $id));
         if($invoice) {
             /* @var $invoice Invoice */
-            $entity = new DpsInvoice();
-            $entity->setDpsConfig($config);
-            $entity->setCustomer($invoice->getCustomer());
-            $entity->setHmsAssignDoctor($invoice->getAssignDoctor());
-            $entity->setPayment($invoice->getAssignDoctor()->getPrice());
-            $entity->setSubTotal($invoice->getAssignDoctor()->getPrice());
-            $entity->setTotal($invoice->getAssignDoctor()->getPrice());
-            $entity->setPayment($invoice->getAssignDoctor()->getPrice());
-            $entity->setCreatedBy($this->getUser());
-            $em->persist($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('dps_prescription_edit', array('id' => $entity->getId())));
+            $exist = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsInvoice')->findOneBy(array('dpsConfig'=>$config,'customer'=>$invoice->getCustomer(),'process'=>'In-progress'));
+            if(empty($exist)){
+                $entity = new DpsInvoice();
+                $entity->setDpsConfig($config);
+                $entity->setCustomer($invoice->getCustomer());
+                $entity->setHmsAssignDoctor($invoice->getAssignDoctor());
+                $entity->setPayment($invoice->getAssignDoctor()->getPrice());
+                $entity->setSubTotal($invoice->getAssignDoctor()->getPrice());
+                $entity->setTotal($invoice->getAssignDoctor()->getPrice());
+                $entity->setPayment($invoice->getAssignDoctor()->getPrice());
+                $entity->setCreatedBy($this->getUser());
+                $em->persist($entity);
+                $em->flush();
+                return $this->redirect($this->generateUrl('dps_prescription_edit', array('id' => $entity->getId())));
+            }
+            return $this->redirect($this->generateUrl('dps_prescription_edit', array('id' => $exist->getId())));
         }
         return $this->redirect($this->generateUrl('hms_prescription'));
     }

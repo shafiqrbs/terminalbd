@@ -716,11 +716,11 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('user', $user);
         }
         if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.created >= :startDate");
+            $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
         }
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
+            $qb->andWhere("e.updated <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
         if (!empty($data['startUpdated']) ) {
@@ -736,6 +736,236 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('process', $process);
         }
         $qb->orderBy('e.created','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportAdmissionService(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
+        $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $surgeryDepartment = isset($data['surgeryDepartment'])? $data['surgeryDepartment'] :'';
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('ip.particular','p');
+        $qb->join('p.service','s');
+        $qb->leftJoin('p.serviceGroup','sg');
+        $qb->leftJoin('p.surgeryDepartment','sd');
+        $qb->select('p.id as id','p.name as name');
+        $qb->addSelect('s.name as service');
+        $qb->addSelect('sg.name as serviceGroup');
+        $qb->addSelect('SUM(ip.quantity) as quantity','SUM(ip.quantity * ip.salesPrice) as price');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Release','Released','Dead','Death','Admitted'));
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($surgeryDepartment)){
+            $qb->andWhere("sd.id = :department");
+            $qb->setParameter('department', $surgeryDepartment);
+        }
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+        $qb->groupBy('p.id');
+        $qb->orderBy('p.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportAdmissionDepartment(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
+        $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('ip.particular','p');
+        $qb->join('p.surgeryDepartment','sd');
+        $qb->select('sd.id as id','sd.name as name');
+        $qb->addSelect('SUM(ip.quantity) as quantity','SUM(ip.quantity * ip.salesPrice) as price');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Release','Released','Dead','Death','Admitted'));
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+        $qb->groupBy('sd.id');
+        $qb->orderBy('sd.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportDiseases(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.diseasesProfile','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->addSelect('COUNT(e.id) as quantity');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode in (:modes)')->setParameter('modes', array('admission','visit')) ;
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportDiseasesDetails(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.diseasesProfile','d');
+        $qb->join('e.customer','c');
+        $qb->join('e.assignDoctor','ad');
+        $qb->select('d.name as diseases');
+        $qb->addSelect('ad.name as assignDoctor');
+        $qb->addSelect('e.invoice as invoice','e.created as created','e.updated as updated','e.process as process','e.invoiceMode as mode');
+        $qb->addSelect('c.id as customerId','c.name as customer','c.mobile as mobile');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode in (:modes)')->setParameter('modes', array('admission','visit')) ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Release','Released','Dead','Death','Admitted'));
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+    public function reportAdmissionDepartmentDetails(User $user,$mode, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('e.customer','c');
+        $qb->join('e.assignDoctor','ad');
+        $qb->join('ip.particular','p');
+        $qb->join('p.service','s');
+        $qb->leftJoin('p.surgeryDepartment','sd');
+        $qb->select('s.name as service');
+        $qb->addSelect('sd.name as surgeryDepartment');
+        $qb->addSelect('ad.name as assignDoctor');
+        $qb->addSelect('p.name as particular');
+        $qb->addSelect('e.invoice as invoice','e.created as created','e.updated as updated','e.process as process');
+        $qb->addSelect('c.id as customerId','c.name as customer','c.mobile as mobile');
+        $qb->addSelect('ip.quantity as quantity','ip.salesPrice as price');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Release','Released','Dead','Death','Admitted'));
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $serviceGroup = isset($data['serviceGroup'])? $data['serviceGroup'] :'';
+        $surgeryDepartment = isset($data['surgeryDepartment'])? $data['surgeryDepartment'] :'';
+        $particular = isset($data['particular'])? $data['particular'] :'';
+        $user = isset($data['user'])? $data['user'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        if(!empty($assignDoctor)){
+            $qb->andWhere("ad.id = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($serviceGroup)){
+            $qb->andWhere("s.id = :service");
+            $qb->setParameter('service', $serviceGroup);
+        }
+        if(!empty($surgeryDepartment)){
+            $qb->andWhere("sd.id = :department");
+            $qb->setParameter('department', $surgeryDepartment);
+        }
+        if(!empty($particular)){
+            $qb->andWhere("p.id = :particular");
+            $qb->setParameter('particular', $particular);
+        }
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+        $qb->orderBy('e.updated','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }
@@ -788,6 +1018,50 @@ class InvoiceRepository extends EntityRepository
         $qb->orderBy('d.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
+    }
+    public function getServiceGroups($hospital)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','e');
+        $qb->join('e.particular','p');
+        $qb->join('p.service','s');
+        $qb->select('s.id as id','s.name as name');
+        $qb->where('p.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->groupBy('s.id');
+        $qb->orderBy('s.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+    public function getServices($hospital)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','e');
+        $qb->join('e.particular','p');
+        $qb->join('p.serviceGroup','s');
+        $qb->select('s.id as id','s.name as name');
+        $qb->where('p.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->groupBy('s.id');
+        $qb->orderBy('s.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+    public function getParticulars($hospital)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','e');
+        $qb->join('e.particular','p');
+        $qb->join('p.service','s');
+        $qb->select('p.id as id','p.name as name');
+        $qb->addSelect('s.id as sid');
+        $qb->where('p.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->groupBy('p.id');
+        $qb->orderBy('p.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $particularGroups = array();
+        foreach ($result as $row){
+            $particularGroups[$row['sid']][] = $row;
+        }
+        return  $particularGroups;
     }
 
 

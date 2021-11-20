@@ -368,4 +368,166 @@ class ReportController extends Controller
         ));
     }
 
+    /**
+     * @Route("/hospital-admission-invoice-service", methods={"GET", "POST"}, name="hms_report_admission_service")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsAdmissionServiceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $serviceGroups = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getServiceGroups($hospital);
+        $surgeryDepartment = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=> $hospital,'service'=>10),array('name'=>"ASC"));
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportAdmissionService($user , $mode = 'admission' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:service.html.twig', array(
+            'entities' => $entities,
+            'serviceGroups' => $serviceGroups,
+            'surgeryDepartment' => $surgeryDepartment,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-admission-surgery-department", methods={"GET", "POST"}, name="hms_report_admission_surgery_department")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsAdmissionSurgeryDepartmentAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $serviceGroups = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getServiceGroups($hospital);
+        $services = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getServices($hospital);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportAdmissionDepartment($user , $mode = 'admission' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:surgery-department.html.twig', array(
+            'entities' => $entities,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-admission-surgery-department-details", methods={"GET", "POST"}, name="hms_report_admission_surgery_department_details")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsAdmissionSurgeryDepartmentDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $surgeryDepartment = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=> $hospital,'service'=>10),array('name'=>"ASC"));
+        $serviceGroups = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getServiceGroups($hospital);
+        $particulars = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getParticulars($hospital);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportAdmissionDepartmentDetails($user , $mode = 'admission' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:surgery-department-details.html.twig', array(
+            'entities' => $entities,
+            'particulars' => $particulars,
+            'serviceGroups' => $serviceGroups,
+            'surgeryDepartment' => $surgeryDepartment,
+            'employees' => $employees,
+            'assignDoctors' => $assignDoctors,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-diseases", methods={"GET", "POST"}, name="hms_report_diseases")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsDiseasesAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportDiseases($user , $mode = 'admission' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:diseases.html.twig', array(
+            'entities' => $entities,
+            'assignDoctors' => $assignDoctors,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-diseases-details", methods={"GET", "POST"}, name="hms_report_diseases_details")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsDiseasesDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $diseaseses = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>11),array('name'=>'ASC'));
+        $entities = $em->getRepository('HospitalBundle:Invoice')->reportDiseasesDetails($user , $mode = 'admission' , $data);
+        return $this->render('ReportBundle:Hospital/Sales:diseases-details.html.twig', array(
+            'entities' => $entities,
+            'assignDoctors' => $assignDoctors,
+            'diseaseses' => $diseaseses,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
 }

@@ -5,15 +5,6 @@
             <form action="" method="get">
                 <div class="row">
                     <div class="col-md-3 margin-top">
-                        <label>Department</label>
-                        <select name="department" id="department" class="search-input select2 span12 m-wrap">
-                            <option value="" >--Select Department--</option>
-                            {% for department in departments %}
-                                <option {% if searchForm.department is defined and searchForm.department == department.id %} selected="selected" {% endif %} value="{{ department.id }}" >{{ department.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3 margin-top">
                         <label>Assign Doctor</label>
                         <select name="doctor" id="doctor" class="search-input select2 span12 m-wrap">
                             <option value="" >--Assign Doctor--</option>
@@ -23,20 +14,35 @@
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Anesthesia Doctor</label>
-                        <select class="search-input span12 m-wrap" id="anesthesiaDoctor" name="anesthesiaDoctor">
-                            <option value="">--Select Anesthesia Doctor--</option>
-                            {% for employee in anesthesiaDoctor %}
-                                <option {% if searchForm.anesthesiaDoctor is defined and searchForm.anesthesiaDoctor == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                        <label>Services Group</label>
+                        <select name="serviceGroup" id="serviceGroup" class="search-input select2 span12 m-wrap">
+                            <option value="" >--Select Service Group--</option>
+                            {% for item in serviceGroups %}
+                                <option {% if searchForm.serviceGroup is defined and searchForm.serviceGroup == item.id %} selected="selected" {% endif %} value="{{ item.id }}" >{{ item.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Assistant Doctor</label>
-                        <select class="search-input span12 m-wrap" id="assistantDoctor" name="assistantDoctor">
-                            <option value="">--Select Assistant Doctor--</option>
-                            {% for employee in employees %}
-                                <option {% if searchForm.assistantDoctor is defined and searchForm.assistantDoctor == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                        <label>Surgery Department</label>
+                        <select name="surgeryDepartment" id="surgeryDepartment" class="search-input select2 span12 m-wrap">
+                            <option value="" >--Select Surgery Department--</option>
+                            {% for item in surgeryDepartment %}
+                                <option {% if searchForm.surgeryDepartment is defined and searchForm.surgeryDepartment == item.id %} selected="selected" {% endif %} value="{{ item.id }}" >{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 margin-top">
+                        <label>Particular</label>
+                        <select name="particular" id="particular" class="search-input select2 span12 m-wrap">
+                            <option value="" >--Select Particular--</option>
+                            {% for item in serviceGroups %}
+                                {% if particulars is defined and particulars[item['id']] is not empty %}
+                                <optgroup label="{{ item.name }}">
+                                    {% for part in particulars[item['id']] %}
+                                        <option {% if searchForm.particular is defined and searchForm.particular == part.id %} selected="selected" {% endif %} value="{{ part.id }}" >{{ part.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -62,11 +68,11 @@
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Created Start Date</label>
+                        <label>Start Date</label>
                         <input type="date" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
                     <div class="col-md-2 margin-top">
-                        <label>Created End Date</label>
+                        <label>End Date</label>
                         <input type="date" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
                     <div class="col-md-1 margin-top">
@@ -101,61 +107,54 @@
                         <col>
                         <col>
                         <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
                     </colgroup>
                     <tbody><tr>
                         <th>SI.</th>
                         <th>Created</th>
                         <th>Updated</th>
                         <th>Invoice</th>
-                        <th>Name</th>
+                        <th>Patient</th>
                         <th>Mobile</th>
-                        <th>Assign</th>
-                        <th>Anesthesia</th>
-                        <th>Assistant</th>
-                        <th class="text-right">SubTotal</th>
-                        <th class="text-right">Discount</th>
-                        <th class="text-right">Total</th>
-                        <th class="text-right">Receive</th>
-                        <th class="text-right">Balance</th>
+                        <th>Assign Doctor</th>
+                        <th>Service Group</th>
+                        <th>Surgery Department</th>
+                        <th>Particular</th>
+                        <th>Process</th>
+                        <th>Quantity</th>
+                        <th class="text-right">Amount</th>
                     </tr>
+                    {% set subTotal =0 %}
                     <tbody>
-                    {% set subTotal = 0 %}
-                    {% set discount = 0 %}
-                    {% set balance = 0 %}
-                    {% set sales = 0 %}
-                    {% set receive = 0 %}
-                    {% for entity in entities %}
-                        {% set subTotal = subTotal + entity.subTotal %}
-                        {% set discount = discount + entity.discount %}
-                        {% set sales = sales + entity.total %}
-                        {% set receive = receive + entity.receive %}
-                        {% set balance = (sales + entity.total) - (receive + entity.receive) %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                            <td class="numeric" >{{ entity.invoice }}</td>
-                            <td class="numeric" >{{ entity.name }}</td>
-                            <td class="numeric" >{{ entity.mobile }}</td>
-                            <td class="numeric" >{{ entity.assignDoctor }}</td>
-                            <td class="numeric" >{{ entity.anesthesiaDoctor }}</td>
-                            <td class="numeric" >{{ entity.assistantDoctor }}</td>
-                            <td class="text-right" >{{ entity.subTotal|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.discount|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.total|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.receive|number_format(2) }}</td>
-                            <td class="text-right" >{{ (entity.total-entity.receive)|number_format(2) }}</td>
-                        </tr
-                    {% endfor %}
+                        {% for entity in entities %}
+                            {% set subTotal = subTotal+entity.price %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                <td class="numeric" >{{ entity.invoice }}</td>
+                                <td class="numeric" >{{ entity.customer }}</td>
+                                <td class="numeric" >{{ entity.mobile }}</td>
+                                <td class="numeric" >{{ entity.assignDoctor }}</td>
+                                <td class="numeric" >{{ entity.service }}</td>
+                                <td class="numeric" >{{ entity.surgeryDepartment }}</td>
+                                <td class="numeric" >{{ entity.particular }}</td>
+                                <td class="numeric" >{{ entity.process }}</td>
+                                <td class="numeric" >{{ entity.quantity }}</td>
+                                <th class="text-right" >{{ entity.price|number_format(2) }}</th>
+                            </tr
+                        {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="9">Grand Balance</th>
+                        <th colspan="12" class="text-right">Grand Total</th>
                         <th class="text-right">{{ subTotal|number_format(2) }}</th>
-                        <th class="text-right">{{ discount|number_format(2) }}</th>
-                        <th class="text-right">{{ sales|number_format(2) }}</th>
-                        <th class="text-right">{{ receive|number_format(2) }}</th>
-                        <th class="text-right">{{ balance|number_format(2) }}</th>
                     </tr>
                     </tfoot>
                 </table>

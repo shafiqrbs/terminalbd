@@ -83,6 +83,11 @@ class AccountHead
      **/
     private  $accountCondition;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountLoanUser")
+     **/
+    private  $accountLoanUser;
+
 
      /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountHead" )
@@ -700,6 +705,22 @@ class AccountHead
     public function setAccountCondition($accountCondition)
     {
         $this->accountCondition = $accountCondition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountLoanUser()
+    {
+        return $this->accountLoanUser;
+    }
+
+    /**
+     * @param mixed $accountLoanUser
+     */
+    public function setAccountLoanUser($accountLoanUser)
+    {
+        $this->accountLoanUser = $accountLoanUser;
     }
 
 

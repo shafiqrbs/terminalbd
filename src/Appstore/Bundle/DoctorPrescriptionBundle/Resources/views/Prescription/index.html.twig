@@ -127,6 +127,7 @@
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Patient No</th>
+                                    <th class="numeric" >Assign Doctor</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Doctor</th>
@@ -140,6 +141,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.hmsAssignDoctor is defined and entity.hmsAssignDoctor is not empty %}{{ entity.hmsAssignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" > {% if entity.hmsAssignDoctor %}{{ entity.hmsAssignDoctor.name }}{% endif %}</td>

@@ -54,11 +54,8 @@ class PrescriptionType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Choose process---',
                 'choices' => array(
-                    'New' => 'New',
                     'In-progress' => 'In-progress',
-                    'Done' => 'Done',
                     'Closed' => 'Closed',
-                    'Canceled' => 'Canceled',
                 ),
             ))
             ->add('diseasesProfile', 'entity', array(
