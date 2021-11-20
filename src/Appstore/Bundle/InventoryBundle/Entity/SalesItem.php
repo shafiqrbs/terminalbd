@@ -94,11 +94,10 @@ class SalesItem
     private $expiredDate;
 
 
-
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity", type="float")
+     * @ORM\Column(name="quantity", type="float",nullable=true)
      */
     private $quantity;
 
@@ -106,7 +105,7 @@ class SalesItem
     /**
      * @var float
      *
-     * @ORM\Column(name="salesPrice", type="float")
+     * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
     private $salesPrice;
 

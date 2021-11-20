@@ -655,6 +655,10 @@ ul.ui-autocomplete li:hover , ul.ui-autocomplete li a:hover{
     cursor: default;
 }
 
+.editable-input input[type="text"].m-wrap{
+    width: 100%!important;
+}
+
 /*.ui-autocomplete-input{
     background: white url("../img/loader-red.gif") right center no-repeat;
 }*/

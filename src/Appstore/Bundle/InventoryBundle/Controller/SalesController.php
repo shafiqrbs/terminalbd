@@ -145,45 +145,48 @@ class SalesController extends Controller
 
     public function searchAction(Request $request)
     {
+
         $em = $this->getDoctrine()->getManager();
         $sales = $request->request->get('sales');
         $barcode = $request->request->get('barcode');
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
-        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
-        $itemStock = $purchaseItem->getItemStock();
+        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
+        if($purchaseItem) {
+            $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
+            $itemStock = $purchaseItem->getItemStock();
 
-        $branch = $this->getUser()->getProfile()->getBranches();
-        $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
-        $msg ='';
+            $branch = $this->getUser()->getProfile()->getBranches();
+            $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
+            $msg ='';
 
-        /* Device Detection code desktop or mobile */
+            /* Device Detection code desktop or mobile */
 
-        $detect = new MobileDetect();
-        $device = '';
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $device = 'mobile' ;
+            $detect = new MobileDetect();
+            $device = '';
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $device = 'mobile' ;
+            }
+            if (!empty($branch) and $branchStockItem == 'invalid' ) {
+
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
+
+            }elseif(!empty($purchaseItem) and $itemStock > 0 and $purchaseItem->getSalesPrice() > 0 and  $itemStock >= $checkQuantity) {
+
+                $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
+
+            } else {
+
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+            }
+            $data = $this->returnResultData($sales,$msg);
+            return new Response(json_encode($data));
         }
-        if (!empty($branch) and $branchStockItem == 'invalid' ) {
 
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
-
-        }elseif(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
-
-            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
-        } else {
-
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-        }
-        $data = $this->returnResultData($sales,$msg);
-        return new Response(json_encode($data));
-        exit;
     }
 
     public function returnResultData(Sales $entity,$msg=''){

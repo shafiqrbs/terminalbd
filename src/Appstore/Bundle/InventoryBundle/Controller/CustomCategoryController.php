@@ -65,7 +65,7 @@ class CustomCategoryController extends Controller
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('inventory_category_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('inventory_category', array('id' => $entity->getId())));
         }
 
         return $this->render('InventoryBundle:CustomCategory:new.html.twig', array(
@@ -90,7 +90,7 @@ class CustomCategoryController extends Controller
             'action' => $this->generateUrl('inventory_category_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -167,7 +167,6 @@ class CustomCategoryController extends Controller
      */
     private function createEditForm(Category $entity)
     {
-
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $form = $this->createForm(new CustomCategoryType($inventory,$em), $entity, array(
@@ -175,10 +174,9 @@ class CustomCategoryController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'novalidate' => 'novalidate',
+                'class' => 'form-horizontal',
             )
         ));
-
-
         return $form;
     }
     /**
