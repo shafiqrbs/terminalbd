@@ -71,7 +71,7 @@ class ItemType extends AbstractType
             ))*/
             ->add('name', 'text', array(
                 'required'    => true,
-                'attr'=>array('class'=>'span12 select2','list'=>'masterItem'),
+                'attr'=>array('class'=>'span12','list'=>'masterItem'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 )

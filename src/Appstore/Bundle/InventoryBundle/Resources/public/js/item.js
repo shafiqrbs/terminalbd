@@ -43,6 +43,9 @@ var InventoryItemListPage = function () {
 };
 
 var InventoryItemEditPage = function (item) {
+
+
+
     /**
      * Created by rbs on 2/12/16.
      */

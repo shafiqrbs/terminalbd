@@ -165,7 +165,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
-        $entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:Item')->reportFindWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Report:stock.html.twig', array(
             'entities' => $pagination,

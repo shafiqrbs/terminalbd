@@ -29,6 +29,64 @@ use Doctrine\ORM\EntityRepository;
 class ItemRepository extends EntityRepository
 {
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        $sort = isset($data['sort'])? $data['sort'] :'item.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+        $item = isset($data['item'])? $data['item'] :'';
+        $color = isset($data['color'])? $data['color'] :'';
+        $size = isset($data['size'])? $data['size'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+        $sku = isset($data['sku'])? $data['sku'] :'';
+        $barcode = isset($data['barcode'])? $data['barcode'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $unit = isset($data['unit'])? $data['unit'] :'';
+
+        if (!empty($sku)) {
+            $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
+        }
+        if (!empty($barcode)) {
+            $qb->andWhere($qb->expr()->like("item.barcode", "'%$barcode%'"  ));
+        }
+        if (!empty($item)) {
+            $qb->andWhere($qb->expr()->like("m.name", "'%$item%'"  ));
+        }
+        if (!empty($color)) {
+            $qb->join('item.color', 'cl');
+            $qb->andWhere($qb->expr()->like("cl.name", "'%$color%'"  ));
+        }
+        if (!empty($size)) {
+            $qb->join('item.size', 's');
+            $qb->andWhere($qb->expr()->like("s.name", "'%$size%'"  ));
+        }
+        if (!empty($vendor)) {
+            $qb->join('item.vendor', 'v');
+            $qb->andWhere($qb->expr()->like("v.name", "'%$vendor%'"  ));
+        }
+        if (!empty($brand)) {
+            $qb->join('item.brand', 'b');
+            $qb->andWhere($qb->expr()->like("b.name", "'%$brand%'"  ));
+        }
+        if (!empty($category)) {
+            $qb->leftJoin('m.category', 'c');
+            $qb->andWhere($qb->expr()->like("c.name", "'%$category%'"  ));
+        }
+        if (!empty($unit)) {
+            $qb->leftJoin('m.productUnit', 'u');
+            $qb->andWhere("u.name = :unit");
+            $qb->setParameter('unit', $unit);
+        }
+        $qb->orderBy("{$sort}",$direction);
+        $qb->getQuery();
+        return  $qb;
+
+    }
     public  function getSumPurchaseItem($inventory , $excelImporter = ''){
 
         $qb = $this->createQueryBuilder('item');
@@ -261,73 +319,34 @@ class ItemRepository extends EntityRepository
 
         $sort = isset($data['sort'])? $data['sort'] :'item.name';
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
-        $item = isset($data['item'])? $data['item'] :'';
-        $color = isset($data['color'])? $data['color'] :'';
-        $size = isset($data['size'])? $data['size'] :'';
-        $vendor = isset($data['vendor'])? $data['vendor'] :'';
-        $brand = isset($data['brand'])? $data['brand'] :'';
-        $sku = isset($data['sku'])? $data['sku'] :'';
-        $barcode = isset($data['barcode'])? $data['barcode'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
-        $unit = isset($data['unit'])? $data['unit'] :'';
-
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.masterItem', 'm');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-
-        if (!empty($sku)) {
-            $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
-        }
-        if (!empty($barcode)) {
-            $qb->andWhere($qb->expr()->like("item.barcode", "'%$barcode%'"  ));
-        }
-        if (!empty($item)) {
-            $qb->andWhere("m.name = :name");
-            $qb->setParameter('name', $item);
-        }
-        if (!empty($color)) {
-
-            $qb->join('item.color', 'c');
-            $qb->andWhere("c.name = :color");
-            $qb->setParameter('color', $color);
-        }
-        if (!empty($size)) {
-
-            $qb->join('item.size', 's');
-            $qb->andWhere("s.name = :size");
-            $qb->setParameter('size', $size);
-        }
-        if (!empty($vendor)) {
-
-            $qb->join('item.vendor', 'v');
-            $qb->andWhere("v.companyName = :vendor");
-            $qb->setParameter('vendor', $vendor);
-        }
-
-        if (!empty($brand)) {
-
-            $qb->join('item.brand', 'b');
-            $qb->andWhere("b.name = :brand");
-            $qb->setParameter('brand', $brand);
-        }
-         if (!empty($category)) {
-
-            $qb->leftJoin('m.category', 'c');
-            $qb->andWhere("c.name = :category");
-            $qb->setParameter('category', $category);
-        }
-
-        if (!empty($unit)) {
-            $qb->leftJoin('m.productUnit', 'u');
-            $qb->andWhere("u.name = :unit");
-            $qb->setParameter('unit', $unit);
-        }
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
         $qb->getQuery();
         return  $qb;
 
     }
+    public function reportFindWithSearch($inventory,$data)
+    {
+
+        $sort = isset($data['sort'])? $data['sort'] :'item.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+        $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'm');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
+        $qb->andWhere('item.remainingQnt > 0');
+        $qb->orderBy('item.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
+
 
     public function findWithShortListSearch($inventory,$data)
     {

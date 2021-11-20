@@ -70,6 +70,13 @@ pos_item_barcode_search:
     options:
         expose: true
 
+pos_item_barcode_info:
+    path:     /add-barcode-item-info
+    defaults: { _controller: "PosBundle:Pos:searchBarcodeInfo" }
+    methods:  POST
+    options:
+        expose: true
+
 pos_item_create:
     path:     /create-item
     defaults: { _controller: "PosBundle:Pos:createItem" }

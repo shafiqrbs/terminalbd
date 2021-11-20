@@ -208,6 +208,90 @@ class PosController extends Controller
 
     }
 
+    public function searchBarcodeInfoAction(Request $request)
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $barcode = trim($request->request->get('barcode'));
+        $item = trim($request->request->get('item'));
+        $product = "";
+        if($item > 0){
+            $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($item);
+        }else{
+            $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config, 'barcode' => $barcode));
+        }
+        if($product){
+            /* @var $product Item */
+            return new Response(json_encode(array('status'=>'In-stock','quantity' => $product->getRemainingQnt(),'purchase'=>$product->getPurchaseAvgPrice(),'price'=>$product->getPrice())));
+        }else{
+            return new Response(json_encode(array('status'=>'empty','quantity' => '','purchase'=>'','price'=>'')));
+        }
+
+    }
+
+
+    public function createItemAction(Request $request)
+    {
+        $cart = new Cart($request->getSession());
+        $data = $request->request->all();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $item = $data['item'];
+        $quantity = $data['quantity'];
+        $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
+        if($product){
+            if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0) {
+                $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+                $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+                $data = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'unit' => $productUnit,
+                    'price' => $salesPrice,
+                    'quantity' => $quantity,
+                );
+                $cart->insert($data);
+            }elseif ($config->isEmptySales() == 1){
+                $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+                $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+                $data = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'unit' => $productUnit,
+                    'price' => $salesPrice,
+                    'quantity' => $quantity,
+                );
+                $cart->insert($data);
+            }
+            $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
+            $array = $this->returnCartSummaryAjaxData($cart);
+            return new Response(json_encode($array));
+        }
+        return new Response(json_encode(array('status'=>'in-valid')));
+    }
+
+    public function searchItemAction(Request $request)
+    {
+        $item = trim($_REQUEST['q']);
+        $user = $this->getUser();
+        /* @var $terminal GlobalOption */
+        $terminal = $user->getGlobalOption();
+        $mainApp = !empty($terminal->getMainApp()) ? $terminal->getMainApp()->getSlug() : "";
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
+            $config = $terminal->getInventoryConfig();
+            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoCompleteAllItem($item,$config);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
+            $config = $terminal->getRestaurantConfig();
+            $items = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->searchAutoComplete($item,$config);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') and $mainApp == 'miss') {
+            $config = $terminal->getMedicineConfig();
+            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$config);
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
+            $config = $terminal->getBusinessConfig();
+            $items = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->searchAutoComplete($item,$config);
+        }
+        return new JsonResponse($items);
+    }
+
+
     public function createAction(Request $request)
     {
 
@@ -324,54 +408,6 @@ class PosController extends Controller
 
     }
 
-
-    public function createItemAction(Request $request)
-    {
-        $cart = new Cart($request->getSession());
-        $data = $request->request->all();
-        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $item = $data['item'];
-        $quantity = $data['quantity'];
-        $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
-        if($product){
-            $salesPrice = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
-            $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit(): '';
-            $data = array(
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'unit' => $productUnit,
-                'price' => $salesPrice,
-                'quantity' => $quantity,
-            );
-            $cart->insert($data);
-        }
-        $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
-        $array = $this->returnCartSummaryAjaxData($cart);
-        return new Response(json_encode($array));
-    }
-
-    public function searchItemAction(Request $request)
-    {
-        $item = trim($_REQUEST['q']);
-        $user = $this->getUser();
-        /* @var $terminal GlobalOption */
-        $terminal = $user->getGlobalOption();
-        $mainApp = !empty($terminal->getMainApp()) ? $terminal->getMainApp()->getSlug() : "";
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') and $mainApp == 'inventory') {
-            $config = $terminal->getInventoryConfig();
-            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->searchAutoCompleteAllItem($item,$config);
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT' and $mainApp == 'restaurant')) {
-            $config = $terminal->getRestaurantConfig();
-            $items = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->searchAutoComplete($item,$config);
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_MEDICINE') and $mainApp == 'miss') {
-            $config = $terminal->getMedicineConfig();
-            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoComplete($item,$config);
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BUSINESS') and $mainApp == 'business') {
-            $config = $terminal->getBusinessConfig();
-            $items = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->searchAutoComplete($item,$config);
-        }
-        return new JsonResponse($items);
-    }
 
     public function productUpdateCartAction(Request $request,$product)
     {

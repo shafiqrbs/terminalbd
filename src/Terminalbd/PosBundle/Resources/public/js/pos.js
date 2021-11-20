@@ -206,7 +206,7 @@ $(document).on( "click", ".btn-number-cart", function(e){
         input.val(1);
     }
 });
-
+$('#barcode').focus();
 $(document).on('change', '#barcode', function() {
 
     var barcode = $('#barcode').val();
@@ -222,7 +222,34 @@ $(document).on('change', '#barcode', function() {
             $('#barcode').focus().val('');
             jsonResult(response);
         },
+    })
+    $.ajax({
+        url: Routing.generate('pos_item_barcode_info'),
+        type: 'POST',
+        data:'item=0&barcode='+barcode,
+        success: function(response){
+            obj = JSON.parse(response);
+            $('#current-stock').html(obj['quantity']);
+            $('#avg-price').html(obj['purchase']);
+            $('#sales-price').html(obj['price']);
+            $('#item-status').html(obj['status']);
+        },
+    })
+});
 
+$(document).on('change', '#item', function() {
+    var item = $(this).val();
+    $.ajax({
+        url: Routing.generate('pos_item_barcode_info'),
+        type: 'POST',
+        data:'item='+item+'&barcode=0',
+        success: function(response){
+            obj = JSON.parse(response);
+            $('#current-stock').html(obj['quantity']);
+            $('#avg-price').html(obj['purchase']);
+            $('#sales-price').html(obj['price']);
+            $('#item-status').html(obj['status']);
+        },
     })
 });
 
@@ -269,6 +296,7 @@ $( "#stockItem" ).submit(function( event ) {
     });
     event.preventDefault();
 });
+
 
 
 function afterSelect2Submit(){

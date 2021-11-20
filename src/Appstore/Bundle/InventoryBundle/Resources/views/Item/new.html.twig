@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+    {% extends '::base.html.twig' %}
 
 {% block body %}
     <div class="container-fluid">
@@ -266,9 +266,15 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('form#item').on('keyup', '#item_model', function() {
+    $("#item_model").on("keydown change", function(e) {
         var mrp = $(this).val();
         $('#item_barcode').val(mrp);
+    });
+    $("input").keydown(function(){
+        $("input").css("background-color", "#f5f5f5");
+    });
+    $("input").keyup(function(){
+        $("input").css("background-color", "#e6e6e6");
     });
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}
