@@ -2,7 +2,7 @@
     <table class="table-order">
         <caption>Holds Statement</caption>
         <thead>
-        <tr>
+        <tr class="blue">
             <th scope="col">S/N</th>
             <th scope="col">Invoice</th>
             <th scope="col">Date</th>
@@ -18,7 +18,7 @@
         <tbody>
         {% for dailySales in entities %}
             <tr id="remove-{{ dailySales.id }}">
-                <td data-label="S/N">{{ loop.index }}</td>
+                <td data-label="S/N"><span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+ Show]</span></span> </td>
                 <td data-label="Invoice">{{ dailySales.invoice }}</td>
                 <td data-label="Date">{{ dailySales.created|date('d-m-Y') }}</td>
                 <td data-label="Time">{{ dailySales.created|date('h:m A') }}</td>
@@ -31,8 +31,7 @@
                     <span class="btn-group">
                         <a href="javascript:" data-action="{{ path('pos_delete', { 'id': dailySales.id }) }}" data-id="{{ dailySales.id }}" class="btn red mini event" ><i class="icon-trash"></i></a>
                         {% if dailySales.posItems is defined and  dailySales.posItems is not empty  %}
-                            <a href="javascript:" data-action="{{ path('pos_hold_reorder', { 'id': dailySales.id }) }}" data-id="{{ dailySales.id }}" class="btn purple mini event" ><i class="icon-refresh"></i> Process</a>
-                            <span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[ + Show ]</span></span>
+                            <a href="javascript:" data-action="{{ path('pos_hold_reorder', { 'id': dailySales.id }) }}" data-id="{{ dailySales.id }}" class="btn purple mini event" ><i class="icon-refresh"></i></a>
                         {% endif %}
                     </span>
                 </td>
@@ -40,14 +39,14 @@
             <tr id="show-{{ dailySales.id }}" class="showing-overview">
                 <td colspan="10">
                     {% if dailySales.posItems is defined and  dailySales.posItems is not empty  %}
-                        <table class="table table-bordered">
-                            <thead class="flip-content ">
-                            <tr class="head-green">
-                                <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                <th class="numeric" >Item</th>
-                                <th class="numeric" >Qnt</th>
-                                <th class="numeric" >Price</th>
-                                <th class="numeric" >Sub-total</th>
+                        <table class="table table-bordered col-md-12">
+                            <thead>
+                            <tr class="green">
+                                <th scope="col">&nbsp;&nbsp;<i class="icon-reorder"></i></th>
+                                <th scope="col" class="numeric" >Item</th>
+                                <th scope="col" class="numeric" >Qnt</th>
+                                <th scope="col" class="numeric" >Price</th>
+                                <th scope="col" class="numeric" >Sub-total</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,3 +69,82 @@
         </tbody>
     </table>
 </div>
+<style>
+    .mini {
+        line-height: 13px!important;
+    }
+    .table {
+        margin: 0 0 40px 0;
+        width: 100%;
+        box-shadow: none;
+        display: table;
+    }
+    table {
+        text-align: left;
+        line-height: 40px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 2px solid #2980b9;
+        width: 500px;
+        margin: 50px auto;
+        border-radius: .25rem;
+    }
+
+    thead tr.blue:first-child {
+        background: #2980b9;
+        color: #fff;
+        border: none;
+    }
+
+    thead tr.green:first-child {
+        background: #27ae60;
+        color: #fff;
+        border: none;
+    }
+
+    th:first-child,
+    td:first-child {
+        padding: 0 15px 0 20px;
+    }
+
+    th {
+        font-weight: 500;
+    }
+
+    thead tr:last-child th {
+        border-bottom: 3px solid #ddd;
+    }
+
+    tbody tr:hover {
+        background-color: #f2f2f2;
+        cursor: default;
+    }
+
+    tbody tr:last-child td {
+        border: none;
+    }
+
+    tbody td {
+        border-bottom: 1px solid #ddd;
+    }
+
+    td:last-child {
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .button {
+        color: #aaa;
+        cursor: pointer;
+        vertical-align: middle;
+        margin-top: -4px;
+    }
+
+    .edit:hover {
+        color: #0a79df;
+    }
+
+    .delete:hover {
+        color: #dc2a2a;
+    }
+</style>

@@ -375,6 +375,13 @@ class InventoryConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="emptySales", type="boolean",  nullable=true)
+     */
+    private $emptySales = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="cartImage", type="boolean",  nullable=true)
      */
     private $cartImage = false;
@@ -1807,6 +1814,22 @@ class InventoryConfig
     public function setIsCategory($isCategory)
     {
         $this->isCategory = $isCategory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmptySales()
+    {
+        return $this->emptySales;
+    }
+
+    /**
+     * @param bool $emptySales
+     */
+    public function setEmptySales($emptySales)
+    {
+        $this->emptySales = $emptySales;
     }
 
 

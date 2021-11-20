@@ -177,20 +177,35 @@ class PosController extends Controller
         $cart = new Cart($request->getSession());
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $barcode = trim($request->request->get('barcode'));
-        $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'barcode' => $barcode));
-        $salesPrice = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
-        $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit(): '';
-        $data = array(
-            'id' => $product->getId(),
-            'name' => $product->getName(),
-            'unit' => $productUnit,
-            'price' => $salesPrice,
-            'quantity' => 1,
-        );
-        $cart->insert($data);
-        $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
-        $array = $this->returnCartSummaryAjaxData($cart);
-        return new Response(json_encode($array));
+        $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config, 'barcode' => $barcode));
+        if($product){
+            $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+            $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+            if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0){
+                $data = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'unit' => $productUnit,
+                    'price' => $salesPrice,
+                    'quantity' => 1,
+                );
+            }elseif($config->isEmptySales() == 1){
+                $data = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'unit' => $productUnit,
+                    'price' => $salesPrice,
+                    'quantity' => 1,
+                );
+            }
+            $cart->insert($data);
+            $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
+            $array = $this->returnCartSummaryAjaxData($cart);
+            return new Response(json_encode($array));
+        }else{
+            return new Response(json_encode(array('status'=>'in-valid')));
+        }
+
     }
 
     public function createAction(Request $request)
