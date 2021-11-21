@@ -102,10 +102,6 @@
                                             <th class="numeric" >Estimate price</th>
                                             <th class="numeric" >Sales price</th>
                                             <th class="numeric" >Sub-total</th>
-                                            {% if inventoryConfig.isBranch == 1 %}
-                                                <th class="numeric" >Branch Stock</th>
-                                                <th class="numeric" ></th>
-                                            {% endif %}
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -119,22 +115,6 @@
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-                                                {% if inventoryConfig.isBranch == 1 %}
-                                                    <td class="numeric" >
-                                                        {% if itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0)  is empty %}
-                                                            Received NULL
-                                                        {% else %}
-                                                            {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="numeric"  ><a href="javascript:" id="{{ salesItem.purchaseItem.barcode }}" data-url="{{ path('inventory_barcode_wise_branch_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" class="btn mini purple itemBranchPreview">Details</a></td>
-                                                {% endif %}
-                                            </tr>
-                                            {% if inventoryConfig.isBranch == 1 %}
-                                                <tr><td colspan="10" id="branchDetails-{{ salesItem.purchaseItem.barcode }}"></td></tr>
-                                            {% endif %}
-
-                                            </tr>
                                         {% endfor %}
                                         </tbody>
                                         <tfoot><tr><td colspan="8">Narration: {{ entity.remark|raw }}</td></tr></tfoot>
@@ -201,15 +181,4 @@
     {{ parent() }}
     EditableInit();
     ApproveProcess();
-    $(document).on('click', '.itemBranchPreview', function() {
-    var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
-    $.ajax({
-    url: url,
-    type: 'GET',
-    success: function (response) {
-    $('#branchDetails-'+id).html(response);
-    }
-    })
-    });
 {% endblock %}

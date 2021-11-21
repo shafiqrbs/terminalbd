@@ -328,12 +328,13 @@ class SalesOnlineController extends Controller
 
         if ($inventory->getId() == $entity->getInventoryConfig()->getId()) {
             if($inventory->getSalesMode() == 'stock') {
-                return $this->render('InventoryBundle:SalesOnline/stock:show.html.twig', array(
+                return $this->render('InventoryBundle:SalesOnline:stock-show.html.twig', array(
                     'entity' => $entity,
                     'inventoryConfig' => $inventory,
                 ));
             }else{
-                return $this->render('InventoryBundle:SalesOnline/purchase-item:show.html.twig', array(
+                $theme = 'purchase-item';
+                return $this->render('InventoryBundle:SalesOnline:purchase-item-show.html.twig', array(
                     'entity' => $entity,
                     'inventoryConfig' => $inventory,
                 ));

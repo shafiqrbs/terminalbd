@@ -97,7 +97,6 @@
                                             <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                             <th class="numeric" >Item</th>
                                             <th class="numeric" >Barcode</th>
-                                            <th class="numeric" >Serial No</th>
                                             <th class="numeric" >Qnt</th>
                                             <th class="numeric" >Estimate price</th>
                                             <th class="numeric" >Sales price</th>
@@ -109,16 +108,13 @@
                                             <tr>
                                                 <td class="numeric" >{{ loop.index }}</td>
                                                 <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                <td class="numeric" >{{ salesItem.serialNo }}</td>
+                                                <td class="numeric" >{{ salesItem.item.barcode }}</td>
                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
                                             </tr>
-                                            {% if inventoryConfig.isBranch == 1 %}
-                                                <tr><td colspan="10" id="branchDetails-{{ salesItem.purchaseItem.barcode }}"></td></tr>
-                                            {% endif %}
+                                            </tr>
                                         {% endfor %}
                                         </tbody>
                                         <tfoot><tr><td colspan="8">Narration: {{ entity.remark|raw }}</td></tr></tfoot>
@@ -164,13 +160,7 @@
         </script>
     {% endif %}
 {% endblock %}
-<style>
-    #barcode {
-        border: 5px solid #e80d0d!important;
-        height: 50px !important;
-        font-size: 30px;
-    }
-</style>
+
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
