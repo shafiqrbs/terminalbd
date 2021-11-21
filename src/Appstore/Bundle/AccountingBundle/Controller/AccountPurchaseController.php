@@ -44,13 +44,15 @@ class AccountPurchaseController extends Controller
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser(),$data);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
+        $groups = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->getProcessModes($globalOption->getId());
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->getCreatedUsers($globalOption->getId());
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountPurchase:index.html.twig', array(
             'option' => $globalOption,
             'entities' => $pagination,
             'overview' => $overview,
-            'accountHead' => $accountHead,
+            'groups' => $groups,
+            'users' => $users,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));

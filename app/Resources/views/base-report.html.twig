@@ -8,6 +8,7 @@
     <link href="{{ asset('assets/print/css/menu.css') }}" type="text/css" rel="stylesheet"/>
     <link href="{{ asset('assets/plugins/datepicker/the-datepicker.css') }}" type="text/css" rel="stylesheet"/>
     <link href="{{ asset('assets/print/css/print.css') }}" type="text/css" rel="stylesheet"/>
+    <link href="{{ asset('assets/print/css/css-loader.css') }}" type="text/css" rel="stylesheet"/>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 </head>
@@ -36,8 +37,9 @@
                                         <li><a href="{{ path('accounting_report_sales_outstanding') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Outstanding</a></li>
                                         <li><a href="{{ path('accounting_report_sales_summary') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Summary</a></li>
                                         <li><a href="{{ path('accounting_report_sales_customer_ledger') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Customer Ledger</a></li>
-                                        <li><a href="{{ path('accounting_report_sales_user_summary') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> User Sales & Collection</a></li>
-                                        <li><a href="{{ path('accounting_report_sales_user_details') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> User Sales & Collection Details</a></li>
+                                        <li><a href="{{ path('accounting_report_sales_user_summary') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> User Sales & Receive</a></li>
+                                        <li><a href="{{ path('accounting_report_sales_customer_summary') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Customer Sales & Receive</a></li>
+                                        <li><a href="{{ path('accounting_report_sales_details') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Sales & Receive Details</a></li>
                                     </ul>
                                 </div>
                                 {#
@@ -227,6 +229,30 @@
     function goBack() {
         window.history.back();
     }
+    jQuery(document).ready(function () {
+        {% block documentready %}
+        $('.select2').select2();
+
+        $(document).on('click', '.ajax-btn', function() {
+            $.ajax({
+                url         : $('form#searchForm').attr( 'action' ),
+                type        : $('form#searchForm').attr( 'method' ),
+                data        : new FormData($('form#searchForm')[0]),
+                processData : false,
+                contentType : false,
+                beforeSend: function(){
+                    $('.loader-double').fadeIn(1000).addClass('is-active');
+                },
+                complete: function(){
+                    $('.loader-double').fadeIn(1000).removeClass('is-active');
+                },
+                success: function(response){
+                    $('#data-load').html(response);
+                }
+            });
+        });
+        {% endblock %}
+    });
 </script>
 </body>
 </html>

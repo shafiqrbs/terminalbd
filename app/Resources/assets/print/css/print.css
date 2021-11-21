@@ -458,10 +458,11 @@ p strong{
     border-color: #0090e2;
 }
 
-.btn-excel {
-    background-color: #28a745;
-    border-color: #29a345;
+.btn-download:hover {
+    background-color: #0668a0!important;
+    border-color: #0668a0!important;
 }
+
 
 .btn-back {
     background-color: #28a745;

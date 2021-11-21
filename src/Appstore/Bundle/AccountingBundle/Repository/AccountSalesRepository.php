@@ -40,7 +40,6 @@ class AccountSalesRepository extends EntityRepository
 
 		if(!empty($data))
 		{
-
 		    $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
 			$endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
 			$mobile =    isset($data['mobile'])? $data['mobile'] :'';
@@ -52,6 +51,8 @@ class AccountSalesRepository extends EntityRepository
 			$medicineInvoice =    isset($data['medicineInvoice'])? $data['medicineInvoice'] :'';
 			$businessInvoice =    isset($data['businessInvoice'])? $data['businessInvoice'] :'';
 			$transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+			$method =    isset($data['method'])? $data['method'] :'';
+			$mode =    isset($data['mode'])? $data['mode'] :'';
 			$account =    isset($data['accountHead'])? $data['accountHead'] :'';
 			$sales =    isset($data['sales'])? $data['sales'] :'';
 
@@ -70,13 +71,20 @@ class AccountSalesRepository extends EntityRepository
 				$qb->andWhere("e.accountRefNo = :accountRefNo");
 				$qb->setParameter('accountRefNo', $accountRefNo);
 			}
+			if (!empty($mode)) {
+				$qb->andWhere("e.processHead = :processHead");
+				$qb->setParameter('processHead', $mode);
+			}
 			if (!empty($transaction)) {
 				$qb->andWhere("e.transactionMethod = :transaction");
 				$qb->setParameter('transaction', $transaction);
 			}
+            if (!empty($method)) {
+				$qb->andWhere("e.transactionMethod = :transaction");
+				$qb->setParameter('transaction', $method);
+			}
             if (!empty($user)) {
-                $qb->join('e.createdBy','u');
-                $qb->andWhere("u.id = :user");
+                $qb->andWhere("e.createdBy = :user");
                 $qb->setParameter('user', $user);
             }
 			if (!empty($mobile)) {
@@ -120,6 +128,42 @@ class AccountSalesRepository extends EntityRepository
 		}
 
 	}
+
+    public function getProcessModes($global)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.processHead as name');
+        $qb->where("e.globalOption = :global")->setParameter('global', $global);
+        $qb->groupBy('e.processHead');
+        $qb->orderBy('e.processHead', 'ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
+
+
+    public function getSalesCustomers($global)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('u.id as id','u.name as name','u.mobile as mobile');
+        $qb->join('e.customer','u');
+        $qb->where("e.globalOption = :global")->setParameter('global', $global);
+        $qb->groupBy('e.customer');
+        $qb->orderBy('u.name', 'ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
+
+	public function getCreatedUsers($global)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('u.id as id','u.username as name');
+        $qb->join('e.createdBy','u');
+        $qb->where("e.globalOption = :global")->setParameter('global', $global);
+        $qb->groupBy('e.createdBy');
+        $qb->orderBy('u.username', 'ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
 
 	public function receiveModeOverview(User $user,$data)
 	{
@@ -214,6 +258,25 @@ class AccountSalesRepository extends EntityRepository
         $qb->orderBy('e.id','DESC');
 	    $qb->addOrderBy("{$sort}",$direction);
         $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function reportFindWithSearch($option,$data = '')
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.updated as created','e.totalAmount as debit','e.amount as credit','e.balance as balance','e.processHead as mode','e.sourceInvoice as invoice');
+        $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('t.name as method');
+        $qb->join('e.customer','c');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','ASC');
+        $qb->setFirstResult(0);
+        $qb->setMaxResults(1000);
+        $result = $qb->getQuery()->getArrayResult();
         return $result;
 
     }
@@ -320,6 +383,7 @@ class AccountSalesRepository extends EntityRepository
         return $result;
 
     }
+
 
     public function lastInsertSales($globalOption,$entity)
     {

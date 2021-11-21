@@ -180,7 +180,13 @@
         </script>
     {% endif %}
 {% endblock %}
-
+<style>
+    #barcode {
+        border: 5px solid #e80d0d!important;
+        height: 50px !important;
+        font-size: 30px;
+    }
+</style>
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

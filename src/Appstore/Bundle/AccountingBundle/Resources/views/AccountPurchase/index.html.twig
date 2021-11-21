@@ -53,28 +53,41 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <input type="text" id="grn" name="grn"  class="leftMargin span12 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter purchase grn no">
+                                        <select name="user" id="user" class="leftMargin m-wrap span12">
+                                            <option value="" >--Created By--</option>
+                                            {% for row in users %}
+                                                <option {% if searchForm.user is defined and searchForm.user == row.id %} selected="selected" {% endif %} value="{{ row.id }}" >{{ row.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
+                                    <div class="span2">
+                                        <select name="mode" id="mode" class="leftMargin m-wrap span12">
+                                            <option value="" >--Payment Mode--</option>
+                                            {% for row in groups %}
+                                                <option {% if searchForm.user is defined and searchForm.user == row.name %} selected="selected" {% endif %} value="{{ row.name }}" >{{ row.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
                                     {% if option.mainApp.slug == 'invventory' %}
-                                        <div class="span4">
+                                        <div class="span3">
                                             <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
                                         </div>
                                     {% elseif option.mainApp.slug == 'miss' %}
-                                        <div class="span4">
+                                        <div class="span3">
                                             <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2MedicineVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
                                         </div>
                                     {% else %}
-                                        <div class="span4">
+                                        <div class="span3">
                                             <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2AccountVendor m-wrap" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Search vendor company">
                                         </div>
                                     {% endif %}
-                                    <div class="span2">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input m-wrap  dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
-                                    </div>
-                                    <div class="span2">
+                                    <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span10 m-wrap search-input  m-ctrl-medium dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <input type="text" id="grn" name="grn"  class="leftMargin span4 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="GRN no">
+                                                <input type="text" id="startDate" name="startDate"  class="span4 search-input m-wrap  dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                                <input type="text" id="endDate" name="endDate"  class="span4 m-wrap search-input  m-ctrl-medium dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

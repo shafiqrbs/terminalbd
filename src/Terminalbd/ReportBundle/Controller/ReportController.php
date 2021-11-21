@@ -6,6 +6,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -174,7 +175,7 @@ class ReportController extends Controller
     }
 
     /**
-     * @Route("/user-sales-collection-summary", methods={"GET", "POST"}, name="accounting_report_sales_user_summary")
+     * @Route("/user-sales-receive", methods={"GET", "POST"}, name="accounting_report_sales_user_summary")
      * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
      */
 
@@ -195,7 +196,7 @@ class ReportController extends Controller
     }
 
     /**
-     * @Route("/user-sales-collection-details", methods={"GET", "POST"}, name="accounting_report_sales_user_details")
+     * @Route("/customer-sales-receive", methods={"GET", "POST"}, name="accounting_report_sales_customer_summary")
      * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
      */
 
@@ -214,6 +215,91 @@ class ReportController extends Controller
         return $this->render('ReportBundle:Accounting/Sales:customerDetails.html.twig', array(
             'entities' => $entities,
             'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/sales-details", methods={"GET", "POST"}, name="accounting_report_sales_details")
+     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     */
+
+    public function salesDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = "";
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $customers = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getSalesCustomers($globalOption);
+        $groups = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getProcessModes($globalOption);
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getCreatedUsers($globalOption);
+        return $this->render('ReportBundle:Accounting/Sales:sales.html.twig', array(
+            'entities' => $entities,
+            'transactionMethods' => $transactionMethods,
+            'groups' => $groups,
+            'users' => $users,
+            'customers' => $customers,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/sales-details-load", methods={"GET", "POST"}, name="accounting_report_sales_ajax")
+     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     */
+
+    public function salesDetailsLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = "";
+        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+            $entities = $em->getRepository('AccountingBundle:AccountSales')->reportFindWithSearch($globalOption,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Accounting/Sales:sales-data.html.twig', array(
+                    'entities' => $entities,
+                )
+            );
+            return new Response($htmlProcess);
+
+        }
+        return new Response('Record Does not found');
+    }
+
+
+    /**
+     * @Route("/purchase-details", methods={"GET", "POST"}, name="accounting_report_purchase_details")
+     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     */
+
+    public function purchaseDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = "";
+        if(isset($data['submit']) and $data['submit'] == 'search' and isset($data['user']) and $data['user']) {
+            $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportCustomerDetails($globalOption,$data);
+        }
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $groups = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->getProcessModes($globalOption);
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->getCreatedUsers($globalOption);
+        return $this->render('ReportBundle:Accounting/Sales:customerDetails.html.twig', array(
+            'entities' => $entities,
+            'transactionMethods' => $transactionMethods,
+            'groups' => $groups,
+            'users' => $users,
             'option' => $globalOption,
             'searchForm' => $data,
         ));

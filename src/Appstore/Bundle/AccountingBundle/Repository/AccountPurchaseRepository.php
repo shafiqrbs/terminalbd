@@ -43,7 +43,47 @@ class AccountPurchaseRepository extends EntityRepository
 
     }
 
+    public function reportFindWithSearch($option,$data = '')
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.updated as created','e.totalAmount as purchase','e.purchaseAmount as amount');
+        $qb->addSelect('v.name as name');
+        $qb->addSelect('t.name as method');
+        $qb->join('e.accountVendor','v');
+        $qb->leftJoin('e.transactionMethod','t');
+        $qb->join('e.customer','c');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option);
+        $this->handleSearchBetween($qb,$option,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->addOrderBy('e.id','DESC');
+        $result = $qb->getQuery();
+        return $result;
 
+    }
+
+    public function getProcessModes($global)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.processType as name');
+        $qb->where("e.globalOption = :global")->setParameter('global', $global);
+        $qb->groupBy('e.processType');
+        $qb->orderBy('e.processType', 'ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
+
+    public function getCreatedUsers($global)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('u.id as id','u.username as name');
+        $qb->join('e.createdBy','u');
+        $qb->where("e.globalOption = :global")->setParameter('global', $global);
+        $qb->groupBy('e.createdBy');
+        $qb->orderBy('u.username', 'ASC');
+        return $qb->getQuery()->getArrayResult();
+
+    }
 
     public function searchAutoComplete($q, GlobalOption $global)
 	{

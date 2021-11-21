@@ -545,3 +545,10 @@ table tr.footer-green th, table tr.footer-green td{
     background: #00b22d;
     height: 32px;
 }
+
+.loader-double{
+    display: none;
+}
+.is-active{
+    display: block;
+}

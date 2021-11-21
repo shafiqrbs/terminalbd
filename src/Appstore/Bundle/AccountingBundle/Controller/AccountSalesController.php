@@ -45,9 +45,13 @@ class AccountSalesController extends Controller
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->receiveModeOverview($user,$data);
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $groups = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getProcessModes($user->getGlobalOption()->getId());
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getCreatedUsers($user->getGlobalOption()->getId());
         return $this->render('AccountingBundle:AccountSales:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
+            'users' => $users,
+            'groups' => $groups,
             'searchForm' => $data,
             'overview' => $overview,
         ));
