@@ -92,6 +92,10 @@ class ItemController extends Controller
             if($checkData['count'] == 0 ) {
                 $entity->setInventoryConfig($inventory);
                 $entity->setMasterItem($checkData['masterItem']);
+                $category = isset($data['item']['category']) ? $data['item']['category'] :'';
+                if(empty($category)){
+                    $entity->setCategory($entity->getMasterItem()->getCategory());
+                }
                 if(empty($entity->getItemUnit())){
                     $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                     $entity->setItemUnit($unit);

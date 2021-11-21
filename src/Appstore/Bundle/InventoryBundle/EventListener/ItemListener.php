@@ -138,20 +138,18 @@ class ItemListener
         }
         $categorySlug = "";
         $categoryName = '';
-        if($entity->getMasterItem()->getCategory() and !empty($entity->getInventoryConfig()->isCategory()) and $entity->getInventoryConfig()->isCategory() == 1 ){
-
+        if($entity->getCategory() and !empty($entity->getInventoryConfig()->isCategory()) and $entity->getInventoryConfig()->isCategory() == 1 ){
             $category             = '';
-            $categorySlug         = $entity->getMasterItem()->getCategory()->getSlug();
-            $categoryName         = $entity->getMasterItem()->getCategory()->getName();
+            $categorySlug         = $entity->getCategory()->getSlug();
+            $categoryName         = $entity->getCategory()->getName();
 
-        }elseif(!empty($entity->getMasterItem()->getCategory())){
-            $categorySlug           = $entity->getMasterItem()->getCategory()->getSlug();
+        }elseif(!empty($entity->getCategory())){
+            $categorySlug           = $entity->getCategory()->getSlug();
         }else{
             $categorySlug = '';
         }
 
-
-        if($entity->getMasterItem()->getCategory() and $entity->getInventoryConfig()->isCategory() == 1){
+        if($entity->getCategory() and $entity->getInventoryConfig()->isCategory() == 1){
             $sku            = $masterItem.$color.$size.$brand.$vendor.$model;
             $name           = $categoryName.' '.$masterName.$colorName.$sizeName.$brandName.$vendorName.$model;
             $skuSlug        = $categorySlug.$masterSlug.$colorSlug.$sizeSlug.$brandSlug.$vendorSlug.$modelSlug;

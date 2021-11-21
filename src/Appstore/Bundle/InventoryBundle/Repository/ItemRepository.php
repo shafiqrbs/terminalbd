@@ -153,9 +153,13 @@ class ItemRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('item.name= :masterId');
         $qb->setParameter('masterId', $masterItem);
+        if($inventory->isCategory() == 1) {
+            $qb->andWhere('item.category = :category');
+            $qb->setParameter('category', $itemSize);
+        }
         if($inventory->getIsSize() == 1) {
             $qb->andWhere('item.size = :itemSize');
-            $qb->setParameter('itemSize', $itemSize);
+            $qb->setParameter('itemSize', $itemCategory);
         }
         if($inventory->getIsColor() == 1) {
             $qb->andWhere('item.color = :itemColor');

@@ -80,7 +80,7 @@ class ItemType extends AbstractType
                 'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
-                'data' => 47,
+                'data' => 4,
                 'empty_value' => '---Choose a item unit ---',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){

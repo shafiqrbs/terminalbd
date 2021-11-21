@@ -47,7 +47,7 @@ class Item
     private  $itemGroup;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category",inversedBy="items")
      **/
     private  $category;
 

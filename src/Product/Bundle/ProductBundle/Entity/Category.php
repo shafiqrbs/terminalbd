@@ -58,6 +58,11 @@ class Category
      **/
     protected $masterProducts;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="category" )
+     **/
+    protected $items;
+
     /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\ItemGroup")
      **/
