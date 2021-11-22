@@ -776,7 +776,7 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
         }else{
             $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['startDate']));
-            $data['endDate'] = date('Y-m-d Y-m-d 23:59:59',strtotime($data['endDate']));
+            $data['endDate'] = date('Y-m-d 23:59:59',strtotime($data['endDate']));
         }
         $sales = $this->_em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user, $data);
         $salesAdjustment = $this->_em->getRepository('AccountingBundle:AccountSalesAdjustment')->accountCashOverview($user->getGlobalOption()->getId(), $data);

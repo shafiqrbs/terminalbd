@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\InventoryBundle\Form\EditItemType;
 use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
 use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -209,10 +210,8 @@ class ItemController extends Controller
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('InventoryBundle:Item:edit.html.twig', array(
             'entity'        => $entity,
-            'items'        => $items,
             'inventory'     => $inventory,
             'form'          => $editForm->createView(),
 
@@ -232,7 +231,7 @@ class ItemController extends Controller
         $groupRep = $this->getDoctrine()->getRepository('ProductProductBundle:ItemGroup');
         $catRep = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new ItemType($inventoryConfig,$groupRep,$catRep), $entity, array(
+        $form = $this->createForm(new EditItemType($inventoryConfig,$groupRep,$catRep), $entity, array(
             'action' => $this->generateUrl('item_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -319,10 +318,8 @@ class ItemController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertProductGallery($entity,$data);
             return $this->redirect($this->generateUrl('item'));
         }
-        $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
-        return $this->render('InventoryBundle:Item:new.html.twig', array(
+        return $this->render('InventoryBundle:Item:edit.html.twig', array(
             'entity'      => $entity,
-            'items'      => $items,
             'inventory'     => $inventory,
             'form'   => $editForm->createView(),
         ));
