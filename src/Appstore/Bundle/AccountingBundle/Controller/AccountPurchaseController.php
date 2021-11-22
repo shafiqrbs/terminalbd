@@ -172,7 +172,11 @@ class AccountPurchaseController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchase_new'));
+            if($this->getUser()->getCheckExistRole('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
+                return $this->redirect($this->generateUrl('account_purchase_new'));
+            }else{
+                return $this->redirect($this->generateUrl('account_purchase'));
+            }
         }elseif(($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
@@ -246,7 +250,11 @@ class AccountPurchaseController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_purchase_new'));
+            if($this->getUser()->getCheckExistRole('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
+                return $this->redirect($this->generateUrl('account_purchase_new'));
+            }else{
+                return $this->redirect($this->generateUrl('account_purchase'));
+            }
         }
         $this->get('session')->getFlashBag()->add(
             'notice',"May be you are missing to select bank or mobile account"

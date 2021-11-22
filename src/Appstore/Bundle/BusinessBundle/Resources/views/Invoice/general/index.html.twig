@@ -117,7 +117,7 @@
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.received }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
-                                        <td class="numeric" >{% if entity.courier is defined and entity.courier is not empty %}{{ entity.courier.companyName }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.condition is defined and entity.condition is not empty %}{{ entity.condition.name }}{% endif %}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             {% if entity.isReversed == 1 %}

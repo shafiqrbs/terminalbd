@@ -188,7 +188,11 @@ class AccountSalesController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_sales_new'));
+            if($this->getUser()->getCheckExistRole('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
+                return $this->redirect($this->generateUrl('account_sales_new'));
+            }else{
+                return $this->redirect($this->generateUrl('account_sales'));
+            }
         }elseif(($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
@@ -230,7 +234,11 @@ class AccountSalesController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_sales_new'));
+            if($this->getUser()->getCheckExistRole('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
+                return $this->redirect($this->generateUrl('account_sales_new'));
+            }else{
+                return $this->redirect($this->generateUrl('account_sales'));
+            }
         }
 
         $this->get('session')->getFlashBag()->add(

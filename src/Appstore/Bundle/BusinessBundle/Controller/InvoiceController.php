@@ -199,14 +199,6 @@ class InvoiceController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
                 $entity->setCustomer($customer);
-            }elseif (isset($data['mobile']) and !empty($data['mobile'])){
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
-                $entity->setCustomer($customer);
-            }elseif (isset($data['customer']) and !empty($data['customer'])){
-                $customerId = $data['customer'];
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'id' => $customerId));
-                $entity->setCustomer($customer);
             }
             if(isset($data['area']) and !empty($data['area'])){
              $area = $data['area'];
@@ -435,8 +427,10 @@ class InvoiceController extends Controller
         }
         $option = $this->getUser()->getGlobalOption();
         $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$option,'mobile'=>$data['customer']));
-        $entity->setCustomer($customer);
-        $em->flush();
+        if($customer){
+            $entity->setCustomer($customer);
+            $em->flush();
+        }
         return new Response(json_encode(array('success' => 'success')));
     }
 

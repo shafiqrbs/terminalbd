@@ -1487,7 +1487,6 @@ class User extends BaseUser
 
 	public function getCheckRoleGlobal($existRole = NULL)
 	{
-
 		$result = array_intersect($existRole, $this->getRoles());
 		if(empty($result)){
 			return false;
@@ -1496,6 +1495,18 @@ class User extends BaseUser
 		}
 
 	}
+
+
+    public function getCheckExistRole($existRole = NULL)
+    {
+        $result = in_array($existRole, $this->getRoles());
+        if(empty($result)){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 	/**
 	 * @return PreOrder
 	 */
