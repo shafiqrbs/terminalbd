@@ -59,7 +59,7 @@ class ItemType extends AbstractType
             ->add('inventoryConfig','hidden',
                 array(
                     'mapped'    => false,
-                    'attr' => array('value' => $this->inventoryConfig->getId())))
+                    'attr' => array('data' => $this->inventoryConfig->getId())))
 
             /*->add('itemGroup', 'entity', array(
                 'required'    => false,
@@ -93,15 +93,23 @@ class ItemType extends AbstractType
                 'required'    => false,
                 'attr'=>array('class'=>'span12')
             ))
-            ->add('barcode', 'text', array(
-                'required'    => false,
-                'attr'=>array('class'=>'span12 barcode')
-            ))
             ->add('purchasePrice', 'text', array(
                 'required'    => false,
                 'attr'=>array('class'=>'span12')
             ))
             ->add('file');
+            if($this->inventoryConfig->getUsingBarcode() == "item" ){
+
+                $builder
+                    ->add('barcode', 'text', array(
+                        'required'    => true,
+                        'constraints' =>array(
+                            new NotBlank(array('message'=>'Please input required'))
+                        ),
+                        'attr'=>array('class'=>'span12 barcode')
+                    ));
+
+            }
             if($this->inventoryConfig->getIsVendor() == 1 ){
 
                 $builder

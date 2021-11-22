@@ -91,6 +91,7 @@ class PurchaseItemController extends Controller
                     $purchaseVendorItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->find($data['purchaseVendorItem'][$i]);
                     $item = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($data['item'][$i]);
                     $entity->setPurchase($purchase);
+                    $entity->setInventoryConfig($purchase->getInventoryConfig());
                     $entity->setPurchaseVendorItem($purchaseVendorItem);
                     $entity->setItem($item);
                     $entity->setQuantity($data['quantity'][$i]);

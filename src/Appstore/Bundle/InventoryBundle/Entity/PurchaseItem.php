@@ -25,6 +25,13 @@ class PurchaseItem
      */
     private $id;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig")
+     **/
+    private  $inventoryConfig;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="purchaseItems" )
      **/
@@ -682,6 +689,22 @@ class PurchaseItem
     public function setSerialNo($serialNo)
     {
         $this->serialNo = $serialNo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInventoryConfig()
+    {
+        return $this->inventoryConfig;
+    }
+
+    /**
+     * @param mixed $inventoryConfig
+     */
+    public function setInventoryConfig($inventoryConfig)
+    {
+        $this->inventoryConfig = $inventoryConfig;
     }
 
 

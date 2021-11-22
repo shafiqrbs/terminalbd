@@ -196,17 +196,19 @@
 
                                     </div>
                                 {% endif %}
-                                <div class="row-fluid">
-                                    <div class="span9">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Barcode</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.barcode) }}
-                                                {{ form_errors(form.barcode) }}
+                                {% if inventory.usingBarcode == 'item' %}
+                                    <div class="row-fluid">
+                                        <div class="span9">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Barcode <span class="required">*</span></label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.barcode) }}
+                                                    {{ form_errors(form.barcode) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
                             </div>
                             <div class="span4">
                                 <div class="row-fluid">

@@ -89,10 +89,20 @@ class ItemController extends Controller
         $data = $request->request->all();
         if ($form->isValid()) {
             $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
-            if($checkData['count'] == 0 ) {
+            $barcode = isset($data['item']['barcode']) and $data['item']['barcode'] ? $data['item']['barcode']:'';
+            $barcodeCount = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistBarcode($inventory->getId(),$data['item']['barcode']);
+            if($checkData['count'] != 0 ) {
+                $this->get('session')->getFlashBag()->add(
+                    'notice',"Item already exist, Please change add another item name"
+                );
+            }elseif($entity->getBarcode() and $barcodeCount > 0){
+                $this->get('session')->getFlashBag()->add(
+                    'notice',"This barcode already exist, Please change add another item name"
+                );
+            }else{
                 $entity->setInventoryConfig($inventory);
                 $entity->setMasterItem($checkData['masterItem']);
-                $category = isset($data['item']['category']) ? $data['item']['category'] :'';
+                $category = $data['item']['category'];
                 if(empty($category)){
                     $entity->setCategory($entity->getMasterItem()->getCategory());
                 }
@@ -111,19 +121,6 @@ class ItemController extends Controller
                     'success', "Item has been added successfully"
                 );
                 return $this->redirect($this->generateUrl('item_new', array('id' => $entity->getId())));
-
-            }else{
-
-                $this->get('session')->getFlashBag()->add(
-                    'notice',"Item already exist, Please change add another item name"
-                );
-                $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
-                return $this->render('InventoryBundle:Item:new.html.twig', array(
-                    'entity' => $entity,
-                    'items' => $items,
-                    'inventory' => $inventory,
-                    'form'   => $form->createView(),
-                ));
             }
         }
         $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
@@ -607,6 +604,7 @@ class ItemController extends Controller
 	public function inlineUpdateAction(Request $request)
 	{
 		$data = $request->request->all();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
 		$em = $this->getDoctrine()->getManager();
 		$entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['pk']);
 		if (!$entity) {
@@ -636,7 +634,7 @@ class ItemController extends Controller
 		}
 
 		if($data['name'] == 'Barcode'){
-			$existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findBy(array('barcode' => $data['value']));
+			$existBarcode = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('inventoryConfig'=>$config,'barcode' => $data['value']));
 			if(empty($existBarcode)){
 				$process = 'set'.$data['name'];
 				$entity->$process($data['value']);

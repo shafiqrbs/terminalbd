@@ -183,6 +183,20 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function getExistBarcode($inventory,$barcode)
+    {
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->select('COUNT(item.id) AS totalNumber');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("item.barcode = :barcode");
+        $qb->setParameter('barcode', $barcode);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return $count;
+
+    }
+
     public function  getApiStock(GlobalOption $option , $data = '')
     {
 
