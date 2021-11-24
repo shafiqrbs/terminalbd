@@ -18,6 +18,10 @@ medicine_medicine_stock:
     resource: "@MedicineBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
 
+medicine_medicine_adjustment:
+    resource: "@MedicineBundle/Resources/config/routing/adjustment.yml"
+    prefix:   /stock-adjustment
+
 medicine_medicine_sales_user:
     resource: "@MedicineBundle/Resources/config/routing/salesuser.yml"
     prefix:   /sales-user

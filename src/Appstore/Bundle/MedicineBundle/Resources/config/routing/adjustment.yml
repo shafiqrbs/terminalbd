@@ -1,0 +1,29 @@
+stock_adjustment:
+    path:     /
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:index" }
+
+stock_adjustment_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:new" }
+
+stock_adjustment_create:
+    path:     /create
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:create" }
+    methods:  POST
+
+stock_adjustment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:edit" }
+
+stock_adjustment_update:
+    path:     /{id}/update
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:update" }
+    methods:  [POST, PUT]
+
+stock_adjustment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:delete" }
+
+stock_adjustment_approved:
+    path:     /{id}/approved
+    defaults: { _controller: "MedicineBundle:MedicineStockAdjustment:approved" }

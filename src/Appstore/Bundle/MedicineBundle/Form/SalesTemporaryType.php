@@ -109,22 +109,6 @@ class SalesTemporaryType extends AbstractType
                         ->orderBy("u.username", "ASC");
                 }
             ))
-            ->add('printMessage', 'entity', array(
-                'required'    => false,
-                'mapped'    => false,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
-                'empty_value' => '---Select Print Message ---',
-                'property' => 'name',
-                'attr'=>array('class'=>' span12 m-wrap'),
-                'constraints' =>array( new NotBlank(array('message'=>'Select print message')) ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.particularType","pt")
-                        ->where("e.status = 1")
-                        ->andWhere("e.medicineConfig ={$this->globalOption->getMedicineConfig()->getId()}")
-                        ->andWhere("pt.slug = 'print-message'");
-                },
-            ))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap discount-type span12'),
                 'expanded'      =>false,

@@ -133,6 +133,14 @@ class AppModule
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="androidStatus", type="boolean")
+     */
+    private $androidStatus = false;
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -468,6 +476,22 @@ class AppModule
     public function getThemes()
     {
         return $this->themes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAndroidStatus()
+    {
+        return $this->androidStatus;
+    }
+
+    /**
+     * @param bool $androidStatus
+     */
+    public function setAndroidStatus($androidStatus)
+    {
+        $this->androidStatus = $androidStatus;
     }
 }
 

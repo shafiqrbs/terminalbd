@@ -552,5 +552,43 @@ class UserRepository extends EntityRepository
     }
 
 
+    public function androidUserCreate(GlobalOption $setup,$data)
+    {
+        $em = $this->_em;
+        $mobile = isset($data['mobile']) ? $data['mobile'] :'';
+        $name = isset($data['name']) ? $data['name'] :'';
+        $password = "8148148#";
+        $entity = new User();
+        $entity->setGlobalOption($setup);
+        $entity->setEnabled(true);
+        $entity->setDomainOwner(1);
+        $entity->setUsername($mobile);
+        $entity->setEmail($mobile.'@gmail.com');
+        $entity->setPlainPassword($password);
+        $entity->setAppPassword($password);
+        if(empty($data['role'])){
+            $entity->setRoles(array('ROLE_DOMAIN'));
+            $entity->setDomainOwner(1);
+        }else{
+            $entity->setRoles(array('ROLE_MEDICINE,ROLE_MEDICINE_SALES'));
+            $entity->setDomainOwner(2);
+        }
+        $roels = array('ROLE_MANAGER,ROLE_PURCHASE,ROLE_SALES,ROLE_EXPENSE,ROLE_STOCK');
+        $entity->setAppRoles($roels);
+        $em->persist($entity);
+        $em->flush();
+
+        $profile = new Profile();
+        $profile->setUser($entity);
+        $profile->setName($name);
+        $profile->setMobile($mobile);
+        $em->persist($profile);
+        $em->flush();
+        return $entity;
+
+    }
+
+
+
 
 }

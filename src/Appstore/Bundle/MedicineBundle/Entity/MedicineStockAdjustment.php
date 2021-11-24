@@ -105,6 +105,13 @@ class MedicineStockAdjustment
 	 */
 	private $process = "Created";
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", nullable=true)
+     */
+    private $mode = "minus";
+
 
     /**
      * Get id
@@ -320,6 +327,22 @@ class MedicineStockAdjustment
     public function setAdjustment($adjustment)
     {
         $this->adjustment = $adjustment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

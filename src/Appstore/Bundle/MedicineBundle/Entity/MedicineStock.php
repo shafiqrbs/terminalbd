@@ -178,6 +178,13 @@ class MedicineStock
      */
     private $bonusQuantity;
 
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="adjustmentQuantity", type="integer", nullable=true)
+     */
+    private $adjustmentQuantity;
+
     /**
      * @var integer
      *
@@ -1067,6 +1074,22 @@ class MedicineStock
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentQuantity()
+    {
+        return $this->adjustmentQuantity;
+    }
+
+    /**
+     * @param int $adjustmentQuantity
+     */
+    public function setAdjustmentQuantity($adjustmentQuantity)
+    {
+        $this->adjustmentQuantity = $adjustmentQuantity;
     }
 
 

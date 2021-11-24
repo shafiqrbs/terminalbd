@@ -437,6 +437,13 @@ class GlobalOption
      */
     private $email;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", nullable = true )
+     */
+    private $address;
+
     /**
      * @var float
      *
@@ -2199,5 +2206,21 @@ class GlobalOption
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
     }
 }

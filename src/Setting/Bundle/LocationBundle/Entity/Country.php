@@ -116,6 +116,22 @@ class Country
     private $code;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string", length=25)
+     */
+    private $currency;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="symbol", type="string", length=25)
+     */
+    private $symbol;
+
+
     /**
      * Get id
      *
@@ -293,6 +309,38 @@ class Country
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSymbol()
+    {
+        return $this->symbol;
+    }
+
+    /**
+     * @param string $symbol
+     */
+    public function setSymbol($symbol)
+    {
+        $this->symbol = $symbol;
     }
 }
 

@@ -57,6 +57,72 @@ class GlobalOptionRepository extends EntityRepository
 	    return $result;
     }
 
+
+    public function getSetupInformation($id)
+    {
+        $entity = $this->find($id);
+
+        /*
+
+        * 1 Active
+        * 2 Create
+        * 3 Suspended
+
+        */
+
+        if($entity->getStatus() == 1 ){
+            $status = 'active';
+        }elseif ($entity->getStatus() == 2){
+            $status = 'create';
+        }else{
+            $status = 'suspended';
+        }
+
+        $data = array(
+            'mobile'    => $entity->getMobile(),
+            'activeKey'     => $entity->getUniqueCode(),
+            'name'          => $entity->getName(),
+            'status'        => (string)$status
+        );
+        return $data;
+
+    }
+
+    public function insertSetupInformation($data)
+    {
+        $em = $this->_em;
+        $store = isset($data['shopName']) ? $data['shopName'] : '';
+        $address = isset($data['address']) ? $data['address'] : '';
+        $mobile = isset($data['mobile']) ? $data['mobile'] : '';
+        $email = isset($data['email']) ? $data['email'] : '';
+        $type = isset($data['shopType']) ? $data['shopType'] : '';
+        $mainApp = $em->getRepository('SettingToolBundle:AppModule')->find($type);
+
+        $entity = new GlobalOption();
+        if($store){
+            $entity->setName($store);
+            $entity->setOrganizationName($store);
+        }
+        if($address){
+            $entity->setAddress($address);
+        }
+        if($email){
+            $entity->setEmail($email);
+        }
+        if($mainApp){
+            $entity->setMainApp($mainApp);
+        }
+        if($mobile){
+            $entity->setMobile($mobile);
+            $entity->setHotline($mobile);
+        }
+        $entity->setStatus(1);
+        $em->persist($entity);
+        $em->flush();
+        $this->systemConfigUpdate($entity);
+        return $entity;
+    }
+
     public function getMasterSetup(GlobalOption $entity){
         $config = '';
         $address = '';
@@ -174,8 +240,6 @@ class GlobalOptionRepository extends EntityRepository
         $result = $qb->getQuery();
         return $result;
     }
-
-
 
     function findByDomain($data = array()) {
 

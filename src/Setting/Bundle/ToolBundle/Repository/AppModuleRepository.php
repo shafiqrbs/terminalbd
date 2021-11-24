@@ -15,7 +15,7 @@ class AppModuleRepository extends EntityRepository
     public function getAppModules()
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id','e.name as name','e.shortContent as content','e.path');
+        $qb->select('e.id as id','e.name as name','e.moduleClass as moduleClass','e.shortContent as content','e.path');
         $qb->where('e.status =1');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -23,13 +23,30 @@ class AppModuleRepository extends EntityRepository
 
             $data[$key]['id']               = (int) $row['id'];
             $data[$key]['name']             =  $row['name'];
-            $data[$key]['content']     =  $row['content'];
+            $data[$key]['moduleClass']      =  $row['moduleClass'];
             if($row['path']){
                 $path = $this->resizeFilter("uploads/admin/content/{$row['path']}");
                 $data[$key]['imagePath']            =  $path;
             }else{
                 $data[$key]['imagePath']            = "";
             }
+        }
+        return $data;
+    }
+
+    public function getAndroidAppModules()
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id','e.name as name','e.moduleClass as moduleClass');
+        $qb->where('e.status =1');
+        $qb->andWhere('e.androidStatus =1');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $data[$key]['id']               = (int) $row['id'];
+            $data[$key]['name']             =  $row['name'];
+            $data[$key]['moduleClass']      =  $row['moduleClass'];
         }
         return $data;
     }

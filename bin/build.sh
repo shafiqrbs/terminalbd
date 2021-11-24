@@ -16,6 +16,9 @@ echo "(Re)Creating assets symlink"
 rm web/assets
 ln -s ../app/Resources/assets/ web/assets
 
+echo "Database generated"
+php app/console doctrine:schema:update --force
+
 echo "Dumping assets"
 app/console  assets:install --symlink --relative
 app/console  assetic:dump --env=prod --no-debug
