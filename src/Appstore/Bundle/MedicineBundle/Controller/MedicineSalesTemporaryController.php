@@ -163,12 +163,6 @@ class MedicineSalesTemporaryController extends Controller
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());
         }
-        if($data['salesTemporary']['printMessage']){
-            $messageId = $data['salesTemporary']['printMessage'];
-            $message = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($messageId);
-            $message->getName();
-            $entity->setPrintMessage($message->getName());
-        }
         $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
         if($accountConfig == 1){
             $datetime = new \DateTime("yesterday 23:30:30");
