@@ -58,6 +58,21 @@ $(document).on("click", ".sms-confirm", function() {
     });
 });
 
+
+$(document).on("change", "#customer", function() {
+    var customer = $(this).val();
+    var invoice = $('#invoiceId').val();
+    var url = Routing.generate('business_invoice_customer_update');
+    $.get(url,{'invoice':invoice,'customer':customer});
+});
+
+$(document).on("change", ".customer2Invoice", function() {
+    var customer = $(this).val();
+    var invoice = $('#invoiceId').val();
+    var url = Routing.generate('business_invoice_customermobile_update');
+    $.get(url,{'invoice':invoice,'customer':customer});
+});
+
 /*$( "#mobile" ).autocomplete({
 
     source: function( request, response ) {
