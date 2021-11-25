@@ -53,9 +53,7 @@ class ApiPoskeeperController extends Controller
     {
 
         if( $this->checkApiValidation($request) == 'invalid') {
-
             return new Response('Unauthorized access.', 401);
-
         }else{
             $entity = $this->checkApiValidation($request);
             $deviceId = $request->headers->get('X-DEVICE-ID');

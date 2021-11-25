@@ -65,9 +65,6 @@ api_system_expense_category:
     path:     /expense-category
     defaults: { _controller: BinduBundle:Api:expenditureCategory }
 
-api_system_template_customization:
-    path:     /template-customization
-    defaults: { _controller: BinduBundle:Api:templateCustomization }
 
 api_system_token_no:
     path:     /token-no
