@@ -97,7 +97,6 @@ class GlobalOptionRepository extends EntityRepository
         $email = isset($data['email']) ? $data['email'] : '';
         $type = isset($data['shopType']) ? $data['shopType'] : '';
         $mainApp = $em->getRepository('SettingToolBundle:AppModule')->find($type);
-
         $entity = new GlobalOption();
         if($store){
             $entity->setName($store);
@@ -106,9 +105,7 @@ class GlobalOptionRepository extends EntityRepository
         if($address){
             $entity->setAddress($address);
         }
-        if($email){
-            $entity->setEmail($email);
-        }
+        if($email){ $entity->setEmail($email);}
         if($mainApp){
             $entity->setMainApp($mainApp);
         }
@@ -116,6 +113,8 @@ class GlobalOptionRepository extends EntityRepository
             $entity->setMobile($mobile);
             $entity->setHotline($mobile);
         }
+        $unique = (string)time();
+        $entity->setUniqueCode($unique);
         $entity->setStatus(1);
         $em->persist($entity);
         $em->flush();

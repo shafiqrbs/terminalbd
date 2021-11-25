@@ -1,6 +1,10 @@
-api_system_license_verify:
-    path:     /license-verify
-    defaults: { _controller: BinduBundle:ApiPoskeeper:licenseVerify }
+api_system_login:
+    path:     /login
+    defaults: { _controller: BinduBundle:ApiPoskeeper:login }
+
+api_system_setup:
+    path:     /setup
+    defaults: { _controller: BinduBundle:ApiPoskeeper:setup }
 
 api_system_app:
     path:     /shop-type
@@ -13,10 +17,6 @@ api_system_register:
 api_system_dashboard:
     path:     /dashboard
     defaults: { _controller: BinduBundle:ApiPoskeeper:dashboard }
-
-api_system_multi_user:
-    path:     /multi-user
-    defaults: { _controller: BinduBundle:ApiPoskeeper:multiUser }
 
 api_system_create_user:
     path:     /create-user
@@ -33,18 +33,6 @@ api_system_update_user:
 api_system_check_user_duplicate:
     path:     /check-duplicate-user-name
     defaults: { _controller: BinduBundle:ApiPoskeeper:checkDuplicateUser }
-
-api_system_user_login:
-    path:     /user-login
-    defaults: { _controller: BinduBundle:ApiPoskeeper:login }
-
-api_system_user_forget_password:
-    path:     /user-forget-password
-    defaults: { _controller: BinduBundle:ApiPoskeeper:forgetPassword }
-
-api_system_user_reset_password:
-    path:     /user-reset-password
-    defaults: { _controller: BinduBundle:ApiPoskeeper:resetPassword }
 
 api_system_user:
     path:     /system-user

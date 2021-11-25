@@ -85,6 +85,16 @@ class GlobalOption
     protected $mainApp;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country")
+     */
+    protected $currency;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country")
+     */
+    protected $country;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" )
      **/
     protected $agent;
@@ -100,20 +110,15 @@ class GlobalOption
      **/
     protected $sms;
 
-
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSetting", mappedBy="globalOption" )
      **/
     protected $payrollSetting;
 
-
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", mappedBy="globalOption" )
      **/
     protected $procurementConfig;
-
-
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="globalOption" )
@@ -471,6 +476,34 @@ class GlobalOption
      * @ORM\Column(name="description", type="text", length=255  , nullable=true )
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="binNo", type="text", length=255  , nullable=true )
+     */
+    private $binNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="vatPercent", type="text", length=255  , nullable=true )
+     */
+    private $vatPercent;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vatEnable", type="boolean", nullable=true )
+     */
+    private $vatEnable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="printMessage", type="text", length=255  , nullable=true )
+     */
+    private $printMessage;
 
     /**
      * @var string
@@ -2223,4 +2256,104 @@ class GlobalOption
     {
         $this->address = $address;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param mixed $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBinNo()
+    {
+        return $this->binNo;
+    }
+
+    /**
+     * @param string $binNo
+     */
+    public function setBinNo($binNo)
+    {
+        $this->binNo = $binNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param string $vatPercent
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVatEnable()
+    {
+        return $this->vatEnable;
+    }
+
+    /**
+     * @param bool $vatEnable
+     */
+    public function setVatEnable($vatEnable)
+    {
+        $this->vatEnable = $vatEnable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintMessage()
+    {
+        return $this->printMessage;
+    }
+
+    /**
+     * @param string $printMessage
+     */
+    public function setPrintMessage($printMessage)
+    {
+        $this->printMessage = $printMessage;
+    }
+
+
+
+
 }

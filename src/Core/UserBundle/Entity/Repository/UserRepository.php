@@ -545,11 +545,30 @@ class UserRepository extends EntityRepository
         $user = $qb->getQuery()->getOneOrNullResult();
         $a = mt_rand(1000,9999);
         $user->setPlainPassword($a);
+        $user->setappPassword($a);
         $this->get('fos_user.user_manager')->updateUser($user);
         $data = array();
         return $data;
 
     }
+
+    public function getAndroidOTP(GlobalOption $option,$mobile){
+
+        $em = $this->_em;
+        $user = $this->findOneBy(array('globalOption'=>$option,'username'=>$mobile));
+        if($user){
+            $a = mt_rand(1000,9999);
+            $user->setPlainPassword($a);
+            $user->setappPassword($a);
+            $em->persist($user);
+            $em->flush();
+            return $user;
+        }
+        return false;
+
+
+    }
+
 
 
     public function androidUserCreate(GlobalOption $setup,$data)

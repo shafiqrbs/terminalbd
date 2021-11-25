@@ -85,25 +85,25 @@ class ApiPoskeeperController extends Controller
 
     }
 
-    public function licenseVerifyAction(Request $request)
+    public function loginAction(Request $request)
     {
 
         $formData = $request->request->all();
-        $key =  $this->getParameter('x-api-key');
-        $value =  $this->getParameter('x-api-value');
-        $uniqueCode = $formData['licenseKey'];
-
+        $mobile = $formData['mobile'];
         $data = array();
-        $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode));
-
-        if (!empty($entity)  and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
-
-            $data = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getSetupInformation($entity);
-
-        }else{
-
+        if( $this->checkApiValidation($request) == 'invalid') {
             return new Response('Unauthorized access.', 401);
-
+        }else {
+            $entity = $this->checkApiValidation($request);
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->getAndroidOTP($entity,$mobile);
+            if($user){
+                $login = $this->getDoctrine()->getRepository("UserBundle:User")->find($user);
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($login, $login->getAppPassword()));
+                $data = array('status'=>'valid','otp' => $login->getAppPassword());
+            }else{
+                $data = array('status'=>'in-valid','otp' => '');
+            }
         }
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
@@ -119,20 +119,84 @@ class ApiPoskeeperController extends Controller
         $formData = $request->request->all();
         $key =  $this->getParameter('x-api-key');
         $value =  $this->getParameter('x-api-value');
-
+        $deviceId = $formData['deviceId'];
         $mobile = $formData['mobile'];
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('mobile' => $mobile));
         $userExist = $this->getDoctrine()->getRepository('UserBundle:User')->checkExistingUser($mobile);
-
-        if (empty($entity) and $request->headers->get('X-API-KEY') != $key and $request->headers->get('X-API-VALUE') != $value) {
-
+        if (empty($formData) and $request->headers->get('X-API-KEY') != $key and $request->headers->get('X-API-VALUE') != $value) {
             return new Response('Unauthorized access.', 401);
-
         }elseif (!empty($entity) and !empty($userExist)  and  $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
             $data = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getSetupInformation($entity);
-        }elseif (($formData)  and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
+            /* @var $entity GlobalOption */
+            if($device) {
+                $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();$address = $entity->getMedicineConfig()->getAddress();
+                $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
+                $vatRegNo = $entity->getVatPercent();
+                $vatEnable = $entity->isVatEnable();
+                $footerMessage = $entity->getPrintMessage();
+                if($footerMessage){
+                    $printFooter = $footerMessage;
+                }else{
+                    $printFooter = "Thanks For Visiting our pharmacy";
+                }
+                $data = array(
+                    'setupId' => $entity->getId(),
+                    'deviceId' => $device,
+                    'uniqueCode' => $entity->getUniqueCode(),
+                    'name' => $entity->getName(),
+                    'mobile' => $mobile,
+                    'email' => $entity->getEmail(),
+                    'symbol' => $entity->getCurrency() ? $entity->getCurrency()->getSymbol() : '',
+                    'country' => $entity->getCurrency() ? $entity->getCountry()->getName() : '',
+                    'currency' => $entity->getCurrency() ? $entity->getCurrency()->getCurrency():'',
+                    'address' => $entity->getAddress(),
+                    'posPrint' => $printFooter,
+                    'main_app' => $entity->getMainApp()->getId(),
+                    'main_app_name' => $entity->getMainApp()->getSlug(),
+                    'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                    'website' => $entity->getDomain(),
+                    'vatRegNo' => $vatRegNo,
+                    'vatPercentage' => $vatPercentage,
+                    'vatEnable' => $vatEnable,
+                );
+            }
+        }elseif ($formData and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
             $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->insertSetupInformation($formData);
             $this->getDoctrine()->getRepository('UserBundle:User')->androidUserCreate($entity,$formData);
+            $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
+            if($device) {
+                $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();$address = $entity->getMedicineConfig()->getAddress();
+                $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
+                $vatRegNo = $entity->getVatPercent();
+                $vatEnable = $entity->isVatEnable();
+                $footerMessage = $entity->getPrintMessage();
+                if($footerMessage){
+                    $printFooter = $footerMessage;
+                }else{
+                    $printFooter = "Thanks For Visiting our pharmacy";
+                }
+                $data = array(
+                    'setupId' => $entity->getId(),
+                    'deviceId' => $device,
+                    'uniqueCode' => $entity->getUniqueCode(),
+                    'name' => $entity->getName(),
+                    'mobile' => $mobile,
+                    'email' => $entity->getEmail(),
+                    'symbol' => $entity->getCurrency() ? $entity->getCurrency()->getSymbol() : '',
+                    'country' => $entity->getCurrency() ? $entity->getCountry()->getName() : '',
+                    'currency' => $entity->getCurrency() ? $entity->getCurrency()->getCurrency():'',
+                    'address' => $entity->getAddress(),
+                    'posPrint' => $printFooter,
+                    'main_app' => $entity->getMainApp()->getId(),
+                    'main_app_name' => $entity->getMainApp()->getSlug(),
+                    'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                    'website' => $entity->getDomain(),
+                    'vatRegNo' => $vatRegNo,
+                    'vatPercentage' => $vatPercentage,
+                    'vatEnable' => $vatEnable,
+                );
+            }
         }else{
             return new Response('Unauthorized access.', 401);
         }
@@ -215,77 +279,7 @@ class ApiPoskeeperController extends Controller
         }
     }
 
-    public function loginAction(Request $request)
-    {
-        // This data is most likely to be retrieven from the Request object (from Form)
-        // But to make it easy to understand ...
 
-        $formData = $request->request->all();
-        $_username = $formData['username'];
-        $_password = $formData['password'];
-
-        // Retrieve the security encoder of symfony
-        $factory = $this->get('security.encoder_factory');
-
-        /// Start retrieve user
-        // Let's retrieve the user by its username:
-        // If you are using FOSUserBundle:
-        // $user_manager = $this->get('fos_user.user_manager');
-        // $user = $user_manager->findUserByUsername($_username);
-        // Or by yourself
-        $user = $this->getDoctrine()->getManager()->getRepository("UserBundle:User")
-            ->checkLoginUser($_username);
-        /// End Retrieve user
-        // Check if the user exists !
-        if(!$user){
-            return new Response(
-                'Username doesnt exists',
-                Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
-            );
-        }
-
-        /// Start verification
-        $encoder = $factory->getEncoder($user);
-        $salt = $user->getSalt();
-
-        if(!$encoder->isPasswordValid($user->getPassword(), $_password, $salt)) {
-            return new Response(
-                'Username or Password not valid.',
-                Response::HTTP_UNAUTHORIZED,
-                array('Content-type' => 'application/json')
-            );
-        }
-        /// End Verification
-
-        // The password matches ! then proceed to set the user in session
-
-        //Handle getting or creating the user entity likely with a posted form
-        // The third parameter "main" can change according to the name of your firewall in security.yml
-        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-        $this->get('security.token_storage')->setToken($token);
-
-        // If the firewall name is not main, then the set value would be instead:
-        // $this->get('session')->set('_security_XXXFIREWALLNAMEXXX', serialize($token));
-        $this->get('session')->set('_security_main', serialize($token));
-
-        // Fire the login event manually
-        $event = new InteractiveLoginEvent($request, $token);
-        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-        if(!empty($user)){
-            $data = array(
-                'licenseKey' => $user->getGlobalOption()->getUniqueCode(),
-                'username' => $user->getUsername(),
-                'name' => $user->getName(),
-                'status' => 'success'
-            );
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
-        }
-    }
 
     public function checkDuplicateUserAction(Request $request)
     {
