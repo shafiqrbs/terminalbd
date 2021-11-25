@@ -105,6 +105,7 @@ class ApiPoskeeperController extends Controller
                 $data = array('status'=>'in-valid','otp' => '');
             }
         }
+
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($data));
