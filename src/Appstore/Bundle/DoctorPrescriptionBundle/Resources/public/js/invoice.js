@@ -664,6 +664,7 @@ var form = $("#invoiceForm").validate({
         "appstore_bundle_dpsinvoice[customer][weight]": {required: false},
         "appstore_bundle_dpsinvoice[customer][bloodPressure]": {required: false},
         "appstore_bundle_dpsinvoice[customer][bloodGroup]": {required: false},
+        "appstore_bundle_dpsinvoice[customer][bloodGroup]": {required: false},
     },
 
     messages: {
