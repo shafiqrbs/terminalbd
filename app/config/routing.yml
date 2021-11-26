@@ -30,7 +30,7 @@ android_sales_api:
     prefix:   /android-api
 
 android_poskeeper_api:
-    resource: "@BinduBundle/Resources/config/apiPoskeeper.yml"
+    resource: "@BinduBundle/Resources/config/apiPoskeeperxx.yml"
     prefix:   /android-api-pos
 
 android_ecommerce_api:
