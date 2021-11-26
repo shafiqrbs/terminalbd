@@ -18,6 +18,18 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 class ApiPoskeeperController extends Controller
 {
 
+    public function checkApiValidation($request)
+    {
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        $unique = $request->headers->get('X-API-SECRET');
+        $setup = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $unique,'status'=> 1));
+        if (!empty($setup) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            return $setup;
+        }
+        return "invalid";
+    }
+
     public function appsAction(Request $request)
     {
 
@@ -36,18 +48,104 @@ class ApiPoskeeperController extends Controller
 
     }
 
-
-    public function checkApiValidation($request)
+    public function setupAction(Request $request)
     {
+
+        $formData = $request->request->all();
         $key =  $this->getParameter('x-api-key');
         $value =  $this->getParameter('x-api-value');
-        $unique = $request->headers->get('X-API-SECRET');
-        $setup = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $unique,'status'=> 1));
-        if (!empty($setup) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
-            return $setup;
+        $uniqueCode = $formData['uniqueCode'];
+        $mobile = $formData['mobile'];
+        $deviceId = $formData['deviceId'];
+        $data = array();
+        $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
+        if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            return new Response('Unauthorized access.', 401);
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
+            if($device) {
+                $address = '';
+                $vatRegNo = '';
+                $vatPercentage = '';
+                $vatEnable = '';
+                $printFooter = "";
+                if ($entity->getMainApp()->getSlug() == "miss") {
+                    $address = $entity->getMedicineConfig()->getAddress();
+                    $vatPercentage = $entity->getMedicineConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getMedicineConfig()->getVatRegNo();
+                    $vatEnable = $entity->getMedicineConfig()->isVatEnable();
+                    $footerMessage = $entity->getMedicineConfig()->getPrintFooterText();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our pharmacy";
+                    }
+                } elseif ($entity->getMainApp()->getSlug() == "business") {
+                    $address = $entity->getBusinessConfig()->getAddress();
+                    $vatPercentage = $entity->getBusinessConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getBusinessConfig()->getVatRegNo();
+                    $vatEnable = $entity->getBusinessConfig()->getVatEnable();
+                    $footerMessage = $entity->getBusinessConfig()->getPrintFooterText();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our business store";
+                    }
+                } elseif ($entity->getMainApp()->getSlug() == "restaurant") {
+                    $address = $entity->getRestaurantConfig()->getAddress();
+                    $vatPercentage = $entity->getRestaurantConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getRestaurantConfig()->getVatRegNo();
+                    $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+                    $footerMessage = $entity->getRestaurantConfig()->getPrintFooterText();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our restaurant";
+                    }
+                } elseif ($entity->getMainApp()->getSlug() == "inventory") {
+                    $address = $entity->getInventoryConfig()->getAddress();
+                    $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
+                    $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
+                    $vatEnable = $entity->getInventoryConfig()->getVatEnable();
+                    $footerMessage = $entity->getInventoryConfig()->getPrintFooterText();
+                    if($footerMessage){
+                        $printFooter = $footerMessage;
+                    }else{
+                        $printFooter = "Thanks For Visiting our shop";
+                    }
+                }
+                $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
+                $data = array(
+                    'setupId' => $entity->getId(),
+                    'deviceId' => $device,
+                    'uniqueCode' => $entity->getUniqueCode(),
+                    'name' => $entity->getName(),
+                    'mobile' => $mobile,
+                    'email' => $entity->getEmail(),
+                    'locationId' => $entity->getLocation()->getId(),
+                    'address' => $address,
+                    'locationName' => $printFooter,
+                    'main_app' => $entity->getMainApp()->getId(),
+                    'main_app_name' => $entity->getMainApp()->getSlug(),
+                    'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                    'website' => $entity->getDomain(),
+                    'vatRegNo' => $vatRegNo,
+                    'vatPercentage' => $vatPercentage,
+                    'vatEnable' => $vatEnable,
+                );
+            }
         }
-        return "invalid";
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($data));
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+
     }
+
 
     public function dashboardAction(Request $request)
     {
@@ -137,7 +235,7 @@ class ApiPoskeeperController extends Controller
                 if($footerMessage){
                     $printFooter = $footerMessage;
                 }else{
-                    $printFooter = "Thanks For Visiting our pharmacy";
+                    $printFooter = "Thanks For Visiting our store";
                 }
                 $data = array(
                     'setupId' => $entity->getId(),
@@ -173,7 +271,7 @@ class ApiPoskeeperController extends Controller
                 if($footerMessage){
                     $printFooter = $footerMessage;
                 }else{
-                    $printFooter = "Thanks For Visiting our pharmacy";
+                    $printFooter = "Thanks For Visiting our store";
                 }
                 $data = array(
                     'setupId' => $entity->getId(),
@@ -344,62 +442,6 @@ class ApiPoskeeperController extends Controller
         }else{
 
             return new Response('Unauthorized access.', 401);
-        }
-    }
-
-    public function forgetPasswordAction(Request $request)
-    {
-
-        $username = $request->request->get('username');
-        $user = $this->getDoctrine()->getManager()->getRepository("UserBundle:User")
-            ->checkLoginUser($username);
-        if (empty($user)) {
-            return new Response('Unauthorized access.', 401);
-        }else{
-            $data = array(
-                'licenseKey' => $user->getGlobalOption()->getUniqueCode(),
-                'username' => $user->getUsername(),
-                'name' => $user->getName(),
-                'status' => 'success'
-            );
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
-        }
-
-    }
-
-    public function resetPasswordAction(Request $request)
-    {
-
-        if( $this->checkApiValidation($request) == 'invalid') {
-
-            return new Response('Unauthorized access.', 401);
-
-        }else{
-            $entity = $this->checkApiValidation($request);
-            $username = $request->request->get('username');
-            $password = $request->request->get('password');
-            $user = $this->getDoctrine()->getManager()->getRepository("UserBundle:User")
-                ->findOneBy(array('username' => $username,'enabled' => 1));
-            if(empty($user)){
-                return new Response('Unauthorized access.', 401);
-            }
-
-            $user->setPlainPassword($password);
-            $this->get('fos_user.user_manager')->updateUser($user);
-            $data = array(
-                'username' => $user->getUsername(),
-                'name' => $user->getProfile()->getName(),
-                'status' => 'success'
-            );
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
-            $response->setStatusCode(Response::HTTP_OK);
-            return $response;
         }
     }
 

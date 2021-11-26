@@ -302,22 +302,16 @@ $('#invoiceParticulars').on("click", ".deleteParticular", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( response ) {
-                $('#remove-'+id).hide();
-                obj = JSON.parse(response);
-                $('#subTotal').html(obj['subTotal']);
-                $('.grandTotal').html(obj['netTotal']);
-                $('#paymentTotal').val(obj['subTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('#discount').html(obj['discount']);
-                $('#msg').html(obj['msg']);
-            });
-        }
+    $.get(url, function( response ) {
+        $('#remove-'+id).hide();
+        obj = JSON.parse(response);
+        $('#subTotal').html(obj['subTotal']);
+        $('.grandTotal').html(obj['netTotal']);
+        $('#paymentTotal').val(obj['subTotal']);
+        $('#due').val(obj['due']);
+        $('.dueAmount').html(obj['due']);
+        $('#discount').html(obj['discount']);
+        $('#msg').html(obj['msg']);
     });
 });
 

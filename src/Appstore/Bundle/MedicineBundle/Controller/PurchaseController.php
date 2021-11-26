@@ -687,10 +687,15 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
+        $entity->setProcess('Created');
+        if(!empty($entity->getMedicinePurchaseReturn())){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($entity->getMedicinePurchaseReturn());
+        }
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
         $em->createQuery("DELETE MedicineBundle:MedicinePurchaseItem e WHERE e.medicinePurchase ={$entity->getId()}");
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('medicine_purchase'));
+        return new Response('success');
     }
 
     /**
