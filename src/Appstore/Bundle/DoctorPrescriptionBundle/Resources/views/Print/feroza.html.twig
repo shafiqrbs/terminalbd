@@ -73,6 +73,7 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if entity.investigations is not empty %}
                 <div class="tab-pane">
                     <h4>Investigation</h4>
                     <ul class="styled">
@@ -81,6 +82,7 @@
                         {% endfor %}
                     </ul>
                 </div>
+                {% endif %}
             </div>
             <div class="col-md-8" style="padding-left: 30px; height: 650px; margin-left: -1px">
                 <img src="{{ asset('assets/img/customer/rx.png') }}" style="margin-top: 30px;width:44px">

@@ -672,11 +672,13 @@ var form = $("#invoiceForm").validate({
         "appstore_bundle_dpsinvoice[customer][name]":"Enter patient name",
         "appstore_bundle_dpsinvoice[customer][mobile]":"Enter patient mobile no",
         "appstore_bundle_dpsinvoice[customer][age]": "Enter patient age",
+        "appstore_bundle_dpsinvoice[customer][hmsDiseasesProfile]": "Enter patient diseases profile",
     },
     tooltip_options: {
         "appstore_bundle_dpsinvoice[customer][name]": {placement:'top',html:true},
         "appstore_bundle_dpsinvoice[customer][mobile]": {placement:'top',html:true},
         "appstore_bundle_dpsinvoice[customer][age]": {placement:'top',html:true},
+        "appstore_bundle_dpsinvoice[customer][hmsDiseasesProfile]": {placement:'top',html:true},
     },
 
     submitHandler: function(form) {

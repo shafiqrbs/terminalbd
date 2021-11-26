@@ -59,7 +59,7 @@ class PrescriptionType extends AbstractType
                 ),
             ))
             ->add('hmsDiseasesProfile', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '---Select diseases profile---',
