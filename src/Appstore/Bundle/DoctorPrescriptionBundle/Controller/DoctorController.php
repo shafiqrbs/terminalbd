@@ -61,8 +61,7 @@ class DoctorController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setDpsConfig($globalOption ->getDpsConfig());
-            $service = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsService')->findOneBy(array('serviceFormat'=>'doctor'));
-            $entity->setService($service);
+            $entity->setMode('doctor');
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());
             if(empty($entity->getDesignation())){

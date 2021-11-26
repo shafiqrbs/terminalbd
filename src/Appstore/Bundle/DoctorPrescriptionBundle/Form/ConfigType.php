@@ -40,6 +40,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
+            ->add('investigation')
             ->add('isPrintFooter')
             ->add('printInstruction')
             ->add('headerLeftWidth','text',array('attr'=>array('class'=>'m-wrap span12')))

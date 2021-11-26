@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\DomainUserBundle\Form\PatientForPrescriptionType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
@@ -47,55 +48,52 @@ class InvoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-            ->add('assignDoctor', 'entity', array(
-                'required'    => true,
+            ->add('diseasesProfile', 'entity', array(
+                'required' => true,
                 'class' => 'Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular',
                 'property' => 'name',
-                'multiple'    => false,
+                'multiple' => false,
                 'expanded' => false,
-                'attr'=>array('class'=>'m-wrap span12'),
-                'query_builder' => function(EntityRepository $er){
+                'attr' => array('class' => 'm-wrap span12'),
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('e')
-                        ->join("e.service",'s')
                         ->where("e.status = 1")
-                     //   ->andWhere('e.dpsConfig =:dpsConfig')
-                      //  ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
-                      // ->andWhere('s.slug IN (:slugs)')
-                      //  ->setParameter('slugs',array('doctor'))
-                        ->orderBy("e.name","ASC");
+                        ->andWhere("e.mode = 'diseases'")
+                        ->andWhere('e.dpsConfig =:dpsConfig')
+                        ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
+                        ->orderBy("e.name", "ASC");
                 }
             ))
             ->add('process', 'choice', array(
-                'attr'=>array('class'=>'m-wrap invoiceProcess select-custom'),
-                'expanded'      =>false,
-                'multiple'      =>false,
+                'attr' => array('class' => 'm-wrap invoiceProcess select-custom'),
+                'expanded' => false,
+                'multiple' => false,
                 'empty_value' => '---Choose process---',
                 'choices' => array(
-                    'Created' => 'Created',
-                    'Appointment' => 'Appointment',
-                    'Visit' => 'Visit',
-                    'Done' => 'Done',
-                    'Canceled' => 'Canceled',
+                    'In-progress' => 'In-progress',
+                    'Closed' => 'Closed',
                 ),
-            ))
-
-            ->add('investigations', 'entity', array(
-                'required'    => true,
-                'multiple'      =>true,
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
-                'group_by'  => 'category.name',
-                'property'  => 'name',
-                'choice_translation_domain' => true,
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.category",'c')
-                        ->orderBy("e.name", "ASC");
-                }
-
             ));
-           $builder->add('customer', new CustomerForDpsType( $this->location ));
+
+        if ($this->globalOption->getDpsConfig()->isInvestigation() == 1){
+
+                $builder->add('investigations', 'entity', array(
+                    'required' => false,
+                    'multiple' => true,
+                    'attr' => array('class' => 'm-wrap span12 select2'),
+                    'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
+                    'group_by' => 'category.name',
+                    'property' => 'name',
+                    'choice_translation_domain' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('e')
+                            ->join("e.category", 'c')
+                            ->orderBy("e.name", "ASC");
+                    }
+
+                ));
+            }
+           $builder->add('customer', new PatientForPrescriptionType());
     }
     
     /**

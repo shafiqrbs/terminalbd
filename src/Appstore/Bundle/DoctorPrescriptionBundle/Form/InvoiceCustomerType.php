@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\DomainUserBundle\Form\PatientForPrescriptionType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
@@ -21,16 +22,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class InvoiceCustomerType extends AbstractType
 {
 
-    /** @var  LocationRepository */
-    private $location;
-
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption)
     {
-        $this->location         = $location;
         $this->globalOption     = $globalOption;
     }
 
@@ -52,16 +49,14 @@ class InvoiceCustomerType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->join("e.service",'s')
                         ->where("e.status = 1")
+                        ->andWhere("e.mode = 'doctor'")
                         ->andWhere('e.dpsConfig =:dpsConfig')
                         ->setParameter('dpsConfig', $this->globalOption->getDpsConfig()->getId())
-                        ->andWhere('s.slug IN (:slugs)')
-                        ->setParameter('slugs',array('doctor'))
                         ->orderBy("e.name","ASC");
                 }
             ));
-           $builder->add('customer', new CustomerForDpsType($this->location ));
+           $builder->add('customer', new PatientForPrescriptionType());
     }
     
     /**
@@ -79,7 +74,7 @@ class InvoiceCustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_dpsinvoice';
+        return 'dpsinvoice';
     }
 
 }

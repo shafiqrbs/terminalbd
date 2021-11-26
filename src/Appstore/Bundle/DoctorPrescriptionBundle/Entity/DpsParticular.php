@@ -153,14 +153,14 @@ class DpsParticular
     private $salesQuantity;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
      */
     private $purchaseAverage;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
      */
@@ -252,6 +252,13 @@ class DpsParticular
      * @ORM\Column(name="particularCode", type="string", length=15, nullable=true)
      */
     private $particularCode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=15, nullable=true)
+     */
+    private $mode;
 
     /**
      * @var boolean
@@ -1059,6 +1066,22 @@ class DpsParticular
     public function setDoctorPrescription($doctorPrescription)
     {
         $this->doctorPrescription = $doctorPrescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

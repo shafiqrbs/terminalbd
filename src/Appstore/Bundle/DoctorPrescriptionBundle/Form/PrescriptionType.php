@@ -74,22 +74,25 @@ class PrescriptionType extends AbstractType
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
-            ))
-            ->add('investigations', 'entity', array(
-                'required'    => true,
-                'multiple'      =>true,
-                'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
-                'group_by'  => 'category.name',
-                'property'  => 'name',
-                'choice_translation_domain' => true,
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.category",'c')
-                        ->orderBy("e.name", "ASC");
-                }
-
             ));
+            if ($this->globalOption->getDpsConfig()->isInvestigation() == 1){
+
+                $builder->add('investigations', 'entity', array(
+                    'required' => false,
+                    'multiple' => true,
+                    'attr' => array('class' => 'm-wrap span12 select2'),
+                    'class' => 'Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport',
+                    'group_by' => 'category.name',
+                    'property' => 'name',
+                    'choice_translation_domain' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('e')
+                            ->join("e.category", 'c')
+                            ->orderBy("e.name", "ASC");
+                    }
+
+                ));
+            }
            $builder->add('customer', new CustomerForDpsType( $this->location ));
     }
     

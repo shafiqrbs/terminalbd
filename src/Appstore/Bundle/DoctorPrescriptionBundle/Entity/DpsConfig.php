@@ -376,6 +376,13 @@ class DpsConfig
      */
      private $showAccessories = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="investigation", type="boolean",  nullable=true)
+     */
+     private $investigation = true;
+
 
 
 
@@ -1251,6 +1258,22 @@ class DpsConfig
     public function setShowTransaction($showTransaction)
     {
         $this->showTransaction = $showTransaction;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInvestigation()
+    {
+        return $this->investigation;
+    }
+
+    /**
+     * @param bool $investigation
+     */
+    public function setInvestigation($investigation)
+    {
+        $this->investigation = $investigation;
     }
 
 

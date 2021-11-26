@@ -6,6 +6,7 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Form\InvoiceTransactionType;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
+use Appstore\Bundle\DomainUserBundle\Form\PatientForPrescriptionType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
@@ -68,7 +69,7 @@ class InvoiceController extends Controller
 
     public function newAction()
     {
-        $entity = new Customer();
+        $entity = new DpsInvoice();
         $user = $this->getUser();
         $form = $this->createInvoiceCustomerForm($entity);
         $dpsConfig = $user->getGlobalOption()->getDpsConfig();
@@ -86,7 +87,7 @@ class InvoiceController extends Controller
         $entity = new DpsInvoice();
         $dpsConfig = $this->getUser()->getGlobalOption()->getDpsConfig();
         $lastObject = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->getLastInvoice($dpsConfig);
-        $form = $this->createInvoiceCustomerForm(new Customer());
+        $form = $this->createInvoiceCustomerForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
         if ($form->isValid()) {
@@ -103,8 +104,15 @@ class InvoiceController extends Controller
             if($dpsConfig->getIsDefaultMedicine() == 1 ){
                 $this->getDoctrine()->getRepository('MedicineBundle:MedicineDoctorPrescribe')->defaultDpsBeforeMedicine($entity,$lastObject);
             }
-            return $this->redirect($this->generateUrl('dps_invoice_edit', array('id' => $entity->getId())));
+            return new Response($entity->getId());
+            //return $this->redirect($this->generateUrl('dps_invoice_edit', array('id' => $entity->getId())));
         }
+        return $this->render('DoctorPrescriptionBundle:Invoice:patient.html.twig', array(
+       // $html = $this->renderView('DoctorPrescriptionBundle:Invoice:patient.html.twig', array(
+            'form'   => $form->createView(),
+            'entity' => $entity,
+        ));
+        //return new Response('in-valid');
 
     }
 
@@ -116,11 +124,10 @@ class InvoiceController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createInvoiceCustomerForm(Customer $entity)
+    private function createInvoiceCustomerForm(DpsInvoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerForDpsType($location), $entity, array(
+        $form = $this->createForm(new InvoiceCustomerType($globalOption), $entity, array(
             'action' => $this->generateUrl('dps_invoice_create'),
             'method' => 'POST',
             'attr' => array(
@@ -184,14 +191,7 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-
-        if($dpsConfig->getShowTransaction() == 1 ){
-            $editForm = $this->createTransactionForm($entity);
-        }else{
-            $editForm = $this->createEditForm($entity);
-        }
-
-
+        $editForm = $this->createEditForm($entity);
         /** @var  $invoiceParticularArr */
         $invoiceParticularArr = array();
 

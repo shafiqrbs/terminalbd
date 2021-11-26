@@ -36,27 +36,29 @@ $(document).on('click', '.addPatient', function() {
 });
 
 function formSubmit() {
+
     $("#invoicePatientForm").validate({
 
         rules: {
 
-            "appstore_bundle_dpsinvoice[customer][name]": {required: true},
-            "appstore_bundle_dpsinvoice[customer][mobile]": {required: true},
-            "appstore_bundle_dpsinvoice[customer][age]": {required: true},
-            "appstore_bundle_dpsinvoice[customer][address]": {required: false},
-            "appstore_bundle_dpsinvoice[customer][weight]": {required: false},
+            "dpsinvoice[customer][name]": {required: true},
+            "dpsinvoice[customer][mobile]": {required: true},
+            "dpsinvoice[customer][age]": {required: true},
+            "dpsinvoice[customer][address]": {required: false},
+            "dpsinvoice[customer][weight]": {required: false},
+            "dpsinvoice[customer][bloodPressure]": {required: false},
         },
 
         messages: {
 
-            "appstore_bundle_dpsinvoice[customer][name]": "Enter patient name",
-            "appstore_bundle_dpsinvoice[customer][mobile]": "Enter patient mobile no",
-            "appstore_bundle_dpsinvoice[customer][age]": "Enter patient age",
+            "dpsinvoice[customer][name]": "Enter patient name",
+            "dpsinvoice[customer][mobile]": "Enter patient mobile no",
+            "dpsinvoice[customer][age]": "Enter patient age",
         },
         tooltip_options: {
-            "appstore_bundle_dpsinvoice[customer][name]": {placement: 'top', html: true},
-            "appstore_bundle_dpsinvoice[customer][mobile]": {placement: 'top', html: true},
-            "appstore_bundle_dpsinvoice[customer][age]": {placement: 'top', html: true},
+            "dpsinvoice[customer][name]": {placement: 'top', html: true},
+            "dpsinvoice[customer][mobile]": {placement: 'top', html: true},
+            "dpsinvoice[customer][age]": {placement: 'top', html: true},
         },
 
         submitHandler: function (form) {
@@ -67,13 +69,12 @@ function formSubmit() {
                 processData : false,
                 contentType : false,
                 beforeSend: function() {
-                    $('#saveNewPatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
                     $('.btn-ajax-loading').attr("disabled", true);
                 },
                 success: function(response){
                     $('.btn-ajax-loading').attr("disabled", false);
-                    $('#saveNewPatientButton').removeClass('btn-ajax-loading').fadeOut(3000);
-                    window.location.href = '/dms/invoice/'+response+'/edit';
+                    console.log(response);
+                  //  window.location.href = '/dms/invoice/'+response+'/edit';
                 }
             });
         }

@@ -323,3 +323,28 @@ li.active > a {
 .preview-print{
     float: right;
 }
+
+.form-horizontal .patient-info .control-label {
+    float: left;
+    text-align: left;
+    background: #1e7b85;
+    color: #fff;
+    margin: 0!important;
+    width: 99.5%;
+    font-size: 14px;
+    border: 1px solid #1e7b85;
+}
+.tabbable-custom > .tab-content {
+    min-height: 350px;
+}
+
+.btn-ajax-loading {
+    position:inherit;
+}
+.row-fluid label{
+    font-weight: bold;
+
+}
+input[class*="span"].m-wrap , .row-fluid select[class*="span"]{
+    border: 2px solid #0b84fe!important;
+}
