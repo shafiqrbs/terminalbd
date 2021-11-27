@@ -47,6 +47,7 @@ function formSubmit() {
             "dpsinvoice[customer][address]": {required: false},
             "dpsinvoice[customer][weight]": {required: false},
             "dpsinvoice[customer][bloodPressure]": {required: false},
+            "dpsinvoice[customer][bloodGroup]": {required: false},
         },
 
         messages: {
