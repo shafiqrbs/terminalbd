@@ -1,106 +1,111 @@
 api_poskeeper_login:
-    path:     /poskeeper/otp-login
+    path:     /otp-login
     defaults: { _controller: BinduBundle:ApiPoskeeper:login }
 
 api_poskeeper_setup:
-    path:     /poskeeper/setup
+    path:     /setup
     defaults: { _controller: BinduBundle:ApiPoskeeper:setup }
 
 api_poskeeper_app:
-    path:     /poskeeper/shop-type
+    path:     /shop-type
     defaults: { _controller: BinduBundle:ApiPoskeeper:apps }
 
 api_poskeeper_register:
-    path:     /poskeeper/store-build
+    path:     /store-build
     defaults: { _controller: BinduBundle:ApiPoskeeper:storeBuild }
 
+api_poskeeper_stock_item:
+    path:     /stock-item
+    defaults: { _controller: BinduBundle:Api:stockItem }
+
+
 api_poskeeper_stock_create:
-    path:     /poskeeper/stock-create
+    path:     /stock-create
     defaults: { _controller: BinduBundle:Api:createStock }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_stock_edit:
-    path:     /poskeeper/stock-edit
+    path:     /stock-edit
     defaults: { _controller: BinduBundle:Api:stockEdit }
 
 api_poskeeper_stock_update:
-    path:     /poskeeper/stock-update
+    path:     /stock-update
     defaults: { _controller: BinduBundle:Api:stockUpdate }
     methods:  POST
     options:
         expose: true
 
 api_poskeeper_stock_delete:
-    path:     /poskeeper/stock-delete
+    path:     /stock-delete
     defaults: { _controller: BinduBundle:Api:stockDelete }
 
 api_poskeeper_customer_create:
-    path:     /poskeeper/customer-create
+    path:     /customer-create
     defaults: { _controller: BinduBundle:Api:createCustomer }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_customer_update:
-    path:     /poskeeper/customer-update
+    path:     /customer-update
     defaults: { _controller: BinduBundle:Api:updateCustomer }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_customer_ledger:
-    path:     /poskeeper/customer-ledeger
+    path:     /customer-ledeger
     defaults: { _controller: BinduBundle:Api:customerLedger }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_customer_invoice_details:
-    path:     /poskeeper/customer-invoice-details
+    path:     /customer-invoice-details
     defaults: { _controller: BinduBundle:Api:customerInvoice }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_sales_payment:
-    path:     /poskeeper/payment-receive
+    path:     /payment-receive
     defaults: { _controller: BinduBundle:Api:salesReceive }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_vendor_create:
-    path:     /poskeeper/vendor-create
+    path:     /vendor-create
     defaults: { _controller: BinduBundle:Api:createVendor }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_vendor_update:
-    path:     /poskeeper/vendor-update
+    path:     /vendor-update
     defaults: { _controller: BinduBundle:Api:updateVendor }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_vendor_ledger:
-    path:     /poskeeper/vendor-ledeger
+    path:     /vendor-ledeger
     defaults: { _controller: BinduBundle:Api:vendorLedger }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_vendor_invoice_details:
-    path:     /poskeeper/vendor-invoice-details
+    path:     /vendor-invoice-details
     defaults: { _controller: BinduBundle:Api:vendorInvoice }
     methods:  POST|GET
     options:
         expose: true
 
 api_poskeeper_vendor_payment:
-    path:     /poskeeper/payment
+    path:     /payment
     defaults: { _controller: BinduBundle:Api:purchasePayment }
     methods:  POST|GET
     options:
@@ -108,13 +113,13 @@ api_poskeeper_vendor_payment:
 
 
 api_poskeeper_short_list:
-    path:     /poskeeper/purchase-short-list
+    path:     /purchase-short-list
     defaults: { _controller: BinduBundle:Api:purchaseShortList }
 
 api_poskeeper_short_list:
-    path:     /poskeeper/instant-purchase-item
+    path:     /instant-purchase-item
     defaults: { _controller: BinduBundle:Api:instantPurchase }
 
 api_poskeeper_add_purchase_shortlist:
-    path:     /poskeeper/add-purchase-short-list
+    path:     /add-purchase-short-list
     defaults: { _controller: BinduBundle:Api:insertPurchaseShortItem }

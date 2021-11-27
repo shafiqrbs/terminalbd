@@ -616,4 +616,33 @@ class ReportController extends Controller
         ));
     }
 
+
+    /* Inventory Report */
+
+    /**
+     * @Route("/inv-system-overview", methods={"GET", "POST"}, name="inv_system_overview")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function invSystemOverviewAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $purchaseOverview = $em->getRepository('ReportBundle:Report')->invReportPurchaseOverview($inventory,$data);
+        $priceOverview = $em->getRepository('ReportBundle:Report')->invReportStockPriceOverview($inventory,$data);
+        $salesPurchasePrice = $em->getRepository('ReportBundle:Report')->invReportPurchasePrice($inventory,$data);
+        $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
+        return $this->render('ReportBundle:Inventory:index.html.twig', array(
+            'priceOverview' => $priceOverview[0],
+            'stockOverview' => $stockOverview,
+            'purchaseOverview' => $purchaseOverview,
+            'salesPurchasePrice' => $salesPurchasePrice,
+            'option' => $globalOption,
+        ));
+    }
+
 }

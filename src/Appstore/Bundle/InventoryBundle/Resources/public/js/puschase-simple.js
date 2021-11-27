@@ -115,7 +115,19 @@ function InventoryPurchasePage(){
                 $('#barcode').focus().val('');
             },
 
-        })
+        });
+        $.ajax({
+            url: Routing.generate('pos_item_barcode_info'),
+            type: 'POST',
+            data:'item=0&barcode='+barcode,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#current-stock').html(obj['quantity']);
+                $('#avg-price').html(obj['purchase']);
+                $('#sales-price').html(obj['price']);
+                $('#item-status').html(obj['status']);
+            },
+        });
     });
 
     var validator =  $('form#purchaseItemForm').validate({
