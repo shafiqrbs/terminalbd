@@ -30,6 +30,16 @@ class ApiPoskeeperController extends Controller
         return "invalid";
     }
 
+    public function checkApiLoginValidation($request)
+    {
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        if ($request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            return "success";
+        }
+        return "invalid";
+    }
+
     public function appsAction(Request $request)
     {
 
@@ -187,21 +197,19 @@ class ApiPoskeeperController extends Controller
         $formData = $request->request->all();
         $mobile = $formData['mobile'];
         $data = array();
-        if( $this->checkApiValidation($request) == 'invalid') {
+        if( $this->checkApiLoginValidation($request) == 'invalid') {
             return new Response('Unauthorized access.', 401);
         }else {
-            $entity = $this->checkApiValidation($request);
-            $user = $this->getDoctrine()->getRepository('UserBundle:User')->getAndroidOTP($entity,$mobile);
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->getAndroidOTP($mobile);
             if($user){
                 $login = $this->getDoctrine()->getRepository("UserBundle:User")->find($user);
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($login, $login->getAppPassword()));
-                $data = array('status'=>'valid','otp' => $login->getAppPassword());
+                $data = array('status'=>'valid','otp' => $login->getAppPassword(),'apiSecret'=> $login->getGlobalOption()->getUniqueCode());
             }else{
                 $data = array('status'=>'in-valid','otp' => '');
             }
         }
-
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($data));

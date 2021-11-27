@@ -552,10 +552,10 @@ class UserRepository extends EntityRepository
 
     }
 
-    public function getAndroidOTP(GlobalOption $option,$mobile){
+    public function getAndroidOTP($mobile){
 
         $em = $this->_em;
-        $user = $this->findOneBy(array('globalOption'=>$option,'username'=>$mobile));
+        $user = $this->findOneBy(array('username'=>$mobile));
         if($user){
             $a = mt_rand(1000,9999);
             $user->setPlainPassword($a);
