@@ -200,7 +200,7 @@
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editable" data-name="pack" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change pack qnt">{{ entity.pack }}</a>
                                             {% endif %}
-                                            {% if entity.pack > 1 and entity.remainingQuantity > entity.pack|default(1) %} => {{ entity.remainingQuantity/entity.pack|default(1) }}{% endif %}
+                                            {% if entity.pack > 1 and entity.remainingQuantity > entity.pack|default(1) %} => {{ entity.remainingQuantity/entity.pack|default(1)|number_format }}{% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

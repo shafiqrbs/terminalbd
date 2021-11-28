@@ -645,4 +645,112 @@ class ReportController extends Controller
         ));
     }
 
+
+    /**
+     * @Route("/inv-stock-item-price", methods={"GET", "POST"}, name="inv_stock_item_price")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invStockItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        return $this->render('ReportBundle:Inventory/Stock:stock.html.twig', array(
+            'searchForm' => $data,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/inv-stock-item-price-ajax-load", methods={"GET", "POST"}, name="inv_stock_item_price_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invStockItemAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('ReportBundle:Report')->invReportStockItemPrice($inventory,$data);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Inventory/Stock:stock-item-price-data.html.twig', array(
+                'entities' => $entities,
+            )
+        );
+        return new Response($htmlProcess);
+    }
+
+    /**
+     * @Route("/inv-category-stock-item-price", methods={"GET", "POST"}, name="inv_category_stock_item_price")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invCategoryStockItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        return $this->render('ReportBundle:Inventory/Stock:category-stock.html.twig', array(
+            'searchForm' => $data,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/inv-category-stock-item-price-ajax-load", methods={"GET", "POST"}, name="inv_category_stock_item_price_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invCategoryStockItemAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('ReportBundle:Report')->invReportCategoryStockItemPrice($inventory,$data);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Inventory/Stock:category-stock-item-price-data.html.twig', array(
+                'entities' => $entities,
+            )
+        );
+        return new Response($htmlProcess);
+    }
+
+
+    /**
+     * @Route("/inv-brand-stock-item-price", methods={"GET", "POST"}, name="inv_brand_stock_item_price")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invBrandStockItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        return $this->render('ReportBundle:Inventory/Stock:brand-stock.html.twig', array(
+            'searchForm' => $data,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/inv-brand-stock-item-price-ajax-load", methods={"GET", "POST"}, name="inv_brand_stock_item_price_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invBrandStockItemAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('ReportBundle:Report')->invReportBrandStockItemPrice($inventory,$data);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Inventory/Stock:brand-stock-item-price-data.html.twig', array(
+                'entities' => $entities,
+            )
+        );
+        return new Response($htmlProcess);
+    }
+
 }

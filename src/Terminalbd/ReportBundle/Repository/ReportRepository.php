@@ -276,6 +276,60 @@ class ReportRepository extends EntityRepository
 
     }
 
+    public function invReportStockItemPrice($inventory,$data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Item', 'item');
+        $qb->join('item.masterItem', 'm');
+        $qb->join('m.productUnit', 'u');
+        $qb->addSelect('item.name as name','item.purchaseQuantity','item.purchaseQuantityReturn','item.salesQuantity','item.salesQuantityReturn','item.damageQuantity','item.remainingQnt','item.purchaseAvgPrice');
+        $qb->addSelect('u.name as unit');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+       // $this->handleSearchBetween($qb,$data);
+        $qb->andWhere('item.remainingQnt > 0');
+        $qb->orderBy('item.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+
+    }
+
+    public function invReportCategoryStockItemPrice($inventory)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Item', 'item');
+        $qb->join('item.masterItem', 'm');
+        $qb->join('m.category', 'c');
+        $qb->addSelect('c.id as cid','c.name as name','SUM(item.remainingQnt) as quantity','SUM(item.purchaseAvgPrice*item.remainingQnt) as amount');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('item.remainingQnt > 0');
+        $qb->groupBy('c.id');
+        $qb->orderBy('c.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+
+    }
+
+    public function invReportBrandStockItemPrice($inventory)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Item', 'item');
+        $qb->join('item.brand', 'c');
+        $qb->addSelect('c.id as cid','c.name as name','SUM(item.remainingQnt) as quantity','SUM(item.purchaseAvgPrice*item.remainingQnt) as amount');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('item.remainingQnt > 0');
+        $qb->groupBy('c.id');
+        $qb->orderBy('c.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+
+    }
+
 
 
 

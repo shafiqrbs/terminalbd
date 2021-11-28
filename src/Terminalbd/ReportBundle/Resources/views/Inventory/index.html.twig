@@ -8,115 +8,86 @@
                 <p><strong>Name of Report: System Overview</strong></p>
             </div>
         </div>
-        {#<div class="row">
-            <div class="col-md-12 print-bar">
-                <form action="" method="get">
-                    <div class="row">
-                        <div class="col-md-5 margin-top">
-                        </div>
-                        <div class="col-md-3 margin-top">
-                            <label>Start Date</label>
-                            <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
-                        </div>
-                        <div class="col-md-3 margin-top">
-                            <label>End Date</label>
-                            <input type="date" class="m-wrap" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
-                        </div>
-                        <div class="col-md-1 margin-top">
-                            <label>&nbsp;</label>
-                            <button class='btn btn-download btn-margin-left' ><i class='fa fa-search'></i> Search</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                    <tr class="head-blue">
+                        <th class="" colspan="2">Cash Account</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="numeric" >Purchase Price</th>
+                        <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Sales Price</th>
+                        <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Approximately Profit</th>
+                        <td class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>#}
+            <div class="col-md-6">
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                        <tr class="head-green">
+                            <th class="" colspan="2">Total Purchase & Sales</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <th class="numeric" >Total Purchase</th>
+                        <td class="numeric" >{{ purchaseOverview.total|number_format}}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Total Sales</th>
+                        <td class="numeric" >{{ salesPurchasePrice|number_format }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Profit</th>
+                        <td class="numeric" >{{ (purchaseOverview.total - salesPurchasePrice)|number_format }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="portlet-body form">
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                <tr>
-                                    <th class="numeric" >Current Stock</th>
-                                    <td class="numeric" >{{ priceOverview.quantity }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Purchase Price</th>
-                                    <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Sales Price</th>
-                                    <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Approximately Profit</th>
-                                    <th class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</th>
-                                </tr>
-                            </table>
-
-                        </div>
-                        <div class="span6">
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                <tr>
-                                    <th class="numeric" colspan="2" >Total Purchase & Sales</th>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Total Purchase</th>
-                                    <td class="numeric" >{{ purchaseOverview.total|number_format}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Total Sales</th>
-                                    <td class="numeric" >{{ salesPurchasePrice|number_format }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="numeric" >Profit</th>
-                                    <th class="numeric" >{{ (purchaseOverview.total - salesPurchasePrice)|number_format }}</th>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="form-actions portlet box green">
-                        <div class="portlet-title">
-                            <div class="caption"><i class="icon-reorder"></i>Current Stock Quantity</div>
-                        </div>
-                    </div>
-                    <div class="clearfix">&nbsp;</div>
-                    <table class="table table-bordered table-striped table-condensed flip-content ">
-                        <tr>
-                            <th class="numeric" >Purchase</th>
-                            <td class="numeric" >{{ stockOverview.purchase }}</td>
-                            <th class="numeric" >Sales</th>
-                            <td class="numeric" >{{ stockOverview.sales }}</td>
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                        <tr class="head-yellow">
+                            <th class="" colspan="4">Total Purchase & Sales Quantity</th>
                         </tr>
-                        <tr>
-                            <th class="numeric" >Sales Return</th>
-                            <td class="numeric" >{{ stockOverview.salesReturn }}</td>
-                            <th class="numeric" >Purchase Return</th>
-                            <td class="numeric" >{{ stockOverview.purchaseReturn }}</td>
-                        </tr>
-                        <tr>
-                            <th class="numeric" >&nbsp;</th>
-                            <td class="numeric" >&nbsp;</td>
-                            <th class="numeric" >Damage</th>
-                            <td class="numeric" >{{ stockOverview.damage }}</td>
-                        </tr>
-                        <tr>
-                            <th class="numeric" >&nbsp;</th>
-                            <td class="numeric" >&nbsp;</td>
-                            <th class="numeric" >Online Sales</th>
-                            <td class="numeric" >&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <th class="numeric" ></th>
-                            <td class="numeric" ></td>
-                            <th class="numeric" >Current Stock</th>
-                            <th class="numeric" >{{ stockOverview.remaining }}</th>
-                        </tr>
-                    </table>
-                </div>
+                    </thead>
+                    <tr>
+                        <th class="numeric" >Purchase</th>
+                        <td class="numeric" >{{ stockOverview.purchase }}</td>
+                        <th class="numeric" >Sales</th>
+                        <td class="numeric" >{{ stockOverview.sales }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Sales Return</th>
+                        <td class="numeric" >{{ stockOverview.salesReturn }}</td>
+                        <th class="numeric" >Purchase Return</th>
+                        <td class="numeric" >{{ stockOverview.purchaseReturn }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >&nbsp;</th>
+                        <td class="numeric" >&nbsp;</td>
+                        <th class="numeric" >Damage</th>
+                        <td class="numeric" >{{ stockOverview.damage }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" ></th>
+                        <td class="numeric" ></td>
+                        <th class="numeric" >Current Stock</th>
+                        <td class="numeric" >{{ stockOverview.remaining }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
 {% endblock %}
-
-
