@@ -11,7 +11,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             width:100%;
-            font-size:18px;
+            font-size:13px;
         }
         table td.header strong,table td.header strong{
             font-size: 35px;
@@ -210,6 +210,9 @@
         </tr>
     </table>
 </div>
+{% if entity.medicineConfig.printCss is not empty %}
+    {{ entity.medicineConfig.printCss|raw }}
+{% endif %}
 </body>
 </html>
              

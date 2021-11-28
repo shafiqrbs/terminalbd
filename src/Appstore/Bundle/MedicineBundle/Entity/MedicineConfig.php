@@ -280,6 +280,13 @@ class MedicineConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="printCss", type="text",  nullable=true)
+     */
+    private $printCss;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="printFooterText", type="text",  nullable=true)
      */
     private $printFooterText;
@@ -936,6 +943,22 @@ class MedicineConfig
     public function setPrintPreviousDue($printPreviousDue)
     {
         $this->printPreviousDue = $printPreviousDue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintCss()
+    {
+        return $this->printCss;
+    }
+
+    /**
+     * @param string $printCss
+     */
+    public function setPrintCss($printCss)
+    {
+        $this->printCss = $printCss;
     }
 
 }

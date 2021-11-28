@@ -408,7 +408,7 @@ class MedicineStockRepository extends EntityRepository
         $query->leftJoin('e.medicineBrand', 'brand');
         $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
-        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name, ' => MRP Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', unit.name,'=>', rack.name , ' => MRP Tk.', e.salesPrice)  END as text");
+        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
         $query->where("ic.id = :config")->setParameter('config', $config->getId());
         if($config->isSearchSlug() == 1){
             $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));

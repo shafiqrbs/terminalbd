@@ -465,17 +465,22 @@
         .select2-container .select2-choice .select2-arrow {
             top: 10px;
         }
+        {% if config.printCss is not empty %}
+            {{ config.printCss|raw }}
+        {% endif %}
     </style>
-    <script>
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, "script", "xiidea-epp-sdk"));
+    {% if config.posPrint == 1 %}
+        <script>
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, "script", "xiidea-epp-sdk"));
 
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -490,7 +495,6 @@
     {% javascripts
         '@MedicineBundle/Resources/public/js/temporary-sales.js'
         '@MedicineBundle/Resources/public/js/approveProcess.js'
-        '@MedicineBundle/Resources/public/js/jquery-canvas.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

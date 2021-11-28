@@ -93,7 +93,7 @@ function jqueryTemporaryLoad() {
             success: function (response) {
                 obj = JSON.parse(response);
                 $('#salesTemporaryItem_barcode').html(obj['purchaseItems']).focus();
-                $("#addTemporaryItem").attr("disabled", false);
+                $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", false);
                 $('#salesTemporaryItem_salesPrice').val(obj['salesPrice']);
             }
         })
@@ -111,12 +111,8 @@ function jqueryTemporaryLoad() {
                 inputs[idx + 1].focus(); //  handles submit buttons
             }
             switch (this.id) {
-
                 case 'salesTemporaryItem_stockName':
-                    $('#salesTemporaryItem_barcode').focus();
-                    break;
-
-                case 'salesTemporaryItem_barcode':
+                    alert('ok');
                     $('#salesTemporaryItem_quantity').focus();
                     break;
 
@@ -136,8 +132,8 @@ function jqueryTemporaryLoad() {
             "salesTemporaryItem[stockName]": {required: true},
             "salesTemporaryItem[barcode]": {required: false},
             "salesTemporaryItem[itemPercent]": {required: false},
-            "salesTemporaryItem[salesPrice]": {required: true},
-            "salesTemporaryItem[quantity]": {required: true},
+            "salesTemporaryItem[salesPrice]": {required: false},
+            "salesTemporaryItem[quantity]": {required: false},
         },
 
         messages: {
@@ -176,6 +172,7 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
+                    $(".select2TemporaryCustomer").select2("val", "");
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);

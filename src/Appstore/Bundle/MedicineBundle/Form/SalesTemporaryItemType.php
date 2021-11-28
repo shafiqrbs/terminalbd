@@ -60,7 +60,7 @@ class SalesTemporaryItemType extends AbstractType
                 ),
             ))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','placeholder'=>'MRP')))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','placeholder'=>'quantity')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','placeholder'=>'quantity','value'=>1)))
            /* ->add('medicineStock', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineStock',
