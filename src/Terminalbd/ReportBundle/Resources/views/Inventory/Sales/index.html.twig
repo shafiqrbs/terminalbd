@@ -2,7 +2,7 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12 print-bar">
-            <form name="searchForm" id="searchForm" action="{{ path('accounting_report_sales_ajax') }}" method="post">
+            <form name="searchForm" id="searchForm" action="{{ path('inv_sales_profit_loss_ajax_load') }}" method="post">
                 <div class="row">
                     <div class="col-md-3 margin-top">
                         <label>Customer</label>
@@ -32,21 +32,12 @@
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Mode</label>
-                        <select class="search-input span12 m-wrap" id="mode" name="mode">
-                            <option value="">--Select Mode--</option>
-                            {% for row in groups %}
-                                <option {% if searchForm.mode is defined and searchForm.mode == row.name %} selected="selected" {% endif %} value="{{ row.name }}">{{ row.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 margin-top"></div>
-                    <div class="col-md-3 margin-top">
                         <label>Invoice</label>
                         <input type="text" class="m-wrap" id="invoice" name="invoice" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}">
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 margin-top"></div>
                     <div class="col-md-3 margin-top">
                         <label>Start Date</label>
                         <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
@@ -69,41 +60,36 @@
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
                 <p><strong style="font-size:18px">{{ option.name }}</strong></p>
-                <p><strong>Name of Report: Customer Outstanding</strong></p>
+                <p><strong>Name of Report: Sales with Profit/Loss</strong></p>
             </div>
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}</div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table even" border="1">
-                    <colgroup>
-                        <col class="w">
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>SI.</th>
-                        <th>Created</th>
-                        <th>Name</th>
-                        <th>Mobile</th>
-                        <th>Invoice</th>
-                        <th>Mode</th>
-                        <th>Method</th>
-                        <th class="text-right">Sales</th>
-                        <th class="text-right">Receive</th>
-                        <th class="text-right">Balance</th>
-                    </tr>
+                    <thead class="flip-content ">
+                        <tr class="head-blue">
+                            <th>Created</th>
+                            <th>Invoice</th>
+                            <th>SalesBy</th>
+                            <th>Transaction</th>
+                            <th>Sub-Total</th>
+                            <th>Discount</th>
+                            <th>Vat</th>
+                            <th>Net Total</th>
+                            <th>Payment</th>
+                            <th>Due</th>
+                            <th>Purchase</th>
+                            <th>Profit/Loss</th>
+                        </tr>
+                    </thead>
                     <tbody id="data-load"></tbody>
-
                 </table>
             </div>
         </div>
     </div>
 {% endblock %}
+
 
 
 

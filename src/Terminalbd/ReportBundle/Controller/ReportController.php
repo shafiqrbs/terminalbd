@@ -753,4 +753,86 @@ class ReportController extends Controller
         return new Response($htmlProcess);
     }
 
+    /**
+     * @Route("/inv-sales-profit-loss", methods={"GET", "POST"}, name="inv_sales_profit_loss")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invSalesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $customers = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getSalesCustomers($globalOption);
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getCreatedUsers($globalOption);
+        return $this->render('ReportBundle:Inventory/Sales:index.html.twig', array(
+            'transactionMethods' => $transactionMethods,
+            'customers' => $customers,
+            'searchForm' => $data,
+            'users' => $users,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/inv-sales-profit-loss-ajax-load", methods={"GET", "POST"}, name="inv_sales_profit_loss_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invSalesAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('ReportBundle:Report')->invReportSales($inventory->getId(),$data);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Inventory/Sales:ajax-data.html.twig', array(
+                'entities' => $entities,
+            )
+        );
+        return new Response($htmlProcess);
+    }
+
+    /**
+     * @Route("/inv-salesitem-profit-loss", methods={"GET", "POST"}, name="inv_salesitem_profit_loss")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invSalesItemAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $customers = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getSalesCustomers($globalOption);
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getCreatedUsers($globalOption);
+        return $this->render('ReportBundle:Inventory/SalesItem:index.html.twig', array(
+            'transactionMethods' => $transactionMethods,
+            'customers' => $customers,
+            'searchForm' => $data,
+            'users' => $users,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/inv-salesitem-profit-loss-ajax-load", methods={"GET", "POST"}, name="inv_salesitem_profit_loss_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function invSalesItemAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('ReportBundle:Report')->invReportSalesItem($inventory->getId(),$data);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Inventory/SalesItem:ajax-data.html.twig', array(
+                'entities' => $entities,
+            )
+        );
+        return new Response($htmlProcess);
+    }
+
 }

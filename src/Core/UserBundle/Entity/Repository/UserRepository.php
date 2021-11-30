@@ -180,6 +180,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ACCOUNTING_SALES_REPORT'           => 'Sales Report',
                 'ROLE_DOMAIN_ACCOUNTING_LOAN'                   => 'Loan',
                 'ROLE_DOMAIN_ACCOUNTING_PURCHASE_REPORT'        => 'Purchase Report',
+                'ROLE_DOMAIN_ACCOUNTING_REPORT'                 => 'Financial Report',
                 'ROLE_DOMAIN_ACCOUNT_REVERSE'                   => 'Reverse',
                 'ROLE_DOMAIN_ACCOUNTING_CONFIG'                 => 'Configuration',
                 'ROLE_DOMAIN_ACCOUNTING'                        => 'Admin',

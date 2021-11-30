@@ -286,7 +286,11 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $inventory = $user->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemDetails($user,$data);
+        if($inventory->getSalesMode() == "stock"){
+            $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemDetails($user,$data);
+        }else{
+            $entities = $em->getRepository('InventoryBundle:Sales')->reportSalesItemPurchaseItemDetails($user,$data);
+        }
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Report:sales/salesItemDetails.html.twig', array(
             'option'                => $this->getUser()->getGlobalOption(),

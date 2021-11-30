@@ -700,7 +700,7 @@ class SalesRepository extends EntityRepository
         return $result;
     }
 
-    public  function reportSalesItemDetails(User $user, $data=''){
+    public  function reportSalesItemStockDetails(User $user, $data=''){
         $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->_em->createQueryBuilder();
@@ -729,10 +729,40 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public  function reportSalesItemPurchaseItemDetails(User $user, $data=''){
+        $userBranch = $user->getProfile()->getBranches();
+        $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','si');
+        $qb->join('si.sales','s');
+        $qb->leftJoin('s.customer','customer');
+        $qb->join('si.item','item');
+        $qb->join('si.purchaseItem','pi');
+        $qb->leftJoin('pi.purchase','purchase');
+        $qb->leftJoin('purchase.vendor','vendor');
+        $qb->select('s.created AS salesCreated');
+        $qb->addSelect('customer.name AS customerName');
+        $qb->addSelect('s.invoice AS salesInvoice');
+        $qb->addSelect('pi.barcode AS barcode');
+        $qb->addSelect('pi.expiredDate AS purchaseExpiredDate');
+        $qb->addSelect('purchase.grn AS purchaseGrn');
+        $qb->addSelect('vendor.vendorCode AS vendorCode');
+        $qb->addSelect('si.assuranceType AS assuranceType');
+        $qb->addSelect('si.assuranceToCustomer AS assuranceToCustomer');
+        $qb->addSelect('si.serialNo AS serialNo');
+        $qb->addSelect('si.quantity AS quantity');
+        $qb->addSelect('si.salesPrice AS salesPrice');
+        $qb->addSelect('item.sku AS name');
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
         return $result;
@@ -764,7 +794,6 @@ class SalesRepository extends EntityRepository
             $qb->setParameter('branch', $branch);
         }
         $qb->orderBy("s.invoice", 'DESC');
-
         return $qb->getQuery()->getResult();
     }
 

@@ -19,40 +19,109 @@ class ReportRepository extends EntityRepository
 
     /* ================ This part for Inventory Reports ============================*/
 
-    protected function handleSearchBetween($qb,$data)
+    protected function invHandleSearchBetween($qb,$data)
     {
         if(!empty($data))
         {
-
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
-            $grn =    isset($data['grn'])? $data['grn'] :'';
+            $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+            $process =    isset($data['process'])? $data['process'] :'';
+            $transactionMethod =    isset($data['method'])? $data['method'] :'';
+            $courierInvoice =    isset($data['courierInvoice'])? $data['courierInvoice'] :'';
+            $salesBy =    isset($data['toUser'])? $data['toUser'] :'';
+            $customer =    isset($data['customer'])? $data['customer'] :'';
+            $paymentStatus =    isset($data['paymentStatus'])? $data['paymentStatus'] :'';
+            $mode =    isset($data['mode'])? $data['mode'] :'';
+            $branch =    isset($data['branch'])? $data['branch'] :'';
+            $item =    isset($data['item'])? $data['item'] :'';
+            $barcode =    isset($data['barcode'])? $data['barcode'] :'';
+            $serialNo =    isset($data['serialNo'])? $data['serialNo'] :'';
             $vendor =    isset($data['vendor'])? $data['vendor'] :'';
 
             if (!empty($startDate)) {
                 $datetime = new \DateTime($startDate);
                 $start = $datetime->format('Y-m-d 00:00:00');
-                $qb->andWhere("e.created >= :startDate")->setParameter('startDate',$start);
+                $qb->andWhere("s.created >= :startDate")->setParameter('startDate',$start);
             }
 
             if (!empty($endDate)) {
                 $datetime = new \DateTime($endDate);
                 $end = $datetime->format('Y-m-d 23:59:59');
-                $qb->andWhere("e.created <= :endDate")->setParameter('endDate',$end);
+                $qb->andWhere("s.created <= :endDate")->setParameter('endDate',$end);
             }
 
-            if (!empty($memo)) {
-                $qb->andWhere("e.memo = :memo");
-                $qb->setParameter('memo', $memo);
+            if (!empty($invoice)) {
+
+                $qb->andWhere("s.invoice LIKE :invoice");
+                $qb->setParameter('invoice', $invoice.'%');
             }
-            if (!empty($grn)) {
-                $qb->andWhere("e.grn LIKE :grn");
-                $qb->setParameter('grn', $grn.'%');
+
+            if (!empty($courierInvoice)) {
+
+                $qb->andWhere("s.courierInvoice LIKE :courierInvoice");
+                $qb->setParameter('invoice','%'. $courierInvoice.'%');
             }
+
+            if (!empty($process)) {
+
+                $qb->andWhere("s.process = :process");
+                $qb->setParameter('process', $process);
+
+            }
+
+            if (!empty($customer)) {
+
+                $qb->andWhere("c.mobile = :mobile");
+                $qb->setParameter('mobile', $customer);
+            }
+
+            if (!empty($salesBy)) {
+
+                $qb->andWhere("u.username = :user");
+                $qb->setParameter('user', $salesBy);
+            }
+            if (!empty($transactionMethod)) {
+
+                $qb->andWhere("s.transactionMethod = :transactionMethod");
+                $qb->setParameter('transactionMethod', $transactionMethod);
+            }
+
+            if (!empty($paymentStatus)) {
+
+                $qb->andWhere("s.paymentStatus = :paymentStatus");
+                $qb->setParameter('paymentStatus', $paymentStatus);
+            }
+
+            if(!empty($mode)){
+                $qb->andWhere("s.salesMode = :mode");
+                $qb->setParameter('mode', $mode);
+            }
+            if(!empty($branch)){
+                $qb->andWhere("s.branches = :branch");
+                $qb->setParameter('branch', $branch);
+            }
+
+            if (!empty($item)) {
+                $qb->join('si.item','item');
+                $qb->andWhere("item.name = :name");
+                $qb->setParameter('name', $item);
+            }
+
             if (!empty($vendor)) {
-                $qb->join('e.vendor', 'v');
-                $qb->andWhere("v.companyName = :companyName");
-                $qb->setParameter('companyName', $vendor);
+                $qb->andWhere("vendor.companyName = :vendorName");
+                $qb->setParameter('vendorName', $vendor);
+            }
+
+            if (!empty($barcode)) {
+                $qb->leftJoin('si.purchaseItem','purchaseItem');
+                $qb->andWhere("purchaseItem.barcode = :barcode");
+                $qb->setParameter('barcode', $barcode);
+            }
+
+            if (!empty($serialNo)) {
+                $qb->andWhere("si.serialNo LIKE :serialNo");
+                $qb->setParameter('serialNo','%'. $serialNo.'%');
             }
 
         }
@@ -329,6 +398,97 @@ class ReportRepository extends EntityRepository
         return  $result;
 
     }
+
+    public function todaySales(User $user , $mode = '')
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->_em->createQueryBuilder();
+        $datetime = new \DateTime("now");
+        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+        $qb->from('InventoryBundle:Sales','s');
+        $qb->select('s')
+            ->where('s.inventoryConfig = :inventory')
+            ->andWhere('s.salesMode =:mode')
+            ->andWhere('s.created >= :today_startdatetime')
+            ->andWhere('s.created <= :today_enddatetime');
+        $qb->setParameter('inventory', $inventory)
+            ->setParameter('mode', $mode)
+            ->setParameter('today_startdatetime', $today_startdatetime)
+            ->setParameter('today_enddatetime', $today_enddatetime);
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->orderBy("s.invoice", 'DESC');
+        return $qb->getQuery()->getResult();
+    }
+
+    public function invReportSales( $inventory , $data)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Sales', 's');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->leftJoin('s.transactionMethod', 't');
+        $qb->innerJoin('s.salesItems', 'si');
+        $qb->select('u.username as salesBy');
+        $qb->addSelect('t.name as transactionMethod');
+        $qb->addSelect('s.id as id');
+        $qb->addSelect('s.created as created');
+        $qb->addSelect('s.process as process');
+        $qb->addSelect('s.invoice as invoice');
+        $qb->addSelect('(s.due) as due');
+        $qb->addSelect('(s.subTotal) as subTotal');
+        $qb->addSelect('(s.total) as total');
+        $qb->addSelect('(s.payment) as payment');
+        $qb->addSelect('(s.totalItem) totalItem');
+        $qb->addSelect('(s.discount) as discount');
+        $qb->addSelect('(s.vat) as vat');
+        $qb->addSelect('SUM(si.purchasePrice * si.quantity) as purchasePrice');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->invHandleSearchBetween($qb,$data);
+        $qb->groupBy('s.id');
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
+    public  function invReportSalesItem($inventory, $data=''){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','si');
+        $qb->join('si.sales','s');
+        $qb->join('s.salesBy','u');
+        $qb->leftJoin('s.customer','customer');
+        $qb->join('si.item','item');
+        $qb->select('s.created AS salesCreated');
+        $qb->addSelect('u.username AS salesBy');
+        $qb->addSelect('customer.name AS customerName');
+        $qb->addSelect('s.invoice AS salesInvoice');
+        $qb->addSelect('si.assuranceType AS assuranceType');
+        $qb->addSelect('si.assuranceToCustomer AS assuranceToCustomer');
+        $qb->addSelect('si.serialNo AS serialNo');
+        $qb->addSelect('si.quantity AS quantity');
+        $qb->addSelect('si.salesPrice AS salesPrice','si.purchasePrice AS purchasePrice');
+        $qb->addSelect('item.sku AS name');
+        $qb->where("s.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        $this->invHandleSearchBetween($qb,$data);
+        $qb->orderBy('s.created','DESC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
 
 
 
