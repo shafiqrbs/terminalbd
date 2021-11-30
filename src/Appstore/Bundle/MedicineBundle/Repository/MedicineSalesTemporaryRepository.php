@@ -31,14 +31,14 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     public function insertInvoiceItems(User $user, $data)
     {
-
+        $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
         $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
         if(empty($invoiceParticular)) {
-	        $entity->setQuantity( $data['quantity'] );
+	        $entity->setQuantity($quantity);
             if($data['itemPercent'] > 0){
                 $entity->setItemPercent( $data['itemPercent'] );
                 $salesPrice = $data['salesPrice'];
@@ -49,7 +49,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
                 $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
             }
             $entity->setEstimatePrice($stockItem->getSalesprice());
-	        $entity->setSubTotal( round(($entity->getSalesPrice() * $data['quantity'] ), 2 ) );
+	        $entity->setSubTotal( round(($entity->getSalesPrice()*$quantity), 2 ) );
 	        $entity->setUser( $user );
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );

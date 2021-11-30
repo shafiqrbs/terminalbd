@@ -425,11 +425,12 @@ class PurchaseController extends Controller
         $stockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
         $entity->setMedicineStock($stockMedicine);
         $pack = !empty($data['pack']) ? $data['pack'] :1;
+        $quantity = empty($data['purchaseItem']['quantity']) ? 1 : $data['purchaseItem']['quantity'];
         $minQuantity = !empty($data['minQuantity']) ? $data['minQuantity'] :1;
         $salesPrice = !empty($data['purchaseItem']['salesPrice']) ? $data['purchaseItem']['salesPrice'] :'';
         $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
         $bonusQuantity = !empty($data['purchaseItem']['bonusQuantity']) ? $data['purchaseItem']['bonusQuantity'] :0;
-        $quantity = ($pack * $entity->getQuantity());
+        $quantity = ($pack * $quantity);
         $entity->setQuantity($quantity);
         $entity->setBonusQuantity($bonusQuantity);
         if(!empty($stockMedicine) and empty($salesPrice)){

@@ -160,6 +160,12 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
                 break;
 
             case 'purchaseItem_quantity':
+                $('#purchaseItem_quantity').focus();
+                $('#addPurchaseItem').click();
+                $('#purchaseItem_stockName').select2('open');
+                break;
+
+           /* case 'purchaseItem_quantity':
                 var qnt = $('#purchaseItem_quantity').val();
                 if(qnt == "NaN" || qnt =="" ){
                     $('#purchaseItem_quantity').focus();
@@ -167,7 +173,7 @@ $('form#purchaseItemForm').on('keypress', '.input', function (e) {
                     $('#addPurchaseItem').click();
                     $('#purchaseItem_stockName').select2('open');
                 }
-                break;
+                break;    */
 
             /*case 'purchaseItem_purchasePrice':
                 $('#purchaseItem_expirationEndDate').focus();
@@ -252,7 +258,7 @@ var form = $("#purchaseItemForm").validate({
     rules: {
         "purchaseItem[stockName]": {required: true},
         "purchaseItem[salesPrice]": {required: false},
-        "purchaseItem[quantity]": {required: true},
+        "purchaseItem[quantity]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false},
         "purchaseItem[bonusQuantity]": {required: false}
     },
