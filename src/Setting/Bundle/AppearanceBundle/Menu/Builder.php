@@ -1378,7 +1378,7 @@ class Builder extends ContainerAware
 	        $menu['Medicine']->addChild('Manage Sales')
 	                         ->setAttribute('icon', 'icon-shopping-cart')
 	                         ->setAttribute('dropdown', true);
-        	    $menu['Medicine']['Manage Sales']->addChild('ADD SALES', array('route' => 'medicine_sales_temporary_new'))
+        	    $menu['Medicine']['Manage Sales']->addChild('Add Sales', array('route' => 'medicine_sales_temporary_new'))
                     ->setAttribute('icon', 'icon-shopping-cart');
         	    $menu['Medicine']['Manage Sales']->addChild('Sales', array('route' => 'medicine_sales'))
                     ->setAttribute('icon', 'icon-list');
@@ -1398,7 +1398,8 @@ class Builder extends ContainerAware
 		    $menu['Medicine']->addChild('Manage Purchase')
 		                     ->setAttribute('icon', 'icon icon-truck')
 		                     ->setAttribute('dropdown', true);
-
+            $menu['Medicine']['Manage Purchase']->addChild('Add Purchase', array('route' => 'medicine_purchase_new'))
+                                                ->setAttribute('icon', 'icon-th-list');
 		    $menu['Medicine']['Manage Purchase']->addChild('Purchase', array('route' => 'medicine_purchase'))
 		                                        ->setAttribute('icon', 'icon-th-list');
 		    $menu['Medicine']['Manage Purchase']->addChild('Android', array('route' => 'medicine_purchase_android'))
