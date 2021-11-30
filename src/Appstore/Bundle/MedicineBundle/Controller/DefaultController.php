@@ -60,7 +60,6 @@ class DefaultController extends Controller
 	    foreach($entities as $row) {
 		    $userSalesAmount[$row['salesBy'].$row['month']] = $row['total'];
 	    }
-
 	    return $this->render('MedicineBundle:Default:index.html.twig', array(
             'option'                    => $user->getGlobalOption() ,
             'globalOption'              => $globalOption,

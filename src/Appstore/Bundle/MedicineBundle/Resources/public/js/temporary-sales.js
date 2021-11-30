@@ -172,7 +172,6 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
-                    $(".select2TemporaryCustomer").select2("val", "");
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
@@ -351,6 +350,8 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
+                        $(".select2TemporaryCustomer").select2("val", "");
+                        $(".customer").hide();
                         $('#cartMethod , #bkashMethod').css("display","none");
 
                     }
@@ -386,6 +387,8 @@ function jqueryTemporaryLoad() {
                         $('#salesSubTotal').val('');
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
+                        $(".select2TemporaryCustomer").select2("val", "");
+                        $(".customer").hide();
                         $('#cartMethod , #bkashMethod').css("display","none");
                         window.open('/medicine/sales/'+response+'/print', '_blank');
 
@@ -423,6 +426,8 @@ function jqueryTemporaryLoad() {
                         $('#salesTemporary_discount').val('');
                         $('#salesTemporary_due').val('');
                         $('#cartMethod , #bkashMethod').css("display","none");
+                        $(".select2TemporaryCustomer").select2("val", "");
+                        $(".customer").hide();
                         jsPostPrint(response);
                     }
                 });
