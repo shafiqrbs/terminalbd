@@ -155,7 +155,7 @@
                             {% for entity in entities %}
                                 <tr id="salesRemove-{{ entity.id }}">
                                     <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                    <td class="numeric" >{{ entity.invoice }}</td>
+                                    <td class="numeric" ><a target="_blank" href="{{ path('inventory_salesonline_show',{'id':entity.id}) }}">{{ entity.invoice }}</a></td>
                                     <td class="numeric" >{{ entity.salesBy }}</td>
                                     <td class="numeric" >{{ entity.transactionMethod }}</td>
                                     <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
