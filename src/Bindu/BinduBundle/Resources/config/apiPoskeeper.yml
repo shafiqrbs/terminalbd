@@ -3,7 +3,7 @@ api_poskeeper_login:
     defaults: { _controller: BinduBundle:ApiPoskeeper:login }
 
 api_poskeeper_setup:
-    path:     /setup
+    path:     /keeper-setup
     defaults: { _controller: BinduBundle:ApiPoskeeper:setup }
 
 api_poskeeper_app:

@@ -29,10 +29,6 @@ android_sales_api:
     resource: "@BinduBundle/Resources/config/apiSales.yml"
     prefix:   /android-api
 
-android_poskeeper_api:
-    resource: "@BinduBundle/Resources/config/apiPoskeeper.yml"
-    prefix:   /poskeeper-android-api
-
 android_ecommerce_api:
     resource: "@BinduBundle/Resources/config/apiEcommerce.yml"
     prefix:   /android-api-ecommerce
