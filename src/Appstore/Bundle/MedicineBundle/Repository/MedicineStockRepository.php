@@ -175,6 +175,12 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere('e.remainingQuantity  = 0');
             $qb->andWhere('e.salesQuantity = 0');
         }
+        if($process == 'Active'){
+            $qb->andWhere('e.status = 1');
+        }
+        if($process == 'In-active'){
+            $qb->andWhere('e.status != 1');
+        }
         if($process == 'Sales' and $startQuantity == 0 and $endQuantity == 0){
             $qb->andWhere('e.salesQuantity  <= 0');
         }elseif ($process == 'Sales'  and $startQuantity >= 0 and $endQuantity > 0){

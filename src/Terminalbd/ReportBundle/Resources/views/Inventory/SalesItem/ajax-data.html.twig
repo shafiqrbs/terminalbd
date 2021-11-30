@@ -10,11 +10,11 @@
         <td class="numeric" >{{ entity.customerName }}</td>
         <td class="numeric" >{{ entity.salesBy }}</td>
         <td class="numeric" >{{ entity.quantity }}</td>
-        <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-        <td class="numeric" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
-        <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
-        <td class="numeric" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
-        <td class="numeric" >{{ ((entity.quantity * entity.salesPrice)-(entity.quantity * entity.purchasePrice))|number_format }}</td>
+        <td class="text-right" >{{ entity.salesPrice|number_format }}</td>
+        <td class="text-right" >{{ entity.purchasePrice|number_format }}</td>
+        <td class="text-right" >{{ (entity.quantity * entity.salesPrice)|number_format }}</td>
+        <td class="text-right" >{{ (entity.quantity * entity.purchasePrice)|number_format }}</td>
+        <td class="text-right" >{{ ((entity.quantity * entity.salesPrice)-(entity.quantity * entity.purchasePrice))|number_format }}</td>
     </tr>
 {% endfor %}
 <tr>

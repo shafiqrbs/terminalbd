@@ -93,7 +93,7 @@
                                     <div class="span2">
                                         <select name="process" id="process" class="span12 m-wrap">
                                             <option  value="">Mode</option>
-                                            {% set process = ['Current Stock','Empty Stock','Sales','Empty Sales','Sales Minus','Opening Quantity','Min Quantity'] %}
+                                            {% set process = ['Current Stock','Empty Stock','Sales','Empty Sales','Sales Minus','Opening Quantity','Min Quantity','Active','In-active'] %}
                                             {% set pro = searchForm.process is defined and searchForm.process is not empty ? searchForm.process : '' %}
                                             {% for process in process %}
                                             <option {% if pro == process %} selected="selected" {% endif %}  value="{{ process }}">{{ process }}</option>
