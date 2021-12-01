@@ -634,7 +634,7 @@ class ReportController extends Controller
         $inventory = $globalOption->getInventoryConfig()->getId();
         $purchaseOverview = $em->getRepository('ReportBundle:Report')->invReportPurchaseOverview($inventory,$data);
         $priceOverview = $em->getRepository('ReportBundle:Report')->invReportStockPriceOverview($inventory,$data);
-        $salesPurchasePrice = $em->getRepository('ReportBundle:Report')->invReportPurchasePrice($inventory,$data);
+        $salesPurchasePrice = $em->getRepository('ReportBundle:Report')->invReportSalesPurchasePrice($inventory,$data);
         $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
         return $this->render('ReportBundle:Inventory:index.html.twig', array(
             'priceOverview' => $priceOverview[0],
@@ -656,8 +656,13 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $priceOverview = $em->getRepository('ReportBundle:Report')->invReportStockPriceOverview($inventory,$data);
+        $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
+
         return $this->render('ReportBundle:Inventory/Stock:stock.html.twig', array(
             'searchForm' => $data,
+            'priceOverview' => $priceOverview[0],
+            'stockOverview' => $stockOverview,
             'option' => $globalOption,
         ));
     }

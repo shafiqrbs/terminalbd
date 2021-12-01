@@ -13,18 +13,19 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                     <tr class="head-blue">
-                        <th class="" colspan="2">Cash Account</th>
+                        <th class="" colspan="2">Current Stock & Price </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <th class="numeric" >Purchase Price</th>
-                        <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
-                    </tr>
-                    <tr>
                         <th class="numeric" >Sales Price</th>
                         <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
                     </tr>
+                    <tr>
+                        <th class="numeric" >Purchase Price</th>
+                        <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
+                    </tr>
+
                     <tr>
                         <th class="numeric" >Approximately Profit</th>
                         <td class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</td>
@@ -36,20 +37,20 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                         <tr class="head-green">
-                            <th class="" colspan="2">Total Purchase & Sales</th>
+                            <th class="" colspan="2">Total Sales Profit/Loss</th>
                         </tr>
                     </thead>
                     <tr>
-                        <th class="numeric" >Total Purchase</th>
-                        <td class="numeric" >{{ purchaseOverview.total|number_format}}</td>
+                        <th class="numeric" >Total Sales</th>
+                        <td class="numeric" >{{ salesPurchasePrice.sales|number_format}}</td>
                     </tr>
                     <tr>
-                        <th class="numeric" >Total Sales</th>
-                        <td class="numeric" >{{ salesPurchasePrice|number_format }}</td>
+                        <th class="numeric" >Total Purchase</th>
+                        <td class="numeric" >{{ salesPurchasePrice.purchase|number_format }}</td>
                     </tr>
                     <tr>
                         <th class="numeric" >Profit</th>
-                        <td class="numeric" >{{ (purchaseOverview.total - salesPurchasePrice)|number_format }}</td>
+                        <td class="numeric" >{{ (salesPurchasePrice.sales - salesPurchasePrice.purchase)|number_format }}</td>
                     </tr>
                 </table>
             </div>

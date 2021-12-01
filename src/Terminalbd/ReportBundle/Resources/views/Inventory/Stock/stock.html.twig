@@ -73,12 +73,67 @@
             </div>
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}</div>
         </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                    <tr class="head-blue">
+                        <th class="" colspan="2">Current Stock & Price </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="numeric" >Sales Price</th>
+                        <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Purchase Price</th>
+                        <td class="numeric" >{{ priceOverview.purchasePrice|number_format}}</td>
+                    </tr>
+
+                    <tr>
+                        <th class="numeric" >Approximately Profit</th>
+                        <td class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead class="flip-content ">
+                    <tr class="head-yellow">
+                        <th class="" colspan="4">Total Purchase & Sales Quantity</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <th class="numeric" >Purchase</th>
+                        <td class="numeric" >{{ stockOverview.purchase|abs }}</td>
+                        <th class="numeric" >Sales</th>
+                        <td class="numeric" >{{ stockOverview.sales|abs }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Sales Return</th>
+                        <td class="numeric" >{{ stockOverview.salesReturn|abs }}</td>
+                        <th class="numeric" >Purchase Return</th>
+                        <td class="numeric" >{{ stockOverview.purchaseReturn|abs }}</td>
+                    </tr>
+                    <tr>
+                        <th class="numeric" >Damage</th>
+                        <td class="numeric" >{{ stockOverview.damage|abs }}</td>
+                        <th class="numeric" >Current Stock</th>
+                        <td class="numeric" >{{ stockOverview.remaining }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <table class="table even" border="1">
                     <thead class="flip-content ">
-                    <tr class="head-grey">
-                        <th class="numeric" ><i class="icon-reorder"></i></th>
+                    <tr class="head-green">
+                        <th class="numeric" >S/N</th>
                         <th class="numeric" >Name</th>
                         <th class="numeric" >Unit</th>
                         <th class="numeric" >Purchase</th>
@@ -87,8 +142,10 @@
                         <th class="numeric" >S.Return</th>
                         <th class="numeric" >Damage</th>
                         <th class="numeric" >Remaining</th>
+                        <th class="numeric text-right" >Sales Price</th>
                         <th class="numeric text-right" >Avg Pur Price</th>
-                        <th class="numeric text-right" >Amount</th>
+                        <th class="numeric text-right" >Unit Profit</th>
+                        <th class="numeric text-right" >Total PP</th>
                     </tr>
                     </thead>
                     <tbody id="data-load"></tbody>

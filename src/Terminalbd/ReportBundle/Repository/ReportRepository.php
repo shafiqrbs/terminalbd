@@ -298,7 +298,7 @@ class ReportRepository extends EntityRepository
         $qb->from("InventoryBundle:Item",'e');
         $qb->select('SUM(e.quantity) AS quantity');
         $qb->addSelect('SUM(e.remainingQnt * e.purchaseAvgPrice) AS purchasePrice');
-        $qb->addSelect('SUM(e.remainingQnt * e.salesAvgPrice) AS salesPrice');
+        $qb->addSelect('SUM(e.remainingQnt * e.salesPrice) AS salesPrice');
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $result = $qb->getQuery()->getArrayResult();
@@ -306,19 +306,27 @@ class ReportRepository extends EntityRepository
 
     }
 
-    public function invReportPurchasePrice($inventory,$data)
+    public function invReportSalesPurchasePrice($inventory,$data)
     {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Sales','sales');
+        $qb->select("SUM(sales.total) as totalSales");
+        $qb->where("sales.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $inventory);
+        $qb->andWhere('sales.process IN(:process)')->setParameter('process',array_values(array('Done','Delivered')));
+        $sales = $qb->getQuery()->getSingleScalarResult();
+
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:SalesItem','si');
         $qb->join('si.sales','sales');
         $qb->select('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $inventory);
-        $qb->andWhere('sales.paymentStatus IN(:paymentStatus)');
-        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
-        return $data = $result['totalPurchaseAmount'] ;
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('Done','Delivered')));
+        $purchase = $qb->getQuery()->getSingleScalarResult();
+        $data = array('sales'=> $sales,'purchase' => $purchase);
+        return $data;
     }
 
     public  function getStockOverview($inventory,$data=''){
@@ -352,7 +360,7 @@ class ReportRepository extends EntityRepository
         $qb->from('InventoryBundle:Item', 'item');
         $qb->join('item.masterItem', 'm');
         $qb->join('m.productUnit', 'u');
-        $qb->addSelect('item.name as name','item.purchaseQuantity','item.purchaseQuantityReturn','item.salesQuantity','item.salesQuantityReturn','item.damageQuantity','item.remainingQnt','item.purchaseAvgPrice');
+        $qb->addSelect('item.name as name','item.purchaseQuantity','item.purchaseQuantityReturn','item.salesQuantity','item.salesQuantityReturn','item.damageQuantity','item.remainingQnt','item.salesPrice as salesPrice','item.purchaseAvgPrice');
         $qb->addSelect('u.name as unit');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
