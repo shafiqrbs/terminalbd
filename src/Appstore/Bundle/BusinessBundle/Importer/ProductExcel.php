@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Importer;
 
+use Appstore\Bundle\BusinessBundle\Entity\BusinessBrand;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\Category;
 use Appstore\Bundle\BusinessBundle\Entity\ItemImport;
@@ -32,6 +33,7 @@ class ProductExcel
         foreach($this->data as $key => $item) {
             $name = ucfirst(strtolower(trim($item['Name'])));
             $category = ucfirst(strtolower(trim($item['Category'])));
+            $brand = ucfirst(strtolower(trim($item['Brand'])));
             $productOld = $this->getDoctrain()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $inventory,'name' => $name));
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
@@ -56,6 +58,10 @@ class ProductExcel
                 if ($category) {
                     $cat = $this->getCategory($category);
                     $product->setCategory($cat);
+                }
+                if ($brand) {
+                    $cat = $this->getBrand($brand);
+                    $product->setBrand($cat);
                 }
                 $this->save($product);
 
@@ -99,6 +105,26 @@ class ProductExcel
             $category->setBusinessConfig($config);
             $category = $this->save($category);
             return $category;
+        }
+    }
+
+    private function getBrand($item)
+    {
+        $config = $this->itemImport->getBusinessConfig();
+        $brandRepository = $this->getBrandRepository();
+
+        $brand = $brandRepository->findOneBy(array(
+            'businessConfig'   => $config,
+            'name'              => $item
+        ));
+        if($brand){
+            return $brand;
+        }else{
+            $brand = new BusinessBrand();
+            $brand->setName($item);
+            $brand->setBusinessConfig($config);
+            $brand = $this->save($brand);
+            return $brand;
         }
     }
 
@@ -146,6 +172,14 @@ class ProductExcel
     private function getCategoryRepository()
     {
         return $this->getDoctrain()->getRepository('BusinessBundle:Category');
+    }
+
+    /**
+     * @return CategoryRepository
+     */
+    private function getBrandRepository()
+    {
+        return $this->getDoctrain()->getRepository('BusinessBundle:BusinessBrand');
     }
 
 
