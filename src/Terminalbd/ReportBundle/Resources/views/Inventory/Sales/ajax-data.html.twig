@@ -24,9 +24,9 @@
 {% endfor %}
 <tr>
     <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
-    <th>{{ totalSales|number_format(2) }}</th>
-    <th>{{ totalPayment|number_format(2) }}</th>
-    <th>{{ totalDue|number_format(2) }}</th>
-    <th>{{ totalPurchase|number_format(2) }}</th>
-    <th>{{ (totalSales-totalPurchase)|number_format(2) }}</th>
+    <th class="text-right"><strong>{{ totalSales|number_format(2) }}</strong></th>
+    <th class="text-right"><strong>{{ totalPayment|number_format(2) }}</strong></th>
+    <th class="text-right"><strong>{{ totalDue|number_format(2) }}</strong></th>
+    <th class="text-right"><strong>{{ totalPurchase|number_format(2) }}</strong></th>
+    <th class="text-right"><strong>{{ (totalSales-totalPurchase)|number_format(2) }}</strong></th>
 </tr>
