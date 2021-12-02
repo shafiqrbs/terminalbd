@@ -49,8 +49,9 @@ class BarcodeController extends Controller
     public function barCoder(PurchaseItem $barcoder,InventoryConfig $config)
     {
 
-        $symbol = empty($config->getCurrency()->getSymbol()) ? "৳" : $config->getCurrency()->getSymbol();
+        $symbol = empty($config->getCurrency()) ? "৳" : $config->getCurrency()->getSymbol();
         $itemName = "";
+        $shopName = $config->getShopName();
         if($config->isBarcodeItem() == 1){
             $itemName = $barcoder->getItem()->getMasterItem()->getName();
         }
@@ -104,8 +105,6 @@ class BarcodeController extends Controller
         }else{
             $border = 0;
         }
-
-        $shopName = $config->getShopName();
         if($config->getBarcodePriceHide() == 1){
             $price ='';
         }else{
@@ -147,10 +146,11 @@ class BarcodeController extends Controller
 	public function itemBarcoder(Item $barcoder,InventoryConfig $config)
 	{
 
-        $symbol = empty($config->getCurrency()->getSymbol()) ? "৳" : $config->getCurrency()->getSymbol();
+        $shopName = $config->getShopName();
+        $symbol = empty($config->getCurrency()) ? "৳" : $config->getCurrency()->getSymbol();
         $itemName = "";
         if($config->isBarcodeItem() == 1){
-            $itemName = $barcoder->getItem()->getMasterItem()->getName();
+            $itemName = $barcoder->getMasterItem()->getName();
         }
 	    if ((!empty($barcoder->getColor()) and $config->getBarcodeColor() == 1) and (!empty($barcoder->getSize()) and $config->getBarcodeSize() == 1)) {
 
