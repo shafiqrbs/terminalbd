@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/mis")
- * @Security("is_granted('ROLE_DOMAIN') or is_granted('ROLE_REPOTRT_ACCOUNTING')")
+ * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN,ROLE_REPORT_ADMIN,ROLE_REPORT_FINANCIAL")
  */
 class ReportController extends Controller
 {
@@ -31,7 +31,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/dashboard", methods={"GET", "POST"}, name="report_dashboard")
-     * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN,ROLE_REPORT_ADMIN,ROLE_REPORT_FINANCIAL")
      */
     public function indexAction()
     {
