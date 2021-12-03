@@ -1,6 +1,6 @@
 
 <ul class="nav pull-right">
-    {% if app.user.granted("ROLE_DOMAIN") and app.user.granted('ROLE_REPORT') %}
+    {% if app.user.granted("ROLE_DOMAIN") or app.user.granted('ROLE_REPORT') or app.user.granted('ROLE_DOMAIN_ACCOUNTING') %}
         <li class="" id="header_notification_bar">
             <a href="{{ path('report_dashboard') }}" target="_blank" class="btn red mini"><i class="icon-bar-chart"></i> MIS Reports</a>
         </li>
