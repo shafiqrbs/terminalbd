@@ -428,6 +428,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('customer.id');
         $qb->having('customerBalance > 0');
+        $qb->orderBy('customer.name ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
