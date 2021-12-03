@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/mis")
- * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN,ROLE_REPORT_ADMIN,ROLE_REPORT_FINANCIAL")
+ * @Security("is_granted('ROLE_DOMAIN') or is_granted('ROLE_REPORT') or is_granted('ROLE_REPORT_ADMIN')")
  */
 class ReportController extends Controller
 {
@@ -31,7 +31,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/dashboard", methods={"GET", "POST"}, name="report_dashboard")
-     * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN,ROLE_REPORT_ADMIN,ROLE_REPORT_FINANCIAL")
+     * @Secure(roles="ROLE_REPORT,ROLE_DOMAIN")
      */
     public function indexAction()
     {
@@ -74,7 +74,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/customer-outstanding", methods={"GET", "POST"}, name="accounting_report_sales_outstanding")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
     public function customerOutstandingAction()
     {
@@ -93,7 +93,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/customer-summary", methods={"GET", "POST"}, name="accounting_report_sales_summary")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function customerSummaryAction()
@@ -112,7 +112,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/cash-flow", methods={"GET", "POST"}, name="accounting_report_cash_flow")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
     public function cashFlowAction()
@@ -142,7 +142,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/customer-ledger", methods={"GET", "POST"}, name="accounting_report_sales_customer_ledger")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function customerLedgerAction()
@@ -176,7 +176,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/user-sales-receive", methods={"GET", "POST"}, name="accounting_report_sales_user_summary")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function userSummaryAction()
@@ -197,7 +197,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/customer-sales-receive", methods={"GET", "POST"}, name="accounting_report_sales_customer_summary")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function userSalesDetailsAction()
@@ -222,7 +222,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/sales-details", methods={"GET", "POST"}, name="accounting_report_sales_details")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function salesDetailsAction()
@@ -250,7 +250,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/sales-details-load", methods={"GET", "POST"}, name="accounting_report_sales_ajax")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function salesDetailsLoadAction()
@@ -277,7 +277,7 @@ class ReportController extends Controller
 
     /**
      * @Route("/purchase-details", methods={"GET", "POST"}, name="accounting_report_purchase_details")
-     * @Secure(roles="ROLE_ACCOUNTING_REPORT,ROLE_ACCOUNTING_REPORT_SALES, ROLE_DOMAIN")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
     public function purchaseDetailsAction()
