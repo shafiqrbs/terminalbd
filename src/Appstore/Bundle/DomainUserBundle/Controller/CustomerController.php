@@ -235,24 +235,26 @@ class CustomerController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+        $count = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->customerCount($entity->getGlobalOption()->getId(),$entity->getId(),$mobile);
+        if ($editForm->isValid() and $count == 0) {
 	        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
 	        $entity->setMobile($mobile);
             $em->flush();
             return $this->redirect($this->generateUrl('domain_customer'));
         }
-
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+        if($count > 0){
+            $this->get('session')->getFlashBag()->add(
+                'notice',"May be you are using existing mobile no"
+            );
+        }
+        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

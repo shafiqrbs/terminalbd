@@ -369,6 +369,19 @@ class CustomerRepository extends EntityRepository
 
     }
 
+    public function customerCount($globalOption,$id,$mobile)
+    {
+
+        $qb = $this->createQueryBuilder('customer');
+        $qb->select('COUNT(customer.id) as customerCount');
+        $qb->where("customer.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
+        $qb->andWhere("customer.mobile = :mobile")->setParameter('mobile', $mobile);
+        $qb->andWhere("customer.id != :id")->setParameter('id', $id);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return  $count;
+
+    }
+
     protected function handleSearchBetween($qb,$data)
     {
         if($data)

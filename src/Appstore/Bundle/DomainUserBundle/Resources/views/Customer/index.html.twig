@@ -75,6 +75,7 @@
                                     <th class="numeric">Location</th>
                                     <th class="numeric">Email</th>
                                     <th class="numeric">Address</th>
+                                    <th class="numeric">Enable</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
@@ -88,6 +89,7 @@
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td>{{ entity.email }}</td>
                                         <td>{{ entity.address|raw }}</td>
+                                        <td>{% if entity.status == 1 %}Active{% else %} In-active{% endif %}</td>
                                         <td class="numeric">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('domain_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>

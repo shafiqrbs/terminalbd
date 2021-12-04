@@ -17,7 +17,7 @@
                         <a href="{{ path('domain_customer') }}">Customer List</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Create new customer</a></li>
+                    <li><a href="#">Edit Customer</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -104,6 +104,16 @@
                                                         {{ form_widget(form.email) }}
                                                         {{ form_errors(form.email) }}
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="email">Status</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.status) }}
                                                 </div>
                                             </div>
                                         </div>

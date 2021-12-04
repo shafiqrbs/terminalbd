@@ -37,6 +37,7 @@ class CustomerEditType extends AbstractType
             ->add('alternativeMobile','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Alternative mobile no')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address'))
             )
+            ->add('status')
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
