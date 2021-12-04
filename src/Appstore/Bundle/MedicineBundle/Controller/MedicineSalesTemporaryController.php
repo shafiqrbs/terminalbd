@@ -146,20 +146,23 @@ class MedicineSalesTemporaryController extends Controller
             $entity->setReceived($data['salesSubTotal'] - $discount);
         }
 
-        if ($entity->getNetTotal() <= $entity->getReceived()) {
+        if ($entity->getMedicineConfig()->isAutoPayment() == 1 and empty($entity->getReceived())) {
             $entity->setReceived($entity->getNetTotal());
             $entity->setPaymentStatus('Paid');
             $entity->setDue(0);
-        } else {
+        }elseif($entity->getNetTotal() <= $entity->getReceived()) {
+            $entity->setReceived($entity->getNetTotal());
+            $entity->setPaymentStatus('Paid');
+            $entity->setDue(0);
+        }else{
             $entity->setPaymentStatus('Due');
             $entity->setDue($entity->getNetTotal() - $entity->getReceived());
         }
         if (isset($data['process']) and ($data['process'] == 'Hold')) {
             $entity->setProcess('Hold');
-        } else {
-            $entity->setApprovedBy($this->getUser());
-            $entity->setProcess('Done');
         }
+        $entity->setApprovedBy($this->getUser());
+        $entity->setProcess('Done');
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());
         }
