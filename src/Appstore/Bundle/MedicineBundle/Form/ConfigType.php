@@ -40,6 +40,7 @@ class ConfigType extends AbstractType
             ->add('printOutstanding')
             ->add('posPrint')
             ->add('searchSlug')
+            ->add('autoPayment')
             ->add('openingQuantity')
             ->add('regularPosPrint')
             ->add('isBarcode')

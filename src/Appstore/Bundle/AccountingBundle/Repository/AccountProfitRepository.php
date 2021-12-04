@@ -73,9 +73,9 @@ class AccountProfitRepository extends EntityRepository
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
-                if (in_array($row['processType'], array('Outstanding', 'Opening'))) {
+                if (in_array($row['processType'], array('Credit','Outstanding', 'Opening'))) {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyOpeningTransaction($profit, $row);
-                } elseif ($row['amount'] > 0 and $row['processType'] == 'Discount') {
+                } elseif ($row['amount'] > 0 and $row['processType'] == 'Debit') {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyDiscountTransaction($profit, $row);
                 } elseif ($row['amount'] > 0 and $row['processType'] == 'Due') {
                     $em->getRepository('AccountingBundle:Transaction')->insertPurchaseMonthlyDueTransaction($profit, $row);
@@ -92,9 +92,9 @@ class AccountProfitRepository extends EntityRepository
 
             foreach ($journalAccountSales as $row):
 
-                if(in_array($row['processHead'],array('Outstanding','Opening'))){
+                if(in_array($row['processHead'],array('Debit','Outstanding','Opening'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyOpeningTransaction($profit,$row);
-                }elseif($row['amount'] > 0 and $row['processHead'] == 'Discount' ){
+                }elseif($row['amount'] > 0 and $row['processHead'] == 'Credit' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);

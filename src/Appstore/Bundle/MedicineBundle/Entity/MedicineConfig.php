@@ -227,6 +227,14 @@ class MedicineConfig
      /**
      * @var boolean
      *
+     * @ORM\Column(name="autoPayment", type="boolean",  nullable=true)
+     */
+    private $autoPayment = false;
+
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="openingQuantity", type="boolean",  nullable=true)
      */
     private $openingQuantity = false;
@@ -959,6 +967,22 @@ class MedicineConfig
     public function setPrintCss($printCss)
     {
         $this->printCss = $printCss;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoPayment()
+    {
+        return $this->autoPayment;
+    }
+
+    /**
+     * @param bool $autoPayment
+     */
+    public function setAutoPayment($autoPayment)
+    {
+        $this->autoPayment = $autoPayment;
     }
 
 }
