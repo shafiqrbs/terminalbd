@@ -178,6 +178,13 @@ class MedicineStock
      */
     private $bonusQuantity;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusAdjustment", type="integer", nullable=true)
+     */
+    private $bonusAdjustment;
+
      /**
      * @var integer
      *
@@ -1090,6 +1097,22 @@ class MedicineStock
     public function setAdjustmentQuantity($adjustmentQuantity)
     {
         $this->adjustmentQuantity = $adjustmentQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusAdjustment()
+    {
+        return $this->bonusAdjustment;
+    }
+
+    /**
+     * @param int $bonusAdjustment
+     */
+    public function setBonusAdjustment($bonusAdjustment)
+    {
+        $this->bonusAdjustment = $bonusAdjustment;
     }
 
 

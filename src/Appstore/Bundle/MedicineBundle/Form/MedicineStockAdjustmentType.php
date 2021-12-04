@@ -30,10 +30,10 @@ class MedicineStockAdjustmentType extends AbstractType
                 'choices' => array(
                     'Minus' => 'Minus',
                     'Plus' => 'Plus',
-                    'Bonus' => 'Bonus'
                 ),
             ))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 form-control input-number input','placeholder'=>'quantity')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 form-control input-number input','placeholder'=>'Quantity')))
+            ->add('bonus','number', array('attr'=>array('class'=>'m-wrap span12 form-control input-number input','placeholder'=>'Bonus')))
             ->add('notes','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter notes ')))
 
         ;

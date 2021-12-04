@@ -112,7 +112,7 @@ class CustomerController extends Controller
             'action' => $this->generateUrl('domain_customer_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -222,7 +222,7 @@ class CustomerController extends Controller
             'action' => $this->generateUrl('domain_customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));

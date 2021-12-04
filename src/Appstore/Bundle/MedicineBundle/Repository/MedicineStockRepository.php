@@ -356,10 +356,20 @@ class MedicineStockRepository extends EntityRepository
         $this->remainingQnt($stock);
     }
 
+    public function stockAdjustment(MedicineStock $stock){
+        $em = $this->_em;
+        $adjustment = $em->getRepository('MedicineBundle:MedicineStockAdjustment')->adjustmentStockItemUpdate($stock);
+        $stock->setAdjustmentQuantity($adjustment['quantity']);
+        $stock->setBonusAdjustment($adjustment['bonus']);
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
     public function remainingQnt(MedicineStock $stock)
     {
         $em = $this->_em;
-	    $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getBonusQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
+	    $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getBonusQuantity() + $stock->getBonusAdjustment() + $stock->getAdjustmentQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
         $em->persist($stock);
         $em->flush();

@@ -46,13 +46,13 @@ class MedicineStockAdjustmentRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
-    public function damageStockItemUpdate(MedicineStock $item)
+    public function adjustmentStockItemUpdate(MedicineStock $item)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.bonus) AS bonus');
         $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
-        return $qnt['quantity'];
+        return $qnt;
     }
 
 

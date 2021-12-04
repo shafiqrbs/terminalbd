@@ -51,30 +51,16 @@ class MedicineStockAdjustment
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="integer",nullable=true)
      */
     private $quantity;
 
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="purchasePrice", type="float",nullable=true)
+     * @ORM\Column(name="bonus", type="integer",nullable=true)
      */
-    private $purchasePrice;
-
-     /**
-     * @var float
-     *
-     * @ORM\Column(name="salePrice", type="float",nullable=true)
-     */
-    private $salePrice;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="subTotal", type="float",nullable=true)
-     */
-    private $subTotal;
+    private $bonus;
 
 
     /**
@@ -235,38 +221,6 @@ class MedicineStockAdjustment
         $this->medicineStock = $medicineStock;
     }
 
-    /**
-     * @return float
-     */
-    public function getPurchasePrice()
-    {
-        return $this->purchasePrice;
-    }
-
-    /**
-     * @param float $purchasePrice
-     */
-    public function setPurchasePrice($purchasePrice)
-    {
-        $this->purchasePrice = $purchasePrice;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSubTotal()
-    {
-        return $this->subTotal;
-    }
-
-    /**
-     * @param float $subTotal
-     */
-    public function setSubTotal($subTotal)
-    {
-        $this->subTotal = $subTotal;
-    }
-
 	/**
 	 * @return string
 	 */
@@ -277,57 +231,10 @@ class MedicineStockAdjustment
 	/**
 	 * @param string $process
 	 */
-	public function setProcess( string $process ) {
+	public function setProcess($process ) {
 		$this->process = $process;
 	}
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return float
-     */
-    public function getSalePrice()
-    {
-        return $this->salePrice;
-    }
-
-    /**
-     * @param float $salePrice
-     */
-    public function setSalePrice($salePrice)
-    {
-        $this->salePrice = $salePrice;
-    }
-
-    /**
-     * @return MedicineParticular
-     */
-    public function getAdjustment()
-    {
-        return $this->adjustment;
-    }
-
-    /**
-     * @param MedicineParticular $adjustment
-     */
-    public function setAdjustment($adjustment)
-    {
-        $this->adjustment = $adjustment;
-    }
 
     /**
      * @return string
@@ -343,6 +250,22 @@ class MedicineStockAdjustment
     public function setMode($mode)
     {
         $this->mode = $mode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonus()
+    {
+        return $this->bonus;
+    }
+
+    /**
+     * @param int $bonus
+     */
+    public function setBonus($bonus)
+    {
+        $this->bonus = $bonus;
     }
 
 
