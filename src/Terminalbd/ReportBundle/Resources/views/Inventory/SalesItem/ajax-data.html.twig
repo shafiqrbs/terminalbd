@@ -9,6 +9,7 @@
         <td class="numeric" >{{ entity.salesInvoice }}</td>
         <td class="numeric" >{{ entity.customerName }}</td>
         <td class="numeric" >{{ entity.salesBy }}</td>
+        <td class="numeric" >{{ entity.name }}</td>
         <td class="numeric" >{{ entity.quantity }}</td>
         <td class="text-right" >{{ entity.salesPrice|number_format }}</td>
         <td class="text-right" >{{ entity.purchasePrice|number_format }}</td>
@@ -18,7 +19,7 @@
     </tr>
 {% endfor %}
 <tr>
-    <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
+    <td colspan="8" class="text-right"><strong>Grand Total</strong></td>
     <td class="text-right"><strong>{{ totalSales|number_format(2) }}</strong></td>
     <td></td>
     <td class="text-right"><strong>{{ totalPurchase|number_format(2) }}</strong></td>

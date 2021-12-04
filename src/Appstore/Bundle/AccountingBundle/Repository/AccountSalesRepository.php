@@ -427,8 +427,8 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('customer.id');
+        $qb->orderBy('customer.name', 'ASC');
         $qb->having('customerBalance > 0');
-        $qb->orderBy('customer.name ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 

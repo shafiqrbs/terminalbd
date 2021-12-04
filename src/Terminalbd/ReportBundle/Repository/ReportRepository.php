@@ -486,7 +486,7 @@ class ReportRepository extends EntityRepository
         $qb->addSelect('si.serialNo AS serialNo');
         $qb->addSelect('si.quantity AS quantity');
         $qb->addSelect('si.salesPrice AS salesPrice','si.purchasePrice AS purchasePrice');
-        $qb->addSelect('item.sku AS name');
+        $qb->addSelect('item.name AS name');
         $qb->where("s.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
