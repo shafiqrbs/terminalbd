@@ -1447,8 +1447,6 @@ class Builder extends ContainerAware
 	                $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) )
 		                                             ->setAttribute( 'icon', 'icon-th-list' );
 	            }
-
-
         }
         if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
             $menu['Medicine']->addChild('Master Data')

@@ -563,11 +563,14 @@ class MedicineStockRepository extends EntityRepository
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row['stockId'];
 
-            if($row['brandName']){
+            /*if($row['brandName']){
                 $printName = $row['brandName'].' '.$row['strength'];
             }else{
                 $printName = $row['name'];
-            }
+            }*/
+          //  $arr = array("Tablet","Capsule","Eye Drops","Suspension","Syrup");
+           // $printName = trim(str_replace($arr, "", $row['name']));
+            $printName = trim($printName = $row['name']);
 
             $data[$key]['category_id']      = 0;
             $data[$key]['categoryName']     = '';
