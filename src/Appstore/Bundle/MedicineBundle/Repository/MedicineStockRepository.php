@@ -570,8 +570,7 @@ class MedicineStockRepository extends EntityRepository
             }*/
           //  $arr = array("Tablet","Capsule","Eye Drops","Suspension","Syrup");
            // $printName = trim(str_replace($arr, "", $row['name']));
-            $printName = trim($printName = $row['name']);
-
+            $printName = trim($row['name']);
             $data[$key]['category_id']      = 0;
             $data[$key]['categoryName']     = '';
             if ($row['unitId']){
