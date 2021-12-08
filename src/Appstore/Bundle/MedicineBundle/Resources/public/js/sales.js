@@ -48,8 +48,9 @@ $(document).on('change', '#salesitem_stockName', function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
-            $('#salesitem_barcode').html(obj['purchaseItems']).focus();
             $('#salesitem_salesPrice').val(obj['salesPrice']);
+            $('#salesitem_quantity').focus();
+            $("#addParticular").attr("disabled", false);
         }
     })
 
@@ -93,10 +94,9 @@ var form = $("#salesItemForm").validate({
     rules: {
 
         "salesitem[stockName]": {required: true},
-        "salesitem[barcode]": {required: true},
         "salesitem[salesPrice]": {required: true},
         "salesitem[itemPercent]": {required: false},
-        "salesitem[quantity]": {required: true},
+        "salesitem[quantity]": {required: false},
     },
 
     messages: {
@@ -121,14 +121,6 @@ var form = $("#salesItemForm").validate({
             data        : new FormData($('form#salesItemForm')[0]),
             processData : false,
             contentType : false,
-            beforeSend: function() {
-                $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
-                $('.btn-ajax-loading').attr("disabled", true);
-            },
-            complete: function(){
-                $('.btn-ajax-loading').attr("disabled", false);
-                $('#savePatientButton').removeClass('btn-ajax-loading');
-            },
             success: function(response){
                 obj = JSON.parse(response);
                 $('#invoiceParticulars').html(obj['salesItems']);
@@ -141,6 +133,7 @@ var form = $("#salesItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $("#salesitem_stockName").select2("val", "");
                 $('#salesItemForm')[0].reset();
+                $('#addParticular').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
             }
         });
     }
@@ -150,26 +143,20 @@ $('#invoiceParticulars').on("click", ".itemDelete", function() {
 
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $('#remove-'+id).hide();
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (response) {
-                    obj = JSON.parse(response);
-                    $('#subTotal').html(obj['subTotal']);
-                    $('.grandTotal').html(obj['netTotal']);
-                    $('#paymentTotal').val(obj['netTotal']);
-                    $('#due').val(obj['due']);
-                    $('.dueAmount').html(obj['due']);
-                    $('#msg').html(obj['msg']);
-                }
-            })
+    $('#remove-'+id).hide();
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#subTotal').html(obj['subTotal']);
+            $('.grandTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
+            $('#msg').html(obj['msg']);
         }
-    });
+    })
 
 });
 

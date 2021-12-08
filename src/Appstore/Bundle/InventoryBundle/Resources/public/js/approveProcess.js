@@ -10,24 +10,16 @@ function ApproveProcess(){
         changeYear: true,
     });
 
-    $('.horizontal-form').submit(function(){
-        $("button[type='submit']", this)
-            .html("Please Wait...")
-            .attr('disabled', 'disabled');
-        return true;
-    });
-
-
-    $(document).on("click", ".delete , .remove", function() {
+    $(document).on("click", ".delete , .remove", function(event) {
 
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
-            onOkBut: function(event, el) {
+            onOkBut: function(event) {
                 $.get(url, function( data ) {
-                    location.reload();
+                    $(event.target).closest('tr').remove();
                 });
             }
         });

@@ -44,23 +44,24 @@
                     <div class="portlet-body flip-scroll">
                         {% include('flash-message.html.twig')  %}
                         <div class="clearfix">&nbsp;</div>
-                        {{ form_start(itemForm) }}
-                        {{ form_row(itemForm._token) }}
+
                         <div class="row-fluid">
                             <div class="row-fluid particular-info" >
                                 <div class="span2">
                                     <input type="text" style="text-align:center; margin-left:15px;height: 42px!important;" class="m-wrap span12 form-control"  id="barcode" name="barcode" data-id="{{ entity.id }}" placeholder="Barcode"  value="" >
                                 </div>
-                                <div class="span3">
-                                    {{ form_widget(itemForm.item) }}
-                                    {{ form_errors(itemForm.item) }}
-                                </div>
-                                <div class="span3">
-                                    <select style="height: 42px!important;" class="m-wrap span12 form-control" name="subItem" id="subItem">
-                                        <option>Select sub-item</option>
-                                    </select>
-                                </div>
-                                <div class="span4">
+                                {{ form_start(itemForm) }}
+                                {{ form_row(itemForm._token) }}
+                                    <div class="span3">
+                                        {{ form_widget(itemForm.item) }}
+                                        {{ form_errors(itemForm.item) }}
+                                    </div>
+                                    <div class="span3">
+                                        <select style="height: 42px!important;" class="m-wrap span12 form-control" name="subItem" id="subItem">
+                                            <option>Select sub-item</option>
+                                        </select>
+                                    </div>
+                                    <div class="span4">
                                     <div class="input-append span12" style="margin-bottom:0!important">
                                         <div class="input-group">
                                                 <span class="input-group-btn">
@@ -82,10 +83,10 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                {{ form_end(itemForm) }}
                             </div>
                         </div>
-                        {{ form_end(itemForm) }}
+
                         <div class="clearfix">&nbsp;</div>
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
@@ -121,7 +122,7 @@
                                                     </td>
                                                     <td class="numeric" >{% if salesItem.item.masterItem.productUnit is not empty %}{{ salesItem.item.masterItem.productUnit.name }}{% endif %}</td>
                                                     <td><span id="subTotalShow-{{ salesItem.id }}" ><strong>{{ salesItem.subTotal }}</strong></span></td>
-                                                    <td><button class="btn red mini remove" data-url="{{ path('inventory_salesmanual_salesitem_delete',{'sales':entity.id,'salesItem':salesItem.id}) }}" id="{{ salesItem.id }}" type="button" ><i class="icon-trash"></i></button></td>
+                                                    <td><button class="btn red mini itemRemove" data-url="{{ path('inventory_salesmanual_salesitem_delete',{'sales':entity.id,'salesItem':salesItem.id}) }}" id="{{ salesItem.id }}" type="button" ><i class="icon-trash"></i></button></td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -135,19 +136,19 @@
                                     <div class="span12" id="payment-info">
                                         <div class="row-fluid">
                                             <div class="span8"><strong>SUB-TOTAL TK.</strong></div>
-                                            <div class="span4"><strong id="subTotal">{{ entity.subTotal }}</strong></div>
+                                            <div class="span4"><strong id="subTotal">{{ entity.subTotal|number_format(2) }}</strong></div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span8"><strong>DISCOUNT TK.</strong></div>
-                                            <div class="span4"><strong id="discount">{{ entity.discount }}</strong></div>
+                                            <div class="span4"><strong id="discount">{{ entity.discount|number_format(2) }}</strong></div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span8"><strong>VAT/TAX TK.</strong></div>
-                                            <div class="span4"><strong class="vat">{{ entity.vat }}</strong></div>
+                                            <div class="span4"><strong class="vat">{{ entity.vat|number_format(2) }}</strong></div>
                                         </div>
                                         <div class="row-fluid" style="border-top: 2px solid #c49f47;padding-top: 10px;border-bottom: 2px solid #c49f47;margin-bottom: 10px;">
                                             <div class="span8"><strong>NET-TOTAL TK.</strong></div>
-                                            <div class="span4"><strong id="netTotal">{{ entity.total }}</strong></div>
+                                            <div class="span4"><strong id="netTotal">{{ entity.total|number_format(2)    }}</strong></div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span8"><strong id="balance">DUE TK.</strong></div>

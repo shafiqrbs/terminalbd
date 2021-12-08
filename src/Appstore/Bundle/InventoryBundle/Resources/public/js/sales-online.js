@@ -347,37 +347,31 @@ var InventorySales = function(sales) {
     });
 
 
-    $(document).on("click", ".delete", function() {
+    $(document).on("click", ".delete", function(event) {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (response) {
-                        obj = JSON.parse(response);
-                        if ('success' == obj['success']) {
-                            $('#remove-' + id).hide();
-                            $('#paymentSubTotal').val(obj['salesTotal']);
-                            $('.salesTotal').html(obj['salesTotal']);
-                            $('#due').val(obj['due']);
-                            $('.dueAmount').html(obj['due']);
-                            $('.subTotal').html(obj['salesSubTotal']);
-                            $('#vat').html(obj['salesVat']);
-                            $('#discount').html(obj['discount']);
-                            $('#paymentTotal').val(obj['salesTotal']);
-                            $('#wrongBarcode').html(obj['msg']);
-                        }
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                if ('success' == obj['success']) {
+                    $(event.target).closest('tr').remove();
+                    $('#paymentSubTotal').val(obj['salesTotal']);
+                    $('.salesTotal').html(obj['salesTotal']);
+                    $('#due').val(obj['due']);
+                    $('.dueAmount').html(obj['due']);
+                    $('.subTotal').html(obj['salesSubTotal']);
+                    $('#vat').html(obj['salesVat']);
+                    $('#discount').html(obj['discount']);
+                    $('#paymentTotal').val(obj['salesTotal']);
+                    $('#wrongBarcode').html(obj['msg']);
+                }
 
 
-                    },
-                })
-            }
-        });
+            },
+        })
 
     });
 

@@ -406,7 +406,7 @@ class SalesItemRepository extends EntityRepository
 	        $data .="<td class='numeric' ><input type='text' name='quantity[]' data-id='{$entity->getId()}'  id='quantity-{$entity->getId()}' class='td-inline-input quantity' value='{$entity->getQuantity()}'</td>";
             $data .='<td class="numeric" >'.$unit.'</td>';
             $data .="<td class=''><span id='subTotalShow-{$entity->getId()}' ><strong>{$entity->getSubTotal()}</strong></span></td>";
-            $data .='<td class="" ><a id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/inventory/sales-manual/'.$entity->getSales()->getId().'/'.$entity->getId().'/manual-item-delete" href="javascript:" class="btn red mini remove" ><i class="icon-trash"></i></a></td>';
+            $data .='<td class="" ><a id="'.$entity->getId().'"  data-url="/inventory/sales-manual/'.$entity->getSales()->getId().'/'.$entity->getId().'/manual-item-delete" href="javascript:" class="btn red mini itemRemove" ><i class="icon-trash"></i></a></td>';
             $data .='</tr>';
             $i++;
         }

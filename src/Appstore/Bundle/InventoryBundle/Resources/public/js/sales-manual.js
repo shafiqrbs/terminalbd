@@ -49,31 +49,26 @@ var InventorySales = function(sales) {
         minimumInputLength: 3
     });
 
-    $(document).on("click", ".remove", function () {
+    $(document).on("click", ".remove,.itemRemove", function (event) {
 
         var url = $(this).attr('data-url');
         var id = $(this).attr('id');
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function (event, el) {
-                $.get(url, function (response) {
-                    $('#remove' + id).hide();
-                    obj = JSON.parse(response);
-                    $('#subTotal').html(obj['subTotal']);
-                    $('#netTotal').html(obj['netTotal']);
-                    $('#vat').html(obj['vat']);
-                    $('#discount').html(obj['discount']);
-                    $('#due').html(obj['due']);
-                    $('#total').val(obj['netTotal']);
-                });
-            }
+        $.get(url, function (response) {
+            $(event.target).closest('tr').remove();
+            obj = JSON.parse(response);
+            $('#subTotal').html(obj['subTotal']);
+            $('#netTotal').html(obj['netTotal']);
+            $('#vat').html(obj['vat']);
+            $('#discount').html(obj['discount']);
+            $('#due').html(obj['due']);
+            $('#total').val(obj['netTotal']);
         });
 
     });
 
-    $(document).on('change', '#barcode', function() {
+    $(document).on('change', '#barcode', function(e) {
 
+        e.preventDefault();
         var barcode = $('#barcode').val();
         var sales  = $(this).attr('data-id');
         if(barcode === ''){
@@ -102,7 +97,8 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on('change', '.stockItem', function () {
+    $(document).on('change', '.stockItem', function (e) {
+        e.preventDefault();
         var item = $(this).val();
         $.ajax({
             url: Routing.generate('inventory_salesmanual_item_search'),

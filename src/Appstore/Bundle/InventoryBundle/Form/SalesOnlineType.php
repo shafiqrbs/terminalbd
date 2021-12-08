@@ -130,16 +130,14 @@ class SalesOnlineType extends AbstractType
                 ),
                 'choices' => array(
                     'In-progress' => 'In-progress',
-                    'Courier' => 'Courier',
+                    'Done' => 'Done',
                     'Delivered' => 'Delivered',
+                    'Courier' => 'Courier',
                     'Cancel' => 'Cancel',
                     'Returned' => 'Returned',
-                    'Done' => 'Done',
                 ),
             ))
-	        ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')))
-
-        ;
+	        ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter narration')));
            // $builder->add('customer', new SalesOnlineCustomerType($this->location));
 
     }

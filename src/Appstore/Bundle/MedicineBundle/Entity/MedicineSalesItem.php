@@ -74,7 +74,7 @@ class MedicineSalesItem
      *
      * @ORM\Column(name="quantity", type="float", nullable=true)
      */
-    private $quantity;
+    private $quantity =1;
 
 
     /**

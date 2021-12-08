@@ -134,7 +134,7 @@
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-                                    {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in ['Done','Deliverd'] and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process in ['Done','Delivered'] and app.user.granted("ROLE_DOMAIN")) %}
+                                    {% if (("now"|date("d-m-y") == entity.updated|date('d-m-y')) and entity.process in ['Done','Deliverd'] and app.user.granted("ROLE_DOMAIN_INVENTORY_REVERSE")) or (entity.process in ['Done','Pos','Delivered'] and app.user.granted("ROLE_DOMAIN")) %}
                                         <a href="{{ path('inventory_online_sales_reverse',{'invoice':entity.invoice}) }}"  class="btn red" ><i class="icon-refresh"></i> Reverse</a>
                                     {% endif %}
                                 </div>
