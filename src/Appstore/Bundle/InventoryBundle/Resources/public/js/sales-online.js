@@ -368,8 +368,6 @@ var InventorySales = function(sales) {
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#wrongBarcode').html(obj['msg']);
                 }
-
-
             },
         })
 
