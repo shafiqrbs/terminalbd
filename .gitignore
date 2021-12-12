@@ -22,6 +22,7 @@ bin/*
 app/config/dynamic/*.yml
 app/config/parameters.ini
 app/config/parameters.yml
+app/config/routing.yml
 web/.htaccess
 
 # Composer

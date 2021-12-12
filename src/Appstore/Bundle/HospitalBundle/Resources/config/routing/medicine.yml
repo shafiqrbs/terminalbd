@@ -2,6 +2,10 @@ hms_medicine:
     path:     /
     defaults: { _controller: "HospitalBundle:Medicine:index" }
 
+hms_medicine_shortlist:
+    path:     /short-list
+    defaults: { _controller: "HospitalBundle:Medicine:shortList" }
+
 hms_medicine_create:
     path:     /create
     defaults: { _controller: "HospitalBundle:Medicine:create" }

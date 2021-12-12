@@ -51,6 +51,27 @@ class MedicineController extends Controller
     }
 
     /**
+     * Lists all Particular entities.
+     *
+     */
+    public function shortListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
+        $pagination = $this->paginate($entities);
+        $entity = new Particular();
+        $form = $this->createCreateForm($entity);
+        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+            'pagination' => $pagination,
+            'entity' => $entity,
+            'formShow'            => 'hide',
+            'form'   => $form->createView(),
+        ));
+
+    }
+
+    /**
      * Creates a new Particular entity.
      *
      */
