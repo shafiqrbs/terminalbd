@@ -111,7 +111,6 @@ api_poskeeper_vendor_payment:
     options:
         expose: true
 
-
 api_poskeeper_short_list:
     path:     /purchase-short-list
     defaults: { _controller: BinduBundle:Api:purchaseShortList }
@@ -123,7 +122,7 @@ api_poskeeper_short_list:
 api_poskeeper_add_purchase_shortlist:
     path:     /add-purchase-short-list
     defaults: { _controller: BinduBundle:Api:insertPurchaseShortItem }
-    
+
 api_setup:
     path:     /setup
     defaults: { _controller: BinduBundle:Api:setup }
@@ -136,99 +135,99 @@ api_template_customization:
     path:     /template-customization
     defaults: { _controller: BinduBundle:Api:templateCustomization }
 
-api_poskeeper_user:
+api_system_user:
     path:     /system-user
     defaults: { _controller: BinduBundle:Api:systemUsers }
 
-api_poskeeper_stock_item:
+api_system_stock_item:
     path:     /stock-item
     defaults: { _controller: BinduBundle:Api:stockItem }
 
 
-api_poskeeper_stock_category:
+api_system_stock_category:
     path:     /stock-category
     defaults: { _controller: BinduBundle:Api:category }
 
 
-api_poskeeper_tarnsaction_method:
+api_system_tarnsaction_method:
     path:     /tarnsaction-method
     defaults: { _controller: BinduBundle:Api:transactionMethod }
 
-api_poskeeper_payment_card:
+api_system_payment_card:
     path:     /payment-card
     defaults: { _controller: BinduBundle:Api:paymentCard }
 
 
-api_poskeeper_bank:
+api_system_bank:
     path:     /online-bank-acccount
     defaults: { _controller: BinduBundle:Api:apiBank }
 
 
-api_poskeeper_mobile:
+api_system_mobile:
     path:     /mobile-account
     defaults: { _controller: BinduBundle:Api:apiMobile }
 
 
-api_poskeeper_customer:
+api_system_customer:
     path:     /anonymiuse-customer
     defaults: { _controller: BinduBundle:Api:customer }
 
 
-api_poskeeper_vendor:
+api_system_vendor:
     path:     /vendor
     defaults: { _controller: BinduBundle:Api:vendor }
 
 
-api_poskeeper_unit:
+api_system_unit:
     path:     /product-unit
     defaults: { _controller: BinduBundle:Api:unit }
 
-api_poskeeper_dims:
+api_system_dims:
     path:     /medicine-dims
     defaults: { _controller: BinduBundle:Api:medicineDims }
 
-api_poskeeper_expense_category:
+api_system_expense_category:
     path:     /expense-category
     defaults: { _controller: BinduBundle:Api:expenditureCategory }
 
 
-api_poskeeper_token_no:
+api_system_token_no:
     path:     /token-no
     defaults: { _controller: BinduBundle:Api:tokenNo }
 
-api_poskeeper_discount_coupon:
+api_system_discount_coupon:
     path:     /discount-coupon
     defaults: { _controller: BinduBundle:Api:discountCoupon }
 
-api_poskeeper_sales:
+api_system_sales:
     path:     /sales
     defaults: { _controller: BinduBundle:Api:apiSales }
     methods:  POST
     options:
         expose: true
 
-api_poskeeper_sales_item:
+api_system_sales_item:
     path:     /sales-item
     defaults: { _controller: BinduBundle:Api:apiSalesItem }
     methods:  POST
     options:
         expose: true
 
-api_poskeeper_purchase:
+api_system_purchase:
     path:     /purchase
     defaults: { _controller: BinduBundle:Api:apiPurchase }
     methods:  POST
     options:
         expose: true
 
-api_poskeeper_purchase_item:
+api_system_purchase_item:
     path:     /purchase-item
     defaults: { _controller: BinduBundle:Api:apiPurchaseItem }
     methods:  POST
     options:
         expose: true
 
-api_poskeeper_expense:
+api_system_expense:
     path:     /expense
     defaults: { _controller: BinduBundle:Api:apiExpense }
     methods:  POST
@@ -241,3 +240,4 @@ api_business_invoice_token:
     methods:  POST
     options:
         expose: true
+
