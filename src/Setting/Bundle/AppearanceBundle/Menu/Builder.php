@@ -270,21 +270,23 @@ class Builder extends ContainerAware
                     )->setAttribute('icon', 'icon-th-list');
 
                 }
-                $menu[$business]['Reports']->addChild('Condition')
-                    ->setAttribute('dropdown', true)->setAttribute('icon', 'icon-th-list');
+                if($config->isConditionSales() == 1) {
+                    $menu[$business]['Reports']->addChild('Condition')
+                        ->setAttribute('dropdown', true)->setAttribute('icon', 'icon-th-list');
 
-                $menu[$business]['Reports']['Condition']->addChild(
-                    'Condition',
-                    array('route' => 'business_report_condition')
-                )->setAttribute('icon', 'icon-th-list');
-                $menu[$business]['Reports']['Condition']->addChild(
-                    'Condition Customer',
-                    array('route' => 'business_report_condition_customer')
-                )->setAttribute('icon', 'icon-th-list');
-                $menu[$business]['Reports']['Condition']->addChild(
-                    'Condition Details',
-                    array('route' => 'business_report_condition_details')
-                )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Reports']['Condition']->addChild(
+                        'Condition',
+                        array('route' => 'business_report_condition')
+                    )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Reports']['Condition']->addChild(
+                        'Condition Customer',
+                        array('route' => 'business_report_condition_customer')
+                    )->setAttribute('icon', 'icon-th-list');
+                    $menu[$business]['Reports']['Condition']->addChild(
+                        'Condition Details',
+                        array('route' => 'business_report_condition_details')
+                    )->setAttribute('icon', 'icon-th-list');
+                }
 
             }
             if($securityContext->isGranted('ROLE_BUSINESS_REPORT') and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')){
