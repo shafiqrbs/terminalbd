@@ -14,6 +14,10 @@ app_setting_mobile:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/mobileaccount.yml"
     prefix:   /appsetting/mobile-account
 
+inventory_stock_adjustment:
+    resource: "@InventoryBundle/Resources/config/routing/adjustment.yml"
+    prefix:   /stock-adjustment
+
 app_setting_barnch_shop:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/branchshop.yml"
     prefix:   /branch-shop

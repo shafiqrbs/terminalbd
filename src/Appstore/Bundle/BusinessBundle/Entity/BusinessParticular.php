@@ -154,6 +154,13 @@ class BusinessParticular
      */
     private $openingQuantity;
 
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="adjustmentQuantity", type="integer", nullable=true)
+     */
+    private $adjustmentQuantity;
+
     /**
      * @var boolean
      *
@@ -235,6 +242,15 @@ class BusinessParticular
      * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
      */
     private $bonusQuantity = 0;
+
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="bonusAdjustment", type="integer", nullable=true)
+     */
+    private $bonusAdjustment = 0;
 
 
     /**
@@ -1213,6 +1229,38 @@ class BusinessParticular
     public function setReturnBonusQuantity($returnBonusQuantity)
     {
         $this->returnBonusQuantity = $returnBonusQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentQuantity()
+    {
+        return $this->adjustmentQuantity;
+    }
+
+    /**
+     * @param int $adjustmentQuantity
+     */
+    public function setAdjustmentQuantity($adjustmentQuantity)
+    {
+        $this->adjustmentQuantity = $adjustmentQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBonusAdjustment()
+    {
+        return $this->bonusAdjustment;
+    }
+
+    /**
+     * @param int $bonusAdjustment
+     */
+    public function setBonusAdjustment($bonusAdjustment)
+    {
+        $this->bonusAdjustment = $bonusAdjustment;
     }
 
 }

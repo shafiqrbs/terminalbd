@@ -112,7 +112,7 @@
 
                                 {% for entity in entities %}
                                     <tr {% if entity.minQnt >= entity.remainingQnt   %} class="min-qnt" aria-disabled="true" {% endif %}>
-                                        <td>{% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                        <td><span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="" >
                                             <input id="action-{{ entity.id }}" {% if  entity.remainingQnt ==  0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="itemBarcode"   type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;
                                             <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product barcode">{{ entity.barcode }}</a></td>
@@ -142,7 +142,7 @@
                                         </td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="12">
+                                        <td colspan="13">
                                             <table>
                                                 <tr><th>Purchase Quantity</th><td>{{ entity.purchaseQuantity }}</td><th>Item Name</th><td>{{ entity.masterItem.name }}</td></tr>
                                                 <tr><th>Purchase Return Quantity</th><td>{{ entity.purchaseQuantityReturn }}</td><th>Category</th><td>{% if entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}</td>{% endif %}</tr>
@@ -151,7 +151,9 @@
                                                 <tr><th>Online Sales Quantity</th><td>{{ entity.onlineOrderQuantity }}</td><th>Brand</th><td>{% if entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</td></tr>
                                                 <tr><th>Online Sales Return Quantity</th><td>{{ entity.onlineOrderQuantityReturn }}</td><th>Vendor</th><td>{% if entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td></tr>
                                                 <tr><th>Damage Quantity</th><td>{{ entity.damageQuantity }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                                                <tr><th>Remaining Quantity</th><td><strong>{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</strong></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                <tr><th>Opening Quantity</th><td>{{ entity.openingQuantity }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                <tr><th>Adjustment Quantity</th><td>{{ entity.adjustmentQuantity }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                <tr><th>Remaining Quantity</th><td><strong>{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn+ entity.adjustmentQuantity)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</strong></td><td>&nbsp;</td><td>&nbsp;</td></tr>
                                             </table>
                                             {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}
                                                 <table class="table table-bordered table-striped table-condensed flip-content ">

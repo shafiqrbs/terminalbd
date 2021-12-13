@@ -526,7 +526,7 @@ class ItemRepository extends EntityRepository
     public function updateRemainingQuantity(Item $item)
     {
         $em = $this->_em;
-        $remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+        $remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn() + $item->getAdjustmentQuantity()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
         $item->setRemainingQnt($remainingQnt);
         $em->flush();
 
@@ -573,6 +573,17 @@ class ItemRepository extends EntityRepository
 
         }
     }
+
+    public function stockAdjustment(Item $stock){
+        $em = $this->_em;
+        $adjustment = $em->getRepository('InventoryBundle:ItemStockAdjustment')->adjustmentStockItemUpdate($stock);
+        $stock->setAdjustmentQuantity($adjustment['quantity']);
+        $stock->setBonusAdjustment($adjustment['bonus']);
+        $em->persist($stock);
+        $em->flush();
+        $this->updateRemainingQuantity($stock);
+    }
+
 
     public function getItemPurchaseReturn(PurchaseReturn $purchaseReturn){
 

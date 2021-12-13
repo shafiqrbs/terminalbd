@@ -511,6 +511,17 @@ class BusinessParticularRepository extends EntityRepository
 
 	}
 
+    public function stockAdjustment(BusinessParticular $stock){
+        $em = $this->_em;
+        $adjustment = $em->getRepository('BusinessBundle:ItemStockAdjustment')->adjustmentStockItemUpdate($stock);
+        $stock->setAdjustmentQuantity($adjustment['quantity']);
+        $stock->setBonusAdjustment($adjustment['bonus']);
+        $em->persist($stock);
+        $em->flush();
+        $this->remainingQnt($stock);
+    }
+
+
     public function updateSalesReturnQuantity(BusinessParticular $particular,$returnQuantity){
 
         $quantity = $returnQuantity['quantity'];
@@ -528,9 +539,9 @@ class BusinessParticularRepository extends EntityRepository
     {
         $em = $this->_em;
        // $em->getRepository('BusinessBundle:BusinessPurchaseItem')->getCurrentStock($stock);
-        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
+        $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity() + $stock->getAdjustmentQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
         $stock->setRemainingQuantity($qnt);
-        $stock->setBonusQuantity(($stock->getBonusPurchaseQuantity() + $stock->getReturnBonusQuantity()) - $stock->getBonusSalesQuantity());
+        $stock->setBonusQuantity(($stock->getBonusPurchaseQuantity() + $stock->getReturnBonusQuantity() + $stock->getBonusAdjustment()) - $stock->getBonusSalesQuantity());
         $em->persist($stock);
         $em->flush();
     }

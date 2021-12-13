@@ -26,6 +26,10 @@ business_vendor_stock:
     resource: "@BusinessBundle/Resources/config/routing/vendorstock.yml"
     prefix:   /vendor-stock
 
+business_stock_adjustment:
+    resource: "@BusinessBundle/Resources/config/routing/adjustment.yml"
+    prefix:   /stock-adjustment
+
 business_area:
     resource: "@BusinessBundle/Resources/config/routing/area.yml"
     prefix:   /area

@@ -189,6 +189,20 @@ class Item
     /**
      * @var float
      *
+     * @ORM\Column(name="adjustmentQuantity", type="float", length=20, nullable=true)
+     */
+    private $adjustmentQuantity;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="bonusAdjustment", type="float", length=20, nullable=true)
+     */
+    private $bonusAdjustment;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="salesQuantityReturn", type="float", length=20, nullable=true)
      */
     private $salesQuantityReturn;
@@ -229,6 +243,14 @@ class Item
      * @ORM\Column(name="maxQnt", type="integer",  nullable=true)
      */
     private $maxQnt;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="openingQuantity", type="integer",  nullable=true)
+     */
+    private $openingQuantity;
 
 
     /**
@@ -1233,6 +1255,55 @@ class Item
     {
         $this->salesAvgPrice = $salesAvgPrice;
     }
+
+    /**
+     * @return float
+     */
+    public function getAdjustmentQuantity()
+    {
+        return $this->adjustmentQuantity;
+    }
+
+    /**
+     * @param float $adjustmentQuantity
+     */
+    public function setAdjustmentQuantity($adjustmentQuantity)
+    {
+        $this->adjustmentQuantity = $adjustmentQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBonusAdjustment()
+    {
+        return $this->bonusAdjustment;
+    }
+
+    /**
+     * @param float $bonusAdjustment
+     */
+    public function setBonusAdjustment($bonusAdjustment)
+    {
+        $this->bonusAdjustment = $bonusAdjustment;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpeningQuantity()
+    {
+        return $this->openingQuantity;
+    }
+
+    /**
+     * @param int $openingQuantity
+     */
+    public function setOpeningQuantity($openingQuantity)
+    {
+        $this->openingQuantity = $openingQuantity;
+    }
+
 
 }
 

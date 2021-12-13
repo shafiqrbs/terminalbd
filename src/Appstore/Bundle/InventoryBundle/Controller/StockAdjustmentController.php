@@ -1,12 +1,10 @@
 <?php
 
-namespace Appstore\Bundle\MedicineBundle\Controller;
+namespace Appstore\Bundle\InventoryBundle\Controller;
 
-use Appstore\Bundle\MedicineBundle\Entity\MedicineDamage;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStockAdjustment;
-use Appstore\Bundle\MedicineBundle\Form\MedicineDamageType;
-use Appstore\Bundle\MedicineBundle\Form\MedicineStockAdjustmentType;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\ItemStockAdjustment;
+use Appstore\Bundle\InventoryBundle\Form\StockAdjustmentType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,19 +38,19 @@ class StockAdjustmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStockAdjustment')->findWithSearch($config,$data);
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:ItemStockAdjustment')->findWithSearch($config,$data);
 	    $pagination = $this->paginate($entities);
-	    return $this->render('MedicineBundle:StockAdjustment:index.html.twig', array(
+	    return $this->render('InventoryBundle:StockAdjustment:index.html.twig', array(
             'entities' => $pagination
         ));
     }
 
     public function newAction(Request $request){
 
-        $entity = new MedicineStockAdjustment();
+        $entity = new ItemStockAdjustment();
         $form = $this->createCreateForm($entity);
-        return $this->render('MedicineBundle:StockAdjustment:new.html.twig', array(
+        return $this->render('InventoryBundle:StockAdjustment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -64,20 +62,17 @@ class StockAdjustmentController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new MedicineStockAdjustment();
+        $entity = new ItemStockAdjustment();
         $data = $request->request->all();
-        /* @var $stock MedicineStock */
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['adjustment']['medicineStock']);
-        if(empty($stock)){
-            $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($data['medicineStock']);
-        }
+        /* @var $stock Item */
+        $stock = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($data['adjustment']['item']);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $entity->setMedicineConfig($config);
-            $entity->setMedicineStock($stock);
+            $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $entity->setConfig($config);
+            $entity->setItem($stock);
             if($entity->getMode() == "Minus"){
                 $entity->setQuantity("-{$entity->getQuantity()}");
                 $entity->setBonus("-{$entity->getBonus()}");
@@ -87,9 +82,9 @@ class StockAdjustmentController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('stock_adjustment', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('inv_stock_adjustment', array('id' => $entity->getId())));
         }
-        return $this->render('MedicineBundle:StockAdjustment:new.html.twig', array(
+        return $this->render('InventoryBundle:StockAdjustment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -102,10 +97,10 @@ class StockAdjustmentController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(MedicineStockAdjustment $entity)
+    private function createCreateForm(ItemStockAdjustment $entity)
     {
-        $form = $this->createForm(new MedicineStockAdjustmentType(), $entity, array(
-            'action' => $this->generateUrl('stock_adjustment_create'),
+        $form = $this->createForm(new StockAdjustmentType(), $entity, array(
+            'action' => $this->generateUrl('inv_stock_adjustment_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -124,27 +119,27 @@ class StockAdjustmentController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('MedicineBundle:MedicineStockAdjustment')->find($id);
-        $stock = $entity->getMedicineStock();
+        $entity = $em->getRepository('InventoryBundle:ItemStockAdjustment')->find($id);
         $em->remove($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'damage');
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );
-        return $this->redirect($this->generateUrl('stock_adjustment'));
+        return $this->redirect($this->generateUrl('inv_stock_adjustment'));
     }
 
 	public function approvedAction($id)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $damage = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStockAdjustment")->findOneBy(array('medicineConfig'=>$config,'id'=>$id));
-		if (!empty($damage) and ($damage->getProcess() == 'Created')) {
+		$config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $damage = $this->getDoctrine()->getRepository("InventoryBundle:ItemStockAdjustment")->findOneBy(array('config'=>$config,'id'=>$id));
+        /* @var $damage ItemStockAdjustment */
+
+        if (!empty($damage) and ($damage->getProcess() == 'Created')) {
 			$em = $this->getDoctrine()->getManager();
 			$damage->setProcess('Approved');
 			$em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->stockAdjustment($damage->getMedicineStock());
+            $this->getDoctrine()->getRepository('InventoryBundle:Item')->stockAdjustment($damage->getItem());
             return new Response('success');
 		} else {
 			return new Response('failed');

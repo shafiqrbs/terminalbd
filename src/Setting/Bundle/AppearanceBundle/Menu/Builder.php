@@ -394,8 +394,9 @@ class Builder extends ContainerAware
                 $menu[$business]['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'))->setAttribute('icon', 'icon-th-list');
                 $menu[$business]['Master Data']->addChild('Brand', array('route' => 'business_brand'))->setAttribute('icon', 'icon-th-list');
+                $menu[$business]['Master Data']->addChild('Stock Adjustment', array('route' => 'business_stock_adjustment'))->setAttribute('icon', 'icon-th-list');
                 if($config->getBusinessModel() == 'distribution') {
-                    $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'))->setAttribute('icon', 'icon-th-list');
+                  /*  $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'))->setAttribute('icon', 'icon-th-list');*/
                     $menu[$business]['Master Data']->addChild('Marketing', array('route' => 'business_marketing'))->setAttribute('icon', 'icon-th-list');
                 }
                 $menu[$business]['Master Data']->addChild('Courier', array('route' => 'business_courier'))->setAttribute('icon', 'icon-th-list');
@@ -901,6 +902,7 @@ class Builder extends ContainerAware
             $menu['Inventory']['Manage Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))->setAttribute('icon', 'icon-hdd');
             $menu['Inventory']['Manage Stock']->addChild('Stock Short List', array('route' => 'inventory_stockitem_short_list'))->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Stock Adjustment', array('route' => 'inv_stock_adjustment'))->setAttribute('icon', 'icon-hdd');
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
             if ($inventory->getBarcodePrint() == 1) {

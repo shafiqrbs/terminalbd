@@ -149,7 +149,7 @@
                                                 <a class="btn mini red btn-action" href="{{ path('business_stock_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
                                             <a href="{{ path('business_stock_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            {% if entity.purchaseQuantity is empty or entity.salesQuantity is empty %}
+                                            {% if entity.purchaseQuantity is empty or entity.salesQuantity is empty or entity.remainingQuantity is empty %}
                                                 <a  href="{{ path('business_stock_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.businessParticularType and entity.businessParticularType.slug == "post-production" %}
@@ -161,7 +161,6 @@
                                             {% if 'wearhouse' in config.stockFormat %}
                                                 <a href="{{ path('business_stock_transfer', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Transfer</a>
                                             {% endif %}
-
                                         </td>
                                     </tr>
 
