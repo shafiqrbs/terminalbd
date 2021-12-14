@@ -100,7 +100,7 @@ class SecurityController extends Controller
 		   // $theme = 'Frontend/Desktop';
 		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
             $theme = 'Security';
-            return $this->render('UserBundle:'.$theme.':login-old.html.twig', $data);
+            return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
 	    }
 
     }
