@@ -23,6 +23,7 @@ app/config/dynamic/*.yml
 app/config/parameters.ini
 app/config/parameters.yml
 app/config/routing.yml
+src/Core/UserBundle/Resources/views/login.html.twig
 web/.htaccess
 
 # Composer
