@@ -876,7 +876,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-reply');
             $menu['Inventory']['Manage Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
-            $menu['Inventory']['Manage Purchase']->addChild('Vendor', array('route' => 'inventory_vendor'))->setAttribute('icon', 'icon-list');;
+            $menu['Inventory']['Manage Purchase']->addChild('Vendor', array('route' => 'inventory_vendor'));
             $menu['Inventory']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'prepurchaseitem'))->setAttribute('icon', 'icon icon-archive');
 	        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_REPORT')) {
             $menu['Inventory']['Manage Purchase']->addChild('Reports')
@@ -919,9 +919,9 @@ class Builder extends ContainerAware
            /* $menu['Inventory']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'));
             $menu['Inventory']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())));
            */
-            $menu['Inventory']['Master Data']->addChild('Category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-list');;
-            $menu['Inventory']['Master Data']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-list');;
-            $menu['Inventory']['Master Data']->addChild('Size Group', array('route' => 'itemsize_group'))->setAttribute('icon', 'icon-list');;
+            $menu['Inventory']['Master Data']->addChild('Category', array('route' => 'inventory_category'));;
+            $menu['Inventory']['Master Data']->addChild('Brand', array('route' => 'itembrand'));;
+            $menu['Inventory']['Master Data']->addChild('Size Group', array('route' => 'itemsize_group'));;
             if ($inventory->getIsBranch() == 1) {
                 $menu['Inventory']['Master Data']->addChild('Branches')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
                 $menu['Inventory']['Master Data']['Branches']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
@@ -1384,13 +1384,13 @@ class Builder extends ContainerAware
         	    $menu['Medicine']['Manage Sales']->addChild('Add Sales', array('route' => 'medicine_sales_temporary_new'))
                     ->setAttribute('icon', 'icon-shopping-cart');
         	    $menu['Medicine']['Manage Sales']->addChild('Sales', array('route' => 'medicine_sales'))
-                    ->setAttribute('icon', 'icon-list');
+                    ;
         	    $menu['Medicine']['Manage Sales']->addChild('Hold Sales', array('route' => 'medicine_sales_hold'))
-                    ->setAttribute('icon', 'icon-list');
+                    ;
         	    $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
-                    ->setAttribute('icon', 'icon-list');
+                    ;
                 $menu['Medicine']['Manage Sales']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
-                    ->setAttribute('icon', 'icon-list');
+                    ;
                 if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
 	                $menu['Medicine']['Manage Sales']->addChild('Customer', array('route' => 'domain_customer'))->setAttribute('icon', 'fa fa-group');
 	                $menu['Medicine']['Manage Sales']->addChild('Notepad', array('route' => 'domain_notepad'))->setAttribute('icon', 'fa fa-file');
@@ -1527,9 +1527,9 @@ class Builder extends ContainerAware
         $menu['Restaurant']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
             ->setAttribute('icon', 'icon-th-large');
         $menu['Restaurant']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
-            ->setAttribute('icon', 'icon-list');
+            ;
         $menu['Restaurant']->addChild('Android Sales', array('route' => 'restaurant_invoice_android'))
-            ->setAttribute('icon', 'icon-list');
+            ;
         $menu['Restaurant']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
         if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
 
