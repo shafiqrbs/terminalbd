@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Product Group<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Product Group</label>
                                         <div class="controls">
                                             {{ form_widget(form.productGroup) }}
                                             {{ form_errors(form.productGroup) }}
@@ -79,16 +79,20 @@
                                 <ul class="sortable grid dd-list">
                                     <li class="dd-item dd3-item" >
                                         <div class="dd3-content" style="background: #2398cc; color:#ffffff;">
-                                            <div  class="span8">Category Name</div>
-                                            <div class="span4">Action</div>
+                                            <div  class="span3">Servvice</div>
+                                            <div  class="span3">Category Name</div>
+                                            <div  class="span3">Group</div>
+                                            <div class="span3">Action</div>
                                         </div>
                                     </li>
                                     {% for entity in pagination %}
                                         <li  data-id="{{ entity.id }}" id="item_{{ entity.id }}" class="dd-item dd3-item">
                                             <span data-id="{{ entity.id }}" class="dd-handle dd3-handle"></span>
                                             <div class="dd3-content">
-                                                <div class="span8"><a href="{{ path('restaurant_category_edit',{'id': entity.id })}}">{{ entity.name }}</a></div>
-                                                <div class="span4">
+                                                <div class="span3">{% if entity.service is not empty %}{{ entity.service.name }}{% endif %}</div>
+                                                <div class="span3"><a href="{{ path('restaurant_category_edit',{'id': entity.id })}}">{{ entity.name }}</a></div>
+                                                <div class="span3">{% if entity.productGroup is not empty %}{{ entity.productGroup.name }}{% endif %}</div>
+                                                <div class="span3">
                                                     {% if( entity.status == 1) %}
                                                         <a class="btn mini blue btn-action" href="{{ path('restaurant_category_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                                     {% else %}
@@ -96,7 +100,6 @@
                                                     {% endif %}
                                                     <a href="{{ path('restaurant_category_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                     <a title="Are you sure went to delete ?" href="{{ path('restaurant_category_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-
                                                 </div>
                                             </div>
                                         </li>

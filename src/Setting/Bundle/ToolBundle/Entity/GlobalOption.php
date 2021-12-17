@@ -232,10 +232,12 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $customers;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions")
      **/
     protected $location;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -448,6 +450,13 @@ class GlobalOption
      * @ORM\Column(name="address", type="string", nullable = true )
      */
     private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="billingAddress", type="string", nullable = true )
+     */
+    private $billingAddress;
 
     /**
      * @var float
@@ -670,17 +679,40 @@ class GlobalOption
     private $linkedin;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="stockFormat", type="array", length=50 , nullable=true)
+     */
+    private $stockFormat;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="promotion", type="boolean" , nullable=true)
      */
     private $promotion;
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="googleAds", type="boolean" , nullable=true)
      */
     private $googleAds;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="userMode", type="boolean" , nullable=true)
+     */
+    private $userMode;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customApp", type="boolean" , nullable=true)
+     */
+    private $customApp;
+
     /**
      * @var boolean
      *
@@ -2353,7 +2385,74 @@ class GlobalOption
         $this->printMessage = $printMessage;
     }
 
+    /**
+     * @return bool
+     */
+    public function isUserMode()
+    {
+        return $this->userMode;
+    }
 
+    /**
+     * @param bool $userMode
+     */
+    public function setUserMode($userMode)
+    {
+        $this->userMode = $userMode;
+    }
 
+    /**
+     * @return string
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param string $billingAddress
+     */
+    public function setBillingAddress($billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomApp()
+    {
+        return $this->customApp;
+    }
+
+    /**
+     * @param bool $customApp
+     */
+    public function setCustomApp($customApp)
+    {
+        $this->customApp = $customApp;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStockFormat()
+    {
+        return $this->stockFormat;
+    }
+
+    /**
+     * @param array $stockFormat
+     * Category
+     * Brand
+     * Model
+     * Size
+     * Color
+     * Vendor
+     */
+    public function setStockFormat($stockFormat)
+    {
+        $this->stockFormat = $stockFormat;
+    }
 
 }

@@ -15,6 +15,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class CategoryType extends AbstractType
 {
 
+    /** @var  GlobalOption */
+
+    private $globalOption;
+
+
+    function __construct(GlobalOption $globalOption)
+    {
+
+        $this->globalOption         = $globalOption;
+        $this->config               = $globalOption->getRestaurantConfig()->getId();
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -44,9 +56,6 @@ class CategoryType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\RestaurantBundle\Entity\Particular',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'empty_value' => '---Choose product group ---',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
@@ -55,6 +64,7 @@ class CategoryType extends AbstractType
                         ->where("e.status = 1")
                         ->andWhere('s.slug IN (:slugs)')
                         ->setParameter('slugs',array('product-group'))
+                        ->andWhere("e.restaurantConfig = {$this->config}")
                         ->orderBy("e.sorting","ASC");
                 }
             ))

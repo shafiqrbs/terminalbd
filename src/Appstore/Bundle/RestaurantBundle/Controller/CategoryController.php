@@ -89,7 +89,8 @@ class CategoryController extends Controller
      */
     private function createCreateForm(Category $entity)
     {
-        $form = $this->createForm(new CategoryType(), $entity, array(
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new CategoryType($option), $entity, array(
             'action' => $this->generateUrl('restaurant_category_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -135,6 +136,7 @@ class CategoryController extends Controller
     private function createEditForm(Category $entity)
     {
 
+        $option = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new CategoryType(), $entity, array(
             'action' => $this->generateUrl('restaurant_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
