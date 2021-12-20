@@ -87,7 +87,7 @@ From Medium Devices Up To Larger Devices
     Page content
     ***/
     .page-content {
-        margin-left: 225px;
+        margin-left: 250px;
         margin-top: 0px;
         min-height: 760px;
         padding: 25px 20px 20px 20px;
@@ -127,7 +127,7 @@ From Medium Devices Up To Larger Devices
     }
 
     .page-sidebar-fixed .footer {
-        margin-left: 225px;
+        margin-left: 250px;
         background-color: #fff;
         padding: 8px 20px 5px 20px;
     }

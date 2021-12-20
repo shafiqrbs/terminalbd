@@ -239,6 +239,10 @@ class StockController extends Controller
         if ($form->isValid() and empty($checkName)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setBusinessConfig($config);
+            if(empty($entity->getUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setUnit($unit);
+            }
             $entity->upload();
             $em->persist($entity);
             $em->flush();

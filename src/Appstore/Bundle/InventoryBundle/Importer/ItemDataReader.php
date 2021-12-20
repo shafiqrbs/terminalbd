@@ -59,12 +59,10 @@ class ItemDataReader
                 }
 
                 $key = $dataArray['ProductName'];
-
                 $namedDataArray[$key] = $dataArray;
 
             }
         }
-
         return $namedDataArray;
     }
 }

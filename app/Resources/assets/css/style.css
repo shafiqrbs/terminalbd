@@ -530,7 +530,7 @@ Page sidebar
 /* ie8 fixes */
 .ie8 .page-sidebar {
   position: absolute;
-  width: 225px;
+  width: 250px;
 }
 
 ul.page-sidebar-menu {
@@ -802,7 +802,7 @@ Sidebar toggler(show/hide)
   opacity: 0.5;
   filter: alpha(opacity=50);
   margin-top: 15px;
-  margin-left: 175px;
+  margin-left: 200px;
   width: 29px;
   height: 29px;
   background-repeat: no-repeat;
@@ -974,7 +974,7 @@ Page content
 }
 
 .ie8 .page-content {
-  margin-left: 225px;
+  margin-left: 250px;
   margin-top: 0px;
   min-height: 760px;
 }

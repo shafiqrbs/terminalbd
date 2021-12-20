@@ -400,16 +400,16 @@ class MedicineSalesTemporaryController extends Controller
         }*/
         $printer -> text("---------------------------------------------------------------\n");
         $printer->text($discount);
-        $printer -> setEmphasis(true);
+        $printer -> setEmphasis(false);
         $printer -> text ( "\n" );
 
-        $printer -> setEmphasis(true);
+        $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($grandTotal);
-         $printer -> setEmphasis(true);
+         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($previousBalance);
-        $printer -> setEmphasis(true);
+        $printer -> setEmphasis(false);
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> text($payment);

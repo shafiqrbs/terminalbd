@@ -123,13 +123,10 @@ class ItemImporterController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('EcommerceBundle:ItemImport')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ItemImporter entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         return $this->render('EcommerceBundle:ItemImporter:new.html.twig', array(
             'entity'      => $entity,

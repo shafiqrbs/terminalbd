@@ -31,15 +31,17 @@ class ItemExcel
 
         foreach($this->data as $key => $item) {
 
-            $name = ucfirst(strtolower($item['ProductName']));
+            echo $name = ucfirst(strtolower($item['ProductName']));
             $productID = $item['ProductID'];
 
             $productOld = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'webName' => $name));
 
             $productId = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'id' => $productID));
-
+            $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
+            $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
+            $unit = empty($item['ProductUnit']) ? 'Pcs' : $item['ProductUnit'];
+            $sizeUnit = empty($item['SizeUnit']) ? 'Pcs' : $item['SizeUnit'];
             if((empty($productOld) and !empty($item['ProductName']) and empty($productId))) {
-
                 $product = new Item();
                 $product->setEcommerceConfig($config);
                 $product->setName($name);
@@ -73,23 +75,13 @@ class ItemExcel
                     $size = $this->getSize(ucfirst(strtolower($size)));
                     $product->setSize($size);
                 }
-                $unit = $item['ProductUnit'];
                 if ($unit) {
                     $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
                     $product->setProductUnit($unit);
                 }
-                $sizeUnit = $item['SizeUnit'];
                 if ($sizeUnit) {
                     $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
                     $product->setSizeUnit($sizeUnit);
-                }
-                $tags = $item['Tags'];
-                if ($tags) {
-                    $tagIds = explode(',', $tags);
-                    foreach ($tagIds as $tag) {
-                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
-                    }
-                    $product->setTag($tagObj);
                 }
                 $colors = $item['Colors'];
                 if ($colors) {
@@ -99,119 +91,30 @@ class ItemExcel
                     }
                     $product->setItemColors($colorObj);
                 }
+                $tags = $item['Tags'];
+                if ($tags) {
+                    $tagIds = explode(',', $tags);
+                    foreach ($tagIds as $tag) {
+                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
+                    }
+                    $product->setTag($tagObj);
+                }
+
                 $this->save($product);
 
             }elseif(!empty($productId)){
 
                 $product = $productId;
-                $product->setName($name);
-                $product->setWebName($name);
-                $product->setProductBengalName($item['ProductBengalName']);
-                $product->setPurchasePrice($item['PurchasePrice']);
                 $product->setSalesPrice($item['SalesPrice']);
+                $product->setPurchasePrice($item['PurchasePrice']);
                 $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
                 $product->setMinQuantity($min);
                 $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
                 $product->setMaxQuantity($max);
                 $path = empty($name) ? '' : $name.".jpg";
                 $product->setPath($path);
-                $category = $item['Category'];
-                if ($category) {
-                    $category = $this->getCategory(ucfirst(strtolower($category)));
-                    $product->setCategory($category);
-                }
-                $brand = $item['Brand'];
-                if ($brand) {
-                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
-                    $product->setBrand($brand);
-                }
-                $size = $item['Size'];
-                if ($size) {
-                    $size = $this->getSize(ucfirst(strtolower($size)));
-                    $product->setSize($size);
-                }
-                $unit = $item['ProductUnit'];
-                if ($unit) {
-                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
-                    $product->setProductUnit($unit);
-                }
-                $sizeUnit = $item['SizeUnit'];
-                if ($sizeUnit) {
-                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
-                    $product->setSizeUnit($sizeUnit);
-                }
-                $tags = $item['Tags'];
-                if (empty($tags) and empty($product->getTag())) {
-                    $tagIds = explode(',', $tags);
-                    foreach ($tagIds as $tag) {
-                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
-                    }
-                    $product->setTag($tagObj);
-                }
-                $colors = $item['Colors'];
-                if (empty($colors) and empty($product->getItemColors())) {
-                    $colorIds = explode(',', $colors);
-                    foreach ($colorIds as $color) {
-                        $colorObj[] = $this->getDoctrain()->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('name' => $color));
-                    }
-                    $product->setItemColors($colorObj);
-                }
                 $this->save($product);
 
-            }elseif(!empty($productOld)){
-
-                $product = $productOld;
-                $product->setProductBengalName($item['ProductBengalName']);
-                $product->setPurchasePrice($item['PurchasePrice']);
-                $product->setSalesPrice($item['SalesPrice']);
-                $min = empty($item['MinQuantity']) ? 1 : $item['MinQuantity'];
-                $product->setMinQuantity($min);
-                $max = empty($item['MaxQuantity']) ? 100 : $item['MaxQuantity'];
-                $product->setMaxQuantity($max);
-                $path = empty($name) ? '' : $name.".jpg";
-                $product->setPath($path);
-                $category = $item['Category'];
-                if ($category) {
-                    $category = $this->getCategory(ucfirst(strtolower($category)));
-                    $product->setCategory($category);
-                }
-                $brand = $item['Brand'];
-                if ($brand) {
-                    $brand = $this->getBrand(ucfirst(strtolower($brand)));
-                    $product->setBrand($brand);
-                }
-                $size = $item['Size'];
-                if ($size) {
-                    $size = $this->getSize(ucfirst(strtolower($size)));
-                    $product->setSize($size);
-                }
-                $unit = $item['ProductUnit'];
-                if ($unit) {
-                    $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
-                    $product->setProductUnit($unit);
-                }
-                $sizeUnit = $item['SizeUnit'];
-                if ($sizeUnit) {
-                    $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
-                    $product->setSizeUnit($sizeUnit);
-                }
-                $tags = $item['Tags'];
-                if (empty($tags) and empty($product->getTag())) {
-                    $tagIds = explode(',', $tags);
-                    foreach ($tagIds as $tag) {
-                        $tagObj[] = $this->getTags(ucfirst(strtolower($tag)));
-                    }
-                    $product->setTag($tagObj);
-                }
-                $colors = $item['Colors'];
-                if (empty($colors) and empty($product->getItemColors())) {
-                    $colorIds = explode(',', $colors);
-                    foreach ($colorIds as $color) {
-                        $colorObj[] = $this->getDoctrain()->getRepository('SettingToolBundle:ProductColor')->findOneBy(array('name' => $color));
-                    }
-                    $product->setItemColors($colorObj);
-                }
-                $this->save($product);
             }
         }
 
