@@ -97,7 +97,9 @@ $('form#purchaseItem').on('keypress', '.stockInput', function (e) {
         return false;
     }
 });
-
+$('#purchasePrice').click(function() {
+    $(this).attr('value', '');
+});
 var form = $("#purchaseItem").validate({
 
     rules: {

@@ -113,7 +113,7 @@
                                     <td class="span1" id="totalQuantity-{{ item.id }}">{{ item.quantity + item.bonusQuantity }}</td>
                                     <td class="span1">{% if item.businessParticular.unit is not empty %}{{ item.businessParticular.unit.name }}{% endif %}</td>
                                     <td class="span1" id="subTotal-{{ item.id }}">{{ item.purchaseSubTotal|number_format(2) }}</td>
-                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('business_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                    <td class="span1"><a id="{{ item.id }}"  data-url="{{ path('business_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}

@@ -137,7 +137,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if ( entity.process == 'Done' and entity.netTotal > 0) %}
+                                    {% if ( entity.process in ['Done','Created'] and entity.netTotal > 0) %}
                                         <a  href="javascript:"  data-url="{{ path('business_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                         <a  href="{{ path('business_purchase_edit',{'id':entity.id}) }}" class="btn green"><i class="icon-pencil"></i>&nbsp;Edit</a>
                                     {% endif %}

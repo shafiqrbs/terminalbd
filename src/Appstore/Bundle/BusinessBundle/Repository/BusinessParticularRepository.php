@@ -426,11 +426,16 @@ class BusinessParticularRepository extends EntityRepository
     public function getPurchaseUpdateQnt(BusinessPurchase $purchase){
 
         /** @var  $purchaseItem BusinessPurchaseItem */
-
+        $em = $this->_em;
         if(!empty($purchase->getBusinessPurchaseItems())) {
             foreach ($purchase->getBusinessPurchaseItems() as $purchaseItem) {
                 $stockItem = $purchaseItem->getBusinessParticular();
                 $this->updateRemoveStockQuantity($stockItem);
+                $avg = $em->getRepository("BusinessBundle:BusinessPurchaseItem")->getPurchaseSalesAvg($stockItem);
+                $stockItem->setAvgPurchasePrice($avg['purchase']);
+                $stockItem->setPurchasePrice($purchaseItem->getPurchasePrice());
+                $em->persist($stockItem);
+                $em->flush();
             }
         }
     }

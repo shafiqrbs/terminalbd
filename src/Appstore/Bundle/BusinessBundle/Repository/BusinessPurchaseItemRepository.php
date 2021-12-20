@@ -344,6 +344,16 @@ class BusinessPurchaseItemRepository extends EntityRepository
 
     }
 
+    public function getPurchaseSalesAvg(BusinessParticular $stockItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('AVG(e.purchasePrice) AS purchase');
+        $qb->addSelect('AVG(e.salesPrice) AS sales');
+        $qb->where('e.businessParticular = :stock')->setParameter('stock', $stockItem->getId());
+        $avg = $qb->getQuery()->getOneOrNullResult();
+        return $avg;
+    }
+
     public function getCurrentStock($stock)
     {
         $qb = $this->createQueryBuilder('e');

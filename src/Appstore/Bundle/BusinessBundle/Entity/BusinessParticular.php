@@ -286,6 +286,14 @@ class BusinessParticular
 
 
 	/**
+     * @var float
+     *
+     * @ORM\Column(name="avgPurchasePrice", type="float", nullable=true)
+     */
+    private $avgPurchasePrice = 0;
+
+
+	/**
 	 * @var float
 	 *
 	 * @ORM\Column(name="productionSalesPrice", type="float", nullable=true)
@@ -1261,6 +1269,22 @@ class BusinessParticular
     public function setBonusAdjustment($bonusAdjustment)
     {
         $this->bonusAdjustment = $bonusAdjustment;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAvgPurchasePrice()
+    {
+        return $this->avgPurchasePrice;
+    }
+
+    /**
+     * @param float $avgPurchasePrice
+     */
+    public function setAvgPurchasePrice($avgPurchasePrice)
+    {
+        $this->avgPurchasePrice = $avgPurchasePrice;
     }
 
 }

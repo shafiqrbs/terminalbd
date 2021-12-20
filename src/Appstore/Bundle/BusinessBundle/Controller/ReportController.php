@@ -238,7 +238,7 @@ class ReportController extends Controller
         $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findWithSearch($config,$data);
         $pagination = $this->paginate($entities);
         $damages = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->returnRemainingStock($config);
-        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
         return $this->render('BusinessBundle:Report:stock.html.twig', array(
             'pagination' => $pagination,
             'damages' => $damages,
@@ -252,12 +252,13 @@ class ReportController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
 		$user = $this->getUser();
-		$purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        $purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 		$cashOverview = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportSalesStockItem($user,$data);
 		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
 
 		return $this->render('BusinessBundle:Report:sales/salesStock.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
@@ -310,7 +311,8 @@ class ReportController extends Controller
 		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
 		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
 		return $this->render('BusinessBundle:Report:productLedger.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
 			'entities' => $pagination,
@@ -825,7 +827,8 @@ class ReportController extends Controller
         $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
         $pagination = $this->paginate($entities);
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        $config = $user->getGlobalOption()->getMedicineConfig();
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
 
         return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
             'option'  => $user->getGlobalOption() ,
@@ -842,10 +845,11 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
         $entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportCustomerSalesItem($user,$data);
         $pagination = $this->paginate($entities);
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
-        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('status'=>1));
+        $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
         return $this->render('BusinessBundle:Report:sales/customerSalesItem.html.twig', array(
             'option'  => $user->getGlobalOption() ,
             'entities' => $pagination,

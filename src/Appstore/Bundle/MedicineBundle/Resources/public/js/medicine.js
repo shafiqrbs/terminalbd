@@ -69,7 +69,6 @@ var form = $("#medicine").validate({
     }
 });
 
-$('#brand').chan
 
 
 $( "#brand" ).autocomplete({
