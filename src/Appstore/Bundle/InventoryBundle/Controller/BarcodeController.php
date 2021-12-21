@@ -296,7 +296,9 @@ class BarcodeController extends Controller
             $x++;
         }
         $this->get('session')->set('barcodeQ',$barCoder);
-        return $this->render('InventoryBundle:Barcode:barcode.html.twig', array(
+        $barCoder = $this->get('session')->get('barcodeQ');
+        return $this->render('InventoryBundle:Barcode:print.html.twig', array(
+            'config'        => $config,
             'barCoder'      => $barCoder
         ));
 
@@ -316,7 +318,9 @@ class BarcodeController extends Controller
             $x++;
         }
         $this->get('session')->set('barcodeQ',$barCoder);
-        return $this->render('InventoryBundle:Barcode:barcode.html.twig', array(
+        $barCoder = $this->get('session')->get('barcodeQ');
+        return $this->render('InventoryBundle:Barcode:print.html.twig', array(
+            'config'        => $config,
             'barCoder'      => $barCoder
         ));
 

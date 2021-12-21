@@ -181,12 +181,13 @@ function InventoryPurchasePage(){
         var id = $(this).attr('data-id');
         var quantity = parseFloat($('#quantity-'+id).val());
         var price = parseFloat($('#price-'+id).val());
+        var salesPrice = parseFloat($('#salesPrice-'+id).val());
         var subTotal  = (quantity * price);
         $("#subTotal-"+id).html(subTotal);
         $.ajax({
             url: Routing.generate('inventory_purchasesimple_inline_item_update'),
             type: 'POST',
-            data:'id='+id+'&quantity='+ quantity +'&price='+ price,
+            data:'id='+id+'&quantity='+ quantity +'&price='+ price+'&salesPrice='+ salesPrice,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['invoiceItems']);
@@ -216,6 +217,20 @@ function InventoryPurchasePage(){
                    location.reload();
                 }
             },
+        })
+    });
+
+    $(document).on("click", ".itemDelete", function(event) {
+        var url = $(this).attr("data-url");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('.subTotal').html(obj['subTotal']);
+                $('#due').html(obj['due']);
+                $(event.target).closest('tr').hide();
+            }
         })
     });
 

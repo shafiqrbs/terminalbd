@@ -220,9 +220,11 @@
                                             <td class="numeric" >{% if purchaseItem.item.masterItem.productUnit is not empty %}{{  purchaseItem.item.masterItem.productUnit.name }}{% endif %}</td>
                                             <td class="span1" ><input type="text"  class="td-inline-input itemUpdate" data-id="{{ purchaseItem.id }}" autocomplete = "off"  id="price-{{ purchaseItem.id }}" name="price[]" value="{{ purchaseItem.purchasePrice }}" ></td>
                                             <td class="numeric" id="subTotal-{{ purchaseItem.id }}" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
-                                            <td class="numeric" >{{purchaseItem.salesPrice}}</td>
+                                            <td class="span1">
+                                                <input type="text" class="td-inline-input itemUpdate" data-id="{{ purchaseItem.id }}" autocomplete = "off" min="1"   id="salesPrice-{{ purchaseItem.id }}" name="salesPrice[]" value="{{ purchaseItem.salesPrice }}" placeholder="{{ purchaseItem.salesPrice }}">
+                                            </td>
                                             <td class="numeric">
-                                                <a href="javascript:" data-url="{{ path('inventory_purchasesimple_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini remove"><i class="icon-trash"></i></a>
+                                                <a href="javascript:" data-url="{{ path('inventory_purchasesimple_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini itemDelete"><i class="icon-trash"></i></a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -454,6 +456,7 @@
         input[type="text"].td-inline-input{
             width: 80px;
             border: 2px solid #27a9e3;
+            margin-bottom: 0!important;
         }
         input[class*="span"].purchaseInput{
             border: 2px solid red!important;

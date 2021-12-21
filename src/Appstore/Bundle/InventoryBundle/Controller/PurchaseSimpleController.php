@@ -481,6 +481,7 @@ class PurchaseSimpleController extends Controller
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         $item->setQuantity((int)$data['quantity']);
+        $item->setSalesPrice((int)$data['salesPrice']);
         $item->setpurchasePrice((int)$data['price']);
         $item->setPurchaseSubTotal($item->getQuantity() * $item->getPurchasePrice());
         $em->flush();
@@ -512,11 +513,16 @@ class PurchaseSimpleController extends Controller
             $em->flush();
             $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
             $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
-            $this->get('session')->getFlashBag()->add(
-                'error', "Data has been deleted successfully"
-            );
         }
-        exit;
+        return new Response(
+            json_encode(
+                array(
+                    'subTotal' => $purchase->getTotalAmount(),
+                    'due' => ($purchase->getTotalAmount() - $purchase->getPaymentAmount()),
+
+                )
+            )
+        );
 
     }
 
