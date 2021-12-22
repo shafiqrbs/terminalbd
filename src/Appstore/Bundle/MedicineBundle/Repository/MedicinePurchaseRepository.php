@@ -786,17 +786,16 @@ class MedicinePurchaseRepository extends EntityRepository
 
                 $deviceId = $item['purchaseId'];
                 $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $conf , 'devicePurchaseId' => $deviceId));
-                if ($purchase) {
+                $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
+                if ($purchase and $stockId) {
+                    /* @var $stockId MedicineStock */
                     $salesItem = new MedicinePurchaseItem();
                     $salesItem->setAndroidProcess($process);
                     $salesItem->setMedicinePurchase($purchase);
-                    $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
-                    if ($stockId) {
-                        $salesItem->setMedicineStock($stockId);
-                        $salesItem->setActualPurchasePrice($stockId->getSalesPrice());
-                        $salesItem->setPurchasePrice($stockId->getSalesPrice());
-                        $salesItem->setSalesPrice($stockId->getSalesPrice());
-                    }
+                    $salesItem->setMedicineStock($stockId);
+                    $salesItem->setActualPurchasePrice($stockId->getSalesPrice());
+                    $salesItem->setPurchasePrice($stockId->getSalesPrice());
+                    $salesItem->setSalesPrice($stockId->getSalesPrice());
                     $salesItem->setQuantity($item['quantity']);
                     $salesItem->setPurchaseSubTotal($item['quantity'] * $stockId->getSalesPrice());
                     $em->persist($salesItem);
