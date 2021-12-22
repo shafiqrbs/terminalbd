@@ -729,14 +729,6 @@ class MedicinePurchaseRepository extends EntityRepository
                 $sales->setAndroidProcess($process);
                 $sales->setInvoice($item['invoiceId']);
                 $sales->setDevicePurchaseId($item['invoiceId']);
-                $sales->setSubTotal($item['subTotal']);
-                $sales->setNetTotal($item['total']);
-                if($item['total'] < $item['payment']){
-                    $sales->setPayment($item['total']);
-                }else{
-                    $sales->setPayment($item['payment']);
-                    $sales->setDue($item['total'] - $item['payment']);
-                }
                 if(isset($item['transactionMethod']) and $item['transactionMethod']){
                     $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>$item['transactionMethod']));
                     if($method){
