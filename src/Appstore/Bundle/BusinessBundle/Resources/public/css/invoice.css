@@ -10,6 +10,11 @@
 .btn-ajax-loading {
     position:inherit;
 }
+.due{
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold!important;
+}
 
 .dropdown-menu .divider{
     margin: 0;

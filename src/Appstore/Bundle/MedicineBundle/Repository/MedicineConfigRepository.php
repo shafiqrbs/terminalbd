@@ -32,8 +32,12 @@ class MedicineConfigRepository extends EntityRepository
         $house = $em->createQuery('DELETE MedicineBundle:MedicineStockHouse e WHERE e.medicineConfig = '.$config);
         $house->execute();
 
-        $house = $em->createQuery('DELETE MedicineBundle:MedicineAndroidProcess e WHERE e.medicineConfig = '.$config);
-        $house->execute();
+        $damage = $em->createQuery('DELETE MedicineBundle:MedicineDamage e WHERE e.medicineConfig = '.$config);
+        $damage->execute();
+
+        $adjustment = $em->createQuery('DELETE MedicineBundle:MedicineStockAdjustment e WHERE e.medicineConfig = '.$config);
+        $adjustment->execute();
+
 
         $stock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
        // $stock->execute();
@@ -50,6 +54,8 @@ class MedicineConfigRepository extends EntityRepository
             ->set('s.averagePurchasePrice', '?11')
             ->set('s.averageSalesPrice', '?12')
             ->set('s.openingQuantity', '?13')
+            ->set('s.adjustmentQuantity', '?14')
+            ->set('s.bonusAdjustment', '?15')
             ->where('s.medicineConfig = ?10')
             ->setParameter(1, 0)
             ->setParameter(2, 0)
@@ -61,6 +67,8 @@ class MedicineConfigRepository extends EntityRepository
             ->setParameter(11, 0)
             ->setParameter(12, 0)
             ->setParameter(13, 0)
+            ->setParameter(14, 0)
+            ->setParameter(15, 0)
             ->setParameter(10, $config)
             ->getQuery();
         $q->execute();

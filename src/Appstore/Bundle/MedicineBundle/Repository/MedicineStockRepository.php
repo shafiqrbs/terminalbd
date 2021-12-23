@@ -632,7 +632,7 @@ class MedicineStockRepository extends EntityRepository
             $stock->execute();
         }
         $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`slug`,`minQuantity`,`remainingQuantity`,`salesPrice`, `purchasePrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
-  SELECT `unit_id`, trim(name),trim(slug),`minQuantity`,0, `salesPrice`,(salesPrice - ((salesPrice * 12.5)/100)), `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
+  SELECT `unit_id`, trim(name),trim(slug),0,0, `salesPrice`,(salesPrice - ((salesPrice * 12.5)/100)), `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
   FROM medicine_stock
   WHERE medicineConfig_id =:config";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);

@@ -916,9 +916,9 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-archive')
                 ->setAttribute('dropdown', true);
-           /* $menu['Inventory']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'));
-            $menu['Inventory']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())));
-           */
+            $menu['Inventory']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'));
+           // $menu['Inventory']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())));
+
             $menu['Inventory']['Master Data']->addChild('Category', array('route' => 'inventory_category'));;
             $menu['Inventory']['Master Data']->addChild('Brand', array('route' => 'itembrand'));;
             $menu['Inventory']['Master Data']->addChild('Size Group', array('route' => 'itemsize_group'));;

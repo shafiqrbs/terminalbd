@@ -171,6 +171,8 @@ class Excel
                 $itemObj->setMasterItem($masterItem);
                 if (trim($item['Barcode'])){
                     $itemObj->setBarcode($this->sentence_case($item['Barcode']));
+                }else{
+                    $itemObj->setBarcode($itemObj->getSku());
                 }
                 if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
@@ -183,6 +185,9 @@ class Excel
                 }
                 if($this->getInventoryConfig()->getIsBrand() == 1) {
                     $itemObj->setBrand($brand);
+                }
+                if($this->getInventoryConfig()->getIsModel() == 1) {
+                    $itemObj->setModel($brand);
                 }
                 $itemObj->setInventoryConfig($this->getInventoryConfig());
                 $itemObj = $this->save($itemObj);

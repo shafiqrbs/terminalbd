@@ -779,7 +779,8 @@ class MedicinePurchaseRepository extends EntityRepository
                 $deviceId = $item['purchaseId'];
                 $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $conf , 'devicePurchaseId' => $deviceId));
                 $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
-                if ($purchase and $stockId) {
+                $exist = $em->getRepository("MedicineBundle:MedicinePurchaseItem")->findOneBy(array('medicinePurchase'=>$purchase,'medicineStock'=>$stockId));
+                if ($purchase and $stockId and empty($exist)) {
                     /* @var $stockId MedicineStock */
                     $salesItem = new MedicinePurchaseItem();
                     $salesItem->setAndroidProcess($process);
@@ -795,6 +796,7 @@ class MedicinePurchaseRepository extends EntityRepository
                     if ($salesItem->getMedicineStock()) {
                         $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(), 'purchase');
                     }
+                    $this->updatePurchaseTotalPrice($purchase);
                 }
 
             endforeach;

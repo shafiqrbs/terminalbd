@@ -57,6 +57,9 @@ class InventoryConfigRepository extends EntityRepository
         $ServiceSales = $em->createQuery('DELETE InventoryBundle:ServiceSales e WHERE e.inventoryConfig = '.$config);
         $ServiceSales->execute();
 
+        $stockAdjustment = $em->createQuery('DELETE InventoryBundle:ItemStockAdjustment e WHERE e.config = '.$config);
+        $stockAdjustment->execute();
+
 
         $Item = $em->createQuery('DELETE InventoryBundle:Item e WHERE e.inventoryConfig = '.$config);
        // $Item->execute();
@@ -67,11 +70,40 @@ class InventoryConfigRepository extends EntityRepository
         $ItemBrand = $em->createQuery('DELETE InventoryBundle:ItemBrand e WHERE e.inventoryConfig = '.$config);
       //  $ItemBrand->execute();
 
-
-        $Product = $em->createQuery('DELETE InventoryBundle:Product e WHERE e.inventoryConfig = '.$config);
-      //  $Product->execute();
-
+        $qb = $this->_em->createQueryBuilder();
+        $q = $qb->update('InventoryBundle:Item', 's')
+            ->set('s.remainingQnt', '?1')
+            ->set('s.purchaseQuantity', '?2')
+            ->set('s.purchaseQuantityReturn', '?3')
+            ->set('s.salesQuantity', '?4')
+            ->set('s.salesQuantityReturn', '?5')
+            ->set('s.damageQuantity', '?6')
+            ->set('s.minQnt', '?9')
+            ->set('s.purchaseAvgPrice', '?11')
+            ->set('s.salesAvgPrice', '?12')
+            ->set('s.openingQuantity', '?13')
+            ->set('s.adjustmentQuantity', '?14')
+            ->set('s.quantity', '?15')
+            ->set('s.discountPrice', '?16')
+            ->set('s.price', '?17')
+            ->where('s.inventoryConfig = ?10')
+            ->setParameter(1, 0)
+            ->setParameter(2, 0)
+            ->setParameter(3, 0)
+            ->setParameter(4, 0)
+            ->setParameter(5, 0)
+            ->setParameter(6, 0)
+            ->setParameter(9, 0)
+            ->setParameter(11, 0)
+            ->setParameter(12, 0)
+            ->setParameter(13, 0)
+            ->setParameter(14, 0)
+            ->setParameter(15, 0)
+            ->setParameter(16, 0)
+            ->setParameter(17, 0)
+            ->setParameter(10, $config)
+            ->getQuery();
+        $q->execute();
     }
-
 
 }
