@@ -162,15 +162,13 @@ class Excel
             $itemColor = $this->getColor($item);
             $vendor = $this->getVendor($item);
             $brand = $this->getBrand($item);
-
             $itemObj = $this->checkFindItem($item);
-
             if($itemObj == NULL) {
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
                 if (trim($item['Barcode'])){
-                    $itemObj->setBarcode($this->sentence_case($item['Barcode']));
+                    $itemObj->setBarcode(trim($item['Barcode']));
                 }else{
                     $itemObj->setBarcode($itemObj->getSku());
                 }
@@ -228,6 +226,10 @@ class Excel
             $qb->andWhere('i.brand ='.$brand->getId());
         }
 
+        if($this->getInventoryConfig()->isModel()){
+            $model = $item['model'];
+            $qb->andWhere("i.model ='{$model}'");
+        }
         return $qb->getQuery()->getOneOrNullResult();
 
     }
