@@ -186,8 +186,8 @@ class Excel
                 if($this->getInventoryConfig()->getIsBrand() == 1) {
                     $itemObj->setBrand($brand);
                 }
-                if($this->getInventoryConfig()->getIsModel() == 1) {
-                    $itemObj->setModel($brand);
+                if($this->getInventoryConfig()->isModel() == 1) {
+                    $itemObj->setModel($item['Model']);
                 }
                 $itemObj->setInventoryConfig($this->getInventoryConfig());
                 $itemObj = $this->save($itemObj);
