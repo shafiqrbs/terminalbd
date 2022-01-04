@@ -585,6 +585,16 @@ class MedicineStockController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoGenericSearchAction(Request $request)
+    {
+        $item = trim($_REQUEST['pram']);
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchGenericStockComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
     public function searchNameAction($stock)
     {
         return new JsonResponse(array(

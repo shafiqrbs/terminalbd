@@ -68,11 +68,13 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="row-fluid">
-                                                                <div class="span12" style="margin-left: 15px; margin-top: 15px">
-                                                                    <input type="text"  class="m-wrap span12 form-control" autocomplete="off" id="description" name="description" placeholder="Description" value=""  >
+                                                            {% if entity.businessConfig.isDescription == 1 %}
+                                                                <div class="row-fluid">
+                                                                    <div class="span12" style="margin-left: 15px; margin-top: 15px">
+                                                                        <input type="text"  class="m-wrap span12 form-control" autocomplete="off" id="description" name="description" placeholder="Description" value=""  >
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="span4">
                                                             <div class="input-append span12" style="margin-bottom:0!important">
@@ -203,7 +205,21 @@
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName">
                                                     <span class="label">Invoice No</span>
-                                                    <span class="pull-right sales-right"><input type="text" class="m-wrap span12 customer-input"  name="invoice" id="invoice"  value="{{ entity.invoice }}" ></span></label>
+                                                    <span class="pull-right sales-right">
+                                                        <input type="text" class="m-wrap span12 customer-input"  name="invoice" id="invoice"  value="{{ entity.invoice }}" ></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">
+                                                    <span class="label">Created Date</span>
+                                                    <span class="pull-right sales-right">
+                                                    <input type="date" class="m-wrap span12 customer-input"  name="created" id="created"  value="{{ entity.created|date('m/d/Y') }}" ></span>
+                                                </label>
                                             </div>
                                         </div>
                                         <!--/span-->

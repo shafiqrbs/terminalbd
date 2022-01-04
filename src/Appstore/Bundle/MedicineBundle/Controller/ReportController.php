@@ -89,10 +89,10 @@ class ReportController extends Controller
             ));
         }else{
             $html = $this->renderView(
-                'MedicineBundle:Report:sales/sales.html.twig', array(
+                'MedicineBundle:Report:sales/dailySalesPdf.html.twig', array(
                     'option' => $user->getGlobalOption(),
-                    'salesPrice' => $salesPrice,
-                    'purchasePrice' => $purchasePrice,
+                    'salesTrans' => $salesPrice,
+                    'purchaseTrans' => $purchasePrice,
                     'searchForm' => $data,
                 )
             );

@@ -2,6 +2,10 @@ ecommerce_item:
     path:     /
     defaults: { _controller: "EcommerceBundle:Item:index" }
 
+ecommerce_item_download:
+    path:     /download
+    defaults: { _controller: "EcommerceBundle:Item:productDownload" }
+
 ecommerce_item_price_update:
     path:     /price-update
     defaults: { _controller: "EcommerceBundle:Item:itemPriceUpdate" }

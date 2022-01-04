@@ -79,8 +79,8 @@ class MedicineSalesTemporaryController extends Controller
 
     private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
     {
-
-        $form = $this->createForm(new SalesTemporaryItemType(), $salesItem, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new SalesTemporaryItemType($globalOption), $salesItem, array(
             'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
             'method' => 'POST',
             'attr' => array(
@@ -249,6 +249,22 @@ class MedicineSalesTemporaryController extends Controller
         $form = $request->request->all();
         $data = $form['salesTemporaryItem'];
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertInvoiceItems($user, $data);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
+
+
+    }
+
+    public function addBarcodeAction(Request $request)
+    {
+        $user = $this->getUser();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $barcode =trim($_REQUEST['barcode']);
+        $stock = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->findOneBy(array('medicineConfig'=>$config,'barcode'=>$barcode));
+        if($stock){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertBarcodeInvoiceItems($user, $stock);
+        }
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));

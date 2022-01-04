@@ -40,6 +40,13 @@ medicine_purchase_status:
     path:     /{id}/status
     defaults: { _controller: "MedicineBundle:Purchase:edit" }
 
+medicine_purchase_vendor_update:
+    path:     /vendor-update
+    defaults: { _controller: "MedicineBundle:Purchase:vendorUpdate" }
+    methods:  [POST, PUT]
+    options:
+        expose: true
+
 
 medicine_purchase_approve:
     path:     /{id}/approve

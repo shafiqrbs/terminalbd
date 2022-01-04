@@ -204,7 +204,7 @@
                                                     {% if entity.process in  processEdit or app.user.granted("ROLE_DOMAIN") %}
                                                         <li><a href="{{ path('hms_invoice_admitted_patient_edit', { 'id': entity.id }) }}" class="btn yellow"><i class="icon-pencil"></i> Edit</a></li>
                                                     {% endif %}
-                                                    {% if entity.paymentStatus == 'Pending' or entity.process =='Created' %}
+                                                    {% if  entity.process =='Created' %}
                                                         <li><a id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete"><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
                                                     <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn green"><i class="icon-eye-open"></i> View</a></li>

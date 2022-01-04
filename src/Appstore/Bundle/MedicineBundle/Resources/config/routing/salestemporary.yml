@@ -17,6 +17,13 @@ medicine_sales_temporary_item_add:
     options:
             expose: true
 
+medicine_sales_barcode_search:
+    path:     /barcode-add
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addBarcode" }
+    methods:  GET
+    options:
+            expose: true
+
 
 medicine_sales_temporary_discount_update:
     path:     /dicount-update

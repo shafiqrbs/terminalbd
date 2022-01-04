@@ -64,6 +64,26 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     }
 
+    public function insertBarcodeInvoiceItems(User $user, $stockItem)
+    {
+        $em = $this->_em;
+        $entity = new MedicineSalesTemporary();
+        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
+        if(empty($invoiceParticular)) {
+	        $entity->setQuantity(1);
+            $entity->setSalesPrice($stockItem->getSalesprice());
+            $entity->setEstimatePrice($stockItem->getSalesprice());
+	        $entity->setSubTotal( round(($entity->getSalesPrice()), 2 ) );
+	        $entity->setUser( $user );
+	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
+	        $entity->setMedicineStock( $stockItem );
+	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+	        $em->persist( $entity );
+	        $em->flush();
+        }
+
+    }
+
     public function updateInvoiceItems(User $user, $data)
     {
 

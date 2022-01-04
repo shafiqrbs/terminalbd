@@ -35,7 +35,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
                 'empty_value' => '---Choose a vendor/supplier ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'m-wrap span12 select2 inputs'),
+                'attr'=>array('class'=>'m-wrap span12 medicineVendor select2 inputs'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

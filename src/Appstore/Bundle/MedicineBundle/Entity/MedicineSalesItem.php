@@ -62,11 +62,19 @@ class MedicineSalesItem
     private $stockName;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="barcode", type="integer", nullable=true)
+     * @ORM\Column(name="barcode", type="string", nullable=true)
      */
     private $barcode;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseItem", type="integer", nullable=true)
+     */
+    private $purchaseItem;
 
 
     /**
@@ -394,6 +402,22 @@ class MedicineSalesItem
     public function setMrpPrice($mrpPrice)
     {
         $this->mrpPrice = $mrpPrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseItem()
+    {
+        return $this->purchaseItem;
+    }
+
+    /**
+     * @param int $purchaseItem
+     */
+    public function setPurchaseItem($purchaseItem)
+    {
+        $this->purchaseItem = $purchaseItem;
     }
 
 

@@ -37,6 +37,7 @@ class ConfigType extends AbstractType
             ->add('printPreviousDue')
             ->add('printDiscountPercent')
             ->add('customPrint')
+            ->add('purchaseItem')
             ->add('printOutstanding')
             ->add('posPrint')
             ->add('searchSlug')

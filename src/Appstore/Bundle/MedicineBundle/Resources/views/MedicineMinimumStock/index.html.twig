@@ -40,24 +40,39 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Unit</label>
+                                        <label class="control-label" for="firstName">Company</label>
                                         <div class="controls">
-                                            {{ form_widget(form.unit) }}
-                                            {{ form_errors(form.unit) }}
+                                            {{ form_widget(form.company) }}
+                                            {{ form_errors(form.company) }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span8">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Medicine Form</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.medicineForm) }}
+                                            {{ form_errors(form.medicineForm) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Min Quantity</label>
                                         <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.minQuantity) }}
-                                                {{ form_errors(form.minQuantity) }}
-                                            </div>
+                                            {{ form_widget(form.minQuantity) }}
+                                            {{ form_errors(form.minQuantity) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Min Quantity</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.reorderQuantity) }}
+                                            {{ form_errors(form.reorderQuantity) }}
                                         </div>
                                     </div>
                                 </div>
@@ -79,8 +94,10 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric" >Unit Name </th>
+                                    <th class="numeric" >Company Name </th>
+                                    <th class="numeric" >Medicine Form </th>
                                     <th class="numeric" >Min Quantity </th>
+                                    <th class="numeric" >Re-order Quantity </th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>

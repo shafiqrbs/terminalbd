@@ -36,7 +36,10 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
-                                <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
+                               {#
+                               <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
+                               #}
+                                <a href="https://medex.com.bd/" target="_blank"  class="btn purple"><i class="fa fa-anchor"></i> Check Price</a>
                                 <a class="btn yellow" target="_blank" href="{{ path('medicine') }}"><i class="icon-plus"></i> New Medicine </a>
                                 <a class="btn black" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
                             </div>
@@ -257,8 +260,10 @@
                                                 <table class="table">
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>
-                                                        <td colspan="3">   {{ form_widget(form.medicineVendor) }}
-                                                            {{ form_errors(form.medicineVendor) }}</td>
+                                                        <td colspan="3">
+                                                            {{ form_widget(form.medicineVendor) }}
+                                                            {{ form_errors(form.medicineVendor) }}
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Invoice Mode</strong></span></td>
@@ -499,7 +504,6 @@
             minuteStep: 1
         }
     });
-
     $('#purchaseItem_stockName').focus();
 {% endblock %}
 

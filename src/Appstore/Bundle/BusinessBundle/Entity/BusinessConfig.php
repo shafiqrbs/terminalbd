@@ -191,6 +191,13 @@ class BusinessConfig
      /**
      * @var boolean
      *
+     * @ORM\Column(name="isDescription", type="boolean",  nullable=true)
+     */
+    private $isDescription = false;
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="zeroStock", type="boolean",  nullable=true)
      */
     private $zeroStock = true;
@@ -1571,6 +1578,22 @@ class BusinessConfig
     public function setConditionSales($conditionSales)
     {
         $this->conditionSales = $conditionSales;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDescription()
+    {
+        return $this->isDescription;
+    }
+
+    /**
+     * @param bool $isDescription
+     */
+    public function setIsDescription($isDescription)
+    {
+        $this->isDescription = $isDescription;
     }
 
 

@@ -412,6 +412,21 @@ $(document).on('change', '#medicinepurchase_payment , #medicinepurchase_discount
     }
 });
 
+$(document).on('change', '.inputs', function() {
+    var invoice = $('#purchaseId').val();
+    url = Routing.generate('medicine_purchase_vendor_update');
+    $.ajax({
+        url         : url,
+        type        : "POST",
+        data        : new FormData($('form#purchaseForm')[0]),
+        processData : false,
+        contentType : false,
+        success: function(response){
+            console.log(response);
+        }
+    });
+});
+
 $(document).on('change', '#medicinepurchase_payment , #invoiceDue', function() {
     var invoiceMode = $('#medicinepurchase_invoiceMode').val();
     if(invoiceMode === "invoice") {

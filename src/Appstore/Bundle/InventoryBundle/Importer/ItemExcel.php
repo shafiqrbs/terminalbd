@@ -31,14 +31,11 @@ class ItemExcel
 
         foreach($this->data as $key => $item) {
 
-            echo $name = ucfirst(strtolower($item['ProductName']));
+            $name = ucfirst(strtolower($item['ProductName']));
             $productID = $item['ProductID'];
 
             $productOld = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'webName' => $name));
-
             $productId = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'id' => $productID));
-            $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
-            $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
             $unit = empty($item['ProductUnit']) ? 'Pcs' : $item['ProductUnit'];
             $sizeUnit = empty($item['SizeUnit']) ? 'Pcs' : $item['SizeUnit'];
             if((empty($productOld) and !empty($item['ProductName']) and empty($productId))) {
@@ -60,30 +57,35 @@ class ItemExcel
                 if ($vendor) {
                     $product->setVendor($vendor);
                 }
-                $category = $item['Category'];
+
+                $category = isset($item['Category'])? $item['Category']:"";
                 if ($category) {
                     $category = $this->getCategory(ucfirst(strtolower($category)));
                     $product->setCategory($category);
                 }
-                $brand = $item['Brand'];
+
+                $brand = isset($item['Brand'])? $item['Brand']:"";
                 if ($brand) {
                     $brand = $this->getBrand(ucfirst(strtolower($brand)));
                     $product->setBrand($brand);
                 }
-                $size = $item['Size'];
+
+                $size = isset($item['Size'])? $item['Size']:"";
                 if ($size) {
                     $size = $this->getSize(ucfirst(strtolower($size)));
                     $product->setSize($size);
                 }
+
                 if ($unit) {
                     $unit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $unit));
                     $product->setProductUnit($unit);
                 }
+
                 if ($sizeUnit) {
                     $sizeUnit = $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit')->findOneBy(array('name' => $sizeUnit));
                     $product->setSizeUnit($sizeUnit);
                 }
-                $colors = $item['Colors'];
+                $colors = isset($item['Colors'])? $item['Colors']:"";
                 if ($colors) {
                     $colorIds = explode(',', $colors);
                     foreach ($colorIds as $color) {
@@ -91,7 +93,8 @@ class ItemExcel
                     }
                     $product->setItemColors($colorObj);
                 }
-                $tags = $item['Tags'];
+               // $tags = $item['Tags'];
+                $tags = isset($item['Tags'])? $item['Tags']:"";
                 if ($tags) {
                     $tagIds = explode(',', $tags);
                     foreach ($tagIds as $tag) {

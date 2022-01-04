@@ -187,8 +187,9 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere("e.salesQuantity  >= {$startQuantity}");
             $qb->andWhere("e.salesQuantity  <= {$endQuantity}");
         }
-         if($process == 'Sales Minus' and $startQuantity == 0 and $endQuantity == 0){
-            $qb->andWhere('e.remainingQuantity  <= 0');
+
+        if($process == 'Sales Minus' and $startQuantity == 0 and $endQuantity == 0){
+            $qb->andWhere('e.remainingQuantity  < 0');
         }elseif ($process == 'Sales Minus'  and $startQuantity >= 0 and $endQuantity > 0){
              $qb->andWhere("e.remainingQuantity  >= -{$startQuantity}");
              $qb->andWhere("e.remainingQuantity  <= -{$endQuantity}");
@@ -421,8 +422,8 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->leftJoin('e.rackNo', 'rack');
         $query->leftJoin('e.unit', 'unit');
-        $query->leftJoin('e.medicineBrand', 'brand');
-        $query->leftJoin('brand.medicineGeneric', 'generic');
+        // $query->leftJoin('e.medicineBrand', 'brand');
+        // $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
         $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
         $query->where("ic.id = :config")->setParameter('config', $config->getId());
@@ -431,6 +432,28 @@ class MedicineStockRepository extends EntityRepository
         }else{
             $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
         }
+        $query->andWhere('e.status = 1');
+        $query->groupBy('e.name');
+        $query->orderBy('e.slug', 'ASC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
+
+
+    public function searchGenericStockComplete($q, MedicineConfig $config)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->leftJoin('e.rackNo', 'rack');
+        $query->leftJoin('e.unit', 'unit');
+        $query->leftJoin('e.medicineBrand', 'brand');
+        $query->leftJoin('brand.medicineGeneric', 'generic');
+        $query->select('e.id as id');
+        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice,'-',e.brandName)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice,'-',e.brandName)  END as text");
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        $query->andWhere($query->expr()->like("generic.name", "'%$q%'"  ));
         $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
         $query->orderBy('e.slug', 'ASC');
@@ -462,6 +485,8 @@ class MedicineStockRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+
 
     public function searchAutoPurchaseStock($q, MedicineConfig $config)
     {
@@ -634,7 +659,7 @@ class MedicineStockRepository extends EntityRepository
         $elem = "INSERT INTO medicine_stock(`unit_id`,`name`,`slug`,`minQuantity`,`remainingQuantity`,`salesPrice`, `purchasePrice`, `medicineBrand_id`,`brandName`,`pack`,`isAndroid`,`printHide`,mode,status,`medicineConfig_id`)
   SELECT `unit_id`, trim(name),trim(slug),0,0, `salesPrice`,(salesPrice - ((salesPrice * 12.5)/100)), `medicineBrand_id`, `brandName`, `pack`, `isAndroid`, `printHide`,mode,1,$to
   FROM medicine_stock
-  WHERE medicineConfig_id =:config";
+  WHERE medicineConfig_id =:config AND status=1";
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
         $qb1->bindValue('config', $from);
         $qb1->execute();

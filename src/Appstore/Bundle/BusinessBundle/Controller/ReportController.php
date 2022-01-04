@@ -935,13 +935,13 @@ class ReportController extends Controller
         $entity = '';
         if(isset($data['particular']) and !empty($data['particular'])){
             $entity = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->findOneBy(array('businessConfig' => $config,'id'=> $data['particular']));
-            $entities = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->getStockHistoryLedger($config,$data);
+            $pagination = $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->getStockHistoryLedger($config,$data);
         }
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getProducts($config->getId());
         if(empty($data['pdf'])){
             return $this->render('BusinessBundle:Report/stock:productLedger.html.twig', array(
                 'entity' => $entity,
-                'pagination' => $entities,
+                'pagination' => $pagination,
                 'particulars' => $particulars,
                 'searchForm' => $data,
             ));
@@ -950,7 +950,7 @@ class ReportController extends Controller
                 'BusinessBundle:Report/stock:productLedgerPdf.html.twig', array(
                     'option' => $this->getUser()->getGlobalOption(),
                     'entity' => $entity,
-                    'pagination' => $entities,
+                    'pagination' => $pagination,
                     'particulars' => $particulars,
                     'searchForm' => $data,
                 )

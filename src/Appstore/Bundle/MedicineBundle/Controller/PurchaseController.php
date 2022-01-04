@@ -293,7 +293,7 @@ class PurchaseController extends Controller
             $salesQty = 0;
         }
         $openingStatus = 'in-valid';
-        if($particular->isOpeningApprove() != 1 and empty($particular->getPurchaseQuantity())) {
+        if($particular->isOpeningApprove() != 1 and empty($particular->getPurchaseQuantity()) and empty($particular->getOpeningQuantity())) {
             $openingStatus = 'valid';
         }
         $min = "";
@@ -346,10 +346,35 @@ class PurchaseController extends Controller
             $msg = 'Medicine added successfully';
             $result = $this->returnResultData($invoice, $msg);
             return new Response(json_encode($result));
+        }elseif($checkStockMedicine){
+            $item = new MedicinePurchaseItem();
+            $salesPrice = round(($entity->getSalesPrice()/$entity->getPurchaseQuantity()),2);
+            $item->setPurchasePrice($salesPrice);
+            $item->setMedicineStock($checkStockMedicine);
+            $item->setSalesPrice($salesPrice);
+            $em->persist($item);
+            $em->flush();
+            $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($purchase);
+            $msg = 'Medicine added successfully';
+            $result = $this->returnResultData($invoice, $msg);
+            return new Response(json_encode($result));
         }else{
             return new Response(json_encode(array('success'=>'invalid')));
         }
 
+    }
+
+    public function vendorUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $invoice = $data['purchaseId'];
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
+        $form = $this->createEditForm($entity);
+        $form->handleRequest($request);
+        $em->flush();
+        return new Response('success');
     }
 
     public function purchaseItemUpdateAction(Request $request)

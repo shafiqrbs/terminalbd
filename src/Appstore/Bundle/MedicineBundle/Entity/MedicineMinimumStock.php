@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * MedicineMinimumStock
  *
  * @ORM\Table("medicine_minimum_stock")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineStockRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineMinimumStockRepository")
  */
 class MedicineMinimumStock
 {
@@ -42,6 +42,29 @@ class MedicineMinimumStock
      * @ORM\Column(name="minQuantity", type="integer", nullable=true)
      */
     private $minQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reorderQuantity", type="integer", nullable=true)
+     */
+    private $reorderQuantity;
+
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="company", type="integer", nullable=true)
+     */
+    private $company;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="medicineForm", type="integer", nullable=true)
+     */
+    private $medicineForm;
 
 
     /**
@@ -100,6 +123,54 @@ class MedicineMinimumStock
     public function setMinQuantity($minQuantity)
     {
         $this->minQuantity = $minQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReorderQuantity()
+    {
+        return $this->reorderQuantity;
+    }
+
+    /**
+     * @param int $reorderQuantity
+     */
+    public function setReorderQuantity($reorderQuantity)
+    {
+        $this->reorderQuantity = $reorderQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMedicineForm()
+    {
+        return $this->medicineForm;
+    }
+
+    /**
+     * @param int $medicineForm
+     */
+    public function setMedicineForm($medicineForm)
+    {
+        $this->medicineForm = $medicineForm;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param int $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
     }
 
 

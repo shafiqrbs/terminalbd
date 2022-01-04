@@ -73,6 +73,7 @@ class ConfigType extends AbstractType
             ->add('isInvoiceTitle')
             ->add('showStock')
             ->add('isPrintHeader')
+            ->add('isDescription')
             ->add('isPrintFooter')
             ->add('isStockHistory')
             ->add('srCommission')

@@ -123,6 +123,13 @@ class MedicineConfig
      */
     private $posPrint = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="purchaseItem", type="boolean",  nullable=true)
+     */
+    private $purchaseItem = false;
+
      /**
      * @var boolean
      *
@@ -983,6 +990,22 @@ class MedicineConfig
     public function setAutoPayment($autoPayment)
     {
         $this->autoPayment = $autoPayment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPurchaseItem()
+    {
+        return $this->purchaseItem;
+    }
+
+    /**
+     * @param bool $purchaseItem
+     */
+    public function setPurchaseItem($purchaseItem)
+    {
+        $this->purchaseItem = $purchaseItem;
     }
 
 }

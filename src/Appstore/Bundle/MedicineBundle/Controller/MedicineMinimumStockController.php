@@ -73,7 +73,9 @@ class MedicineMinimumStockController extends Controller
      */
     private function createCreateForm(MedicineMinimumStock $entity)
     {
-        $form = $this->createForm(new MedicineMinimumStockType(), $entity, array(
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $em = $this->getDoctrine()->getRepository('MedicineBundle:MedicineMinimumStock');
+        $form = $this->createForm(new MedicineMinimumStockType($em,$config), $entity, array(
             'action' => $this->generateUrl('medicine_minimum_create'),
             'method' => 'POST',
             'attr' => array(

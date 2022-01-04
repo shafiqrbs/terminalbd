@@ -227,6 +227,14 @@ class InvoiceController extends Controller
                 $invoice = $data['invoice'];
                 if($invoice){ $entity->setInvoice($invoice);}
             }
+            if(isset($data['created']) and !empty($data['created'])){
+                $created = $data['created'];
+                if($invoice){
+                    $date = new \DateTime($created);
+                    $entity->setCreated($date);
+                    $entity->setUpdated($date);
+                }
+            }
             if(isset($data['vendor']) and !empty($data['vendor'])){
                 $vendor = $data['vendor'];
                 $vendorExist =$this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->find($vendor);
@@ -899,7 +907,7 @@ class InvoiceController extends Controller
             }
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess("Done");
+            $entity->setProcess("Delivered");
             $entity->setApprovedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
@@ -1009,7 +1017,7 @@ class InvoiceController extends Controller
                 $em->flush();
             }
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess("Done");
+            $entity->setProcess("Delivered");
             $entity->setApprovedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
