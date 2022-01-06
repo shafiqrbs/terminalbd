@@ -44,7 +44,7 @@
             {% endif %}
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
-            <div class="span5">
+            <div class="span5" {% if config.barcode == 1 %} style="margin-left: 0!important" {% endif %} >
                 {{ form_widget(salesItem.stockName) }}
                 {{ form_errors(salesItem.stockName) }}
             </div>
