@@ -414,7 +414,9 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
-        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+        if($order->getProcess() == "delivered"){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+        }
         return new Response('success');
     }
 
@@ -441,14 +443,7 @@ class OrderController extends Controller
      */
     public function inlineItemAddAction(Request $request,OrderItem $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-        $data = $request->request->all();
-        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $data['value']));
-        if(!empty($purchaseItem)){
-        $entity->setPurchaseItem($purchaseItem);
-        }
-        $em->flush();
-        exit;
+        return new Response('success');
     }
 
 
@@ -482,7 +477,7 @@ class OrderController extends Controller
         $entity->setShippingCharge($data['value']);
         $em->flush();
         $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
-        exit;
+        return new Response('success');
     }
 
 
@@ -562,6 +557,9 @@ class OrderController extends Controller
                 $dispatcher->dispatch('setting_tool.post.order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
 
             }
+            if($order->getProcess() == "delivered"){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+            }
             return $this->redirect($this->generateUrl('customer_order_payment',array('id' => $order->getId())));
         }
         return $this->render('EcommerceBundle:Order:payment.html.twig', array(
@@ -598,18 +596,20 @@ class OrderController extends Controller
         }
         $order->setProcess($data['value']);
         $em->flush();
-
         if($order->getProcess() == 'confirm') {
 
             $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
             $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
             $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
             $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
         }
-        exit;
+        if($order->getProcess() == "delivered"){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+        }
+        return new Response('success');
+
 
     }
 
@@ -635,7 +635,7 @@ class OrderController extends Controller
         }
         $entity->setPurchaseItem($purchaseItem);
         $em->flush();
-        exit;
+        return new Response('success');
     }
 
 

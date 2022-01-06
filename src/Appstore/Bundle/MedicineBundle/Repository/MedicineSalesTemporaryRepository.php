@@ -32,8 +32,9 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     public function insertInvoiceItems(User $user, $data)
     {
         $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
+        $purchaseItem = isset($data['purchaseItem']) and !empty($data['purchaseItem']) ? $data['purchaseItem'] : '';
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
-        $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['barcode']);
+        $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($purchaseItem);
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));

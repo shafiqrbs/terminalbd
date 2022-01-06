@@ -66,27 +66,6 @@ class ProductType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
-            
-            ->add('ageGroup', 'choice', array(
-                'required'    => false,
-                'multiple'    => true,
-                'attr'=>array('class'=>'span12 select2'),
-                'choices' => array(
-                    'Kids' => 'Kids',
-                    'Adult' => 'Adult'
-                ),
-            ))
-
-            ->add('gender', 'choice', array(
-                'required'    => false,
-                'attr'=>array('class'=>'span12'),
-                'empty_value' => '---Choose a gender ---',
-                'choices' => array(
-                    'Male' => 'Male',
-                    'Female' => 'Female'
-                ),
-            ))
-
             ->add('file')
             ->add('status');
     }

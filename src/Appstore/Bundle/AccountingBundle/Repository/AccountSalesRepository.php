@@ -7,6 +7,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
@@ -1512,6 +1513,11 @@ class AccountSalesRepository extends EntityRepository
             $em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
         }
         return "valid";
+    }
+
+    public function insertEcommerceSales(Order $order)
+    {
+
     }
 
 }
