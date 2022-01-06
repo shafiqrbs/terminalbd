@@ -43,8 +43,40 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="customer" name="customer" class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}" autocomplete="off" placeholder="Enter customer">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="deliveryDate" name="deliveryDate" class="span12 m-wrap dateCalendar" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}" autocomplete="off" placeholder="Enter delivery date">
+                                        </div>
+                                        <div class="span2">
+                                            <select name="process" id="process" class="leftMargin m-wrap span12">
+                                                {% set groups = {'created':'Created','wfc':'Waiting for Confirm','confirm':'Confirm','shipped':'Shipped','delivered':'Delivered','returned':'Returned','cancel':'Cancel','delete':'Delete'} %}
+                                                <option value="" >--Process Mode--</option>
+                                                {% for key,row in groups %}
+                                                    <option {% if searchForm.mode is defined and searchForm.mode == row %} selected="selected" {% endif %} value="{{ key }}" >{{ row }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span5">
+                                            <div class="controls">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="startDate" name="startDate"  class="span4 search-input m-wrap  dateCalendar" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                                    <input type="text" id="endDate" name="endDate"  class="span4 m-wrap search-input  m-ctrl-medium dateCalendar" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                    <input type="text" id="invoice" name="invoice"  class="leftMargin span4  m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="Invoice no">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>

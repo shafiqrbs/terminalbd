@@ -60,6 +60,11 @@ class Order
     private  $orderPayments;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\CourierService", inversedBy="orders" )
+     **/
+    private  $courier;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="order"  , cascade={"persist", "remove"} )
      **/
     private  $orderItems;
@@ -163,6 +168,14 @@ class Order
      * @ORM\Column(name="customerName", type="string", length=100,  nullable=true)
      */
     private $customerName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="trackingNo", type="string", length=100,  nullable=true)
+     */
+    private $trackingNo;
 
 
     /**
@@ -1391,6 +1404,38 @@ class Order
     public function setTransactionMethod($transactionMethod)
     {
         $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return CourierService
+     */
+    public function getCourier()
+    {
+        return $this->courier;
+    }
+
+    /**
+     * @param CourierService $courier
+     */
+    public function setCourier($courier)
+    {
+        $this->courier = $courier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTrackingNo()
+    {
+        return $this->trackingNo;
+    }
+
+    /**
+     * @param string $trackingNo
+     */
+    public function setTrackingNo($trackingNo)
+    {
+        $this->trackingNo = $trackingNo;
     }
 
 

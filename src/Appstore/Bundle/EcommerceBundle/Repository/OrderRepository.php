@@ -25,8 +25,10 @@ class OrderRepository extends EntityRepository
             $invoice = isset($data['invoice'])  ? $data['invoice'] : '';
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+            $deliveryDate =   isset($data['deliveryDate'])  ? $data['deliveryDate'] : '';
             $name =    isset($data['name'])? $data['name'] :'';
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $process =    isset($data['process'])? $data['process'] :'';
             $processHead =    isset($data['processHead'])? $data['processHead'] :'';
             if($name){
                 $qb->andWhere($qb->expr()->like("e.customerName", "'%$name%'" ));
@@ -34,7 +36,14 @@ class OrderRepository extends EntityRepository
             if($mobile){
                 $qb->andWhere($qb->expr()->like("e.customerMobile", "'%$mobile%'" ));
             }
-            if (!empty($startDate) and !empty($endDate) ) {
+            if (!empty($deliveryDate)) {
+                $compareTo = new \DateTime($deliveryDate);
+                $startDelDate =  $compareTo->format('Y-m-d 00:00:00');
+                $endDelDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.deliveryDate >= :startDate")->setParameter('startDate', $startDelDate);
+                $qb->andWhere("e.deliveryDate <= :endDate")->setParameter('endDate', $endDelDate);
+            }
+             if (!empty($startDate) and !empty($endDate) ) {
                 $compareTo = new \DateTime($startDate);
                 $startDate =  $compareTo->format('Y-m-d 00:00:00');
                 $qb->andWhere("e.created >= :startDate")->setParameter('startDate', $startDate);
@@ -49,6 +58,9 @@ class OrderRepository extends EntityRepository
             }
             if (!empty($processHead)) {
                 $qb->andWhere("e.processHead = :process")->setParameter('process', $processHead);
+            }
+            if (!empty($process)) {
+                $qb->andWhere("e.process = :process")->setParameter('process', $process);
             }
 
     }

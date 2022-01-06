@@ -26,6 +26,10 @@ ecommerce_item_category:
     resource: "@EcommerceBundle/Resources/config/routing/itemcategory.yml"
     prefix:   /item-category
 
+ecommerce_courier:
+    resource: "@EcommerceBundle/Resources/config/routing/courier.yml"
+    prefix:   /courier-service
+
 ecommerce_delivery_location:
     resource: "@EcommerceBundle/Resources/config/routing/location.yml"
     prefix:   /delivery-location

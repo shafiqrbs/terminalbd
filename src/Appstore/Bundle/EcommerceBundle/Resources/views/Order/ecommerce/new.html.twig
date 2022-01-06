@@ -50,6 +50,14 @@
                                             <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="select2EcommerceUser m-wrap-custom span6" value="{{ entity.customerMobile }}"></li>
                                             <li><strong class="span2">Name</strong><input type="text" name="ecommerce_payment[customerName]" id="customerName" class="m-wrap-custom span6 input-update" value="{{ entity.customerName }}"></li>
                                             <li><strong class="span2">Address</strong><input type="text" name="ecommerce_payment[customerAddress]" id="customerAddress" value="{{ entity.address }}" class="m-wrap-custom span10 input-update" ></li>
+                                            <li><strong class="span2">Courier Service</strong>
+                                                <select  class="m-wrap-custom input-update span6" id="courier" name="ecommerce_payment[courier]" >
+                                                    <option value="">Select Courier Name</option>
+                                                    {% for cou in couriers %}
+                                                        <option value="{{ cou.id }}">{{ cou.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -66,25 +74,28 @@
                                             </li>
                                              <li><strong class="span4">Delivery Slot</strong>
                                                  <span class="span8">
-                                                 {% set slots = ["Morning 10-12","Evening 03-06","Night 06-10"] %}
-                                                 <select  class="m-wrap-custom input-update span12" id="deliverySlot" name="ecommerce_payment[deliverySlot]" >            {% for slot in slots %}
-                                                     <option {% if slot == entity.deliverySlot %} selected="selected" {% endif %} value="{{ slot }}">{{ slot }}</option>
-                                                     {% endfor %}
-                                                 </select>
+                                                     <select  class="m-wrap-custom input-update span12" id="timePeriod" name="ecommerce_payment[timePeriod]" >
+                                                         {% for slot in timePeriods %}
+                                                             <option {% if entity.timePeriod is defined and entity.timePeriod.id == slot.id %} selected="selected" {% endif %} value="{{ slot.id }}">{{ slot.name }}</option>
+                                                         {% endfor %}
+                                                     </select>
                                                  </span>
                                              </li>
-                                            <li><strong class="span4">Process Status</strong><span class="span8">
+                                            <li><strong class="span4">Process Status</strong>
+                                                <span class="span8">
                                                     {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm',delivered:'Delivered',returned:'Returned',cancel:'Cancel'} %}
                                                     <select  class="m-wrap-custom input-update span12" id="process" name="ecommerce_payment[process]" >
                                                         {% for key,process in processes %}
                                                             <option {% if key == entity.process %} selected="selected" {% endif %} value="{{ key }}">{{ process }}</option>
                                                         {% endfor %}
-
-                                                 </select>
-
+                                                    </select>
                                                 </span>
                                             </li>
-
+                                            <li><strong class="span4">Tracking No</strong>
+                                                <span class="span8">
+                                                    <input type="text" name="ecommerce_payment[trackingNo]" id="trackingNo" value="{{ entity.trackingNo }}" class="m-wrap-custom span10 input-update" >
+                                                </span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -95,7 +106,6 @@
                         <div class="form-actions portlet box red">
                             <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Add Order Item</div></div>
                         </div>
-
                         <div class="clearfix"><br/> </div>
                         {{ form_start(salesItem) }}
                         {{ form_row(salesItem._token) }}
@@ -141,14 +151,28 @@
                                     <tr id="remove-{{ orderItem.id }}">
                                         <input type="hidden" name="itemId[]" value="{{ orderItem.id }}">
                                         <td>{{ loop.index }}.</td>
-                                        <td class="numeric" >{{ orderItem.itemName }}</td>
+                                        <td class="numeric dropdown" >
+                                            <a target="_blank" href="{{ path('ecommerce_item_show',{'id':orderItem.item.id}) }}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                {{ orderItem.itemName }}
+                                            </a>
+                                            {% if orderItem.item is defined and orderItem.item.webPath is not empty  %}
+                                                <ul class="dropdown-menu extended inbox">
+                                                    <li>
+                                                        <p>{{ orderItem.item.webName }}</p>
+                                                    </li>
+                                                    <li>
+                                                        <img src="{% if orderItem.item.webPath is not empty  %}{{ image(orderItem.item.webPath).scaleResize(300,300) }}{% elseif orderItem.item.webPath is not empty  %}{{ image(orderItem.item.webPath).scaleResize(300,300) }}{% endif %}" alt="" />
+                                                    </li>
+                                                    <li><p class="pull-center"><strong>BDT: {{ orderItem.item.salesPrice|number_format }}</strong></p></li>
+                                                </ul>
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ orderItem.brandName }}</td>
                                         <td class="numeric" >{{ orderItem.categoryName }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' and orderItem.status == 0  %}
                                                 <div class="input-append">
                                                     <span class="input-group-btn">
-
                                                     <input type="text"  name="quantity" id="quantity-{{ orderItem.id }}" class="form-control m-wrap-custom  span4 input-number" value="{{ orderItem.quantity }}" min="1" max="1000" >
                                                         {% if orderItem.UnitName is not empty %}
                                                         <button type="button" class="btn mini yellow">
@@ -361,16 +385,22 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-right">
+                                    <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green {% if entity.cashOnDelivery == 1 %}submitOrder {% else %}submitPayment{% endif %}"><i class="icon-save"></i>&nbsp;Save Order</button>
+                                </div>
+                            </div>
                         </div>
                         {{ form_end(paymentForm) }}
                         <div class="clearfix"><br/> </div>
-                        <div class="clearfix"> </div>
-                        <div class="form-actions portlet box grey">
-                            <div class="pull-right">
-                                <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green {% if entity.cashOnDelivery == 1 %}submitOrder {% else %}submitPayment{% endif %}"><i class="icon-save"></i>&nbsp;Save Order</button>
-                            </div>
+                        <div class="form-actions portlet box yellow">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Comments Information</div></div>
                         </div>
+                        <div class="clearfix"> </div>
+                        {% set paymentID = entity.globalOption.id~'-ecommerce-payment-'~entity.id %}
+                        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                        <div class="clearfix"> </div>
+
                     </div>
                 </div>
 
@@ -394,7 +424,7 @@
         }
         input[type="text"].m-wrap-custom,input[type="date"].m-wrap-custom, select.m-wrap-custom{
             border: 1px solid #0b84fe!important;
-            height: 25px!important;
+            height: 30px!important;
             padding: 5px!important;
             min-height: 25px!important;
         }

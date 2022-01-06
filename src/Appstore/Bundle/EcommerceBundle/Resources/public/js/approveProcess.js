@@ -9,6 +9,12 @@ function ApproveProcess(){
     // Setter
     $( ".datePicker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
+    $( ".dateCalendar" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+    });
+
     $(document).on("click", "#submitProcess", function(e) {
 
         $('#confirm-content').confirmModal({

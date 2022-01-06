@@ -74,6 +74,12 @@ class AccountSales
     private  $customer;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $ecommerceOrder;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
@@ -854,6 +860,22 @@ class AccountSales
     public function setTloPrice($tloPrice)
     {
         $this->tloPrice = $tloPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEcommerceOrder()
+    {
+        return $this->ecommerceOrder;
+    }
+
+    /**
+     * @param mixed $ecommerceOrder
+     */
+    public function setEcommerceOrder($ecommerceOrder)
+    {
+        $this->ecommerceOrder = $ecommerceOrder;
     }
 
 

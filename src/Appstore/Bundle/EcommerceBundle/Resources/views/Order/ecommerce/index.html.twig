@@ -39,6 +39,32 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="customer" name="customer" class="span12 m-wrap select2Customer" value="{% if searchForm.customer is defined %}{{ searchForm.customer }}{% endif %}" autocomplete="off" placeholder="Enter customer">
+
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="startDate" name="startDate" class="span12 m-wrap" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}" autocomplete="off" placeholder="Enter start date">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="endDate" name="endDate" class="span12 m-wrap" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="Enter brand name">
+                                        </div>
+                                        <div class="span3">
+                                            <div class="controls">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="invoice" name="invoice" class="span11 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}" autocomplete="off" placeholder="Enter invoice no ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">

@@ -105,11 +105,13 @@ class OrderController extends Controller
         $salesItemForm = $this->createMedicineSalesItemForm(new OrderItem(),$order);
         $locations = $this->getDoctrine()->getRepository('EcommerceBundle:DeliveryLocation')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
         $timePeriods = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
+        $couriers = $this->getDoctrine()->getRepository('EcommerceBundle:CourierService')->findBy(array('ecommerceConfig' => $config,'status'=>1),array('name'=>'ASC'));
         return $this->render("EcommerceBundle:Order/{$theme}:new.html.twig", array(
             'globalOption' => $order->getGlobalOption(),
             'entity'                => $order,
-            'locations'                => $locations,
-            'timePeriods'                => $timePeriods,
+            'couriers'              => $couriers,
+            'locations'             => $locations,
+            'timePeriods'           => $timePeriods,
             'orderForm'             => $orderForm->createView(),
             'salesItem'             => $salesItemForm->createView(),
             'paymentForm'           => $payment->createView(),
@@ -272,7 +274,6 @@ class OrderController extends Controller
         }else{
             $theme = 'ecommerce';
         }
-
         $html =  $this->renderView("EcommerceBundle:Order/{$theme}:cartItem.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
@@ -326,8 +327,6 @@ class OrderController extends Controller
         exit;
 
     }
-
-
 
     public function paymentProcessAction(Request $request ,Order $order)
     {
@@ -392,6 +391,17 @@ class OrderController extends Controller
         if (isset($data['deliverySlot']) and $data['deliverySlot']) {
             $order->setDeliverySlot($data['deliverySlot']);
         }
+        if (isset($data['trackingNo']) and $data['trackingNo']) {
+            $order->setTrackingNo($data['trackingNo']);
+        }
+        if (isset($data['timePeriod']) and $data['timePeriod']) {
+            $timePeriod = $this->getDoctrine()->getRepository('EcommerceBundle:TimePeriod')->find($data['timePeriod']);
+            $order->setTimePeriod($timePeriod);
+        }
+        if (isset($data['courier']) and $data['courier']) {
+            $courier = $this->getDoctrine()->getRepository('EcommerceBundle:CourierService')->find($data['courier']);
+            $order->setCourier($courier);
+        }
         if (isset($data['shippingCharge']) and $data['shippingCharge']) {
             $order->setShippingCharge($data['shippingCharge']);
         }
@@ -404,6 +414,7 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
         return new Response('success');
     }
 
@@ -568,6 +579,7 @@ class OrderController extends Controller
         $items[]=array('value' => 'created','text'=> 'Created');
         $items[]=array('value' => 'wfc','text'=> 'Waiting for Confirm');
         $items[]=array('value' => 'confirm','text'=> 'Confirm');
+        $items[]=array('value' => 'shipped','text'=> 'Shipped');
         $items[]=array('value' => 'delivered','text'=> 'Delivered');
         $items[]=array('value' => 'returned','text'=> 'Returned');
         $items[]=array('value' => 'cancel','text'=> 'Cancel');
