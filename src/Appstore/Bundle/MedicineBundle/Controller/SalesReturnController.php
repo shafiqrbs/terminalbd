@@ -53,7 +53,8 @@ class SalesReturnController extends Controller
 
 	private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
 	{
-		$form = $this->createForm(new SalesTemporaryItemType(), $salesItem, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+	    $form = $this->createForm(new SalesTemporaryItemType($globalOption), $salesItem, array(
 			'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
 			'method' => 'POST',
 			'attr' => array(

@@ -151,21 +151,22 @@
                         {{ form_start(salesItem) }}
                         {{ form_row(salesItem._token) }}
                         <div class="row-fluid particular-info" style="padding-left:15px!important; margin-left: -10px!important;" >
-                            <div class="span6">
+                            <div class="span5">
                                 {{ form_widget(salesItem.stockName) }}
                                 {{ form_errors(salesItem.stockName) }}
                             </div>
-                            <div class="span3">
-                                {{ form_widget(salesItem.barcode) }}
-                                {{ form_errors(salesItem.barcode) }}
+                            <div class="span2">
+                                {{ form_widget(salesItem.purchaseItem) }}
+                                {{ form_errors(salesItem.purchaseItem) }}
                             </div>
-                            <div class="span3">
+                            <div class="span5">
                                 <div class="input-append">
                                     <div class="input-group">
                                         {{ form_widget(salesItem.salesPrice) }}
                                         {{ form_errors(salesItem.salesPrice) }}
                                         {{ form_widget(salesItem.quantity) }}
                                         {{ form_errors(salesItem.quantity) }}
+                                        {{ form_widget(salesItem.itemPercent) }}
                                         <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
                                     </div>
                                 </div>
@@ -185,6 +186,7 @@
                                         <th class="span1">PP</th>
                                         <th class="span1">MRP</th>
                                         <th class="span1">Quantity</th>
+                                        <th class="span1">Discount</th>
                                         <th class="span1">Sub-total</th>
                                         <th class="span1"><i class="icon-trash"></i></th>
                                     </tr>
@@ -204,6 +206,7 @@
                                                 <td class="span1">
                                                     <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                                 </td>
+                                                <td class="" >{{ item.itemPercent }}</td>
                                                 <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
                                                 <td class="">
                                                     <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
@@ -215,25 +218,25 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                                        <td colspan="8" class="span12" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="span8"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                        <td colspan="6" class="span8"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                         <td class=""><strong id="subTotal">{{ result.subTotal|number_format }}</strong></td>
                                         <td class="span1"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="span8"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                        <td colspan="6" class="span8"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                         <td class=""><strong class="discount"></strong></td>
                                         <td class="span1"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="span8"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
+                                        <td colspan="6" class="span8"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
                                         <td class=""><strong id="grandTotal">{{ result.subTotal|number_format }}</strong></td>
                                         <td class="span1"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="span8"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
+                                        <td colspan="6" class="span8"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
                                         <td class=""><strong id="profit">{{ (result.subTotal - result.purchaseSubTotal)|number_format }}</strong></td>
                                         <td class="span1"></td>
                                     </tr>

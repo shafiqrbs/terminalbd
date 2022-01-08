@@ -117,6 +117,7 @@ function jqueryTemporaryLoad() {
             type: 'GET',
             success: function (response) {
                 obj = JSON.parse(response);
+                $('#salesTemporaryItem_quantity').focus();
                 $('#salesTemporaryItem_barcode').html(obj['purchaseItems']).focus();
                 $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", false);
                 $('#salesTemporaryItem_salesPrice').val(obj['salesPrice']);
@@ -154,7 +155,7 @@ function jqueryTemporaryLoad() {
         rules: {
 
             "salesTemporaryItem[stockName]": {required: true},
-            "salesTemporaryItem[barcode]": {required: false},
+            "salesTemporaryItem[purchaseItem]": {required: false},
             "salesTemporaryItem[itemPercent]": {required: false},
             "salesTemporaryItem[salesPrice]": {required: false},
             "salesTemporaryItem[quantity]": {required: false},
@@ -163,7 +164,6 @@ function jqueryTemporaryLoad() {
         messages: {
 
             "salesTemporaryItem[medicineStock]":"Enter medicine name",
-            "salesTemporaryItem[barcode]":"Select barcode",
             "salesTemporaryItem[salesPrice]":"Enter sales price",
             "salesTemporaryItem[quantity]":"Enter medicine quantity",
         },
