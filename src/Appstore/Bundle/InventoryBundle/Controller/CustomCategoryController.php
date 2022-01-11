@@ -141,8 +141,8 @@ class CustomCategoryController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('ProductProductBundle:Category')->find($id);
+        $config = $this->getUser()->getInventoryConfig();
+        $entity = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$config,'id'=>$id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -221,7 +221,8 @@ class CustomCategoryController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('ProductProductBundle:Category')->find($id);
+            $config = $this->getUser()->getInventoryConfig();
+            $entity = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$config,'id'=>$id));
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Category entity.');

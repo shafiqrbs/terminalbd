@@ -1,0 +1,12 @@
+_www_domain_app_adc_com:
+  resource: '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml'
+  host: '{domain_name}'
+  name_prefix: adc_
+  defaults: { subdomain: adc, domain_name: www.adc.com }
+  requirements: { domain_name: www.adc.com|adc.com }
+_www_domain_app_amsc_com:
+  resource: '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml'
+  host: '{domain_name}'
+  name_prefix: amsc_
+  defaults: { subdomain: amsc, domain_name: www.amsc.com }
+  requirements: { domain_name: www.amsc.com|amsc.com }

@@ -93,6 +93,7 @@ class SalesReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = $request->request->all();
+        $adjustment = isset($data['adjustment']) ? $data['adjustment']:0;
         foreach ($data['quantity'] as $key => $qnt) {
         	if($qnt > 0 ){
 		        $entity = new MedicineSalesReturn();
@@ -152,9 +153,13 @@ class SalesReturnController extends Controller
     	$em = $this->getDoctrine()->getManager();
         if (!empty($entity) and $entity->getProcess() !='approved') {
             $em = $this->getDoctrine()->getManager();
-	        $entity->setProcess('approved');
-            $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertMedicineAccountSalesReturn($entity);
-	        $entity->setJournal($journal);
+            if($entity->isAdjustment() == 1){
+                $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountSalesReturn($entity);
+            }else{
+                $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertMedicineAccountSalesReturn($entity);
+            }
+            $entity->setProcess('approved');
+            $entity->setJournal($journal);
             $em->flush();
 	        return new Response('success');
         } else {

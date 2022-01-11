@@ -1119,7 +1119,6 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setApprovedBy($entity->getCreatedBy());
 	    $accountSales->setMedicineSales($entity->getMedicineSalesItem()->getMedicineSales());
 	    $accountSales->setSourceInvoice($entity->getMedicineSalesItem()->getMedicineSales()->getInvoice());
-        $accountSales->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $accountSales->setCreated($entity->getCreated());
         $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);

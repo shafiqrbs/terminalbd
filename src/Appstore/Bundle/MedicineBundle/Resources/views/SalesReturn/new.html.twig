@@ -141,7 +141,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
-                                    <button type="button" id="submitBtn"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                  Adjustment: <input type="checkbox" name="isAdjustment" id="isAdjustment" value="1">  <button type="button" id="submitBtn"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
                                 </div>
                             </div>
                             </form>
@@ -151,14 +151,16 @@
                         {{ form_start(salesItem) }}
                         {{ form_row(salesItem._token) }}
                         <div class="row-fluid particular-info" style="padding-left:15px!important; margin-left: -10px!important;" >
-                            <div class="span5">
+                            <div class="{% if entity.medicineConfig.purchaseItem == 1 %}span5{% else %}span7{% endif %}">
                                 {{ form_widget(salesItem.stockName) }}
                                 {{ form_errors(salesItem.stockName) }}
                             </div>
+                            {% if entity.medicineConfig.purchaseItem == 1 %}
                             <div class="span2">
                                 {{ form_widget(salesItem.purchaseItem) }}
                                 {{ form_errors(salesItem.purchaseItem) }}
                             </div>
+                            {% endif %}
                             <div class="span5">
                                 <div class="input-append">
                                     <div class="input-group">
@@ -255,8 +257,8 @@
                                             <label class="control-label" for="firstName">
                                                 <span class="label" >Discount Type</span>
                                                 <span class="pull-right sales-right">
-                              {{ form_widget(form.discountType) }}
-                            </span>
+                                                    {{ form_widget(form.discountType) }}
+                                                </span>
                                             </label>
                                         </div>
                                     </div>

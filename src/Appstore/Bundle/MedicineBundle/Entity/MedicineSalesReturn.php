@@ -83,6 +83,14 @@ class MedicineSalesReturn
      */
     private $quantity;
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean" )
+     */
+    private $revised = false;
+
     /**
      * @var float
      *
@@ -375,6 +383,22 @@ class MedicineSalesReturn
 	public function setJournal( string $journal ) {
 		$this->journal = $journal;
 	}
+
+    /**
+     * @return bool
+     */
+    public function isAdjustment()
+    {
+        return $this->adjustment;
+    }
+
+    /**
+     * @param bool $adjustment
+     */
+    public function setAdjustment($adjustment)
+    {
+        $this->adjustment = $adjustment;
+    }
 
 }
 
