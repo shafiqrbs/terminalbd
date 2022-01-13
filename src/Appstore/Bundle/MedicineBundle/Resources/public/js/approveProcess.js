@@ -819,6 +819,7 @@ $(document).on( "click", "#globalMedicine", function(e){
     $('#medicineStock_name').focus();
 });
 
+
 $(document).on( "click", ".btn-number-day", function(e){
 
     e.preventDefault();

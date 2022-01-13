@@ -57,7 +57,8 @@
                                         <li><strong>Payment BDT:</strong>&nbsp;{{ entity.received|number_format() }}</li>
                                         {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
                                         {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
-                                        <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
+                                        <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
+                                        <li><strong>Customer Outstanding:&nbsp;{{  balance|number_format(2) }}</strong></li>
                                     </ul>
                                 </div>
                                 <div class="span4">
@@ -81,7 +82,7 @@
                                 <table class="table table-bordered table-striped table-condensed table-fixed">
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
-                                        {#<th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>#}
+                                        <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                                         <th class="numeric">Name</th>
                                         <th class="numeric">Price</th>
                                         <th class="numeric">Quantity</th>
@@ -89,26 +90,27 @@
                                         <th class="numeric" >Return Qnt</th>
                                         <th class="numeric" >Return price</th>
                                         <th class="numeric" >Return subTotal</th>
+                                        <th class="numeric" >Adjustment</th>
                                     </tr>
                                     </thead>
                                     <tbody id="">
                                     {% if entity.medicineSalesItems is not empty %}
                                         {% for item in entity.medicineSalesItems %}
-
                                             {% if item.medicineSalesReturns is empty %}
                                                 <tr>
-                                                    {#<td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>#}
+                                                    <td class="span1">{{ loop.index }}.</td>
                                                     <td class="">{{ item.medicineStock.name }}</td>
                                                     <td class="">{{ item.salesPrice }}</td>
                                                     <td class="">{{ item.quantity }}</td>
                                                     <td class="">{{ item.subTotal|number_format }}</td>
                                                     <td class="" >
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
-                                                        <input type="number" class="span10 numeric quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="" placeholder="{{ item.quantity }}"></td>
-                                                    <td class="span2" ><input type="number" class="span10 numeric price" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
+                                                        <input type="number" class="span10 numeric returnQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="" placeholder="{{ item.quantity }}"></td>
+                                                    <td class="span2" ><input type="number" class="span10 numeric returnPrice" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
                                                     <td>
                                                         <span id="subTotal-{{ item.id }}">0</span>
                                                     </td>
+                                                    <td><input type="checkbox" name="isAdjustment[]" id="isAdjustment-{{ item.id }}" value="1"></td>
                                                 </tr>
                                              {% else %}
                                                     <tr>
@@ -127,13 +129,14 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td colspan="3"><strong class="pull-right">Sub-Total</strong></td>
+                                        <td colspan="4"><strong class="pull-right">Sub-Total</strong></td>
                                         <td><strong>{{ entity.netTotal }}</strong></td>
                                         <td colspan="2"><strong class="pull-right">Return Sub-Total</strong></td>
                                         <td>
                                             <strong class="returnSubTotal"></strong>
                                             <input type="hidden" class="returnSubTotal"  id="returnTotal" value="0">
                                         </td>
+                                        <td></td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -141,7 +144,8 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
-                                  Adjustment: <input type="checkbox" name="isAdjustment" id="isAdjustment" value="1">  <button type="button" id="submitBtn"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                    <button type="reset" id=""  class="btn yellow"><i class="icon-save"></i>&nbsp;Reset</button>
+                                    <button type="button" id="submitBtn"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
                                 </div>
                             </div>
                             </form>
@@ -208,11 +212,20 @@
                                                 <td class="span1">
                                                     <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                                 </td>
-                                                <td class="" >{{ item.itemPercent }}</td>
-                                                <td class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
+                                                <td class="span1">
+                                                    <select class="td-inline-input itemPercent" id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}">
+                                                        <option value="0">Disc(%)</option>
+                                                        {% for per in discountPercentLists %}
+                                                            <option {% if item.itemPercent is defined and item.itemPercent == per %} selected="selected" {% endif %} value="per">{{ per }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                <th class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</th>
                                                 <td class="">
+                                                    <div class="btn-group">
                                                     <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
-                                                    <a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_temporary_item_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
+                                                    <a id="{{ item.id }}"  data-url="{{ path('medicine_sales_temporary_item_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         {% endfor %}
