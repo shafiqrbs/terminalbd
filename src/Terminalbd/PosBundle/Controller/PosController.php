@@ -316,12 +316,12 @@ class PosController extends Controller
             }else{
                 $entity->setSalesBy($this->getUser());
             }
-            if (isset($masterData['customerMobile']) and !empty($masterData['customerMobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($masterData['customerMobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($user->getGlobalOption(), $mobile, $masterData);
+            if (isset($data['customerMobile']) and !empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($user->getGlobalOption(), $mobile, $data);
                 $entity->setCustomer($customer);
-            } elseif (isset($masterData['mobile']) and !empty($masterData['mobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($masterData['mobile']);
+            } elseif (isset($data['mobile']) and !empty($data['mobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $user->getGlobalOption(), 'mobile' => $mobile));
                 $entity->setCustomer($customer);
             }else{

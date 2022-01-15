@@ -6,6 +6,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
@@ -77,7 +78,7 @@ class AccountSales
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountSales" )
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    private  $ecommerceOrder;
+    private  $order;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
@@ -862,20 +863,21 @@ class AccountSales
         $this->tloPrice = $tloPrice;
     }
 
+
     /**
-     * @return mixed
+     * @return Order
      */
-    public function getEcommerceOrder()
+    public function getOrder()
     {
-        return $this->ecommerceOrder;
+        return $this->order;
     }
 
     /**
-     * @param mixed $ecommerceOrder
+     * @param Order $order
      */
-    public function setEcommerceOrder($ecommerceOrder)
+    public function setOrder($order)
     {
-        $this->ecommerceOrder = $ecommerceOrder;
+        $this->order = $order;
     }
 
 

@@ -47,6 +47,7 @@ class AccountPurchaseReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn", inversedBy="accountPurchaseReturn" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchaseReturn;
 

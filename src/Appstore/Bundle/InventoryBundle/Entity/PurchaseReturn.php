@@ -32,6 +32,7 @@ class PurchaseReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseReturns" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchase;
 

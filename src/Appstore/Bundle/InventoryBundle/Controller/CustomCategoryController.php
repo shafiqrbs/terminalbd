@@ -141,20 +141,15 @@ class CustomCategoryController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getInventoryConfig();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$config,'id'=>$id));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
-
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:CustomCategory:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

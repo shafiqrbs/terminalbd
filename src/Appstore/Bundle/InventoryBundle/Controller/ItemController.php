@@ -2,11 +2,13 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Form\EditItemType;
 use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
 use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
+use Cassandra\Time;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -82,12 +84,17 @@ class ItemController extends Controller
      */
     public function createAction(Request $request)
     {
+        /* @var $inventory InventoryConfig  */
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getManager();
         $entity = new Item();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
+        $name = $data['item']['name'];
+        $categoryName = $data['item']['category'];
+        $brandName = (isset($data['item']['brand']) and $data['item']['brand']) ? $data['item']['brand'] :'';
+        $vendorName = (isset($data['item']['vendor']) and $data['item']['vendor']) ? $data['item']['vendor'] :'';
         if ($form->isValid()) {
             $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
             $barcode = isset($data['item']['barcode']) and $data['item']['barcode'] ? $data['item']['barcode']:'';
@@ -103,16 +110,30 @@ class ItemController extends Controller
             }else{
                 $entity->setInventoryConfig($inventory);
                 $entity->setMasterItem($checkData['masterItem']);
-                $category = $data['item']['category'];
-                if(empty($category)){
-                    $entity->setCategory($entity->getMasterItem()->getCategory());
+                if($inventory->getIsVendor() == 1){
+                    $vendor = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistVendor($inventory,$vendorName);
+                    $entity->setVendor($vendor);
                 }
+                if($inventory->getIsBrand() == 1){
+                    $brand = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistBrand($inventory,$brandName);
+                    $entity->setBrand($brand);
+                }
+                $category = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistCategory($inventory,$categoryName);
+                $entity->setCategory($category);
+                $masterItem = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistMasterItem($inventory,$category,$name);
+                $entity->setMasterItem($masterItem);
                 if(empty($entity->getItemUnit())){
                     $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                     $entity->setItemUnit($unit);
                     $entity->getMasterItem()->setProductUnit($unit);
                 }
-                if(empty($entity->getBarcode())){
+                if(empty($entity->getBarcode()) and empty($entity->getModel())){
+
+
+                    $time = new \DateTime();
+                    $bar = (int) $time->getTimestamp();
+                    $entity->setBarcode($bar);
+                }elseif(empty($entity->getBarcode()) and !empty($entity->getModel())){
                     $entity->setBarcode($entity->getModel());
                 }
                 $entity->upload();
@@ -125,9 +146,15 @@ class ItemController extends Controller
             }
         }
         $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
+        $brands = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
+        $vendors = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
+        $categories = $this->getDoctrine()->getRepository("ProductProductBundle:Category")->categoryInventoryTree($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity' => $entity,
             'items' => $items,
+            'categories' => $categories,
+            'vendors' => $vendors,
+            'brands' => $brands,
             'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
@@ -170,9 +197,15 @@ class ItemController extends Controller
         $entity = new Item();
         $form   = $this->createCreateForm($entity);
         $items = $this->getDoctrine()->getRepository("InventoryBundle:Product")->getMasterItems($inventory);
+        $categories = $this->getDoctrine()->getRepository("ProductProductBundle:Category")->categoryInventoryTree($inventory);
+        $brands = $this->getDoctrine()->getRepository("InventoryBundle:ItemBrand")->brandInventoryTree($inventory);
+        $vendors = $this->getDoctrine()->getRepository("InventoryBundle:Vendor")->vendorInventoryTree($inventory);
         return $this->render('InventoryBundle:Item:new.html.twig', array(
             'entity' => $entity,
             'items' => $items,
+            'categories' => $categories,
+            'vendors' => $vendors,
+            'brands' => $brands,
             'inventory' => $inventory,
             'form'   => $form->createView(),
         ));
