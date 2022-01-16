@@ -29,6 +29,7 @@ web/.htaccess
 
 # Composer
 composer.phar
+composer.json
 
 # IDE
 .idea/*
