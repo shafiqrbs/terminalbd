@@ -72,15 +72,17 @@
                                                 <input type="date" name="ecommerce_payment[deliveryDate]" id="deliveryDate" value="{{ entity.deliveryDate|date('Y-m-d') }}" class="m-wrap-custom span12 input-update">
                                                 </span>
                                             </li>
+                                            {% if timePeriods is defined and timePeriods is not empty %}
                                              <li><strong class="span4">Delivery Slot</strong>
                                                  <span class="span8">
                                                      <select  class="m-wrap-custom input-update span12" id="timePeriod" name="ecommerce_payment[timePeriod]" >
                                                          {% for slot in timePeriods %}
-                                                             <option {% if entity.timePeriod is defined and entity.timePeriod.id == slot.id %} selected="selected" {% endif %} value="{{ slot.id }}">{{ slot.name }}</option>
+                                                             <option {% if entity.timePeriod is defined and entity.timePeriod is not empty and entity.timePeriod.id == slot.id %} selected="selected" {% endif %} value="{{ slot.id }}">{{ slot.name }}</option>
                                                          {% endfor %}
                                                      </select>
                                                  </span>
                                              </li>
+                                            {% endif %}
                                             <li><strong class="span4">Process Status</strong>
                                                 <span class="span8">
                                                     {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm',delivered:'Delivered',returned:'Returned',cancel:'Cancel'} %}

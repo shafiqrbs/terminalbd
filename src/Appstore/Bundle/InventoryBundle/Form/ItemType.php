@@ -48,13 +48,14 @@ class ItemType extends AbstractType
 
         $builder
 
-            ->add('category', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select item category---',
-                'attr'=>array('class'=>'category m-wrap span12 select2'),
-                'class' => 'ProductProductBundle:Category',
-                'property' => 'nestedLabel',
-                'choices'=> $this->categoryChoiceList()
+
+            ->add('category', 'text', array(
+                'required'    => true,
+                'mapped'    => false,
+                'attr'=>array('class'=>'span12','list'=>'categories','autocomplete'=>'off'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                )
             ))
             ->add('inventoryConfig','hidden',
                 array(
@@ -103,9 +104,6 @@ class ItemType extends AbstractType
                 $builder
                     ->add('barcode', 'text', array(
                         'required'    => true,
-                        'constraints' =>array(
-                            new NotBlank(array('message'=>'Please input required'))
-                        ),
                         'attr'=>array('class'=>'span12 barcode')
                     ));
 
@@ -113,22 +111,14 @@ class ItemType extends AbstractType
             if($this->inventoryConfig->getIsVendor() == 1 ){
 
                 $builder
-                ->add('vendor', 'entity', array(
-                    'required'    => true,
-                    'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
-                    'empty_value' => '---Choose a vendor ---',
-                    'property' => 'companyName',
-                    'attr'=>array('class'=>'span12 select2'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please input required'))
-                    ),
-                    'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('v')
-                            ->where("v.status = 1")
-                            ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
-
-                    },
-                )) ;
+                    ->add('vendor', 'text', array(
+                        'required'    => true,
+                        'mapped'    => false,
+                        'attr'=>array('class'=>'span12','list'=>'vendors','autocomplete'=>'off'),
+                        'constraints' =>array(
+                            new NotBlank(array('message'=>'Please input required'))
+                        )
+                    ));
 
             }
             if($this->inventoryConfig->isModel() == 1 ){
@@ -186,20 +176,13 @@ class ItemType extends AbstractType
             if($this->inventoryConfig->getIsBrand() == 1 ) {
 
                 $builder
-                    ->add('brand', 'entity', array(
+                    ->add('brand', 'text', array(
                         'required'    => true,
-                        'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
-                        'empty_value' => '---Choose a brand ---',
-                        'property' => 'name',
-                        'attr'=>array('class'=>'span12 select2'),
+                        'mapped'    => false,
+                        'attr'=>array('class'=>'span12','list'=>'brands','autocomplete'=>'off'),
                         'constraints' =>array(
                             new NotBlank(array('message'=>'Please input required'))
-                        ),
-                        'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('v')
-                                ->where("v.status = 1")
-                                ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
-                        },
+                        )
                     ));
 
             }

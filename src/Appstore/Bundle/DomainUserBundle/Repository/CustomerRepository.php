@@ -111,10 +111,6 @@ class CustomerRepository extends EntityRepository
         if($entity){
             $entity->setAddress($address);
             if($email){ $entity->setEmail($email); }
-            if(!empty($data['location'])){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
-                $entity->setLocation($location);
-            }
             $em->flush($entity);
             return $entity;
         }else{
@@ -124,10 +120,6 @@ class CustomerRepository extends EntityRepository
             $entity->setAddress($address);
             if($email){$entity->setEmail($email); }
             $entity->setGlobalOption($globalOption);
-            if(!empty($data['location'])){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($data['location']);
-                $entity->setLocation($location);
-            }
             $em->persist($entity);
             $em->flush($entity);
             return $entity;

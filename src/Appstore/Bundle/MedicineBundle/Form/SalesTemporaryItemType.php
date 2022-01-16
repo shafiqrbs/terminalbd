@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\MedicineBundle\Form;
 
+use Appstore\Bundle\InventoryBundle\Repository\SalesItemRepository;
+use Appstore\Bundle\MedicineBundle\Repository\MedicineSalesItemRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -14,13 +16,18 @@ class SalesTemporaryItemType extends AbstractType
 {
 
 
-    /** @var  GlobalOption */
+    /** @var  $globalOption GlobalOption */
     private $globalOption;
 
+    /** @var $em MedicineSalesItemRepository */
+    private $em;
 
-    function __construct(GlobalOption $globalOption)
+
+
+    function __construct(GlobalOption $globalOption, MedicineSalesItemRepository $em)
     {
-        $this->globalOption     = $globalOption;
+        $this->glodbalOption     = $globalOption;
+        $this->em     = $em;
         $this->config     = $globalOption->getMedicineConfig();
     }
 
@@ -41,28 +48,7 @@ class SalesTemporaryItemType extends AbstractType
                 'mapped' => false,
                 'required'    => false,
                 'multiple'      =>false,
-                'choices' => array(
-                    1=>1,
-                    2=>2,
-                    3=>3,
-                    4=>4,
-                    5=>5,
-                    6=>6,
-                    7=>7,
-                    8=>8,
-                    9=>9,
-                    10=>10,
-                    11=>11,
-                    12=>12,
-                    13=>13,
-                    14=>14,
-                    15=>15,
-                    16=>16,
-                    17=>17,
-                    18=>18,
-                    19=>19,
-                    20=>20,
-                ),
+                'choices' => $this->discountPercentList()
             ))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','autocomplete'=>'off','placeholder'=>'MRP')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','autocomplete'=>'off','placeholder'=>'quantity')))
@@ -77,6 +63,12 @@ class SalesTemporaryItemType extends AbstractType
                     'choices' => array(),
                 ));
             }
+    }
+
+    public function discountPercentList()
+    {
+        return $this->em->discountPercentList();
+
     }
 
     /**

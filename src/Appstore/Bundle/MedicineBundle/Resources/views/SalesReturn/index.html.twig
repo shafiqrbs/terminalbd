@@ -46,10 +46,9 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
-
+                                    <th class="numeric" >Customer</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric span4" >Medicine Name </th>
-                                    {#<th class="numeric" >Barcode </th>#}
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >SubTotal</th>
@@ -57,6 +56,7 @@
                                     <th class="numeric" >Return Price</th>
                                     <th class="numeric" >SubTotal</th>
                                     <th class="numeric" >Journal</th>
+                                    <th class="numeric" >Adjustment</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -65,9 +65,9 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.medicineSalesItem.medicineSales.customer.name }}</td>
                                         <td class="numeric" >{{ entity.medicineSalesItem.medicineSales.invoice }}</td>
                                         <td class="numeric" >{{ entity.medicineStock.name }}</td>
-                                        {#<td class="numeric" >{{ entity.medicinePurchaseItem.barcode }}</td>#}
                                         <td class="numeric" >{{ entity.medicineSalesItem.quantity }}</td>
                                         <td class="numeric" >{{ entity.medicineSalesItem.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.medicineSalesItem.subTotal }}</td>
@@ -75,6 +75,7 @@
                                         <td class="numeric" >{{ entity.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.journal }}</td>
+                                        <td class="numeric" >{% if entity.isAdjustment %} Adjustment {% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved' %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('medicine_sales_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>

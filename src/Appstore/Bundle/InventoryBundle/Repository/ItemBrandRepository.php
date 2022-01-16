@@ -28,6 +28,15 @@ class ItemBrandRepository extends EntityRepository
 
     }
 
+    function brandInventoryTree($config){
+
+        $sql = "SELECT name FROM ItemBrand WHERE  inventoryConfig_id ={$config->getId()}";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        return $results;
+    }
+
     public function searchAutoComplete($q, InventoryConfig $inventory)
     {
         $query = $this->createQueryBuilder('e');

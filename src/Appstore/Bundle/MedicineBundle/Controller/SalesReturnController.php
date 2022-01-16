@@ -36,17 +36,24 @@ class SalesReturnController extends Controller
 
     public function newAction(MedicineSalesItem $item){
 
+        $balance = 0;
 	    $user = $this->getUser();
 	    $entity = new MedicineSales();
     	$salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
 	    $editForm = $this->createCreateForm($entity);
 	    $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-
-	    return $this->render('MedicineBundle:SalesReturn:new.html.twig', array(
+        $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
+        if($entity->getCustomer()){
+            $outstanding = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($this->getUser()->getGlobalOption(),$entity->getCustomer());
+            $balance = empty($outstanding) ? 0 : $outstanding;
+        }
+        return $this->render('MedicineBundle:SalesReturn:new.html.twig', array(
             'entity' => $item->getMedicineSales(),
             'salesItem' => $salesItemForm->createView(),
             'form' => $editForm->createView(),
             'user'   => $user,
+            'discountPercentLists'   => $discountPercentLists,
+            'balance'   => $balance,
             'result'   => $result,
         ));
     }
@@ -54,7 +61,8 @@ class SalesReturnController extends Controller
 	private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
 	{
         $globalOption = $this->getUser()->getGlobalOption();
-	    $form = $this->createForm(new SalesTemporaryItemType($globalOption), $salesItem, array(
+        $em = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem');
+	    $form = $this->createForm(new SalesTemporaryItemType($globalOption,$em), $salesItem, array(
 			'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
 			'method' => 'POST',
 			'attr' => array(
@@ -93,13 +101,15 @@ class SalesReturnController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $data = $request->request->all();
-        $adjustment = isset($data['adjustment']) ? $data['adjustment']:0;
         foreach ($data['quantity'] as $key => $qnt) {
         	if($qnt > 0 ){
-		        $entity = new MedicineSalesReturn();
+                $adj = "isAdjustment-{[$key]}";
+        	    $adjustment = isset($adj) ? 1:0;
+                $entity = new MedicineSalesReturn();
 		        $salesItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->find($data['salesItem'][$key]);
 		        $entity->setMedicineConfig($config);
 		        $entity->setQuantity($qnt);
+		        $entity->setAdjustment($adjustment);
 		        $entity->setMedicineStock($salesItem->getMedicineStock());
 		        if($salesItem->getMedicinePurchaseItem()){
 			        $entity->setMedicinePurchaseItem($salesItem->getMedicinePurchaseItem());
@@ -123,7 +133,6 @@ class SalesReturnController extends Controller
         return $this->redirect($this->generateUrl('medicine_sales_return'));
 
     }
-
 
     public function deleteAction($id)
     {
@@ -157,15 +166,15 @@ class SalesReturnController extends Controller
                 $em->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountSalesReturn($entity);
             }else{
                 $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertMedicineAccountSalesReturn($entity);
+                $entity->setJournal($journal);
             }
             $entity->setProcess('approved');
-            $entity->setJournal($journal);
             $em->flush();
 	        return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
+        return new Response('success');
 
     }
 

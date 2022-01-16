@@ -6,6 +6,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -13,8 +15,10 @@ use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -929,6 +933,73 @@ class ItemRepository extends EntityRepository
         $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
         $qb1->bindValue('config', $to);
         $qb1->execute();
+    }
+
+    public function getExistVendor($inventory,$name)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name));
+        if($exist){
+            return $exist;
+        }else{
+            $entity = new Vendor();
+            $entity->setCompanyName($name);
+            $entity->setName($name);
+            $entity->setVendorCode($name);
+            $em->persist($entity);
+            $em->flush();
+            return  $entity;
+        }
+    }
+
+    public function getExistBrand($inventory,$name)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('InventoryBundle:ItemBrand')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name));
+        if($exist){
+            return $exist;
+        }else{
+            $entity = new ItemBrand();
+            $entity->setInventoryConfig($inventory);
+            $entity->setName($name);
+            $em->persist($entity);
+            $em->flush();
+            return  $entity;
+        }
+    }
+
+    public function getExistCategory($inventory,$name)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name,'level'=>2));
+        if($exist){
+            return $exist;
+        }else{
+            $entity = new Category();
+            $entity->setInventoryConfig($inventory);
+            $entity->setName($name);
+            $em->persist($entity);
+            $em->flush();
+            return  $entity;
+        }
+    }
+
+
+    public function getExistMasterItem($inventory,$category,$name)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('InventoryBundle:ItemBrand')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name));
+        if($exist){
+            return $exist;
+        }else{
+            $entity = new Product();
+            $entity->setInventoryConfig($inventory);
+            $entity->setName($name);
+            $entity->setCategory($category);
+            $em->persist($entity);
+            $em->flush();
+            return  $entity;
+        }
     }
 
 

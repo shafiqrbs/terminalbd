@@ -819,6 +819,13 @@ $(document).on( "click", "#globalMedicine", function(e){
     $('#medicineStock_name').focus();
 });
 
+$(document).on( "click", "#genericStockShow", function(e){
+    $('#generic-stock-hide').slideToggle(2000);
+    $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
+    $('#medicineStock_name').focus();
+});
+
+
 $(document).on( "click", ".btn-number-day", function(e){
 
     e.preventDefault();

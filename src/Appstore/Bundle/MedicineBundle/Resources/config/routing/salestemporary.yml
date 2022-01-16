@@ -24,6 +24,13 @@ medicine_sales_barcode_search:
     options:
             expose: true
 
+medicine_sales_generic_stock:
+    path:     /{id}/generic-stock-item
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStockAction" }
+    methods:  GET
+    options:
+            expose: true
+
 
 medicine_sales_temporary_discount_update:
     path:     /dicount-update

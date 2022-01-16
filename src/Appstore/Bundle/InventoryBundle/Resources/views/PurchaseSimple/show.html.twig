@@ -110,6 +110,7 @@
                                         <th class="numeric" >Item</th>
                                         {% if entity.inventoryConfig.isAttribute == 1 %}
                                         <th class="numeric" >Serial No</th>
+                                        <th class="numeric" >Expired</th>
                                         {% endif %}
                                         <th class="numeric" >Qnt</th>
                                         <th class="numeric" >Process Qnt</th>
@@ -127,6 +128,7 @@
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                             {% if entity.inventoryConfig.isAttribute == 1 %}
                                             <td class="numeric" >{{ purchaseItem.serialNo|raw }}</td>
+                                            <td class="numeric" >{% if purchaseItem.expiredDate %}{{ purchaseItem.expiredDate|date('m-Y') }}{% endif %}</td>
                                             {% endif %}
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                             <td class="numeric" >{% if processItem[purchaseItem.id] is defined %}{{ processItem[purchaseItem.id] }}{% endif %}</td>

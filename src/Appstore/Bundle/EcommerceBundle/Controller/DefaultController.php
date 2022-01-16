@@ -69,4 +69,23 @@ class DefaultController extends Controller
         ));
 
     }
+
+    public function categoryDeleteAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $StockItem = $em->createQuery('DELETE ProductProductBundle:Category e WHERE e.ecommerceConfig = '.$config);
+        $StockItem->execute();
+        return $this->redirect($this->generateUrl('ecommerce_item'));
+    }
+
+    public function itemDeleteAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $em = $this->getDoctrine()->getManager();
+        $StockItem = $em->createQuery('DELETE EcommerceBundle:Item e WHERE e.ecommerceConfig = '.$config);
+        $StockItem->execute();
+        return $this->redirect($this->generateUrl('ecommerce_item'));
+
+    }
 }

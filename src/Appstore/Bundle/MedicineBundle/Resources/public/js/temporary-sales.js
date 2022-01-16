@@ -93,11 +93,70 @@ $(document).on("change", "#barcode", function() {
     });
 });
 
+
+
+
+
 function jqueryTemporaryLoad() {
 
 
     $('#salesTemporary_received').click(function() {
         $('#salesTemporary_received').attr('value', '');
+    });
+
+    $(".selectStock2Generic").select2({
+
+        placeholder: "Search generic by stock medicine",
+        ajax: {
+            url: Routing.generate('medicine_generic_stock_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    pram: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength:2,
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('medicine_sales_generic_stock', { id : id}), {
+                dataType: "json"
+            }).done(function (response) {
+                obj = JSON.parse(response);
+                $("#addTemporaryItem").attr("disabled", true);
+                $('#invoiceParticulars').html(obj['salesItems']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#grandTotal').html(obj['initialGrandTotal']);
+                $('.discount').html(obj['initialDiscount']);
+                $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
+                $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
+                $('#salesTemporary_discount').val(obj['initialDiscount']);
+                $('#salesTemporary_due').val(obj['initialGrandTotal']);
+                $('#barcode').focus().val('');
+            });
+
+        },
+
     });
 
 
@@ -204,18 +263,21 @@ function jqueryTemporaryLoad() {
         }
     });
 
-    $(document).on('change', '.quantity , .salesPrice', function() {
+    $(document).on('change', '.quantity , .salesPrice, .itemPercent', function() {
 
         var id = $(this).attr('data-id');
         var quantity = parseFloat($('#quantity-'+id).val());
         var price = parseFloat($('#salesPrice-'+id).val());
-        var subTotal  = (quantity * price);
+        var estimatePrice = parseFloat($('#estimatePrice-'+id).val());
+        var itemPercent = parseFloat($('#itemPercent-'+id).val());
+        var amount = (estimatePrice-(estimatePrice*itemPercent/100));
+        var subTotal  = (quantity * amount);
         $("#subTotal-"+id).html(subTotal);
 
         $.ajax({
             url: Routing.generate('medicine_sales_temporary_item_update'),
             type: 'POST',
-            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price,
+            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price+'&itemPercent='+ itemPercent,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#subTotal').html(obj['subTotal']);
@@ -475,7 +537,7 @@ function jqueryTemporaryLoad() {
 
     $(".select2StockMedicine").select2({
 
-        placeholder: "Search vendor name",
+        placeholder: "Search medicine name",
         ajax: {
             url: Routing.generate('medicine_stock_search'),
             dataType: 'json',
@@ -771,50 +833,6 @@ function jqueryInstantTemporaryLoad(){
         changeMonth: true,
         changeYear: true,
     });
-
-    $(".selectStock2Generic").select2({
-
-        placeholder: "Search generic by stock medicine",
-        ajax: {
-            url: Routing.generate('medicine_generic_stock_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    pram: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        allowClear: true,
-        minimumInputLength:2,
-        initSelection: function (element, callback) {
-            var customer = $(element).val();
-            alert(customer);
-            $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-        },
-
-    });
-
 
 
 }

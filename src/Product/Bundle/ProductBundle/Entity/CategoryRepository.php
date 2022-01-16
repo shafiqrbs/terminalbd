@@ -918,6 +918,15 @@ class CategoryRepository extends MaterializedPathRepository
         return $items;
     }
 
+    function categoryInventoryTree($config){
+
+        $sql = "SELECT name FROM categories WHERE  inventoryConfig_id ={$config->getId()}";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results =  $stmt->fetchAll();
+        return $results;
+    }
+
     public function selectCategoryTree( $category , $spacing = '--', $items = '' ) {
 
         if (!is_array($items))

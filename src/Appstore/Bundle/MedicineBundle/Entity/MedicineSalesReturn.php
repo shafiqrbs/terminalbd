@@ -87,9 +87,9 @@ class MedicineSalesReturn
     /**
      * @var boolean
      *
-     * @ORM\Column(name="revised", type="boolean" )
+     * @ORM\Column(name="adjustment", type="boolean" )
      */
-    private $revised = false;
+    private $adjustment = false;
 
     /**
      * @var float

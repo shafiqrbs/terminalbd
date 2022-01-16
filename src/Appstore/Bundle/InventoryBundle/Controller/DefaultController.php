@@ -152,4 +152,31 @@ class DefaultController extends Controller
 
     }
 
+
+    public function categoryDeleteAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $StockItem = $em->createQuery('DELETE ProductProductBundle:Category e WHERE e.inventoryConfig = '.$config);
+        $StockItem->execute();
+        return $this->redirect($this->generateUrl('item'));
+    }
+    public function masterItemDeleteAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $em = $this->getDoctrine()->getManager();
+        $StockItem = $em->createQuery('DELETE InventoryBundle:Product e WHERE e.inventoryConfig = '.$config);
+        $StockItem->execute();
+        return $this->redirect($this->generateUrl('item'));
+    }
+    public function stockItemDeleteAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $em = $this->getDoctrine()->getManager();
+        $StockItem = $em->createQuery('DELETE InventoryBundle:Item e WHERE e.inventoryConfig = '.$config);
+        $StockItem->execute();
+        return $this->redirect($this->generateUrl('item'));
+
+    }
+
 }

@@ -390,13 +390,10 @@ class SalesOnlineController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
-
             } elseif(!empty($data['mobile'])) {
-
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
                 $entity->setCustomer($customer);
-
             }
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
@@ -675,11 +672,12 @@ class SalesOnlineController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'invoice'=>$invoice));
+
         $barcode = $this->getBarcode($entity->getInvoice());
         $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
         $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
         if($inventory->isCustomPrint() == 1){
-            $print = $this->getUser()->getGlobalOption()->getSlug();
+            $print = $this->getUser()->getGlobalOption()->getSubDomain();
         }else{
             $print = 'invoice';
         }

@@ -75,7 +75,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $entity->setSalesPrice($stockItem->getSalesprice());
             $entity->setEstimatePrice($stockItem->getSalesprice());
 	        $entity->setSubTotal( round(($entity->getSalesPrice()), 2 ) );
-	        $entity->setUser( $user );
+	        $entity->setUser($user);
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
 	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
@@ -95,6 +95,16 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $entity = $invoiceParticular;
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($data['salesPrice']);
+            $entity->setItemPaercent($data['itemPercent']);
+            if($data['itemPercent'] > 0){
+                $entity->setItemPercent( $data['itemPercent'] );
+                $salesPrice = $data['salesPrice'];
+                $initialDiscount = (($salesPrice *  $data['itemPercent'])/100);
+                $initialGrandTotal =($salesPrice  - $initialDiscount);
+                $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+            }else{
+                $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+            }
             $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
         }
         $em->persist($entity);

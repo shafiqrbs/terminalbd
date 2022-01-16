@@ -123,7 +123,7 @@ class SalesOnlineType extends AbstractType
           //  ->add('discount','hidden')
             ->add('process', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span10 m-wrap inputs'),
+                'attr'=>array('class'=>'span9 m-wrap inputs'),
                 'empty_value' => '---Choose current process---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select current process'))

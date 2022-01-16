@@ -259,10 +259,9 @@ class PurchaseItemController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('inventory_purchaseitem_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $entity->getPurchase()->getId())));
         }
 
         return $this->render('InventoryBundle:PurchaseItem:new.html.twig', array(

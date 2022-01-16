@@ -14,7 +14,7 @@ $(document).on("click", "#submitBtn", function() {
     });
 });
 
-$(document).on('keyup', '.quantity , .price', function() {
+$(document).on('keyup', '.returnQuantity , .returnPrice', function() {
 
     var returnSubTotal     = parseFloat($('#returnTotal').val()  != '' ? $('#returnTotal').val() : 0 );
     var id = $(this).attr('data-id');

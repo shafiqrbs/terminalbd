@@ -44,10 +44,12 @@ class MedicineSalesTemporaryController extends Controller
             'result'        => $result,
         ));
         return New Response($html);*/
+        $discountPercentList = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         return $this->render('MedicineBundle:Sales:pos.html.twig', array(
             'entity'        => $entity,
             'salesItem'     => $salesItemForm->createView(),
             'form'          => $editForm->createView(),
+            'discountPercentLists'          => $discountPercentList,
             'user'          => $user,
             'config'        => $config,
             'result'        => $result,
@@ -80,7 +82,8 @@ class MedicineSalesTemporaryController extends Controller
     private function createMedicineSalesItemForm(MedicineSalesItem $salesItem )
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new SalesTemporaryItemType($globalOption), $salesItem, array(
+        $em = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem');
+        $form = $this->createForm(new SalesTemporaryItemType($globalOption,$em), $salesItem, array(
             'action' => $this->generateUrl('medicine_sales_temporary_item_add'),
             'method' => 'POST',
             'attr' => array(
@@ -224,10 +227,15 @@ class MedicineSalesTemporaryController extends Controller
 
     public function returnResultData(User $user,$msg=''){
 
-        $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
+       // $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
         $total = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
 	    $subTotal = floor($total['subTotal']);
 	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
+        $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
+        $salesItems = $this->renderView('MedicineBundle:Sales:ajaxPosItem.html.twig', array(
+            'user'        => $user,
+            'discountPercentLists'=> $discountPercentLists
+        ));
         $data = array(
            'subTotal' => $subTotal,
            'purchaseSubTotal' => $purchaseSubTotal,
@@ -268,8 +276,19 @@ class MedicineSalesTemporaryController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
+    }
 
-
+    public function addGenericStockAction($id)
+    {
+        $user = $this->getUser();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $stock = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->findOneBy(array('medicineConfig'=>$config,'id'=>$id));
+        if($stock){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertBarcodeInvoiceItems($user, $stock);
+        }
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
     }
 
     public function invoiceItemUpdateAction(Request $request)

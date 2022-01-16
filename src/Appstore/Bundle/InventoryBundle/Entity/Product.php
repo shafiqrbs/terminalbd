@@ -55,6 +55,7 @@ class Product implements CodeAwareEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="masterProducts" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $category;
 

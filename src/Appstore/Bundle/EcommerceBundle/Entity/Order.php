@@ -59,6 +59,7 @@ class Order
      **/
     private  $orderPayments;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\CourierService", inversedBy="orders" )
      **/
