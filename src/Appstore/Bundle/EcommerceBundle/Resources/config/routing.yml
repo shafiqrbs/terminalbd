@@ -73,3 +73,12 @@ ecommerce_item_attribute:
 ecommerce_dashboard:
     path:     /
     defaults: { _controller: "EcommerceBundle:Default:index" }
+
+ecommerce_item_delete:
+    path:     /item-delete
+    defaults: { _controller: "EcommerceBundle:Default:itemDelete" }
+
+ecommerce_category_delete:
+    path:     /category-delete
+    defaults: { _controller: "EcommerceBundle:Default:categoryDelete" }
+

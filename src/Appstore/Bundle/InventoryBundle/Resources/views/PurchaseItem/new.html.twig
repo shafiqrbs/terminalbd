@@ -40,7 +40,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="red btn" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
-                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':purchaseInfo.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a>
+                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':purchaseInfo.id}) }}"><i class="icon-skip-back"></i>&nbsp;Back To</a>
                                 <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
                             </div>
                         </div>
@@ -61,7 +61,6 @@
                                         {% if purchaseInfo.vendor.country %}
                                         <li>{{ purchaseInfo.vendor.country.name }}</li>
                                         {% endif %}
-
                                     </ul>
                                 </div>
                                 <div class="span4">
@@ -78,10 +77,10 @@
                                     <h4>Payment Details:</h4>
                                     <ul class="unstyled">
 
-                                        <li><strong>Total BDT:</strong> {{ purchaseInfo.totalAmount|number_format() }}</li>
-                                        <li><strong>Payment BDT:</strong> {{ purchaseInfo.paymentAmount|number_format() }}</li>
-                                        <li><strong>Due BDT:</strong> {{ purchaseInfo.dueAmount|number_format() }}</li>
-                                        <li><strong>Commission BDT:</strong> {{ purchaseInfo.commissionAmount|number_format() }}</li>
+                                        <li><strong>Total BDT:</strong> {{ purchaseInfo.totalAmount|number_format(2) }}</li>
+                                        <li><strong>Payment BDT:</strong> {{ purchaseInfo.paymentAmount|number_format(2) }}</li>
+                                        <li><strong>Due BDT:</strong> {{ purchaseInfo.dueAmount|number_format(2) }}</li>
+                                        <li><strong>Commission BDT:</strong> {{ purchaseInfo.commissionAmount|number_format(2) }}</li>
 
 
                                     </ul>
@@ -95,7 +94,7 @@
                             {{ form_row(form._token) }}
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i> Purchase Item: {{ entity.item.name }}-{{ entity.barcode }}</div>
+                                    <div class="caption"><i class="icon-reorder"></i> Purchase Item: {{ entity.item.name }}-{{ entity.barcode }} : Quantity - {{ entity.quantity }}</div>
                                 </div>
                              </div>
                             <div class="clearfix"><br/></div>

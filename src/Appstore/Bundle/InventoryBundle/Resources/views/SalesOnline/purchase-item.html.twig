@@ -302,12 +302,7 @@
                                 <div class="clearfix"></div>
                                 <div class="row-fluid customer">
                                     <div class="span12">
-                                        <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
-                                    </div>
-                                </div>
-                                <div class="row-fluid customer">
-                                    <div class="span12">
-                                        <input style="margin-left:0!important;" type="text" id="location" name="location" class="m-wrap span12 customer-input select2Location" autocomplete="off" placeholder="Customer location" value="">
+                                        <input type="text" id="customerMobile" style="margin-top: 8px" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
@@ -331,7 +326,7 @@
                                             <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                             <div class="row-fluid">
                                                 <div class="input-append span12 ">
-                                                    <div class="btn-group">
+                                                    <div>
                                                         {{ form_widget(form.process) }}
                                                         {{ form_errors(form.process) }}
                                                         <input type="hidden" name="total" id="total" value="{{ entity.total }}">

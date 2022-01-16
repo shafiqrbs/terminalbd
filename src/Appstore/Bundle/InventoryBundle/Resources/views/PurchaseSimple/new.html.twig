@@ -37,9 +37,9 @@
                     <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn red" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></>
-                            <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a></>
-                            <a class="btn yellow" id="addInventory" href="javascript:"><i class="icon-plus-sign"></i>&nbsp; Add Inventory Item</a>
+                            <a class="btn red" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                            <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
+                            <a class="btn yellow" target="_blank"  href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Stock Item</a>
 
                         </div>
                     </div>
@@ -50,68 +50,6 @@
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
-                        <form class="search-form" action="{{ path('inventory_purchasesimple_create_stock_item') }}" method="get" name="inventoryItem" id="inventoryItem">
-                            <div class="row-fluid">
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label" for="masterItem">Master item<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <input type="text" id="masterItem" name="masterItem" required="required"  class="span12 m-wrap" value=""  autocomplete="off" placeholder="Item name">
-                                        </div>
-                                    </div>
-                                </div>
-                                {% if entity.inventoryConfig.isColor ==1  %}
-                                    <div class="span2">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Color<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <input type="text" id="color" name="color" required="required"  class="span12 m-wrap select2Color" value=""  autocomplete="off" placeholder="Color name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% if entity.inventoryConfig.isSize ==1  %}
-                                    <div class="span2">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Size/Dimension/Weight<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <input type="text" id="size" name="size" required="required"  class="span12 m-wrap select2Size" value=""  autocomplete="off" placeholder="Size name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% if entity.inventoryConfig.isVendor ==1  %}
-                                    <div class="span4">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Vendor<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <input type="text" id="vendor" name="vendor" required="required"  class="span12 m-wrap select2Vendor" value=""  autocomplete="off" placeholder="Vendor name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                {% if entity.inventoryConfig.isBrand ==1  %}
-                                    <div class="span4">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Brand<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <input type="text" id="brand" name="brand"  class="span12 m-wrap select2Brand" value=""  autocomplete="off" placeholder="Brand name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                        <!--/span-->
-                        <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box grey">
-                            <div class="pull-right">
-                                <button type="button" id="addStockItem" class="btn green"><i class="icon-save"></i> Create Stock Item</button>
-                            </div>
-                        </div>
-                        </form> <!--/span-->
-                        <div class="clearfix"><br/></div>
-
                         <div class="row-fluid">
                             <div class="span2">
                                 <div class="control-group">

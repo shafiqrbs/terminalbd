@@ -40,7 +40,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="red btn" href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
-                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a>
+                                <a class="btn yellow" href="{{ path('inventory_purchasesimple_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Back To</a>
                                 <a class="btn" href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Purchase</a>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                                                     <div class="controls">
                                                         <div class="input-icon left">
                                                             <i class="icon-calendar"></i>
-                                                            <input type="text" id="expiredDate-{{ purchaseItem.id }}" name="expiredDate[]" value="{{ purchaseItem.expiredDate|date('d-m-Y') }}" class="m-wrap span12 dateCalendar">
+                                                            <input type="text" id="expiredDate-{{ purchaseItem.id }}" name="expiredDate[]" value="{% if purchaseItem.expiredDate %}{{ purchaseItem.expiredDate|date('d-m-Y') }}{% endif %}" class="m-wrap span12 dateCalendar">
                                                         </div>
                                                     </div>
                                                 </div>

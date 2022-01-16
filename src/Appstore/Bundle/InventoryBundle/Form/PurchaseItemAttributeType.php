@@ -22,6 +22,7 @@ class PurchaseItemAttributeType extends AbstractType
             ->add('serialNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Attribute name')))
             ->add('expiredDate', 'date', array(
                 'widget' => 'single_text',
+                'required' => 'false',
                 'placeholder' => array(
                     'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
 
@@ -51,6 +52,7 @@ class PurchaseItemAttributeType extends AbstractType
                     'Others' => 'Others',
 
                 ),
+                'data' => $options->getData() ?: '1 Year'
             ))
             ->add('assuranceToCustomer', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),
@@ -72,6 +74,7 @@ class PurchaseItemAttributeType extends AbstractType
                     'Life Time' => 'Life Time',
                     'Others' => 'Others',
                 ),
+                'data' => $options->getData() ? : '1 Year'
             ))
             ->add('assuranceType', 'choice', array(
                 'attr'=>array('class'=>'span12 m-wrap'),

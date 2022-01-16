@@ -237,7 +237,7 @@ class Item
      */
     private $webPrice;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="overHeadCost", type="decimal", nullable = true)
@@ -299,6 +299,58 @@ class Item
      * @ORM\Column(name="minQuantity", type="integer", nullable = true)
      */
     private $minQuantity = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseQuantity", type="integer", nullable = true)
+     */
+    private $purchaseQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer", nullable = true)
+     */
+    private $salesQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseReturnQuantity", type="integer", nullable = true)
+     */
+    private $purchaseReturnQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesReturnQuantity", type="integer", nullable = true)
+     */
+    private $salesReturnQuantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer", nullable = true)
+     */
+    private $remainingQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="damageQuantity", type="integer", nullable = true)
+     */
+    private $damageQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="adjustmentQuantity", type="integer", nullable = true)
+     */
+    private $adjustmentQuantity;
+
+
 
     /**
      * @var boolean
@@ -1389,6 +1441,38 @@ class Item
             $name = $this->getWebName();
         }
         return $name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseQuantity()
+    {
+        return $this->purchaseQuantity;
+    }
+
+    /**
+     * @param int $purchaseQuantity
+     */
+    public function setPurchaseQuantity($purchaseQuantity)
+    {
+        $this->purchaseQuantity = $purchaseQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
     }
 
 

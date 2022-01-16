@@ -376,6 +376,7 @@ class UserRepository extends EntityRepository
                 'ROLE_ECOMMERCE'                            => 'E-commerce',
                 'ROLE_DOMAIN_ECOMMERCE_PRODUCT'             => 'E-commerce Product',
                 'ROLE_DOMAIN_ECOMMERCE_ORDER'               => 'E-commerce Order',
+                'ROLE_DOMAIN_ECOMMERCE_PURCHASE'            => 'E-commerce Purchase',
                 'ROLE_DOMAIN_ECOMMERCE_MANAGER'             => 'E-commerce Manager',
                 'ROLE_DOMAIN_ECOMMERCE_VENDOR'              => 'E-commerce Vendor',
                 'ROLE_DOMAIN_ECOMMERCE_REPORT'              => 'E-commerce Report',
