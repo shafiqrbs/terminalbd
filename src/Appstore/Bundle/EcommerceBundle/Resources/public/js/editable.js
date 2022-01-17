@@ -32,8 +32,8 @@ var EditableInit = function () {
             select: function( event, ui ) {
         },
         change: function (event, ui) {
-            $("#medicineId").val(ui.item.id); // save selected id to hidden input
-            alert("changed!");
+            user = $("#customerMobile").val(ui.term.id); // save selected id to hidden input
+            console.log(user);
         }
     });
 }

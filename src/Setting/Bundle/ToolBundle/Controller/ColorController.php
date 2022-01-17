@@ -3,48 +3,46 @@
 namespace Setting\Bundle\ToolBundle\Controller;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Setting\Bundle\ToolBundle\Entity\ProductColor;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
 use Setting\Bundle\ToolBundle\Form\ColorType;
 
 /**
- * ItemColor controller.
+ * ProductColor controller.
  *
  */
 class ColorController extends Controller
 {
 
     /**
-     * Lists all ItemColor entities.
+     * Lists all ProductColor entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('isValid'=> 1),array('name'=>'asc'));
+        $entities = $em->getRepository('SettingToolBundle:ProductColor')->findBy(array('isValid'=> 1),array('name'=>'asc'));
         return $this->render('SettingToolBundle:Color:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new ItemColor entity.
+     * Creates a new ProductColor entity.
      *
      */
 
     public function createAction(Request $request)
     {
-        $entity = new ItemColor();
+        $entity = new ProductColor();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventory);
             $entity->setStatus(false);
             $em->persist($entity);
             $em->flush();
@@ -61,13 +59,13 @@ class ColorController extends Controller
     }
 
     /**
-     * Creates a form to create a ItemColor entity.
+     * Creates a form to create a ProductColor entity.
      *
-     * @param ItemColor $entity The entity
+     * @param ProductColor $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ItemColor $entity)
+    private function createCreateForm(ProductColor $entity)
     {
         $form = $this->createForm(new ColorType(), $entity, array(
             'action' => $this->generateUrl('color_create'),
@@ -81,12 +79,12 @@ class ColorController extends Controller
     }
 
     /**
-     * Displays a form to create a new ItemColor entity.
+     * Displays a form to create a new ProductColor entity.
      *
      */
     public function newAction()
     {
-        $entity = new ItemColor();
+        $entity = new ProductColor();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingToolBundle:Color:new.html.twig', array(
@@ -96,17 +94,17 @@ class ColorController extends Controller
     }
 
     /**
-     * Finds and displays a ItemColor entity.
+     * Finds and displays a ProductColor entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemColor')->find($id);
+        $entity = $em->getRepository('SettingToolBundle:ProductColor')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ItemColor entity.');
+            throw $this->createNotFoundException('Unable to find ProductColor entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -118,17 +116,17 @@ class ColorController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing ItemColor entity.
+     * Displays a form to edit an existing ProductColor entity.
      * @Secure(roles="ROLE_ADMIN")
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemColor')->find($id);
+        $entity = $em->getRepository('SettingToolBundle:ProductColor')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ItemColor entity.');
+            throw $this->createNotFoundException('Unable to find ProductColor entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -142,13 +140,13 @@ class ColorController extends Controller
     }
 
     /**
-    * Creates a form to edit a ItemColor entity.
+    * Creates a form to edit a ProductColor entity.
     *
-    * @param ItemColor $entity The entity
+    * @param ProductColor $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(ItemColor $entity)
+    private function createEditForm(ProductColor $entity)
     {
         $form = $this->createForm(new ColorType(), $entity, array(
             'action' => $this->generateUrl('color_update', array('id' => $entity->getId())),
@@ -161,17 +159,17 @@ class ColorController extends Controller
          return $form;
     }
     /**
-     * Edits an existing ItemColor entity.
+     * Edits an existing ProductColor entity.
      * @Secure(roles="ROLE_ADMIN")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:ItemColor')->find($id);
+        $entity = $em->getRepository('SettingToolBundle:ProductColor')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ItemColor entity.');
+            throw $this->createNotFoundException('Unable to find ProductColor entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -193,10 +191,10 @@ class ColorController extends Controller
         ));
     }
     /**
-     * Deletes a ItemColor entity.
+     * Deletes a ProductColor entity.
      * @Secure(roles="ROLE_ADMIN")
      */
-    public function deleteAction(ItemColor $entity)
+    public function deleteAction(ProductColor $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -220,11 +218,11 @@ class ColorController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('itemcolor'));
+        return $this->redirect($this->generateUrl('ProductColor'));
     }
 
     /**
-     * Creates a form to delete a ItemColor entity by id.
+     * Creates a form to delete a ProductColor entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -249,7 +247,7 @@ class ColorController extends Controller
         return new JsonResponse($item);
     }
 
-    public function searchItemColorNameAction($color)
+    public function searchProductColorNameAction($color)
     {
         return new JsonResponse(array(
             'id'=>$color,

@@ -94,7 +94,7 @@ class ItemController extends Controller
                 $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
                 $entity->setWebName($name);
             }
-			$entity->setSource('goods');
+			$entity->setSource('ecommerce');
 			$entity->setSubProduct(true);
 			$entity->setIsWeb(true);
 			$entity->upload();
