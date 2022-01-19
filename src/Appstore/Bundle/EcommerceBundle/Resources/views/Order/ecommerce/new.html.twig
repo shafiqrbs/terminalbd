@@ -47,7 +47,9 @@
                                     <div class="span12">
                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
                                         <ul class="unstyled" >
-                                            <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="select2EcommerceUser m-wrap-custom span6" value="{{ entity.customerMobile }}"></li>
+                                            <li><strong class="span2">Mobile</strong><input type="text" name="ecommerce_payment[customerMobile]" id="customerMobile" class="select2EcommerceUser m-wrap-custom span6" value="{{ entity.customerMobile }}">
+                                            <input type="hidden" name="customerId" id="customerId" value="">
+                                            </li>
                                             <li><strong class="span2">Name</strong><input type="text" name="ecommerce_payment[customerName]" id="customerName" class="m-wrap-custom span6 input-update" value="{{ entity.customerName }}"></li>
                                             <li><strong class="span2">Address</strong><input type="text" name="ecommerce_payment[customerAddress]" id="customerAddress" value="{{ entity.address }}" class="m-wrap-custom span10 input-update" ></li>
                                             <li><strong class="span2">Courier Service</strong>
@@ -132,7 +134,7 @@
                         {{ form_end(salesItem) }}
                         <div class="clearfix"><br/> </div>
                         <div class="clearfix"> </div>
-                        <form name="transactionUpdate" method="post" action="{{ path('customer_order_ajax_payment',{'id':entity.id}) }}" id="transactionUpdate" novalidate="novalidate">
+                        <form name="transactionUpdate" method="post" action="{{ path('customer_order_ajax_update',{'id':entity.id}) }}" id="transactionUpdate" novalidate="novalidate">
                         <div class="portlet-body flip-scroll">
                             <div class="clearfix">&nbsp;</div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -154,10 +156,14 @@
                                         <input type="hidden" name="itemId[]" value="{{ orderItem.id }}">
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric dropdown" >
+                                            {% if orderItem.item is not empty %}
                                             <a target="_blank" href="{{ path('ecommerce_item_show',{'id':orderItem.item.id}) }}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                 {{ orderItem.itemName }}
                                             </a>
-                                            {% if orderItem.item is defined and orderItem.item.webPath is not empty  %}
+                                            {% else %}
+                                                {{ orderItem.itemName }}
+                                            {% endif %}
+                                            {% if orderItem.item is defined and orderItem.item is not empty and orderItem.item.webPath is not empty  %}
                                                 <ul class="dropdown-menu extended inbox">
                                                     <li>
                                                         <p>{{ orderItem.item.webName }}</p>
@@ -211,55 +217,53 @@
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
-                                    <td class="numeric"><input type="text" name="ecommerce_payment[shippingCharge]" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
+                                    <td class="numeric"><input type="text" name="shippingCharge" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
                                     <td></td>
                                 </tr>
-
                                 {% if entity.ecommerceConfig.vatEnable == 1 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Vat & Tax</span></td>
-                                        <td class="numeric">=&nbsp;{{ entity.vat }}</td>
+                                        <td class="numeric">{{ entity.vat }}</td>
                                         <td></td>
                                     </tr>
                                 {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Discount</span></td>
-                                    <td class="numeric"><input type="text" name="ecommerce_payment[discount]" id="discount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discount }}"></td>
+                                    <td class="numeric"><input type="text" name="discount" id="discount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discount }}"></td>
                                     <td></td>
                                 </tr>
-
                                 {% if entity.coupon is not empty %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
-                                        <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
+                                        <td class="numeric">{{ entity.couponAmount }}</td>
                                         <td></td>
                                     </tr>
                                 {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
-                                    <td class="numeric"><strong>=&nbsp;{{ ( entity.total)|number_format }}</strong></td>
+                                    <td class="numeric"><strong id="total">{{ ( entity.total)|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
-                                    <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
+                                    <td class="numeric"><strong id="receive">{{ ( entity.paidAmount)|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
-
                                 {% if entity.dueAmount  > 0 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>
-                                        <td class="numeric" >=&nbsp;{{ ( entity.dueAmount)|number_format }}</td>
+                                        <td class="numeric" >{{ ( entity.dueAmount)|number_format }}</td>
                                         <td></td>
                                     </tr>
                                 {% endif %}
                                 {% if entity.returnAmount  > 0 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Return Amount</span></td>
-                                        <td class="numeric">=&nbsp;{{ ( entity.returnAmount)|number_format }}</td>
+                                        <td class="numeric">{{ ( entity.returnAmount)|number_format }}</td>
                                         <td></td>
                                     </tr>
                                 {% endif %}
+
                                 </tbody>
                             </table>
                         </div>
@@ -467,4 +471,29 @@
     ApproveProcess();
     $('#fos_comment_comment_body').addClass('span12');
     $('.fos_comment_submit input[type="submit"]').addClass('btn blue');
+
+
+    $( ".select2EcommerceUser" ).autocomplete({
+
+        source: function( request, response ) {
+        $.ajax( {
+        url: Routing.generate('ecommerce_customer_search'),
+        data: {
+        term: request.term
+        },
+        success: function( data ) {
+        response( data );
+        }
+        } );
+
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+        $.get( Routing.generate('ecommerce_order_existing_customer',{'order':{{ entity.id }},'customer':ui.item.id}), function( data ) {
+            location.reload();
+        })
+        }
+    });
+
+
 {% endblock %}

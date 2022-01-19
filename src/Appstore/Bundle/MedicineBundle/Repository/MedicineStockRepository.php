@@ -797,4 +797,14 @@ class MedicineStockRepository extends EntityRepository
         return 'success';
     }
 
+
+    public function updateMinimumQty(MedicineStock $stock)
+    {
+        $em = $this->_em;
+        $qty = $stock->getMedicineConfig()->getShortQuantity();
+        $stock->setMinQuantity($qty);
+        $em->flush();
+
+    }
+
 }

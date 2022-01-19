@@ -1475,6 +1475,88 @@ class Item
         $this->salesQuantity = $salesQuantity;
     }
 
+    /**
+     * @return int
+     */
+    public function getPurchaseReturnQuantity()
+    {
+        return $this->purchaseReturnQuantity;
+    }
+
+    /**
+     * @param int $purchaseReturnQuantity
+     */
+    public function setPurchaseReturnQuantity($purchaseReturnQuantity)
+    {
+        $this->purchaseReturnQuantity = $purchaseReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesReturnQuantity()
+    {
+        return $this->salesReturnQuantity;
+    }
+
+    /**
+     * @param int $salesReturnQuantity
+     */
+    public function setSalesReturnQuantity($salesReturnQuantity)
+    {
+        $this->salesReturnQuantity = $salesReturnQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDamageQuantity()
+    {
+        return $this->damageQuantity;
+    }
+
+    /**
+     * @param int $damageQuantity
+     */
+    public function setDamageQuantity($damageQuantity)
+    {
+        $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentQuantity()
+    {
+        return $this->adjustmentQuantity;
+    }
+
+    /**
+     * @param int $adjustmentQuantity
+     */
+    public function setAdjustmentQuantity($adjustmentQuantity)
+    {
+        $this->adjustmentQuantity = $adjustmentQuantity;
+    }
+
+
+
 
 }
 

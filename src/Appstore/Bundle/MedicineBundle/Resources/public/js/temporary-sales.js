@@ -69,7 +69,6 @@ $(document).on("click", ".removePopup", function() {
 });
 
 $(document).on("change", "#barcode", function() {
-    var barcode = $(this).val();
     var barcode = $('#barcode').val();
     if(barcode === ''){
         $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
@@ -104,6 +103,32 @@ function jqueryTemporaryLoad() {
         $('#salesTemporary_received').attr('value', '');
     });
 
+    $(document).on("change", "#genericStock", function() {
+        var id = $(this).val();
+        if(id === ''){
+            return false;
+        }
+        $.ajax(Routing.generate('medicine_sales_generic_stock', { id : id}), {
+            type: 'GET',
+        }).done(function (response) {
+            obj = JSON.parse(response);
+            alert(obj['subTotal']);
+            $("#addTemporaryItem").attr("disabled", true);
+            $('#invoiceParticulars').html(obj['salesItems']);
+            $('#subTotal').html(obj['subTotal']);
+            $('#grandTotal').html(obj['initialGrandTotal']);
+            $('.discount').html(obj['initialDiscount']);
+            $('.dueAmount').html(obj['initialGrandTotal']);
+            $('#salesSubTotal').val(obj['subTotal']);
+            $('#salesNetTotal').val(obj['initialGrandTotal']);
+            $('#profit').html(obj['profit']);
+            $('#salesTemporary_discount').val(obj['initialDiscount']);
+            $('#salesTemporary_due').val(obj['initialGrandTotal']);
+            $('#generic-stock-hide').hide();
+            $("#genericStock").select2("val", "");
+        });
+    });
+
     $(".selectStock2Generic").select2({
 
         placeholder: "Search generic by stock medicine",
@@ -132,30 +157,9 @@ function jqueryTemporaryLoad() {
         }, // omitted for brevity, see the source of this page
         formatSelection: function (item) {
             return item.text
-        }, // omitted for brevity, see the source of this page
-        allowClear: true,
-        minimumInputLength:2,
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('medicine_sales_generic_stock', { id : id}), {
-                dataType: "json"
-            }).done(function (response) {
-                obj = JSON.parse(response);
-                $("#addTemporaryItem").attr("disabled", true);
-                $('#invoiceParticulars').html(obj['salesItems']);
-                $('#subTotal').html(obj['subTotal']);
-                $('#grandTotal').html(obj['initialGrandTotal']);
-                $('.discount').html(obj['initialDiscount']);
-                $('.dueAmount').html(obj['initialGrandTotal']);
-                $('#salesSubTotal').val(obj['subTotal']);
-                $('#salesNetTotal').val(obj['initialGrandTotal']);
-                $('#profit').html(obj['profit']);
-                $('#salesTemporary_discount').val(obj['initialDiscount']);
-                $('#salesTemporary_due').val(obj['initialGrandTotal']);
-                $('#barcode').focus().val('');
-            });
-
         },
+        allowClear: true,
+        minimumInputLength:2
 
     });
 
@@ -255,6 +259,7 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
+                    $("input#isShort:not(:checked)");
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
@@ -277,10 +282,11 @@ function jqueryTemporaryLoad() {
         $.ajax({
             url: Routing.generate('medicine_sales_temporary_item_update'),
             type: 'POST',
-            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+ price+'&itemPercent='+ itemPercent,
+            data:'salesItemId='+ id +'&quantity='+ quantity +'&salesPrice='+price+'&itemPercent='+itemPercent,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#subTotal').html(obj['subTotal']);
+                $('#invoiceParticulars').html(obj['salesItems']);
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);

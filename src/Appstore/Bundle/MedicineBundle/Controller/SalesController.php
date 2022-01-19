@@ -245,7 +245,7 @@ class SalesController extends Controller
         }
         $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
         $entity->setMrpPrice($stock->getSalesPrice());
-        $entity->setPurchasePrice($stock->getPurchasePrice());
+        $entity->setPurchasePrice($stock->getAveragePurchasePrice());
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
@@ -270,7 +270,7 @@ class SalesController extends Controller
         $salesItem->setQuantity($quantity);
         $salesItem->setSalesPrice($item->getSalesPrice());
         $salesItem->setSubTotal($salesItem->getSalesPrice() * $salesItem->getQuantity());
-        $salesItem->setPurchasePrice($item->getMedicineStock()->getPurchasePrice());
+        $salesItem->setPurchasePrice($item->getMedicineStock()->getAveragePurchasePrice());
         $em->persist($salesItem);
         $em->flush();
         $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');

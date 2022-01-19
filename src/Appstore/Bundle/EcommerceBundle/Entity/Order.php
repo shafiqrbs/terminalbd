@@ -307,6 +307,14 @@ class Order
      */
     private $total;
 
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="vatPercent", type="float", nullable = true)
+     */
+    private $vatPercent;
+
     /**
      * @var float
      *
@@ -1437,6 +1445,22 @@ class Order
     public function setTrackingNo($trackingNo)
     {
         $this->trackingNo = $trackingNo;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param float $vatPercent
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
     }
 
 

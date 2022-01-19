@@ -20,10 +20,19 @@ class MedicineVendorRepository extends EntityRepository
 
     public function findWithSearch(User $user, $data = [])
     {
-        $config = $user->getGlobalOption()->getMedicineConfig()->getId();
 
+        $companyName = isset($data['companyName']) ? $data['companyName'] : '';
+        $name = isset($data['name']) ? $data['name'] : '';
+
+        $config = $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        if($companyName){
+            $qb->andWhere($qb->expr()->like("e.companyName", "'%$q%'"  ));
+        }
+        if($name){
+            $qb->andWhere($qb->expr()->like("e.name", "'%$q%'"  ));
+        }
         $qb->orderBy('s.companyName','ASC');
         $qb->getQuery();
         return  $qb;

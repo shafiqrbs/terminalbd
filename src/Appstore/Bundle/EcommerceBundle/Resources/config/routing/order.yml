@@ -82,6 +82,13 @@ customer_order_payment_delete:
     defaults: { _controller: "EcommerceBundle:Order:paymentDelete" }
 
 
+customer_order_ajax_update:
+    path:      /{id}/order-ajax-update
+    defaults: { _controller: "EcommerceBundle:Order:paymentAjaxUpdate" }
+    methods:  [POST]
+    options:
+        expose: true
+
 customer_order_ajax_payment:
     path:      /{id}/order-payment
     defaults: { _controller: "EcommerceBundle:Order:paymentProcess" }
@@ -97,6 +104,12 @@ order_stock_item_search:
 ecommerce_customer_search:
     path:     /customer-search
     defaults: { _controller: "EcommerceBundle:Order:autoCustomerSearch" }
+    options:
+            expose: true
+
+ecommerce_order_existing_customer:
+    path:     /customer-existing
+    defaults: { _controller: "EcommerceBundle:Order:orderUpdateCustomer" }
     options:
             expose: true
 

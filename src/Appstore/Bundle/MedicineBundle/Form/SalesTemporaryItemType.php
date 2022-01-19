@@ -50,10 +50,8 @@ class SalesTemporaryItemType extends AbstractType
                 'multiple'      =>false,
                 'choices' => $this->discountPercentList()
             ))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 input','autocomplete'=>'off','placeholder'=>'MRP')))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','autocomplete'=>'off','placeholder'=>'quantity')))
-           ;
-
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 input','autocomplete'=>'off','placeholder'=>'MRP')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','autocomplete'=>'off','placeholder'=>'quantity')));
             if($this->config->isPurchaseItem() == 1) {
                 $builder->add('purchaseItem', 'choice', array(
                     'attr' => array('class' => 'm-wrap span12 input'),

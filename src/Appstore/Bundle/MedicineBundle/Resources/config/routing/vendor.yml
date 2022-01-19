@@ -20,6 +20,10 @@ medicine_vendor_name:
     options:
             expose: true
 
+medicine_vendor_new:
+    path:     /new
+    defaults: { _controller: "MedicineBundle:Vendor:new" }
+
 medicine_vendor_create:
     path:     /create
     defaults: { _controller: "MedicineBundle:Vendor:create" }

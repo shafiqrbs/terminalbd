@@ -159,8 +159,9 @@ class MedicineSalesItemRepository extends EntityRepository
 		        $entity->setQuantity($item->getQuantity() );
 		        $entity->setMrpPrice($item->getMedicineStock()->getSalesPrice());
 		        $entity->setSalesPrice( $item->getSalesPrice() );
-		        $entity->setSubTotal( $item->getSubTotal() );
+		        $entity->setSubTotal($item->getSubTotal());
 	            $entity->setPurchasePrice( $item->getPurchasePrice() );
+	            $entity->isShort($item->isShort());
 	            if(!empty($item->getMedicinePurchaseItem())) {
 		            $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
 		        }

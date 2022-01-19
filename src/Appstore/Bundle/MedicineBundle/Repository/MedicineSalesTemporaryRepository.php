@@ -4,6 +4,7 @@ namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Controller\MedicineSalesTemporaryController;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -32,7 +33,9 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     public function insertInvoiceItems(User $user, $data)
     {
         $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
+        $isShort = empty($data['isShort']) ? 0 : 1;
         $purchaseItem = isset($data['purchaseItem']) and !empty($data['purchaseItem']) ? $data['purchaseItem'] : '';
+        /* @var $stockItem MedicineStock */
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
         $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($purchaseItem);
         $em = $this->_em;
@@ -49,18 +52,20 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             }else{
                 $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
             }
+            $entity->setIsShort($isShort);
             $entity->setEstimatePrice($stockItem->getSalesprice());
 	        $entity->setSubTotal( round(($entity->getSalesPrice()*$quantity), 2 ) );
 	        $entity->setUser( $user );
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
-	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+	        $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
 	        if(!empty($purchaseStockItem)){
 				 $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
 				 $entity->setMedicinePurchaseItem($purchaseStockItem);
 			}
 	        $em->persist( $entity );
 	        $em->flush();
+
         }
 
     }
@@ -78,7 +83,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 	        $entity->setUser($user);
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
-	        $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+	        $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
 	        $em->persist( $entity );
 	        $em->flush();
         }
@@ -95,7 +100,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $entity = $invoiceParticular;
             $entity->setQuantity($data['quantity']);
             $entity->setSalesPrice($data['salesPrice']);
-            $entity->setItemPaercent($data['itemPercent']);
+            $entity->setItemPercent($data['itemPercent']);
             if($data['itemPercent'] > 0){
                 $entity->setItemPercent( $data['itemPercent'] );
                 $salesPrice = $data['salesPrice'];

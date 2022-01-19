@@ -57,7 +57,7 @@ $(document).on('click', '#addOrderItem', function() {
             processData : false,
             contentType : false,
             success: function(response){
-                location.reload();
+                $("#orderItems").html(response);
             }
         });
     }
@@ -87,16 +87,21 @@ var formTemporary = $("#orderItem").validate({
 
 $(document).on("change", ".transactionProcess", function() {
 
-    var formData = new FormData($('form#transactionUpdate')[0]); // Create an arbitrary FormData instance
     var url = $('form#transactionUpdate').attr('action'); // Create an arbitrary FormData instance
+    var shippingCharge = $('#shippingCharge').val();
+    var discount = $('#discount').val();
     $.ajax({
-        url:url ,
+        url:url,
         type: 'POST',
-        processData: false,
-        contentType: false,
-        data:formData,
+        data: 'shippingCharge='+shippingCharge+'&discount='+discount,
         success: function(response){
-            $("#orderItems").html(response);
+            obj = JSON.parse(response);
+            $('#discount').val(obj['discount']);
+            $('#vat').val(obj['vat']);
+            $('#shippingCharge').val(obj['shippingCharge']);
+            $('#total').html(obj['total']);
+            $('#receive').html(obj['receive']);
+            $('#due').html(obj['due']);
         }
     });
 

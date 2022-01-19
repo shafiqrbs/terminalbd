@@ -1793,8 +1793,8 @@ class ItemRepository extends EntityRepository
 
         $query = $this->createQueryBuilder('e');
         $query->select('e.id as id');
-        $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->addSelect('e.webName as text');
+        $query->where($query->expr()->like("e.webName", "'%$q%'"  ));
         $query->andWhere("e.ecommerceConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');

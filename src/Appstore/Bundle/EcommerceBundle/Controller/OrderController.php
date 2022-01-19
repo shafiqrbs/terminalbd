@@ -252,6 +252,7 @@ class OrderController extends Controller
         $category = ($product->getCategory()) ? $product->getCategory()->getName() :'';
         $size = !empty($product->getSize()) ? $product->getSize()->getName(): '';
         $orderItem->setOrder($entity);
+        $orderItem->setItem($product);
         $orderItem->setItemName($product->getWebName());
         $orderItem->setBrandName($brand);
         $orderItem->setCategoryName($category);
@@ -274,10 +275,12 @@ class OrderController extends Controller
         }else{
             $theme = 'ecommerce';
         }
-        $html =  $this->renderView("EcommerceBundle:Order/{$theme}:cartItem.html.twig", array(
+
+        $html =  $this->renderView("EcommerceBundle:Order/ecommerce:ajaxOrderItem.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
         ));
+        return $html;
 
     }
 
@@ -301,12 +304,29 @@ class OrderController extends Controller
     public function autoCustomerSearchAction(Request $request)
     {
         $q = $_REQUEST['term'];
-        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->searchEcommerceCustomer($q);
+        $option = $this->getUser()->getGlobalOption()->getId();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->searchEcommerceCustomer($option,$q);
         $items = array();
         foreach ($entities as $entity):
-            $items[] = ['key' => $entity['id'],'value' => $entity['text']];
+            $items[] = ['id' => $entity['id'],'value' => $entity['text']];
         endforeach;
         return new JsonResponse($items);
+    }
+
+    public function orderUpdateCustomerAction()
+    {
+        $data = $_REQUEST;
+        $order = $data['order'];
+        $userId = $data['customer'];
+        /* @var $entity Order */
+        $entity = $this->getDoctrine()->getRepository("EcommerceBundle:Order")->find($order);
+        $user = $this->getDoctrine()->getRepository("UserBundle:User")->find($userId);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setCustomerName($user->getProfile()->getName());
+        $entity->setCustomerMobile($user->getProfile()->getMobile());
+        $entity->setAddress($user->getProfile()->getAddress());
+        $em->flush();
+        return new Response('success');
     }
 
     public function inlineOrderUpdateAction(Request $request)
@@ -326,6 +346,23 @@ class OrderController extends Controller
         }
         exit;
 
+    }
+
+    public function paymentAjaxUpdateAction(Request $request ,Order $order)
+    {
+
+        $data =$_REQUEST;
+        $shippingCharge = $data['shippingCharge'];
+        $discount = $data['discount'];
+        $em = $this->getDoctrine()->getManager();
+        $order->setShippingCharge($shippingCharge);
+        $order->setDiscount($discount);
+        $total = ($order->getSubTotal() + $order->getVat() + $order->getShippingCharge() + $order->getDiscount());
+        $order->setTotal($total);
+        $em->persist($order);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+        return new JsonResponse(array('discount'=>$order->getDiscount(),'shippingCharge'=>$order->getShippingCharge(),'vat' => $order->getVat(),'total' => $order->getTotal(),'receive' => $order->getReceive(),'dus' => ($order->getTotal() - $order->getReceive())));
     }
 
     public function paymentProcessAction(Request $request ,Order $order)
@@ -362,7 +399,9 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-        return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
+
+        return new JsonResponse('success');
+        // return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
     }
 
     /**

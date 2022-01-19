@@ -40,7 +40,7 @@
             {% endif %}
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
-            <div class="span5" {% if config.barcode != 1 %} style="margin-left: 0!important" {% endif %} >
+            <div class="{% if config.barcode == 1 and config.purchaseItem == 1 %}span3{% else %}span5{% endif %}"  style="margin-left: 0!important">
                 {{ form_widget(salesItem.stockName) }}
                 {{ form_errors(salesItem.stockName) }}
             </div>
@@ -52,13 +52,13 @@
             <div class="span5">
                 <div class="input-append">
                     <div class="input-group">
+                        <button class="btn big yellow" ><input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1"></button>
                         {{ form_widget(salesItem.salesPrice) }}
                         {{ form_errors(salesItem.salesPrice) }}
                         {{ form_widget(salesItem.quantity) }}
                         {{ form_errors(salesItem.quantity) }}
                         {{ form_widget(salesItem.itemPercent) }}
                         <button type="submit" class="btn big blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
-                        <button type="reset" class="btn big yellow" > <span class="fa fa-refresh"></span></button>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                     {#<th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>#}
                     <th class="span3">Name</th>
                     <th class="span1">Rack</th>
-                    <th class="span1">PP</th>
+                    <th class="span1">AVG PP</th>
                     <th class="span1">MRP</th>
                     <th class="span1">Quantity</th>
                     <th class="span1">Discount</th>
@@ -94,16 +94,21 @@
                             <td class="span1">
                                 <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                 <input type="hidden" name="estimatePrice-{{ item.id }}" id="estimatePrice-{{ item.id }}" value="{{ item.estimatePrice }}" >
-                                <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice|number_format(2) }}" >
+                                {% if item.itemPercent is defined and item.itemPercent > 0 %}
+                                    {{ item.salesPrice|number_format(2) }}
+                                    <input type="hidden" name="salesPrice-{{ item.id }}" id="salesPrice-{{ item.id }}" value="{{ item.salesPrice }}" >
+                                {% else %}
+                                    <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice-{{ item.id }}" value="{{ item.salesPrice|number_format(2) }}" >
+                                {% endif %}
                             </td>
                             <td class="span1">
                                 <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                             </td>
                             <td class="span1">
-                                <select class="td-inline-input itemPercent" id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}">
+                                <select class="td-inline-input itemPercent" data-id="{{ item.id }}" id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}">
                                     <option value="0">Disc(%)</option>
                                     {% for per in discountPercentLists %}
-                                    <option {% if item.itemPercent is defined and item.itemPercent == per %} selected="selected" {% endif %} value="per">{{ per }}</option>
+                                    <option {% if item.itemPercent is defined and item.itemPercent == per %} selected="selected" {% endif %} value="{{ per }}">{{ per }}</option>
                                      {% endfor %}
                                 </select>
                             </td>

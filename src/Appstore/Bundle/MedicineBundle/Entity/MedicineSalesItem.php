@@ -123,6 +123,13 @@ class MedicineSalesItem
     private $customPrice = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isShort", type="boolean")
+     */
+    private $isShort = false;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="subTotal", type="float", nullable=true)
@@ -418,6 +425,22 @@ class MedicineSalesItem
     public function setPurchaseItem($purchaseItem)
     {
         $this->purchaseItem = $purchaseItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShort()
+    {
+        return $this->isShort;
+    }
+
+    /**
+     * @param bool $isShort
+     */
+    public function setIsShort($isShort)
+    {
+        $this->isShort = $isShort;
     }
 
 

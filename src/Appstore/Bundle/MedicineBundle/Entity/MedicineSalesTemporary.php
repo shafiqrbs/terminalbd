@@ -59,6 +59,14 @@ class MedicineSalesTemporary
     private $quantity = 1;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isShort", type="boolean" )
+     */
+    private $isShort = false;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="salesPrice", type="float")
@@ -315,6 +323,22 @@ class MedicineSalesTemporary
     public function setItemPercent($itemPercent)
     {
         $this->itemPercent = $itemPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShort()
+    {
+        return $this->isShort;
+    }
+
+    /**
+     * @param bool $isShort
+     */
+    public function setIsShort($isShort)
+    {
+        $this->isShort = $isShort;
     }
 
 

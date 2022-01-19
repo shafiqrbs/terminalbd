@@ -26,7 +26,7 @@ medicine_sales_barcode_search:
 
 medicine_sales_generic_stock:
     path:     /{id}/generic-stock-item
-    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStockAction" }
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStock" }
     methods:  GET
     options:
             expose: true

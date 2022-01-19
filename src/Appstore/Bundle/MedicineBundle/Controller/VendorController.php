@@ -34,18 +34,34 @@ class VendorController extends Controller
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
-        $entity = new MedicineVendor();
-        $form = $this->createCreateForm($entity);
+        $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
         $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entities' => $pagination,
+            'searchForm'   => $data,
+        ));
+    }
+
+    /**
+     * Lists all Vendor entities.
+     *
+     */
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new MedicineVendor();
+        $form = $this->createCreateForm($entity);
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
+
     /**
      * Creates a new Vendor entity.
      *

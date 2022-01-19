@@ -65,19 +65,19 @@ class OrderRepository extends EntityRepository
 
     }
 
-    public function searchEcommerceCustomer($q)
+    public function searchEcommerceCustomer(GlobalOption $option ,$q)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->from('UserBundle:User','e');
         $qb->select('e.id as id');
         $qb->addSelect('e.username as text');
         $qb->where($qb->expr()->like("e.username", "'%$q%'"  ));
-        $qb->andWhere("e.userGroup = :group");
-        $qb->setParameter('group', 'customer');
+        $qb->andWhere("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.userGroup = :group")->setParameter('group', 'customer');
         $qb->groupBy('e.username');
         $qb->orderBy('e.username', 'ASC');
         $qb->setMaxResults( '30' );
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getArrayResult();
 
     }
 

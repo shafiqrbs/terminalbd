@@ -182,6 +182,13 @@ class MedicineConfig
     /**
      * @var smallint
      *
+     * @ORM\Column(name="shortQuantity", type = "smallint",  nullable=true)
+     */
+    private $shortQuantity;
+
+    /**
+     * @var smallint
+     *
      * @ORM\Column(name="expiryDate", type = "smallint",  nullable=true)
      */
     private $expiryDate =1;
@@ -1006,6 +1013,22 @@ class MedicineConfig
     public function setPurchaseItem($purchaseItem)
     {
         $this->purchaseItem = $purchaseItem;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getShortQuantity()
+    {
+        return $this->shortQuantity;
+    }
+
+    /**
+     * @param smallint $shortQuantity
+     */
+    public function setShortQuantity($shortQuantity)
+    {
+        $this->shortQuantity = $shortQuantity;
     }
 
 }

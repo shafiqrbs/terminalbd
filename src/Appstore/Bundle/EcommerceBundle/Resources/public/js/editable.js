@@ -15,25 +15,13 @@ var EditableInit = function () {
         /*location.reload();*/
     }
 
-    $( ".select2EcommerceUser" ).autocomplete({
-        source: function( request, response ) {
-            $.ajax( {
-                url: Routing.generate('ecommerce_customer_search'),
-                data: {
-                    term: request.term
-                },
-                success: function( data ) {
-                    response( data );
-                }
-            } );
-
-        },
-        minLength: 2,
-            select: function( event, ui ) {
-        },
-        change: function (event, ui) {
-            user = $("#customerMobile").val(ui.term.id); // save selected id to hidden input
-            console.log(user);
-        }
-    });
 }
+
+$(document).on('change', '#customerMobile', function() {
+
+
+
+});
+
+
+
