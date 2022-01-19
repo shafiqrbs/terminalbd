@@ -458,9 +458,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@EcommerceBundle/Resources/public/js/editable.js'
-    '@EcommerceBundle/Resources/public/js/medicine.js'
-    '@EcommerceBundle/Resources/public/js/approveProcess.js'
+    'bundles/ecommerce/js/editable.js'
+    'bundles/ecommerce/js/medicine.js'
+    'bundles/ecommerce/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

@@ -32,7 +32,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('ecommerce_item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
-                                {% if app.user.granted("ROLE_DOMAIN") OR app.user.granted("ROLE_DOMAIN_ECOMMERCE_CONFIG") %}
+                                {% if app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_DOMAIN_ECOMMERCE_CONFIG") %}
                                 <a class="btn blue" id="priceUpdate" data-url="{{ path('ecommerce_item_price_update') }}"><i class="icon-money"></i>&nbsp; Price Update</a>
                                 {% endif %}
                                 {% if app.user.granted("ROLE_DOMAIN")  %}
