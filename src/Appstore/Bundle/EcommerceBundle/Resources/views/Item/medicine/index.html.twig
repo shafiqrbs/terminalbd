@@ -47,11 +47,6 @@
                             </div>
                         </div>
                     </div>
-                    <style>
-                        .search-input{
-                            height: 34px!important;
-                        }
-                    </style>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
@@ -87,7 +82,7 @@
                                 <tr class="head-grey">
                                     {%  set sort = app.request.query.get('sort') %}
                                     {%  set direction = app.request.query.get('direction') %}
-                                    <th class="numeric" >FeatureBrand</th>
+                                    <th class="numeric" >FeatBrand</th>
                                     <th class="numeric" >Image</th>
                                     <th {% if pagination.isSorted('item.webName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'item.webName') }}{% if( direction == 'desc' and sort == 'item.webName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                     <th {% if pagination.isSorted('item.category') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Category', 'item.category') }}{% if( direction == 'desc' and sort == 'item.category') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -168,6 +163,17 @@
             </div>
         </div>
     </div>
+    <style>
+        .search-input{
+            height: 34px!important;
+        }
+        .fileupload-preview {
+            max-width: 400px;
+            max-height: 40px;
+            line-height: 20px;
+        }
+
+    </style>
 {% endblock %}
 {% block javascriptBlock %}
     {{ parent() }}

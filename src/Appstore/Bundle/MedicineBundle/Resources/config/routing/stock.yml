@@ -10,6 +10,10 @@ medicine_stock_short_item:
     path:     /item-short-list
     defaults: { _controller: "MedicineBundle:MedicineStock:itemShortList" }
 
+medicine_stock_current_short_item:
+    path:     /daily-item-short-list
+    defaults: { _controller: "MedicineBundle:MedicineStock:dailyShortList" }
+
 medicine_stock_item_history:
     path:     /item-history
     defaults: { _controller: "MedicineBundle:MedicineStock:stockItemHistory" }

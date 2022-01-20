@@ -656,7 +656,16 @@ ul.ui-autocomplete li:hover , ul.ui-autocomplete li a:hover{
 }
 
 .editable-input input[type="text"].m-wrap{
-    width: 100%!important;
+
+}
+.editable-buttons {
+    margin-left: 15px!important;
+}
+.editable-input {
+    width: auto!important;
+}
+.editable-buttons .editable-cancel {
+    margin-left: 0!important;
 }
 
 /*.ui-autocomplete-input{

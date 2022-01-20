@@ -52,7 +52,7 @@
             <div class="span5">
                 <div class="input-append">
                     <div class="input-group">
-                        <button class="btn big yellow" ><input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1"></button>
+                        <input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1">
                         {{ form_widget(salesItem.salesPrice) }}
                         {{ form_errors(salesItem.salesPrice) }}
                         {{ form_widget(salesItem.quantity) }}
@@ -497,11 +497,13 @@
         .sales-right input[class*="span"]#salesTemporary_received {
             height: 54px!important;
             font-size: 41px!important;
+            width: 220px!important;
         }
         .sales-right .discount-type {
             height: 40px!important;
             border: 2px solid red !important;
             margin-top: -4px!important;
+            width: auto!important;
         }
         .sales-right input[class*="span"].m-wrap {
             font-weight: bold;
@@ -509,6 +511,7 @@
             text-align: right;
             border: 2px solid red !important;
             height: 40px!important;
+            width: auto!important;
         }
         ul.ui-autocomplete li a {
             position: relative;
@@ -547,24 +550,15 @@
     {% endif %}
 {% endblock %}
 {% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-        '@MedicineBundle/Resources/public/css/dashboard.css'
-        '@MedicineBundle/Resources/public/css/invoice.css'
-        '@MedicineBundle/Resources/public/css/sidebar-tooltip.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/medicine/css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/medicine/css/invoice.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/medicine/css/sidebar-tooltip.css') }}">
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
-
-    {% javascripts
-        '@MedicineBundle/Resources/public/js/temporary-sales.js'
-        '@MedicineBundle/Resources/public/js/approveProcess.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock  %}
+    <script type="application/javascript" src="{{ asset('bundles/medicine/js/temporary-sales.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('bundles/medicine/js/approveProcess.js') }}"></script>
+{% endblock %}
 {% block documentready %}
     {{ parent() }}
     $.key('shift+n', function() {

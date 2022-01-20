@@ -117,6 +117,29 @@ class MedicineStockController extends Controller
 	 */
 
 
+	public function dailyShortListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->dailyShortListSearch($config,$data);
+        $pagination = $this->paginate($entities);
+        $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
+        $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        return $this->render('MedicineBundle:MedicineStock:shortList.html.twig', array(
+            'pagination' => $pagination,
+            'racks' => $racks,
+            'modeFor' => $modeFor,
+            'searchForm' => $data,
+        ));
+    }
+
+
+	/**
+	 * @Secure(roles="ROLE_MEDICINE_STOCK")
+	 */
+
+
 	public function stockItemHistoryAction()
     {
         $em = $this->getDoctrine()->getManager();

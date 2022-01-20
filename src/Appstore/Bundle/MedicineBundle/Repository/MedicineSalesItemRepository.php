@@ -46,6 +46,15 @@ class MedicineSalesItemRepository extends EntityRepository
         return $result;
     }
 
+    public  function dailyShortListSearch($config, $data =''){
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->where('si.isShort = 1');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery();
+        return $result;
+    }
+
     public function getInvoicePurchasePrice($entity)
     {
         $sql = "SELECT COALESCE(SUM(salesItem.quantity * salesItem.purchasePrice),0) as total FROM medicine_sales_item as salesItem
@@ -161,7 +170,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		        $entity->setSalesPrice( $item->getSalesPrice() );
 		        $entity->setSubTotal($item->getSubTotal());
 	            $entity->setPurchasePrice( $item->getPurchasePrice() );
-	            $entity->isShort($item->isShort());
+	            $entity->setIsShort($item->isShort());
 	            if(!empty($item->getMedicinePurchaseItem())) {
 		            $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
 		        }

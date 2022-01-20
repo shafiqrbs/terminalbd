@@ -2,6 +2,7 @@
  * Created by rbs on 5/1/17.
  */
 
+
 $(document).on('click', '#temporarySales', function() {
 
     $('.dialogModal_header').html('Sales Information');
@@ -112,7 +113,6 @@ function jqueryTemporaryLoad() {
             type: 'GET',
         }).done(function (response) {
             obj = JSON.parse(response);
-            alert(obj['subTotal']);
             $("#addTemporaryItem").attr("disabled", true);
             $('#invoiceParticulars').html(obj['salesItems']);
             $('#subTotal').html(obj['subTotal']);
@@ -259,7 +259,8 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
-                    $("input#isShort:not(:checked)");
+                    $( "#isShort").prop( "checked", false );
+                    $('#isShort').attr('checked', false); // Unchecks it
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
