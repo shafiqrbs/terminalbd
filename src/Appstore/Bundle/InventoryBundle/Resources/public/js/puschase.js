@@ -144,13 +144,8 @@ function InventoryPurchasePage(){
         })
     });
 
-
-
     $('#appstore_bundle_inventorybundle_purchase_memo').attr("required", true);
     $('#appstore_bundle_inventorybundle_purchase_dueAmount').attr("disabled", true);
-
-
-
     $('#appstore_bundle_inventorybundle_purchase_totalAmount , #appstore_bundle_inventorybundle_purchase_paymentAmount ,#appstore_bundle_inventorybundle_purchase_commissionAmount ').change(function() {
 
         var totalAmount = ($('#appstore_bundle_inventorybundle_purchase_totalAmount').val());
@@ -219,51 +214,6 @@ function InventoryPurchasePage(){
         }
 
     });
-
-   /* $('#action-buttonxx').click( function( e ) {
-
-        var name_regex = /^[a-zA-Z]+$/;
-        var number_regex = /^[0-9]+$/;
-
-        var vendor =  $('#appstore_bundle_inventorybundle_purchase_vendor').val();
-        var totalAmount =  $('#appstore_bundle_inventorybundle_purchase_totalAmount').val();
-        var paymentAmount =  $('#appstore_bundle_inventorybundle_purchase_paymentAmount').val();
-        var memo =  $('#appstore_bundle_inventorybundle_purchase_memo').val();
-        var totalItem =  $('#appstore_bundle_inventorybundle_purchase_totalItem').val();
-        var totalQnt =  $('#appstore_bundle_inventorybundle_purchase_totalQnt').val();
-
-
-        if(vendor == ""){
-            $('#error-msg').text("Please add your vendor name"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_vendor").focus();
-            return false;
-        }else if(memo ==""){
-            $('#error-msg').text("Please add purchase memo no"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_memo").focus();
-            return false;
-        }else if(!totalItem.match(number_regex)){
-            $('#error-msg').text("Please add purchase total item");
-            $("#appstore_bundle_inventorybundle_purchase_totalItem").focus();
-            return false;
-        }else if(!totalQnt.match(number_regex) || totalQnt.length == 0){
-            $('#error-msg').text("Please add purchase total quantity"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_totalQnt").focus();
-            return false;
-
-        }else if(!totalAmount.match(number_regex) || totalAmount.length == 0){
-            $('#error-msg').text("Please add purchase total amount"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_totalAmount").focus();
-            return false;
-        }else if(!paymentAmount.match(number_regex) || paymentAmount.length == 0){
-            $('#error-msg').text("Please add payment amount"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_paymentAmount").focus();
-            return false;
-        }else{
-            $('.purchase').submit();
-        }
-        e.preventDefault();
-
-    });*/
 
     var count = 0;
     $('.addmore').click(function(){

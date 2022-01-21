@@ -166,10 +166,7 @@
                             <!--/span-->
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
-                                    <button type="submit" class="btn green"><i class="icon-save"></i>&nbsp;Payment</button>
-                                    {% if(entity.id > 0 ) %}
-                                        <a href="{{ path('account_expenditure_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                                    {% endif %}
+                                    <button type="submit" class="btn green"><i class="icon-save"></i>&nbsp;SAVE</button>
                                 </div>
                             </div>
                             {{ form_end(form) }}

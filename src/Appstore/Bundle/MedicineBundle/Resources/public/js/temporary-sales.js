@@ -93,10 +93,6 @@ $(document).on("change", "#barcode", function() {
     });
 });
 
-
-
-
-
 function jqueryTemporaryLoad() {
 
 

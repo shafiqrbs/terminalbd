@@ -327,7 +327,7 @@ class MedicineStockRepository extends EntityRepository
         }
     }
 
-    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $minQuantity = 0, $openStock = 0 ){
+    public function updateRemovePurchaseQuantity(MedicineStock $stock , $fieldName = '', $pack = 0, $openStock = 0 ){
 
     	$em = $this->_em;
         if($fieldName == 'sales'){
@@ -348,7 +348,7 @@ class MedicineStockRepository extends EntityRepository
             if($openStock > 0){
                 $stock->setOpeningQuantity($openStock);
             }
-            $stock->setMinQuantity($minQuantity);
+            $stock->setPack($pack);
             $stock->setBonusQuantity($bonusQnt);
             $stock->setPurchaseQuantity($qnt);
         }

@@ -38,7 +38,7 @@ class VendorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
+        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser(),$data);
         $pagination = $this->paginate($entities);
         return $this->render('MedicineBundle:Vendor:index.html.twig', array(
             'entities' => $pagination,
@@ -56,7 +56,7 @@ class VendorController extends Controller
         $entity = new MedicineVendor();
         $form = $this->createCreateForm($entity);
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        return $this->render('MedicineBundle:Vendor:index.html.twig', array(
+        return $this->render('MedicineBundle:Vendor:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -90,7 +90,7 @@ class VendorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('medicine_vendor', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('medicine_vendor'));
         }
         $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->insertVendor($entity);
 	    $this->get('session')->getFlashBag()->add(
@@ -131,16 +131,12 @@ class VendorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->findWithSearch($this->getUser());
-        $pagination = $this->paginate($entities);
-        $entity = $em->getRepository('MedicineBundle:MedicineVendor')->find($id);
-
+        $entity = $em->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('medicineConfig'=> $config,'id'=>$id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('MedicineBundle:Vendor:index.html.twig', array(
-            'entities'      => $pagination,
+        return $this->render('MedicineBundle:Vendor:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

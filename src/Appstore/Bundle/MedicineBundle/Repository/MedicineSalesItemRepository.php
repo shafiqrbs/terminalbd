@@ -46,14 +46,7 @@ class MedicineSalesItemRepository extends EntityRepository
         return $result;
     }
 
-    public  function dailyShortListSearch($config, $data =''){
 
-        $qb = $this->createQueryBuilder('si');
-        $qb->where('si.isShort = 1');
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery();
-        return $result;
-    }
 
     public function getInvoicePurchasePrice($entity)
     {
@@ -322,6 +315,18 @@ class MedicineSalesItemRepository extends EntityRepository
         return  $qb;
     }
 
+    public function currentShortList($config, $data)
+    {
+
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.medicineSales','s');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('si.isShort = 1');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
 
 
     public function getSalesItems(MedicineSales $sales)

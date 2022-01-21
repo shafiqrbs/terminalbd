@@ -17,23 +17,54 @@ use Doctrine\ORM\EntityRepository;
 class MedicineStockAdjustmentRepository extends EntityRepository
 {
 
-   public function findWithSearch(MedicineConfig $config,$data)
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $salesBy = isset($data['createdBy'])? $data['createdBy'] :'';
+        $createdStart = isset($data['startDate'])? $data['startDate'] :'';
+        $createdEnd = isset($data['endDate'])? $data['endDate'] :'';
+        $name = isset($data['name'])? $data['name'] :'';
+        $brand = isset($data['brandName'])? $data['brandName'] :'';
+        if (!empty($createdStart)) {
+            $compareTo = new \DateTime($createdStart);
+            $created =  $compareTo->format('Y-m-d 00:00:00');
+            $qb->andWhere("e.created >= :createdStart");
+            $qb->setParameter('createdStart', $created);
+        }
+
+        if (!empty($createdEnd)) {
+            $compareTo = new \DateTime($createdEnd);
+            $createdEnd =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("e.created <= :createdEnd");
+            $qb->setParameter('createdEnd', $createdEnd);
+        }
+        if(!empty($salesBy)){
+            $qb->andWhere("u.username = :username");
+            $qb->setParameter('username', $salesBy);
+        }
+        if (!empty($brand)) {
+            $qb->andWhere($qb->expr()->like("s.brandName", "'%$brand%'"  ));
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("s.name", "'%$name%'"  ));
+        }
+
+    }
+
+
+    public function findWithSearch(MedicineConfig $config,$data)
    {
-       $name = isset($data['name'])? $data['name'] :'';
-       $brand = isset($data['brandName'])? $data['brandName'] :'';
+
        $qb = $this->createQueryBuilder('e');
        $qb->select('e');
-       $qb->join('e.medicineStock','item');
+       $qb->join('e.medicineStock','s');
        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId());
-       if (!empty($sku)) {
-           $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
-       }
-       if (!empty($brand)) {
-           $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
-       }
-       if (!empty($name)) {
-           $qb->andWhere($qb->expr()->like("item.name", "'%$name%'"  ));
-       }
+       $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
         return $result;
@@ -55,6 +86,22 @@ class MedicineStockAdjustmentRepository extends EntityRepository
         $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $item->getId());
         $qnt = $qb->getQuery()->getOneOrNullResult();
         return $qnt;
+    }
+
+
+    public function stockAdjustmentReport($config,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.quantity) AS quantity','SUM(e.bonus) AS bonus');
+        $qb->addSelect('s.name as name','s.brandName as brandName','s.id as stock');
+        $qb->addSelect('u.username as username');
+        $qb->join('e.createdBy','u');
+        $qb->join('e.medicineStock','s');
+        $qb->where('e.medicineConfig = :medicineConfig')->setParameter('medicineConfig', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('s.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
     }
 
 

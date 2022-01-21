@@ -1424,7 +1424,8 @@ class Builder extends ContainerAware
                     ;
                 $menu['Medicine']['Manage Stock']->addChild('Medicine Expiration', array('route' => 'medicine_expiry_item'))
                     ;
-                $menu['Medicine']['Manage Stock']->addChild('Medicine Short List', array('route' => 'medicine_stock_short_item'))
+                $menu['Medicine']['Manage Stock']->addChild('Current Short List', array('route' => 'medicine_stock_current_short_item'));
+                $menu['Medicine']['Manage Stock']->addChild('Short List', array('route' => 'medicine_stock_short_item'))
                     ;
 	            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
                     $menu['Medicine']['Manage Stock']->addChild( 'Medicine Transfer', array( 'route' => 'medicine_transfer' ) )
@@ -1491,6 +1492,7 @@ class Builder extends ContainerAware
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'));
 		        $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'));
 	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'));
+	            $menu['Medicine']['Reports']->addChild('Stock Adjustment', array('route' => 'stock_adjustment_summary'));
 	            $menu['Medicine']['Reports']->addChild('Brand Stock Price', array('route' => 'medicine_report_brand_stock'));
 	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'));
 

@@ -79,8 +79,12 @@ class StockAdjustmentController extends Controller
             $entity->setMedicineConfig($config);
             $entity->setMedicineStock($stock);
             if($entity->getMode() == "Minus"){
-                $entity->setQuantity("-{$entity->getQuantity()}");
-                $entity->setBonus("-{$entity->getBonus()}");
+                if($entity->getQuantity() > 0){
+                    $entity->setQuantity("-{$entity->getQuantity()}");
+                }
+                if($entity->getBonus() > 0){
+                    $entity->setBonus("-{$entity->getBonus()}");
+                }
             }
             $em->persist($entity);
             $em->flush();
@@ -150,6 +154,18 @@ class StockAdjustmentController extends Controller
 			return new Response('failed');
 		}
 	}
+
+    public function stockSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        $entities = $em->getRepository('MedicineBundle:MedicineStockAdjustment')->stockAdjustmentReport($config, $data);
+        return $this->render('MedicineBundle:StockAdjustment:adjustment.html.twig', array(
+            'entities' => $entities,
+            'searchForm' => $data,
+        ));
+    }
 
 
 }

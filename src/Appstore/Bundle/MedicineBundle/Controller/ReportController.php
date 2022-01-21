@@ -571,6 +571,7 @@ class ReportController extends Controller
         ));
     }
 
+
     public function purchaseDetailsAction()
     {
 

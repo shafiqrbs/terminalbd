@@ -2,6 +2,10 @@ stock_adjustment:
     path:     /
     defaults: { _controller: "MedicineBundle:StockAdjustment:index" }
 
+stock_adjustment_summary:
+    path:     /summary
+    defaults: { _controller: "MedicineBundle:StockAdjustment:stockSummary" }
+
 stock_adjustment_new:
     path:     /new
     defaults: { _controller: "MedicineBundle:StockAdjustment:new" }

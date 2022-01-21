@@ -455,7 +455,7 @@ class PurchaseController extends Controller
         $salesPrice = !empty($data['purchaseItem']['salesPrice']) ? $data['purchaseItem']['salesPrice'] :'';
         $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
         $bonusQuantity = !empty($data['purchaseItem']['bonusQuantity']) ? $data['purchaseItem']['bonusQuantity'] :0;
-        $quantity = ($pack * $quantity);
+       // $quantity = ($pack * $quantity);
         $entity->setQuantity($quantity);
         $entity->setBonusQuantity($bonusQuantity);
         if(!empty($stockMedicine) and empty($salesPrice)){
@@ -481,7 +481,7 @@ class PurchaseController extends Controller
         $entity->setPack($pack);
         $em->persist($entity);
         $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$minQuantity,$openStock);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($entity->getMedicineStock(),'',$pack,$openStock);
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice,$msg);
@@ -565,8 +565,14 @@ class PurchaseController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $invoiceDue = $request->request->get('invoiceDue');
+        $data = $request->request->all();
+        //$vendorName = (isset($data['medicinepurchase']['medicineVendor']) and $data['medicinepurchase']['medicineVendor']) ? $data['medicinepurchase']['medicineVendor'] :'';
         if ($editForm->isValid()) {
             $entity->setProcess('Complete');
+            /*if($vendorName){
+                $vendor = $this->getDoctrine()->getRepository("MedicineBundle:MedicineVendor")->getExistVendor($entity->getMedicineConfig(),$vendorName);
+                $entity->setMedicineVendor($vendor);
+            }*/
             if($entity->getPayment() > 0 and empty($entity->getTransactionMethod())){
                 $method = $this->getDoctrine()->getRepository("SettingToolBundle:TransactionMethod")->find(1);
                 $entity->setTransactionMethod($method);
@@ -599,6 +605,7 @@ class PurchaseController extends Controller
         }
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
+      //  $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->getVendorLists($entity->getMedicineConfig()->getId());
         return $this->render('MedicineBundle:Purchase:new.html.twig', array(
             'entity' => $entity,
             'purchaseItem' => $purchaseItemForm->createView(),

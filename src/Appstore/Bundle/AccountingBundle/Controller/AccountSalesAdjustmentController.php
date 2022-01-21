@@ -99,7 +99,7 @@ class AccountSalesAdjustmentController extends Controller
             'action' => $this->generateUrl('account_salesadjustment_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal purchase',
                 'novalidate' => 'novalidate',
             )
         ));

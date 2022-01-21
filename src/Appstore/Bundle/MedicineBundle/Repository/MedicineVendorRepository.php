@@ -21,23 +21,47 @@ class MedicineVendorRepository extends EntityRepository
     public function findWithSearch(User $user, $data = [])
     {
 
-        $companyName = isset($data['companyName']) ? $data['companyName'] : '';
         $name = isset($data['name']) ? $data['name'] : '';
-
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
-        if($companyName){
-            $qb->andWhere($qb->expr()->like("e.companyName", "'%$q%'"  ));
-        }
         if($name){
-            $qb->andWhere($qb->expr()->like("e.name", "'%$q%'"  ));
+            $qb->andWhere($qb->expr()->like("s.companyName", "'%$name%'"  ));
         }
         $qb->orderBy('s.companyName','ASC');
         $qb->getQuery();
         return  $qb;
 
     }
+
+    public function getVendorLists($config)
+    {
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.companyName as name');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->orderBy('s.companyName','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function getExistVendor($config,$name)
+    {
+        $em = $this->_em;
+        $exist = $em->getRepository('MedicineBundle:MedicineVendor')->findOneBy(array('medicineConfig'=>$config,'companyName'=>$name));
+        if($exist){
+            return $exist;
+        }else{
+            $entity = new MedicineVendor();
+            $entity->setMedicineConfig($config);
+            $entity->setName($name);
+            $entity->setCompanyName($name);
+            $em->persist($entity);
+            $em->flush();
+            return  $entity;
+        }
+    }
+
 
     public function getApiVendor(GlobalOption $entity)
     {

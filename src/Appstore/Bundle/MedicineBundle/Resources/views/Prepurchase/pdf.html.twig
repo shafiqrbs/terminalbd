@@ -383,6 +383,7 @@
         <tr>
             <th style="text-align: left">&nbsp;Name</th>
             <th style="text-align: left">Quantity</th>
+            <th style="text-align: left">Pack</th>
             <th style="text-align: left">Unit</th>
         </tr>
         {% if entity.medicinePrepurchaseItems is not empty %}
@@ -390,6 +391,8 @@
                 <tr id="remove-{{ item.id }}">
                     <td style="text-align: left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
                     <td style="text-align: left">{{ item.quantity }}</td>
+                    <td style="text-align: left">{{ item.quantity }}</td>
+                    <td style="text-align: left">{{ item.medicineStock.pack }}{% if item.medicineStock.pack > 1 and item.quantity > item.medicineStock.pack|default(1) %} => {{ (item.quantity/item.medicineStock.pack)|default(1)|number_format(2) }}{% endif %}</td>
                     <td style="text-align: left">{% if item.medicineStock.unit %}{{ item.medicineStock.unit.name }}{% endif %}</td>
                 </tr>
             {% endfor %}

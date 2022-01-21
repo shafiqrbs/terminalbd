@@ -117,16 +117,16 @@ class MedicineStockController extends Controller
 	 */
 
 
-	public function dailyShortListAction()
+	public function currentShortListAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
-        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->dailyShortListSearch($config,$data);
+        $entities = $em->getRepository('MedicineBundle:MedicineSalesItem')->currentShortList($config,$data);
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
-        return $this->render('MedicineBundle:MedicineStock:shortList.html.twig', array(
+        return $this->render('MedicineBundle:MedicineStock:currentShortList.html.twig', array(
             'pagination' => $pagination,
             'racks' => $racks,
             'modeFor' => $modeFor,

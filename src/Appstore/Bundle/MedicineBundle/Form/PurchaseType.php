@@ -44,6 +44,7 @@ class PurchaseType extends AbstractType
                         ->orderBy('e.companyName','ASC');
                 },
             ))
+
             ->add('medicinePurchaseReturn', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn',
