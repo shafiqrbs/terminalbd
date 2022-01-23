@@ -197,10 +197,8 @@
                             <div style="float: left;">
                                 <ul class="nav navbar-nav" style="background: #009b3a">
                                     <li class="dropdown">
-                                        <a href="#" style="width: 120px" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
+                                        <a href="#" id="myaccount" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ app.user }} </a>
                                         <ul class="dropdown-menu">
-                                            <li>  <a href="{{ path(globalOption.subDomain ~ '_domain_authentication') }}" data-toggle="tooltip" title="Go To Your Order Panel"  > Dashboard</a>
-                                            </li>
                                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order') }}">Order</a></li>
                                             <li><a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_preorder') }}">Pre-order</a></li>
                                             <li class="divider"></li>
@@ -379,4 +377,13 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header'}) %}
     {% endif %}
 </nav>
+<style>
+    .dropdown #myaccount{
+        min-width: 120px;
+        padding: 0px!important;
+        line-height: 34px!important;
+        height: 34px!important;
+        text-align: center;
+    }
+</style>
 

@@ -87,7 +87,7 @@
                                             {% endif %}
                                             <li><strong class="span4">Process Status</strong>
                                                 <span class="span8">
-                                                    {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm','shipped':'Shipped','delivered':'Delivered','returned':'Returned','cancel':'Cancel'} %}
+                                                    {% set processes = {sms:'Send SMS',created:'Created','wfc': 'Wait for Confirm','confirm':'Confirm','shipped':'Shipped','returned':'Returned','cancel':'Cancel'} %}
                                                     <select  class="m-wrap-custom input-update span12" id="process" name="ecommerce_payment[process]" >
                                                         {% for key,process in processes %}
                                                             <option {% if key == entity.process %} selected="selected" {% endif %} value="{{ key }}">{{ process }}</option>

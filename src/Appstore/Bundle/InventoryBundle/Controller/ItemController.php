@@ -128,8 +128,6 @@ class ItemController extends Controller
                     $entity->getMasterItem()->setProductUnit($unit);
                 }
                 if(empty($entity->getBarcode()) and empty($entity->getModel())){
-
-
                     $time = new \DateTime();
                     $bar = (int) $time->getTimestamp();
                     $entity->setBarcode($bar);

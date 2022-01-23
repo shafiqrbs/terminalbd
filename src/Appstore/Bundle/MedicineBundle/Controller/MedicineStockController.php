@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\AccessoriesStockType;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockType;
@@ -357,6 +358,21 @@ class MedicineStockController extends Controller
             'form'              => $editForm->createView(),
         ));
     }
+
+    public function shortItemCloseAction(MedicineSalesItem $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        if($entity->getMedicineSales()->getMedicineConfig()->getId() != $config) {
+            throw $this->createNotFoundException('Unable to find MedicineStock entity.');
+        }
+        $entity->setIsShort(false);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
+
+    }
+
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();

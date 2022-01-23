@@ -41,7 +41,10 @@ $(document).on('change', '#orderItem_itemName', function() {
         success: function (response) {
             obj = JSON.parse(response);
             $('#orderItem_price').val(obj['price']);
-            $('#unit').html(obj['unit']);
+            if(obj['unit'] !== ""){
+                $('#unit').html(obj['unit']);
+            }
+
         }
     })
 
@@ -95,7 +98,7 @@ $(document).on("change", ".transactionProcess", function() {
         type: 'POST',
         data: 'shippingCharge='+shippingCharge+'&discount='+discount,
         success: function(response){
-            obj = JSON.parse(response);
+            let obj = JSON.parse(response);
             $('#discount').val(obj['discount']);
             $('#vat').val(obj['vat']);
             $('#shippingCharge').val(obj['shippingCharge']);

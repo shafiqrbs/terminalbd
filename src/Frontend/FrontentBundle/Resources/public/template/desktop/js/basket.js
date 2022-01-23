@@ -538,4 +538,24 @@ $(document).on('click',"#cart-print", function (event) {
     });
 });
 
+$(document).on( "click", ".hunger-remove-cart", function(e){
+    var url = $(this).attr("data-url");
+    var id = $(this).attr("id");
+    $('#item-remove-'+id).hide();
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+            obj = JSON.parse(response);
+            $('#cart-item-list-box').html(obj['cartItem']);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.vsidebar .txt').html(obj['cartResult']);
+
+        }
+    });
+    e.preventDefault();
+});
+
+
 

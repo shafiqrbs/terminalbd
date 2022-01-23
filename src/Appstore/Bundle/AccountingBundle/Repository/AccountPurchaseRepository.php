@@ -667,32 +667,37 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
 
         $global = $entity->getMedicineConfig()->getGlobalOption();
         $em = $this->_em;
-        $accountPurchase = new AccountPurchase();
-        $accountPurchase->setGlobalOption($global);
-        $accountPurchase->setMedicinePurchase($entity);
-        $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
-	    $accountPurchase->setAccountBank( $entity->getAccountBank() );
-	    $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
-	    if (!empty( $entity->getTransactionMethod())) {
-		    $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
-	    }
-        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
-        $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setCompanyName($entity->getMedicineVendor()->getCompanyName());
-	    $accountPurchase->setGrn($entity->getGrn());
-	    $accountPurchase->setProcessHead('medicine');
-        $accountPurchase->setProcessType('Purchase');
-        $accountPurchase->setCreated($entity->getCreated());
-        $accountPurchase->setUpdated($entity->getCreated());
-        $accountPurchase->setProcess('approved');
-        $accountPurchase->setApprovedBy($entity->getApprovedBy());
-        $em->persist($accountPurchase);
-        $em->flush();
-        $this->updateVendorBalance($accountPurchase);
-        if($accountPurchase->getPayment() > 0 and !empty($accountPurchase->getTransactionMethod()) ){
-            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        $exist = $this->findOneBy(array('globalOption'=>$global,'medicinePurchase'=>$entity,'processHead'=>'medicine'));
+        if(empty($exist)){
+            $accountPurchase = new AccountPurchase();
+            $accountPurchase->setGlobalOption($global);
+            $accountPurchase->setMedicinePurchase($entity);
+            $accountPurchase->setMedicineVendor($entity->getMedicineVendor());
+            $accountPurchase->setAccountBank( $entity->getAccountBank() );
+            $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
+            if (!empty( $entity->getTransactionMethod())) {
+                $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
+            }
+            $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+            $accountPurchase->setPayment($entity->getPayment());
+            $accountPurchase->setCompanyName($entity->getMedicineVendor()->getCompanyName());
+            $accountPurchase->setGrn($entity->getGrn());
+            $accountPurchase->setProcessHead('medicine');
+            $accountPurchase->setProcessType('Purchase');
+            $accountPurchase->setCreated($entity->getCreated());
+            $accountPurchase->setUpdated($entity->getCreated());
+            $accountPurchase->setProcess('approved');
+            $accountPurchase->setApprovedBy($entity->getApprovedBy());
+            $em->persist($accountPurchase);
+            $em->flush();
+            $this->updateVendorBalance($accountPurchase);
+            if($accountPurchase->getPayment() > 0 and !empty($accountPurchase->getTransactionMethod()) ){
+                $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+            }
+            return $accountPurchase;
         }
-        return $accountPurchase;
+        return $exist;
+
 
     }
 

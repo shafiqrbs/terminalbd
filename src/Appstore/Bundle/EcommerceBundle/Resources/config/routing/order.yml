@@ -2,6 +2,10 @@ customer_order:
     path:     /
     defaults: { _controller: "EcommerceBundle:Order:index" }
 
+customer_order_archive:
+    path:     /archive
+    defaults: { _controller: "EcommerceBundle:Order:archive" }
+
 customer_order_new:
     path:     /new
     defaults: { _controller: "EcommerceBundle:Order:new" }
@@ -75,6 +79,10 @@ customer_order_purchase_item_add:
 customer_order_payment_confirm:
     path:     /{id}/{process}/payment-confirm
     defaults: { _controller: "EcommerceBundle:Order:confirmPayment" }
+
+customer_order_invoice_archive:
+    path:     /{id}/invoice-archive
+    defaults: { _controller: "EcommerceBundle:Order:archiveProcess" }
 
 
 customer_order_payment_delete:

@@ -457,7 +457,7 @@ class MedicineStockRepository extends EntityRepository
         $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
         $query->orderBy('e.slug', 'ASC');
-        $query->setMaxResults( '50' );
+        $query->setMaxResults( '100' );
         return $query->getQuery()->getResult();
 
     }

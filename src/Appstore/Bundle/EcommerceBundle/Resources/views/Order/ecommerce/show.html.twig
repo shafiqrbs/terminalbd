@@ -43,19 +43,19 @@
                     </div>
                 </div>
                 <div class="span4">
+                    {% if entity.courier is not empty %}
                     <div class="row-fluid">
                         <div class="span12">
-                            <label><strong>Payment </strong></label>
-                            {% if entity.accountMobileBank is not empty %}
+                            <label><strong>Courier Information </strong></label>
                                 <ul class="unstyled" >
-                                    <li><strong>Receive Mob.</strong>:&nbsp;{{ entity.accountMobileBank.mobile }}</li>
-                                    <li><strong>Service</strong>:&nbsp;{{ entity.accountMobileBank.serviceName }}</li>
-                                    <li><strong>Sender Mob.</strong>:&nbsp;{{ entity.mobileAccount }}</li>
-                                    <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
+                                    <li><strong>Courier</strong>:&nbsp;{{ entity.courier.name }}</li>
+                                    <li><strong>TrackingNo</strong>:&nbsp;{{ entity.trackingNo }}</li>
+                                    <li><strong>Address</strong>:&nbsp;{{ entity.courier.address }}</li>
+                                    <li><strong>Mobile</strong>:&nbsp;{{ entity.courier.address }}</li>
                                 </ul>
-                            {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
                 {% endfor %}
                 <tr>
                     <td class="numeric" colspan="6" ><span class="pull-right">Total</span></td>
-                    <td class="numeric" colspan="1" >=&nbsp;{{ entity.totalAmount|number_format }}</td>
+                    <td class="numeric" colspan="1" >=&nbsp;{{ entity.subTotal|number_format }}</td>
                 </tr>
                 <tr>
                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
@@ -115,7 +115,7 @@
                 {% endif %}
                 <tr>
                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
-                    <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
+                    <td class="numeric"><strong>=&nbsp;{{ ( entity.total)|number_format }}</strong></td>
                 </tr>
                 <tr>
                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
@@ -165,7 +165,7 @@
                     <td class="numeric" >{{ payment.mobileAccount }}</td>
                     <td class="numeric" >{{ payment.transaction }}</td>
                     <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
-                    <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
+                    <td class="numeric" >{% if payment.transactionType =='Receive' %}{{ payment.amount|number_format }}{% endif %}</td>
                     <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                     <td class="numeric" >
                         {% if payment.status == 1  %}
@@ -188,7 +188,7 @@
             </tr>
             <tr>
                 <td class="numeric" colspan="6" ><span class="pull-right"><strong>Grand Total </strong></span></td>
-                <td class="numeric" >=&nbsp;{{ entity.grandTotalAmount|number_format }}</td>
+                <td class="numeric" >=&nbsp;{{ entity.total|number_format }}</td>
                 <td class="numeric" ></td>
             </tr>
             <tr>

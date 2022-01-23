@@ -75,10 +75,10 @@ class AccountSales
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order")
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
-    private  $order;
+    private  $ecommerce;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
@@ -864,20 +864,21 @@ class AccountSales
     }
 
 
+
     /**
      * @return Order
      */
-    public function getOrder()
+    public function getEcommerce()
     {
-        return $this->order;
+        return $this->ecommerce;
     }
 
     /**
-     * @param Order $order
+     * @param Order $ecommerce
      */
-    public function setOrder($order)
+    public function setEcommerce($ecommerce)
     {
-        $this->order = $order;
+        $this->ecommerce = $ecommerce;
     }
 
 

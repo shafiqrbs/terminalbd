@@ -938,7 +938,7 @@ class ItemRepository extends EntityRepository
     public function getExistVendor($inventory,$name)
     {
         $em = $this->_em;
-        $exist = $em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name));
+        $exist = $em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=>$inventory,'companyName'=>$name));
         if($exist){
             return $exist;
         }else{

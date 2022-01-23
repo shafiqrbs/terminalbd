@@ -37,7 +37,7 @@ class ExpenditureType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'payment amount'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
@@ -144,7 +144,7 @@ class ExpenditureType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_accountingbundle_expenditure';
+        return 'expenditure';
     }
 
     /**

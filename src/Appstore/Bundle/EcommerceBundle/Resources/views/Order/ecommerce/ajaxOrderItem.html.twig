@@ -62,49 +62,49 @@
 </tr>
 <tr>
     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
-    <td class="numeric"><input type="text" name="ecommerce_payment[shippingCharge]" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
+    <td class="numeric"><input type="text" name="shippingCharge" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
     <td></td>
 </tr>
 {% if entity.ecommerceConfig.vatEnable == 1 %}
     <tr>
         <td class="numeric" colspan="6" ><span class="pull-right">Vat & Tax</span></td>
-        <td class="numeric">=&nbsp;{{ entity.vat }}</td>
+        <td class="numeric">{{ entity.vat }}</td>
         <td></td>
     </tr>
 {% endif %}
 <tr>
     <td class="numeric" colspan="6" ><span class="pull-right">Discount</span></td>
-    <td class="numeric"><input type="text" name="ecommerce_payment[discount]" id="discount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discount }}"></td>
+    <td class="numeric"><input type="text" name="discount" id="discount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discount }}"></td>
     <td></td>
 </tr>
 {% if entity.coupon is not empty %}
     <tr>
         <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
-        <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
+        <td class="numeric">{{ entity.couponAmount }}</td>
         <td></td>
     </tr>
 {% endif %}
 <tr>
     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
-    <td class="numeric"><strong>=&nbsp;{{ ( entity.total)|number_format }}</strong></td>
+    <td class="numeric"><strong id="total">{{ ( entity.total)|number_format }}</strong></td>
     <td></td>
 </tr>
 <tr>
     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
-    <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
+    <td class="numeric"><strong id="receive">{{ ( entity.paidAmount)|number_format }}</strong></td>
     <td></td>
 </tr>
 {% if entity.dueAmount  > 0 %}
     <tr>
         <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>
-        <td class="numeric" >=&nbsp;{{ ( entity.dueAmount)|number_format }}</td>
+        <td class="numeric" >{{ ( entity.dueAmount)|number_format }}</td>
         <td></td>
     </tr>
 {% endif %}
 {% if entity.returnAmount  > 0 %}
     <tr>
         <td class="numeric" colspan="6" ><span class="pull-right">Return Amount</span></td>
-        <td class="numeric">=&nbsp;{{ ( entity.returnAmount)|number_format }}</td>
+        <td class="numeric">{{ ( entity.returnAmount)|number_format }}</td>
         <td></td>
     </tr>
 {% endif %}

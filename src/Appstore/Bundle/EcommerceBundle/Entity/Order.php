@@ -70,10 +70,6 @@ class Order
      **/
     private  $orderItems;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="order" )
-     **/
-    private  $accountOnlineOrder;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", inversedBy="orders" )
@@ -86,16 +82,16 @@ class Order
     protected $timePeriod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderProcess" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
 
     private $processBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderApproved")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
-
     private $approvedBy;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="orders")
@@ -401,6 +397,13 @@ class Order
      * @ORM\Column(name="status", type="boolean")
      */
     private $status = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isArchive", type="boolean")
+     */
+    private $isArchive = true;
 
     /**
      * @var boolean
@@ -1461,6 +1464,22 @@ class Order
     public function setVatPercent($vatPercent)
     {
         $this->vatPercent = $vatPercent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchive()
+    {
+        return $this->isArchive;
+    }
+
+    /**
+     * @param bool $isArchive
+     */
+    public function setIsArchive($isArchive)
+    {
+        $this->isArchive = $isArchive;
     }
 
 

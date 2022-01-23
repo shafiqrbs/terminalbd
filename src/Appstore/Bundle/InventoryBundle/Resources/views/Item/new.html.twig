@@ -74,7 +74,7 @@
                                                     <datalist id="categories" >
                                                         {% if categories is not empty %}
                                                             {% for item in categories %}
-                                                                <option value="{{ item.name }}">
+                                                                <option data-value="{{ item.name }}" value="{{ item.name }}">{{ item.name }}</option>
                                                             {% endfor %}
                                                          {% endif %}
                                                     </datalist>

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
@@ -12,6 +13,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * AccountJournalRepository
@@ -414,6 +416,36 @@ class AccountJournalRepository extends EntityRepository
 		$this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity);
 		$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
 		return $entity->getAccountRefNo();
+
+	}
+
+	public function insertEcommerceOrderPayable(OrderPayment $salesReturn)
+	{
+		$global = $salesReturn->getOrder()->getEcommerceConfig()->getGlobalOption();
+		$sales = $salesReturn->getOrder();
+		$accountSales = new AccountJournal();
+		$accountSales->setGlobalOption($global);
+
+		$journalSource = "Sales-Return-{$sales->getInvoice()}";
+		$entity = new AccountJournal();
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
+		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
+	    $transaction = $this->_em->getRepository(TransactionMethod::class)->findOneBy(array('slug'=>'mobile'));
+     	$entity->setTransactionType('Credit');
+		$entity->setAmount(abs($salesReturn->getAmount()));
+		$entity->setTransactionMethod($transaction);
+		$entity->setAccountMobileBank($salesReturn->getAccountMobileBank());
+		$entity->setApprovedBy($salesReturn->getApprovedBy());
+		$entity->setCreatedBy($salesReturn->getCreatedBy());
+		$entity->setGlobalOption($global);
+		$entity->setAccountHeadCredit($accountHeadCredit);
+		$entity->setAccountHeadDebit($accountCashHead);
+		$entity->setJournalSource($journalSource);
+		$entity->setProcess('approved');
+		$this->_em->persist($entity);
+		$this->_em->flush();
+		$this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity);
+	//	$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
 
 	}
 

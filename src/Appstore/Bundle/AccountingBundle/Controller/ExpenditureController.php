@@ -70,6 +70,7 @@ class ExpenditureController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         if (($form->isValid() && $method == 'cash') ||
             ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
@@ -82,6 +83,12 @@ class ExpenditureController extends Controller
             $entity->setAccountHead($entity->getExpenseCategory()->getAccountHead());
             if($this->getUser()->getProfile()->getBranches()){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            if(isset($data['created']) and !empty($data['created'])){
+                $created = $data['created'];
+                $date = new \DateTime($created);
+                $entity->setCreated($date);
+                $entity->setUpdated($date);
             }
             $entity->setUpdated($entity->getCreated());
             $entity->upload();
@@ -116,7 +123,7 @@ class ExpenditureController extends Controller
             'action' => $this->generateUrl('account_expenditure_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal purchase',
                 'novalidate' => 'novalidate',
             )
         ));

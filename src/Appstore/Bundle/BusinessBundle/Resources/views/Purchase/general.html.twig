@@ -158,6 +158,49 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
+                                <label class="control-label" for="firstName"><span class="label">Created Date</span>
+                                    <span class="pull-right sales-right">
+                                        <input type="date" class="m-wrap span12 customer-input"  name="created" id="created"  value="{{ entity.created|date('Y-m-d') }}" ></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="control-group">
+                        <div class="span10">
+                            <div class="control-group">
+                                {{ form_widget(form.vendor) }}
+                                {{ form_errors(form.vendor) }}
+                            </div>
+                        </div>
+                        <div class="span2">
+                            <div class="btn-group">
+                                <a class="btn blue" target="_blank" href="{{ path('business_vendor') }}" ><i class="icon-plus"></i></a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <div class="span5">
+                                    {{ form_widget(form.memo) }}
+                                    {{ form_errors(form.memo) }}
+                                </div>
+                                <div class="span7">
+                                    {{ form_widget(form.receiveDate) }}
+                                    {{ form_errors(form.receiveDate) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
                                 <label class="control-label" for="firstName"><span class="label">Discount Type</span> <span class="pull-right sales-right">{{ form_widget(form.discountType) }}</span></label>
                             </div>
                         </div>
@@ -194,31 +237,8 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                {{ form_widget(form.vendor) }}
-                                {{ form_errors(form.vendor) }}
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
-                                <div class="span5">
-                                {{ form_widget(form.memo) }}
-                                {{ form_errors(form.memo) }}
-                                </div>
-                                <div class="span7">
-                                {{ form_widget(form.receiveDate) }}
-                                {{ form_errors(form.receiveDate) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="clearfix"></div>
                     <div class="row-fluid">
                         <div class="span12">

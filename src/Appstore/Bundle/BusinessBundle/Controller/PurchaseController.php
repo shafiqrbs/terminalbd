@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
@@ -140,8 +141,10 @@ class PurchaseController extends Controller
         $editForm = $this->createEditForm($entity);
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config,$type = array('consumable','stock'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        $vendors = $this->getDoctrine()->getRepository(AccountVendor::class)->findBy(array('globalOption'=>$this->getUser()->getGlobalOption()));
 	    return $this->render("BusinessBundle:Purchase:{$view}.html.twig", array(
             'entity' => $entity,
+            'vendors' => $vendors,
             'id' => 'purchase',
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -361,6 +364,12 @@ class PurchaseController extends Controller
             $entity->setNetTotal(round($entity->getNetTotal()));
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $entity->upload();
+            if(isset($data['created']) and !empty($data['created'])){
+                $created = $data['created'];
+                $date = new \DateTime($created);
+                $entity->setCreated($date);
+                $entity->setUpdated($date);
+            }
             $em->flush();
             return $this->redirect($this->generateUrl('business_purchase_show', array('id' => $entity->getId())));
         }

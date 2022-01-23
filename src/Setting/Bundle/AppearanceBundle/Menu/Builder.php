@@ -481,7 +481,7 @@ class Builder extends ContainerAware
             $website = array_intersect($menuName, array('Website'));
             $menu
                 ->addChild('Manage Appearance')
-                
+                ->setAttribute('icon', 'fa fa-cogs')
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Appearance']->addChild( 'Customize Template', array( 'route'=> 'templatecustomize_edit'));
@@ -1841,6 +1841,7 @@ class Builder extends ContainerAware
 
         $menu
             ->addChild('Invoice Sms & Email')
+            ->setAttribute('icon', 'fa fa-phone')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_SMS_MANAGER')) {
             $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('dropdown', true);

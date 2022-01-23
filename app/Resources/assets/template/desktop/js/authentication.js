@@ -194,8 +194,8 @@ $("#signup").validate({
     }
 });
 
-$("#registration_mobile, #_username").inputFilter(function(value) {
-    return /^-?\d*[.,]?\d*$/.test(value); });
+/*$("#registration_mobile, #_username").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });*/
 
 $("#registrationForm").validate({
 

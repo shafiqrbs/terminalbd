@@ -85,6 +85,21 @@ class StudentRepository extends EntityRepository
 
     }
 
+    public function findWithArchive( $config , $data , $type = '')
+    {
+        $sort = isset($data['sort'])? $data['sort'] :'e.name';
+        $direction = isset($data['direction'])? $data['direction'] :'ASC';
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.location','l');
+        $qb->where("e.educationConfig = :config")->setParameter('config', $config);
+        $qb->where("e.isArchive = 1");
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy("{$sort}",$direction);
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
     protected function handleSearchBetween($qb,$data)
     {
         if(!empty($data))

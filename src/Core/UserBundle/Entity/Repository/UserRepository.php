@@ -80,8 +80,10 @@ class UserRepository extends EntityRepository
             $entity->setUserGroup('customer');
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $entity->setGlobalOption($globalOption);
+            $entity->setPlainPassword($mobile);
             $em->persist($entity);
             $em->flush();
+
             $profile = new Profile();
             $profile->setUser($entity);
             $profile->setMobile($mobile);

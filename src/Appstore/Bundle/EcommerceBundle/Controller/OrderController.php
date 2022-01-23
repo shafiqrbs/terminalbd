@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\EcommerceBundle\Entity\CourierService;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\MedicineItemType;
@@ -9,6 +11,7 @@ use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,8 +55,31 @@ class OrderController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('EcommerceBundle:Order')->findWithSearch($globalOption->getId(),$data);
         $pagination = $this->paginate($entities);
+        $couriers = $this->getDoctrine()->getRepository(CourierService::class)->findBy(array('ecommerceConfig'=>$globalOption->geteCommerceConfig(),'status'=>1));
+
         return $this->render('EcommerceBundle:Order:index.html.twig', array(
             'entities' => $pagination,
+            'couriers' => $couriers,
+        ));
+    }
+
+    /**
+     * Lists all Item entities.
+     *
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN")
+     */
+
+    public function archiveAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $entities = $em->getRepository('EcommerceBundle:Order')->findWithArchive($globalOption->getId(),$data);
+        $pagination = $this->paginate($entities);
+        $couriers = $this->getDoctrine()->getRepository(CourierService::class)->findBy(array('ecommerceConfig'=>$globalOption->geteCommerceConfig(),'status'=>1));
+        return $this->render('EcommerceBundle:Order:archive.html.twig', array(
+            'entities' => $pagination,
+            'couriers' => $couriers,
         ));
     }
 
@@ -91,7 +117,8 @@ class OrderController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $order = $em->getRepository('EcommerceBundle:Order')->find($id);
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $order = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('ecommerceConfig'=>$config,'id'=>$id));
         $paymentEntity = new  OrderPayment();
         $orderForm = $this->createEditForm($order);
         $payment = $this->createEditPaymentForm($paymentEntity,$order);
@@ -329,6 +356,16 @@ class OrderController extends Controller
         return new Response('success');
     }
 
+    public function archiveProcessAction(Order $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity->setIsArchive(1);
+        $entity->setApprovedBy($this->getUser());
+        $em->flush();
+        $this->getDoctrine()->getRepository(AccountSales::class)->insertEcommerceSales($entity);
+        return new Response('success');
+    }
+
     public function inlineOrderUpdateAction(Request $request)
     {
         $data = $request->request->all();
@@ -362,7 +399,7 @@ class OrderController extends Controller
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-        return new JsonResponse(array('discount'=>$order->getDiscount(),'shippingCharge'=>$order->getShippingCharge(),'vat' => $order->getVat(),'total' => $order->getTotal(),'receive' => $order->getReceive(),'dus' => ($order->getTotal() - $order->getReceive())));
+        return new Response (json_encode(array('discount'=>$order->getDiscount(),'shippingCharge'=>$order->getShippingCharge(),'vat' => $order->getVat(),'total' => $order->getTotal(),'receive' => $order->getReceive(),'due' => ($order->getTotal() - $order->getReceive()))));
     }
 
     public function paymentProcessAction(Request $request ,Order $order)
@@ -371,7 +408,8 @@ class OrderController extends Controller
         $data = $payment['ecommerce_payment'];
         $this->updateOrderInformation($order, $data);
         $em = $this->getDoctrine()->getManager();
-        if(isset($data['transactionType']) and $data['transactionType'] and $order->getGrandTotalAmount() > 0){
+        if(isset($data['transactionType']) and $data['transactionType'] and $order->getTotal() > 0){
+
             $entity = new OrderPayment();
             $entity->setOrder($order);
             if($data['transactionType'] == 'Return'){
@@ -384,11 +422,15 @@ class OrderController extends Controller
             if(!empty($data['accountMobileBank'])){
                 $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
                 $entity->setAccountMobileBank($accountMobileBank);
+                $method = $this->getDoctrine()->getRepository(TransactionMethod::class)->findOneBy(array('slug'=>'mobile'));
+                $entity->setTransactionMethod($method);
             }
             $entity->setMobileAccount($data['mobileAccount']);
             $entity->setTransaction($data['transaction']);
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+            return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
         }
         $cashDelivery = isset($payment['cashOnDelivery']) and $payment['cashOnDelivery'] == 1 ? $payment['cashOnDelivery'] : 0;
         if($cashDelivery == 1 ) {
@@ -398,10 +440,8 @@ class OrderController extends Controller
         }
         $em->persist($order);
         $em->flush();
-        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+        return new Response('success');
 
-        return new JsonResponse('success');
-        // return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
     }
 
     /**
@@ -460,7 +500,6 @@ class OrderController extends Controller
     }
 
 
-
     /**
      * Displays a form to edit an existing OrderItem entity.
      *
@@ -484,7 +523,6 @@ class OrderController extends Controller
     {
         return new Response('success');
     }
-
 
 
     /**
@@ -645,7 +683,7 @@ class OrderController extends Controller
             $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
         }
         if($order->getProcess() == "delivered"){
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+            
         }
         return new Response('success');
 
@@ -707,13 +745,21 @@ class OrderController extends Controller
     public function confirmPaymentAction(OrderPayment $payment, $process)
     {
         $em = $this->getDoctrine()->getManager();
-        $payment->setStatus($process);
-        $em->persist($payment);
-        $em->flush();
-        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($payment->getOrder());
-        $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.order_payment_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($payment));
+        if(empty($payment->getApprovedBy())){
+            $payment->setStatus($process);
+            $payment->setApprovedBy($this->getUser());
+            $em->persist($payment);
+            $em->flush();
+            $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($payment->getOrder());
+            if($payment->getTransactionType() == 'Receive'){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceOrderPayable($payment);
+            }elseif($payment->getTransactionType() == 'Return'){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertEcommerceOrderPayable($payment);
+            }
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_payment_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($payment));
 
+        }
         return new Response('success');
 
     }

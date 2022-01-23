@@ -93,6 +93,29 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :option")->setParameter('option', $option);
         $qb->andWhere("e.process != :head")->setParameter('head', "Delete");
+        $qb->andWhere("e.isArchive != 1");
+        if (empty($data['sortBy'])){
+            $qb->orderBy('e.updated', 'DESC');
+        }else{
+            $qb->orderBy($sort ,$order);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+
+    public function findWithArchive($option, $data)
+    {
+        if (!empty($data['sortBy'])) {
+
+            $sortBy = explode('=?=', $data['sortBy']);
+            $sort = $sortBy[0];
+            $order = $sortBy[1];
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.isArchive = 1");
         if (empty($data['sortBy'])){
             $qb->orderBy('e.updated', 'DESC');
         }else{
