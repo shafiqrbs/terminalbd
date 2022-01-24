@@ -88,7 +88,7 @@
                     {% endfor %}
                     <tr>
                         <td colspan="2" >
-                            <div class="col-xs-6 col-md-6 col-sm-6">Total</div> <div class="col-xs-6 col-md-6 col-sm-6 text-right"><strong>{{ entity.totalAmount|number_format(2) }}</strong></div>
+                            <div class="col-xs-6 col-md-6 col-sm-6">Total</div> <div class="col-xs-6 col-md-6 col-sm-6 text-right"><strong>{{ entity.subTotal|number_format(2) }}</strong></div>
                         </td>
                     </tr>
                     <tr>
@@ -119,7 +119,7 @@
                     {% endif %}
                     <tr>
                         <td colspan="2" >
-                            <div class="col-xs-6 col-md-6 col-sm-6">Grand Total</div> <div class="col-xs-6 col-md-6 col-sm-6 text-right"><strong>{{ entity.grandTotalAmount|number_format(2) }}</strong></div>
+                            <div class="col-xs-6 col-md-6 col-sm-6">Grand Total</div> <div class="col-xs-6 col-md-6 col-sm-6 text-right"><strong>{{ entity.total|number_format(2) }}</strong></div>
                         </td>
                     </tr>
                     <tr>

@@ -18,6 +18,8 @@
                                 <li>Amount</li>
                                 <li>Delivery</li>
                                 <li><strong>Process</strong></li>
+                                <li>Courier</li>
+                                <li>Tracking no</li>
                                 <li></li>
                             </ul>
                         </div>
@@ -25,9 +27,11 @@
                             <ul class="unstyled" >
                                 <li>{{ entity.invoice }}</li>
                                 <li>{{ entity.created|date('d-m-Y') }}</li>
-                                <li><span class="order-price">{{ entity.grandTotalAmount|number_format(2) }}</span></li>
+                                <li><span class="order-price">{{ entity.total|number_format(2) }}</span></li>
                                 <li>{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                 <li>{{ entity.process|capitalize }}</li>
+                                <li>{% if entity.courier is not empty %}{{ entity.courier.name }}{% endif %}</li>
+                                <li>{% if entity.courier is not empty %}{{ entity.trackingNo }}{% endif %}</li>
                                 <li>{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</li>
                             </ul>
                         </div>

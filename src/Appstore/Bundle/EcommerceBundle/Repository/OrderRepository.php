@@ -246,19 +246,19 @@ class OrderRepository extends EntityRepository
         $order->setVat($vat);
         $order->setComment($comment);
         $order->setCreatedBy($user);
-        $order->setTotalAmount($cart->total());
+        $order->setSubTotal($cart->total());
         $order->setItem($cart->total_items());
         $grandTotal = $cart->total() + $order->getShippingCharge() + $vat;
         if (!empty($couponCode)) {
             $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($globalOption,$couponCode);
             if (!empty($coupon)){
-                $couponAmount = $this->getCalculatorCouponAmount($order->getTotalAmount(), $coupon);
-                $order->setGrandTotalAmount($grandTotal - $couponAmount);
+                $couponAmount = $this->getCalculatorCouponAmount($order->getSubTotal(), $coupon);
+                $order->setTotal($grandTotal - $couponAmount);
                 $order->setCoupon($coupon);
                 $order->setCouponAmount($couponAmount);
             }
         }else{
-            $order->setGrandTotalAmount($grandTotal);
+            $order->setTotal($grandTotal);
         }
         $em->persist($order);
         $em->flush();

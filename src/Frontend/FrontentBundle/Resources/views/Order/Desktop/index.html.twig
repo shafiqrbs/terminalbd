@@ -31,6 +31,8 @@
                                         <th class="numeric" >Delivery</th>
                                         <th class="numeric" >Period</th>
                                         <th class="numeric" >Total</th>
+                                        <th class="numeric" >Courier</th>
+                                        <th class="numeric" >Tracking No</th>
                                         <th class="numeric" >Process</th>
                                         <th class="numeric" >File</th>
                                         <th class="numeric" >Action</th>
@@ -45,7 +47,9 @@
                                             <td class="numeric" >{{ entity.invoice }}</td>
                                             <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
                                             <td class="numeric" >{% if entity.timePeriod is not empty %}{{ entity.timePeriod.name }}{% endif %}</td>
-                                            <td class="numeric" >{{ entity.grandTotalAmount }}</td>
+                                            <td class="numeric" >{{ entity.total|number_format(2) }}</td>
+                                            <td class="numeric" >{% if entity.courier is not empty %}{{ entity.courier.name }}{% endif %}</td>
+                                            <td class="numeric" >{% if entity.courier is not empty %}{{ entity.trackingNo }}{% endif %}</td>
                                             <td class="" >{{ entity.process|capitalize }}</td>
                                             <td class="" >{% if entity.path is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_buyer_order_download',{'invoice':entity.invoice}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</td>
                                             <td class="numeric" >
