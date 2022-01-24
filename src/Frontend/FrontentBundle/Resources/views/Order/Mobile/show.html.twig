@@ -58,6 +58,21 @@
                     </ul>
                 </div>
                 {% endif %}
+                <div class="clearfix">
+                {% if entity.courier is not empty %}
+                    <div class="col-xs-4 col-md-4 col-sm-4">
+                        <ul class="unstyled" >
+                            <li>Courier Name</li>
+                            <li>Tracking no</li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-8 col-md-8 col-sm-8">
+                        <ul class="unstyled" >
+                            <li>{{ entity.courier.name }}</li>
+                            <li>{{ entity.trackingNo }}</li>
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="clearfix"></div>
             </div>
             <div>
