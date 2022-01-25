@@ -389,6 +389,7 @@ class PurchaseSimpleController extends Controller
             $purchaseItem = new PurchaseItem();
             $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
             $purchaseItemForm->handleRequest($request);
+            $purchaseItem->setInventoryConfig($purchase->getInventoryConfig());
             $purchaseItem->setPurchase($purchase);
             $purchaseItem->setItem($stock);
             $purchaseItem->setName($purchaseItem->getItem()->getName());

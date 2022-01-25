@@ -361,4 +361,27 @@ class PurchaseItemController extends Controller
             'text'  => $barcode
         ));
     }
+
+    public function updateBarcodeAction(Request $request)
+    {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Item entity.');
+        }
+        $barcode = trim($data['value']);
+        $existBarcode = $this->getDoctrine()->getRepository( 'InventoryBundle:PurchaseItem' )->findOneBy( array('inventoryConfig'=>$config, 'barcode' => $barcode) );
+        if ( empty( $existBarcode ) ) {
+            $barcode = trim($data['value']);
+            $entity->setBarcode($barcode);
+            $em->flush();
+        }else{
+            $this->get('session')->getFlashBag()->add(
+                'notice'," $barcode This barcode already used another item"
+            );
+        }
+        return new Response('success');
+    }
 }

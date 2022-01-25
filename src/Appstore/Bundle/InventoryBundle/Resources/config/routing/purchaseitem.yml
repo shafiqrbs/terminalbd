@@ -50,6 +50,12 @@ inventory_barcode_name:
     options:
             expose: true
 
+inventory_purchaseitem_barcode:
+    path:     /{id}/update-barcode
+    defaults: { _controller: "InventoryBundle:PurchaseItem:updateBarcode" }
+    options:
+            expose: true
+
 inventory_purchaseitem_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PurchaseItem:edit" }

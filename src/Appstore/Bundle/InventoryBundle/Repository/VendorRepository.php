@@ -31,7 +31,7 @@ class VendorRepository extends EntityRepository
 
     function vendorInventoryTree($config){
 
-        $sql = "SELECT companyName FROM supplier WHERE  inventoryConfig_id ={$config->getId()}";
+        $sql = "SELECT companyName as name FROM supplier WHERE  inventoryConfig_id ={$config->getId()}";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();
         $results =  $stmt->fetchAll();

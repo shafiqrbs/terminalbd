@@ -81,7 +81,7 @@ ul.page-sidebar-menu > li > a {
     color: #ffffff!important;
 }
 .page-sidebar .page-sidebar-menu .sub-menu>li.active>a, .page-sidebar .page-sidebar-menu .sub-menu>li.open>a, .page-sidebar .page-sidebar-menu .sub-menu>li:hover>a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li.active>a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li.open>a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li:hover>a{
-    background: #00b22d!important;
+    background: transparent!important;
     color:#ffffff;
 }
 
@@ -122,7 +122,7 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > a {
 
 
 ul.page-sidebar-menu > li.current_ancestor > a {
-    background: none repeat scroll 0 0 #2db22e !important;
+    background: none repeat scroll 0 0 #0052cc !important;
     border-top-color: transparent !important;
 }
 
@@ -140,6 +140,11 @@ ul.page-sidebar-menu > li.current_ancestor > a .selected {
     right: 0px;
     top: 8px;
 }
+
+.page-sidebar .page-sidebar-menu>li.active>a>i{
+ color: #ffffff!important;
+}
+
 ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > a {
     padding-left: 25px !important;
 }

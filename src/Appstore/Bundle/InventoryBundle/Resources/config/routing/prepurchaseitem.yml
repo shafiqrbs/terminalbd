@@ -19,6 +19,7 @@ prepurchaseitem_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PrePurchaseItem:edit" }
 
+
 prepurchaseitem_status:
     path:     /{id}/status
     defaults: { _controller: "InventoryBundle:PrePurchaseItem:status" }

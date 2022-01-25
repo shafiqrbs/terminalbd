@@ -1862,7 +1862,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('System Transaction')
-            
+            ->setAttribute('icon', 'fa fa-money')
             ->setAttribute('dropdown', true);
         $menu['System Transaction']->addChild('Bank', array('route' => 'bankaccount'));
         $menu['System Transaction']->addChild('Mobile Bank', array('route' => 'mobilebankaccount'));
@@ -1873,7 +1873,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Manage Domain')
-            
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
         $menu['Manage Domain']->addChild('Domain Operation', array('route' => 'tools_domain'));
 	    $menu['Manage Domain']->addChild('Service Pricing')->setAttribute('dropdown', true);
@@ -1891,7 +1891,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Manage Frontend')
-            
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
         $menu['Manage Frontend']->addChild('Site Slider', array('route' => 'siteslider'));
         $menu['Manage Frontend']->addChild('Site Content', array('route' => 'sitecontent'));
@@ -1908,6 +1908,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Tools')
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
 
 /*	    $menu['Tools']->addChild('Manage Option', array('route' => 'globaloption'));
@@ -1944,6 +1945,7 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Syndicate')
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
 
         $menu['Syndicate']->addChild('Education', array('route' => 'education'));
@@ -1955,11 +1957,26 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Product Category')
+            ->setAttribute('icon', 'fa fa-cogs')
             ->setAttribute('dropdown', true);
 
         $menu['Product Category']->addChild('Add Category', array('route' => 'category_new'));
         $menu['Product Category']->addChild('Listing', array('route' => 'category'));
         return $menu;
+    }
+    public function manageApplicationSettingMenu($menu)
+    {
+        $menu
+            ->addChild('Application Setting')
+            ->setAttribute('icon', 'fa fa-cogs')
+            ->setAttribute('dropdown', true);
+        $menu['Application Setting']->addChild('Account Head', array('route' => 'accounthead'));
+        $menu['Application Setting']->addChild('Transaction Method', array('route' => 'transactionmethod_new'));
+        $menu['Application Setting']->addChild('Color', array('route' => 'color'));
+        $menu['Application Setting']->addChild('Size', array('route' => 'size'));
+        $menu['Application Setting']->addChild('Hospital Category', array('route' => 'hms_category'));
+        return $menu;
+
     }
 
     public function appearanceMenu($menu)
@@ -2173,20 +2190,7 @@ class Builder extends ContainerAware
 
     }
 
-    public function manageApplicationSettingMenu($menu)
-    {
-        $menu
-            ->addChild('Application Setting')
-            
-            ->setAttribute('dropdown', true);
-        $menu['Application Setting']->addChild('Account Head', array('route' => 'accounthead'));
-        $menu['Application Setting']->addChild('Transaction Method', array('route' => 'transactionmethod_new'));
-        $menu['Application Setting']->addChild('Color', array('route' => 'color'));
-        $menu['Application Setting']->addChild('Size', array('route' => 'size'));
-        $menu['Application Setting']->addChild('Hospital Category', array('route' => 'hms_category'));
-        return $menu;
 
-    }
 
     private function buildChildMenus(ItemInterface $menu, $categories)
     {
