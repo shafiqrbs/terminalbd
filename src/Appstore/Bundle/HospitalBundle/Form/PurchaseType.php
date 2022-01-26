@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Form;
+namespace Appstore\Bundle\MedicineBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Doctrine\ORM\EntityRepository;
@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PurchaseType extends AbstractType
 {
     /** @var  HospitalConfig */
+
     public  $option;
 
     public function __construct(GlobalOption $option)
@@ -29,18 +30,32 @@ class PurchaseType extends AbstractType
     {
         $builder
 
-            ->add('vendor', 'entity', array(
+            ->add('medicineVendor', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsVendor',
-                'empty_value' => '---Choose a vendor ---',
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
+                'empty_value' => '---Choose a vendor/supplier ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'m-wrap span12 medicineVendor select2 inputs'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.medicineConfig =".$this->option->getMedicineConfig()->getId())
+                        ->orderBy('e.companyName','ASC');
+                },
+            ))
+
+            ->add('medicinePurchaseReturn', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn',
+                'empty_value' => '--Adjustment return--',
+                'property' => 'invoiceAmount',
+                'attr'=>array('class'=>'m-wrap span12 inputs'),
+                'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.mode = 'medicine'")
-                        ->andWhere("wt.hospitalConfig =".$this->option->getHospitalConfig()->getId());
+                        ->where("wt.medicineConfig =".$this->option->getMedicineConfig()->getId())
+                        ->andWhere("wt.process ='approved'")
+                        ->andWhere("wt.adjusted != 1");
                 },
             ))
             ->add('transactionMethod', 'entity', array(
@@ -48,7 +63,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
                 'empty_value' => '---Choose a Transaction---',
-                'attr'=>array('class'=>'span12 transactionMethod'),
+                'attr'=>array('class'=>'m-wrap span12 inputs transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -62,7 +77,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -75,7 +90,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
@@ -83,14 +98,31 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add  memo no'))
-            )))
-            ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
-            ->add('receiveDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar','placeholder'=>'Enter receive date')))
-            ->add('payment','text', array('attr'=>array('class'=>'numeric m-wrap span12','placeholder'=>'Payment amount')
-            ));
+            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','required' => false ,'label' => 'form.name','placeholder'=>'Memo no')))
+          //  ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12  resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
+            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
+            ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap remove-value','placeholder'=>'Payment amount')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('invoiceMode', 'choice', array(
+                'attr'=>array('class'=>'m-wrap invoice-mode span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'invoice' => 'Vendor Invoice',
+                    'manual' => 'Manual',
+                ),
+            ))
+            ->add('discountType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap discount-type span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'percentage' => 'Percentage',
+                    'flat' => 'Flat',
+                ),
+            ))
+           // ->add('asInvestment')
+            ->add('discount','hidden');
     }
     
     /**
@@ -99,7 +131,7 @@ class PurchaseType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsPurchase'
+            'data_class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase'
         ));
     }
 
@@ -108,6 +140,6 @@ class PurchaseType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_hmspurchase';
+        return 'medicinepurchase';
     }
 }

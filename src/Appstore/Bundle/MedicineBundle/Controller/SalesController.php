@@ -4,13 +4,16 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
+use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -441,10 +444,50 @@ class SalesController extends Controller
         if($entity->getCustomer()->getName() != "Default"){
             $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
         }
+
+        $html = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
+            'entity'      => $entity,
+            'previousDue'      => $previousDue,
+        ));
+        echo $html;
+        $path = "http://www.terminalbd.local/medicine/sales/$id/print";
+        shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
+
+        exit;
+
         return $this->render('MedicineBundle:Sales:print.html.twig', array(
             'entity'      => $entity,
             'previousDue'      => $previousDue,
         ));
+    }
+
+
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function posPrintUltraAction($id)
+    {
+        $mode = $_REQUEST['mode'];
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+        $option = $this->getUser()->getGlobalOption();
+        $previousDue = 0;
+        if($entity->getCustomer()->getName() != "Default"){
+            $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
+        }
+        if($mode == "print"){
+            $print = $this->posMikePrint($entity);
+        }else{
+            $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
+                'entity'      => $entity,
+                'previousDue'      => $previousDue,
+            ));
+        }
+        return new Response($print);
     }
 
 
@@ -674,6 +717,168 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDuplicateSalesDelete($config,$android);
         return $this->redirect($this->generateUrl('medicine_sales_android'));
 
+    }
+
+    private function posMikePrint(MedicineSales $entity)
+    {
+
+        $invoiceParticulars = $entity->getMedicineSalesItems();
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        /* @var $config MedicineConfig */
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+
+        $vatRegNo       = $config->getVatRegNo();
+        $companyName    = $option->getName();
+        // $mobile         = "Mobile -".$option->getMobile();
+        $address        = $config->getAddress();
+        $website        = $option->getDomain();
+        $customer       = '';
+
+        /** ===================Customer Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getNetTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getReceived();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getSalesBy()->getProfile()->getName();
+        $printMessage       = $config->getPrintFooterText();
+        if($entity->getCustomer()->getName() != "Default"){
+            $customer           = "Customer: {$entity->getCustomer()->getName()},Mobile: {$entity->getCustomer()->getMobile()}\n";
+        }
+
+        /** ===================Invoice Sales Item Information========================= */
+
+
+        /* Date is kept the same for testing */
+        $date = date('d-M-y h:i:s A');
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($address."\n");
+        // $printer -> text($mobile."\n");
+        $printer -> feed();
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        /*if(!empty($vatRegNo)){
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> setEmphasis(false);
+        }*/
+        $discountPercent = $config->isPrintDiscountPercent();
+        $prevDue = $config->isPrintPreviousDue();
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        //  $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
+        if($discountPercent == 1 and $entity->getDiscountType() =="Percentage"){
+            $percent = $entity->getDiscountCalculation();
+            $discount       = new PosItemManager('Discount: ('.$percent.'%)','Tk.',number_format($discount));
+        }else{
+            $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        }
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
+        if($prevDue == 1 and $entity->getCustomer()->getName() != "Default"){
+            $previous = ($previousDue - $entity->getDue());
+            $previousBalance       = new PosItemManager('Previous Due: ','Tk.',number_format($previous));
+        }
+        $payment        = new PosItemManager('Paid: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($previousDue));
+
+        /* Title of receipt */
+        $printer -> feed();
+        $printer -> setEmphasis(true);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales Memo No- {$entity->getInvoice()}\n");
+        $printer -> setEmphasis(false);
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        if(!empty($customer)){
+            $printer -> text($customer);
+        }
+        $printer -> feed();
+        $printer -> setEmphasis(true);
+        $printer->setFont(Printer::FONT_B);
+        $printer -> text(new PosItemManager('Item Name', 'Qnt', 'Amount'));
+        $printer -> text("---------------------------------------------------------------\n");
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(false);
+        //$printer -> feed();
+        $i = 1;
+        if(!empty($invoiceParticulars)){
+            /* @var $row MedicineSalesItem */
+            foreach ($invoiceParticulars as $row){
+                $qnt = sprintf("%s", str_pad($row->getQuantity(),2, '0', STR_PAD_LEFT));
+                $printer -> text(new PosItemManager($i.'. '.$row->getMedicineStock()->getName(),$qnt,number_format($row->getSubTotal())));
+                $i++;
+            }
+        }
+        $printer -> text("---------------------------------------------------------------\n");
+        //    $printer -> feed();
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        //$printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        /* if($vat){
+             $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+             $printer->text($vat);
+             $printer->setEmphasis(false);
+         }*/
+        $printer -> text("---------------------------------------------------------------\n");
+        $printer->text($discount);
+        $printer -> setEmphasis(false);
+        $printer -> text ( "\n" );
+
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> text($grandTotal);
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+       // $printer -> text($previousBalance);
+        $printer -> setEmphasis(false);
+        //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> text($payment);
+        $printer -> setEmphasis(true);
+        if($previousDue > 0 and $entity->getCustomer()->getName() != "Default") {
+            $printer->text($due);
+        }
+        //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer->text("\n");
+        //$printer -> feed();
+        //$printer->text($transaction);
+        //$printer->selectPrintMode();
+        /* Barcode Print */
+        $printer -> feed();
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales By: ".$salesBy."\n");
+        /*if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }*/
+        $printer -> text($date . "\n");
+        if($printMessage){
+            $printer->text("{$printMessage}\n");
+        }else{
+            $printer->text("*Medicines once sold are not taken back*\n");
+        }
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return $response;
     }
 
 

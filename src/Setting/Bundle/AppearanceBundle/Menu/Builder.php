@@ -366,6 +366,7 @@ class Builder extends ContainerAware
             $menu[$business]['Manage Stock']->addChild('Category', array('route' => 'business_category'));
             $menu[$business]['Manage Stock']->addChild('Stock Shortlist', array('route' => 'business_stock_shortlist'));
             $menu[$business]['Manage Stock']->addChild('Stock History', array('route' => 'business_stock_history'));
+            $menu[$business]['Manage Stock']->addChild('Stock Adjustment', array('route' => 'business_stock_adjustment'));
             if($config->isStockHistory() == 1) {
                 $menu[$business]['Manage Stock']->addChild('Product Ledger', array('route' => 'business_stock_ledger'));
             }
@@ -381,8 +382,7 @@ class Builder extends ContainerAware
                     $menu[$business]['Agency Stock']->addChild('Vendor Stock Item', array('route' => 'business_vendor_stock_item'));
                     $menu[$business]['Agency Stock']->addChild('Vendor Stock', array('route' => 'business_vendor_stock'));
                     $menu[$business]['Agency Stock']->addChild( 'Stock Report' )->setAttribute( 'dropdown', true );
-                    $menu[$business]['Agency Stock']['Stock Report']->addChild( 'Vendor base Sales', array( 'route' => 'business_report_vendor_commission_sales' ) )
-                        ;
+                    $menu[$business]['Agency Stock']['Stock Report']->addChild( 'Vendor base Sales', array( 'route' => 'business_report_vendor_commission_sales' ) );
             }
         }
         $menu[$business]->addChild( 'Notepad', array('route' => 'domain_notepad'));
@@ -395,7 +395,6 @@ class Builder extends ContainerAware
                 $menu[$business]['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'));
                 $menu[$business]['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'));
                 $menu[$business]['Master Data']->addChild('Brand', array('route' => 'business_brand'));
-                $menu[$business]['Master Data']->addChild('Stock Adjustment', array('route' => 'business_stock_adjustment'));
                 if($config->getBusinessModel() == 'distribution') {
                   /*  $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'));*/
                     $menu[$business]['Master Data']->addChild('Marketing', array('route' => 'business_marketing'));
@@ -1401,7 +1400,7 @@ class Builder extends ContainerAware
 		                                        ;
 		    $menu['Medicine']['Manage Purchase']->addChild('Pre-purchase', array('route' => 'medicine_prepurchase'))
 		                                        ;
-		    $menu['Medicine']['Manage Purchase']->addChild('Vendor', array('route' => 'medicine_vendor'));
+		    $menu['Medicine']['Manage Purchase']->addChild('Vendor/Supplier', array('route' => 'medicine_vendor'));
 
 	    }
 

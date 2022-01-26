@@ -74,8 +74,12 @@ class StockAdjustmentController extends Controller
             $entity->setConfig($config);
             $entity->setItem($stock);
             if($entity->getMode() == "Minus"){
-                $entity->setQuantity("-{$entity->getQuantity()}");
-                $entity->setBonus("-{$entity->getBonus()}");
+                if($entity->getQuantity() > 0){
+                    $entity->setQuantity("-{$entity->getQuantity()}");
+                }
+                if($entity->getBonus() > 0){
+                    $entity->setBonus("-{$entity->getBonus()}");
+                }
             }
             $em->persist($entity);
             $em->flush();
