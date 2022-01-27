@@ -360,7 +360,7 @@ class Builder extends ContainerAware
 
 	    }
         if ($config->isShowStock() == 1 and $securityContext->isGranted('ROLE_BUSINESS_STOCK')) {
-            $menu[$business]->addChild('Manage Stock')->setAttribute('icon', 'icon icon-building')->setAttribute('dropdown', true);
+            $menu[$business]->addChild('Manage Stock')->setAttribute('dropdown', true);
             $menu[$business]['Manage Stock']->addChild('Stock Item', array('route' => 'business_stock'));
             $menu[$business]['Manage Stock']->addChild('Stock Import', array('route' => 'business_itemimporter'));
             $menu[$business]['Manage Stock']->addChild('Category', array('route' => 'business_category'));
@@ -1109,7 +1109,18 @@ class Builder extends ContainerAware
            $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
                 ;
         }
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_PURCHASE')) {
+            $menu['Hospital & Diagnostic']->addChild('Manage Purchase')->setAttribute('dropdown', true);
+            $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Purchase', array('route' => 'hms_purchase'));
+            $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Vendor/Supplier', array('route' => 'hms_vendor'));
+        }
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK')) {
+            $menu['Hospital & Diagnostic']->addChild('Item Issue', array('route' => 'hms_stockout'))
+            ;
+            $menu['Hospital & Diagnostic']->addChild('Manage Stock', array('route' => 'hms_stock'))
+            ;
 
+        }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MASTERDATA')) {
 
                 $menu['Hospital & Diagnostic']->addChild('Master Data')
@@ -1137,29 +1148,6 @@ class Builder extends ContainerAware
                     $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
                         ;
                 }
-            }
-
-
-            if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK')) {
-                $menu['Hospital & Diagnostic']->addChild('Manage Stock')
-                    
-                    ->setAttribute('dropdown', true);
-                $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Item Issue', array('route' => 'hms_stockout'))
-                    ;
-                $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Medicine', array('route' => 'hms_medicine'))
-                    ;
-                $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Accessories', array('route' => 'hms_accessories'))
-                    ;
-            }
-            if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_PURCHASE')) {
-                $menu['Hospital & Diagnostic']->addChild('Purchase')
-                    
-                    ->setAttribute('dropdown', true);
-                $menu['Hospital & Diagnostic']['Purchase']->addChild('Medicine Receive', array('route' => 'hms_purchase'))
-                    ;
-                $menu['Hospital & Diagnostic']['Purchase']->addChild('Accessories Receive', array('route' => 'hms_accessories_purchase'))
-                    ;
-                $menu['Hospital & Diagnostic']['Purchase']->addChild('Vendor', array('route' => 'hms_vendor'));
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_REPORT')) {
                 $menu['Hospital & Diagnostic']->addChild('Reports')

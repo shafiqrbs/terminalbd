@@ -14,6 +14,10 @@ hms_vendor_name:
     options:
             expose: true
 
+hms_vendor_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:Vendor:new" }
+
 hms_vendor_create:
     path:     /create
     defaults: { _controller: "HospitalBundle:Vendor:create" }

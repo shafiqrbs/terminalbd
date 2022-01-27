@@ -444,17 +444,6 @@ class SalesController extends Controller
         if($entity->getCustomer()->getName() != "Default"){
             $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
         }
-
-        $html = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
-            'entity'      => $entity,
-            'previousDue'      => $previousDue,
-        ));
-        echo $html;
-        $path = "http://www.terminalbd.local/medicine/sales/$id/print";
-        shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
-
-        exit;
-
         return $this->render('MedicineBundle:Sales:print.html.twig', array(
             'entity'      => $entity,
             'previousDue'      => $previousDue,
@@ -479,6 +468,8 @@ class SalesController extends Controller
         if($entity->getCustomer()->getName() != "Default"){
             $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
         }
+       // $path = "http://www.terminalbd.local/medicine/sales/$id/print";
+       // shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
         if($mode == "print"){
             $print = $this->posMikePrint($entity);
         }else{

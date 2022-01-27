@@ -13,7 +13,6 @@ security:
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_USER]
         ROLE_DOMAIN_CUSTOMER:                           [ROLE_USER]
         ROLE_DOMAIN_USER:                               [ROLE_USER]
-        ROLE_DOMAIN_USER:                               [ROLE_DOAMIN]
         ROLE_WEBSITE:                                   [ROLE_WEBSITE]
         ROLE_APPEARANCE:                                [ROLE_APPEARANCE]
         ROLE_HMS:                                       [ROLE_HMS,ROLE_MEDICINE]
@@ -37,7 +36,6 @@ security:
         ROLE_ASSETS_MANAGE:                             [ROLE_ASSETS,ROLE_ASSETS_MANAGE]
         ROLE_ASSETS_DISTRIBUTION:                       [ROLE_ASSETS,ROLE_ASSETS_DISTRIBUTION]
         ROLE_ASSETS_MAINTENANCE:                        [ROLE_ASSETS,ROLE_ASSETS_MAINTENANCE]
-        ROLE_ASSETS_DISTRIBUTION:                       [ROLE_ASSETS,ROLE_ASSETS_DISTRIBUTION]
         ROLE_ASSETS_DISPOSAL:                           [ROLE_ASSETS,ROLE_ASSETS_DISPOSAL]
         ROLE_ASSETS_STOCK:                              [ROLE_ASSETS,ROLE_ASSETS_STOCK]
         ROLE_ASSETS_SETTING:                            [ROLE_ASSETS,ROLE_ASSETS_SETTING]
@@ -96,7 +94,6 @@ security:
 
         # THIS IS PART OF MEDICINE MANAGEMENT
 
-        ROLE_MEDICINE:                                  [ROLE_MEDICINE]
         ROLE_MEDICINE_STAFF:                            [ROLE_MEDICINE,ROLE_MEDICINE_STAFF]
         ROLE_MEDICINE_REPORT:                           [ROLE_MEDICINE,ROLE_MEDICINE_REPORT]
         ROLE_MEDICINE_SALES:                            [ROLE_MEDICINE,ROLE_MEDICINE_SALES]
@@ -199,7 +196,7 @@ security:
         ROLE_HOTEL_INVOICE:                             [ROLE_HOTEL,ROLE_HOTEL_INVOICE]
         ROLE_HOTEL_PURCHASE:                            [ROLE_HOTEL,ROLE_HOTEL_PURCHASE]
         ROLE_HOTEL_STOCK:                               [ROLE_HOTEL,ROLE_HOTEL_STOCK]
-        ROLE_HOTEL_STOCK:                               [ROLE_HOTEL,ROLE_HOTEL_REPORTS]
+        ROLE_HOTEL_REPORTS:                               [ROLE_HOTEL,ROLE_HOTEL_REPORTS]
         ROLE_HOTEL_MANAGER:                             [ROLE_HOTEL,ROLE_HOTEL_MANAGER,ROLE_HOTEL_INVOICE,ROLE_HOTEL_PURCHASE,ROLE_HOTEL_STOCK,ROLE_HOTEL_REPORTS]
 
         ROLE_DOMAIN_RESTAURANT:                         [ROLE_RESTAURANT,ROLE_DOMAIN_RESTAURANT]

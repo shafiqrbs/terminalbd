@@ -1,4 +1,4 @@
-PurchaseController.php{% extends '::base.html.twig' %}
+{% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
         <!-- BEGIN category HEADER-->
@@ -14,7 +14,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_purchase') }}">Medicine Purchase</a>
+                        <a href="{{ path('hms_purchase') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Medicine Purchase</a></li>
@@ -32,7 +32,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Medicine Purchase Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
@@ -40,8 +40,8 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
                                #}
                                 <a href="https://medex.com.bd/" target="_blank"  class="btn purple"><i class="fa fa-anchor"></i> Check Price</a>
-                                <a class="btn yellow" target="_blank" href="{{ path('medicine') }}"><i class="icon-plus"></i> New Medicine </a>
-                                <a class="btn black" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
+                                <a class="btn yellow" target="_blank" href="{{ path('medicine') }}"><i class="icon-plus"></i> New </a>
+                                <a class="btn black" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Purchase </a>
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                                 <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Per Pack" autocomplete="off">
                                                 {{ form_widget(purchaseItem.salesPrice) }}
                                                 {{ form_widget(purchaseItem.expirationEndDate) }}
-                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                                 <input type="hidden" id="particularId" name="particularId" value="">
                                             </div>
                                         </div>
@@ -170,7 +170,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                                 <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Pack QTY" autocomplete="off">
                                                 {{ form_widget(purchaseItem.salesPrice) }}
                                                 {{ form_widget(purchaseItem.expirationEndDate) }}
-                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                                 <input type="hidden" id="particularId" name="particularId" value="">
                                             </div>
                                         </div>
@@ -213,7 +213,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                     <td class="">
-                                                        <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                                        <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('hms_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
                                                     </td>
                                                     {#
                                                     <td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>
@@ -238,7 +238,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
                                                         <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >
                                                         {{ item.salesQuantity }}</td>
-                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
+                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
                                                 </tr>
                                             {% endfor %}
                                         {% endif %}
@@ -272,7 +272,7 @@ PurchaseController.php{% extends '::base.html.twig' %}
                                                             </div>
                                                             <div class="span2">
                                                                 <div class="btn-group">
-                                                                    <a class="btn blue" target="_blank" href="{{ path('medicine_vendor_new') }}" ><i class="icon-plus"></i></a>
+                                                                    <a class="btn blue" target="_blank" href="{{ path('hms_vendor_new') }}" ><i class="icon-plus"></i></a>
                                                                 </div>
                                                             </div>
                                                         </td>

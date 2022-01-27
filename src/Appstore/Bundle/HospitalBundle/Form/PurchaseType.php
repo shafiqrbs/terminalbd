@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\MedicineBundle\Form;
+namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Doctrine\ORM\EntityRepository;

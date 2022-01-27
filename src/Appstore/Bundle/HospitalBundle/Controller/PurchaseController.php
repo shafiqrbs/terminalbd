@@ -12,7 +12,6 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningType;
-use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningTypeType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,7 +42,7 @@ class PurchaseController extends Controller
 
 
 	/**
-	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 * @Secure(roles="ROLE_DOMAIN_HOSPITAL_PURCHASE")
 	 */
     public function indexAction()
     {
@@ -59,7 +58,7 @@ class PurchaseController extends Controller
     }
 
     /**
-	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 * @Secure(roles="ROLE_DOMAIN_HOSPITAL_PURCHASE")
 	 */
     public function purchaseItemAction()
     {
@@ -79,7 +78,7 @@ class PurchaseController extends Controller
     }
 
 	/**
-	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 * @Secure(roles="ROLE_DOMAIN_HOSPITAL_PURCHASE")
 	 */
 
     public function medicineExpiryAction()
@@ -129,7 +128,7 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseOpeningType($globalOption), $entity, array(
-            'action' => $this->generateUrl('medicine_purchase_opening_create'),
+            'action' => $this->generateUrl('hms_purchase_opening_create'),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -176,7 +175,7 @@ class PurchaseController extends Controller
     }
 
 	/**
-	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 * @Secure(roles="ROLE_DOMAIN_HOSPITAL_PURCHASE")
 	 */
     public function newAction()
     {
@@ -198,12 +197,12 @@ class PurchaseController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('hms_purchase_edit', array('id' => $entity->getId())));
 
     }
 
 	/**
-	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
+	 * @Secure(roles="ROLE_DOMAIN_HOSPITAL_PURCHASE")
 	 */
 
     public function editAction($id)
@@ -215,7 +214,7 @@ class PurchaseController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         if($entity->getProcess() == 'Approved'){
-            return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_purchase_show', array('id' => $entity->getId())));
         }
         if($entity->getInvoiceMode() == 'invoice'){
           $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updateInvoiceMode($entity);
@@ -242,7 +241,7 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
-            'action' => $this->generateUrl('medicine_purchase_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('hms_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -257,7 +256,7 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseItemType($globalOption), $purchaseItem, array(
-            'action' => $this->generateUrl('medicine_purchase_particular_add', array('invoice' => $entity->getId())),
+            'action' => $this->generateUrl('hms_purchase_particular_add', array('invoice' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'custom-form',
@@ -272,7 +271,7 @@ class PurchaseController extends Controller
     {
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $form = $this->createForm(new MedicineStockItemType($config), $entity, array(
-            'action' => $this->generateUrl('medicine_stock_item_create', array('id' => $purchase->getId())),
+            'action' => $this->generateUrl('hms_stock_item_create', array('id' => $purchase->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'custom-form',
@@ -601,7 +600,7 @@ class PurchaseController extends Controller
             }
             $em->flush();
            // $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
-            return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_purchase_show', array('id' => $entity->getId())));
         }
         $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
@@ -707,7 +706,7 @@ class PurchaseController extends Controller
             'config' => $purchase->getMedicineConfig(),
         ));
         $em->getRepository('MedicineBundle:MedicineReverse')->purchase($purchase, $template);
-        return $this->redirect($this->generateUrl('medicine_purchase_edit',array('id' => $purchase->getId())));
+        return $this->redirect($this->generateUrl('hms_purchase_edit',array('id' => $purchase->getId())));
     }
 
     /**
@@ -755,7 +754,7 @@ class PurchaseController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('medicine_vendor'));
+        return $this->redirect($this->generateUrl('hms_vendor'));
     }
 
     public function inlineUpdateAction(Request $request)
@@ -828,132 +827,9 @@ class PurchaseController extends Controller
 
     }
 
-    public function vendorMergeAction(MedicineVendor $vendor)
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
 
-        $em = $this->getDoctrine()->getManager();
-        $entity = new MedicinePurchase();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $entity->setMedicineConfig($config);
-        $entity->setMedicineVendor($vendor);
-        $entity->setPayment($vendor);
-        $entity->setCreatedBy($this->getUser());
-        $receiveDate = new \DateTime('now');
-        $entity->setReceiveDate($receiveDate);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $em->persist($entity);
-        $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->mergePurchaseItem($entity,$vendor);
-        return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
-    }
 
-    public function groupReverseAction()
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
-        $entities = $entities->getQuery()->getResult();
-        /* @var $purchase MedicinePurchase */
-        foreach ( $entities as $purchase):
-                if($purchase->getProcess() != "Created"){
-                    if($purchase->getAsInvestment() == 1 ) {
-                        $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedMedicinePurchaseJournal($purchase);
-                    }
-                    $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountMedicinePurchaseReverse($purchase);
-                    $purchase->setRevised(true);
-                    $purchase->setPayment(0);
-                    $purchase->setProcess('Complete');
-                    $em->flush();
-                    if(!empty($purchase->getMedicinePurchaseReturn())){
-                        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->removePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
-                    }
-                    $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
-                }
-        endforeach;
-        exit;
-        return $this->redirect($this->generateUrl('medicine_purchase'));
-    }
 
-    public function groupApprovedAction()
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $data = array('startDate' => '2019-07-04','endateDate' => '2019-07-04');
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->findWithSearch($config,$data);
-        $entities = $entities->getQuery()->getResult();
-        /* @var $purchase MedicinePurchase */
-        foreach ( $entities as $purchase):
-
-            if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
-                $em = $this->getDoctrine()->getManager();
-                $purchase->setProcess('Approved');
-                $purchase->setPayment($purchase->getNetTotal());
-                $purchase->setUpdated($purchase->getCreated());
-                $purchase->setApprovedBy($this->getUser());
-                if($purchase->getPayment() == 0){
-                    $purchase->setAsInvestment(false);
-                    $purchase->setTransactionMethod(NULL);
-                }
-                $em->flush();
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
-                $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
-                if(!empty($purchase->getMedicinePurchaseReturn())){
-                    $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseAdjustment($purchase->getMedicinePurchaseReturn());
-                }
-                if($purchase->getAsInvestment() == 1 and $purchase->getPayment() > 0 ){
-                    $journal =  $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->insertAccountMedicinePurchaseJournal($purchase);
-                    $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
-                    $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
-                }
-                $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertMedicineAccountPurchase($purchase);
-                $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
-            }
-        endforeach;
-        exit;
-    }
-
-    public function androidPurchaseAction()
-    {
-        $conf = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
-        $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineAndroidProcess')->getAndroidSalesList($conf,"purchase");
-        $pagination = $this->paginate($entities);
-        $sales = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->findAndroidDeviceSales($pagination);
-        return $this->render('HospitalBundle:Purchase:purchaseAndroid.html.twig', array(
-            'entities' => $pagination,
-            'sales' => $sales,
-        ));
-    }
-
-    public function insertGroupApiPurchaseImportAction(MedicineAndroidProcess $android)
-    {
-        $msg = "invalid";
-        set_time_limit(0);
-        ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-
-        $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
-        if(!empty($removeSales)){
-            $removeSales->execute();
-        }
-        $msg = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->insertApiPurchase($config->getGlobalOption(),$android);
-        if($msg == "valid"){
-            $android->setStatus(true);
-            $em->persist($android);
-            $em->flush();
-            return new Response('success');
-        }else{
-            return new Response('failed');
-        }
-    }
 
 
 }
