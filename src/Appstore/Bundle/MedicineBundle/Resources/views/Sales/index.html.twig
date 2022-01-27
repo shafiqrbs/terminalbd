@@ -145,8 +145,10 @@
                                                 {#<a href="{{ path('account_sales_medicine_due', { 'sales': entity.id }) }}" class="btn yellow mini" ><i class="icon-money"></i> Receive</a>#}
                                                 <a href="javascript:" class="btn yellow mini" ><i class="icon-money"></i> Due</a>
                                             {% endif %}
-                                            <a  data-action="{{ path('medicine_sales_posprint', { 'id': entity.id,'mode':'print'}) }}"  class="btn yellow mini posprint" ><i class="icon-print"></i>Page</a>
+                                            {% if ((entity.process == 'Done' and app.user.granted("ROLE_DOMAIN"))) %}
+                                            <a  data-action="{{ path('medicine_sales_posprint', { 'id': entity.id,'mode':'print'}) }}"  class="btn purple mini posprint" ><i class="icon-print"></i>Page</a>
                                             <a  data-action="{{ path('medicine_sales_posprint', { 'id': entity.id,'mode':'pos' }) }}" class="btn blue mini posprint" ><i class="icon-print"></i>Print</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

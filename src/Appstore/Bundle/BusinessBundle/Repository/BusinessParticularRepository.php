@@ -72,7 +72,7 @@ class BusinessParticularRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
 	    $query->select('e.name as id');
 	    $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("e.businessConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');

@@ -511,7 +511,6 @@
             text-align: right;
             border: 2px solid red !important;
             height: 40px!important;
-            width: auto!important;
         }
         ul.ui-autocomplete li a {
             position: relative;
@@ -531,6 +530,9 @@
         }
         .select2-container .select2-choice .select2-arrow {
             top: 10px;
+        }
+        .sales-right input[class*="span"].initialDiscount{
+            width: 120px!important;
         }
         {% if config.printCss is not empty %}
             {{ config.printCss|raw }}

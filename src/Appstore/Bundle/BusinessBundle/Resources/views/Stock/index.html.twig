@@ -97,10 +97,11 @@
                                     <th class="numeric" >PP</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Opening QTY</th>
-                                    <th class="numeric" >Purchase QTY</th>
+                                    <th class="numeric" >Pur. QTY</th>
                                     <th class="numeric" >Sales QTY</th>
                                     <th class="numeric" >Bonus QTY</th>
-                                    <th class="numeric" >Pur Return QTY</th>
+                                    <th class="numeric" >PP Ret QTY</th>
+                                    <th class="numeric" >Sales Ret QTY</th>
                                     <th class="numeric" >Damage QTY</th>
                                     <th class="numeric" >Remain QTY</th>
                                     <th class="numeric" >Min. QTY</th>
@@ -136,6 +137,7 @@
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.bonusQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.purchaseReturnQuantity|number_format }}</td>
+                                        <td class="numeric" >{{ entity.salesReturnQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.damageQuantity|number_format }}</td>
                                         <td class="numeric" >{{ (entity.remainingQuantity + entity.bonusQuantity) }}</td>
                                         <td class="numeric">

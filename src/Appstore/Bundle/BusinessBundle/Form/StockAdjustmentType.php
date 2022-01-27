@@ -18,7 +18,7 @@ class StockAdjustmentType extends AbstractType
     {
 
         $builder
-            ->add('item','text', array('attr'=>array('class'=>'m-wrap span12 select2ParticularName input','placeholder'=>'Enter stock medicine name'),
+            ->add('item','text', array('attr'=>array('class'=>'m-wrap span12 select2ParticularName input','placeholder'=>'Enter stock name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
