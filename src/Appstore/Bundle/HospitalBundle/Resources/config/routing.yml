@@ -90,6 +90,10 @@ hospital_stock:
     resource: "@HospitalBundle/Resources/config/routing/stock.yml"
     prefix:   /stock
 
+hospital_sales:
+    resource: "@HospitalBundle/Resources/config/routing/sales.yml"
+    prefix:   /sales
+
 hospital_other_service:
     resource: "@HospitalBundle/Resources/config/routing/otherservice.yml"
     prefix:   /other-service

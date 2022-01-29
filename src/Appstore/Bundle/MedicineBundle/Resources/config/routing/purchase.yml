@@ -52,6 +52,10 @@ medicine_purchase_approve:
     path:     /{id}/approve
     defaults: { _controller: "MedicineBundle:Purchase:approve" }
 
+medicine_purchase_emptyDelete:
+    path:     /empty/delete
+    defaults: { _controller: "MedicineBundle:Purchase:emptyDelete" }
+
 medicine_purchase_delete:
     path:     /{id}/delete
     defaults: { _controller: "MedicineBundle:Purchase:delete" }

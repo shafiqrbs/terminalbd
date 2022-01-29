@@ -271,7 +271,8 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Hms Master Data',
                 'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
                 'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Hms Purchase',
-                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Hms Issue',
+                'ROLE_DOMAIN_HOSPITAL_SALES'                 => 'Hms Issue',
+                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Hms Stock',
                 'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Hms Report',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',
             );

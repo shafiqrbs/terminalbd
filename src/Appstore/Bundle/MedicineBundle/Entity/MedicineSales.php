@@ -123,6 +123,20 @@ class MedicineSales
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceFor", type="string",nullable=true)
+     */
+    private $invoiceFor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hmsInvoice", type="string",nullable=true)
+     */
+    private $hmsInvoice;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="deviceSalesId", type="integer",nullable=true)
@@ -1054,6 +1068,40 @@ class MedicineSales
     {
         $this->printMessage = $printMessage;
     }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceFor()
+    {
+        return $this->invoiceFor;
+    }
+
+    /**
+     * @param string $invoiceFor
+     */
+    public function setInvoiceFor($invoiceFor)
+    {
+        $this->invoiceFor = $invoiceFor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param string $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
+    }
+
+
 
 
 }

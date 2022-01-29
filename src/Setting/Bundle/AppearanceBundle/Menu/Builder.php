@@ -1109,14 +1109,16 @@ class Builder extends ContainerAware
            $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
                 ;
         }
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_SALES')) {
+            $menu['Hospital & Diagnostic']->addChild('Sales & Issue', array('route' => 'hms_sales'))
+            ;
+        }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_PURCHASE')) {
             $menu['Hospital & Diagnostic']->addChild('Manage Purchase')->setAttribute('dropdown', true);
             $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Purchase', array('route' => 'hms_purchase'));
             $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Vendor/Supplier', array('route' => 'hms_vendor'));
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK')) {
-            $menu['Hospital & Diagnostic']->addChild('Item Issue', array('route' => 'hms_stockout'))
-            ;
             $menu['Hospital & Diagnostic']->addChild('Manage Stock', array('route' => 'hms_stock'))
             ;
 

@@ -1,0 +1,39 @@
+{% if user.medicineSalesTemporary is not empty %}
+    {% for item in user.medicineSalesTemporary %}
+        <tr id="remove-{{ item.id }}">
+            {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
+            <td class="span5">{{ loop.index }}. {{ item.medicineStock.name }}</td>
+            <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+            <td class="span1">{{ item.purchasePrice|number_format(2) }}</td>
+
+            <td class="span1">
+                <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
+                <input type="hidden" name="estimatePrice-{{ item.id }}" id="estimatePrice-{{ item.id }}" value="{{ item.estimatePrice }}" >
+                {% if item.itemPercent is defined and item.itemPercent > 0 %}
+                    {{ item.salesPrice|number_format(2) }}
+                    <input type="hidden" name="salesPrice-{{ item.id }}" id="salesPrice-{{ item.id }}" value="{{ item.salesPrice }}" >
+                {% else %}
+                <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice-{{ item.id }}" value="{{ item.salesPrice|number_format(2) }}" >
+                {% endif %}
+            </td>
+            <td class="span1">
+                <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
+            </td>
+            <td class="span1">
+                <select class="td-inline-input itemPercent" data-id="{{ item.id }}" id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}">
+                    <option value="0">Disc(%)</option>
+                    {% for per in discountPercentLists %}
+                        <option {% if item.itemPercent is defined and item.itemPercent == per %} selected="selected" {% endif %} value="{{ per }}">{{ per }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <th class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</th>
+            <td class="">
+                <div class="btn-group">
+                <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>
+                <a id="{{ item.id }}"  data-url="{{ path('medicine_sales_temporary_item_delete',{'id': item.id }) }}" href="javascript:" class="btn red mini temporaryDelete" ><i class="icon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endif %}

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
@@ -1063,6 +1064,22 @@ class InvoiceRepository extends EntityRepository
         }
         return  $particularGroups;
     }
+
+
+    public function searchAutoComplete($q, HospitalConfig $config)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->leftJoin('e.customer', 'c');
+        $query->select('e.id as id');
+        $query->addSelect("CONCAT(e.invoice,'-', c.name) as text");
+        $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
+        $query->andWhere($query->expr()->like("e.invoice", "'%$q%'"  ));
+        $query->orderBy('e.created', 'DESC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
 
 
 }

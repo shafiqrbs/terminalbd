@@ -57,6 +57,18 @@ class HmsStockOut
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice")
+     **/
+    private  $hmsInvoice;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer")
+     **/
+    private  $customer;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="invoice", type="string", length=255, nullable=true)
@@ -104,9 +116,23 @@ class HmsStockOut
     /**
      * @var float
      *
+     * @ORM\Column(name="total", type="float", nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="payment", type="float", nullable=true)
      */
     private $payment;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="receive", type="float", nullable=true)
+     */
+    private $receive;
 
     /**
      * @var float
@@ -456,6 +482,72 @@ class HmsStockOut
 	public function setInvoiceFor( $invoiceFor ) {
 		$this->invoiceFor = $invoiceFor;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param mixed $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReceive()
+    {
+        return $this->receive;
+    }
+
+    /**
+     * @param float $receive
+     */
+    public function setReceive($receive)
+    {
+        $this->receive = $receive;
+    }
+
+
 
 
 }

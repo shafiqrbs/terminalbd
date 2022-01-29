@@ -595,23 +595,19 @@ class TransactionRepository extends EntityRepository
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getProfile());
             $transaction->setSubAccountHead($subAccount);
         }
-        if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Debit' ){
+        if(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Debit' ){
 
             /* Current Asset Bank Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
             $transaction->setSubAccountHead($subAccount);
 
-        }elseif($entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Debit' ){
+        }elseif(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Debit' ){
 
             /* Current Asset Mobile Account Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
             $transaction->setSubAccountHead($subAccount);
-        }
-
-        if(!empty($entity->getBranches())){
-            $transaction->setBranches($entity->getBranches());
         }
         $this->_em->persist($transaction);
         $this->_em->flush();
@@ -641,20 +637,17 @@ class TransactionRepository extends EntityRepository
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertUserAccount($entity->getToUser()->getprofile());
             $transaction->setSubAccountHead($subAccount);
         }
-        if($entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Credit' ){
+        if(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 2 and $entity->getTransactionType() == 'Credit' ){
             /* Current Asset Bank Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankAccount($entity->getAccountBank());
             $transaction->setSubAccountHead($subAccount);
-        }elseif($entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Credit' ){
+        }elseif(!empty($entity->getTransactionMethod()) and $entity->getTransactionMethod()->getId() == 3 and $entity->getTransactionType() == 'Credit' ){
             /* Current Asset Mobile Account Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
             $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertMobileBankAccount($entity->getAccountMobileBank());
             $transaction->setSubAccountHead($subAccount);
 
-        }
-        if(!empty($entity->getBranches())){
-            $transaction->setBranches($entity->getBranches());
         }
         $this->_em->persist($transaction);
         $this->_em->flush();

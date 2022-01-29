@@ -804,4 +804,11 @@ class MedicinePurchaseRepository extends EntityRepository
 
     }
 
+    public function emptyDelete($config)
+    {
+        $em = $this->_em;
+        $purchase = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.medicineConfig = {$config} AND e.subTotal IS NULL OR  e.subTotal=0");
+        $purchase->execute();
+    }
+
 }

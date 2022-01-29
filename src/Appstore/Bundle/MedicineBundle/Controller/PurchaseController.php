@@ -732,6 +732,18 @@ class PurchaseController extends Controller
     }
 
     /**
+     * Deletes a Vendor entity.
+     *
+     */
+    public function emptyDeleteAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+        $this->getDoctrine()->getRepository("MedicineBundle:MedicinePurchase")->emptyDelete($config);
+        return $this->redirect($this->generateUrl('medicine_purchase'));
+    }
+
+    /**
      * Status a Page entity.
      *
      */

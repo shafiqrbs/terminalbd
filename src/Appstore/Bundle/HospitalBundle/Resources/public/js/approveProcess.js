@@ -286,6 +286,38 @@ $( ".select2mobile" ).autocomplete({
 
 });
 
+$( ".select2HmsInvoice" ).select2({
+
+    placeholder: "Search invoice no",
+    ajax: {
+        url: Routing.generate('hms_patient_invoice_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+    formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+    },
+    allowClear: true,
+    minimumInputLength: 1
+
+});
 
 $(".select2Vendor").select2({
 

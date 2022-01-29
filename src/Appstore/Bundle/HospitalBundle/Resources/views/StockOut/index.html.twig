@@ -77,6 +77,8 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Ref. Invoice</th>
+                                    <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -90,16 +92,20 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.hmsInvoice is not empty %}{{ entity.hmsInvoice.invoice }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.netTotal|number_format }}</td>
                                         <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >
+                                            <div class="btn-group">
                                             {% if entity.process == 'created' or entity.process == 'pending' %}
-                                            <a href="{{ path('hms_stockout_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                            <a href="{{ path('hms_stockout_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('hms_stockout_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             <a href="{{ path('hms_stockout_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

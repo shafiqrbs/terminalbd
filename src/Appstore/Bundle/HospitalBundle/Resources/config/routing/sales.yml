@@ -1,0 +1,121 @@
+hms_sales:
+    path:     /
+    defaults: { _controller: "HospitalBundle:Sales:index" }
+
+hms_sales_hold:
+    path:     /hold
+    defaults: { _controller: "HospitalBundle:Sales:hold" }
+
+
+hms_sales_android_reprocess:
+    path:     /{device}/android-process
+    defaults: { _controller: "HospitalBundle:Sales:androidSalesProcess" }
+    options:
+            expose: true
+
+hms_sales_android_process:
+    path:     /{device}/android-process
+    defaults: { _controller: "HospitalBundle:Sales:androidSalesProcess" }
+    options:
+            expose: true
+
+medicine_device_sales_import:
+    path:      /device-sales-delete-import/{android}
+    defaults: { _controller: "HospitalBundle:Sales:insertGroupApiSalesImport" }
+
+hms_sales_item:
+    path:     /sales-item
+    defaults: { _controller: "HospitalBundle:Sales:salesItem" }
+
+hms_sales_show:
+    path:     /{id}/show
+    defaults: { _controller: "HospitalBundle:Sales:show" }
+
+hms_sales_print:
+    path:     /{id}/print
+    defaults: { _controller: "HospitalBundle:Sales:posPrint" }
+
+hms_sales_posprint:
+    path:     /{id}/{mode]/posprint
+    defaults: { _controller: "HospitalBundle:Sales:posPrintUltra" }
+
+hms_sales_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:Sales:new" }
+
+hms_sales_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "HospitalBundle:Sales:edit" }
+
+hms_sales_update:
+    path:     /{id}/update
+    defaults: { _controller: "HospitalBundle:Sales:update" }
+    methods:  [POST, PUT]
+
+hms_sales_status:
+    path:     /{id}/status
+    defaults: { _controller: "HospitalBundle:Sales:edit" }
+
+
+hms_sales_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "HospitalBundle:Sales:approve" }
+
+hms_sales_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "HospitalBundle:Sales:delete" }
+
+hms_sales_stock_search:
+    path:     /{id}/medicine-stock-search
+    defaults: { _controller: "HospitalBundle:Sales:stockSearch" }
+    options:
+            expose: true
+
+hms_patient_invoice_search:
+    path:     /patient-invoice-search
+    defaults: { _controller: "HospitalBundle:Sales:invoiceSearch" }
+    options:
+            expose: true
+
+
+hms_sales_item_add:
+    path:     /{invoice}/medicine-add
+    defaults: { _controller: "HospitalBundle:Sales:addMedicine" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_sales_instant_item:
+    path:     /{sales}/{item}/medicine-instant-sales
+    defaults: { _controller: "HospitalBundle:Sales:instantPurchaseSales" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_sales_item_update:
+    path:     /item-update
+    defaults: { _controller: "HospitalBundle:Sales:invoiceItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_sales_discount_update:
+    path:     /dicount-update
+    defaults: { _controller: "HospitalBundle:Sales:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_sales_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "HospitalBundle:Sales:approved" }
+
+
+hms_sales_item_delete:
+    path:     /{invoice}/{id}/sales-item-delete
+    defaults: { _controller: "HospitalBundle:Sales:salesItemDelete" }
+
+hms_sales_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "HospitalBundle:Sales:invoicePrint" }
+

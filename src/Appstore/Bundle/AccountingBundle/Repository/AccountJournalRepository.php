@@ -10,6 +10,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -360,8 +361,6 @@ class AccountJournalRepository extends EntityRepository
 	public function insertInventoryAccountSalesReturn(SalesReturn $salesReturn)
 	{
 		$global = $salesReturn->getInventoryConfig()->getGlobalOption();
-		$accountSales = new AccountJournal();
-		$accountSales->setGlobalOption($global);
 
 		$journalSource = "Sales-Return-{$salesReturn->getSales()->getInvoice()}";
 		$entity = new AccountJournal();
@@ -380,6 +379,7 @@ class AccountJournalRepository extends EntityRepository
 		$entity->setToUser($salesReturn->getCreatedBy());
 		$entity->setRemark("Inventory sales return as assets,Ref Invoice no-{$salesReturn->getSales()->getInvoice()}");
 		$entity->setJournalSource($journalSource);
+        $entity->setGlobalOption($global);
 		$entity->setProcess('approved');
 		$this->_em->persist($entity);
 		$this->_em->flush();
@@ -393,9 +393,6 @@ class AccountJournalRepository extends EntityRepository
 	{
 		$global = $salesReturn->getMedicineConfig()->getGlobalOption();
 		$sales = $salesReturn->getMedicineSalesItem()->getMedicineSales();
-		$accountSales = new AccountJournal();
-		$accountSales->setGlobalOption($global);
-
 		$journalSource = "Sales-Return-{$sales->getId()}";
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
@@ -410,6 +407,7 @@ class AccountJournalRepository extends EntityRepository
 		$entity->setAccountHeadCredit($accountHeadCredit);
 		$entity->setAccountHeadDebit($accountCashHead);
 		$entity->setJournalSource($journalSource);
+		$entity->setGlobalOption($global);
 		$entity->setProcess('approved');
 		$this->_em->persist($entity);
 		$this->_em->flush();
@@ -419,13 +417,12 @@ class AccountJournalRepository extends EntityRepository
 
 	}
 
+
+
 	public function insertEcommerceOrderPayable(OrderPayment $salesReturn)
 	{
 		$global = $salesReturn->getOrder()->getEcommerceConfig()->getGlobalOption();
 		$sales = $salesReturn->getOrder();
-		$accountSales = new AccountJournal();
-		$accountSales->setGlobalOption($global);
-
 		$journalSource = "Sales-Return-{$sales->getInvoice()}";
 		$entity = new AccountJournal();
 		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
@@ -483,6 +480,58 @@ class AccountJournalRepository extends EntityRepository
 		$this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
 		return $entity->getAccountRefNo();
 	}
+
+    public function insertPatientMedicine(MedicineSales $sales)
+    {
+        $global = $sales->getMedicineConfig()->getGlobalOption();
+        $journalSource = "Medicine-issue-{$sales->getId()}";
+        $exist = $this->findOneBy(array('globalOption'=>$global,'journalSource'=>$journalSource));
+        if(empty($exist)){
+            $entity = new AccountJournal();
+            $accountInventoryCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
+            $accountServiceHeadDebit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(55);
+            $entity->setTransactionType('Debit');
+            $entity->setAmount($sales->getNetTotal());
+            $entity->setApprovedBy($sales->getCreatedBy());
+            $entity->setCreatedBy($sales->getCreatedBy());
+            $entity->setToUser($sales->getCreatedBy());
+            $entity->setGlobalOption($sales->getCreatedBy()->getGlobalOption());
+            $entity->setAccountHeadCredit($accountInventoryCredit);
+            $entity->setAccountHeadDebit($accountServiceHeadDebit);
+            $entity->setJournalSource($journalSource);
+            $entity->setRemark($journalSource);
+            $entity->setProcess('approved');
+            $this->_em->persist($entity);
+            $this->_em->flush();
+            $this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
+        }
+
+    }
+
+    public function removePatientMedicine(MedicineSales $sales)
+    {
+        $global = $sales->getMedicineConfig()->getGlobalOption();
+        $journalSource = "Medicine-issue-{$sales->getId()}";
+        $journal = $this->findOneBy(array('globalOption'=> $global,'journalSource' => $journalSource ));
+        $em = $this->_em;
+        if(!empty($journal)) {
+
+            /* @var  $journal AccountJournal */
+
+            $globalOption = $journal->getGlobalOption()->getId();
+            $accountRefNo = $journal->getAccountRefNo();
+
+            $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Journal'");
+            $transaction->execute();
+            $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Journal'");
+            $accountCash->execute();
+            $journalRemove = $em->createQuery('DELETE AccountingBundle:AccountJournal e WHERE e.id = '.$journal->getId());
+            if(!empty($journalRemove)){
+                $journalRemove->execute();
+            }
+        }
+
+    }
 
 	public function insertAccountBusinessPurchaseJournal(BusinessPurchase $purchase)
 	{
