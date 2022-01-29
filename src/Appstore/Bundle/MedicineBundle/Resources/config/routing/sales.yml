@@ -47,7 +47,7 @@ medicine_sales_print:
     defaults: { _controller: "MedicineBundle:Sales:posPrint" }
 
 medicine_sales_posprint:
-    path:     /{id}/{mode]/posprint
+    path:     /{id}/{mode}/posprint
     defaults: { _controller: "MedicineBundle:Sales:posPrintUltra" }
 
 medicine_sales_new:

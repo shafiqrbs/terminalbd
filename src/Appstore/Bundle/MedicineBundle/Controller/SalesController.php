@@ -13,6 +13,8 @@ use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
 use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Knp\Snappy\Image;
+use Knp\Snappy\Pdf;
 use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -455,9 +457,9 @@ class SalesController extends Controller
      * Finds and displays a Vendor entity.
      *
      */
-    public function posPrintUltraAction($id)
+    public function posPrintUltraAction($id,$mode)
     {
-        $mode = $_REQUEST['mode'];
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($id);
         if (!$entity) {
@@ -470,15 +472,53 @@ class SalesController extends Controller
         }
        // $path = "http://www.terminalbd.local/medicine/sales/$id/print";
        // shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
-        if($mode == "print"){
+        /*if($mode == "print"){
             $print = $this->posMikePrint($entity);
         }else{
             $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
                 'entity'      => $entity,
                 'previousDue'      => $previousDue,
             ));
-        }
-        return new Response($print);
+        }*/
+        echo $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
+            'entity'      => $entity,
+            'previousDue'      => $previousDue,
+        ));
+        //shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltoimage --use-xserver';
+        $snappy          = new Image($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($print);
+        header('Content-Type: application/png');
+        header("Content-Disposition: attachment; filename=image.png");
+        exit;
+
+
+
+
+        $fileName ="image.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($print);
+        // shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
+
+        header('Content-Type: application/png');
+        header("Content-Disposition: attachment; filename={$fileName}");
+        echo $pdf;
+        return new Response('');
+
+       // return new Response($pdf);
+    }
+
+    public function imageAction(Image $knpSnappyImage)
+    {
+        $html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
+            'some'  => $vars
+        ));
+
+        return new JpegResponse(
+            $knpSnappyImage->getOutputFromHtml($html),
+            'image.jpg'
+        );
     }
 
 
