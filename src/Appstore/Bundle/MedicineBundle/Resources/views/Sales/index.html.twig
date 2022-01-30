@@ -192,7 +192,7 @@
     });
     function jsPostPrint(data) {
         $.ajax({
-        url: "localhost:9000/api/pos",
+        url: "http://localhost:9000/api/pos",
         type: "POST",
         data: "posdata="+data,
         crossDomain: true,
