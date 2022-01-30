@@ -193,7 +193,7 @@
     function jsPostPrint(data) {
         $.ajax({
         url: "localhost:9000/api/pos",
-        type: "GET",
+        type: "POST",
         data: "posdata="+data,
         crossDomain: true,
         processData: false
