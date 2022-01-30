@@ -169,7 +169,7 @@
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", "http://localhost:9000/api/pos", true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("posdata="+posdata);
+            xhttp.send(posdata);
         }
     </script>
 {% endblock %}
