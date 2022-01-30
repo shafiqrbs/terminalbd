@@ -904,7 +904,7 @@ class SalesController extends Controller
         }else{
             $printer->text("*Medicines once sold are not taken back*\n");
         }
-        $response =  base64_encode($connector->getData());
+        $response =  $connector->getData();
         $printer -> close();
         return $response;
     }
