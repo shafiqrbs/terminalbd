@@ -472,7 +472,7 @@ class SalesController extends Controller
         }
        // $path = "http://www.terminalbd.local/medicine/sales/$id/print";
        // shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
-        if($mode == "print"){
+        if($mode == "pos"){
             $print = $this->posMikePrint($entity);
         }else{
             $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
