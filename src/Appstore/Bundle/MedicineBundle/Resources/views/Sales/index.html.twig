@@ -175,7 +175,7 @@
                     console.log(this.responseText);
                 }
             });
-            xhr.open("POST", "localhost:9000/api/pos?posdata=posdata");
+            xhr.open("POST", "localhost:9000/api/pos?posdata="+posdata);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(data);
         }
