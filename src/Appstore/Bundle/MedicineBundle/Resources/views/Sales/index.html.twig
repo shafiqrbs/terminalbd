@@ -190,11 +190,11 @@
         });
 
     });
-    function jsPostPrint(myfile) {
+    function jsPostPrint(data) {
         $.ajax({
-        url: "http://localhost:3008/uploadfile",
-        type: "POST",
-        data: myfile,
+        url: "localhost:9000/api/pos",
+        type: "GET",
+        data: "posdata="+data,
         crossDomain: true,
         processData: false
         });
