@@ -472,19 +472,16 @@ class SalesController extends Controller
         }
        // $path = "http://www.terminalbd.local/medicine/sales/$id/print";
        // shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
-        /*if($mode == "print"){
+        if($mode == "print"){
             $print = $this->posMikePrint($entity);
         }else{
             $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
                 'entity'      => $entity,
                 'previousDue'      => $previousDue,
             ));
-        }*/
-        echo $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
-            'entity'      => $entity,
-            'previousDue'      => $previousDue,
-        ));
-        //shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
+        }
+
+       /* //shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltoimage --use-xserver';
         $snappy          = new Image($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($print);
@@ -504,9 +501,9 @@ class SalesController extends Controller
         header('Content-Type: application/png');
         header("Content-Disposition: attachment; filename={$fileName}");
         echo $pdf;
-        return new Response('');
+        return new Response('');*/
 
-       // return new Response($pdf);
+        return new Response($print);
     }
 
     public function imageAction(Image $knpSnappyImage)
