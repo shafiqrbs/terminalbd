@@ -284,7 +284,6 @@ class MedicineStockController extends Controller
         $form->handleRequest($request);
         $data = $request->request->all();
         if ($form->isValid()) {
-
             $entity->setMedicineConfig($config);
             $brand = $entity->getAccessoriesBrand();
             $entity->setBrandName($brand->getName());

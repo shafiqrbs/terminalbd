@@ -34,24 +34,7 @@ class MedicineStockPreItemType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('accessoriesBrand', 'entity',array(
-                'required'    => false,
-                'group_by'  => 'particularType.name',
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineParticular',
-                'empty_value' => '---Select medicine & others brand ---',
-                'property' => 'name',
-                'choice_translation_domain' => true,
-                'attr'=>array('class'=>'m-wrap span12 inputs'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->join("e.particularType","pt")
-                        ->where("e.status = 1")
-                        ->andWhere("pt.status = 1")
-                        ->andWhere("e.medicineConfig =". $this->medicineConfig->getId())
-                        ->andWhere('pt.modeFor = :brand')->setParameter('brand','brand');
-                },
-            ))
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'Qnt','autoComplete'=>'off')))
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
             ->add('unit', 'entity', array(
                 'required'    => true,

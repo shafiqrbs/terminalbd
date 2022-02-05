@@ -28,7 +28,7 @@ class PrepurchaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'(%)','data-original-title'=>'(%)','autocomplete'=>'off')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'td-inline-input span12 salesInput','placeholder'=>'(%)','data-original-title'=>'(%)','autocomplete'=>'off')))
             ->add('medicineVendor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',

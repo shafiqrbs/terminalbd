@@ -55,30 +55,6 @@ $('form#purchaseItemForm').on('keyup', '#purchaseItem_purchasePrice', function (
     $('#purchaseItem_salesPrice').val(mrp);
 });
 
-$('form#purchaseItemForm').on('keypress', '.input', function (e) {
-
-    if (e.which === 13) {
-        var inputs = $(this).parents("form").eq(0).find("input,select");
-        var idx = inputs.index(this);
-        if (idx == inputs.length - 1) {
-            inputs[0].select()
-        } else {
-            inputs[idx + 1].focus(); //  handles submit buttons
-        }
-        switch (this.id) {
-
-            case 'purchaseItem_quantity':
-                $('#addParticular').focus();
-                break;
-            case 'addParticular':
-                $('#purchaseItem_stockName').select2('open');
-                break;
-        }
-        return false;
-    }
-});
-
-
 
 $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
 
@@ -92,11 +68,9 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
         }
         switch (this.id) {
 
-            case 'medicineStock_rackNo':
-                $('#medicineStock_purchaseQuantity').focus();
-                break;
             case 'medicineStock_purchaseQuantity':
                 $('#medicineStock_purchasePrice').focus();
+                $("#stockItemCreate").attr("disabled", false);
                 break;
             case 'medicineStock_purchasePrice':
                 $('#medicineStock_unit').focus();
@@ -112,29 +86,17 @@ $('form#stockItemForm').on('keypress', '.stockInput', function (e) {
 
 var formStock = $("#stockItemForm").validate({
     rules: {
-
         "medicineStock[name]": {required: true},
         "medicineStock[rackNo]": {required: false},
         "medicineStock[unit]": {required: false},
         "medicineStock[purchasePrice]": {required: false},
-        "medicineStock[purchaseQuantity]": {required: true}
+        "medicineStock[purchaseQuantity]": {required: false}
     },
-
     messages: {
-
         "medicineStock[name]":"Enter medicine name",
-        "medicineStock[rackNo]":"Enter medicine rack no",
-        "medicineStock[unit]":"Enter medicine unit",
-        "medicineStock[purchasePrice]":"Enter purchase price",
-        "medicineStock[purchaseQuantity]":"Enter purchase quantity",
-
     },
     tooltip_options: {
         "medicineStock[name]": {placement:'top',html:true},
-        "medicineStock[rackNo]": {placement:'top',html:true},
-        "medicineStock[unit]": {placement:'top',html:true},
-        "medicineStock[purchasePrice]": {placement:'top',html:true},
-        "medicineStock[purchaseQuantity]": {placement:'top',html:true},
     },
 
     submitHandler: function(formStock) {
@@ -162,6 +124,7 @@ var formStock = $("#stockItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
                 $("#medicineId").val();
+                $("#stockItemCreate").attr("disabled", false);
                 $('#stockItemForm')[0].reset();
                 EditableInit();
             }

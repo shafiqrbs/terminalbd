@@ -47,10 +47,10 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ->add('religion','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Religion'),
 
             ))
-            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'weight')))
-            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'BP')))
-            ->add('height','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'height')))
-            ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'diabetes')))
+            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Weight')))
+            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'BP')))
+            ->add('height','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Height')))
+            ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Diabetes')))
 
             ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Profession'),
 
@@ -60,14 +60,14 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ))
             ->add('dob','date', array(
                 'years' => range(date('Y'), date('Y')-100),
-                'attr'=>array('class'=>'m-wrap span6 dob','placeholder'=>'patient date of birth'),
+                'attr'=>array('class'=>'m-wrap span6 dob','placeholder'=>'Patient date of birth'),
                 ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'age'),
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'Age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'patient age')),
             )))
             ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span6'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '--- Select Blood Group ---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))

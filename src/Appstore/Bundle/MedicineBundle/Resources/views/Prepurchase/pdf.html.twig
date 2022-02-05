@@ -391,7 +391,6 @@
                 <tr id="remove-{{ item.id }}">
                     <td style="text-align: left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
                     <td style="text-align: left">{{ item.quantity }}</td>
-                    <td style="text-align: left">{{ item.quantity }}</td>
                     <td style="text-align: left">{{ item.medicineStock.pack }}{% if item.medicineStock.pack > 1 and item.quantity > item.medicineStock.pack|default(1) %} => {{ (item.quantity/item.medicineStock.pack)|default(1)|number_format(2) }}{% endif %}</td>
                     <td style="text-align: left">{% if item.medicineStock.unit %}{{ item.medicineStock.unit.name }}{% endif %}</td>
                 </tr>
