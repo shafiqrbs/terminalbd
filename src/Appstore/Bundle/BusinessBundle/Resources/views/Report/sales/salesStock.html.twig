@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Sales Item Report
+                     Item Sales & Income Summary Report
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#"> Sales Item Report</a></li>
+                    <li><a href="#"> Item Sales & Income Summary Report</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Sales Item Report</div>
+                        <div class="caption"><i class="icon-reorder"></i>Item Sales & Income Summary Report</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn yellow" href="{{ path('business_report_sales_summary') }}"><i class="icon-bar-chart"></i>&nbsp;Sales Overview</a>
@@ -59,7 +59,6 @@
                                                         <option value="{{ cat.id }}" {% if searchForm.type is defined and searchForm.type == cat.id %} selected="selected" {% endif %} >{{ cat.name }}</option>
                                                     {% endfor %}
                                                 </select>
-
                                             </div>
                                         </div>
                                     </div>
@@ -119,6 +118,7 @@
                                 <th class="numeric" ><i class="icon-reorder"></i> SKU</th>
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Bonus Quantity</th>
                                 <th class="numeric" >Sales Price</th>
                                 <th class="numeric" >Purchase Price</th>
                                 <th class="numeric" >Profit/Loss</th>
@@ -131,6 +131,7 @@
                                     <td class="numeric" >{{ entity.sku }}</td>
                                     <td class="numeric" >{{ entity.name }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
+                                    <td class="numeric" >{{ entity.bonusQnt }}</td>
                                     <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
                                     <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
                                     <td class="numeric" >{{ (entity.salesPrice -  entity.purchasePrice)|number_format }}</td>
@@ -139,9 +140,6 @@
 
                             </tbody>
                         </table>
-                        <div class="pagination pull-center"  >
-                            {{ knp_pagination_render(entities) }}
-                        </div>
                     </div>
                 </div>
 

@@ -724,9 +724,6 @@ ul.page-sidebar-menu > li > ul.sub-menu  li > a > .arrow.open:before {
   text-shadow:none;
 }
 
-ul.page-sidebar-menu > li.active > ul.sub-menu > li.active ul.sub-menu {
-  display: block;
-}
 
 ul.page-sidebar-menu > li > ul.sub-menu > li  ul.sub-menu li {
   background: none;

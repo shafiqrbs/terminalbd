@@ -97,6 +97,7 @@ class BusinessStockHistoryRepository extends EntityRepository
 
             $entity->setQuantity("-{$item->getTotalQuantity()}");
             $entity->setSalesQuantity($item->getTotalQuantity());
+            $entity->setBonusSalesQuantity($item->getBonusQnt());
             $entity->setItem($item->getBusinessParticular());
             $entity->setSalesItem($item);
             $entity->setProcess('sales');
@@ -282,7 +283,7 @@ class BusinessStockHistoryRepository extends EntityRepository
         $month = isset($data['month'])? $data['month'] :$month;
         $year = isset($data['year'])? $data['year'] :$year;
         $item = isset($data['name'])? $data['name'] :'';
-        $sql = "SELECT DATE_FORMAT(e.created,'%d-%m-%Y') as date ,COALESCE(SUM(e.purchaseQuantity),0) as purchaseQuantity,COALESCE(SUM(e.purchaseReturnQuantity),0) as purchaseReturnQuantity,COALESCE(SUM(e.salesQuantity),0) as salesQuantity,COALESCE(SUM(e.salesReturnQuantity),0) as salesReturnQuantity,COALESCE(SUM(e.damageQuantity),0) as damageQuantity
+        $sql = "SELECT DATE_FORMAT(e.created,'%d-%m-%Y') as date ,COALESCE(SUM(e.purchaseQuantity),0) as purchaseQuantity,COALESCE(SUM(e.purchaseReturnQuantity),0) as purchaseReturnQuantity,COALESCE(SUM(e.salesQuantity),0) as salesQuantity,COALESCE(SUM(e.salesReturnQuantity),0) as salesReturnQuantity,COALESCE(SUM(e.damageQuantity),0) as damageQuantity,COALESCE(SUM(e.bonusSalesQuantity),0) as bonusSalesQuantity
                 FROM business_stock_history as e
                 JOIN business_particular ON e.item_id = business_particular.id
                 WHERE e.businessConfig_id = :config AND business_particular.id = :item  AND MONTHNAME(e.created) =:month AND YEAR(e.created) =:year

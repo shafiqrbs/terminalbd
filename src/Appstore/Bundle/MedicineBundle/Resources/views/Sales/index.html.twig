@@ -132,7 +132,7 @@
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesBy }}</td>
                                         <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.revised == 1 %}<a href="{{ path('medicine_reverse_sales_show',{'id':entity.id}) }}" target="_blank" class="btn yellow mini"><i class="icon-refresh"></i> Reverse</a>{% endif %}</td>
+                                        <td class="numeric" >{% if entity.revised == 1 %}<a href="{{ path('medicine_reverse_sales_show',{'id':entity.id}) }}" target="_blank" class="btn yellow mini"><i class="icon-refresh"></i></a>{% endif %}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             {% if entity.process in proceses %}

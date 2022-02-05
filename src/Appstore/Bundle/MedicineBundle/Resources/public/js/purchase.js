@@ -233,10 +233,14 @@ var formStock = $("#medicineStock").validate({
                     alert('This item already exist in stock item');
                     return false;
                 }
+                if (obj['msg'] !== 'success') {
+                    alert(obj['msg']);
+                    return false;
+                }
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#vat').val(obj['vat']);
-                $('.grandTotal').html(obj['netTotal']);
+                $('.grandTotal').html(obj['netTotal']);872323
                 $('#paymentTotal').val(obj['subTotal']);
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);

@@ -3,7 +3,7 @@ hms_invoicereturn:
     defaults: { _controller: "HospitalBundle:InvoiceReturn:index" }
 
 hms_invoicereturn_create:
-    path:     /{invoice}/create
+    path:     /{id}/create
     defaults: { _controller: "HospitalBundle:InvoiceReturn:create" }
 
 hms_invoicereturn_payment:

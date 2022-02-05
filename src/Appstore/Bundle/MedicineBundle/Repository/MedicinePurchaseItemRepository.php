@@ -254,7 +254,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->select('AVG(e.purchasePrice) AS purchase');
         $qb->addSelect('AVG(e.salesPrice) AS sales');
         $qb->where('e.medicineStock = :medicineStock')->setParameter('medicineStock', $stockItem->getId());
-        //$qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('mp.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('e.status = 0');
         $avg = $qb->getQuery()->getOneOrNullResult();
         return $avg;
     }
@@ -405,25 +406,33 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $entity = new MedicineStock();
             $entity->setMedicineConfig($config);
             if(empty($data['medicineId'])){
-                if($data['mode']){
-                    $brandName = $this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['mode']);
-                    $entity->setMode($brandName->getParticularType()->getSlug());
-                    $entity->setBrandName($brandName->getName());
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
                 }
                 $slug = str_replace(" ",'',$entity->getName());
                 $entity->setSlug(strtolower($slug));
                 $entity->setName($data['medicineBrand']);
             }else{
                 $entity->setMedicineBrand($medicine);
-                $name = $medicine->getMedicineForm().' '.$medicine->getName().' '.$medicine->getStrength();
+                $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
                 $entity->setName($name);
-                $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
+                }else{
+                    $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                }
                 $entity->setMode('medicine');
                 $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
                 $entity->setSlug(strtolower($slug));
             }
             if(!empty($data['rackNo'])){
-                $entity->setRackNo($this->_em->getRepository('MedicineBundle:MedicineParticular')->find($data['rackNo']));
+                $rack = $em->getRepository('MedicineBundle:MedicineParticular')->findOneBy(array('medicineConfig'=>$config,'name'=>$data['rackNo']));
+                if($rack){
+                    $entity->setRackNo($rack);
+                }else{
+                    $rack = $em->getRepository('MedicineBundle:MedicineParticular')->createRack($config,$data['rackNo']);
+                    $entity->setRackNo($rack);
+                }
             }
             $entity->setSalesPrice($data['salesPrice']);
             $entity->setPurchasePrice($this->stockInstantPurchaseItemPrice($config->getInstantVendorPercentage(),$data['salesPrice']));

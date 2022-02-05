@@ -402,7 +402,6 @@ class GlobalOptionRepository extends EntityRepository
         $location = $data['Core_userbundle_user']['globalOption']['location'];
         $name = $data['Core_userbundle_user']['globalOption']['name'];
         $em = $this->_em;
-
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
@@ -413,13 +412,17 @@ class GlobalOptionRepository extends EntityRepository
             $globalOption->setStatus(false);
         }
         $globalOption->setName($name);
+        $globalOption->setOrganizationName($name);
+        $globalOption->setMobileName($name);
+        $globalOption->setName($name);
         $globalOption->setSlug($this->urlSlug($name));
+        $globalOption->setSubDomain($this->urlSlug($name));
         $globalOption->setMobile($mobile);
         $globalOption->setSyndicate($syndicate);
         $globalOption->setLocation($location);
         $globalOption->setUniqueCode($this->getUniqueId());
         $em->persist($globalOption);
-        $em->flush($globalOption);
+        $em->flush();
         return $globalOption;
 
     }

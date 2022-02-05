@@ -63,10 +63,10 @@ class InvoiceReturnController extends Controller
      * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
      */
 
-    public function createAction($invoice)
+    public function createAction($id)
     {
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'id' => $id));
         if(!empty($entity->getHmsInvoiceReturn())){
             return $this->redirect($this->generateUrl('hms_invoicereturn'));
         }

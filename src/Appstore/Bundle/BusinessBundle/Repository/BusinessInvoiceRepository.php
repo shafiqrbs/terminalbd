@@ -313,7 +313,7 @@ class BusinessInvoiceRepository extends EntityRepository
 		$qb->join('e.medicineSalesItems','si');
 		$qb->join('si.medicinePurchaseItem','item');
 		$qb->join('si.medicineStock','mds');
-		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->select('SUM(si.quantity) AS quantity','SUM(si.bonusQnt) AS bonusQnt');
 		$qb->addSelect('SUM(si.quantity * si.discountPrice ) AS salesPrice');
 		$qb->addSelect('SUM(si.quantity * si.purchasePrice ) AS purchasePrice');
 		$qb->addSelect('mde.name AS name');

@@ -455,10 +455,10 @@ class AccountJournalRepository extends EntityRepository
 		$accountSales->setGlobalOption($global);
 
         $journalSource = "Sales-Return-{$sales->getId()}";
-		$remark = "Diagnostic-Invoice ID: {$sales->getInvoice()}, " .$salesReturn->getRemark();
+		$remark = "{$sales->getInvoiceMode()} - Invoice ID: {$sales->getInvoice()}, " .$salesReturn->getRemark();
 
 		$entity = new AccountJournal();
-		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(34);
+		$accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(55);
 		$accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
 		$transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
 

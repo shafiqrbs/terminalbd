@@ -196,7 +196,7 @@
                                                     <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Revised" ><i class="icon-retweet"></i> Reverse</a>
                                                 {% endif %}
                                                 {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a href="{{ path('hms_invoicereturn_create', { 'invoice': entity.invoice }) }}" class="btn gray mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
+                                                    <a href="{{ path('hms_invoicereturn_create', { 'id': entity.id }) }}" class="btn gray mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
                                                 {% endif %}
                                             </div>
                                         </td>

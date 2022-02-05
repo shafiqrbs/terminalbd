@@ -513,7 +513,7 @@ class ItemController extends Controller
 			);
 			return new Response('failed');
 		}
-		exit;
+        return new Response('failed');
 
 	}
 
@@ -578,8 +578,6 @@ class ItemController extends Controller
 	}
 
 
-
-
 	public function uploadItemImageAction(Item $item)
 	{
 		$entity = new ItemGallery();
@@ -635,8 +633,6 @@ class ItemController extends Controller
 		$this->getDoctrine()->getRepository('EcommerceBundle:ItemKeyValue')->insertCopyItemKeyValue($entity,$copyEntity);
 		$this->getDoctrine()->getRepository('EcommerceBundle:ItemSub')->insertCopySubProduct($entity,$copyEntity);
 		return $this->redirect($this->generateUrl('ecommerce_item_edit', array('id' => $entity->getId())));
-
-
 	}
 
 

@@ -698,7 +698,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:right;width:110px">{{ (entity.due) |number_format(2) }}</span></label>
+                                                    <label class="control-label" for="firstName"><span id="balance" class="label">Due TK.</span> <span class="pull-right sales-right due" style="text-align:right;width:110px;color:red">{{ (entity.due) |number_format(2) }}</span></label>
                                                 </div>
                                             </div>
                                             <!--/span-->
@@ -835,8 +835,14 @@
             line-height: 13px!important;
             font-size: 13px!important;
             border: 2px solid #4d90fe!important;
-            width: 60px;
+            width: 50px;
             margin-bottom:0!important;
+        }
+        select[class*="span"].discount-type{
+            margin-bottom: 0!important;
+            border: 2px solid red!important;
+            height: 28px!important;
+            width: 90px!important;
         }
         .sales-right{
             width: 120px;

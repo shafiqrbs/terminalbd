@@ -115,6 +115,7 @@
                             <tr class="head-green">
                                 <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                 <th class="numeric" >Created</th>
+                                <th class="numeric" >Invoice Mode</th>
                                 <th class="numeric" >Invoice No</th>
                                 <th class="numeric" >Name</th>
                                 <th class="numeric" >Mobile</th>
@@ -132,7 +133,14 @@
                                 <tr id="delete-{{ entity.id }}">
                                     <td class="span1"><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                     <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                    <td class="numeric" >{{ entity.hmsInvoice.invoice }}</td>
+                                    <td class="numeric" >{{ entity.hmsInvoice.invoiceMode|capitalize }}</td>
+                                    <td class="numeric" >
+                                        {% if entity.hmsInvoice.invoiceMode == 'admission' %}
+                                        <a target="_blank" href="{{ path('hms_invoice_admission_show', { 'id': entity.hmsInvoice.id }) }}">{{ entity.hmsInvoice.invoice }}</a>
+                                        {% else %}
+                                        <a target="_blank" href="{{ path('hms_invoice_show', { 'id': entity.hmsInvoice.id }) }}">{{ entity.hmsInvoice.invoice }}</a>
+                                        {% endif %}
+                                    </td>
                                     <td class="numeric" >{% if entity.hmsInvoice.customer is defined and entity.hmsInvoice.customer is not empty %}{{ entity.hmsInvoice.customer.name }}{% endif %}</td>
                                     <td class="numeric" >{% if entity.hmsInvoice.customer is defined and entity.hmsInvoice.customer is not empty %}{{ entity.hmsInvoice.customer.mobile }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.hmsInvoice.total }}</td>

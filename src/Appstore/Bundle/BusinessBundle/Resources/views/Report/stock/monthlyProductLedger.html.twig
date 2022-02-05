@@ -88,6 +88,7 @@
                                 <th>PurchaseReturn</th>
                                 <th>Sales</th>
                                 <th>SalesReturn</th>
+                                <th>SalesBonus</th>
                                 <th>Damage</th>
                                 <th>Closing</th>
                             </tr>
@@ -102,6 +103,7 @@
                             {% set expenditure = 0 %}
                             {% set purchaseExpenditure = 0 %}
                             {% set openingQuantity = 0 %}
+                            {% set salesBonus = 0 %}
                             {% set opening = app.session.get('opening') %}
                             {% set balance = 0 %}
                             {% set closing = 0 %}
@@ -109,6 +111,7 @@
                             {% set totalPurchaseReturn = 0 %}
                             {% set totalSales = 0 %}
                             {% set totalSalesReturn = 0 %}
+                            {% set totalSalesBonus = 0 %}
                             {% set totalDamage = 0 %}
                             {% set totalClosing = 0 %}
                             {% for i in 1..max %}
@@ -119,6 +122,7 @@
                                 {% set purchase             = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].purchaseQuantity : 0  %}
                                 {% set purchaseReturn       = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].purchaseReturnQuantity : 0  %}
                                 {% set damage               = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].damageQuantity : 0  %}
+                                {% set salesBonus               = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].bonusSalesQuantity : 0  %}
                                 {% set closing              = ((openingQuantity + purchase + salesReturn) - (sales + purchaseReturn + damage))|default(0)|number_format  %}
 
                                 {% set totalPurchase = totalPurchase + purchase %}
@@ -126,6 +130,7 @@
                                 {% set totalSales = totalSales + sales %}
                                 {% set totalSalesReturn = totalSalesReturn + salesReturn %}
                                 {% set totalDamage = totalDamage + damage %}
+                                {% set totalSalesBonus = totalSalesBonus + salesBonus %}
                                 {% set totalClosing = totalClosing + closing %}
                                 <tr>
                                     <td>{{ blackO }}</td>
@@ -134,6 +139,7 @@
                                     <td>{{ purchaseReturn }}</td>
                                     <td>{{ sales }}</td>
                                     <td>{{ salesReturn }}</td>
+                                    <td>{{ salesBonus }}</td>
                                     <td>{{ damage }}</td>
                                     <td>{{ closing }}</td>
                                 </tr>

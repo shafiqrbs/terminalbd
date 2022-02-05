@@ -73,13 +73,13 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td class="numeric" >{{ entity.customerName|capitalize }}</td>
-                                        <td class="numeric" >{{ entity.customerMobile }}</td>
-                                        <th class="numeric" >{{ entity.totalAmount|number_format }}</th>
-                                        <th class="numeric" >{{ entity.amount|number_format }}</th>
-                                        <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
-                                        <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
-                                            <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
+                                        <td class="numeric" >{{ entity.name|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.mobile }}</td>
+                                        <th class="numeric" >{{ entity.debit|number_format(2) }}</th>
+                                        <th class="numeric" >{{ entity.credit|number_format(2) }}</th>
+                                        <th class="numeric" >{{ entity.balance|number_format(2) }}</th>
+                                        <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.mobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
+                                            <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.mobile}) }}"><i class="icon-print"></i> Print</a>
                                         </th>
                                     </tr>
                                 {% endfor %}

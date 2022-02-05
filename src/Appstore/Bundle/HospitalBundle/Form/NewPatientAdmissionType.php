@@ -30,12 +30,16 @@ class NewPatientAdmissionType extends AbstractType
     /** @var  GlobalOption */
     private $globalOption;
 
+    /** @var  array */
+    private $cabins;
 
-    function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location)
+
+    function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location, $cabins)
     {
         $this->location         = $location;
         $this->emCategory       = $emCategory;
         $this->globalOption     = $globalOption;
+        $this->cabins     = $cabins;
     }
 
 
@@ -53,7 +57,9 @@ class NewPatientAdmissionType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 invoiceCabinBooking m-wrap'),
+                'group_by'  => 'serviceGroup.name',
+                'choice_translation_domain' => true,
+                'attr'=>array('class'=>'span12 select2 invoiceCabinBooking m-wrap'),
                 'empty_value' => '---Select cabin/ward no---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select cabin/ward no'))
@@ -62,6 +68,7 @@ class NewPatientAdmissionType extends AbstractType
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
                         ->andWhere("b.service = 2")
+                        ->andWhere('b.id NOT IN (:ids)')->setParameter('ids', $this->cabins )
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }

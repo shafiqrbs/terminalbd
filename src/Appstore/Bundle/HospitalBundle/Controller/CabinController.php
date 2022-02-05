@@ -39,6 +39,7 @@ class CabinController extends Controller
 
     }
 
+
     /**
      * Creates a new Particular entity.
      *

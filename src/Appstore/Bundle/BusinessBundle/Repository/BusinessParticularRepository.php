@@ -545,8 +545,14 @@ class BusinessParticularRepository extends EntityRepository
         $em = $this->_em;
        // $em->getRepository('BusinessBundle:BusinessPurchaseItem')->getCurrentStock($stock);
         $qnt = ($stock->getOpeningQuantity() + $stock->getPurchaseQuantity() + $stock->getSalesReturnQuantity() + $stock->getTransferQuantity() + $stock->getAdjustmentQuantity()) - ($stock->getPurchaseReturnQuantity() + $stock->getSalesQuantity() + $stock->getDamageQuantity());
-        $stock->setRemainingQuantity($qnt);
-        $stock->setBonusQuantity(($stock->getBonusPurchaseQuantity() + $stock->getReturnBonusQuantity() + $stock->getBonusAdjustment()) - $stock->getBonusSalesQuantity());
+        if($stock->getBusinessConfig()->isBonusFromStock() == 1){
+            $bouns = $stock->getBonusQuantity();
+            $remin = ($qnt-$bouns);
+            $stock->setRemainingQuantity($remin);
+        }else{
+            $stock->setBonusQuantity(($stock->getBonusPurchaseQuantity() + $stock->getReturnBonusQuantity() + $stock->getBonusAdjustment()) - $stock->getBonusSalesQuantity());
+            $stock->setRemainingQuantity($qnt);
+        }
         $em->persist($stock);
         $em->flush();
     }

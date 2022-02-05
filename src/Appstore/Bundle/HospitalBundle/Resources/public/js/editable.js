@@ -25,11 +25,11 @@ var EditableInit = function () {
 };
 
 $(document).on("click", ".editable-reload", function() {
-    setTimeout(pageReload, 3000);
+   // setTimeout(pageReload, 3000);
 });
 
 function pageReload() {
-    location.reload();
+   // location.reload();
 }
 
 $(document).on("click", ".confirm", function() {

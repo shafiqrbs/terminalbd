@@ -158,13 +158,9 @@
                                                 <div class="btn-group">
                                                     <a href="{{ path('ecommerce_item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;</a>
                                                     <a href="{{ path('ecommerce_item_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                    {% if entity.status is empty %}
-                                                        <a  data-url="{{ path('ecommerce_item_delete',{'id':entity.id}) }}" class="btn red mini remove" ><i class="icon-remove"></i></a>
-                                                    {% endif %}
-                                                    {% if entity.source == 'ecommerce' %}
-                                                        <a href="javascript:" data-id="{{ entity.id }}"  data-url="{{ path('ecommerce_item_delete',{'id':entity.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
-                                                        <a target="_blank" href="{{ path('ecommerce_item_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
-                                                    {% endif %}
+                                                    <a href="javascript:" data-id="{{ entity.id }}"  data-url="{{ path('ecommerce_item_remove',{'id':entity.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                    <a target="_blank" href="{{ path('ecommerce_item_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
+
                                                 </div>
                                             </div>
                                         </td>

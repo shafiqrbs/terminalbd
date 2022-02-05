@@ -190,8 +190,10 @@ class MedicineStockController extends Controller
 
 		$entity = new MedicineStock();
         $form = $this->createCreateForm($entity);
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
         return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
             'entity' => $entity,
+            'brands' => $brands,
             'form'   => $form->createView(),
         ));
     }
@@ -229,7 +231,9 @@ class MedicineStockController extends Controller
             if(empty($data['medicineId'])){
                 if($entity->getAccessoriesBrand()) {
                     $brand = $entity->getAccessoriesBrand();
-                    $entity->setBrandName($brand->getName());
+                    if($data['medicineCompany']){
+                        $entity->setBrandName($data['medicineCompany']);
+                    }
                     $entity->setMode($brand->getParticularType()->getSlug());
                 }
                 $slug = str_replace(" ",'',$entity->getName());
@@ -238,7 +242,11 @@ class MedicineStockController extends Controller
                 $entity->setMedicineBrand($medicine);
                 $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
                 $entity->setName($name);
-                $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
+                }else{
+                    $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                }
                 $entity->setMode('medicine');
                 $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
                 $entity->setSlug(strtolower($slug));
@@ -259,8 +267,10 @@ class MedicineStockController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Required or Duplicate has been exist"
         );
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
         return $this->render('MedicineBundle:MedicineStock:medicine.html.twig', array(
             'entity' => $entity,
+            'brands' => $brands,
             'form'   => $form->createView(),
         ));
     }
@@ -352,9 +362,11 @@ class MedicineStockController extends Controller
             $editForm = $this->createEditForm($entity);
             $template = 'medicine';
         }
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
         return $this->render('MedicineBundle:MedicineStock:'.$template.'.html.twig', array(
             'entity'            => $entity,
             'formShow'          => 'show',
+            'brands'          => $brands,
             'form'              => $editForm->createView(),
         ));
     }
@@ -432,7 +444,7 @@ class MedicineStockController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find MedicineStock entity.');
         }
-
+        $data = $request->request->all();
         if($entity->getMode() =='accessories'){
             $editForm = $this->createEditAccessoriesForm($entity);
             $template = 'accessories';
@@ -441,10 +453,12 @@ class MedicineStockController extends Controller
             $template = 'medicine';
         }
         $editForm->handleRequest($request);
-
         if ($editForm->isValid()) {
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
+            }
+            if($data['medicineCompany']){
+                $entity->setBrandName($data['medicineCompany']);
             }
             $slug = str_replace(" ",'',$entity->getName());
             $entity->setSlug(trim(strtolower($slug)));

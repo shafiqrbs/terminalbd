@@ -184,6 +184,13 @@ class BusinessConfig
      /**
      * @var boolean
      *
+     * @ORM\Column(name="bonusFromStock", type="boolean",  nullable=true)
+     */
+    private $bonusFromStock = false;
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="conditionSales", type="boolean",  nullable=true)
      */
     private $conditionSales = false;
@@ -1594,6 +1601,22 @@ class BusinessConfig
     public function setIsDescription($isDescription)
     {
         $this->isDescription = $isDescription;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBonusFromStock()
+    {
+        return $this->bonusFromStock;
+    }
+
+    /**
+     * @param bool $bonusFromStock
+     */
+    public function setBonusFromStock($bonusFromStock)
+    {
+        $this->bonusFromStock = $bonusFromStock;
     }
 
 

@@ -159,6 +159,13 @@ class MedicineConfig
     private $isPrintFooter = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="profitLastpp", type="boolean",  nullable=true)
+     */
+    private $profitLastpp = false;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="printLeftMargin", type="smallint", nullable = true)
@@ -1029,6 +1036,22 @@ class MedicineConfig
     public function setShortQuantity($shortQuantity)
     {
         $this->shortQuantity = $shortQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProfitLastpp()
+    {
+        return $this->profitLastpp;
+    }
+
+    /**
+     * @param bool $profitLastpp
+     */
+    public function setProfitLastpp($profitLastpp)
+    {
+        $this->profitLastpp = $profitLastpp;
     }
 
 }

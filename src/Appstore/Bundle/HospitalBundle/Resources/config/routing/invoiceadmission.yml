@@ -2,6 +2,10 @@ hms_invoice_admission:
     path:     /
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:index" }
 
+hms_invoice_admission_booking:
+    path:     /booking-cabin
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:bookingCabin" }
+
 hms_invoice_admission_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:show" }
@@ -9,6 +13,10 @@ hms_invoice_admission_show:
 hms_invoice_admission_new:
     path:     /new
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:new" }
+
+hms_invoice_admission_cabin:
+    path:     /{id}/cabin-new
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:cabinAdmission" }
 
 hms_invoice_admission_old_patient:
     path:     /old-patient
@@ -23,6 +31,10 @@ hms_invoice_admitted_create:
 hms_invoice_admission_edit:
     path:     /{id}/edit
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:edit" }
+
+hms_invoice_admission_return:
+    path:     /{id}/admission-return
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionReturn" }
 
 hms_invoice_admitted_patient:
     path:     /{id}/patient-admission
@@ -201,3 +213,16 @@ hms_invoice_admission_particular_print:
 hms_invoice_admission_print:
     path:      /{id}/admitted-invoice-print
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionPrint" }
+
+hms_invoice_admission_cabin_search:
+    path:     /inline-cabin-search
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:cabinSelect" }
+    options:
+        expose: true
+
+hms_invoice_admission_cabin_inline_update:
+    path:     /inline-cabin-update
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:inlineCabinUpdate" }
+    methods:  POST
+    options:
+        expose: true

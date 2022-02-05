@@ -61,7 +61,7 @@
                                 {{ form_row(stockItemForm._token) }}
                                 <div class="row-fluid" >
                                     <!--/span-->
-                                    <div class="span6">
+                                    <div class="span5">
                                         <div class="control-group">
                                             <label class="control-label"  for="category" >Name<span class="required">*</span></label>
                                             <div class="controls">
@@ -71,23 +71,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span2">
+                                    <div class="span4">
                                         <div class="control-group">
-                                            <label class="control-label" for="name">Unit</label>
+                                            <label class="control-label" for="name">Unit  & Brand Name</label>
                                             <div class="controls">
-                                                {{ form_widget(stockItemForm.unit) }}
+                                                {{ form_widget(stockItemForm.unit) }}&nbsp;
+                                            <input type="text" id="medicineCompany" name="medicineCompany" list="brands"  class="m-wrap span9 input" placeholder="Brand name" aria-required="true" value="{% if entity.brandName is defined %}{{ entity.brandName }}{% endif %}">
+                                        <datalist id="brands" >
+                                            {% if brands is not empty %}
+                                            {% for item in brands %}
+                                            <option value="{{ item.name }}">
+                                                {% endfor %}
+                                                {% endif %}
+                                        </datalist>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="span3">
                                         <div class="control-group">
-                                            <label class="control-label" for="name">QTY & Total MRP</label>
+                                            <label class="control-label" for="name"> QTY & Total MRP</label>
                                             <div class="controls">
                                                 <div class="input-append">
                                                     <div class="input-group">
                                                         {{ form_widget(stockItemForm.purchaseQuantity) }}
                                                         {{ form_widget(stockItemForm.salesPrice) }}
-                                                        <button type="submit" class="btn green" id="stockItemCreate"><i class="icon-save"></i> Add Stock Item</button>
+                                                        <button type="submit" class="btn green" id="stockItemCreate"><i class="icon-save"></i> Add Stock</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -190,10 +198,10 @@
                                             <th class="span1">S/N</th>
                                             <th class="span3">Name</th>
                                             <th class="">Rack</th>
-                                            <th class="">Expiration</th>
-                                           {# <th class="span1">AVGPP</th>#}
+                                            <th class="">Expiry</th>
+                                            <th class="span1">AVGPP</th>
                                             <th class="">Last PP</th>
-                                            <th class="">Trade Price</th>
+                                            <th class="">TP</th>
                                             <th class="">MRP</th>
                                             <th class="">QTY</th>
                                             <th class="">Bonus QTY</th>
@@ -208,18 +216,15 @@
                                         {% if entity.medicinePurchaseItems is not empty %}
                                             {% for item in entity.medicinePurchaseItems %}
                                                 {% set totalPrice = totalPrice + (item.medicineStock.averagePurchasePrice * item.quantity)  %}
-                                                <tr id="remove-{{ item.id }}">
+
+                                                <tr id="remove-{{ item.id }}" class="{% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
-                                                    <td class="span3">{{ item.medicineStock.name }}</td>
+                                                    <td class="span3"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                     <td class="">
                                                         <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
                                                     </td>
-                                                    {#
-                                                    <td class="span1">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</td>
-                                                    <td class="span1">
-                                                        <input type="text" class="td-inline-input purchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.actualPurchasePrice }}" >
-                                                    </td>#}
+                                                    <td class="span1"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</a></td>
                                                     <td class="">{{ item.medicineStock.purchasePrice }}</td>
                                                     <td class="">{{ item.tp }}</td>
                                                     <td class="" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
@@ -238,30 +243,30 @@
                                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
                                                         <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >
                                                         {{ item.salesQuantity }}</td>
-                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
+                                                    <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}"  data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
                                                 </tr>
                                             {% endfor %}
                                         {% endif %}
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="13" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="14" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
                                             <th colspan="6">AVG Purchase Price</th>
-                                            <td colspan="4" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                            <td class="span1"></td>
+                                            <td class="span1">{{ (entity.subTotal - ((entity.subTotal*12.5)/100))|number_format(2) }}</td>
+                                            <td class="span1">12.5%</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="10" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
+                                            <td colspan="11" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
                                             <td class="span1"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="span1"></td>
                                             <td class="span1"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="13">
+                                            <td colspan="14">
                                                 <table class="table">
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>
@@ -389,7 +394,6 @@
         </div>
     </div>
     <style>
-
         #opening-box{
             display: none;
         }
@@ -402,6 +406,7 @@
         }
         .red-border{
             border: 3px solid red!important;
+
         }
         .form-horizontal .payment-info .control-label {
             float: left;
@@ -489,11 +494,7 @@
     </style>
 {% endblock %}
 {% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@MedicineBundle/Resources/public/css/invoice.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/medicine/css/invoice.css') }}">
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}

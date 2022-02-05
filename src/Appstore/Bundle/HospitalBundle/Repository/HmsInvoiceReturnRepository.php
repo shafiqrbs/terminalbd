@@ -133,10 +133,10 @@ class HmsInvoiceReturnRepository extends EntityRepository
         $qb = $this->createQueryBuilder('r');
         $qb->join('r.hmsInvoice','e');
         $qb->where('r.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $this->handleDateRangeFind($qb,$data);
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
+        $result = $qb->getQuery();
+        return  $result;
     }
 
     public function getInvoiceReturnAmount(User $user, $data){

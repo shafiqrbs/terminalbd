@@ -229,10 +229,10 @@ class Builder extends ContainerAware
             if($securityContext->isGranted('ROLE_BUSINESS_REPORT') and $securityContext->isGranted('ROLE_BUSINESS_PURCHASE')) {
                 $menu[$business]['Reports']->addChild('Sales')
                     ->setAttribute('dropdown', true);
-                $menu[$business]['Reports']['Sales']->addChild('Invoice Summary', array('route' => 'business_report_sales_summary'));
-                $menu[$business]['Reports']['Sales']->addChild('Customer Invoice', array('route' => 'business_report_sales_details'));
-                $menu[$business]['Reports']['Sales']->addChild('Customer Invoice', array('route' => 'business_report_customer_sales_item'));
-                $menu[$business]['Reports']['Sales']->addChild('Product Wise Invoice', array('route' => 'business_report_sales_stock'));
+                $menu[$business]['Reports']['Sales']->addChild('Sales Summary', array('route' => 'business_report_sales_summary'));
+                $menu[$business]['Reports']['Sales']->addChild('Sales & Income', array('route' => 'business_report_sales_details'));
+                $menu[$business]['Reports']['Sales']->addChild('Customer Item Sales', array('route' => 'business_report_customer_sales_item'));
+                $menu[$business]['Reports']['Sales']->addChild('Item Sales & Income', array('route' => 'business_report_sales_stock'));
                 if ($config->getBusinessModel() == 'commission') {
                     $menu[$business]['Reports']['Sales']->addChild(
                         'Sales Item Details',
@@ -1811,7 +1811,15 @@ class Builder extends ContainerAware
 
         }
 
-        if ($securityContext->isGranted('ROLE_ADMIN')) {
+        if ($securityContext->isGranted('ROLE_PAYROLL_SETTING')) {
+
+            $menu['HR & Payroll']->addChild('Setting')->setAttribute('dropdown', true);
+            $menu['HR & Payroll']['Setting']->addChild('Payroll Setting', array('route' => 'payrollsetting'));
+            $menu['HR & Payroll']['Setting']->addChild('Leave Setting', array('route' => 'payrollsetting'));
+
+        }
+
+        /*if ($securityContext->isGranted('ROLE_ADMIN')) {
 
             $menu['HR & Payroll']->addChild('Manage Agent')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Manage Agent']->addChild('Agent New', array('route' => 'agent_new'));
@@ -1819,7 +1827,7 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']->addChild('Agent Payroll')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Agent Payroll']->addChild('Agent Transaction', array('route' => 'agentpayment'));
             $menu['HR & Payroll']['Agent Payroll']->addChild('Agent Invoice', array('route' => 'agentpayment_invoice'));
-        }
+        }*/
         return $menu;
 
     }

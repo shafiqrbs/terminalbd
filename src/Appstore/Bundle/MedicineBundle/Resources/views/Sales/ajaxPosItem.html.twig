@@ -1,11 +1,10 @@
 {% if user.medicineSalesTemporary is not empty %}
     {% for item in user.medicineSalesTemporary %}
-        <tr id="remove-{{ item.id }}">
+        <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice > item.salesPrice %} class="warning" {% endif %}>
             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
-            <td class="span5">{{ loop.index }}. {{ item.medicineStock.name }}</td>
+            <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
             <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-            <td class="span1">{{ item.purchasePrice|number_format(2) }}</td>
-
+            <td class="span1"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.purchasePrice|number_format(2) }}</a></td>
             <td class="span1">
                 <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                 <input type="hidden" name="estimatePrice-{{ item.id }}" id="estimatePrice-{{ item.id }}" value="{{ item.estimatePrice }}" >

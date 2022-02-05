@@ -431,7 +431,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		$qb = $this->createQueryBuilder('si');
 		$qb->join('si.businessInvoice','e');
 		$qb->join('si.businessParticular','mds');
-		$qb->select('SUM(si.quantity) AS quantity');
+		$qb->select('SUM(si.quantity) AS quantity','SUM(si.bonusQnt) AS bonusQnt');
 		$qb->addSelect('SUM(si.totalQuantity * si.purchasePrice) AS purchasePrice');
 		$qb->addSelect('SUM(si.subTotal) AS salesPrice');
 		$qb->addSelect('mds.name AS name');
@@ -515,22 +515,13 @@ class BusinessInvoiceParticularRepository extends EntityRepository
 		$qb = $this->createQueryBuilder('si');
 		$qb->join('si.businessInvoice','e');
 		$qb->join('si.businessParticular','mds');
-		$qb->leftJoin('mds.unit','u');
-		$qb->select('si.totalQuantity AS quantity');
-		$qb->addSelect('si.totalQuantity * si.purchasePrice AS purchasePrice');
-		$qb->addSelect('si.subTotal AS salesPrice');
-		$qb->addSelect('e.invoice AS invoice');
-		$qb->addSelect('e.created AS created');
-		$qb->addSelect('mds.name AS name');
-		$qb->addSelect('u.name AS unit');
-		$qb->addSelect('mds.particularCode AS sku');
 		$qb->where('e.businessConfig = :config');
 		$qb->setParameter('config', $config);
 		$qb->andWhere('e.process IN (:process)');
 	    $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $this->handleSearchStockBetween($qb,$data);
 		$qb->orderBy('mds.name','ASC');
-		return $qb->getQuery()->getArrayResult();
+		return $qb->getQuery();
 	}
 
     public function searchAutoComplete(BusinessConfig $config,$q)

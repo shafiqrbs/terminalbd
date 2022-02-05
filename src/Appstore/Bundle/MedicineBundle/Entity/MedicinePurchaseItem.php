@@ -220,6 +220,13 @@ class MedicinePurchaseItem
      */
     private $expirationEndDate;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean",  nullable=true)
+     */
+    private $status = false;
+
 
 
     /**
@@ -668,6 +675,22 @@ class MedicinePurchaseItem
     public function setBonusQuantity($bonusQuantity)
     {
         $this->bonusQuantity = $bonusQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

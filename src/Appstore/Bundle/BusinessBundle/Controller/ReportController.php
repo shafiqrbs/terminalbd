@@ -256,13 +256,11 @@ class ReportController extends Controller
         $purchaseSalesPrice = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesItemPurchaseSalesOverview($user,$data);
 		$cashOverview = $em->getRepository( 'BusinessBundle:BusinessInvoice' )->reportSalesOverview($user,$data);
 		$entities = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->reportSalesStockItem($user,$data);
-		$pagination = $this->paginate($entities);
 		$type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
 		$category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig'=>$config,'status'=>1));
-
 		return $this->render('BusinessBundle:Report:sales/salesStock.html.twig', array(
 			'option'  => $user->getGlobalOption() ,
-			'entities' => $pagination,
+			'entities' => $entities,
 			'cashOverview' => $cashOverview,
 			'purchaseSalesItem' => $purchaseSalesPrice,
 			'types' => $type,
@@ -916,7 +914,7 @@ class ReportController extends Controller
                     'searchForm'                    => $data,
                 )
             );
-            $this->downloadPdf($html,'monthlyCashPdf.pdf');
+            $this->downloadPdf($html,'productLedgerPdf.pdf');
         }
     }
 

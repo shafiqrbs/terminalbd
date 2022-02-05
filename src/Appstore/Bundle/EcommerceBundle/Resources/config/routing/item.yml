@@ -44,8 +44,8 @@ ecommerce_item_upload_update:
     defaults: { _controller: "EcommerceBundle:Item:uploadUpdate" }
     methods:  [POST, PUT]
 
-ecommerce_item_delete:
-    path:     /{id}/delete
+ecommerce_item_remove:
+    path:     /{id}/remove
     defaults: { _controller: "EcommerceBundle:Item:delete" }
 
 

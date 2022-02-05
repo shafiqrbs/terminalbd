@@ -112,6 +112,19 @@
                                             {% endif %}
                                         </td>
                                     </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="13">
+                                            <table class="table">
+                                                <tr><td class="span2">Remark</td><td>{{ entity.remark }}</td></tr>
+                                                {% if entity.accountBank is not empty %}
+                                                    <tr><td class="span2">Bank name</td><td>{{ entity.accountBank.name }}</td></tr>
+                                                {% endif %}
+                                                {% if entity.accountMobileBank is not empty %}
+                                                    <tr><td class="span2">Mobile Account</td><td>{{ entity.accountMobileBank.name }}</td></tr>
+                                                {% endif %}
+                                            </table>
+                                        </td>
+                                    </tr>
 
                                 {% endfor %}
                                 </tbody>

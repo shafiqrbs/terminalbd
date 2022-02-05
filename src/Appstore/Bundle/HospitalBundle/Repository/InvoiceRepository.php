@@ -161,6 +161,35 @@ class InvoiceRepository extends EntityRepository
     }
 
 
+    public function getExistCabin($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('c.id');
+        $qb->join('e.cabin','c');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created'));
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
+
+    public function getBookingCabinLists($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('c.id as cabin','p.name as customer','e.created as created','e.invoice as invoice','p.mobile as mobile');
+        $qb->join('e.cabin','c');
+        $qb->join('e.customer','p');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created'));
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ( $result as $row):
+            $array[$row['cabin']]= $row;
+        endforeach;
+        return $array;
+    }
+
     public function getFindEmployees($hospital)
     {
         $qb = $this->createQueryBuilder('e');

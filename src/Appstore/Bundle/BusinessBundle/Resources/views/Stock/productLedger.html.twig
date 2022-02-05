@@ -88,6 +88,7 @@
                                 <th>PurchaseReturn</th>
                                 <th>Sales</th>
                                 <th>SalesReturn</th>
+                                <th>SalesBonus</th>
                                 <th>Damage</th>
                                 <th>Closing</th>
                             </tr>
@@ -97,6 +98,7 @@
                             {% set month =  date(year~'-'~month~'-1')|date('Y-m-') %}
                             {% set max =  fullDate|date("t") %}
                             {% set sales = 0 %}
+                            {% set salesBonus = 0 %}
                             {% set purchase = 0 %}
                             {% set purchaseReturn = 0 %}
                             {% set expenditure = 0 %}
@@ -120,6 +122,7 @@
                                 {% set purchaseReturn       = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].purchaseReturnQuantity : 0  %}
                                 {% set damage               = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].damageQuantity : 0  %}
                                 {% set closing              = ((openingQuantity + purchase + salesReturn) - (sales + purchaseReturn + damage))|default(0)|number_format  %}
+                                {% set salesBonus               = entity[blackO] is defined and entity[blackO] is not empty ? entity[blackO].bonusSalesQuantity : 0  %}
 
                                 {% set totalPurchase = totalPurchase + purchase %}
                                 {% set totalPurchaseReturn = totalPurchaseReturn + purchaseReturn %}
@@ -134,6 +137,7 @@
                                     <td>{{ purchaseReturn }}</td>
                                     <td>{{ sales }}</td>
                                     <td>{{ salesReturn }}</td>
+                                    <td>{{ salesBonus }}</td>
                                     <td>{{ damage }}</td>
                                     <td>{{ closing }}</td>
                                 </tr>

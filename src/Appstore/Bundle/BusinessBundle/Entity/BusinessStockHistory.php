@@ -114,7 +114,6 @@ class BusinessStockHistory
     private $closingQuantity = 0;
 
 
-
     /**
      * @var float
      *

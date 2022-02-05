@@ -206,6 +206,12 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere("e.minQuantity  >= {$startQuantity}");
             $qb->andWhere("e.minQuantity  <= {$endQuantity}");
         }
+        if($process == "MRP < Purchase AVG") {
+            $qb->andWhere('e.averagePurchasePrice > e.salesPrice');
+        }
+        if($process == "MRP < Purchase Price") {
+            $qb->andWhere('e.purchasePrice > e.salesPrice');
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
         $result = $qb->getQuery();
@@ -247,6 +253,19 @@ class MedicineStockRepository extends EntityRepository
 		$qb->andWhere("item.minQuantity >= item.remainingQuantity");
 		$count = $qb->getQuery()->getOneOrNullResult()['totalShortList'];
 		return  $count;
+
+	}
+
+    public function getBrands($config)
+	{
+
+		$qb = $this->createQueryBuilder('item');
+		$qb->select('item.brandName as name');
+		$qb->where("item.medicineConfig = :config");
+		$qb->setParameter('config', $config);
+		$qb->groupBy("item.brandName");
+		$result = $qb->getQuery()->getArrayResult();
+		return  $result;
 
 	}
 

@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineParticularType;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -43,6 +46,20 @@ class MedicineParticularRepository extends EntityRepository
         $result = $query->getQuery()->getArrayResult();
         return $result;
 
+    }
+
+    public function createRack($config,$name)
+    {
+        $em = $this->_em;
+        $type = $em->getRepository(MedicineParticularType::class)->find(1);
+        $entity = new MedicineParticular();
+        $entity->setMedicineConfig($config);
+        $entity->setParticularType($type);
+        $entity->setName($name);
+        $entity->isStatus(true);
+        $em->persist($entity);
+        $em->flush();
+        return $entity;
     }
 
 }

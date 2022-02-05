@@ -55,10 +55,10 @@ class EmployeePayrollRepository extends \Doctrine\ORM\EntityRepository
         }
         if($payroll->isBonusApplicable() == 1){
             $qb->andWhere("e.bonusApplicable =1");
-            $qb->andWhere("e.bonusAmount = > 0");
+            $qb->andWhere("e.bonusAmount >= 0");
         }
         if($payroll->isArearApplicable() == 1){
-            $qb->andWhere("e.arearAmount = > 0");
+            $qb->andWhere("e.arearAmount >= 0");
         }
         $qb->andWhere('u.domainOwner = 2');
         $qb->andWhere('u.isDelete != 1');

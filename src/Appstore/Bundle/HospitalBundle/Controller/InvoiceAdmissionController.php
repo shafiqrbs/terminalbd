@@ -5,10 +5,12 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\PatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +63,25 @@ class InvoiceAdmissionController extends Controller
             'cabins' => $cabins,
             'option' => $user->getGlobalOption(),
             'searchForm' => $data,
+        ));
+
+    }
+
+    /**
+     * Lists all Particular entities.
+     *
+     */
+    public function bookingCabinAction()
+    {
+        $entity = new Particular();
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
+        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getBookingCabinLists($config);
+        return $this->render('HospitalBundle:InvoiceAdmission:cabin.html.twig', array(
+            'pagination' => $pagination,
+            'cabins' => $cabins,
+            'option' => $this->getUser()->getGlobalOption(),
         ));
 
     }
@@ -150,7 +171,8 @@ class InvoiceAdmissionController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new NewPatientAdmissionType($globalOption,$category ,$location), $entity, array(
+        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getExistCabin($globalOption->getHospitalConfig());
+        $form = $this->createForm(new NewPatientAdmissionType($globalOption,$category ,$location,$cabins), $entity, array(
             'action' => $this->generateUrl('hms_invoice_admitted_create', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -164,7 +186,7 @@ class InvoiceAdmissionController extends Controller
 
 
 
-    public function newAxction()
+    public function cabinAdmissionAction(Particular $cabin)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
@@ -172,17 +194,11 @@ class InvoiceAdmissionController extends Controller
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
         $entity->setService($service);
-        $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
-        $entity->setReferredDoctor($referredDoctor);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
+        $entity->setCabin($cabin);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('admission');
         $entity->setPrintFor('admission');
         $entity->setCreatedBy($this->getUser());
-        if(!empty($this->getUser()->getProfile()->getBranches())){
-            $entity->setBranches($this->getUser()->getProfile()->getBranches());
-        }
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
@@ -649,6 +665,8 @@ class InvoiceAdmissionController extends Controller
 
     }
 
+
+
     public function confirmAction(Invoice $entity)
     {
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
@@ -930,6 +948,45 @@ class InvoiceAdmissionController extends Controller
         return $this->render('HospitalBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
+    }
+
+
+
+    public function cabinSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getBookingCabinLists($config);
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getCurrentCabins($config,2,$cabins);
+        $items = array();
+        $items[] = array('value' => '','text'=> '-Change Patient Cabin-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity['id'],'text'=> $entity['name']);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Cabin');
+        return new JsonResponse($items);
+
+    }
+
+    public function inlineCabinUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository(Invoice::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        if($data['name'] == 'Cabin'){
+            $setValue = $em->getRepository(Particular::class)->find($data['value']);
+            if($setValue){
+                $entity->setCabin($setValue);
+            }else {
+                $entity->setCabin(NULL);
+            }
+        }
+        $em->persist($entity);
+        $em->flush();
+        exit;
+
     }
 }
 

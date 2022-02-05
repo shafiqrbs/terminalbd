@@ -33,12 +33,12 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Enter patient full name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span6 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'father/spouse name'),
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'father/spouse name'),
 
             ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span4 numeric patientAge','placeholder'=>'age'),
@@ -61,7 +61,7 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
             ->add('bloodGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span6'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'empty_value' => '--- Select Blood Group ---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))

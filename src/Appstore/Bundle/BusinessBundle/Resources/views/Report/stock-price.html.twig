@@ -90,8 +90,14 @@
                                 {% set totalSales = 0 %}
                                 {% set totalPurchase = 0 %}
                                 {% for entity in pagination %}
-                                    {% set totalSales = totalSales + ((entity.remainingQuantity + entity.bonusQuantity) * entity.salesPrice)|default(0) %}
-                                    {% set totalPurchase = totalPurchase + ((entity.remainingQuantity + entity.bonusQuantity) * entity.purchasePrice)|default(0) %}
+                                    {% if entity.businessConfig.bonusFromStock == 1 %}
+                                        {% set quantity = (entity.remainingQuantity) %}
+                                    {% else %}
+                                         {% set quantity = (entity.remainingQuantity + entity.bonusQuantity) %}
+                                    {% endif %}
+                                    {% set totalSales = totalSales + (quantity * entity.salesPrice)|default(0) %}
+                                    {% set totalPurchase = totalPurchase + (quantity * entity.purchasePrice)|default(0) %}
+
                                     <tr>
                                         <td class="numeric" >{{ entity.name }}</td>
                                        <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
@@ -99,16 +105,17 @@
                                             {{ entity.purchasePrice|number_format(2) }}
                                         </td>
                                         <td class="numeric">{{ entity.salesPrice|number_format(2) }}</td>
-                                        <td class="numeric" >{{ (entity.remainingQuantity + entity.bonusQuantity) }}</td>
-                                        <td class="numeric">{{ ((entity.remainingQuantity + entity.bonusQuantity) * entity.salesPrice)|number_format(2) }}</td>
-                                        <td class="numeric">{{ ((entity.remainingQuantity + entity.bonusQuantity) * entity.purchasePrice)|number_format(2) }}</td>
-                                        <td class="numeric">{{ (((entity.remainingQuantity + entity.bonusQuantity) * entity.salesPrice) - ((entity.remainingQuantity + entity.bonusQuantity) * entity.purchasePrice))|number_format(2) }}</td>
+                                        <td class="numeric" >{{ quantity }}</td>
+                                        <td class="numeric">{{ (quantity * entity.salesPrice)|number_format(2) }}</td>
+                                        <td class="numeric">{{ (quantity * entity.purchasePrice)|number_format(2) }}</td>
+                                        <td class="numeric">
+                                            {{ ((quantity * entity.salesPrice) - (quantity * entity.purchasePrice))|number_format(2) }}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 <tr><th colspan="5">Total</th><th>{{ totalSales|number_format(2) }}</th><th>{{ totalPurchase|number_format(2) }}</th><th>{{ (totalSales - totalPurchase)|number_format(2) }}</th></tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
 

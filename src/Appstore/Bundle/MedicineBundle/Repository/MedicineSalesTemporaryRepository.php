@@ -58,7 +58,11 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 	        $entity->setUser( $user );
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
-	        $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+            if($stockItem->getMedicineConfig()->isProfitLastpp() == 1){
+                $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+            }else{
+                $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+            }
 	        if(!empty($purchaseStockItem)){
 				 $entity->setPurchasePrice(round($purchaseStockItem->getPurchasePrice(),2));
 				 $entity->setMedicinePurchaseItem($purchaseStockItem);
@@ -70,7 +74,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     }
 
-    public function insertBarcodeInvoiceItems(User $user, $stockItem)
+    public function insertBarcodeInvoiceItems(User $user,MedicineStock $stockItem)
     {
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
@@ -83,7 +87,11 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 	        $entity->setUser($user);
 	        $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
 	        $entity->setMedicineStock( $stockItem );
-	        $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+	        if($stockItem->getMedicineConfig()->isProfitLastpp() == 1){
+                $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+            }else{
+                $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+            }
 	        $em->persist( $entity );
 	        $em->flush();
         }

@@ -567,7 +567,7 @@ class GlobalOption
      *
      * @ORM\Column(name="isSidebar", type="boolean" , nullable=true)
      */
-    private $isSidebar = true;
+    private $isSidebar = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption")

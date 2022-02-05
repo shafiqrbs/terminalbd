@@ -74,11 +74,11 @@
 
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <th class="numeric" ><i class="icon-reorder"></i> SKU</th>
-                                <th class="numeric" >Name</th>
+                                <th class="numeric" ><i class="icon-reorder"></i> Name</th>
                                 <th class="numeric" >Created</th>
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Bonus Quantity</th>
                                 <th class="numeric" >Unit</th>
                                 <th class="numeric" >Sales Price</th>
                                 <th class="numeric" >Purchase Price</th>
@@ -89,15 +89,15 @@
                             {%  set totalSales = 0 %}
                             {% for entity in entities %}
                                 <tr>
-                                    <td class="numeric" >{{ entity.sku }}</td>
-                                    <td class="numeric" >{{ entity.name }}</td>
-                                    <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                    <td class="numeric" >{{ entity.invoice }}</td>
-                                    <td class="numeric" >{{ entity.quantity }}</td>
-                                    <td class="numeric" >{{ entity.unit }}</td>
-                                    <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
-                                    <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
-                                    <td class="numeric" >{{ (entity.salesPrice -  entity.purchasePrice)|number_format }}</td>
+                                    <td class="numeric" >{{ entity.particular }}</td>
+                                    <td class="numeric" >{{ entity.businessInvoice.created|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ entity.businessInvoice.invoice }}</td>
+                                    <td class="numeric" >{{ entity.totalQuantity }}</td>
+                                    <td class="numeric" >{{ entity.bonusQnt }}</td>
+                                    <td class="numeric" >{% if entity.businessParticular is not empty and entity.businessParticular.unit is not empty %}{{ entity.businessParticular.unit.name }}{% endif %}</td>
+                                    <td class="numeric" >{{ entity.price|number_format(2) }}</td>
+                                    <td class="numeric" >{{ entity.purchasePrice|number_format(2) }}</td>
+                                    <td class="numeric" >{{ (entity.price -  entity.purchasePrice)|number_format(2) }}</td>
                                 </tr>
                             {% endfor %}
 
