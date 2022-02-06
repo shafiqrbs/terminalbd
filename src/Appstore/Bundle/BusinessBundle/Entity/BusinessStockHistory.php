@@ -164,6 +164,13 @@ class BusinessStockHistory
      *
      * @ORM\Column(type="float", nullable=true)
      */
+    private $bonusSalesQuantity = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
     private $spoilQuantity = 0;
 
 
@@ -504,6 +511,22 @@ class BusinessStockHistory
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBonusSalesQuantity()
+    {
+        return $this->bonusSalesQuantity;
+    }
+
+    /**
+     * @param float $bonusSalesQuantity
+     */
+    public function setBonusSalesQuantity($bonusSalesQuantity)
+    {
+        $this->bonusSalesQuantity = $bonusSalesQuantity;
     }
 
 

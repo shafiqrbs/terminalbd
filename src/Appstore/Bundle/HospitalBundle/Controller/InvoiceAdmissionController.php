@@ -950,8 +950,6 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
-
-
     public function cabinSelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
