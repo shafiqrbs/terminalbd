@@ -69,7 +69,7 @@
                                     {% if heads[account.id] is defined and heads[account.id] is not empty %}
                                         {% for head in heads[account.id] %}
                                             <tr>
-                                                <td class="numeric" >{{ head.id }}{{ head.name }}</td>
+                                                <td class="numeric" >{{ head.name }}</td>
                                                 <td class="numeric" >{{ head.code }}</td>
                                                 <td class="numeric" >{{ head.parentName|capitalize }}</td>
                                                 <td class="numeric" ></td>
