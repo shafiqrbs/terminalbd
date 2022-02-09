@@ -132,21 +132,6 @@ class AccountBank
     private  $pettyCash;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="accountBank"  )
-     **/
-    private  $accountOnlineOrders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="accountBank"  )
-     **/
-    private  $orderPayments;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountBank"  )
-     **/
-    private  $preOrderPayments;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountBank")
      */
     protected $hmsInvoices;

@@ -121,12 +121,6 @@ class Customer
      **/
     private  $accountSales;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="customer" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $accountOnlineOrders;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="customer" )

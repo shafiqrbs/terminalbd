@@ -161,13 +161,17 @@ class InvoiceRepository extends EntityRepository
     }
 
 
-    public function getExistCabin($hospital)
+    public function getExistCabin($hospital,$invoice = 0)
     {
+
         $qb = $this->createQueryBuilder('e');
         $qb->select('c.id');
         $qb->join('e.cabin','c');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created'));
+        if($invoice > 0){
+            $qb->orWhere('c.id = :cid')->setParameter('cid', $invoice);
+        }
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
@@ -711,18 +715,21 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $department = isset($data['department'])? $data['department'] :'';
         $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
         $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
+        $qb->leftJoin('e.department','dep');
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
         $qb->leftJoin('e.assistantDoctor','assist');
         $qb->select('e.created as created','e.updated as updated','e.invoice as invoice','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as assignDoctor');
+        $qb->addSelect('dep.name as department');
         $qb->addSelect('ad.name as anesthesiaDoctor');
         $qb->addSelect('assist.name as assistantDoctor');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
@@ -732,6 +739,10 @@ class InvoiceRepository extends EntityRepository
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($department)){
+            $qb->andWhere("e.department = :department");
+            $qb->setParameter('department', $department);
         }
         if(!empty($assistantDoctor)){
             $qb->andWhere("e.assistantDoctor = :assistantDoctor");

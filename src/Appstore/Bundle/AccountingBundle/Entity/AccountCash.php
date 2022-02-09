@@ -120,14 +120,6 @@ class AccountCash
      */
     protected $conditionLedger;
 
-
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    protected $accountOnlineOrder;
-
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", inversedBy="accountCash")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -153,17 +145,6 @@ class AccountCash
      */
     protected $pettyCash;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", inversedBy="accountCash"  )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $orderPayments;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", inversedBy="accountCash"  )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $preOrderPayments;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountCashes" )

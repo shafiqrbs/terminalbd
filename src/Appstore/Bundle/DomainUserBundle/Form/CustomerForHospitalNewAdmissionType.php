@@ -72,6 +72,16 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
                 'empty_value' => '--- Select Blood Group ---',
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))
+            ->add('alternativeContactPerson','text', array('attr'=>array('class'=>'m-wrap span6 ','placeholder'=>'Guardian name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Guardian name')),
+                )))
+
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no')))
+            ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Relationship with the Patient'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Relationship with the Patient')),
+                )))
 
             ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Nationality'),
 

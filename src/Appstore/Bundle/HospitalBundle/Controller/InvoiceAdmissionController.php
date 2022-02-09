@@ -950,10 +950,11 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
-    public function cabinSelectAction()
+    public function cabinSelectAction(Invoice $invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getBookingCabinLists($config);
+        $cabin = ($invoice->getCabin()) ? $invoice->getCabin()->getId():0;
+        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getExistCabin($config,$cabin);
         $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getCurrentCabins($config,2,$cabins);
         $items = array();
         $items[] = array('value' => '','text'=> '-Change Patient Cabin-');

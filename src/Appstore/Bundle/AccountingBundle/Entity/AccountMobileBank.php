@@ -129,20 +129,7 @@ class AccountMobileBank
      **/
     private  $pettyCash;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="accountMobileBank"  )
-     **/
-    private  $accountOnlineOrders;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="accountMobileBank"  )
-     **/
-    private  $orderPayments;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountMobileBank"  )
-     **/
-    private  $preOrderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountMobileBank" , cascade={"persist", "remove"})

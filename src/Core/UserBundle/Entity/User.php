@@ -548,16 +548,6 @@ class User extends BaseUser
 	 */
 	protected $salarySettingApproved;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="createdBy" , cascade={"persist", "remove"} )
-	 */
-	protected $accountOnlineOrder;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="approvedBy" , cascade={"persist", "remove"} )
-	 */
-	protected $accountOnlineOrderApprove;
-
 
 	/*------------------------------------------------ Domain ---------------------------------*/
 
@@ -602,54 +592,6 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="approvedBy" , cascade={"persist", "remove"} )
 	 */
 	protected $employeeLeaveApprove;
-
-	/**
-	=========================================== E-commerce============================================
-	 */
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="createdBy"  )
-	 **/
-	private  $orders;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="createdBy"  )
-	 **/
-	private  $orderPayments;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="processBy"  )
-	 **/
-	private  $orderProcess;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="approvedBy"  )
-	 **/
-	private  $orderApproved;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="createdBy"  )
-	 **/
-	private  $preOrders;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="createdBy"  )
-	 **/
-	private  $preOrderPayments;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="processBy"  )
-	 **/
-	private  $preOrderProcess;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="approvedBy"  )
-	 **/
-	private  $preOrderApproved;
 
 
 	/**

@@ -134,10 +134,6 @@ class TransactionMethod
      */
     protected $accountSalesReturns;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="transactionMethod" , cascade={"persist", "remove"})
-     */
-    protected $accountOnlineOrders;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -154,15 +150,6 @@ class TransactionMethod
      */
     protected $pettyCash;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="transactionMethod" , cascade={"persist", "remove"})
-     */
-    protected $orderPayments;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="transactionMethod" , cascade={"persist", "remove"})
-     */
-    protected $preOrderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})

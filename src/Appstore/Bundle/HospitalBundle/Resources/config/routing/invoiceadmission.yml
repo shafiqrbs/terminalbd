@@ -215,7 +215,7 @@ hms_invoice_admission_print:
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionPrint" }
 
 hms_invoice_admission_cabin_search:
-    path:     /inline-cabin-search
+    path:     /{id}/inline-cabin-search
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:cabinSelect" }
     options:
         expose: true

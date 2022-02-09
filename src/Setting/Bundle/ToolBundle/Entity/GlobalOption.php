@@ -353,11 +353,6 @@ class GlobalOption
     protected $salarySetting;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $accountOnlineOrder;
-
-    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="globalOption" , cascade={"persist", "remove"})
      * @ORM\OrderBy({"updated" = "DESC"})
      */

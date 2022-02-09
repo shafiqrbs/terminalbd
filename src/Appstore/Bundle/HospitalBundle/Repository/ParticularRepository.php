@@ -352,12 +352,13 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function getCurrentCabins($config,$service,$cabins) {
+    public function getCurrentCabins($config,$service,$cabins)
+    {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id','e.name as name');
+        $qb->select('e.id as id', 'e.name as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
-        $qb->andWhere('e.service = :service')->setParameter('service',$service);
+        $qb->andWhere('e.service = :service')->setParameter('service', $service);
         $qb->andWhere('e.id NOT IN (:cabins)')->setParameter('cabins', $cabins);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
