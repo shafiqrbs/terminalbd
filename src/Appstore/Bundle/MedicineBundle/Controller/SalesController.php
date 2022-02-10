@@ -470,52 +470,21 @@ class SalesController extends Controller
         if($entity->getCustomer()->getName() != "Default"){
             $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
         }
-       // $path = "http://www.terminalbd.local/medicine/sales/$id/print";
-       // shell_exec("wkhtmltoimage $html ~/Downloads/invoice2.png");
         if($mode == "pos"){
-            $print = $this->posMikePrint($entity);
+            $plaintext = $this->posMikePrint($entity);
         }else{
-            $print = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
+            $plaintext = $this->renderView('MedicineBundle:Sales:posprint.html.twig', array(
                 'entity'      => $entity,
                 'previousDue'      => $previousDue,
             ));
         }
-
-       /* //shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltoimage --use-xserver';
-        $snappy          = new Image($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($print);
-        header('Content-Type: application/png');
-        header("Content-Disposition: attachment; filename=image.png");
-        exit;
-
-
-
-
-        $fileName ="image.pdf";
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($print);
-        // shell_exec("wkhtmltoimage $print ~/Downloads/invoice2.png");
-
-        header('Content-Type: application/png');
-        header("Content-Disposition: attachment; filename={$fileName}");
-        echo $pdf;
-        return new Response('');*/
-
-        return new Response($print);
-    }
-
-    public function imageAction(Image $knpSnappyImage)
-    {
-        $html = $this->renderView('MyBundle:Foo:bar.html.twig', array(
-            'some'  => $vars
-        ));
-
-        return new JpegResponse(
-            $knpSnappyImage->getOutputFromHtml($html),
-            'image.jpg'
-        );
+        $key = 'pos@keeper';
+        $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
+        $iv = openssl_random_pseudo_bytes($ivlen);
+        $ciphertext_raw = openssl_encrypt($plaintext, $cipher, $key, $options=OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, $as_binary=true);
+        $ciphertext = base64_encode( $iv.$hmac.$ciphertext_raw );
+        return new Response($ciphertext);
     }
 
 
