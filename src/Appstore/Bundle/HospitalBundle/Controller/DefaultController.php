@@ -2,9 +2,12 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class DefaultController extends Controller
 {
@@ -47,5 +50,36 @@ class DefaultController extends Controller
         ));
 
     }
+
+
+    public function getBarcode($value)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($value);
+        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
+    }
+
+    /**
+     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
+     */
+    public function idcardAction(Customer $customer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $barcode = $this->getBarcode($customer->getCustomerId());
+        return $this->render('HospitalBundle:Default:patient-idcard.html.twig', array(
+            'hospitalConfig' => $hospital,
+            'entity' => $customer,
+            'barcode' => $barcode
+        ));
+    }
+
 
 }

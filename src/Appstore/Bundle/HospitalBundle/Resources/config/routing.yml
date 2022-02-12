@@ -2,6 +2,8 @@ hospital_report:
     resource: "@HospitalBundle/Resources/config/routing/report.yml"
     prefix:   /report
 
+
+
 hospital_prescription:
     resource: "@HospitalBundle/Resources/config/routing/prescription.yml"
     prefix:   /prescription
@@ -109,6 +111,10 @@ hospital_config:
 hospital_homepage:
     path:     /
     defaults: { _controller: HospitalBundle:Default:index }
+
+hospital_patient_idcard:
+    path:     /{id}/patient/idcard
+    defaults: { _controller: "HospitalBundle:Default:idcard" }
 
 hospital_group_approved:
     path:      /group/invoice/approved

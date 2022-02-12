@@ -1,0 +1,49 @@
+{% extends '::print-patient.html.twig' %}
+{% block body %}
+    <div style="width: 420px; margin: 0 auto">
+        <table class="table table-border" >
+            <tr>
+                <td colspan="2"><img style="background-color: #FFFFff" src="{{ asset('assets/frontend/img/eH.png') }}" height="80" width="420" alt="" /></td>
+
+            </tr>
+            <tr class="print-header">
+                <th colspan="2">
+                    <strong class="title">{{ entity.name }}</strong>
+                    <span class="barcode" style="margin-top: 8px">{{ barcode|raw }}</span>
+                </th>
+            </tr>
+            <thead class="flip-content ">
+            </thead>
+            <tr>
+                <td>
+                    <ul class="unstyled">
+                        {% if entity is not empty %}<li><strong>Contact No:</strong>&nbsp;{{ entity.mobile }}</li>{% endif %}
+                        {% if entity is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.gender }}</li>{% endif %}
+                        {% if entity is not empty %}<li><strong>Age:</strong>&nbsp;{{ entity.age }}-{{ entity.ageType }}</li>{% endif %}
+                    </ul>
+                </td>
+                <td>
+                    <ul class="unstyled">
+                        <ul class="unstyled">
+                            {% if entity is not empty %}<li><strong>Date of Birth:</strong>&nbsp;{{ entity.dob|date('d-m-Y') }}</li>{% endif %}
+                            {% if entity is not empty %}<li><strong>Blood Group:</strong>&nbsp;{{ entity.bloodGroup }}</li>{% endif %}
+                            {% if entity is not empty %}<li><strong>Address</strong>&nbsp;{{ entity.address|raw }}</li>{% endif %}
+                        </ul>
+                    </ul>
+                </td>
+            </tr>
+            <tr><td colspan="2" style="text-align: center">
+                        {% if entity is not empty %}<strong>Registration Date: {{ entity.created|date('d-m-Y') }}</strong>{% endif %}
+                    </td>
+            </tr>
+            <tr><td colspan="2" style="text-align: center;
+    background: #0bc52a;
+    color: #ffffff;
+    font-size: 15px;
+    height: 32px;
+    vertical-align: middle;"><strong>Seba Hospital Limited</strong></td></tr>
+            <tr><td colspan="2" style="text-align: center;
+    font-size: 10px;">Hospital Road, Sadar, Lakshmipur<br/>Contact No. <strong>+88 01811-111222</strong></td></tr>
+        </table>
+    </div>
+{% endblock %}

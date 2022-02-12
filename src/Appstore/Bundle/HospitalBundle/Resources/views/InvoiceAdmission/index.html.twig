@@ -217,6 +217,7 @@
                                                         <li><a id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn  delete"><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
                                                     <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn"><i class="icon-eye-open"></i> View</a></li>
+                                                    <li><a href="{{ path('hospital_patient_idcard', { 'id': entity.customer.id }) }}" class="btn"><i class="icon-eye-open"></i> Patient ID Card</a></li>
                                                 </ul>
                                                 {% if entity.revised == 1 %}
                                                     <a href="{{ path('hms_invoice_admission_reverse_show', { 'invoice': entity.invoice }) }}" class="btn purple mini"><i class="icon-retweet"></i> Revised</a>

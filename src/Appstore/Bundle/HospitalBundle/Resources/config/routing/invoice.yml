@@ -10,6 +10,7 @@ hms_invoice_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:Invoice:show" }
 
+
 hms_invoice_new:
     path:     /new
     defaults: { _controller: "HospitalBundle:Invoice:new" }

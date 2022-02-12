@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
@@ -139,6 +140,7 @@ class InvoiceController extends Controller
             'form' => $editForm->createView(),
         ));
     }
+
 
     public function readyReportAction(Invoice $entity)
     {
