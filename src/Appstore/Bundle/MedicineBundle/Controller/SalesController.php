@@ -494,10 +494,6 @@ class SalesController extends Controller
 
     }
 
-
-
-
-
     public function approvedAction(MedicineSales $sales)
     {
         $em = $this->getDoctrine()->getManager();

@@ -41,9 +41,8 @@ class MedicineConfigRepository extends EntityRepository
         $adjustment = $em->createQuery('DELETE MedicineBundle:MedicineStockAdjustment e WHERE e.medicineConfig = '.$config);
         $adjustment->execute();
 
-
-        $stock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
-       // $stock->execute();
+        $android = $em->createQuery('DELETE MedicineBundle:MedicineAndroidProcess e WHERE e.medicineConfig = '.$config);
+        $android->execute();
 
         $qb = $this->_em->createQueryBuilder();
         $q = $qb->update('MedicineBundle:MedicineStock', 's')
@@ -78,7 +77,6 @@ class MedicineConfigRepository extends EntityRepository
     public function discountPercentList()
     {
         $array = array(
-
             1=>1,
             2=>2,
             3=>3,
