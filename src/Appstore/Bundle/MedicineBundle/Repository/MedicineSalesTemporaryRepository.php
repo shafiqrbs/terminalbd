@@ -98,11 +98,47 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     }
 
+    public function insertGenericInvoiceItems(User $user,MedicineStock $stockItem,$data)
+    {
+        $em = $this->_em;
+        $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
+        $entity = new MedicineSalesTemporary();
+        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
+        if(empty($invoiceParticular)) {
+            $entity->setQuantity($quantity);
+            if($data['itemPercent'] > 0){
+                $entity->setItemPercent( $data['itemPercent'] );
+                $salesPrice = $data['salesPrice'];
+                $initialDiscount = (($salesPrice *  $data['itemPercent'])/100);
+                $initialGrandTotal =($salesPrice  - $initialDiscount);
+                $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+            }else{
+                $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+            }
+            $entity->setIsShort(false);
+            $entity->setEstimatePrice($stockItem->getSalesprice());
+            $entity->setSubTotal( round(($entity->getSalesPrice()*$quantity), 2 ) );
+            $entity->setUser( $user );
+            $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
+            $entity->setMedicineStock( $stockItem );
+            if($stockItem->getMedicineConfig()->isProfitLastpp() == 1){
+                $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+            }else{
+                $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+            }
+            $em->persist( $entity );
+            $em->flush();
+
+        }
+
+    }
+
     public function updateInvoiceItems(User $user, $data)
     {
 
         $em = $this->_em;
         $entity = new MedicineSalesTemporary();
+        /* @var $invoiceParticular MedicineSalesTemporary*/
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->find($data['salesItemId']);
         if(!empty($invoiceParticular)) {
             $entity = $invoiceParticular;
@@ -117,6 +153,11 @@ class MedicineSalesTemporaryRepository extends EntityRepository
                 $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
             }else{
                 $entity->setSalesPrice( round( $data['salesPrice'], 2 ) );
+            }
+            if($entity->getMedicineStock()->getMedicineConfig()->isProfitLastpp() == 1){
+                $entity->setPurchasePrice( round( $entity->getMedicineStock()->getPurchasePrice(), 2 ) );
+            }else{
+                $entity->setPurchasePrice( round( $entity->getMedicineStock()->getAveragePurchasePrice(), 2 ) );
             }
             $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
         }
@@ -139,6 +180,23 @@ class MedicineSalesTemporaryRepository extends EntityRepository
         $entity->setSubTotal($item->getSalesPrice() * $data['salesQuantity']);
         $entity->setSalesPrice($item->getSalesPrice());
         $entity->setPurchasePrice($item->getPurchasePrice());
+        $em->persist($entity);
+        $em->flush();
+
+    }
+
+    public function insertDirectInvoiceItems(User $user ,MedicineStock $stock,$data){
+
+        $em = $this->_em;
+        $entity = new MedicineSalesTemporary();
+        $entity->setUser($user);
+        $entity->setMedicineConfig($user->getGlobalOption()->getMedicineConfig());
+        $entity->setMedicineStock($stock);
+        $entity->setQuantity($stock->getSalesQuantity());
+        $entity->setEstimatePrice($stock->getSalesprice());
+        $entity->setSalesPrice($stock->getSalesPrice());
+        $entity->setPurchasePrice($stock->getPurchasePrice());
+        $entity->setSubTotal($stock->getSalesPrice() * $entity->getQuantity());
         $em->persist($entity);
         $em->flush();
 

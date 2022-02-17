@@ -57,7 +57,7 @@ class SalesTemporaryItemType extends AbstractType
                     'attr' => array('class' => 'm-wrap span12 input'),
                     'expanded' => false,
                     'multiple' => false,
-                    'empty_value' => '---Expiry Date---',
+                    'empty_value' => '---Purchase Item---',
                     'choices' => array(),
                 ));
             }

@@ -5,6 +5,12 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemSalesType;
+use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
+use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
@@ -35,21 +41,16 @@ class MedicineSalesTemporaryController extends Controller
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem());
         $editForm = $this->createCreateForm($entity);
         $result = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-       /* $html = $this->renderView('MedicineBundle:Sales:temporary.html.twig', array(
-            'entity'        => $entity,
-            'salesItem'     => $salesItemForm->createView(),
-            'form'          => $editForm->createView(),
-            'user'          => $user,
-            'config'        => $config,
-            'result'        => $result,
-        ));
-        return New Response($html);*/
+        $stockItemForm = $this->createStockItemForm(new MedicineStock());
         $discountPercentList = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
         return $this->render('MedicineBundle:Sales:pos.html.twig', array(
             'entity'        => $entity,
             'salesItem'     => $salesItemForm->createView(),
+            'stockItemForm' => $stockItemForm->createView(),
             'form'          => $editForm->createView(),
             'discountPercentLists'          => $discountPercentList,
+            'brands'          => $brands,
             'user'          => $user,
             'config'        => $config,
             'result'        => $result,
@@ -93,6 +94,83 @@ class MedicineSalesTemporaryController extends Controller
             )
         ));
         return $form;
+    }
+
+    private function createStockItemForm(MedicineStock $entity)
+    {
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $form = $this->createForm(new MedicineStockItemSalesType($config), $entity, array(
+            'action' => $this->generateUrl('medicine_stock_item_sales_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'custom-form',
+                'id' => 'medicineStock',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function stockItemCreateAction(Request $request)
+    {
+        $user = $this->getUser();
+        $config = $user->getGlobalOption()->getMedicineConfig();
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $entity = new MedicineStock();
+        $form = $this->createStockItemForm($entity);
+        $form->handleRequest($request);
+        $medicineName = trim($data['medicineStock']['name']);
+        if(empty($data['medicineId'])) {
+            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config,$medicineName);
+        }else{
+            $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
+            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config, $medicine);
+        }
+        if (empty($checkStockMedicine) and $medicineName){
+            $entity->setMedicineConfig($config);
+            if(!empty($data['medicineId'])){
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
+                }else{
+                    $entity->setBrandName($medicine->getMedicineCompany()->getName());
+                }
+                $entity->setMedicineBrand($medicine);
+                $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
+                $entity->setName($name);
+                $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
+                $entity->setSlug(strtolower($slug));
+                $entity->setMode('medicine');
+            }else{
+                $slug = str_replace(" ",'',$entity->getName());
+                $entity->setSlug(strtolower($slug));
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
+                }
+            }
+            if(empty($entity->getUnit())){
+                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
+                $entity->setUnit($unit);
+            }
+            $avg = $entity->getSalesPrice() - (($entity->getSalesPrice() * 12.5)/100);
+            $entity->setPurchasePrice($avg);
+            $entity->setAveragePurchasePrice($avg);
+            $entity->setAverageSalesPrice($entity->getSalesPrice());
+            $entity->setRemainingQuantity($entity->getOpeningQuantity() - $entity->getSalesQuantity());
+            $em->persist($entity);
+            $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertDirectInvoiceItems($user, $entity,$data);
+            $result = $this->returnResultData($user,'success');
+            return new Response(json_encode($result));
+        }elseif($checkStockMedicine){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertDirectInvoiceItems($user,$checkStockMedicine,$data);
+            $result = $this->returnResultData($user,'success');
+            return new Response(json_encode($result));
+        }else{
+            return new Response(json_encode(array('success'=>'invalid')));
+        }
+
     }
 
     public function createAction(Request $request)
@@ -228,13 +306,15 @@ class MedicineSalesTemporaryController extends Controller
     public function returnResultData(User $user,$msg=''){
 
        // $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
+        $salesTemporary = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->findBy(array('user'=>$user),array('id'=>'ASC'));
         $total = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
 	    $subTotal = floor($total['subTotal']);
 	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
         $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         $salesItems = $this->renderView('MedicineBundle:Sales:ajaxPosItem.html.twig', array(
-            'user'        => $user,
-            'discountPercentLists'=> $discountPercentLists
+            'salesTemporary'        => $salesTemporary,
+            'result'                => $total,
+            'discountPercentLists'  => $discountPercentLists
         ));
         $data = array(
            'subTotal' => $subTotal,
@@ -290,6 +370,20 @@ class MedicineSalesTemporaryController extends Controller
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
     }
+
+    public function addGenericStockItemAction(Request $request, MedicineStock $stock)
+    {
+        $data = $request->request->all();
+        $user = $this->getUser();
+        if($stock){
+            $this->getDoctrine()->getRepository(MedicineSalesTemporary::class)->insertGenericInvoiceItems($user,$stock,$data);
+        }
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
+
+    }
+
 
     public function invoiceItemUpdateAction(Request $request)
     {

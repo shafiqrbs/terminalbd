@@ -603,7 +603,7 @@ class MedicineStockController extends Controller
             $entity->$setField(abs($data['value']));
         }
         $em->flush();
-        exit;
+        return new Response('success');
 
     }
 

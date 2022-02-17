@@ -173,7 +173,13 @@
                                         <td class="numeric" >
                                             <a  data-type="select" class="editableText" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
                                         </td>
-                                        <td class="numeric" ><a href="{{ path('medicine_purchase_item',{'name':entity.name}) }}" target="_blank">{{ entity.averagePurchasePrice|number_format(2) }}</a></td>
+                                        <td class="numeric" >
+                                            {% if entity.purchaseQuantity > 0 %}
+                                                <a href="{{ path('medicine_purchase_item',{'name':entity.name}) }}" target="_blank">{{ entity.averagePurchasePrice|number_format(2) }}</a>
+                                            {% else %}
+                                                <a  class="editableText" data-name="purchaseAvgPrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase avg price">{{ entity.averagePurchasePrice }}</a>
+                                            {% endif %}
+                                        </td>
 
                                          <td class="numeric">
                                             {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

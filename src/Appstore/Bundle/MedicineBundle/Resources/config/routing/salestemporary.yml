@@ -17,6 +17,13 @@ medicine_sales_temporary_item_add:
     options:
             expose: true
 
+medicine_stock_item_sales_create:
+    path:     /medicine-stock-create
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:stockItemCreate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_sales_barcode_search:
     path:     /barcode-add
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addBarcode" }
@@ -27,6 +34,13 @@ medicine_sales_barcode_search:
 medicine_sales_generic_stock:
     path:     /{id}/generic-stock-item
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStock" }
+    methods:  GET
+    options:
+            expose: true
+
+medicine_sales_temporary_generic_item:
+    path:     /{id}/generic-stock-item-add
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStockItem" }
     methods:  GET
     options:
             expose: true

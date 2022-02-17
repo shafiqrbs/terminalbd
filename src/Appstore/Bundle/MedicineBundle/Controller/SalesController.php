@@ -187,234 +187,241 @@ class SalesController extends Controller
     public function stockSearchAction(MedicineStock $stock)
     {
         $purchaseItems ='';
-        $purchaseItems .='<option value="">--Select the Barcode--</option>';
+        $purchaseItems .='<option value="">-Purchase Item-</option>';
         /* @var $item MedicinePurchaseItem */
         foreach ($stock->getMedicinePurchaseItems() as $item){
             if($item->getRemainingQuantity() > 0) {
-
                 if(!empty($item->getExpirationEndDate())){
                     $expirationEndDate = $item->getExpirationEndDate()->format('d-m-y');
                     $expiration = $expirationEndDate;
                 }else{
-                    $expiration='Expiry Empty';
+                    $expiration='Empty Item';
                 }
-                $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getBarcode() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . '] - PP Tk.'.$item->getPurchasePrice().'</option>';
+                $purchaseItems .= '<option value="' . $item->getId() . '">' . $item->getMedicinePurchase()->getGrn() . ' - ' . $expiration . '[' . $item->getRemainingQuantity() . '] - PP Tk.'.$item->getPurchasePrice().'</option>';
             }
         }
-        return new Response(json_encode(array('purchaseItems' => $purchaseItems , 'salesPrice' => $stock->getSalesPrice())));
-    }
+        $discountPercentList = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
+        $genericItems = $this->getDoctrine()->getRepository(MedicineStock::class)->getGenericStockMedicine($stock);
+        $html = $this->renderView('MedicineBundle:Sales:stock-generic-item.html.twig', array(
+           'stock'        => $stock,
+           'genericItems'        => $genericItems,
+           'discountPercentLists'        => $discountPercentList,
+       ));
+       return new Response(json_encode(array('purchaseItems' => $purchaseItems ,'genericItems' => $html , 'salesPrice' => $stock->getSalesPrice())));
+   }
 
-    public function returnResultData(MedicineSales $entity,$msg=''){
+   public function returnResultData(MedicineSales $entity,$msg=''){
 
-        $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->getSalesItems($entity);
-        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
-        $netTotal = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
-        $payment = $entity->getReceived() > 0 ? $entity->getReceived() : 0;
-        $due = $entity->getDue();
-        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
-        $data = array(
-            'msg' => $msg,
-            'subTotal' => $subTotal,
-            'netTotal' => $netTotal,
-            'payment' => $payment ,
-            'due' => $due,
-            'discount' => $discount,
-            'salesItems' => $salesItems ,
-            'success' => 'success'
-        );
+       $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->getSalesItems($entity);
+       $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+       $netTotal = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
+       $payment = $entity->getReceived() > 0 ? $entity->getReceived() : 0;
+       $due = $entity->getDue();
+       $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+       $data = array(
+           'msg' => $msg,
+           'subTotal' => $subTotal,
+           'netTotal' => $netTotal,
+           'payment' => $payment ,
+           'due' => $due,
+           'discount' => $discount,
+           'salesItems' => $salesItems ,
+           'success' => 'success'
+       );
 
-        return $data;
+       return $data;
 
-    }
+   }
 
-    public function addMedicineAction(Request $request, MedicineSales $invoice)
-    {
+   public function addMedicineAction(Request $request, MedicineSales $invoice)
+   {
 
-        $data = $request->request->all();
-        $entity = new MedicineSalesItem();
-        $form = $this->createMedicineSalesItemForm($entity,$invoice);
-        $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-        $entity->setMedicineSales($invoice);
-        $stockItem = ($data['salesitem']['stockName']);
-        $itemPercent = ($data['salesitem']['itemPercent']);
-        $salesPrice = ($data['salesitem']['salesPrice']);
-        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
-        $entity->setMedicineStock($stock);
-        if($itemPercent > 0){
-            $initialDiscount = round(($salesPrice *  $itemPercent)/100);
-            $initialGrandTotal = round($salesPrice  - $initialDiscount);
-            $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
-        }else{
-            $entity->setSalesPrice( round( $salesPrice, 2 ) );
-        }
-        $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
-        $entity->setMrpPrice($stock->getSalesPrice());
-        $entity->setPurchasePrice($stock->getAveragePurchasePrice());
-        $em->persist($entity);
-        $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
-        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
-        $msg = 'Medicine added successfully';
-        $result = $this->returnResultData($invoice,$msg);
-        return new Response(json_encode($result));
+       $data = $request->request->all();
+       $entity = new MedicineSalesItem();
+       $form = $this->createMedicineSalesItemForm($entity,$invoice);
+       $form->handleRequest($request);
+       $em = $this->getDoctrine()->getManager();
+       $entity->setMedicineSales($invoice);
+       $stockItem = ($data['salesitem']['stockName']);
+       $itemPercent = ($data['salesitem']['itemPercent']);
+       $salesPrice = ($data['salesitem']['salesPrice']);
+       $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
+       $entity->setMedicineStock($stock);
+       if($itemPercent > 0){
+           $initialDiscount = round(($salesPrice *  $itemPercent)/100);
+           $initialGrandTotal = round($salesPrice  - $initialDiscount);
+           $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+       }else{
+           $entity->setSalesPrice( round( $salesPrice, 2 ) );
+       }
+       $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
+       $entity->setMrpPrice($stock->getSalesPrice());
+       $entity->setPurchasePrice($stock->getAveragePurchasePrice());
+       $em->persist($entity);
+       $em->flush();
+       $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+       $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
+       $msg = 'Medicine added successfully';
+       $result = $this->returnResultData($invoice,$msg);
+       return new Response(json_encode($result));
 
-    }
-
-    public function instantPurchaseSalesAction(MedicineSales $sales , MedicinePurchaseItem $item)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $quantity = $_REQUEST['quantity'];
-        if(empty($item->getSalesQuantity())) {
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
-        }
-        $salesItem = new MedicineSalesItem();
-        $salesItem->setMedicineSales($sales);
-        $salesItem->setMedicineStock($item->getMedicineStock());
-        $salesItem->setMedicinePurchaseItem($item);
-        $salesItem->setQuantity($quantity);
-        $salesItem->setSalesPrice($item->getSalesPrice());
-        $salesItem->setSubTotal($salesItem->getSalesPrice() * $salesItem->getQuantity());
-        $salesItem->setPurchasePrice($item->getMedicineStock()->getAveragePurchasePrice());
-        $em->persist($salesItem);
-        $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
-        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($sales);
-        $msg = 'Medicine added successfully';
-        $result = $this->returnResultData($invoice,$msg);
-        return new Response(json_encode($result));
+   }
 
 
-    }
-
-    public function salesItemDeleteAction(MedicineSales $invoice, MedicineSalesItem $particular){
-
-        $em = $this->getDoctrine()->getManager();
-     //   $item = $particular->getMedicinePurchaseItem();
-        $stock = $particular->getMedicineStock();
-	  //  $this->get('session')->set('item', $item);
-	    $this->get('session')->set('stock', $stock);
-
-	    if (!$particular) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
-        }
-        $em->remove($particular);
-        $em->flush();
-	 //   $item = $this->get('session')->get('item');
-	    $stock = $this->get('session')->get('stock');
-	 //   $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
-        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
-        $msg = 'Medicine added successfully';
-        $result = $this->returnResultData($invoice,$msg);
-        return new Response(json_encode($result));
-
-    }
+   public function instantPurchaseSalesAction(MedicineSales $sales , MedicinePurchaseItem $item)
+   {
+       $em = $this->getDoctrine()->getManager();
+       $quantity = $_REQUEST['quantity'];
+       if(empty($item->getSalesQuantity())) {
+           $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock());
+       }
+       $salesItem = new MedicineSalesItem();
+       $salesItem->setMedicineSales($sales);
+       $salesItem->setMedicineStock($item->getMedicineStock());
+       $salesItem->setMedicinePurchaseItem($item);
+       $salesItem->setQuantity($quantity);
+       $salesItem->setSalesPrice($item->getSalesPrice());
+       $salesItem->setSubTotal($salesItem->getSalesPrice() * $salesItem->getQuantity());
+       $salesItem->setPurchasePrice($item->getMedicineStock()->getAveragePurchasePrice());
+       $em->persist($salesItem);
+       $em->flush();
+       $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+       $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($item->getMedicineStock(),'sales');
+       $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($sales);
+       $msg = 'Medicine added successfully';
+       $result = $this->returnResultData($invoice,$msg);
+       return new Response(json_encode($result));
 
 
+   }
 
-	public function invoiceDiscountUpdateAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $discountType = $request->request->get('discountType');
-        $discountCal = (float)$request->request->get('discount');
-        $invoice = $request->request->get('invoice');
-        $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
-        $subTotal = $entity->getSubTotal();
-        if($discountType == 'flat'){
-            $total = ($subTotal  - $discountCal);
-            $discount = $discountCal;
-        }else{
-            $discount = ($subTotal*$discountCal)/100;
-            $total = ($subTotal  - $discount);
-        }
-        $vat = 0;
-        if($total > $discount ){
-            $entity->setDiscountType($discountType);
-            $entity->setDiscountCalculation($discountCal);
-            $entity->setDiscount(round($discount));
-            $entity->setNetTotal(round($total + $vat));
-            $entity->setDue(round($total + $vat));
-        }else{
-	        $entity->setDiscountType('flat');
-	        $entity->setDiscountCalculation(0);
-	        $entity->setDiscount(0);
-	        $entity->setNetTotal(round($entity->getSubTotal() + $vat));
-	        $entity->setDue($entity->getNetTotal());
-        }
-	    $em->flush();
-        $msg = 'Discount successfully';
-        $result = $this->returnResultData($entity,$msg);
-        return new Response(json_encode($result));
+   public function salesItemDeleteAction(MedicineSales $invoice, MedicineSalesItem $particular){
 
-    }
+       $em = $this->getDoctrine()->getManager();
+    //   $item = $particular->getMedicinePurchaseItem();
+       $stock = $particular->getMedicineStock();
+     //  $this->get('session')->set('item', $item);
+       $this->get('session')->set('stock', $stock);
 
-    public function updateAction(Request $request, MedicineSales $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MedicineSales entity.');
-        }
-        $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem() , $entity);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-        $data = $request->request->all();
-        if ($editForm->isValid()) {
-            if (!empty($data['customerMobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
-                $entity->setCustomer($customer);
+       if (!$particular) {
+           throw $this->createNotFoundException('Unable to find SalesItem entity.');
+       }
+       $em->remove($particular);
+       $em->flush();
+    //   $item = $this->get('session')->get('item');
+       $stock = $this->get('session')->get('stock');
+    //   $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updateRemovePurchaseItemQuantity($item,'sales');
+       $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+       $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
+       $msg = 'Medicine added successfully';
+       $result = $this->returnResultData($invoice,$msg);
+       return new Response(json_encode($result));
 
-            } elseif(!empty($data['mobile'])) {
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
-                $entity->setCustomer($customer);
-            }
-            if($data['process'] == 'hold'){
-                $entity->setProcess('Hold');
-            }else{
-                $entity->setApprovedBy($this->getUser());
-                $entity->setProcess('Done');
-            }
-
-            if ($entity->getNetTotal() <= $entity->getReceived()) {
-                $entity->setReceived($entity->getNetTotal());
-                $entity->setDue(0);
-                $entity->setPaymentStatus('Paid');
-            }else{
-                $entity->setPaymentStatus('Due');
-                $entity->setDue($entity->getNetTotal() - $entity->getReceived());
-            }
-            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
-            if($accountConfig == 1){
-                $datetime = new \DateTime("yesterday 23:30:30");
-                $entity->setCreated($datetime);
-                $entity->setUpdated($datetime);
-            }
-            $em->flush();
-            if($entity->getProcess() == 'Done'){
-                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-            }
-            if($data['process'] == 'save' or $data['process'] == 'hold' ){
-                return $this->redirect($this->generateUrl('medicine_sales'));
-            }else{
-                return $this->redirect($this->generateUrl('medicine_sales_print_invoice', array('id' => $entity->getId())));
-            }
-        }
-        return $this->render('MedicineBundle:Sales:new.html.twig', array(
-            'entity' => $entity,
-            'salesItemForm' => $salesItemForm->createView(),
-            'form' => $editForm->createView(),
-        ));
-    }
+   }
 
 
-    /**
-     * Finds and displays a Vendor entity.
-     *
-     */
+
+   public function invoiceDiscountUpdateAction(Request $request)
+   {
+       $em = $this->getDoctrine()->getManager();
+       $discountType = $request->request->get('discountType');
+       $discountCal = (float)$request->request->get('discount');
+       $invoice = $request->request->get('invoice');
+       $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($invoice);
+       $subTotal = $entity->getSubTotal();
+       if($discountType == 'flat'){
+           $total = ($subTotal  - $discountCal);
+           $discount = $discountCal;
+       }else{
+           $discount = ($subTotal*$discountCal)/100;
+           $total = ($subTotal  - $discount);
+       }
+       $vat = 0;
+       if($total > $discount ){
+           $entity->setDiscountType($discountType);
+           $entity->setDiscountCalculation($discountCal);
+           $entity->setDiscount(round($discount));
+           $entity->setNetTotal(round($total + $vat));
+           $entity->setDue(round($total + $vat));
+       }else{
+           $entity->setDiscountType('flat');
+           $entity->setDiscountCalculation(0);
+           $entity->setDiscount(0);
+           $entity->setNetTotal(round($entity->getSubTotal() + $vat));
+           $entity->setDue($entity->getNetTotal());
+       }
+       $em->flush();
+       $msg = 'Discount successfully';
+       $result = $this->returnResultData($entity,$msg);
+       return new Response(json_encode($result));
+
+   }
+
+   public function updateAction(Request $request, MedicineSales $entity)
+   {
+       $em = $this->getDoctrine()->getManager();
+       $globalOption = $this->getUser()->getGlobalOption();
+       if (!$entity) {
+           throw $this->createNotFoundException('Unable to find MedicineSales entity.');
+       }
+       $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem() , $entity);
+       $editForm = $this->createEditForm($entity);
+       $editForm->handleRequest($request);
+       $data = $request->request->all();
+       if ($editForm->isValid()) {
+           if (!empty($data['customerMobile'])) {
+               $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+               $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
+               $entity->setCustomer($customer);
+
+           } elseif(!empty($data['mobile'])) {
+               $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+               $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+               $entity->setCustomer($customer);
+           }
+           if($data['process'] == 'hold'){
+               $entity->setProcess('Hold');
+           }else{
+               $entity->setApprovedBy($this->getUser());
+               $entity->setProcess('Done');
+           }
+
+           if ($entity->getNetTotal() <= $entity->getReceived()) {
+               $entity->setReceived($entity->getNetTotal());
+               $entity->setDue(0);
+               $entity->setPaymentStatus('Paid');
+           }else{
+               $entity->setPaymentStatus('Due');
+               $entity->setDue($entity->getNetTotal() - $entity->getReceived());
+           }
+           $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+           if($accountConfig == 1){
+               $datetime = new \DateTime("yesterday 23:30:30");
+               $entity->setCreated($datetime);
+               $entity->setUpdated($datetime);
+           }
+           $em->flush();
+           if($entity->getProcess() == 'Done'){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+           }
+           if($data['process'] == 'save' or $data['process'] == 'hold' ){
+               return $this->redirect($this->generateUrl('medicine_sales'));
+           }else{
+               return $this->redirect($this->generateUrl('medicine_sales_print_invoice', array('id' => $entity->getId())));
+           }
+       }
+       return $this->render('MedicineBundle:Sales:new.html.twig', array(
+           'entity' => $entity,
+           'salesItemForm' => $salesItemForm->createView(),
+           'form' => $editForm->createView(),
+       ));
+   }
+
+
+   /**
+    * Finds and displays a Vendor entity.
+    *
+    */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();

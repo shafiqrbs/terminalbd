@@ -481,6 +481,22 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function getGenericStockMedicine(MedicineStock $stock)
+    {
+        if($stock->getMedicineBrand()){
+            $generic = $stock->getMedicineBrand()->getMedicineGeneric()->getId();
+            $form = $stock->getMedicineBrand()->getMedicineForm();
+            $query = $this->createQueryBuilder('e');
+            $query->join('e.medicineBrand', 'brand');
+            $query->where("e.medicineConfig = :config")->setParameter('config', $stock->getMedicineConfig()->getId());
+            $query->andWhere("brand.medicineGeneric = :medicineGenericId")->setParameter('medicineGenericId', $generic);
+            $query->andWhere("brand.medicineForm = :medicineFor")->setParameter('medicineFor',$form);
+            $query->orderBy('e.slug', 'ASC');
+            return $query->getQuery()->getResult();
+        }
+        return false;
+    }
+
     public function ecommerceSearchAutoComplete($q, MedicineConfig $config)
     {
 
