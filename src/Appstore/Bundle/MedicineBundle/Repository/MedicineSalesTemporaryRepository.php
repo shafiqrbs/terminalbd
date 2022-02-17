@@ -101,7 +101,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     public function insertGenericInvoiceItems(User $user,MedicineStock $stockItem,$data)
     {
         $em = $this->_em;
-        $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
+        $quantity = empty($data['quantity']) or $data['quantity'] == 'NaN'  ? 1 : $data['quantity'];
         $entity = new MedicineSalesTemporary();
         $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
         if(empty($invoiceParticular)) {

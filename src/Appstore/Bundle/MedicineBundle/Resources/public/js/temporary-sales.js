@@ -459,6 +459,37 @@ function jqueryTemporaryLoad() {
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#subTotal').html(obj['subTotal']);
+                $('#invoiceParticulars').html(obj['salesItems']);
+                $('#grandTotal').html(obj['initialGrandTotal']);
+                $('.discount').html(obj['initialDiscount']);
+                $('.dueAmount').html(obj['initialGrandTotal']);
+                $('#salesSubTotal').val(obj['subTotal']);
+                $('#salesNetTotal').val(obj['initialGrandTotal']);
+                $('#profit').html(obj['profit']);
+                $('#salesTemporary_discount').val(obj['initialDiscount']);
+                $('#salesTemporary_due').val(obj['initialGrandTotal']);
+            },
+
+        })
+    });
+
+    $(document).on('click', '.genericStockItem', function() {
+
+        var id = $(this).attr('data-id');
+        var quantity = parseFloat($('#quantity-'+id).val());
+        var price = parseFloat($('#salesPrice-'+id).val());
+        var itemPercent = parseFloat($('#itemPercent-'+id).val());
+        var url =$(this).attr('data-action');
+        var subTotal  = (quantity * price);
+        $("#subTotal-"+id).html(subTotal);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:'quantity='+ quantity +'&salesPrice='+ price+'&itemPercent='+ itemPercent,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('#subTotal').html(obj['subTotal']);
+                $('#invoiceParticulars').html(obj['salesItems']);
                 $('#grandTotal').html(obj['initialGrandTotal']);
                 $('.discount').html(obj['initialDiscount']);
                 $('.dueAmount').html(obj['initialGrandTotal']);

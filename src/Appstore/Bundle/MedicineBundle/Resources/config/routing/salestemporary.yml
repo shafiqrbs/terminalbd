@@ -41,7 +41,7 @@ medicine_sales_generic_stock:
 medicine_sales_temporary_generic_item:
     path:     /{id}/generic-stock-item-add
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addGenericStockItem" }
-    methods:  GET
+    methods:  POST
     options:
             expose: true
 
