@@ -2,13 +2,14 @@
  * Created by rbs on 5/1/17.
  */
 
-$(document).on('click', '.profitToggle', function() {
+$('.profitToggle').click(function(){
     $("#profit").slideToggle(100);
 }).toggle( function() {
     $(this).text("Hide");
 }, function() {
     $(this).text("Show");
 });
+
 
 $(document).on('click', '#temporarySales', function() {
 
