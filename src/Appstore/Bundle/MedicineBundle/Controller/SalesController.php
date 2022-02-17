@@ -202,7 +202,7 @@ class SalesController extends Controller
         }
         $discountPercentList = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         $genericItems = $this->getDoctrine()->getRepository(MedicineStock::class)->getGenericStockMedicine($stock);
-        $html = $this->renderView('MedicineBundle:Sales:stock-generic-item.html.twig', array(
+        $html = $this->renderView('MedicineBundle:Sales:stockGenericItem.html.twig', array(
            'stock'        => $stock,
            'genericItems'        => $genericItems,
            'discountPercentLists'        => $discountPercentList,
