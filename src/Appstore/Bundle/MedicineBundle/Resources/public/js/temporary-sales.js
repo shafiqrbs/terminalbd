@@ -5,9 +5,9 @@
 $('.profitToggle').click(function(){
     $("#profit").slideToggle(100);
 }).toggle( function() {
-    $(this).text("Hide");
+    $('.profitToggle').text("Hide");
 }, function() {
-    $(this).text("Show");
+    $('.profitToggle').text("Show");
 });
 
 
