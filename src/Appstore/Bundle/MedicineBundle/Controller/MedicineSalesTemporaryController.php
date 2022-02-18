@@ -153,7 +153,7 @@ class MedicineSalesTemporaryController extends Controller
                 $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                 $entity->setUnit($unit);
             }
-            $avg = $entity->getSalesPrice() - (($entity->getSalesPrice() * 12.5)/100);
+            $avg = ($entity->getSalesPrice() - (($entity->getSalesPrice() * 12.5)/100));
             $entity->setPurchasePrice($avg);
             $entity->setAveragePurchasePrice($avg);
             $entity->setAverageSalesPrice($entity->getSalesPrice());

@@ -8,11 +8,11 @@
     <div class="caption"><i class="icon-reorder"></i>MANAGE SALES POS</div>
     <div class="actions">
         <div class="btn-group">
+            <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
+            <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
             <a class="btn black" target="_blank" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales List </a>
             <a class="btn blue" href="{{ path('medicine_stock') }}" target="_blank"><i class="icon-th-list"></i> Stock Item </a>
             <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
-            <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
-            <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
             <a href="javascript:" id="genericStockShow"  data-trigger="hover" data-original-title="Generic Stock Medicine" class=" btn gray tooltips"><i class="fa fa-angle-double-down"></i> Generic Stock</a>
         </div>
     </div>
@@ -165,12 +165,12 @@
                 {% if user.medicineSalesTemporary is not empty %}
                     {% for item in user.medicineSalesTemporary %}
                         {% set avgTotal = avgTotal +(item.medicineStock.averagePurchasePrice * item.quantity) %}
-                        <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice > item.salesPrice %} class="warning" {% endif %}>
+                        <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
                             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
                             <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
                             <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                             <td class="span1">
-                                {% if item.medicineStock.averagePurchasePrice > item.medicineStock.salesPrice %}
+                                {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %}
                                     <a class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change purchase avg price">{{ item.medicineStock.averagePurchasePrice }}</a>
                                 {% else %}
                                     {{ item.medicineStock.averagePurchasePrice|number_format(2) }}

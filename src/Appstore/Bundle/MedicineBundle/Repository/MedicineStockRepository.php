@@ -207,10 +207,13 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere("e.minQuantity  <= {$endQuantity}");
         }
         if($process == "MRP < Purchase AVG") {
-            $qb->andWhere('e.averagePurchasePrice > e.salesPrice');
+            $qb->andWhere('e.averagePurchasePrice >= e.salesPrice');
         }
         if($process == "MRP < Purchase Price") {
-            $qb->andWhere('e.purchasePrice > e.salesPrice');
+            $qb->andWhere('e.purchasePrice >= e.salesPrice');
+        }
+        if($process == "Purchase AVG = 0") {
+            $qb->andWhere('e.averagePurchasePrice = 0');
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy("{$sort}",$direction);
@@ -458,8 +461,6 @@ class MedicineStockRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
-
-
 
     public function searchGenericStockComplete($q, MedicineConfig $config)
     {

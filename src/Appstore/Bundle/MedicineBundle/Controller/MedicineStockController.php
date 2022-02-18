@@ -255,7 +255,8 @@ class MedicineStockController extends Controller
                 $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
                 $entity->setUnit($unit);
             }
-
+            $avg = ($entity->getSalesPrice() - (($entity->getSalesPrice() * 12.5)/100));
+            $entity->setAveragePurchasePrice($avg);
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -693,6 +694,7 @@ class MedicineStockController extends Controller
 		    $percentage = floatval(12.50);
 		    $purchasePrice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->stockInstantPurchaseItemPrice($percentage,$item->getSalesPrice());
 		    $item->setPurchasePrice($purchasePrice);
+		    $item->setAveragePurchasePrice($purchasePrice);
 		    $em->persist($item);
 		    $em->flush();
 	    }
