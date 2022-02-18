@@ -82,8 +82,8 @@ class AccountLoanType extends AbstractType
 		        'expanded'      =>false,
 		        'multiple'      =>false,
 		        'choices' => array(
-			        'Debit' => 'Debit',
-			        'Credit' => 'Credit'
+			        'Debit' => 'Receive',
+			        'Credit' => 'Payment'
 		        ),
 	        ))
             ->add('accountMobileBank', 'entity', array(

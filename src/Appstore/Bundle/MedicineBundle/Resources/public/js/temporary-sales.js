@@ -2,15 +2,6 @@
  * Created by rbs on 5/1/17.
  */
 
-$('.profitToggle').click(function(){
-    $("#profit").slideToggle(100);
-}).toggle( function() {
-    $('.profitToggle').text("Hide");
-}, function() {
-    $('.profitToggle').text("Show");
-});
-
-
 $(document).on('click', '#temporarySales', function() {
 
     $('.dialogModal_header').html('Sales Information');
@@ -41,7 +32,6 @@ $(document).on('click', '#temporarySales', function() {
 $(document).on('change', '#salesitem_stockName', function() {
 
     var medicine = $('#salesitem_stockName').val();
-    alert(medicine);
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
@@ -104,6 +94,9 @@ $(document).on("change", "#barcode", function() {
 
 function jqueryTemporaryLoad() {
 
+    $(document).on("click", ".profitBtn", function() {
+        $("#profit").slideToggle(100);
+    });
 
     $('#salesTemporary_received').click(function() {
         $('#salesTemporary_received').attr('value', '');
@@ -131,6 +124,7 @@ function jqueryTemporaryLoad() {
             $('#salesTemporary_due').val(obj['initialGrandTotal']);
             $('#generic-stock-hide').hide();
             $("#genericStock").select2("val", "");
+            $('.editableText').editable();
         });
     });
 
@@ -258,6 +252,7 @@ function jqueryTemporaryLoad() {
                 $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", false);
                 $('#salesTemporaryItem_salesPrice').val(obj['salesPrice']);
                 $('#genericItems').html(obj['genericItems']);
+                $('.editableText').editable();
             }
         })
 
@@ -314,7 +309,7 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
-                    EditableWithLoadInit();
+                    $('.editableText').editable();
                 }
             });
         }
@@ -357,7 +352,7 @@ function jqueryTemporaryLoad() {
                     $("#medicineId").val();
                     $('#medicineStock')[0].reset();
                     $('#opening-box').hide();
-                    EditableWithLoadInit();
+                    $('.editableText').editable();
                 }
             });
         }
@@ -441,7 +436,7 @@ function jqueryTemporaryLoad() {
                 $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
-                EditableWithLoadInit();
+                $('.editableText').editable();
             },
 
         })
@@ -470,7 +465,7 @@ function jqueryTemporaryLoad() {
                 $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
-                EditableWithLoadInit();
+                $('.editableText').editable();
             },
 
         })
@@ -501,7 +496,7 @@ function jqueryTemporaryLoad() {
                 $('#profit').html(obj['profit']);
                 $('#salesTemporary_discount').val(obj['initialDiscount']);
                 $('#salesTemporary_due').val(obj['initialGrandTotal']);
-                EditableWithLoadInit();
+                $('.editableText').editable();
             },
 
         })

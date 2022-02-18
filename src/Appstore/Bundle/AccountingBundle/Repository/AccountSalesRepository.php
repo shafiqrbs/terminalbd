@@ -436,6 +436,19 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function customerOutstandingSummary($globalOption, $data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) as sales, COALESCE(SUM(e.amount),0) as receive,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as balance ');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
+    }
+
     public function customerSummary($globalOption, $data = array())
     {
         $amount = isset($data['amount']) ? $data['amount']:0;

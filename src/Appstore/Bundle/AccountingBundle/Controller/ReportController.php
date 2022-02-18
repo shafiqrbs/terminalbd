@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Knp\Snappy\Pdf;
+use Proxies\__CG__\Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -375,8 +376,10 @@ class ReportController extends Controller
 		$globalOption = $this->getUser()->getGlobalOption();
 		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerOutstanding($globalOption,$data);
 		$pagination = $this->paginate($entities);
+		$summary = $this->getDoctrine()->getRepository(AccountSales::class)->customerOutstandingSummary($globalOption);
 		return $this->render('AccountingBundle:Report/Outstanding:customerOutstanding.html.twig', array(
 			'entities' => $pagination,
+			'summary' => $summary,
 			'searchForm' => $data,
 		));
 	}

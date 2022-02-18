@@ -9,18 +9,29 @@
     <div class="actions">
         <div class="btn-group">
             <a class="btn yellow instantPopup" href="javascript:" data-url="{{ path('medicine_instant_purchase_add') }}" id="instantPurchasePopup" ><i class="icon-circle-arrow-down"></i> Instant Purchase</a>
-            <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search Medicine</a>
-            <a class="btn black" target="_blank" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales List </a>
-            <a class="btn blue" href="{{ path('medicine_stock') }}" target="_blank"><i class="icon-th-list"></i> Stock Item </a>
-            <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
-            <a href="javascript:" id="genericStockShow"  data-trigger="hover" data-original-title="Generic Stock Medicine" class=" btn gray tooltips"><i class="fa fa-angle-double-down"></i> Generic Stock</a>
+            <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search</a>
+            <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn blue tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
+            <a href="javascript:" id="genericStockShow"  data-trigger="hover" data-original-title="Generic Stock Medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Generic Stock</a>
+            {% if app.user.granted("ROLE_DOMAIN") %}
+                <a class="btn green" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                    <i class="icon-tasks"></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li><a  target="_blank" href="{{ path('medicine_sales') }}">Sales List </a></li>
+                    <li> {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
+                            <a  href="{{ path('report_customer_outstanding') }}" target="_blank">OutStanding </a>
+                        {% endif %}
+                    </li>
+                    <li><a  href="{{ path('medicine_stock') }}" target="_blank">Stock Item </a></li>
+                </ul>
+            {% endif %}
         </div>
     </div>
 </div>
 <div class="portlet-body form">
     {% include('flash-message.html.twig')  %}
     <!-- BEGIN FORM-->
-    <div class="" id="hide">
+    <div class="" id="hide" style="background: #d0dde4">
         {{ form_start(stockItemForm) }}
         {{ form_row(stockItemForm._token) }}
         <div class="row-fluid" >
@@ -52,7 +63,7 @@
             </div>
             <div class="span4">
                 <div class="control-group">
-                    <label class="control-label" for="name"> Opening , Sales & MRP</label>
+                    <label class="control-label" for="name"> Opening , Sales & MRP per Unit</label>
                     <div class="controls">
                         <div class="input-append">
                             <div class="input-group">
@@ -64,10 +75,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="form-actions portlet box grey">
-            <div class="pull-right">
             </div>
         </div>
         {{ form_end(stockItemForm) }}
@@ -228,7 +235,7 @@
                 <tr>
                     <td colspan="6" class="span9"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
                     <td class=""><strong id="profit">{{ (result.subTotal - avgTotal)|number_format(2) }}</strong></td>
-                    <td class="span1"><btn class="btn mini purple profitToggle">Show</btn></td>
+                    <td class="span1"><a href="javascript:" class="btn mini blue profitBtn"><i class="icon-eye-open"></i> Show</a></td>
                 </tr>
                 </tbody>
 
@@ -367,6 +374,14 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label" for="firstName"><span class="label">Previous Due</span> <span class="pull-right sales-right"  style="width: 180px; font-size: 18px; color: #ea9b14" id="outstanding" ></span></label>
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
             <div class="row-fluid ">
                 <div class="span12 input-append-border">
                     <div class="row-fluid">
@@ -375,10 +390,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 180px; font-size: 40px; color: red"  id="" >{{ result.subTotal|number_format(2) }}</span></label>
+                        <label class="control-label" for="firstName"><span class="label" id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="width: 180px; font-size: 40px; color: red"  id="" >{{ result.subTotal|number_format(2) }}</span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -654,6 +670,15 @@
         inputclass: 'span12 m-wrap',
         placement: 'right',
     });
+    $(document).on("change", ".select2Customer , .select2TemporaryCustomer", function() {
+        var customer = $(this).val();
+        alert(customer);
+        $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
+        .done(function( data ) {
+        $('#outstanding').html(data);
+        });
+    });
+
     EditableWithLoadInit();
 
     $.key('shift+n', function() {
@@ -681,4 +706,5 @@
     jqueryTemporaryLoad();
     jqueryInstantTemporaryLoad();
     $('#salesTemporaryItem_stockName').focus();
+
 {% endblock %}

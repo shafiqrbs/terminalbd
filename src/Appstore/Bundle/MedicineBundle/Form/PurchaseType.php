@@ -98,7 +98,7 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','required' => false ,'label' => 'form.name','placeholder'=>'Memo no')))
+            ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','required' => false ,'label' => 'form.name','placeholder'=>'Memo no','autocomplete'=>'off')))
           //  ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12  resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
             ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap remove-value','placeholder'=>'Payment amount')))
