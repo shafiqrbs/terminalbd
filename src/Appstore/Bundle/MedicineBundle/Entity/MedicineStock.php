@@ -801,7 +801,7 @@ class MedicineStock
     /**
      * @param int $pack
      */
-    public function setPack(int $pack)
+    public function setPack($pack)
     {
         $this->pack = $pack;
     }
@@ -817,7 +817,7 @@ class MedicineStock
     /**
      * @param float $averageSalesPrice
      */
-    public function setAverageSalesPrice(float $averageSalesPrice)
+    public function setAverageSalesPrice($averageSalesPrice)
     {
         $this->averageSalesPrice = $averageSalesPrice;
     }
@@ -833,7 +833,7 @@ class MedicineStock
     /**
      * @param float $averagePurchasePrice
      */
-    public function setAveragePurchasePrice(float $averagePurchasePrice)
+    public function setAveragePurchasePrice($averagePurchasePrice)
     {
         $this->averagePurchasePrice = $averagePurchasePrice;
     }
