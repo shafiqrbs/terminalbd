@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Knp\Snappy\Pdf;
 use Proxies\__CG__\Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -397,8 +398,10 @@ class ReportController extends Controller
 		$globalOption = $this->getUser()->getGlobalOption();
 		$entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSummary($globalOption,$data);
 		$pagination = $this->paginate($entities);
-		return $this->render('AccountingBundle:Report/Outstanding:customerSummary.html.twig', array(
+        $summary = $this->getDoctrine()->getRepository(AccountSales::class)->customerOutstandingSummary($globalOption);
+        return $this->render('AccountingBundle:Report/Outstanding:customerSummary.html.twig', array(
 			'entities' => $pagination,
+			'summary' => $summary,
 			'searchForm' => $data,
 		));
 	}
@@ -520,9 +523,11 @@ class ReportController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorLedgerOutstanding($globalOption,$data);
         $pagination = $this->paginate($entities);
+        $summary = $this->getDoctrine()->getRepository(AccountPurchase::class)->vendorOutstandingSummary($globalOption);
         return $this->render('AccountingBundle:Report/Outstanding:vendorOutstanding.html.twig', array(
             'option' => $globalOption,
             'entities' => $pagination,
+            'summary' => $summary,
 			'searchForm' => $data,
 		));
 	}
@@ -537,9 +542,12 @@ class ReportController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->vendorSummary($globalOption,$data);
         $pagination = $this->paginate($entities);
+        $summary = $this->getDoctrine()->getRepository(AccountPurchase::class)->vendorOutstandingSummary($globalOption);
+
         return $this->render('AccountingBundle:Report/Outstanding:vendorSummary.html.twig', array(
             'option' => $globalOption,
             'entities' => $pagination,
+            'summary' => $summary,
             'searchForm' => $data,
         ));
     }

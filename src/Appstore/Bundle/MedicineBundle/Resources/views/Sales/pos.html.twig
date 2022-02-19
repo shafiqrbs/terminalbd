@@ -670,17 +670,8 @@
         inputclass: 'span12 m-wrap',
         placement: 'right',
     });
-    $(document).on("change", ".select2Customer , .select2TemporaryCustomer", function() {
-        var customer = $(this).val();
-        alert(customer);
-        $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
-        .done(function( data ) {
-        $('#outstanding').html(data);
-        });
-    });
 
     EditableWithLoadInit();
-
     $.key('shift+n', function() {
         $('#salesTemporaryItem_stockName').select2('open');
     });

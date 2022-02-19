@@ -43,8 +43,26 @@
                     <div class="portlet-body">
                         <form class="search-form" action="" method="get" name="itemSearch">
                             <div class="row-fluid">
-                                <div class="span9"></div>
-                                <div class="span3">
+                                <div class="span12">
+                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <thead class="flip-content">
+                                        <tr class="head-red">
+                                            <th class="" >Sales</th>
+                                            <th class="" >Receive</th>
+                                            <th class="" >Balance</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="numeric" ><strong>{{ summary.sales|number_format(2) }}</strong></td>
+                                            <td class="numeric" ><strong>{{ summary.receive|number_format(2) }}</strong></td>
+                                            <td class="numeric" ><strong>{{ summary.balance|number_format(2) }}</strong></td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {#<div class="span3">
                                     <div class="controls">
                                         <div class="input-append span11">
                                             <input type="text" id="amount" name="amount"  class="leftMargin span10  m-wrap" value="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% endif %}"  autocomplete="off" placeholder="Enter till amount">
@@ -53,7 +71,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>#}
                             </div>
                         </form>
                         <div class="portlet-body flip-scroll" id="DivIdToPrint">

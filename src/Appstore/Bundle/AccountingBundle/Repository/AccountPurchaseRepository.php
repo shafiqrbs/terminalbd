@@ -198,6 +198,17 @@ class AccountPurchaseRepository extends EntityRepository
         return $result;
     }
 
+    public function vendorOutstandingSummary(GlobalOption $globalOption,$data = array())
+    {
+        $amount = isset($data['amount']) ? $data['amount']:0;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.purchaseAmount),0) as purchase, COALESCE(SUM(e.payment),0) as payment,(COALESCE(SUM(e.purchaseAmount),0) - COALESCE(SUM(e.payment),0)) as balance ');
+        $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
+        $qb->andWhere("e.process = 'approved'");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
     public function vendorInventoryOutstanding($globalOption,$head, $data = array())
     {
 
