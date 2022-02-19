@@ -34,17 +34,6 @@ $(document).on("click", ".invoiceConfirm", function() {
     });
 });
 
-
-$(document).on("change", ".select2Customer , .select2TemporaryCustomer", function() {
-    var customer = $(this).val();
-    $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer} )
-        .done(function( data ) {
-            $('#outstanding').html(data);
-        });
-
-});
-
-
 $(document).on("click", ".confirm", function() {
     var url = $(this).attr('data-url');
     $('#confirm-content').confirmModal({

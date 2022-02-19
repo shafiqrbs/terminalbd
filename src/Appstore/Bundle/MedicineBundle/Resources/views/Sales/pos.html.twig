@@ -12,19 +12,17 @@
             <a href="javascript:" id="globalMedicine"  data-trigger="hover" data-original-title="Global Medicine" class=" btn purple tooltips"><i class="fa fa-angle-double-down"></i> Search</a>
             <a href="javascript:" id="stockShow"  data-trigger="hover" data-original-title="Add stock medicine" class=" btn blue tooltips"><i class="fa fa-angle-double-down"></i> Add Stock</a>
             <a href="javascript:" id="genericStockShow"  data-trigger="hover" data-original-title="Generic Stock Medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Generic Stock</a>
-            {% if app.user.granted("ROLE_DOMAIN") %}
-                <a class="btn green" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                    <i class="icon-tasks"></i>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                    <li><a  target="_blank" href="{{ path('medicine_sales') }}">Sales List </a></li>
-                    <li> {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
-                            <a  href="{{ path('report_customer_outstanding') }}" target="_blank">Outstanding </a>
-                        {% endif %}
-                    </li>
-                    <li><a  href="{{ path('medicine_stock') }}" target="_blank">Stock Item </a></li>
-                </ul>
-            {% endif %}
+            <a class="btn green" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                <i class="icon-tasks"></i>
+            </a>
+            <ul class="dropdown-menu pull-right">
+                <li><a  target="_blank" href="{{ path('medicine_sales') }}">Sales List </a></li>
+                <li> {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
+                        <a  href="{{ path('report_customer_outstanding') }}" target="_blank">Outstanding </a>
+                    {% endif %}
+                </li>
+                <li><a  href="{{ path('medicine_stock') }}" target="_blank">Stock Item </a></li>
+            </ul>
         </div>
     </div>
 </div>

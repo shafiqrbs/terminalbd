@@ -39,6 +39,10 @@ dps_doctor:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing/doctor.yml"
     prefix:   /doctor
 
+dps_diseases:
+    resource: "@DoctorPrescriptionBundle/Resources/config/routing/diseases.yml"
+    prefix:   /diseases
+
 dps_config:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing/config.yml"
     prefix:   /config

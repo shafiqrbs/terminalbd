@@ -1314,6 +1314,8 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             $menu['Doctor Prescription']['Master Data']->addChild('Particular', array('route' => 'dps_particular'))
                 ;
+            $menu['Doctor Prescription']['Master Data']->addChild('Diseases', array('route' => 'dps_diseases'))
+                ;
             $menu['Doctor Prescription']['Master Data']->addChild('Service', array('route' => 'dps_service'))
                 ;
             if($mainApp != "Hospital") {

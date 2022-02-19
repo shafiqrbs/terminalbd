@@ -159,9 +159,7 @@ function jqueryTemporaryLoad() {
         },
         allowClear: true,
         minimumInputLength:2
-
     });
-
 
     $(".addTemporaryCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
@@ -356,6 +354,12 @@ function jqueryTemporaryLoad() {
                 }
             });
         }
+    });
+
+    $(document).on("change", ".select2Customer , .select2TemporaryCustomer", function() {
+        var customer = $(this).val();
+        $.get( Routing.generate('domain_customer_sales_ledger'),{ customer:customer})
+            .done(function(data){ $('#outstanding').html(data); });
     });
 
     $(document).on( "click", "#stockShow", function(e){

@@ -85,12 +85,9 @@ class DpsParticularRepository extends EntityRepository
     public function getFindDentalServiceParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
             ->where('e.dpsConfig = :config')->setParameter('config', $config)
          /*   ->andWhere('e.status = :status')->setParameter('status', 1)*/
-            //->andWhere('s.serviceFormat IN(:slugs)')
-         //   ->setParameter('slugs',array_values($services))
-            ->orderBy('s.sorting','ASC')
+            ->andWhere('e.mode =:mode')->setParameter('mode',$services)
             ->orderBy('e.name','ASC')
             ->getQuery()->getResult();
         return  $qb;
