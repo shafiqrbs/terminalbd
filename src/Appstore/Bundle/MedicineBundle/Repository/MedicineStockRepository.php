@@ -405,12 +405,12 @@ class MedicineStockRepository extends EntityRepository
         $stock->setPurchasePrice($item->getPurchasePrice());
 	    $stock->setSalesPrice($item->getSalesPrice());
 	    if($avg['purchase']){
-            $stock->setAveragePurchasePrice($avg['purchase']);
+            $stock->setAveragePurchasePrice(floatval($avg['purchase']));
         }else{
             $stock->setAveragePurchasePrice($item->getPurchasePrice());
         }
         if($avg['sales']){
-            $stock->setAverageSalesPrice($avg['sales']);
+            $stock->setAverageSalesPrice(floatval($avg['sales']));
         }else{
             $stock->setAverageSalesPrice($item->getSalesPrice());
         }
