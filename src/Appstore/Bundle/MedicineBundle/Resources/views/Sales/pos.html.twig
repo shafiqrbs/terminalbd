@@ -657,10 +657,14 @@
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
-    <script type="application/javascript" src="{{ asset('bundles/medicine/js/editable.js') }}"></script>
-    <script type="application/javascript" src="{{ asset('bundles/medicine/js/temporary-sales.js') }}"></script>
-    <script type="application/javascript" src="{{ asset('bundles/medicine/js/approveProcess.js') }}"></script>
-{% endblock %}
+    {% javascripts
+        '@MedicineBundle/Resources/public/js/editable.js'
+        '@MedicineBundle/Resources/public/js/temporary-sales.js'
+        '@MedicineBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
 {% block documentready %}
     {{ parent() }}
     $('.editableText').editable({
