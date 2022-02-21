@@ -74,8 +74,7 @@ function formSubmit() {
                 },
                 success: function(response){
                     $('.btn-ajax-loading').attr("disabled", false);
-                    console.log(response);
-                  //  window.location.href = '/dms/invoice/'+response+'/edit';
+                    window.location.href = '/doctor-prescription/invoice/'+response+'/edit';
                 }
             });
         }
