@@ -159,7 +159,7 @@
                                                 <a href="{{ path('dps_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Patient</a>
                                                 {% endif %}
                                                 {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
-                                                <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
+                                                <a  id="{{ entity.id }}" data-action="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini tr-remove" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
                                                 {% if entity.process !='Created' %}
                                                 <a target="_blank"  href="{{ path('dps_invoice_print_invoice',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
@@ -192,6 +192,7 @@
     {{ parent() }}
     {% javascripts
     '@DoctorPrescriptionBundle/Resources/public/js/patient.js'
+    '@DoctorPrescriptionBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

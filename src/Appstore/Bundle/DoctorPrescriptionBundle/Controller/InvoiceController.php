@@ -8,6 +8,7 @@ use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
 use Appstore\Bundle\DomainUserBundle\Form\PatientForPrescriptionType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoiceParticular;
@@ -287,13 +288,31 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        $msg = 'invalid';
+        $dpsConfig = $this->getUser()->getGlobalOption()->getDpsConfig();
+        if (!$entity and $dpsConfig->getId() == $entity->getDpsConfig()->getId()) {
+            $msg = "invalid";
         }
-        $em->remove($entity);
-        $em->flush();
-        return new Response(json_encode(array('success' => 'success')));
-        exit;
+        try {
+            $em->remove($entity);
+            $em->flush();
+            $msg = "success";
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+            $msg = "invalid";
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+            $msg = "invalid";
+        }
+        return new Response($msg);
     }
 
 
