@@ -58,6 +58,9 @@ class InvoiceParticularController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     */
     public function reportProcessAction()
     {
         $em = $this->getDoctrine()->getManager();

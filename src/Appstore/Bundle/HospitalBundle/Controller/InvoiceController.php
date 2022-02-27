@@ -39,7 +39,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
      */
 
     public function indexAction()

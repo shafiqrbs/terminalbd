@@ -6,8 +6,8 @@
             <div class="row-fluid" >
                 <div class="span3">
                     <div class="btn-group" style="width:88%!important">
-                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  ) %}
-                            <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn yellow big"><i class="fa fa-truck"></i> Delivery Report</a>
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  app.user.granted("ROLE_DOMAIN")) %}
+                            <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn yellow big"><i class="fa fa-truck"></i> Report Delivery</a>
                         {% endif %}
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                             <a href="{{ path('hms_invoice') }}" style="width:27%" class="btn green big"><i class="fa fa-money"></i> Diagnostic</a>
                         {% endif %}
                         {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
-                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 27%" class="btn blue big"><i class="fa fa-stethoscope"></i> Pathological </a>
+                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 27%" class="btn blue big"><i class="fa fa-stethoscope"></i> Report Prepared </a>
                         {% endif %}
                     </div>
                 </div>
@@ -115,6 +115,7 @@
             <div class="span5">
                 <div class="row-fluid">
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
@@ -141,8 +142,10 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") %}
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
@@ -169,10 +172,13 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
 
                 </div>
                 <div class="row-fluid">
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") or  app.user.granted("ROLE_DOMAIN") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") %}
+
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
                             <div class="display">
@@ -201,6 +207,9 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_PURCHASE") or  app.user.granted("ROLE_DOMAIN") %}
+
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
                             <div class="display">
@@ -229,12 +238,13 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="span4">
                 <div class="span6" style="margin-top:-10px">
                             <div class="portlet-body">
-
+                                {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_COMMISSION") or  app.user.granted("ROLE_DOMAIN") %}
                                 <a href="{{ path('hms_doctor_commission_invoice') }}" class="icon-btn">
                                     <i class="fa fa-money"></i>
                                     <div> Commission </div>
@@ -243,6 +253,8 @@
                                     <i class="fa fa-money"></i>
                                     <div> Commission Payment  </div>
                                 </a>
+                                {% endif %}
+                                {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or  app.user.granted("ROLE_DOMAIN")  %}
                                 <a href="{{ path('hms_doctor') }}" class="icon-btn">
                                     <i class="fa fa-user"></i>
                                     <div> Doctor </div>
@@ -251,24 +263,29 @@
                                     <i class="icon-truck"></i>
                                     <div> Referred/PC </div>
                                 </a>
+                                {% endif %}
 
                             </div>
 
                         </div>
                         <div class="span6" style="margin-top:-10px">
                             <div class="portlet-body">
-                                <a href="{{ path('hms_pathology') }}" class="icon-btn">
-                                    <i class="icon-tags"></i>
-                                    <div> Diagnostic Test </div>
-                                </a>
-                                <a href="{{ path('hms_stockout') }}" class="icon-btn">
-                                    <i class="icon-bar-chart"></i>
-                                    <div> Item Issue </div>
-                                </a>
-                                <a href="{{ path('hms_stock') }}" class="icon-btn">
-                                    <i class="icon-signal"></i>
-                                    <div> Manage Stock </div>
-                                </a>
+                                {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or  app.user.granted("ROLE_DOMAIN")  %}
+                                    <a href="{{ path('hms_pathology') }}" class="icon-btn">
+                                        <i class="icon-tags"></i>
+                                        <div> Diagnostic Test </div>
+                                    </a>
+                                {% endif %}
+                                {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_PURCHASE") or app.user.granted("ROLE_DOMAIN_HOSPITAL_SALES") or  app.user.granted("ROLE_DOMAIN")  %}
+                                    <a href="{{ path('hms_stockout') }}" class="icon-btn">
+                                        <i class="icon-bar-chart"></i>
+                                        <div> Item Issue </div>
+                                    </a>
+                                    <a href="{{ path('hms_stock') }}" class="icon-btn">
+                                        <i class="icon-signal"></i>
+                                        <div> Manage Stock </div>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
             </div>
