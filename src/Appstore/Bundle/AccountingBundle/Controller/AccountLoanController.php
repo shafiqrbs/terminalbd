@@ -97,7 +97,9 @@ class AccountLoanController extends Controller
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
+        $data = $request->request->all();
         $balance =  $em->getRepository('AccountingBundle:AccountLoan')->getLastBalance($option);
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
         if($entity->getTransactionType() == "Credit" and $entity->getAmount() > $balance ){
             $this->get('session')->getFlashBag()->add(
                 'error',"This {$entity->getAmount()} amount must be went to equal or less then credit {$balance} amount"
@@ -114,8 +116,12 @@ class AccountLoanController extends Controller
             }else{
                 $entity->setDebit($entity->getAmount());
             }
-            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
-            if($accountConfig == 1){
+            if(isset($data['created']) and !empty($data['created'])){
+                $created = $data['created'];
+                $date = new \DateTime($created);
+                $entity->setCreated($date);
+                $entity->setUpdated($date);
+            }elseif($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 23:30:30");
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);
@@ -123,7 +129,6 @@ class AccountLoanController extends Controller
                 $datetime = new \DateTime("now");
                 $entity->setUpdated($datetime);
             }
-
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -142,7 +147,12 @@ class AccountLoanController extends Controller
                 $entity->setDebit($entity->getAmount());
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
-            if($accountConfig == 1){
+            if(isset($data['created']) and !empty($data['created'])){
+                $created = $data['created'];
+                $date = new \DateTime($created);
+                $entity->setCreated($date);
+                $entity->setUpdated($date);
+            }elseif($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 23:30:30");
                 $entity->setCreated($datetime);
                 $entity->setUpdated($datetime);

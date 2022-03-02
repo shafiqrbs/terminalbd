@@ -84,11 +84,19 @@ class ExpenditureController extends Controller
             if($this->getUser()->getProfile()->getBranches()){
                 $entity->setBranches($this->getUser()->getProfile()->getBranches());
             }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if(isset($data['created']) and !empty($data['created'])){
                 $created = $data['created'];
                 $date = new \DateTime($created);
                 $entity->setCreated($date);
                 $entity->setUpdated($date);
+            }elseif($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:30:30");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
             }
             $entity->setUpdated($entity->getCreated());
             $entity->upload();
