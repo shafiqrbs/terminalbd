@@ -77,7 +77,7 @@ class DefaultController extends Controller
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $barcode = $this->getBarcode($customer->getCustomerId());
         return $this->render('HospitalBundle:Default:patient-idcard.html.twig', array(
-            'hospitalConfig' => $hospital,
+            'hospital' => $hospital,
             'entity' => $customer,
             'barcode' => $barcode
         ));
