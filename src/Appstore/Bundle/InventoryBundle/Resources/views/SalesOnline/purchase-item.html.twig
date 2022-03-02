@@ -91,7 +91,7 @@
                                                                 {% set serials = salesitem.serialNo|trim|split(',') %}
                                                                 {% set purchaseItems = salesitem.purchaseItem.serialNo|split(',') %}
                                                                 <select class="m-wrap inputs" name="serialNo" id="serialNo-{{ salesitem.id }}" multiple="multiple" >
-                                                                    <option>--Serial no--</option>
+                                                                    <option value="">--IME/Serial No--</option>
                                                                     {% for serial in  purchaseItems %}
                                                                         <option {% if serial|trim in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>
                                                                     {% endfor %}
@@ -113,10 +113,12 @@
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
-                                                        {% if entity.inventoryConfig.isAttribute == 1 and salesitem.purchaseItem.serialNo is not empty %}
-                                                            <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
-                                                        {% endif %}
-                                                        <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                        <div class="btn-group">
+                                                            {% if entity.inventoryConfig.isAttribute == 1 and salesitem.purchaseItem.serialNo is not empty %}
+                                                                <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
+                                                            {% endif %}
+                                                            <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             {% endfor %}

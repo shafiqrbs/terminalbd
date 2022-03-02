@@ -487,8 +487,7 @@ class SalesController extends Controller
         }
         $em->remove($sales);
         $em->flush();
-        return new Response(json_encode(array('success' => 'success')));
-        exit;
+        return new Response('success');
     }
 
     /**
@@ -498,9 +497,9 @@ class SalesController extends Controller
     public function itemSerialNoUpdateAction(SalesItem  $salesItem)
     {
         $serial = $_REQUEST['serial'];
+        $em = $this->getDoctrine()->getManager();
         if(!empty($serial)){
             $ser = implode(",",$serial);
-	        $em = $this->getDoctrine()->getManager();
 	        $salesItem->setSerialNo($ser);
 	        $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
 	        $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
@@ -508,8 +507,16 @@ class SalesController extends Controller
 	        $salesItem->setExpiredDate($salesItem->getPurchaseItem()->getExpiredDate());
             $em->persist($salesItem);
 	        $em->flush();
+        }else{
+            $salesItem->setSerialNo(NULL);
+            $salesItem->setAssuranceType(NULL);
+            $salesItem->setAssuranceFromVendor(NULL);
+            $salesItem->setAssuranceToCustomer(NULL);
+            $salesItem->setExpiredDate(NULL);
+            $em->persist($salesItem);
+            $em->flush();
         }
-        exit;
+        return new Response('success');
     }
 
     /**

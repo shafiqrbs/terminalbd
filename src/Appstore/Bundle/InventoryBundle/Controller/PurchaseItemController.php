@@ -267,7 +267,7 @@ class PurchaseItemController extends Controller
             {
                 $ids[] = trim($row);
             }
-            $entity->setSerialNo(implode(", ", $ids));
+            $entity->setSerialNo(implode(",", $ids));
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $entity->getPurchase()->getId())));

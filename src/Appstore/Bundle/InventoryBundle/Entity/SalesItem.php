@@ -286,6 +286,18 @@ class SalesItem
     }
 
     /**
+     * @return string
+     */
+    public function getSalesSerialNo()
+    {
+            $serials = array();
+            foreach($this->getPurchaseItem()->getSalesItems() as $row){
+                $serials[] = $row->getSerialNo();
+            }
+        return $serials;
+    }
+
+    /**
      * @param string $serialNo
      */
     public function setSerialNo($serialNo)
