@@ -36,7 +36,7 @@ class InvoiceParticularController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_COMMISSION,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_COMMISSION,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN");
      */
 
     public function indexAction()
@@ -59,7 +59,7 @@ class InvoiceParticularController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_DOCTOR");
      */
     public function reportProcessAction()
     {
@@ -142,6 +142,11 @@ class InvoiceParticularController extends Controller
         }
         exit;
     }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     */
 
     public function preparationAction(InvoiceParticular $entity)
     {

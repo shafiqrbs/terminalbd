@@ -36,7 +36,7 @@ class ReportController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_MEDICINE_REPORT")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_REPORT")
      */
 
     public function salesOverviewAction()

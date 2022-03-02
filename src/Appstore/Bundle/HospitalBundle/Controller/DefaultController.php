@@ -25,7 +25,8 @@ class DefaultController extends Controller
         $data['endDate'] = $datetime->format('Y-m-d');
         $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
         $user = $this->getUser();
-        $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','admission'));
+        $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','visit'));
+        $salesCashAdmission = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('admission'));
         $purchaseCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user,$data);
         $transactionMethods                 = array(1);
         $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
@@ -44,6 +45,7 @@ class DefaultController extends Controller
             'transactionCashOverviews'          => $transactionCashOverview,
             'expenditureOverview'               => $expenditureOverview ,
             'salesCashOverview'                 => $salesCashOverview ,
+            'salesCashAdmission'                 => $salesCashAdmission ,
             'invoiceReturn'                     => $invoiceReturn ,
             'purchaseCashOverview'              => $purchaseCashOverview ,
             'searchForm'                        => $data ,

@@ -147,7 +147,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
             $entity->setItemPercent($data['itemPercent']);
             if($data['itemPercent'] > 0){
                 $entity->setItemPercent( $data['itemPercent'] );
-                $salesPrice = $data['salesPrice'];
+                $salesPrice = $invoiceParticular->getMedicineStock()->getSalesPrice();
                 $initialDiscount = (($salesPrice *  $data['itemPercent'])/100);
                 $initialGrandTotal =($salesPrice  - $initialDiscount);
                 $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );

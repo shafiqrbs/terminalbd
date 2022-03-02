@@ -261,20 +261,24 @@ class UserRepository extends EntityRepository
         if (!empty($result)) {
 
             $array['HMS'] = array(
-                'ROLE_HOSPITAL'                              => 'Hms',
-                'ROLE_DOMAIN_HOSPITAL_ADMISSION'             => 'Hms Patient Admission',
-                'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
-                'ROLE_DOMAIN_HOSPITAL_COMMISSION'            => 'Hms Commission',
-                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Operator',
-                'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Assistant',
-                'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Hms Doctor',
-                'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Hms Master Data',
-                'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
-                'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Hms Purchase',
-                'ROLE_DOMAIN_HOSPITAL_SALES'                 => 'Hms Issue',
-                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Hms Stock',
-                'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Hms Report',
-                'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',
+                'ROLE_HOSPITAL'                              => 'Hospital & Diagnostic',
+                'ROLE_HOSPITAL_FINANCIAL_APPROVE'            => 'Financial Approve',
+                'ROLE_DOMAIN_HOSPITAL_ADMISSION'             => 'Admission',
+                'ROLE_DOMAIN_HOSPITAL_VISIT'                 => 'Doctor Visit',
+                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Receptionist',
+                'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Manager',
+                'ROLE_DOMAIN_HOSPITAL_COMMISSION'            => 'Doctor/Referred Commission',
+                'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Lab Assistant',
+                'ROLE_DOMAIN_HOSPITAL_DUTY_DOCTOR'           => 'Duty Doctor',
+                'ROLE_DOMAIN_HOSPITAL_DUTY_NURSE'            => 'Duty Nurse',
+                'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Doctor',
+                'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Purchase',
+                'ROLE_DOMAIN_HOSPITAL_SALES'                 => 'Stock Issue',
+                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Stock',
+                'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Configuration',
+                'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Master Data',
+                'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Reports',
+                'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Administrator',
             );
         }
 

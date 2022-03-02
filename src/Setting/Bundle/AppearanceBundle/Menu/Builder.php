@@ -1080,27 +1080,27 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
 
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
-            $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
-                ->setAttribute('dropdown', true);
-            if (!empty($config) and in_array('diagnostic', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
-            }
-            if (!empty($config) and in_array('visit', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_prescription'));
-            }
-            if (!empty($config) and in_array('admission', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
-            }
+
+        $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
+            ->setAttribute('dropdown', true);
+        if (!empty($config) and in_array('diagnostic', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
+        if (!empty($config) and in_array('admission', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
+        }
+        if (!empty($config) and in_array('visit', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_VISIT')) {
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_prescription'));
+        }
+
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_COMMISSION')) {
             if (!empty($config) and in_array('commission', $config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'));
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Payment', array('route' => 'hms_doctor_invoice'));
             }
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR') or $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
             if (!empty($config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'));
             }

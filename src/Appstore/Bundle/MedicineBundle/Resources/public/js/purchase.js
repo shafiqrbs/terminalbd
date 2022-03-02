@@ -240,7 +240,7 @@ var formStock = $("#medicineStock").validate({
                 $('#invoiceParticulars').html(obj['invoiceParticulars']);
                 $('#subTotal').html(obj['subTotal']);
                 $('#vat').val(obj['vat']);
-                $('.grandTotal').html(obj['netTotal']);872323
+                $('.grandTotal').html(obj['netTotal']);
                 $('#paymentTotal').val(obj['subTotal']);
                 $('#due').val(obj['due']);
                 $('.dueAmount').html(obj['due']);

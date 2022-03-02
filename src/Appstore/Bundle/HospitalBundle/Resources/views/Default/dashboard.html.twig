@@ -26,14 +26,14 @@
                 </div>
                 <div class="span2">
                     <div class="btn-group" style="width:100%!important;">
-                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'visit' in option.hospitalConfig.invoiceProcess)) or  ('visit' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_VISIT") and 'visit' in option.hospitalConfig.invoiceProcess)) or  ('visit' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
                             <a  href="javascript:" style="width: 88%" class="btn yellow big addAppointment"><i class="fa fa-ambulance"></i> Visit</a>
                         {% endif %}
                     </div>
                 </div>
                 <div class="span2">
                     <div class="btn-group" style="width: 100%!important;">
-                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
                             <a  href="{{ path('hms_invoice_admission_new') }}" style="width:75%" class="btn red big"><i class="fa fa-ambulance"></i> Admission</a>
                         {% endif %}
                     </div>
@@ -187,7 +187,7 @@
                                         <span data-counter="counterup" data-value="{{ salesCashOverview['totalAmount'] }}">{{ salesCashOverview['totalAmount'] }}</span>
                                         <small class="font-purple-soft">BDT</small>
                                     </h3>
-                                    <small>SALES</small>
+                                    <small>Diagnostic</small>
                                 </div>
                                 <div class="icon">
                                     <i class="fa fa-money"></i>
@@ -196,7 +196,7 @@
                             <div class="progress-info">
                                 <div class="progress">
                             <span style="width: 75%;" class="progress-bar progress-bar-success purple-soft">
-                                <span class="sr-only">75% change</span>
+                                <span class="sr-only">85% change</span>
                             </span>
                                 </div>
                                 <div class="status">
@@ -208,17 +208,17 @@
                         </div>
                     </div>
                     {% endif %}
-                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or  app.user.granted("ROLE_DOMAIN_HOSPITAL_PURCHASE") or  app.user.granted("ROLE_DOMAIN") %}
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION")  or  app.user.granted("ROLE_DOMAIN") %}
 
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
                                     <h3 class="font-blue-sharp">
-                                        <span data-counter="counterup" data-value="{{ purchaseCashOverview['purchaseAmount'] }}">{{ purchaseCashOverview['purchaseAmount'] }}</span>
+                                        <span data-counter="counterup" data-value="{{ salesCashAdmission['totalAmount'] }}">{{ salesCashAdmission['totalAmount'] }}</span>
                                         <small class="font-blu-sharp">BDT</small>
                                     </h3>
-                                    <small>Purchase</small>
+                                    <small>Admission</small>
                                 </div>
                                 <div class="icon">
                                     <i class="icon-shopping-cart"></i>
@@ -227,12 +227,12 @@
                             <div class="progress-info">
                                 <div class="progress">
                                     <span style="width: 75%;" class="progress-bar progress-bar-success blue-sharp">
-                                        <span class="sr-only">75% grow</span>
+                                        <span class="sr-only">65% grow</span>
                                     </span>
                                 </div>
                                 <div class="status">
                                     <div class="status-number">
-                                        <a href="{{ path('hms_purchase') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
+                                        <a href="{{ path('hms_invoice_admission') }}" class="btn blue mini">More <i class="icon-circle-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
