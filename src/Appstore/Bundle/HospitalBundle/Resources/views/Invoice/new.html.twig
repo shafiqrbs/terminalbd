@@ -164,8 +164,8 @@
                             <td class="span2">{{ item.salesPrice }}</td>
                             <td class="span1">{{ item.subTotal|number_format }}</td>
                             <td class="span1">
-                                {% if item.process in pathologyProcess  %}
-                                    <a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+                                {% if item.process in pathologyProcess and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") %}
+                                    <a id="{{ item.id }}" data-id="{{ item.id }}"  data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
                                 {% else %}
                                     {{ item.process }}
                                 {% endif %}

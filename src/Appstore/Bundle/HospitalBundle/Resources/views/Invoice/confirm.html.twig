@@ -311,7 +311,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress') or (entity.process == 'In-progress' and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) %}
+                                    {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress') or (entity.process == 'In-progress' and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) or (entity.process == 'In-progress' and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) %}
                                     <a data-url="{{ path('hms_invoice_ready',{'id':entity.id}) }}" href="javascript:" class="btn blue approve"><i class="icon-cog"></i>&nbsp;Process Report</a>
                                     {% endif %}
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
