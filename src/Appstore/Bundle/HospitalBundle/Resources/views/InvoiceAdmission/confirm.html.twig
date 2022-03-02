@@ -78,7 +78,12 @@
                                             <h4>Admission:</h4>
                                             <ul class="unstyled">
                                                 <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
-                                                 <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
+                                                 <li><strong>Cabin/Bed:</strong>
+                                                     {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
+                                                     {% if entity.process in processEdit %}
+                                                     <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_invoice_admission_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_invoice_admission_cabin_inline_update') }}" data-pk="{{ entity.id }}" value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{ entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
+                                                    {% endif %}
+                                                 </li>
                                                 <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
                                                 <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
                                                 <li><strong>Anesthesia Doctor:</strong>&nbsp;{% if entity.anesthesiaDoctor is not empty %}{{ entity.anesthesiaDoctor.name }}{% endif %}</li>
@@ -404,7 +409,7 @@
                                             <form id="invoiveTransactionForm" method="post" action="{{ path('hms_invoice_admission_daily_invoice_transaction_submit',{'id': invoiceTransaction.id}) }}">
                                                 <div class="input-append span11" style="margin-bottom:0!important">
                                                     <input type="hidden" id="invoiceTransaction" name="invoiceTransaction" value="{{ entity.id }}">
-                                                    <input type="text" class="m-wrap span8" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount">
+                                                    <input type="text" class="m-wrap span8" id="payment" name="payment" value="" maxlength="8"  placeholder="Receive amount">
                                                     <div class="btn-group">
                                                         <button class="btn blue invoiceConfirm" type="button"><i class="icon-save"></i> Save</button>
                                                     </div>
@@ -473,7 +478,7 @@
                                                 <div class="span8 text-right">
                                                     <div class="input-append span12" style="margin-bottom:0!important">
                                                         <input type="text" class="m-wrap span3" id="discount" name="discount" placeholder="Discount amount"  >
-                                                        <input type="text" class="m-wrap span3" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount">
+                                                        <input type="text" class="m-wrap span3" id="payment" name="payment" value="" maxlength="8"  placeholder="Receive amount">
                                                         <select id="process" name="process" class="span4 m-wrap">
                                                             <option {% if entity.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
                                                             <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
@@ -529,6 +534,9 @@
         .process{
             display: none;
         }
+        .input-append input[class*="span"], .input-append .uneditable-input[class*="span"], .input-prepend input[class*="span"], .input-prepend .uneditable-input[class*="span"], .row-fluid input[class*="span"], .row-fluid select[class*="span"], .row-fluid textarea[class*="span"], .row-fluid .uneditable-input[class*="span"], .row-fluid .input-prepend [class*="span"], .row-fluid .input-append [class*="span"] {
+            border: 2px solid #0052cc!important;
+        }
     </style>
     {% endblock %}
     {% block cssBlock %}
@@ -544,12 +552,14 @@
         '@HospitalBundle/Resources/public/js/invoice.js'
         '@HospitalBundle/Resources/public/js/admission.js'
         '@HospitalBundle/Resources/public/js/approveProcess.js'
+        '@HospitalBundle/Resources/public/js/editable.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
     {% endblock  %}
     {% block documentready %}
         {{ parent() }}
+        EditableInit();
         $(document).on('click', '.showTransaction', function() {
             var id = $(this).attr('data-id');
             $('#transaction-'+id).slideToggle();

@@ -162,7 +162,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set processArr = {'Admitted': 'Admitted' ,'Revised':'Revised','Release':'Release','Death':'Death'} %}
+                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -170,7 +171,9 @@
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >
+                                            {% if entity.process in processEdit %}
                                             <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_invoice_admission_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_invoice_admission_cabin_inline_update') }}" data-pk="{{ entity.id }}" value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
+                                            {% endif %}
                                         </td>
                                         <td class="numeric" >{% if entity.diseasesProfile is not empty %}{{ entity.diseasesProfile.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
@@ -188,8 +191,6 @@
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processArr = {'Admitted': 'Admitted' ,'Revised':'Revised','Release':'Release','Death':'Death'} %}
-                                                {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
                                                 {% if entity.process in processArr %}
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}
