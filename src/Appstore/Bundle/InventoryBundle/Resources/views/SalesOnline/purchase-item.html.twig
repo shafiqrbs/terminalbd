@@ -86,12 +86,14 @@
                                                     </td>
                                                     {% if entity.inventoryConfig.isAttribute == 1 %}
                                                         <td class="numeric" >
+
                                                             {% if salesitem.purchaseItem.serialNo is not empty %}
+                                                                {% set serials = salesitem.serialNo|trim|split(',') %}
+                                                                {% set purchaseItems = salesitem.purchaseItem.serialNo|split(',') %}
                                                                 <select class="m-wrap inputs" name="serialNo" id="serialNo-{{ salesitem.id }}" multiple="multiple" >
                                                                     <option>--Serial no--</option>
-                                                                    {% set serials = salesitem.serialNo|split(',') %}
-                                                                    {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
-                                                                        <option {% if serial in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>
+                                                                    {% for serial in  purchaseItems %}
+                                                                        <option {% if serial|trim in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>
                                                                     {% endfor %}
                                                                 </select>
                                                             {% endif %}

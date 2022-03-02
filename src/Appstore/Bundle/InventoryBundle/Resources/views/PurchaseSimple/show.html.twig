@@ -94,7 +94,7 @@
                                     <div class="actions">
                                         <div class="btn-group">
                                         {% if entity.inventoryConfig.isAttribute == 1 %}
-                                            <a href="{{ path('inventory_purchaseitem_multi_add',{'purchase':entity.id}) }}" rel=""   class="btn red" ><i class="icon-plus"></i> Add All Item Attribute</a>
+                                            <a href="{{ path('inventory_purchaseitem_multi_add',{'purchase':entity.id}) }}" rel=""   class="btn red" ><i class="icon-plus"></i>Item IME/Serial no</a>
                                         {% endif %}
                                         </div>
                                     </div>
@@ -143,7 +143,7 @@
                                                     <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                                 {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                <a href="{{ path('inventory_purchaseitem_edit', { 'id': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" ><i class="icon-plus"></i> Add Attribute</a>
+                                                <a href="{{ path('inventory_purchaseitem_edit', { 'id': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" >IME/Serial</a>
                                                 {% endif %}
                                             </td>
 

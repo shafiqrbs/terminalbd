@@ -499,13 +499,14 @@ class SalesController extends Controller
     {
         $serial = $_REQUEST['serial'];
         if(!empty($serial)){
-	        $ser = implode(",",$serial);
+            $ser = implode(",",$serial);
 	        $em = $this->getDoctrine()->getManager();
 	        $salesItem->setSerialNo($ser);
 	        $salesItem->setAssuranceType($salesItem->getPurchaseItem()->getAssuranceType());
 	        $salesItem->setAssuranceFromVendor($salesItem->getPurchaseItem()->getAssuranceFromVendor());
 	        $salesItem->setAssuranceToCustomer($salesItem->getPurchaseItem()->getAssuranceToCustomer());
 	        $salesItem->setExpiredDate($salesItem->getPurchaseItem()->getExpiredDate());
+            $em->persist($salesItem);
 	        $em->flush();
         }
         exit;

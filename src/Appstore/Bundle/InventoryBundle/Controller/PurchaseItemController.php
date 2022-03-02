@@ -259,7 +259,16 @@ class PurchaseItemController extends Controller
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
         if ($editForm->isValid()) {
+            $rows = explode(",",trim($entity->getSerialNo()));
+            $ids = array();
+            foreach ($rows as $row)
+            {
+                $ids[] = trim($row);
+            }
+            $entity->setSerialNo(implode(", ", $ids));
+            $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $entity->getPurchase()->getId())));
         }

@@ -88,7 +88,7 @@
                                                         <td class="numeric" >
                                                             {% if salesitem.purchaseItem.serialNo is not empty %}
                                                                 <select class="m-wrap inputs" name="serialNo" id="serialNo-{{ salesitem.id }}" multiple="multiple" >
-                                                                    <option>--Serial no--</option>
+                                                                    <option>--Serial No--</option>
                                                                     {% set serials = salesitem.serialNo|split(',') %}
                                                                     {% for serial in  salesitem.purchaseItem.serialNo|split(',') %}
                                                                         <option {% if serial in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>

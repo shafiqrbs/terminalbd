@@ -46,7 +46,6 @@ class SalesRepository extends EntityRepository
             $barcode =    isset($data['barcode'])? $data['barcode'] :'';
             $serialNo =    isset($data['serialNo'])? $data['serialNo'] :'';
             $vendor =    isset($data['vendor'])? $data['vendor'] :'';
-
             if (!empty($startDate)) {
                 $datetime = new \DateTime($startDate);
                 $start = $datetime->format('Y-m-d 00:00:00');
@@ -72,31 +71,25 @@ class SalesRepository extends EntityRepository
             }
 
             if (!empty($process)) {
-
                 $qb->andWhere("s.process = :process");
                 $qb->setParameter('process', $process);
-
             }
 
             if (!empty($customer)) {
-
                 $qb->andWhere("c.mobile = :mobile");
                 $qb->setParameter('mobile', $customer);
             }
 
             if (!empty($salesBy)) {
-
                 $qb->andWhere("u.username = :user");
                 $qb->setParameter('user', $salesBy);
             }
             if (!empty($transactionMethod)) {
-
                 $qb->andWhere("s.transactionMethod = :transactionMethod");
                 $qb->setParameter('transactionMethod', $transactionMethod);
             }
 
             if (!empty($paymentStatus)) {
-
                 $qb->andWhere("s.paymentStatus = :paymentStatus");
                 $qb->setParameter('paymentStatus', $paymentStatus);
             }
