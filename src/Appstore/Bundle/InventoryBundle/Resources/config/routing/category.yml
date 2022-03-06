@@ -27,5 +27,4 @@ inventory_category_update:
 inventory_category_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:CustomCategory:delete" }
-    methods:  [POST, DELETE]
 

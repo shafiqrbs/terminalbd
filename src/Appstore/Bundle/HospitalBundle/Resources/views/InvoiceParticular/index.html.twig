@@ -136,7 +136,7 @@
                                             {% elseif entity.process in processes and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  %}
                                                 <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
                                             {% endif %}
-                                            {% if entity.particularDeliveredBy is not empty %}
+                                            {% if entity.process == "Done" and entity.particularDeliveredBy is not empty %}
                                                 <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
                                             {% endif %}
                                             {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.process == 'Done'  and entity.particularDeliveredBy is empty %}

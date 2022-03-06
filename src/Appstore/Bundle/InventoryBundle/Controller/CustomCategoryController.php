@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Form\CustomCategoryType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,6 +19,19 @@ use Product\Bundle\ProductBundle\Form\CategoryType;
 class CustomCategoryController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
+
     /**
      * Lists all Category entities.
      *
@@ -32,17 +46,6 @@ class CustomCategoryController extends Controller
             'entities' => $pagination,
         ));
 
-    }
-
-    public function paginate($entities)
-    {
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            30  /*limit per page*/
-        );
-        return $pagination;
     }
 
 
@@ -211,20 +214,25 @@ class CustomCategoryController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        $entity = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$config,'id'=>$id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find item entity.');
+        }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $config = $this->getUser()->getInventoryConfig();
-            $entity = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$config,'id'=>$id));
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Category entity.');
-            }
+        try {
 
             $em->remove($entity);
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
         }
 
         return $this->redirect($this->generateUrl('inventory_category'));

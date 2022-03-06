@@ -207,8 +207,8 @@ inventory_group_revised:
     path:     /group/invoice/revised
     defaults: { _controller: "InventoryBundle:SalesOnline:invoiceGroupReverse" }
 
-inventory_category_delete:
-    path:     /master/category
+inventory_category_master_delete:
+    path:     /master/master-category
     defaults: { _controller: InventoryBundle:Default:categoryDelete }
 
 inventory_master_delete:
