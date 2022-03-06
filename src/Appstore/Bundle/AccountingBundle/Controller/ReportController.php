@@ -3,10 +3,14 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DomainUserBundle\Event\AssociationSmsEvent;
 use Knp\Snappy\Pdf;
 use Proxies\__CG__\Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Event\CustomerOutstandingSmsEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReportController extends Controller
 {
@@ -379,11 +383,68 @@ class ReportController extends Controller
 		$pagination = $this->paginate($entities);
 		$summary = $this->getDoctrine()->getRepository(AccountSales::class)->customerOutstandingSummary($globalOption);
 		return $this->render('AccountingBundle:Report/Outstanding:customerOutstanding.html.twig', array(
+			'global' => $globalOption,
 			'entities' => $pagination,
 			'summary' => $summary,
 			'searchForm' => $data,
 		));
 	}
+
+	/**
+	 * Lists all AccountSales entities.
+	 *
+	 */
+	public function customerOutstandingSmsAction(Customer $customer)
+	{
+        $global = $this->getUser()->getGlobalOption();
+        $invoice = $customer;
+        $name = $customer->getName();
+        $orgName = $global->getName();
+        $hotline = $global->getHotline();
+        $mobile = "+88".$invoice->getMobile();
+
+       // $mobile = "+8801828148148"; //.$invoice->getCustomer()->getMobile();
+        $date = date('d-m-Y');
+        $balance = $this->getDoctrine()->getRepository(AccountSales::class)->customerSingleOutstanding( $invoice->getGlobalOption(),$invoice->getId());
+        $outstanding = number_format($balance,2);
+        $msg = "Dear Sir As-salamu Alaykum, Your present Due balance TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
+        $msg = $orgName .'\nDear '.$msg;
+        if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
+            $status = $this->send($msg,$mobile);
+            $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($invoice, $status);
+            $this->get('session')->getFlashBag()->add(
+                'success',"{ $name } SMS has benn sent successfully"
+            );
+        }
+        return new Response($status);
+	}
+    function send($msg, $phone, $sender = ""){
+
+        if(empty($sender)){
+            $from = "03590602016";
+        }else{
+            $from = $sender;
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.icombd.com/api/v1/campaigns/sms/1/text/single",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>"{\"from\":\"{$from}\",\"text\":\"{$msg}\",\"to\":\"{$phone}\"}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Authorization: Basic dW1hcml0OnVtYXJpdDE0OA=="
+            ),
+        ));
+        $response = curl_exec($curl);
+        return $response;
+
+    }
 
 	/**
 	 * Lists all AccountSales entities.

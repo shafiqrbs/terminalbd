@@ -56,7 +56,6 @@ services:
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.email_receive, method: receiveEmail }
 
-
   setting_tool.listener.sms_and_email:
       class: Setting\Bundle\ToolBundle\EventListener\SmsEmailListener
       arguments: [@setting_tool.sms_gateWay]

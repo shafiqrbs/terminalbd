@@ -81,3 +81,7 @@ report_sales_customer_summary:
 report_sales_user_summary:
     path:     /user-outstanding
     defaults: { _controller: "AccountingBundle:Report:userSummary" }
+
+report_sales_customer_sms:
+    path:     /{id}/customer-sms
+    defaults: { _controller: "AccountingBundle:Report:customerOutstandingSms" }

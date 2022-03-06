@@ -99,8 +99,14 @@
                                         <th class="numeric" >{{ entity.totalAmount|number_format }}</th>
                                         <th class="numeric" >{{ entity.amount|number_format }}</th>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
-                                        <th class="numeric" ><a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
+                                        <th class="numeric" >
+                                            <div class="btn-group">
+                                            <a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
                                             <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
+                                            {% if global.notificationConfig.smsActive == 1 %}
+                                            <a  class="btn mini purple approve" href="javascript:" data-url="{{ path('report_sales_customer_sms',{'id':entity.customerId}) }}"><i class="icon-phone"></i> SMS</a>
+                                            {% endif %}
+                                            </div>
                                         </th>
                                     </tr>
                                 {% endfor %}

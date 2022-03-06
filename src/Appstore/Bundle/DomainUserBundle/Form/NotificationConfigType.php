@@ -42,7 +42,7 @@ class NotificationConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_domainuserbundle_notification';
+        return 'notification';
     }
 
 
