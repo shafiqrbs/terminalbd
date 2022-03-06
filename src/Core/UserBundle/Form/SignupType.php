@@ -7,6 +7,8 @@ use Core\UserBundle\Form\Type\SignupProfileType;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Form\InitialOptionType;
+use Setting\Bundle\ToolBundle\Form\SiteSettingAppType;
+use Setting\Bundle\ToolBundle\Form\SiteSettingType;
 use Setting\Bundle\ToolBundle\Repository\SyndicateRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,7 +38,7 @@ class SignupType extends AbstractType
     {
         $builder->add('profile', new SignupProfileType());
         $builder->add('globalOption', new InitialOptionType($this->em,$this->location));
-
+        $builder->add('siteSetting', new SiteSettingAppType());
     }
 
     /**

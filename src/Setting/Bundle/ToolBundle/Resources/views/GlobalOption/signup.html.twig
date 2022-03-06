@@ -96,10 +96,10 @@
                         <div class="row-fluid">
                             <div class="span12 ">
                                 <div class="control-group">
-                                    <label class="control-label" >Business Type</label>
+                                    <label class="control-label" >Main Application</label>
                                     <div class="controls">
-                                        {{ form_errors(form.globalOption.syndicate) }}
-                                        {{ form_widget(form.globalOption.syndicate) }}
+                                        {{ form_errors(form.globalOption.mainApp) }}
+                                        {{ form_widget(form.globalOption.mainApp) }}
                                     </div>
                                 </div>
                             </div>
@@ -109,8 +109,8 @@
                         <div class="row-fluid">
                             <div class="span12 ">
                                 <div class="control-group">
-                                    <div class="controls"> Terms & Condition &nbsp; {{ form_widget(form.globalOption.status) }}
-                                        {{ form_errors(form.globalOption.status) }}</div>
+                                    <div class="controls">{{ form_widget(form.siteSetting.appModules) }}
+                                        {{ form_errors(form.siteSetting.appModules) }}</div>
                                 </div>
                             </div>
                             <!--/span-->
@@ -131,6 +131,18 @@
             </div>
         </div>
     </div>
+    <style>
+        .check-list{
+            margin-top: 12px;
+        }
+        .check-list .checker{
+            float: left;
+        }
+        .check-list label{
+            float: left;
+            width: 30%;
+        }
+    </style>
 {% endblock %}
 
 

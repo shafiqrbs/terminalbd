@@ -43,19 +43,18 @@ class InitialOptionType extends AbstractType
                     )
                 ))
 
-                ->add('syndicate', 'entity', array(
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter you business type'))
-                    ),
+                ->add('mainApp', 'entity', array(
                     'required'    => true,
-                    'attr'=>array('class'=>'select2 span12'),
-                    'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
-                    'choices'=> $this->SyndicateChoiceList(),
-                    'choices_as_values' => true,
-                    'choice_label' => 'nestedLabel',
+                    'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
+                    'empty_value' => '---Select Main Application ---',
+                    'property' => 'name',
+                    'attr'     =>array('id' => '' , 'class' => 'm-wrap span12'),
+                    'query_builder' => function(EntityRepository $er){
+                        return $er->createQueryBuilder('s')
+                            ->andWhere("s.status = 1")
+                            ->orderBy('s.name','ASC');
+                    },
                 ))
-
-
                 ->add('location', 'entity', array(
                     'required'    => false,
                     'empty_value' => '---Select Location---',
@@ -67,15 +66,7 @@ class InitialOptionType extends AbstractType
                     'choices'=> $this->LocationChoiceList(),
                     'choices_as_values' => true,
                     'choice_label' => 'nestedLabel',
-                ))
-
-                ->add('status','checkbox', array(
-                        'attr'=>array('class'=>''),
-                        'constraints' =>array(
-                            new NotBlank(array('message'=>'Must need to accept terms & condition')),
-                        )
-                    )
-                );
+                ));
 
     }
     
