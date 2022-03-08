@@ -172,7 +172,7 @@ class SalesController extends Controller
                 $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
 
-            }elseif(!empty($purchaseItem) and $itemStock > 0 and $purchaseItem->getSalesPrice() > 0 and  $itemStock >= $checkQuantity) {
+            }elseif(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
 
                 $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
                 $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);

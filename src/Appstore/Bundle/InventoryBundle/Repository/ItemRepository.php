@@ -467,8 +467,8 @@ class ItemRepository extends EntityRepository
         $query->join('i.inventoryConfig', 'ic');
         $query->leftJoin('i.stockItems', 'stockItem');
         $query->select('i.id as id');
-        $query->addSelect('CONCAT(i.sku, \' - \', i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS name');
-	    $query->addSelect('CONCAT(i.sku, \' - \', i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS text');
+        $query->addSelect('CONCAT(i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS name');
+	    $query->addSelect('CONCAT(i.name,  \' [\',  SUM(stockItem.quantity), \'] \') AS text');
 	    $query->addSelect('i.barcode as sku');
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.name", "'%$search%'"  ));

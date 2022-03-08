@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
@@ -1029,6 +1030,37 @@ class InvoiceController extends Controller
         return new Response("invalid");
 
     }
+
+    public function invoiceCustomerSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository(Customer::class)->findBy(
+            array('globalOption' => $config)
+        );
+        $type = '';
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+    }
+
+    public function invoiceCustomerInlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository(BusinessInvoice::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $customer = $em->getRepository(Customer::class)->find($data['value']);
+        $entity->setCustomer($customer);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
+
+    }
+
 
 }
 

@@ -244,6 +244,35 @@ var InventorySales = function(sales) {
         })
     });
 
+    $(document).on('click', '.addPurchaseItemSales', function() {
+
+        var barcode = $(this).attr('id');
+        if(barcode == ''){
+            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_sales_item_search'),
+            type: 'POST',
+            data:'barcode='+barcode+'&sales='+ sales,
+            success: function(response) {
+                $('#barcode').focus().val('');
+                obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
+                $('#paymentSubTotal').val(obj['salesTotal']);
+                $('.salesTotal').html(obj['salesTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
+                $('.subTotal').html(obj['salesSubTotal']);
+                $('#vat').html(obj['salesVat']);
+                $('#discount').html(obj['discount']);
+                $('#paymentTotal').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
+                FormComponents.init();
+            },
+        })
+    });
+
     $(document).on('change', '#item', function() {
 
         var item = $('#item').val();

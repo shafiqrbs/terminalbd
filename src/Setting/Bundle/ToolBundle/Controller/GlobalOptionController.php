@@ -75,10 +75,8 @@ class GlobalOptionController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->initialSetup($entity);
             $this->get('settong.toolManageRepo')->createDirectory($entity->getGlobalOption()->getId());
-
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
-
             return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $globalOption->getId())));
         }
 
@@ -214,7 +212,7 @@ class GlobalOptionController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $entity ->upload();
+
             $em->flush();
             //$this->getDoctrine()->getRepository('SettingContentBundle:HomePage')->globalOptionHome($user);
             //$this->getDoctrine()->getRepository('SettingContentBundle:ContactPage')->globalOptionContact($user);

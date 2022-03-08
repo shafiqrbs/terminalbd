@@ -1,23 +1,23 @@
 {% extends '::baseprint.html.twig' %}
 {% block body %}
-<div id="invoice">
-    <div class="invoice overflow-auto" style="height:850px!important;margin-top:{{ config.printTopMargin }}px!important;">
+    <div id="invoice">
+        <div class="invoice overflow-auto" style="height:850px!important;margin-top:{{ config.printTopMargin }}px!important;">
             <div style="min-width: 600px">
                 {% if config.isPrintHeader == 1 %}
-                <header>
-                    <div class="row">
-                        <div class="col" style="float: left">
+                    <header>
+                        <div class="row">
+                            <div class="col" style="float: left">
                             <span>
                               {% if config.webPath is not empty %}
                                   <img style="max-height:70px!important; width: auto"  src="{{ image(config.webPath).resize(340,102, 'white') }}">
                               {% endif %}
                             </span>
+                            </div>
+                            <div class="col company-details">
+                                {{ config.address|raw }}
+                            </div>
                         </div>
-                        <div class="col company-details">
-                            {{ config.address|raw }}
-                        </div>
-                    </div>
-                </header>
+                    </header>
                 {% endif %}
                 <div class="clearfix"></div>
                 <main>
@@ -71,27 +71,27 @@
 
                         {% if config.printOutstanding == 1 %}
                             <tfoot>
-                        <tr>
-                            <td colspan="2" style="width:50%;">
-                                <table style="width: 100%;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                    <tr><td>PREVIOUS DUE</td><td>{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</td></tr>
-                                    <tr><td>RECEIVABLE</td><td>{{ entity.total|number_format() }}</td></tr>
-                                    <tr><td>CURRENT DUE</td><td>{{ entity.due|number_format() }}</td></tr>
-                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td>OUTSTANDING</td><td>{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</td></tr>
-                                </table>
-                            </td>
-                            <td colspan="3" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
-                                <table style="width: 100%;margin-bottom: -20px;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
-                                    <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
-                                    <tr><td >DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
-                                    <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
-                                    <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
-                                    <tr><td style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
-                                </table>
-                            </td>
-                        </tr>
-                        </tfoot>
+                            <tr>
+                                <td colspan="2" style="width:50%;">
+                                    <table style="width: 100%;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
+                                        <tr><td>PREVIOUS DUE</td><td>{% if balance > 0 %}{{ (balance - entity.due)|number_format }}{% endif %}</td></tr>
+                                        <tr><td>RECEIVABLE</td><td>{{ entity.total|number_format() }}</td></tr>
+                                        <tr><td>CURRENT DUE</td><td>{{ entity.due|number_format() }}</td></tr>
+                                        <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
+                                        <tr><td>OUTSTANDING</td><td>{% if balance > 0 %} {{ balance|number_format }}{% else %}{{ entity.due|number_format() }}{% endif %}</td></tr>
+                                    </table>
+                                </td>
+                                <td colspan="3" style="width:50%; border-left: 2px solid #999999;vertical-align: top!important; ">
+                                    <table style="width: 100%;margin-bottom: -20px;" border="0" cellspacing="0" cellpadding="0" class="tfoot-table">
+                                        <tr><td >SUB TOTAL</td><td><strong  class="pull-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
+                                        <tr><td >DISCOUNT</td><td><strong  class="pull-right">{{ entity.discount|number_format() }}</strong></td></tr>
+                                        <tr><td ><strong>GRAND TOTAL</strong></td><td ><strong class="pull-right">{{ entity.total|number_format() }}</strong></td></tr>
+                                        <tr><td colspan="2"  style="border-bottom:3px solid #000!important; height: 1px"></td></tr>
+                                        <tr><td style="text-align: left!important;"><strong>In words: {{ entity.paymentInWord }} </strong><strong class="pull-right" >PAID</strong></td><td><strong  class="pull-right">{{ entity.received|number_format() }}</strong></td></tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tfoot>
                         {% else %}
                             <tfoot>
                             <tr>
@@ -117,19 +117,19 @@
                     </div>
                 </main>
                 <footer>
-                  <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
+                    <span class="left"> Invoice was created on a computer and is valid without the signature and seal.</span>
                     <span class="right">Developed by: {{ portal_design_development }}</span>
                 </footer>
             </div>
             <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
         </div>
     </div>
-<style>
-    .clearfix{
-       clear: both;
-       display: inline-block;
-    }
-</style>
+    <style>
+        .clearfix{
+            clear: both;
+            display: inline-block;
+        }
+    </style>
 {% endblock %}
 
 

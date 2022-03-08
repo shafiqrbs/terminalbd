@@ -148,6 +148,7 @@ class SalesManualController extends Controller
         $editForm = $this->createEditForm($entity);
         return $this->render('InventoryBundle:SalesManual:sales.html.twig', array(
             'entities' => '',
+            'inventory' => $inventory,
             'entity' => $entity,
             'form' => $editForm->createView(),
             'itemForm' => $createItemForm->createView(),

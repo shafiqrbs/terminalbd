@@ -269,7 +269,6 @@ security:
                 default_target_path: landing_page
                 always_use_default_target_path: true
                 use_referer:  true
-            logout:       true
             logout:
                 path:   /logout
                 target: /login

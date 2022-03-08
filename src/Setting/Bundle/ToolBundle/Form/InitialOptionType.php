@@ -43,6 +43,18 @@ class InitialOptionType extends AbstractType
                     )
                 ))
 
+                ->add('syndicate', 'entity', array(
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please enter you business type'))
+                    ),
+                    'required'    => true,
+                    'attr'=>array('class'=>'select2 span12'),
+                    'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
+                    'choices'=> $this->SyndicateChoiceList(),
+                    'choices_as_values' => true,
+                    'choice_label' => 'nestedLabel',
+                ))
+
                 ->add('mainApp', 'entity', array(
                     'required'    => true,
                     'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
@@ -85,7 +97,7 @@ class InitialOptionType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_toolbundle_globaloption';
+        return 'globaloption';
     }
 
     /**

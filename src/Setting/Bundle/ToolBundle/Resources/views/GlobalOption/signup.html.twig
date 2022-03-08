@@ -92,7 +92,6 @@
                             <!--/span-->
                         </div>
                         <!--/row-->
-                        <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid">
                             <div class="span12 ">
                                 <div class="control-group">
@@ -100,6 +99,18 @@
                                     <div class="controls">
                                         {{ form_errors(form.globalOption.mainApp) }}
                                         {{ form_widget(form.globalOption.mainApp) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12 ">
+                                <div class="control-group">
+                                    <label class="control-label" >Business Model</label>
+                                    <div class="controls">
+                                        {{ form_errors(form.globalOption.syndicate) }}
+                                        {{ form_widget(form.globalOption.syndicate) }}
                                     </div>
                                 </div>
                             </div>

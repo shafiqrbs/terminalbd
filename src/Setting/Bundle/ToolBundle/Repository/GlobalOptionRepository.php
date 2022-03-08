@@ -398,19 +398,22 @@ class GlobalOptionRepository extends EntityRepository
     public function createGlobalOption($mobile,$data,$user ='')
     {
 
+        $em = $this->_em;
         $syndicate = $data['Core_userbundle_user']['globalOption']['syndicate'];
+        $mainApp = $data['Core_userbundle_user']['globalOption']['mainApp'];
         $location = $data['Core_userbundle_user']['globalOption']['location'];
         $name = $data['Core_userbundle_user']['globalOption']['name'];
-        $em = $this->_em;
+        /*$appModules = $data['Core_userbundle_user']['siteSetting']['appModules'];
+        $apps[] = array();
+        foreach ($appModules as $appModule){
+            $apps[]  = $em->getRepository(AppModule::class)->find($appModule);
+        }*/
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
+        $mainApp = $em->getRepository(AppModule::class)->find($mainApp);
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
-        if($user){
-            $globalOption->setAgent($user);
-            $globalOption->setStatus(true);
-        }else{
-            $globalOption->setStatus(false);
-        }
+        if($user) { $globalOption->setAgent($user);}
+        $globalOption->setStatus(true);
         $globalOption->setName($name);
         $globalOption->setOrganizationName($name);
         $globalOption->setMobileName($name);
@@ -418,7 +421,9 @@ class GlobalOptionRepository extends EntityRepository
         $globalOption->setSlug($this->urlSlug($name));
         $globalOption->setSubDomain($this->urlSlug($name));
         $globalOption->setMobile($mobile);
+        $globalOption->setMainApp($mainApp);
         $globalOption->setSyndicate($syndicate);
+      //  $globalOption->getSiteSetting()->setAppModules($apps);
         $globalOption->setLocation($location);
         $globalOption->setUniqueCode($this->getUniqueId());
         $em->persist($globalOption);

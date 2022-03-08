@@ -141,5 +141,19 @@ business_invoice_item_update:
     defaults: { _controller: "BusinessBundle:Invoice:invoiceItemUpdate" }
     methods:  POST
     options:
-            expose: true
+        expose: true
+
+business_invoice_customer_search:
+    path:     /invoice-customer-search
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceCustomerSelect" }
+    methods:  GET
+    options:
+        expose: true
+
+business_invoice_customer_inline_update:
+    path:     /invoice-customer-inline-update
+    defaults: { _controller: "BusinessBundle:Invoice:invoiceCustomerInlineUpdate" }
+    methods:  POST
+    options:
+        expose: true
 

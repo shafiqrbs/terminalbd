@@ -112,7 +112,12 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if app.user.granted("ROLE_DOMAIN") %}
+                                                <a  data-type="select" class="editable" id="customer" data-name="customer" href="#" data-source="{{ path('business_invoice_customer_search') }}"  data-url="{{ path('business_invoice_customer_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.id }}{% endif %}" data-original-title="Enter custo mer name">{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</a>
+                                            {% else %}
+                                                {% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
+                                            {% endif %}
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.received }}</td>
@@ -156,11 +161,13 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@BusinessBundle/Resources/public/js/editable.js'
     '@BusinessBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
+    EditableInit();
     {{ parent() }}
 {% endblock %}

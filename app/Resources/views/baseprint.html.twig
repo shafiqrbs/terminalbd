@@ -30,13 +30,11 @@
 {% endjavascripts %}
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        $('#printInvoice').click(function(){
-            Popup($('.invoice')[0].outerHTML);
-            function Popup(data)
-            {
-                window.print();
-            }
-        });
+        Popup($('.invoice')[0].outerHTML);
+        function Popup(data)
+        {
+            window.print();
+        }
     });
 </script>
 </body>

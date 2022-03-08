@@ -35,12 +35,13 @@
                         <div class="caption"><i class="icon-reorder"></i>Sales lists</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="{{ path('inventory_salesonline') }}"><i class="icon-th-list"></i> Sales</a>
                                 {% if config.isPos == 1 %}
                                     <a class="btn red" href="{{ path('pos_desktop') }}"><i class="icon-plus-sign"></i> POS</a>
                                 {% endif %}
-                                {% if config.isInvoice == 1 %}
-                                    <a class="btn yellow" href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i> Invoice</a>
+                                {% if config.isInvoice == 1 and config.deliveryProcess == "general-sales" %}
+                                    <a class="btn yellow" href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                {% elseif config.isInvoice == 1 and config.deliveryProcess == "manual-sales" %}
+                                    <a class="btn yellow" href="{{ path('inventory_salesmanual_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                 {% endif %}
                                 <a class="btn purple" href="{{ path('inventory_sales_empty_delete') }}"><i class="icon-th-list"></i>&nbsp;Delete Empty</a>
                             </div>
@@ -135,8 +136,12 @@
                                                 <a target="_blank"  href="{{ path('inventory_salesonline_print_invoice',{'invoice':entity.invoice}) }}" rel=""  class="btn green mini print" ><i class="icon-print"></i></a>
                                             {% endif %}
                                             {% if entity.process in ['Created','In-progress'] %}
-                                                <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
-                                                <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                {% if config.isInvoice == 1 and config.deliveryProcess == "general-sales" %}
+                                                    <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
+                                                {% elseif config.isInvoice == 1 and config.deliveryProcess == "manual-sales" %}
+                                                    <a href="{{ path('inventory_salesmanual_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
+                                                {% endif %}
+                                                <a  id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.paymentStatus == "Due" %}
                                                 <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow" ><i class="icon-money"></i></a>
